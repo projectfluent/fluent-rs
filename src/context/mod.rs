@@ -17,9 +17,7 @@ pub struct MessageContext {
 
 impl MessageContext {
     pub fn new() -> MessageContext {
-        MessageContext{
-            entries: HashMap::new(),
-        }
+        MessageContext { entries: HashMap::new() }
     }
 
     pub fn add_messages(&mut self, source: &str) -> Result<(), ParserError> {
@@ -34,10 +32,12 @@ impl MessageContext {
 
     pub fn format(&self, id: &str) -> Result<String, ContextError> {
         match self.entries.get(id) {
-            Some(ref value) => match resolve(self, value) {
-              Ok(msg) => Ok(msg),
-              Err(_) => Err(ContextError::Generic)
-            },
+            Some(ref value) => {
+                match resolve(self, value) {
+                    Ok(msg) => Ok(msg),
+                    Err(_) => Err(ContextError::Generic),
+                }
+            }
             None => Err(ContextError::Generic),
         }
     }

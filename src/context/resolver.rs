@@ -8,5 +8,5 @@ pub enum ResolverError {
 }
 
 pub fn resolve(ctx: &MessageContext, entity: &ast::Value) -> Result<String, ResolverError> {
-    return Ok(format!("{:?}", entity))
+    return Ok(format!("{:?}", entity));
 }
