@@ -2,15 +2,18 @@
 pub struct Resource(pub Vec<Entry>);
 
 #[derive(Debug, PartialEq)]
+pub enum Entry {
+    Message(Message),
+}
+
+#[derive(Debug, PartialEq)]
 pub struct Identifier(String);
 
 #[derive(Debug, PartialEq)]
-pub enum Entry {
-    Message {
-        id: String,
-        value: Option<Pattern>,
-        traits: Option<Vec<Member>>,
-    },
+pub struct Message {
+    pub id: String,
+    pub value: Option<Pattern>,
+    pub traits: Option<Vec<Member>>,
 }
 
 #[derive(Debug, PartialEq)]

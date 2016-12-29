@@ -7,6 +7,6 @@ pub enum ResolverError {
     Generic,
 }
 
-pub fn resolve(ctx: &MessageContext, entity: &ast::Entry) -> Result<String, ResolverError> {
-    return Ok(format!("{:?}", entity));
+pub fn resolve(ctx: &MessageContext, message: &ast::Message) -> Result<String, ResolverError> {
+    return Ok(format!("{:?}", message));
 }
