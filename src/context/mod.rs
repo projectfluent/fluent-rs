@@ -25,13 +25,8 @@ impl MessageContext {
 
         for entry in res.0 {
             match entry {
-                ast::Entry::Message(ast::Message { id, value, traits }) => {
-                    self.messages.insert(id.clone(),
-                                         ast::Message {
-                                             id: id,
-                                             value: value,
-                                             traits: traits,
-                                         });
+                ast::Entry::Message(msg @ ast::Message { .. }) => {
+                    self.messages.insert(msg.id.clone(), msg);
                 }
             }
         }
