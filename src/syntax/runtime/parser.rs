@@ -2,7 +2,6 @@ extern crate itertools;
 
 use std::str;
 use std::iter::Iterator;
-use std::collections::HashMap;
 use std::result;
 use self::itertools::{MultiPeek, multipeek};
 
@@ -38,8 +37,8 @@ impl<I> ParserStream<I> for MultiPeek<I>
     }
 
     fn expect_char(&mut self, ch: char) -> Result<()> {
-        match self.peek() {
-            Some(&ch2) if ch == ch2 => Ok(()),
+        match self.next() {
+            Some(ch2) if ch == ch2 => Ok(()),
             _ => Err(ParserError::Generic),
         }
     }
@@ -89,17 +88,17 @@ impl<I> ParserStream<I> for MultiPeek<I>
 pub fn parse(source: &str) -> Result<ast::Resource> {
     let mut ps = multipeek(source.chars());
 
-    let mut entries = HashMap::new();
+    let mut entries = vec![];
 
-    let (id, val) = get_entity(&mut ps)?;
+    let entry = get_entity(&mut ps)?;
 
-    entries.insert(id, val);
+    entries.push(entry);
 
     let res = ast::Resource(entries);
     Ok(res)
 }
 
-fn get_entity<'a, I>(ps: &mut MultiPeek<I>) -> Result<(String, ast::Value)>
+fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
     where I: Iterator<Item = char>
 {
     let id = get_identifier(ps)?;
@@ -110,12 +109,16 @@ fn get_entity<'a, I>(ps: &mut MultiPeek<I>) -> Result<(String, ast::Value)>
 
     ps.skip_line_ws();
 
-    let val = get_value(ps)?;
+    let pattern = get_pattern(ps)?;
 
-    Ok((id, val))
+    Ok(ast::Entry::Message {
+        id: id,
+        value: Some(pattern),
+        traits: None,
+    })
 }
 
-fn get_identifier<'a, I>(ps: &mut MultiPeek<I>) -> Result<String>
+fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<String>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
@@ -135,16 +138,11 @@ fn get_identifier<'a, I>(ps: &mut MultiPeek<I>) -> Result<String>
     Ok(name)
 }
 
-fn get_value<'a, I>(ps: &mut MultiPeek<I>) -> Result<ast::Value>
-    where I: Iterator<Item = char>
-{
-    get_pattern(ps)
-}
-
-fn get_pattern<'a, I>(ps: &mut MultiPeek<I>) -> Result<ast::Value>
+fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
     where I: Iterator<Item = char>
 {
     let mut buffer = String::new();
+    let mut elements = vec![];
 
     loop {
         match ps.peek() {
@@ -164,5 +162,9 @@ fn get_pattern<'a, I>(ps: &mut MultiPeek<I>) -> Result<ast::Value>
         }
     }
 
-    Ok(ast::Value::Simple(buffer))
+    if buffer.len() != 0 {
+        elements.push(ast::PatternElement::Text(buffer));
+    }
+
+    Ok(ast::Pattern { elements: elements })
 }

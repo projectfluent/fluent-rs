@@ -12,7 +12,7 @@ pub enum ContextError {
 }
 
 pub struct MessageContext {
-    entries: HashMap<String, ast::Value>,
+    entries: HashMap<String, ast::Entry>,
 }
 
 impl MessageContext {
@@ -23,8 +23,17 @@ impl MessageContext {
     pub fn add_messages(&mut self, source: &str) -> Result<(), ParserError> {
         let res = parse(source)?;
 
-        for (key, value) in res.0 {
-            self.entries.insert(key, value);
+        for entry in res.0 {
+            match entry {
+                ast::Entry::Message { id, value, traits } => {
+                    self.entries.insert(id.clone(),
+                                        ast::Entry::Message {
+                                            id: id,
+                                            value: value,
+                                            traits: traits,
+                                        });
+                }
+            }
         }
 
         Ok(())
