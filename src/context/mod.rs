@@ -39,15 +39,14 @@ impl MessageContext {
         Ok(())
     }
 
-    pub fn format(&self, id: &str) -> Result<String, ContextError> {
-        match self.entries.get(id) {
-            Some(ref value) => {
-                match resolve(self, value) {
-                    Ok(msg) => Ok(msg),
-                    Err(_) => Err(ContextError::Generic),
-                }
-            }
-            None => Err(ContextError::Generic),
+    pub fn get_message(&self, id: &str) -> Option<&ast::Value> {
+        self.entries.get(id)
+    }
+
+    pub fn format(&self, value: &ast::Value) -> Result<String, ContextError> {
+        match resolve(self, value) {
+            Ok(msg) => Ok(msg),
+            Err(_) => Err(ContextError::Generic),
         }
     }
 }
