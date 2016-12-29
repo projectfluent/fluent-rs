@@ -8,10 +8,13 @@ fn main() {
     ctx.add_messages("key1 = Value 1");
     ctx.add_messages("key2 = Value 2");
 
-    let msg = ctx.get_message("key1").unwrap();
-
-    match ctx.format(&msg) {
-        Ok(v) => println!("{}", v),
-        Err(err) => println!("Couldn't retrieve: {:?}", err),
+    if let Some(msg) = ctx.get_message("key1") {
+        match ctx.format(&msg) {
+            Ok(v) => println!("Formatted value: {}", v),
+            Err(err) => println!("Formatting error: {:?}", err),
+        }
+    } else {
+        println!("Missing message: {}", "key1");
     }
+
 }

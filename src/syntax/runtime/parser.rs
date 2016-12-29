@@ -91,9 +91,7 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
     let mut entries = vec![];
 
     let message = get_entity(&mut ps)?;
-    let entry = ast::Entry::Message(message);
-
-    entries.push(entry);
+    entries.push(ast::Entry::Message(message));
 
     let res = ast::Resource(entries);
     Ok(res)
