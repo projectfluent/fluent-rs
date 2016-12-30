@@ -94,7 +94,7 @@ fn main() {
             }
 
             print_resource(&res, mode);
-        },
+        }
         Err(err) => println!("Error: {:?}", err),
     };
 }
