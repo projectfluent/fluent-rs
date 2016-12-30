@@ -7,7 +7,7 @@ pub enum Entry {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Identifier(String);
+pub struct Identifier(pub String);
 
 #[derive(Debug, PartialEq)]
 pub struct Message {
@@ -24,7 +24,6 @@ pub struct Pattern {
 #[derive(Debug, PartialEq)]
 pub enum PatternElement {
     Text(String),
-    Placeable(Vec<Expression>),
 }
 
 #[derive(Debug, PartialEq)]
@@ -32,9 +31,4 @@ pub struct Member {
     pub key: String,
     pub value: Pattern,
     pub default: bool,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Expression {
-    EntityReference(Identifier),
 }
