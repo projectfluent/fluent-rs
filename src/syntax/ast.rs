@@ -2,12 +2,12 @@
 pub struct Resource(pub Vec<Entry>);
 
 #[derive(Debug, PartialEq)]
-pub struct Identifier(pub String);
-
-#[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
 }
+
+#[derive(Debug, PartialEq)]
+pub struct Identifier(pub String);
 
 #[derive(Debug, PartialEq)]
 pub struct Message {
