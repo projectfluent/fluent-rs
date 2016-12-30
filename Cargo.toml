@@ -11,6 +11,6 @@ entries-json = ["serde", "serde_json", "serde_derive"]
 itertools = { git = "https://github.com/bluss/rust-itertools" }
 getopts = "0.2.14"
 
-serde = { version = "0.8.19", optional = true }
+serde = { version = "0.8.21", optional = true }
 serde_json = { version = "0.8.4", optional = true }
-serde_derive = {version = "0.8.19", optional = true }
+serde_derive = {version = "0.8.21", optional = true }
