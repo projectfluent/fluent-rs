@@ -5,15 +5,16 @@ use fluent::context::MessageContext;
 fn main() {
     let mut ctx = MessageContext::new();
 
-    ctx.add_messages("key1 = Value 1");
-    ctx.add_messages("key2 = Value 2");
+    ctx.add_messages("foo = Foo");
+    ctx.add_messages("foobar = { foo } Bar");
+    ctx.add_messages("bazbar = { baz } Bar");
 
-    match ctx.get_message("key1").and_then(|msg| ctx.format(&msg)) {
+    match ctx.get_message("foobar").and_then(|msg| ctx.format(&msg)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
-    match ctx.get_message("key2").and_then(|msg| ctx.format(&msg)) {
+    match ctx.get_message("bazbar").and_then(|msg| ctx.format(&msg)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
