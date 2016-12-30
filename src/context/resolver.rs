@@ -1,6 +1,6 @@
 
 use super::MessageContext;
-use super::super::syntax::runtime::ast;
+use super::super::syntax::ast;
 
 #[derive(Debug)]
 pub enum ResolverError {

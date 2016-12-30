@@ -1,5 +1,9 @@
+#![feature(proc_macro)]
 #![feature(test)]
 
+#[cfg(feature = "json")]
+#[macro_use]
+extern crate serde_derive;
 extern crate test;
 
 #[cfg(test)]

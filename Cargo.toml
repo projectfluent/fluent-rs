@@ -5,6 +5,7 @@ authors = ["Zibi Braniecki <gandalf@mozilla.com>"]
 
 [features]
 json = ["serde", "serde_json", "serde_derive"]
+entries-json = ["serde", "serde_json", "serde_derive"]
 
 [dependencies]
 itertools = { git = "https://github.com/bluss/rust-itertools" }
