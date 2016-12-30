@@ -7,6 +7,7 @@ pub enum ResolverError {
     Generic,
 }
 
+#[allow(unused_variables)]
 pub fn resolve(ctx: &MessageContext, message: &ast::Message) -> Result<String, ResolverError> {
     return Ok(format!("{:?}", message));
 }

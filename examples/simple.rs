@@ -2,6 +2,7 @@ extern crate fluent;
 
 use fluent::context::MessageContext;
 
+#[allow(unused_must_use)]
 fn main() {
     let mut ctx = MessageContext::new();
 
