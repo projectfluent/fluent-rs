@@ -1,5 +1,13 @@
+#![feature(proc_macro)]
+
 extern crate fluent;
 extern crate getopts;
+
+#[macro_use]
+extern crate serde_derive;
+
+extern crate serde;
+extern crate serde_json;
 
 use std::fs::File;
 use std::io::Read;
@@ -18,8 +26,14 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     Ok(s)
 }
 
-fn print_entries_resource(res: &Resource) {
+fn print_resource(res: &Resource) {
     println!("{:?}", res);
+}
+
+#[cfg(feature = "json")]
+fn print_serialized_resource(res: &Resource) {
+    let e = serde_json::to_string_pretty(res).unwrap();
+    println!("{:?}", e);
 }
 
 fn print_usage(program: &str, opts: Options) {
@@ -33,7 +47,10 @@ fn main() {
 
     let mut opts = Options::new();
     opts.optflag("s", "silence", "disable output");
-    opts.optflag("r", "raw", "print raw result");
+
+    #[cfg(feature = "json")]
+    opts.optflag("j", "json", "serialize to json");
+
     opts.optflag("h", "help", "print this help menu");
     let matches = match opts.parse(&args[1..]) {
         Ok(m) => m,
@@ -59,7 +76,13 @@ fn main() {
     };
 
     match res {
-        Ok(res) => print_entries_resource(&res),
+        Ok(res) => {
+            if matches.opt_present("j") {
+                print_serialized_resource(&res);
+            } else {
+                print_resource(&res);
+            }
+        },
         Err(err) => println!("Error: {:?}", err),
     };
 }

@@ -3,6 +3,13 @@ name = "fluent"
 version = "0.1.0"
 authors = ["Zibi Braniecki <gandalf@mozilla.com>"]
 
+[features]
+json = ["serde", "serde_json", "serde_derive"]
+
 [dependencies]
 itertools = { git = "https://github.com/bluss/rust-itertools" }
 getopts = "0.2.14"
+
+serde = { version = "0.8.19", optional = true }
+serde_json = { version = "0.8.4", optional = true }
+serde_derive = {version = "0.8.19", optional = true }
