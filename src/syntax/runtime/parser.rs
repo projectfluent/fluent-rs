@@ -90,15 +90,14 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
 
     let mut entries = vec![];
 
-    let entry = get_entity(&mut ps)?;
-
-    entries.push(entry);
+    let message = get_entity(&mut ps)?;
+    entries.push(ast::Entry::Message(message));
 
     let res = ast::Resource(entries);
     Ok(res)
 }
 
-fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
+fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Message>
     where I: Iterator<Item = char>
 {
     let id = get_identifier(ps)?;
@@ -111,7 +110,7 @@ fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
 
     let pattern = get_pattern(ps)?;
 
-    Ok(ast::Entry::Message {
+    Ok(ast::Message {
         id: id,
         value: Some(pattern),
         traits: None,

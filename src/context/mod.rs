@@ -12,12 +12,12 @@ pub enum ContextError {
 }
 
 pub struct MessageContext {
-    entries: HashMap<String, ast::Entry>,
+    messages: HashMap<String, ast::Message>,
 }
 
 impl MessageContext {
     pub fn new() -> MessageContext {
-        MessageContext { entries: HashMap::new() }
+        MessageContext { messages: HashMap::new() }
     }
 
     pub fn add_messages(&mut self, source: &str) -> Result<(), ParserError> {
@@ -25,13 +25,8 @@ impl MessageContext {
 
         for entry in res.0 {
             match entry {
-                ast::Entry::Message { id, value, traits } => {
-                    self.entries.insert(id.clone(),
-                                        ast::Entry::Message {
-                                            id: id,
-                                            value: value,
-                                            traits: traits,
-                                        });
+                ast::Entry::Message(msg @ ast::Message { .. }) => {
+                    self.messages.insert(msg.id.clone(), msg);
                 }
             }
         }
@@ -39,15 +34,14 @@ impl MessageContext {
         Ok(())
     }
 
-    pub fn format(&self, id: &str) -> Result<String, ContextError> {
-        match self.entries.get(id) {
-            Some(ref value) => {
-                match resolve(self, value) {
-                    Ok(msg) => Ok(msg),
-                    Err(_) => Err(ContextError::Generic),
-                }
-            }
-            None => Err(ContextError::Generic),
+    pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
+        self.messages.get(id)
+    }
+
+    pub fn format(&self, value: &ast::Message) -> Result<String, ContextError> {
+        match resolve(self, value) {
+            Ok(msg) => Ok(msg),
+            Err(_) => Err(ContextError::Generic),
         }
     }
 }
