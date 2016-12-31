@@ -1,7 +1,10 @@
 [package]
 name = "fluent"
-version = "0.1.0"
-authors = ["Zibi Braniecki <gandalf@mozilla.com>"]
+version = "0.0.1"
+authors = [
+    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Staś Małolepszy <stas@mozilla.com>"
+]
 
 [dependencies]
 itertools = { git = "https://github.com/bluss/rust-itertools" }
