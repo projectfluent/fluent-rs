@@ -1,10 +1,10 @@
 use std::collections::HashMap;
 
-use super::syntax::runtime::parse;
-use super::syntax::runtime::parser::ParserError;
+use super::syntax::parse;
+use super::syntax::parser::ParserError;
 use self::resolver::resolve;
 
-use super::syntax::runtime::ast;
+use super::syntax::ast;
 
 #[derive(Debug)]
 pub enum ContextError {

@@ -8,8 +8,8 @@ use std::env;
 
 use getopts::Options;
 
-use fluent::syntax::runtime::parser::parse;
-use fluent::syntax::runtime::ast::Resource;
+use fluent::syntax::parser::parse;
+use fluent::syntax::ast::Resource;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
