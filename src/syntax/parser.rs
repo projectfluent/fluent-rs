@@ -93,7 +93,7 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
     let message = get_entity(&mut ps)?;
     entries.push(ast::Entry::Message(message));
 
-    let res = ast::Resource(entries);
+    let res = ast::Resource { body: entries };
     Ok(res)
 }
 
@@ -117,7 +117,7 @@ fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Message>
     })
 }
 
-fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<String>
+fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<ast::Identifier>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
@@ -134,7 +134,7 @@ fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<String>
         }
     }
 
-    Ok(name)
+    Ok(ast::Identifier { name: name })
 }
 
 fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
@@ -165,5 +165,8 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
         elements.push(ast::PatternElement::Text(buffer));
     }
 
-    Ok(ast::Pattern { elements: elements })
+    Ok(ast::Pattern {
+        elements: elements,
+        quoted: false,
+    })
 }

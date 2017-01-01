@@ -23,10 +23,10 @@ impl MessageContext {
     pub fn add_messages(&mut self, source: &str) -> Result<(), ParserError> {
         let res = parse(source)?;
 
-        for entry in res.0 {
+        for entry in res.body {
             match entry {
                 ast::Entry::Message(msg @ ast::Message { .. }) => {
-                    self.messages.insert(msg.id.clone(), msg);
+                    self.messages.insert(msg.id.name.clone(), msg);
                 }
             }
         }
