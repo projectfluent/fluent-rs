@@ -24,7 +24,7 @@ pub struct Pattern {
 #[derive(Debug, PartialEq)]
 pub enum PatternElement {
     Text(String),
-    Placeable { expression: Vec<Expression> },
+    Placeable { expressions: Vec<Expression> },
 }
 
 #[derive(Debug, PartialEq)]
@@ -63,4 +63,5 @@ pub struct Member {
 #[derive(Debug, PartialEq)]
 pub enum Expression {
     EntityReference { id: Identifier },
+    ExternalArgument { id: Identifier },
 }
