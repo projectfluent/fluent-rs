@@ -18,6 +18,7 @@ trait ParserStream<I> {
     fn skip_line_ws(&mut self);
     fn skip_ws(&mut self);
     fn expect_char(&mut self, ch: char) -> Result<()>;
+    fn take_char_if(&mut self, ch: char) -> bool;
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
     fn take_id_start(&mut self) -> Option<char>;
     fn take_id_char(&mut self) -> Option<char>;
@@ -52,6 +53,19 @@ impl<I> ParserStream<I> for MultiPeek<I>
         match self.next() {
             Some(ch2) if ch == ch2 => Ok(()),
             _ => Err(ParserError::Generic),
+        }
+    }
+
+    fn take_char_if(&mut self, ch: char) -> bool {
+        match self.peek() {
+            Some(&ch2) if ch == ch2 => {
+                self.next();
+                true
+            }
+            _ => {
+                self.reset_peek();
+                false
+            }
         }
     }
 
@@ -210,10 +224,31 @@ fn get_placeable<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
     where I: Iterator<Item = char>
 {
     let mut placeable = vec![];
-    let exp = get_expression(ps)?;
+    let exp = get_call_expression(ps)?;
     placeable.push(exp);
 
     Ok(placeable)
+}
+
+fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+    where I: Iterator<Item = char>
+{
+    let exp = get_expression(ps)?;
+
+    if !ps.take_char_if('(') {
+        return Ok(exp);
+    }
+
+    match exp {
+        ast::Expression::EntityReference { id } => {
+            ps.expect_char(')')?;
+            return Ok(ast::Expression::CallExpression {
+                callee: id,
+                args: vec![],
+            });
+        }
+        _ => Err(ParserError::Generic),
+    }
 }
 
 fn get_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>

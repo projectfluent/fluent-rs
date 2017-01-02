@@ -41,6 +41,7 @@ pub struct Key {
 pub struct Number {
     pub value: String,
 }
+
 #[derive(Debug, PartialEq)]
 pub struct Keyword {
     pub ns: Option<Identifier>,
@@ -64,4 +65,8 @@ pub struct Member {
 pub enum Expression {
     EntityReference { id: Identifier },
     ExternalArgument { id: Identifier },
+    CallExpression {
+        callee: Identifier,
+        args: Vec<Expression>,
+    },
 }
