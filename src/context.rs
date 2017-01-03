@@ -45,6 +45,7 @@ impl MessageContext {
             &ast::Expression::ExternalArgument { id: ast::Identifier { ref name } } => {
                 Some(format!("${}", name))
             }
+            _ => unimplemented!(),
         }
     }
 
@@ -59,7 +60,7 @@ impl MessageContext {
                             .map(|expr| self.eval_expr(expr).unwrap_or(String::from("___")))
                             .collect::<Vec<String>>()
                             .join(", ")
-                    },
+                    }
                 }
             })
             .collect::<Vec<String>>()
