@@ -1,0 +1,75 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "Comment",
+      "content": "Standalone comment"
+    },
+    {
+      "type": "Comment",
+      "content": "Another standalone comment"
+    },
+    {
+      "type": "Comment",
+      "content": "Comment with no leading space"
+    },
+    {
+      "type": "Comment",
+      "content": " Comment with a leading space"
+    },
+    {
+      "type": "Comment",
+      "content": "Multi\nLine\nComment"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key1"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "New entity",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "New entity"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": {
+        "type": "Comment",
+        "content": "Comment for entity key1"
+      }
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key2"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Multi line message",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Multi line message"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": {
+        "type": "Comment",
+        "content": "Comment for entity key2"
+      }
+    }
+  ],
+  "comment": {
+    "type": "Comment",
+    "content": "File comment"
+  }
+}

@@ -21,6 +21,8 @@ trait ParserStream<I> {
     fn take_char_if(&mut self, ch: char) -> bool;
     fn take_char_after_line_ws_if(&mut self, ch: char) -> bool;
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
+    fn peek_char_matches<F>(&mut self, f: F) -> bool where F: Fn(char) -> bool;
+    fn is_id_start(&mut self) -> bool;
     fn take_id_start(&mut self) -> Option<char>;
     fn take_id_char(&mut self) -> Option<char>;
 }
@@ -110,6 +112,31 @@ impl<I> ParserStream<I> for MultiPeek<I>
         }
     }
 
+    fn peek_char_matches<F>(&mut self, f: F) -> bool
+        where F: Fn(char) -> bool
+    {
+
+        match self.peek() {
+            Some(&ch) if f(ch) => {
+                self.reset_peek();
+                true
+            }
+            _ => {
+                self.reset_peek();
+                false
+            }
+        }
+    }
+
+    fn is_id_start(&mut self) -> bool {
+        let closure = |x| match x {
+            'a'...'z' | 'A'...'Z' | '_' => true,
+            _ => false,
+        };
+
+        return self.peek_char_matches(closure);
+    }
+
     fn take_id_start(&mut self) -> Option<char> {
         let closure = |x| match x {
             'a'...'z' | 'A'...'Z' | '_' => true,
@@ -139,22 +166,132 @@ impl<I> ParserStream<I> for MultiPeek<I>
 pub fn parse(source: &str) -> Result<ast::Resource> {
     let mut ps = multipeek(source.chars());
 
+    get_resource(&mut ps)
+}
+
+fn get_resource<I>(ps: &mut MultiPeek<I>) -> Result<ast::Resource>
+    where I: Iterator<Item = char>
+{
     let mut entries = vec![];
 
     while ps.peek().is_some() {
         ps.reset_peek();
 
-        let message = get_entity(&mut ps)?;
-        entries.push(ast::Entry::Message(message));
+        let entry = get_entry(ps)?;
+        entries.push(entry);
 
         ps.skip_ws();
     }
 
-    let res = ast::Resource { body: entries };
-    Ok(res)
+    Ok(ast::Resource { body: entries })
 }
 
-fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Message>
+fn get_entry<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
+    where I: Iterator<Item = char>
+{
+    let mut comment: Option<ast::Comment> = None;
+
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '#' => {
+                    comment = Some(get_comment(ps)?);
+                }
+                _ => {
+                    ps.reset_peek();
+                }
+            }
+        }
+        None => return Err(ParserError::Generic),
+    }
+
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '[' => {
+                    return Ok(ast::Entry::Section(get_section(ps, comment)?));
+                }
+                _ => {
+                    ps.reset_peek();
+                }
+            }
+        }
+        None => return Err(ParserError::Generic),
+    }
+
+    if ps.is_id_start() {
+        return Ok(ast::Entry::Message(get_message(ps, comment)?));
+    } else {
+        match comment {
+            Some(comment) => Ok(ast::Entry::Comment(comment)),
+            None => Err(ParserError::Generic),
+        }
+    }
+}
+
+fn get_comment<I>(ps: &mut MultiPeek<I>) -> Result<ast::Comment>
+    where I: Iterator<Item = char>
+{
+    ps.next();
+    ps.take_char_if(' ');
+
+    let mut content = String::new();
+
+    loop {
+        while let Some(ch) = ps.take_char(|x| x != '\n') {
+            content.push(ch);
+        }
+
+        ps.next();
+
+        match ps.peek() {
+            Some(&ch) => {
+                match ch {
+                    '#' => {
+                        content.push('\n');
+                        ps.next();
+                        ps.take_char_if(' ');
+                    }
+                    _ => {
+                        ps.reset_peek();
+                        break;
+                    }
+                }
+            }
+            None => {
+                ps.reset_peek();
+                break;
+            }
+        }
+    }
+
+    Ok(ast::Comment { body: content })
+}
+
+fn get_section<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Result<ast::Section>
+    where I: Iterator<Item = char>
+{
+    ps.expect_char('[')?;
+    ps.expect_char('[')?;
+
+    ps.skip_line_ws();
+
+    let key = get_key(ps)?;
+
+    ps.skip_line_ws();
+
+    ps.expect_char(']')?;
+    ps.expect_char(']')?;
+
+    Ok(ast::Section {
+        key: key,
+        body: vec![],
+        comment: comment,
+    })
+}
+
+
+fn get_message<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Result<ast::Message>
     where I: Iterator<Item = char>
 {
     let id = get_identifier(ps)?;
@@ -171,6 +308,7 @@ fn get_entity<I>(ps: &mut MultiPeek<I>) -> Result<ast::Message>
         id: id,
         value: Some(pattern),
         traits: None,
+        comment: comment,
     })
 }
 
@@ -192,6 +330,26 @@ fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<ast::Identifier>
     }
 
     Ok(ast::Identifier { name: name })
+}
+
+fn get_key<I>(ps: &mut MultiPeek<I>) -> Result<ast::Key>
+    where I: Iterator<Item = char>
+{
+    let mut name = String::new();
+
+    match ps.take_id_start() {
+        Some(ch) => name.push(ch),
+        None => return Err(ParserError::Generic),
+    };
+
+    loop {
+        match ps.take_id_char() {
+            Some(ch) => name.push(ch),
+            _ => break,
+        }
+    }
+
+    Ok(ast::Key { name: name })
 }
 
 fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>

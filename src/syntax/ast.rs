@@ -4,8 +4,22 @@ pub struct Resource {
 }
 
 #[derive(Debug, PartialEq)]
+pub struct Comment {
+    pub body: String,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Section {
+    pub key: Key,
+    pub body: Vec<Entry>,
+    pub comment: Option<Comment>,
+}
+
+#[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
+    Comment(Comment),
+    Section(Section),
 }
 
 #[derive(Debug, PartialEq)]
@@ -13,6 +27,7 @@ pub struct Message {
     pub id: Identifier,
     pub value: Option<Pattern>,
     pub traits: Option<Vec<Member>>,
+    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]

@@ -1,0 +1,225 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "JunkEntry",
+      "content": "menu/open = Namespaces in entity ids aren't allowed\n\n"
+    },
+    {
+      "type": "JunkEntry",
+      "content": "menu/open = Namespaces in entity ids aren't allowed\n\n[section]]\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key1"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "section]]\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key2"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "[[section\n\n"
+    },
+    {
+      "type": "JunkEntry",
+      "content": "key3 = Value\n\n[section\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key4"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "[[section]\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key5"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Section",
+      "body": [
+        {
+          "type": "JunkEntry",
+          "content": "dd\n\n"
+        },
+        {
+          "type": "Entity",
+          "id": {
+            "type": "Identifier",
+            "name": "key6"
+          },
+          "value": {
+            "type": "Pattern",
+            "source": "value",
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "value"
+              }
+            ],
+            "quoted": false
+          },
+          "traits": [],
+          "comment": null
+        },
+        {
+          "type": "JunkEntry",
+          "content": "[[section\n]]\n\n"
+        },
+        {
+          "type": "Entity",
+          "id": {
+            "type": "Identifier",
+            "name": "key7"
+          },
+          "value": {
+            "type": "Pattern",
+            "source": "value",
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "value"
+              }
+            ],
+            "quoted": false
+          },
+          "traits": [],
+          "comment": null
+        },
+        {
+          "type": "JunkEntry",
+          "content": "\n[[ ]]\n\n"
+        },
+        {
+          "type": "Entity",
+          "id": {
+            "type": "Identifier",
+            "name": "key8"
+          },
+          "value": {
+            "type": "Pattern",
+            "source": "value",
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "value"
+              }
+            ],
+            "quoted": false
+          },
+          "traits": [],
+          "comment": null
+        },
+        {
+          "type": "JunkEntry",
+          "content": "[[]]\n\n"
+        },
+        {
+          "type": "Entity",
+          "id": {
+            "type": "Identifier",
+            "name": "key9"
+          },
+          "value": {
+            "type": "Pattern",
+            "source": "value",
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "value"
+              }
+            ],
+            "quoted": false
+          },
+          "traits": [],
+          "comment": null
+        },
+        {
+          "type": "JunkEntry",
+          "content": "#doo\n[[\n\n"
+        },
+        {
+          "type": "JunkEntry",
+          "content": "#doo\n[[\n\n#foo\n[\n"
+        }
+      ],
+      "comment": null,
+      "key": {
+        "type": "Keyword",
+        "name": "section",
+        "namespace": null
+      }
+    }
+  ],
+  "comment": null
+}

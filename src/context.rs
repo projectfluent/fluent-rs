@@ -21,6 +21,7 @@ impl MessageContext {
                 ast::Entry::Message(msg @ ast::Message { .. }) => {
                     self.messages.insert(msg.id.name.clone(), msg);
                 }
+                _ => unimplemented!(),
             }
         }
 
