@@ -1,0 +1,314 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key1"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 1",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 1"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "key2 = Value 2\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key3"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "= Value\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key4"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "= Value\n\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key5"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "=\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key6"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "= \n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key7"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "= =\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key8"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "id\n = value\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key9"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "id\n= value\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key10"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value2",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value2"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "1 = 1\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key10"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "-1 = Foo\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key11"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "19 = Foo2\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key12"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "JunkEntry",
+      "content": "key13 = Single Value\n  | Multi Value\n\n"
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key14"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    }
+  ],
+  "comment": null
+}

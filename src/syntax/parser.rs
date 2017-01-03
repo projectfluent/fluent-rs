@@ -19,6 +19,7 @@ trait ParserStream<I> {
     fn skip_ws(&mut self);
     fn expect_char(&mut self, ch: char) -> Result<()>;
     fn take_char_if(&mut self, ch: char) -> bool;
+    fn take_char_after_line_ws_if(&mut self, ch: char) -> bool;
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
     fn take_id_start(&mut self) -> Option<char>;
     fn take_id_char(&mut self) -> Option<char>;
@@ -67,6 +68,30 @@ impl<I> ParserStream<I> for MultiPeek<I>
                 false
             }
         }
+    }
+
+    fn take_char_after_line_ws_if(&mut self, ch2: char) -> bool {
+        let mut i = 0;
+
+        while let Some(&ch) = self.peek() {
+            if ch != ' ' && ch != '\t' {
+                if ch == ch2 {
+                    i += 1;
+                    for _ in 0..i {
+                        self.next();
+                    }
+                    return true;
+                } else {
+                    self.reset_peek();
+                    return false;
+                }
+            }
+
+            i += 1;
+        }
+
+        self.reset_peek();
+        return false;
     }
 
     fn take_char<F>(&mut self, f: F) -> Option<char>
@@ -174,16 +199,78 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
 {
     let mut buffer = String::new();
     let mut elements = vec![];
+    let mut quote_delimited = false;
+    let mut first_line = true;
+    let mut is_intended = false;
+
+    if ps.take_char_if('"') {
+        quote_delimited = true;
+    }
 
     loop {
         match ps.peek() {
             Some(&ch) => {
                 match ch {
                     '\n' => {
-                        ps.reset_peek();
-                        break;
+                        ps.next();
+                        if quote_delimited {
+                            return Err(ParserError::Generic);
+                        }
+
+                        if !ps.take_char_after_line_ws_if('|') {
+                            break;
+                        }
+
+                        if first_line && !buffer.is_empty() {
+                            return Err(ParserError::Generic);
+                        }
+
+
+                        if first_line {
+                            if ps.take_char_if(' ') {
+                                is_intended = true;
+                            }
+                        } else {
+                            if is_intended && !ps.take_char_if(' ') {
+                                return Err(ParserError::Generic);
+                            }
+                        }
+
+                        first_line = false;
+
+                        if !buffer.is_empty() {
+                            buffer.push(ch);
+                        }
+                        continue;
+                    }
+                    '\\' => {
+                        match ps.peek() {
+                            Some(&ch2) => {
+                                match ch2 {
+                                    '{' => {
+                                        buffer.push(ch2);
+                                        ps.next();
+                                    }
+                                    '"' if quote_delimited => {
+                                        buffer.push(ch2);
+                                        ps.next();
+                                    }
+                                    _ => {
+                                        buffer.push(ch);
+                                        buffer.push(ch2);
+                                        ps.next();
+                                    }
+                                }
+                            }
+                            None => {
+                                ps.reset_peek();
+                                buffer.push(ch);
+                                break;
+                            }
+                        }
                     }
                     '{' => {
+                        ps.next();
                         ps.skip_line_ws();
 
                         elements.push(ast::PatternElement::Text(buffer));
@@ -200,6 +287,10 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
 
                         continue;
                     }
+                    '"' if quote_delimited => {
+                        quote_delimited = false;
+                        break;
+                    }
                     _ => {
                         buffer.push(ch);
                     }
@@ -208,6 +299,10 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
             }
             None => break,
         }
+    }
+
+    if quote_delimited {
+        return Err(ParserError::Generic);
     }
 
     if buffer.len() != 0 {

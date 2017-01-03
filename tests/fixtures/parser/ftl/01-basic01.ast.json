@@ -1,0 +1,26 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key1"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    }
+  ],
+  "comment": null
+}

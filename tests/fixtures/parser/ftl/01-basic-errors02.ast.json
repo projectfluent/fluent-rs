@@ -1,0 +1,10 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "JunkEntry",
+      "content": "key1 = \" Value\n"
+    }
+  ],
+  "comment": null
+}

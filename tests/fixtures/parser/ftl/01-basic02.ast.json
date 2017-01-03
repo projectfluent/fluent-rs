@@ -1,0 +1,166 @@
+{
+  "type": "Resource",
+  "body": [
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key1"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 1",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 1"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key2"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 2",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 2"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key3"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 3",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 3"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key4"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value4",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value4"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key5"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 5",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 5"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key6"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 6",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 6"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key7"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 7",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 7"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    },
+    {
+      "type": "Entity",
+      "id": {
+        "type": "Identifier",
+        "name": "key8"
+      },
+      "value": {
+        "type": "Pattern",
+        "source": "Value 8",
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 8"
+          }
+        ],
+        "quoted": false
+      },
+      "traits": [],
+      "comment": null
+    }
+  ],
+  "comment": null
+}
