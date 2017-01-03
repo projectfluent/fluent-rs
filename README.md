@@ -15,27 +15,10 @@ Status
 ------
 
 The implementation is in its early stages and supports only some of the Project
-Fluent's spec.  We're currently working towards an MVP version 0.1 with the
-following scope:
+Fluent's spec.  Consult the [list of milestones][] for more information about
+release planning and scope.
 
-  - [x] Patterns without interpolations
-  - [ ] Message references
-  - [ ] String-typed external arguments
-  - [ ] Number-typed external arguments
-  - [ ] Plural rule for English
-  - [ ] Select expressions
-
-Post-0.1 versions will provide support for:
-
-  - [ ] Multi-line patterns
-  - [ ] Quoted whitespace
-  - [ ] Traits
-  - [ ] Sections
-  - [ ] Comments
-  - [ ] Member expressions
-  - [ ] Plural rules for other languages
-  - [ ] Call expressions and built-in functions
-
+[list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
 
 Install
 -------
