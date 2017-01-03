@@ -20,7 +20,7 @@ mod tests {
 
     #[bench]
     fn bench_parser(b: &mut Bencher) {
-        let f = read_file("./tests/simple.ftl").expect("Couldn't load file");
+        let f = read_file("./tests/workload-low.ftl").expect("Couldn't load file");
 
         b.iter(|| {
             parse(&f).unwrap();
