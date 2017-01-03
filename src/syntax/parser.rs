@@ -493,7 +493,7 @@ fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
     }
 
     match exp {
-        ast::Expression::EntityReference { id } => {
+        ast::Expression::MessageReference { id } => {
             ps.expect_char(')')?;
             return Ok(ast::Expression::CallExpression {
                 callee: id,
@@ -515,7 +515,7 @@ fn get_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
         }
         _ => {
             ps.reset_peek();
-            ast::Expression::EntityReference { id: get_identifier(ps)? }
+            ast::Expression::MessageReference { id: get_identifier(ps)? }
         }
     };
 

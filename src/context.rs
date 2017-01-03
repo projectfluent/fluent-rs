@@ -38,7 +38,7 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::EntityReference { id: ast::Identifier { ref name } } => {
+            &ast::Expression::MessageReference { id: ast::Identifier { ref name } } => {
                 self.messages
                     .get(name)
                     .and_then(|msg| self.format(msg))

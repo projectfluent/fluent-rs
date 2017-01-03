@@ -78,7 +78,7 @@ pub struct Member {
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
-    EntityReference { id: Identifier },
+    MessageReference { id: Identifier },
     ExternalArgument { id: Identifier },
     CallExpression {
         callee: Identifier,
