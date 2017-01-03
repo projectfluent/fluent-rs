@@ -15,8 +15,10 @@ pub enum ParserError {
 type Result<T> = result::Result<T, ParserError>;
 
 trait ParserStream<I> {
+    fn peek_line_ws(&mut self) -> (u8, Option<char>);
     fn skip_line_ws(&mut self);
     fn skip_ws(&mut self);
+    fn skip_ws_lines(&mut self);
     fn expect_char(&mut self, ch: char) -> Result<()>;
     fn take_char_if(&mut self, ch: char) -> bool;
     fn take_char_after_line_ws_if(&mut self, ch: char) -> bool;
@@ -25,11 +27,24 @@ trait ParserStream<I> {
     fn is_id_start(&mut self) -> bool;
     fn take_id_start(&mut self) -> Option<char>;
     fn take_id_char(&mut self) -> Option<char>;
+    fn take_kw_char(&mut self) -> Option<char>;
 }
 
 impl<I> ParserStream<I> for MultiPeek<I>
     where I: Iterator<Item = char>
 {
+    fn peek_line_ws(&mut self) -> (u8, Option<char>) {
+        let mut i: u8 = 0;
+        while let Some(&ch) = self.peek() {
+            if ch != ' ' && ch != '\t' {
+                return (i, Some(ch));
+            }
+
+            i += 1;
+        }
+        return (i, None);
+    }
+
     fn skip_line_ws(&mut self) {
         while let Some(&ch) = self.peek() {
             if ch != ' ' && ch != '\t' {
@@ -49,6 +64,25 @@ impl<I> ParserStream<I> for MultiPeek<I>
             }
 
             self.next();
+        }
+    }
+
+    fn skip_ws_lines(&mut self) {
+        loop {
+            let (wc, ch) = self.peek_line_ws();
+
+            match ch {
+                Some('\n') => {
+                    for _ in 0..wc {
+                        self.next();
+                    }
+                    self.next();
+                }
+                _ => {
+                    self.reset_peek();
+                    break;
+                }
+            }
         }
     }
 
@@ -160,11 +194,25 @@ impl<I> ParserStream<I> for MultiPeek<I>
             None => None,
         }
     }
+
+    fn take_kw_char(&mut self) -> Option<char> {
+        let closure = |x| match x {
+            'a'...'z' | 'A'...'Z' | '0'...'9' | '_' | '-' | ' ' => true,
+            _ => false,
+        };
+
+        match self.take_char(closure) {
+            Some(ch) => Some(ch),
+            None => None,
+        }
+    }
 }
 
 
 pub fn parse(source: &str) -> Result<ast::Resource> {
     let mut ps = multipeek(source.chars());
+
+    ps.skip_ws_lines();
 
     get_resource(&mut ps)
 }
@@ -216,7 +264,7 @@ fn get_entry<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
                 }
             }
         }
-        None => return Err(ParserError::Generic),
+        None => {}
     }
 
     if ps.is_id_start() {
@@ -276,7 +324,7 @@ fn get_section<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Resul
 
     ps.skip_line_ws();
 
-    let key = get_key(ps)?;
+    let key = get_key(ps, true, true)?;
 
     ps.skip_line_ws();
 
@@ -304,10 +352,55 @@ fn get_message<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Resul
 
     let pattern = get_pattern(ps)?;
 
+    let mut traits: Option<Vec<ast::Member>> = None;
+
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '\n' => {
+                    let (wc, ch) = ps.peek_line_ws();
+
+                    match ch {
+                        Some('*') => {
+                            ps.next();
+                            for _ in 0..wc {
+                                ps.next();
+                            }
+                            traits = Some(get_members(ps)?);
+                        }
+                        Some('[') => {
+                            match ps.peek() {
+                                Some(&'[') => {
+                                    ps.reset_peek();
+                                }
+                                _ => {
+                                    ps.next();
+                                    for _ in 0..wc {
+                                        ps.next();
+                                    }
+                                    traits = Some(get_members(ps)?);
+                                }
+                            }
+                        }
+                        _ => {
+                            ps.reset_peek();
+                        }
+                    }
+                }
+                _ => {
+                    ps.reset_peek();
+                }
+            }
+        }
+        None => {
+            ps.reset_peek();
+        }
+    };
+
     Ok(ast::Message {
         id: id,
         value: Some(pattern),
-        traits: None,
+        traits: traits,
         comment: comment,
     })
 }
@@ -332,25 +425,186 @@ fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<ast::Identifier>
     Ok(ast::Identifier { name: name })
 }
 
-fn get_key<I>(ps: &mut MultiPeek<I>) -> Result<ast::Key>
+fn get_member_key<I>(ps: &mut MultiPeek<I>) -> Result<ast::MemberKey>
+    where I: Iterator<Item = char>
+{
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '0'...'9' | '-' => {
+                    let num = get_number(ps)?;
+                    return Ok(ast::MemberKey::Number(num));
+                }
+                _ => {
+                    ps.reset_peek();
+                    return Ok(ast::MemberKey::Keyword(get_keyword(ps)?));
+                }
+            }
+        }
+        None => Err(ParserError::Generic),
+    }
+}
+
+fn get_members<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Member>>
+    where I: Iterator<Item = char>
+{
+    let mut members = vec![];
+
+    loop {
+        let mut default_index = false;
+
+        match ps.peek() {
+            Some(&'*') => {
+                ps.next();
+                default_index = true;
+            }
+            _ => {
+                ps.reset_peek();
+            }
+        };
+
+        match ps.peek() {
+            Some(&'[') => {
+                match ps.peek() {
+                    Some(&'[') => {
+                        ps.reset_peek();
+                        break;
+                    }
+                    _ => {
+                        ps.reset_peek();
+                        ps.next();
+                    }
+                }
+
+                let key = get_member_key(ps)?;
+
+                ps.expect_char(']')?;
+
+                ps.skip_line_ws();
+
+                let value = get_pattern(ps)?;
+
+                members.push(ast::Member {
+                    key: key,
+                    value: value,
+                    default: default_index,
+                });
+
+                match ps.peek() {
+                    Some(&'\n') => {
+                        ps.next();
+                        ps.skip_ws();
+                    }
+                    _ => {
+                        ps.reset_peek();
+                        break;
+                    }
+                }
+            }
+            _ => {
+                ps.reset_peek();
+                break;
+            }
+        }
+    }
+    Ok(members)
+}
+
+fn get_key<I>(ps: &mut MultiPeek<I>, start: bool, end_ws: bool) -> Result<ast::Key>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
 
-    match ps.take_id_start() {
-        Some(ch) => name.push(ch),
-        None => return Err(ParserError::Generic),
-    };
+    if start {
+        match ps.take_id_start() {
+            Some(ch) => name.push(ch),
+            None => return Err(ParserError::Generic),
+        };
+    }
 
     loop {
-        match ps.take_id_char() {
+        match ps.take_kw_char() {
             Some(ch) => name.push(ch),
             _ => break,
         }
     }
 
+    while name.ends_with(' ') {
+        if !end_ws {
+            return Err(ParserError::Generic);
+        }
+        name.pop();
+    }
+
     Ok(ast::Key { name: name })
 }
+
+fn get_keyword<I>(ps: &mut MultiPeek<I>) -> Result<ast::Keyword>
+    where I: Iterator<Item = char>
+{
+    let ns = get_identifier(ps)?;
+
+    match ps.peek() {
+        Some(&'/') => {
+            ps.next();
+            let key = get_key(ps, true, false)?;
+
+            Ok(ast::Keyword {
+                ns: Some(ns),
+                name: key,
+            })
+        }
+        Some(&']') => {
+            ps.reset_peek();
+            Ok(ast::Keyword {
+                ns: None,
+                name: ast::Key { name: ns.name },
+            })
+        }
+        _ => {
+            ps.reset_peek();
+            let key = get_key(ps, false, false)?;
+
+            Ok(ast::Keyword {
+                ns: None,
+                name: ast::Key { name: ns.name + &key.name },
+            })
+        }
+    }
+
+}
+
+fn get_number<I>(ps: &mut MultiPeek<I>) -> Result<ast::Number>
+    where I: Iterator<Item = char>
+{
+    let mut num = String::new();
+
+    match ps.peek() {
+        Some(&'-') => {
+            num.push('-');
+            ps.next();
+        }
+        _ => {
+            ps.reset_peek();
+        }
+    }
+
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '0'...'9' => {
+                    num.push(ch);
+                    ps.next();
+                }
+                _ => return Err(ParserError::Generic),
+            }
+        }
+        None => return Err(ParserError::Generic),
+    }
+
+    Ok(ast::Number { value: num })
+}
+
 
 fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
     where I: Iterator<Item = char>
@@ -358,11 +612,13 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
     let mut buffer = String::new();
     let mut elements = vec![];
     let mut quote_delimited = false;
+    let mut quote_open = false;
     let mut first_line = true;
     let mut is_intended = false;
 
     if ps.take_char_if('"') {
         quote_delimited = true;
+        quote_open = true;
     }
 
     loop {
@@ -370,19 +626,20 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
             Some(&ch) => {
                 match ch {
                     '\n' => {
-                        ps.next();
                         if quote_delimited {
                             return Err(ParserError::Generic);
+                        }
+
+                        if first_line && !buffer.is_empty() {
+                            ps.reset_peek();
+                            break;
                         }
 
                         if !ps.take_char_after_line_ws_if('|') {
                             break;
                         }
 
-                        if first_line && !buffer.is_empty() {
-                            return Err(ParserError::Generic);
-                        }
-
+                        ps.next();
 
                         if first_line {
                             if ps.take_char_if(' ') {
@@ -445,8 +702,9 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
 
                         continue;
                     }
-                    '"' if quote_delimited => {
-                        quote_delimited = false;
+                    '"' if quote_open => {
+                        ps.next();
+                        quote_open = false;
                         break;
                     }
                     _ => {
@@ -459,7 +717,7 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
         }
     }
 
-    if quote_delimited {
+    if quote_open {
         return Err(ParserError::Generic);
     }
 
@@ -469,7 +727,7 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
 
     Ok(ast::Pattern {
         elements: elements,
-        quoted: false,
+        quoted: quote_delimited,
     })
 }
 
