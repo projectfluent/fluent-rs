@@ -84,4 +84,18 @@ pub enum Expression {
         callee: Identifier,
         args: Vec<Expression>,
     },
+    SelectExpression {
+        exp: Box<Expression>,
+        vars: Vec<Member>,
+    },
+    KeyValueArgument {
+        name: Identifier,
+        val: Box<Expression>,
+    },
+    Number(Number),
+    String(String),
+    Member {
+        obj: Box<Expression>,
+        key: MemberKey,
+    },
 }

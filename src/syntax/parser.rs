@@ -574,6 +574,48 @@ fn get_keyword<I>(ps: &mut MultiPeek<I>) -> Result<ast::Keyword>
 
 }
 
+fn get_digits<I>(ps: &mut MultiPeek<I>) -> Result<String>
+    where I: Iterator<Item = char>
+{
+    let mut num = String::new();
+
+    match ps.peek() {
+        Some(&ch) => {
+            match ch {
+                '0'...'9' => {
+                    num.push(ch);
+                    ps.next();
+                }
+                _ => return Err(ParserError::Generic),
+            }
+        }
+        None => return Err(ParserError::Generic),
+    }
+
+    loop {
+        match ps.peek() {
+            Some(&ch) => {
+                match ch {
+                    '0'...'9' => {
+                        num.push(ch);
+                        ps.next();
+                    }
+                    _ => {
+                        ps.reset_peek();
+                        break;
+                    }
+                }
+            }
+            None => {
+                ps.reset_peek();
+                break;
+            }
+        }
+    }
+
+    Ok(num)
+}
+
 fn get_number<I>(ps: &mut MultiPeek<I>) -> Result<ast::Number>
     where I: Iterator<Item = char>
 {
@@ -589,17 +631,18 @@ fn get_number<I>(ps: &mut MultiPeek<I>) -> Result<ast::Number>
         }
     }
 
+    num.push_str(&get_digits(ps)?);
+
+
     match ps.peek() {
-        Some(&ch) => {
-            match ch {
-                '0'...'9' => {
-                    num.push(ch);
-                    ps.next();
-                }
-                _ => return Err(ParserError::Generic),
-            }
+        Some(&'.') => {
+            num.push('.');
+            ps.next();
+            num.push_str(&get_digits(ps)?);
         }
-        None => return Err(ParserError::Generic),
+        _ => {
+            ps.reset_peek();
+        }
     }
 
     Ok(ast::Number { value: num })
@@ -686,7 +729,6 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
                     }
                     '{' => {
                         ps.next();
-                        ps.skip_line_ws();
 
                         elements.push(ast::PatternElement::Text(buffer));
 
@@ -695,8 +737,6 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
                         elements.push(ast::PatternElement::Placeable {
                             expressions: get_placeable(ps)?,
                         });
-
-                        ps.skip_line_ws();
 
                         ps.expect_char('}')?;
 
@@ -734,17 +774,77 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
 fn get_placeable<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
     where I: Iterator<Item = char>
 {
-    let mut placeable = vec![];
-    let exp = get_call_expression(ps)?;
-    placeable.push(exp);
+    let mut exprs = vec![];
 
-    Ok(placeable)
+    ps.skip_line_ws();
+
+    loop {
+        exprs.push(get_placeable_expression(ps)?);
+
+        ps.skip_line_ws();
+
+        match ps.peek() {
+            Some(&'}') => {
+                ps.reset_peek();
+                break;
+            }
+            Some(&',') => {
+                ps.next();
+                ps.skip_line_ws();
+            }
+            _ => return Err(ParserError::Generic),
+        }
+    }
+
+    Ok(exprs)
+}
+
+fn get_placeable_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+    where I: Iterator<Item = char>
+{
+    let selector = get_call_expression(ps)?;
+
+    ps.skip_line_ws();
+
+    match ps.peek() {
+        Some(&'-') => {
+            match ps.peek() {
+                Some(&'>') => {
+                    ps.next();
+                    ps.next();
+
+                    ps.skip_line_ws();
+
+                    ps.expect_char('\n')?;
+
+                    ps.skip_ws();
+
+                    let members = get_members(ps)?;
+
+                    if members.len() == 0 {
+                        return Err(ParserError::Generic);
+                    }
+
+                    return Ok(ast::Expression::SelectExpression {
+                        exp: Box::new(selector),
+                        vars: members,
+                    });
+                }
+                _ => return Err(ParserError::Generic),
+            }
+        }
+        _ => {
+            ps.reset_peek();
+        }
+    }
+
+    Ok(selector)
 }
 
 fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
-    let exp = get_expression(ps)?;
+    let exp = get_member_expression(ps)?;
 
     if !ps.take_char_if('(') {
         return Ok(exp);
@@ -752,29 +852,139 @@ fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
 
     match exp {
         ast::Expression::MessageReference { id } => {
+
+            let args = get_call_args(ps)?;
+
             ps.expect_char(')')?;
             return Ok(ast::Expression::CallExpression {
                 callee: id,
-                args: vec![],
+                args: args,
             });
         }
         _ => Err(ParserError::Generic),
     }
 }
 
-fn get_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+fn get_call_args<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
+    where I: Iterator<Item = char>
+{
+    let mut args = vec![];
+
+    ps.skip_line_ws();
+
+    loop {
+        match ps.peek() {
+            Some(&')') => {
+                ps.reset_peek();
+                break;
+            }
+            Some(&',') => {
+                ps.next();
+                ps.skip_line_ws();
+            }
+            _ => {
+                ps.reset_peek();
+
+                let exp = get_call_expression(ps)?;
+
+                ps.skip_line_ws();
+
+                match ps.peek() {
+                    Some(&':') => {
+                        ps.next();
+                        ps.skip_line_ws();
+
+                        let val = get_call_expression(ps)?;
+
+                        match exp {
+                            ast::Expression::MessageReference { id } => {
+                                args.push(ast::Expression::KeyValueArgument {
+                                    name: id,
+                                    val: Box::new(val),
+                                });
+                            }
+                            _ => {
+                                return Err(ParserError::Generic);
+                            }
+                        }
+                    }
+                    _ => {
+                        ps.reset_peek();
+                        args.push(exp);
+                    }
+                }
+            }
+        }
+    }
+
+    Ok(args)
+}
+
+fn get_member_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+    where I: Iterator<Item = char>
+{
+    let mut exp = get_literal(ps)?;
+
+    loop {
+        match ps.peek() {
+            Some(&'[') => {
+                ps.next();
+                let keyword = get_member_key(ps)?;
+
+                ps.expect_char(']')?;
+
+                exp = ast::Expression::Member {
+                    obj: Box::new(exp),
+                    key: keyword,
+                }
+            }
+            _ => {
+                ps.reset_peek();
+                break;
+            }
+        }
+    }
+
+    Ok(exp)
+}
+
+
+fn get_literal<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
 
     let exp = match ps.peek() {
-        Some(&'$') => {
-            ps.next();
-            ast::Expression::ExternalArgument { id: get_identifier(ps)? }
+        Some(&ch) => {
+            match ch {
+                '0'...'9' | '-' => {
+                    ps.reset_peek();
+                    ast::Expression::Number(get_number(ps)?)
+                }
+                '"' => {
+                    ps.reset_peek();
+
+                    let pat = get_pattern(ps)?;
+
+                    if pat.elements.len() == 1 {
+                        match pat.elements[0] {
+                            ast::PatternElement::Text(ref t) => ast::Expression::String(t.clone()),
+                            _ => return Err(ParserError::Generic),
+                        }
+                    } else {
+                        return Err(ParserError::Generic);
+                    }
+                }
+                '$' => {
+                    ps.next();
+                    ast::Expression::ExternalArgument { id: get_identifier(ps)? }
+                }
+                _ => {
+                    ps.reset_peek();
+                    ast::Expression::MessageReference { id: get_identifier(ps)? }
+                }
+            }
         }
-        _ => {
-            ps.reset_peek();
-            ast::Expression::MessageReference { id: get_identifier(ps)? }
-        }
+        None => return Err(ParserError::Generic),
     };
 
     Ok(exp)
