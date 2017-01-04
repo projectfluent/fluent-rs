@@ -12,10 +12,13 @@ pub struct ParserStream<I>
 {
     iter: Fuse<I>,
     pub buf: Vec<char>,
-    peek_index: Option<usize>,
-    index: Option<usize>,
+    peek_index: i32,
+    index: i32,
 
     ch: Option<char>,
+
+    iter_end: bool,
+    peek_end: bool,
 }
 
 impl<I: Iterator<Item = char>> ParserStream<I> {
@@ -24,17 +27,21 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     }
 
     pub fn current_is(&mut self, ch: char) -> bool {
-        match self.ch {
-            Some(c) => ch == c,
-            None => false,
-        }
+        self.ch == Some(ch)
     }
 
     pub fn current_peek(&self) -> Option<char> {
-        match self.peek_index {
-            Some(i) if i < self.buf.len() => Some(self.buf[i]),
-            _ => self.ch,
+        let diff = self.peek_index - self.index;
+
+        if diff == 0 {
+            return self.ch;
         }
+
+        if self.peek_end {
+            return None;
+        }
+
+        return Some(self.buf[(diff - 1) as usize]);
     }
 
     pub fn current_peek_is(&mut self, ch: char) -> bool {
@@ -43,7 +50,6 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
             None => false,
         }
     }
-
 
     // pub fn bump(&mut self) {
     //     self.peek_index = None;
@@ -55,55 +61,28 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     // }
 
     pub fn peek(&mut self) -> Option<char> {
-        match self.peek_index {
-            Some(i) if i < self.buf.len() - 1 => {
-                let ret = Some(self.buf[i + 1]);
-                self.peek_index = Some(i + 1);
-                return ret;
+        if !self.peek_end {
+            self.peek_index += 1;
+        }
+        match self.iter.next() {
+            Some(c) => {
+                self.buf.push(c);
+                let diff = (self.peek_index - self.index) as usize;
+                return Some(self.buf[diff - 1]);
             }
-            None if self.buf.len() > 0 => {
-                let ret = Some(self.buf[0]);
-                self.peek_index = Some(0);
-                return ret;
-            }
-            _ => {
-                match self.iter.next() {
-                    Some(x) => {
-                        self.buf.push(x);
-                        let i = self.buf.len() - 1;
-                        self.peek_index = Some(i);
-                        let ret = Some(self.buf[i]);
-                        return ret;
-                    }
-                    None => {
-                        if self.buf.len() == 0 {
-                            self.peek_index = None;
-                        } else {
-                            self.peek_index = Some(self.buf.len() - 1);
-                        }
-                        return None;
-                    }
-                }
+            None => {
+                self.peek_end = true;
+                return None;
             }
         }
     }
 
-    pub fn get_index(&self) -> Option<usize> {
+    pub fn get_index(&self) -> i32 {
         self.index
     }
 
-    pub fn get_peek_index(&self) -> Option<usize> {
-        match self.peek_index {
-            Some(i) => {
-                match self.index {
-                    Some(i2) => {
-                        return Some(i2 + i + 1);
-                    }
-                    None => return Some(i),
-                }
-            }
-            None => return self.index,
-        }
+    pub fn get_peek_index(&self) -> i32 {
+        return self.peek_index;
     }
 
     pub fn has_more(&mut self) -> bool {
@@ -115,51 +94,30 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     }
 
     pub fn peek_char_is(&mut self, c: char) -> bool {
+        if self.peek_end {
+            return false;
+        }
         let ret = match self.peek() {
             Some(ch) if ch == c => true,
             _ => false,
         };
 
-        match self.peek_index {
-            Some(i) if i > 0 => {
-                self.peek_index = Some(i - 1);
-            }
-            Some(_) => {
-                self.peek_index = None;
-            }
-            None => {}
-        };
-
-        ret
+        self.peek_index -= 1;
+        return ret;
     }
 
     pub fn reset_peek(&mut self) {
-        self.peek_index = None;
+        self.peek_index = self.index;
     }
 
     pub fn skip_to_peek(&mut self) {
-        match self.get_peek_index() {
-            None => {}
-            Some(i) => {
-                match self.index {
-                    Some(i2) => {
-                        let diff = i - i2;
-                        self.index = Some(i2 + diff);
-                        for _ in 0..diff {
-                            self.ch = Some(self.buf.remove(0));
-                        }
-                    }
-                    None => {
-                        self.index = Some(i);
-                        for _ in 0..i + 1 {
-                            self.ch = Some(self.buf.remove(0));
-                        }
-                    }
-                }
-            }
-        };
+        let diff = self.peek_index - self.index;
 
-        self.peek_index = None;
+        for _ in 0..diff {
+            self.ch = Some(self.buf.remove(0));
+        }
+
+        self.index = self.peek_index;
     }
 
     pub fn peek_line_ws(&mut self) {
@@ -193,9 +151,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
                 break;
             }
 
-            if self.next().is_none() {
-                break;
-            }
+            self.next();
         }
     }
 
@@ -205,9 +161,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
                 break;
             }
 
-            if self.next().is_none() {
-                break;
-            }
+            self.next();
         }
     }
 
@@ -340,22 +294,24 @@ impl<I> Iterator for ParserStream<I>
     type Item = char;
 
     fn next(&mut self) -> Option<char> {
-        self.peek_index = None;
+
         if self.buf.is_empty() {
-            let ch = self.iter.next();
-            match ch {
-                Some(ch) => self.ch = Some(ch),
-                None => return None,
-            }
+            self.ch = self.iter.next();
         } else {
-            self.ch = Some(self.buf.remove(0))
+            self.ch = Some(self.buf.remove(0));
         }
-        if self.ch.is_some() {
-            match self.index {
-                Some(i) => self.index = Some(i + 1),
-                None => self.index = Some(0),
-            }
+
+        if !self.iter_end {
+            self.index += 1;
         }
+
+        if self.ch.is_none() {
+            self.iter_end = true;
+            self.peek_end = true;
+        }
+
+        self.peek_index = self.index;
+
         self.ch
     }
 }
@@ -366,8 +322,11 @@ pub fn parserstream<I>(iterable: I) -> ParserStream<I::IntoIter>
     ParserStream {
         iter: iterable.into_iter().fuse(),
         buf: vec![],
-        peek_index: None,
-        index: None,
+        peek_index: -1,
+        index: -1,
         ch: None,
+
+        iter_end: false,
+        peek_end: false,
     }
 }
