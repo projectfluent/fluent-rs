@@ -13,48 +13,16 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
 
     let mut ps = parserstream(source.chars());
 
-    println!("{:?}", ps.current());
-    println!("{:?}", ps.current_peek());
-    println!("{:?}", ps.get_index());
-    println!("{:?}", ps.get_peek_index());
-    loop {
-        match ps.next() {
-            Some(ch) => {
-                println!("{:?}", ch);
-                println!("{:?}", ps.current());
-                println!("{:?}", ps.current_peek());
-                println!("{:?}", ps.get_index());
-                println!("{:?}", ps.get_peek_index());
-            }
-            None => break,
-        }
+    ps.skip_ws_lines();
+
+    if ps.get_index().is_none() {
+        ps.next();
     }
-    println!("{:?}", ps.current());
-    println!("{:?}", ps.current_peek());
-    println!("{:?}", ps.get_index());
-    println!("{:?}", ps.get_peek_index());
 
-    ps.next();
-
-    println!("{:?}", ps.current());
-    println!("{:?}", ps.current_peek());
-    println!("{:?}", ps.get_index());
-    println!("{:?}", ps.get_peek_index());
-    // ps.skip_ws_lines();
-
-    Ok(ast::Resource { body: vec![] })
-    // get_resource(&mut ps)
-}
-
-fn get_resource<I>(ps: &mut ParserStream<I>) -> Result<ast::Resource>
-    where I: Iterator<Item = char>
-{
     let mut entries = vec![];
 
-    while ps.peek().is_some() {
-        ps.reset_peek();
-
-        let entry = get_entry(ps)?;
+    while ps.has_more() {
+        let entry = get_entry(&mut ps)?;
         entries.push(entry);
 
         ps.skip_ws();
@@ -68,32 +36,12 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 {
     let mut comment: Option<ast::Comment> = None;
 
-    match ps.peek() {
-        Some(&ch) => {
-            match ch {
-                '#' => {
-                    comment = Some(get_comment(ps)?);
-                }
-                _ => {
-                    ps.reset_peek();
-                }
-            }
-        }
-        None => return Err(ParserError::Generic),
+    if ps.current_is('#') {
+        comment = Some(get_comment(ps)?);
     }
 
-    match ps.peek() {
-        Some(&ch) => {
-            match ch {
-                '[' => {
-                    return Ok(ast::Entry::Section(get_section(ps, comment)?));
-                }
-                _ => {
-                    ps.reset_peek();
-                }
-            }
-        }
-        None => {}
+    if ps.current_is('[') {
+        return Ok(ast::Entry::Section(get_section(ps, comment)?));
     }
 
     if ps.is_id_start() {
@@ -109,7 +57,7 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
     where I: Iterator<Item = char>
 {
-    ps.next();
+    ps.expect_char('#')?;
     ps.take_char_if(' ');
 
     let mut content = String::new();
@@ -121,8 +69,8 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
 
         ps.next();
 
-        match ps.peek() {
-            Some(&ch) => {
+        match ps.current() {
+            Some(ch) => {
                 match ch {
                     '#' => {
                         content.push('\n');
@@ -130,13 +78,11 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
                         ps.take_char_if(' ');
                     }
                     _ => {
-                        ps.reset_peek();
                         break;
                     }
                 }
             }
             None => {
-                ps.reset_peek();
                 break;
             }
         }
@@ -183,26 +129,23 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     let mut traits: Option<Vec<ast::Member>> = None;
 
-    match ps.peek() {
-        Some(&ch) => {
+    match ps.current() {
+        Some(ch) => {
             match ch {
                 '\n' => {
                     ps.peek_line_ws();
 
-                    match ps.peek() {
-                        Some(&'*') => {
+                    match ps.current_peek() {
+                        Some('*') => {
                             ps.skip_to_peek();
                             traits = Some(get_members(ps)?);
                         }
-                        Some(&'[') => {
-                            match ps.peek() {
-                                Some(&'[') => {
-                                    ps.reset_peek();
-                                }
-                                _ => {
-                                    ps.skip_to_peek();
-                                    traits = Some(get_members(ps)?);
-                                }
+                        Some('[') => {
+                            if ps.peek_char_is('[') {
+                                ps.reset_peek();
+                            } else {
+                                ps.skip_to_peek();
+                                traits = Some(get_members(ps)?);
                             }
                         }
                         _ => {
@@ -251,8 +194,8 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
 fn get_member_key<I>(ps: &mut ParserStream<I>) -> Result<ast::MemberKey>
     where I: Iterator<Item = char>
 {
-    match ps.peek() {
-        Some(&ch) => {
+    match ps.current() {
+        Some(ch) => {
             match ch {
                 '0'...'9' | '-' => {
                     let num = get_number(ps)?;
@@ -276,28 +219,22 @@ fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
     loop {
         let mut default_index = false;
 
-        match ps.peek() {
-            Some(&'*') => {
+        match ps.current() {
+            Some('*') => {
                 ps.next();
                 default_index = true;
             }
-            _ => {
-                ps.reset_peek();
-            }
+            _ => {}
         };
 
-        match ps.peek() {
-            Some(&'[') => {
-                match ps.peek() {
-                    Some(&'[') => {
-                        ps.reset_peek();
-                        break;
-                    }
-                    _ => {
-                        ps.reset_peek();
-                        ps.next();
-                    }
+        match ps.current() {
+            Some('[') => {
+                if ps.peek_char_is('[') {
+                    ps.reset_peek();
+                    break;
                 }
+
+                ps.next();
 
                 let key = get_member_key(ps)?;
 
@@ -313,19 +250,17 @@ fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
                     default: default_index,
                 });
 
-                match ps.peek() {
-                    Some(&'\n') => {
+                match ps.current() {
+                    Some('\n') => {
                         ps.next();
                         ps.skip_ws();
                     }
                     _ => {
-                        ps.reset_peek();
                         break;
                     }
                 }
             }
             _ => {
-                ps.reset_peek();
                 break;
             }
         }
@@ -367,8 +302,8 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
 {
     let ns = get_identifier(ps)?;
 
-    match ps.peek() {
-        Some(&'/') => {
+    match ps.current() {
+        Some('/') => {
             ps.next();
             let key = get_key(ps, true, false)?;
 
@@ -377,15 +312,13 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
                 name: key,
             })
         }
-        Some(&']') => {
-            ps.reset_peek();
+        Some(']') => {
             Ok(ast::Keyword {
                 ns: None,
                 name: ast::Key { name: ns.name },
             })
         }
         _ => {
-            ps.reset_peek();
             let key = get_key(ps, false, false)?;
 
             Ok(ast::Keyword {
@@ -403,7 +336,7 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
     let mut num = String::new();
 
     match ps.peek() {
-        Some(&ch) => {
+        Some(ch) => {
             match ch {
                 '0'...'9' => {
                     num.push(ch);
@@ -417,7 +350,7 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
 
     loop {
         match ps.peek() {
-            Some(&ch) => {
+            Some(ch) => {
                 match ch {
                     '0'...'9' => {
                         num.push(ch);
@@ -445,7 +378,7 @@ fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
     let mut num = String::new();
 
     match ps.peek() {
-        Some(&'-') => {
+        Some('-') => {
             num.push('-');
             ps.next();
         }
@@ -458,7 +391,7 @@ fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
 
 
     match ps.peek() {
-        Some(&'.') => {
+        Some('.') => {
             num.push('.');
             ps.next();
             num.push_str(&get_digits(ps)?);
@@ -488,8 +421,8 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
     }
 
     loop {
-        match ps.peek() {
-            Some(&ch) => {
+        match ps.current() {
+            Some(ch) => {
                 match ch {
                     '\n' => {
                         if quote_delimited {
@@ -497,13 +430,16 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
                         }
 
                         if first_line && !buffer.is_empty() {
-                            ps.reset_peek();
                             break;
                         }
+
+                        ps.peek();
 
                         if !ps.take_char_after_line_ws_if('|') {
                             break;
                         }
+
+
 
                         ps.next();
 
@@ -526,7 +462,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
                     }
                     '\\' => {
                         match ps.peek() {
-                            Some(&ch2) => {
+                            Some(ch2) => {
                                 match ch2 {
                                     '{' => {
                                         buffer.push(ch2);
@@ -606,12 +542,11 @@ fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
 
         ps.skip_line_ws();
 
-        match ps.peek() {
-            Some(&'}') => {
-                ps.reset_peek();
+        match ps.current() {
+            Some('}') => {
                 break;
             }
-            Some(&',') => {
+            Some(',') => {
                 ps.next();
                 ps.skip_line_ws();
             }
@@ -629,10 +564,10 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
 
     ps.skip_line_ws();
 
-    match ps.peek() {
-        Some(&'-') => {
+    match ps.current() {
+        Some('-') => {
             match ps.peek() {
-                Some(&'>') => {
+                Some('>') => {
                     ps.next();
                     ps.next();
 
@@ -697,11 +632,11 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
 
     loop {
         match ps.peek() {
-            Some(&')') => {
+            Some(')') => {
                 ps.reset_peek();
                 break;
             }
-            Some(&',') => {
+            Some(',') => {
                 ps.next();
                 ps.skip_line_ws();
             }
@@ -713,7 +648,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                 ps.skip_line_ws();
 
                 match ps.peek() {
-                    Some(&':') => {
+                    Some(':') => {
                         ps.next();
                         ps.skip_line_ws();
 
@@ -749,8 +684,8 @@ fn get_member_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     let mut exp = get_literal(ps)?;
 
     loop {
-        match ps.peek() {
-            Some(&'[') => {
+        match ps.current() {
+            Some('[') => {
                 ps.next();
                 let keyword = get_member_key(ps)?;
 
@@ -762,7 +697,6 @@ fn get_member_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 }
             }
             _ => {
-                ps.reset_peek();
                 break;
             }
         }
@@ -776,16 +710,11 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
 
-    let exp = match ps.peek() {
-        Some(&ch) => {
+    let exp = match ps.current() {
+        Some(ch) => {
             match ch {
-                '0'...'9' | '-' => {
-                    ps.reset_peek();
-                    ast::Expression::Number(get_number(ps)?)
-                }
+                '0'...'9' | '-' => ast::Expression::Number(get_number(ps)?),
                 '"' => {
-                    ps.reset_peek();
-
                     let pat = get_pattern(ps)?;
 
                     if pat.elements.len() == 1 {
@@ -801,10 +730,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                     ps.next();
                     ast::Expression::ExternalArgument { id: get_identifier(ps)? }
                 }
-                _ => {
-                    ps.reset_peek();
-                    ast::Expression::MessageReference { id: get_identifier(ps)? }
-                }
+                _ => ast::Expression::MessageReference { id: get_identifier(ps)? },
             }
         }
         None => return Err(ParserError::Generic),
