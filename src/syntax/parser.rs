@@ -1,10 +1,7 @@
-extern crate itertools;
-
 pub use super::errors::ParserError;
 
 use super::stream::ParserStream;
-
-use self::itertools::{MultiPeek, multipeek};
+use super::stream::parserstream;
 
 use std::result;
 
@@ -13,14 +10,43 @@ use super::ast;
 type Result<T> = result::Result<T, ParserError>;
 
 pub fn parse(source: &str) -> Result<ast::Resource> {
-    let mut ps = multipeek(source.chars());
 
-    ps.skip_ws_lines();
+    let mut ps = parserstream(source.chars());
 
-    get_resource(&mut ps)
+    println!("{:?}", ps.current());
+    println!("{:?}", ps.current_peek());
+    println!("{:?}", ps.get_index());
+    println!("{:?}", ps.get_peek_index());
+    loop {
+        match ps.next() {
+            Some(ch) => {
+                println!("{:?}", ch);
+                println!("{:?}", ps.current());
+                println!("{:?}", ps.current_peek());
+                println!("{:?}", ps.get_index());
+                println!("{:?}", ps.get_peek_index());
+            }
+            None => break,
+        }
+    }
+    println!("{:?}", ps.current());
+    println!("{:?}", ps.current_peek());
+    println!("{:?}", ps.get_index());
+    println!("{:?}", ps.get_peek_index());
+
+    ps.next();
+
+    println!("{:?}", ps.current());
+    println!("{:?}", ps.current_peek());
+    println!("{:?}", ps.get_index());
+    println!("{:?}", ps.get_peek_index());
+    // ps.skip_ws_lines();
+
+    Ok(ast::Resource { body: vec![] })
+    // get_resource(&mut ps)
 }
 
-fn get_resource<I>(ps: &mut MultiPeek<I>) -> Result<ast::Resource>
+fn get_resource<I>(ps: &mut ParserStream<I>) -> Result<ast::Resource>
     where I: Iterator<Item = char>
 {
     let mut entries = vec![];
@@ -37,7 +63,7 @@ fn get_resource<I>(ps: &mut MultiPeek<I>) -> Result<ast::Resource>
     Ok(ast::Resource { body: entries })
 }
 
-fn get_entry<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
+fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
     where I: Iterator<Item = char>
 {
     let mut comment: Option<ast::Comment> = None;
@@ -80,7 +106,7 @@ fn get_entry<I>(ps: &mut MultiPeek<I>) -> Result<ast::Entry>
     }
 }
 
-fn get_comment<I>(ps: &mut MultiPeek<I>) -> Result<ast::Comment>
+fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
     where I: Iterator<Item = char>
 {
     ps.next();
@@ -119,7 +145,7 @@ fn get_comment<I>(ps: &mut MultiPeek<I>) -> Result<ast::Comment>
     Ok(ast::Comment { body: content })
 }
 
-fn get_section<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Result<ast::Section>
+fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Section>
     where I: Iterator<Item = char>
 {
     ps.expect_char('[')?;
@@ -142,7 +168,7 @@ fn get_section<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Resul
 }
 
 
-fn get_message<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Result<ast::Message>
+fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Message>
     where I: Iterator<Item = char>
 {
     let id = get_identifier(ps)?;
@@ -161,26 +187,20 @@ fn get_message<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Resul
         Some(&ch) => {
             match ch {
                 '\n' => {
-                    let (wc, ch) = ps.peek_line_ws();
+                    ps.peek_line_ws();
 
-                    match ch {
-                        Some('*') => {
-                            ps.next();
-                            for _ in 0..wc {
-                                ps.next();
-                            }
+                    match ps.peek() {
+                        Some(&'*') => {
+                            ps.skip_to_peek();
                             traits = Some(get_members(ps)?);
                         }
-                        Some('[') => {
+                        Some(&'[') => {
                             match ps.peek() {
                                 Some(&'[') => {
                                     ps.reset_peek();
                                 }
                                 _ => {
-                                    ps.next();
-                                    for _ in 0..wc {
-                                        ps.next();
-                                    }
+                                    ps.skip_to_peek();
                                     traits = Some(get_members(ps)?);
                                 }
                             }
@@ -208,7 +228,7 @@ fn get_message<I>(ps: &mut MultiPeek<I>, comment: Option<ast::Comment>) -> Resul
     })
 }
 
-fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<ast::Identifier>
+fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
@@ -228,7 +248,7 @@ fn get_identifier<I>(ps: &mut MultiPeek<I>) -> Result<ast::Identifier>
     Ok(ast::Identifier { name: name })
 }
 
-fn get_member_key<I>(ps: &mut MultiPeek<I>) -> Result<ast::MemberKey>
+fn get_member_key<I>(ps: &mut ParserStream<I>) -> Result<ast::MemberKey>
     where I: Iterator<Item = char>
 {
     match ps.peek() {
@@ -248,7 +268,7 @@ fn get_member_key<I>(ps: &mut MultiPeek<I>) -> Result<ast::MemberKey>
     }
 }
 
-fn get_members<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Member>>
+fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
     where I: Iterator<Item = char>
 {
     let mut members = vec![];
@@ -313,7 +333,7 @@ fn get_members<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Member>>
     Ok(members)
 }
 
-fn get_key<I>(ps: &mut MultiPeek<I>, start: bool, end_ws: bool) -> Result<ast::Key>
+fn get_key<I>(ps: &mut ParserStream<I>, start: bool, end_ws: bool) -> Result<ast::Key>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
@@ -342,7 +362,7 @@ fn get_key<I>(ps: &mut MultiPeek<I>, start: bool, end_ws: bool) -> Result<ast::K
     Ok(ast::Key { name: name })
 }
 
-fn get_keyword<I>(ps: &mut MultiPeek<I>) -> Result<ast::Keyword>
+fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
     where I: Iterator<Item = char>
 {
     let ns = get_identifier(ps)?;
@@ -377,7 +397,7 @@ fn get_keyword<I>(ps: &mut MultiPeek<I>) -> Result<ast::Keyword>
 
 }
 
-fn get_digits<I>(ps: &mut MultiPeek<I>) -> Result<String>
+fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
     where I: Iterator<Item = char>
 {
     let mut num = String::new();
@@ -419,7 +439,7 @@ fn get_digits<I>(ps: &mut MultiPeek<I>) -> Result<String>
     Ok(num)
 }
 
-fn get_number<I>(ps: &mut MultiPeek<I>) -> Result<ast::Number>
+fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
     where I: Iterator<Item = char>
 {
     let mut num = String::new();
@@ -452,7 +472,7 @@ fn get_number<I>(ps: &mut MultiPeek<I>) -> Result<ast::Number>
 }
 
 
-fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
+fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
     where I: Iterator<Item = char>
 {
     let mut buffer = String::new();
@@ -574,7 +594,7 @@ fn get_pattern<I>(ps: &mut MultiPeek<I>) -> Result<ast::Pattern>
     })
 }
 
-fn get_placeable<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
+fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
     where I: Iterator<Item = char>
 {
     let mut exprs = vec![];
@@ -602,7 +622,7 @@ fn get_placeable<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
     Ok(exprs)
 }
 
-fn get_placeable_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
     let selector = get_call_expression(ps)?;
@@ -644,7 +664,7 @@ fn get_placeable_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
     Ok(selector)
 }
 
-fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+fn get_call_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
     let exp = get_member_expression(ps)?;
@@ -668,7 +688,7 @@ fn get_call_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
     }
 }
 
-fn get_call_args<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
+fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
     where I: Iterator<Item = char>
 {
     let mut args = vec![];
@@ -723,7 +743,7 @@ fn get_call_args<I>(ps: &mut MultiPeek<I>) -> Result<Vec<ast::Expression>>
     Ok(args)
 }
 
-fn get_member_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+fn get_member_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
     let mut exp = get_literal(ps)?;
@@ -752,7 +772,7 @@ fn get_member_expression<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
 }
 
 
-fn get_literal<I>(ps: &mut MultiPeek<I>) -> Result<ast::Expression>
+fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
 

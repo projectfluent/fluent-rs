@@ -20,6 +20,7 @@ pub enum Entry {
     Message(Message),
     Comment(Comment),
     Section(Section),
+    Junk(JunkEntry),
 }
 
 #[derive(Debug, PartialEq)]
@@ -98,4 +99,9 @@ pub enum Expression {
         obj: Box<Expression>,
         key: MemberKey,
     },
+}
+
+#[derive(Debug, PartialEq)]
+pub struct JunkEntry {
+    body: String,
 }

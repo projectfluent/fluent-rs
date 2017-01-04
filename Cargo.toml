@@ -7,7 +7,6 @@ authors = [
 ]
 
 [dependencies]
-itertools = { git = "https://github.com/bluss/rust-itertools" }
 getopts = "0.2.14"
 
 [dev-dependencies]
