@@ -15,17 +15,21 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
 
     ps.skip_ws_lines();
 
-    if ps.get_index().is_none() {
+    if ps.get_index() == -1 {
         ps.next();
     }
 
     let mut entries = vec![];
 
-    while ps.has_more() {
+    loop {
         let entry = get_entry(&mut ps)?;
         entries.push(entry);
 
         ps.skip_ws();
+
+        if !ps.has_more() {
+            break;
+        }
     }
 
     Ok(ast::Resource { body: entries })
@@ -335,7 +339,7 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
 {
     let mut num = String::new();
 
-    match ps.peek() {
+    match ps.current() {
         Some(ch) => {
             match ch {
                 '0'...'9' => {
@@ -349,7 +353,7 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
     }
 
     loop {
-        match ps.peek() {
+        match ps.current() {
             Some(ch) => {
                 match ch {
                     '0'...'9' => {
@@ -357,13 +361,11 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
                         ps.next();
                     }
                     _ => {
-                        ps.reset_peek();
                         break;
                     }
                 }
             }
             None => {
-                ps.reset_peek();
                 break;
             }
         }
@@ -377,28 +379,24 @@ fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
 {
     let mut num = String::new();
 
-    match ps.peek() {
+    match ps.current() {
         Some('-') => {
             num.push('-');
             ps.next();
         }
-        _ => {
-            ps.reset_peek();
-        }
+        _ => {}
     }
 
     num.push_str(&get_digits(ps)?);
 
 
-    match ps.peek() {
+    match ps.current() {
         Some('.') => {
             num.push('.');
             ps.next();
             num.push_str(&get_digits(ps)?);
         }
-        _ => {
-            ps.reset_peek();
-        }
+        _ => {}
     }
 
     Ok(ast::Number { value: num })
@@ -604,6 +602,7 @@ fn get_call_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 {
     let exp = get_member_expression(ps)?;
 
+
     if !ps.take_char_if('(') {
         return Ok(exp);
     }
@@ -631,9 +630,8 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
     ps.skip_line_ws();
 
     loop {
-        match ps.peek() {
+        match ps.current() {
             Some(')') => {
-                ps.reset_peek();
                 break;
             }
             Some(',') => {
@@ -641,13 +639,11 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                 ps.skip_line_ws();
             }
             _ => {
-                ps.reset_peek();
-
                 let exp = get_call_expression(ps)?;
 
                 ps.skip_line_ws();
 
-                match ps.peek() {
+                match ps.current() {
                     Some(':') => {
                         ps.next();
                         ps.skip_line_ws();
@@ -667,7 +663,6 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                         }
                     }
                     _ => {
-                        ps.reset_peek();
                         args.push(exp);
                     }
                 }
