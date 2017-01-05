@@ -9,6 +9,46 @@ use super::ast;
 
 type Result<T> = result::Result<T, ParserError>;
 
+fn get_line_for_pos(source: &str, pos: usize) -> (usize, usize) {
+    let mut lines = source.lines();
+    let mut ptr = 0;
+    let mut line_num = 0;
+
+    while let Some(line) = lines.next() {
+        let line_len = line.len();
+        line_num += 1;
+
+        if ptr + line_len > pos {
+            return (ptr, line_num);
+        }
+
+    }
+    return (0, 0);
+}
+
+fn get_error_slice(source: &str, start: usize) -> &str {
+    let slice_len = 10;
+    let len = source.len();
+
+    let mut start_pos;
+    let mut end_pos;
+    if start + slice_len > len {
+        start_pos = 0;
+        end_pos = slice_len;
+    } else {
+        start_pos = start - slice_len;
+        end_pos = slice_len;
+    }
+
+    let mut iter = source.chars();
+    if start_pos > 0 {
+        iter.by_ref().nth(start_pos - 1);
+    }
+    let slice = iter.as_str();
+    let endp = slice.char_indices().nth(end_pos).map(|(n, _)| n).unwrap_or(len);
+    return &slice[..endp];
+}
+
 pub fn parse(source: &str) -> Result<ast::Resource> {
 
     let mut ps = parserstream(source.chars());
@@ -22,8 +62,14 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
     let mut entries = vec![];
 
     loop {
-        let entry = get_entry(&mut ps)?;
-        entries.push(entry);
+        match get_entry(&mut ps) {
+            Ok(entry) => entries.push(entry),
+            Err(e) => {
+                println!("Error at position: {}", ps.get_index());
+                println!("{:?}", get_error_slice(source, ps.get_index() as usize));
+                return Err(e);
+            }
+        }
 
         ps.skip_ws();
 
@@ -48,7 +94,7 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
         return Ok(ast::Entry::Section(get_section(ps, comment)?));
     }
 
-    if ps.is_id_start() {
+    if comment.is_none() || ps.is_id_start() {
         return Ok(ast::Entry::Message(get_message(ps, comment)?));
     } else {
         match comment {
@@ -110,6 +156,10 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
     ps.expect_char(']')?;
     ps.expect_char(']')?;
 
+    ps.skip_line_ws();
+
+    ps.expect_char('\n')?;
+
     Ok(ast::Section {
         key: key,
         body: vec![],
@@ -133,43 +183,37 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     let mut traits: Option<Vec<ast::Member>> = None;
 
-    match ps.current() {
-        Some(ch) => {
-            match ch {
-                '\n' => {
-                    ps.peek_line_ws();
+    if ps.current_is('\n') {
+        ps.peek_line_ws();
 
-                    match ps.current_peek() {
-                        Some('*') => {
-                            ps.skip_to_peek();
-                            traits = Some(get_members(ps)?);
-                        }
-                        Some('[') => {
-                            if ps.peek_char_is('[') {
-                                ps.reset_peek();
-                            } else {
-                                ps.skip_to_peek();
-                                traits = Some(get_members(ps)?);
-                            }
-                        }
-                        _ => {
-                            ps.reset_peek();
-                        }
-                    }
-                }
-                _ => {
+        match ps.current_peek() {
+            Some('*') => {
+                ps.skip_to_peek();
+                traits = Some(get_members(ps)?);
+            }
+            Some('[') => {
+                if ps.peek_char_is('[') {
                     ps.reset_peek();
+                } else {
+                    ps.skip_to_peek();
+                    traits = Some(get_members(ps)?);
                 }
             }
-        }
-        None => {
-            ps.reset_peek();
+            _ => {
+                ps.reset_peek();
+            }
         }
     };
 
+    if pattern.is_none() && traits.is_none() {
+        return Err(ParserError::MissingField {
+            fields: vec![String::from("Value"), String::from("Traits")],
+        });
+    }
+
     Ok(ast::Message {
         id: id,
-        value: Some(pattern),
+        value: pattern,
         traits: traits,
         comment: comment,
     })
@@ -180,10 +224,7 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
 {
     let mut name = String::new();
 
-    match ps.take_id_start() {
-        Some(ch) => name.push(ch),
-        None => return Err(ParserError::Generic),
-    };
+    name.push(ps.take_id_start()?);
 
     loop {
         match ps.take_id_char() {
@@ -234,6 +275,11 @@ fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
         match ps.current() {
             Some('[') => {
                 if ps.peek_char_is('[') {
+                    if default_index {
+                        return Err(ParserError::ExpectedField {
+                            field: String::from("Trait::key"),
+                        });
+                    }
                     ps.reset_peek();
                     break;
                 }
@@ -248,11 +294,18 @@ fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
 
                 let value = get_pattern(ps)?;
 
-                members.push(ast::Member {
-                    key: key,
-                    value: value,
-                    default: default_index,
-                });
+                match value {
+                    Some(pattern) => {
+                        members.push(ast::Member {
+                            key: key,
+                            value: pattern,
+                            default: default_index,
+                        });
+                    }
+                    None => {
+                        return Err(ParserError::ExpectedField { field: String::from("Pattern") })
+                    }
+                }
 
                 match ps.current() {
                     Some('\n') => {
@@ -278,10 +331,7 @@ fn get_key<I>(ps: &mut ParserStream<I>, start: bool, end_ws: bool) -> Result<ast
     let mut name = String::new();
 
     if start {
-        match ps.take_id_start() {
-            Some(ch) => name.push(ch),
-            None => return Err(ParserError::Generic),
-        };
+        name.push(ps.take_id_start()?);
     }
 
     loop {
@@ -403,7 +453,7 @@ fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
 }
 
 
-fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
+fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     where I: Iterator<Item = char>
 {
     let mut buffer = String::new();
@@ -522,10 +572,14 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<ast::Pattern>
         elements.push(ast::PatternElement::Text(buffer));
     }
 
-    Ok(ast::Pattern {
+    if !quote_delimited && elements.len() == 0 {
+        return Ok(None);
+    }
+
+    Ok(Some(ast::Pattern {
         elements: elements,
         quoted: quote_delimited,
-    })
+    }))
 }
 
 fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
@@ -710,15 +764,25 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
             match ch {
                 '0'...'9' | '-' => ast::Expression::Number(get_number(ps)?),
                 '"' => {
-                    let pat = get_pattern(ps)?;
-
-                    if pat.elements.len() == 1 {
-                        match pat.elements[0] {
-                            ast::PatternElement::Text(ref t) => ast::Expression::String(t.clone()),
-                            _ => return Err(ParserError::Generic),
+                    match get_pattern(ps)? {
+                        Some(ref p) if p.elements.len() == 1 => {
+                            match p.elements[0] {
+                                ast::PatternElement::Text(ref t) => {
+                                    ast::Expression::String(t.clone())
+                                }
+                                _ => return Err(ParserError::Generic),
+                            }
                         }
-                    } else {
-                        return Err(ParserError::Generic);
+                        Some(_) => {
+                            return Err(ParserError::ExpectedField {
+                                field: String::from("String"),
+                            });
+                        }
+                        None => {
+                            return Err(ParserError::ExpectedField {
+                                field: String::from("String"),
+                            });
+                        }
                     }
                 }
                 '$' => {
