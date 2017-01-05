@@ -1,5 +1,6 @@
 pub use super::errors::ParserError;
 
+use super::errors::get_error_slice;
 use super::stream::ParserStream;
 use super::stream::parserstream;
 
@@ -8,46 +9,6 @@ use std::result;
 use super::ast;
 
 type Result<T> = result::Result<T, ParserError>;
-
-fn get_line_for_pos(source: &str, pos: usize) -> (usize, usize) {
-    let mut lines = source.lines();
-    let mut ptr = 0;
-    let mut line_num = 0;
-
-    while let Some(line) = lines.next() {
-        let line_len = line.len();
-        line_num += 1;
-
-        if ptr + line_len > pos {
-            return (ptr, line_num);
-        }
-
-    }
-    return (0, 0);
-}
-
-fn get_error_slice(source: &str, start: usize) -> &str {
-    let slice_len = 10;
-    let len = source.len();
-
-    let mut start_pos;
-    let mut end_pos;
-    if start + slice_len > len {
-        start_pos = 0;
-        end_pos = slice_len;
-    } else {
-        start_pos = start - slice_len;
-        end_pos = slice_len;
-    }
-
-    let mut iter = source.chars();
-    if start_pos > 0 {
-        iter.by_ref().nth(start_pos - 1);
-    }
-    let slice = iter.as_str();
-    let endp = slice.char_indices().nth(end_pos).map(|(n, _)| n).unwrap_or(len);
-    return &slice[..endp];
-}
 
 pub fn parse(source: &str) -> Result<ast::Resource> {
 
