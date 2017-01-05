@@ -1,13 +1,13 @@
 extern crate fluent;
 extern crate glob;
 
-use glob::glob;
+use self::glob::glob;
 use std::io::prelude::*;
 use std::fs::File;
 use std::io;
 
-use fluent::syntax::parse;
-use fluent::syntax::parser::ParserError;
+use self::fluent::syntax::parse;
+use self::fluent::syntax::parser::ParserError;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));

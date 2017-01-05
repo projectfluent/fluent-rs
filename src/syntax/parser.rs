@@ -1,8 +1,9 @@
 pub use super::errors::ParserError;
 
 use super::errors::get_error_slice;
-use super::stream::ParserStream;
-use super::stream::parserstream;
+use super::iter::ParserStream;
+use super::iter::parserstream;
+use super::stream::FTLParserStream;
 
 use std::result;
 
