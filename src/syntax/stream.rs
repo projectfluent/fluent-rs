@@ -12,11 +12,8 @@ pub trait FTLParserStream<I> {
     fn skip_ws(&mut self);
     fn expect_char(&mut self, ch: char) -> Result<()>;
     fn take_char_if(&mut self, ch: char) -> bool;
-    fn take_char_after_line_ws_if(&mut self, ch2: char) -> bool;
 
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
-    fn current_char_matches<F>(&mut self, f: F) -> bool where F: Fn(char) -> bool;
-    fn peek_char_matches<F>(&mut self, f: F) -> bool where F: Fn(char) -> bool;
 
     fn is_id_start(&mut self) -> bool;
     fn take_id_start(&mut self) -> Result<char>;
@@ -28,10 +25,12 @@ impl<I> FTLParserStream<I> for ParserStream<I>
     where I: Iterator<Item = char>
 {
     fn peek_line_ws(&mut self) {
-        while let Some(ch) = self.peek() {
+        while let Some(ch) = self.current_peek() {
             if ch != ' ' && ch != '\t' {
                 break;
             }
+
+            self.peek();
         }
     }
 
@@ -92,24 +91,6 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
     }
 
-    fn take_char_after_line_ws_if(&mut self, ch2: char) -> bool {
-        while let Some(ch) = self.current_peek() {
-            if ch == ' ' || ch == '\t' {
-                self.peek();
-            } else {
-                if ch == ch2 {
-                    self.skip_to_peek();
-                    return true;
-                } else {
-                    self.reset_peek();
-                    return false;
-                }
-            }
-        }
-
-        return false;
-    }
-
     fn take_char<F>(&mut self, f: F) -> Option<char>
         where F: Fn(char) -> bool
     {
@@ -123,39 +104,16 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
     }
 
-    fn current_char_matches<F>(&mut self, f: F) -> bool
-        where F: Fn(char) -> bool
-    {
-
-        match self.ch {
-            Some(ch) if f(ch) => true,
-            _ => false,
-        }
-    }
-
-    fn peek_char_matches<F>(&mut self, f: F) -> bool
-        where F: Fn(char) -> bool
-    {
-
-        match self.peek() {
-            Some(ch) if f(ch) => {
-                self.reset_peek();
-                true
-            }
-            _ => {
-                self.reset_peek();
-                false
-            }
-        }
-    }
-
     fn is_id_start(&mut self) -> bool {
-        let closure = |x| match x {
-            'a'...'z' | 'A'...'Z' | '_' => true,
-            _ => false,
-        };
-
-        return self.current_char_matches(closure);
+        match self.ch {
+            Some(ch) => {
+                match ch {
+                    'a'...'z' | 'A'...'Z' | '_' => true,
+                    _ => false,
+                }
+            }
+            None => false,
+        }
     }
 
     fn take_id_start(&mut self) -> Result<char> {

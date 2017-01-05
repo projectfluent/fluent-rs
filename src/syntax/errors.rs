@@ -30,3 +30,5 @@ pub fn get_error_slice(source: &str, start: usize) -> &str {
     let endp = slice.char_indices().nth(slice_len).map(|(n, _)| n).unwrap_or(len);
     return &slice[..endp];
 }
+
+pub fn find_next_entry_start() {}

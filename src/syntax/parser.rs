@@ -16,11 +16,9 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
 
     let mut ps = parserstream(source.chars());
 
-    ps.skip_ws_lines();
+    ps.next();
 
-    if ps.get_index() == -1 {
-        ps.next();
-    }
+    ps.skip_ws_lines();
 
     let mut entries = vec![];
 
@@ -151,6 +149,7 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
     let mut traits: Option<Vec<ast::Member>> = None;
 
     if ps.current_is('\n') {
+        ps.peek();
         ps.peek_line_ws();
 
         match ps.current_peek() {
@@ -450,13 +449,15 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 
                         ps.peek();
 
-                        if !ps.take_char_after_line_ws_if('|') {
+                        ps.peek_line_ws();
+
+                        if !ps.current_peek_is('|') {
+                            ps.reset_peek();
                             break;
+                        } else {
+                            ps.skip_to_peek();
+                            ps.next();
                         }
-
-
-
-                        ps.next();
 
                         if first_line {
                             if ps.take_char_if(' ') {
@@ -764,3 +765,9 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 
     Ok(exp)
 }
+
+// fn get_junk_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::JunkEntry>
+//     where I: Iterator<Item = char>
+// {
+//     let next_entity = find_next_entry_start();
+// }

@@ -19,7 +19,7 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 }
 
 fn print_entries_resource(res: &Resource) {
-    println!("{:?}", res);
+    println!("{:#?}", res);
 }
 
 fn print_usage(program: &str, opts: Options) {
@@ -60,7 +60,8 @@ fn main() {
 
     match res {
         Ok(res) => print_entries_resource(&res),
-        Err((_, errors)) => {
+        Err((res, errors)) => {
+            print_entries_resource(&res);
             println!("Parser encountered {} errors:", errors.len());
             println!("-----------------------------");
             for err in errors {
