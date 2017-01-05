@@ -251,15 +251,19 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         return self.current_char_matches(closure);
     }
 
-    pub fn take_id_start(&mut self) -> Option<char> {
+    pub fn take_id_start(&mut self) -> Result<char> {
         let closure = |x| match x {
             'a'...'z' | 'A'...'Z' | '_' => true,
             _ => false,
         };
 
         match self.take_char(closure) {
-            Some(ch) => Some(ch),
-            None => None,
+            Some(ch) => Ok(ch),
+            None => {
+                Err(ParserError::ExpectedCharRange {
+                    range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
+                })
+            }
         }
     }
 
