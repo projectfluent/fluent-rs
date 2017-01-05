@@ -16,9 +16,11 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     Ok(s)
 }
 
-fn attempt_parse(source: &str) -> Result<(), ParserError> {
-    parse(source)?;
-    Ok(())
+fn attempt_parse(source: &str) -> Result<(), ()> {
+    match parse(source) {
+        Ok(_) => Ok(()),
+        Err(_) => Err(()),
+    }
 }
 
 #[test]

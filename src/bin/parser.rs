@@ -60,6 +60,13 @@ fn main() {
 
     match res {
         Ok(res) => print_entries_resource(&res),
-        Err(err) => println!("Error: {:?}", err),
+        Err((_, errors)) => {
+            println!("Parser encountered {} errors:", errors.len());
+            println!("-----------------------------");
+            for err in errors {
+                println!("Error: {:?}", err);
+                println!("-----------------------------");
+            }
+        }
     };
 }

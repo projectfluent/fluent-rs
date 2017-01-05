@@ -11,7 +11,8 @@ use super::ast;
 
 type Result<T> = result::Result<T, ParserError>;
 
-pub fn parse(source: &str) -> Result<ast::Resource> {
+pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
+    let mut errors = vec![];
 
     let mut ps = parserstream(source.chars());
 
@@ -27,9 +28,9 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
         match get_entry(&mut ps) {
             Ok(entry) => entries.push(entry),
             Err(e) => {
-                println!("Error at position: {}", ps.get_index());
-                println!("{:?}", get_error_slice(source, ps.get_index() as usize));
-                return Err(e);
+                errors.push(e);
+                break;
+                // entries.push(get_junk_entry(ps));
             }
         }
 
@@ -40,7 +41,11 @@ pub fn parse(source: &str) -> Result<ast::Resource> {
         }
     }
 
-    Ok(ast::Resource { body: entries })
+    if errors.len() > 0 {
+        Err((ast::Resource { body: entries }, errors))
+    } else {
+        Ok(ast::Resource { body: entries })
+    }
 }
 
 fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>

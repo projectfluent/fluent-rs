@@ -13,8 +13,8 @@ impl MessageContext {
         MessageContext { messages: HashMap::new() }
     }
 
-    pub fn add_messages(&mut self, source: &str) -> Result<(), ParserError> {
-        let res = parse(source)?;
+    pub fn add_messages(&mut self, source: &str) {
+        let res = parse(source).unwrap_or_else(|x| x.0);
 
         for entry in res.body {
             match entry {
@@ -24,8 +24,6 @@ impl MessageContext {
                 _ => unimplemented!(),
             }
         }
-
-        Ok(())
     }
 
     pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
