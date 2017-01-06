@@ -6,8 +6,8 @@ pub struct ParserStream<I>
 {
     iter: Fuse<I>,
     pub buf: Vec<char>,
-    peek_index: i32,
-    index: i32,
+    peek_index: usize,
+    index: usize,
 
     pub ch: Option<char>,
 
@@ -16,6 +16,22 @@ pub struct ParserStream<I>
 }
 
 impl<I: Iterator<Item = char>> ParserStream<I> {
+    pub fn new(iterable: I) -> ParserStream<I> {
+        let mut iter = iterable.into_iter().fuse();
+        let ch = iter.next();
+
+        ParserStream {
+            iter: iter,
+            buf: vec![],
+            peek_index: 0,
+            index: 0,
+            ch: ch,
+
+            iter_end: false,
+            peek_end: false,
+        }
+    }
+
     pub fn current(&mut self) -> Option<char> {
         self.ch
     }
@@ -25,17 +41,17 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     }
 
     pub fn current_peek(&self) -> Option<char> {
+        if self.peek_end {
+            return None;
+        }
+
         let diff = self.peek_index - self.index;
 
         if diff == 0 {
             return self.ch;
         }
 
-        if self.peek_end {
-            return None;
-        }
-
-        return Some(self.buf[(diff - 1) as usize]);
+        return Some(self.buf[diff - 1]);
     }
 
     pub fn current_peek_is(&mut self, ch: char) -> bool {
@@ -46,13 +62,13 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     }
 
     pub fn peek(&mut self) -> Option<char> {
-        if !self.peek_end {
-            self.peek_index += 1;
-        } else {
+        if self.peek_end {
             return None;
         }
 
-        let diff = (self.peek_index - self.index) as usize;
+        self.peek_index += 1;
+
+        let diff = self.peek_index - self.index;
 
         if diff > self.buf.len() {
             match self.iter.next() {
@@ -69,12 +85,12 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         return Some(self.buf[diff - 1]);
     }
 
-    pub fn get_index(&self) -> i32 {
+    pub fn get_index(&self) -> usize {
         self.index
     }
 
-    pub fn get_peek_index(&self) -> i32 {
-        return self.peek_index;
+    pub fn get_peek_index(&self) -> usize {
+        self.peek_index
     }
 
     pub fn has_more(&mut self) -> bool {
@@ -120,6 +136,9 @@ impl<I> Iterator for ParserStream<I>
     type Item = char;
 
     fn next(&mut self) -> Option<char> {
+        if self.iter_end {
+            return None;
+        }
 
         if self.buf.is_empty() {
             self.ch = self.iter.next();
@@ -127,9 +146,7 @@ impl<I> Iterator for ParserStream<I>
             self.ch = Some(self.buf.remove(0));
         }
 
-        if !self.iter_end {
-            self.index += 1;
-        }
+        self.index += 1;
 
         if self.ch.is_none() {
             self.iter_end = true;
@@ -139,20 +156,5 @@ impl<I> Iterator for ParserStream<I>
         self.peek_index = self.index;
 
         self.ch
-    }
-}
-
-pub fn parserstream<I>(iterable: I) -> ParserStream<I::IntoIter>
-    where I: IntoIterator
-{
-    ParserStream {
-        iter: iterable.into_iter().fuse(),
-        buf: vec![],
-        peek_index: -1,
-        index: -1,
-        ch: None,
-
-        iter_end: false,
-        peek_end: false,
     }
 }

@@ -1,7 +1,6 @@
 pub use super::errors::ParserError;
 
 use super::iter::ParserStream;
-use super::iter::parserstream;
 use super::stream::FTLParserStream;
 
 use std::result;
@@ -13,9 +12,7 @@ type Result<T> = result::Result<T, ParserError>;
 pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
     let mut errors = vec![];
 
-    let mut ps = parserstream(source.chars());
-
-    ps.next();
+    let mut ps = ParserStream::new(source.chars());
 
     ps.skip_ws_lines();
 
