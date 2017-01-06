@@ -1,4 +1,5 @@
 pub use super::errors::ParserError;
+pub use super::errors::ErrorKind;
 
 use super::iter::ParserStream;
 use super::stream::FTLParserStream;
@@ -8,6 +9,15 @@ use std::result;
 use super::ast;
 
 type Result<T> = result::Result<T, ParserError>;
+
+macro_rules! error {
+    ($kind:expr) => {{
+        Err(ParserError {
+            info: None,
+            kind: $kind
+        })
+    }};
+}
 
 pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
     let mut errors = vec![];
@@ -19,16 +29,18 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     let mut entries = vec![];
 
     loop {
+        let entry_start_pos = ps.get_index();
+
         match get_entry(&mut ps) {
             Ok(entry) => entries.push(entry),
-            Err(e) => {
+            Err(mut e) => {
                 errors.push(e);
+                entries.push(get_junk_entry(&mut ps, entry_start_pos));
                 break;
-                // entries.push(get_junk_entry(ps));
             }
         }
 
-        ps.skip_ws();
+        ps.skip_ws_lines();
 
         if !ps.has_more() {
             break;
@@ -60,7 +72,7 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
     } else {
         match comment {
             Some(comment) => Ok(ast::Entry::Comment(comment)),
-            None => Err(ParserError::Generic),
+            None => error!(ErrorKind::Generic),
         }
     }
 }
@@ -144,31 +156,12 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     let mut traits: Option<Vec<ast::Member>> = None;
 
-    if ps.current_is('\n') {
-        ps.peek();
-        ps.peek_line_ws();
-
-        match ps.current_peek() {
-            Some('*') => {
-                ps.skip_to_peek();
-                traits = Some(get_members(ps)?);
-            }
-            Some('[') => {
-                if ps.peek_char_is('[') {
-                    ps.reset_peek();
-                } else {
-                    ps.skip_to_peek();
-                    traits = Some(get_members(ps)?);
-                }
-            }
-            _ => {
-                ps.reset_peek();
-            }
-        }
+    if ps.is_peek_next_line_member_start() {
+        traits = Some(get_members(ps)?);
     };
 
     if pattern.is_none() && traits.is_none() {
-        return Err(ParserError::MissingField {
+        return error!(ErrorKind::MissingField {
             fields: vec![String::from("Value"), String::from("Traits")],
         });
     }
@@ -214,7 +207,7 @@ fn get_member_key<I>(ps: &mut ParserStream<I>) -> Result<ast::MemberKey>
                 }
             }
         }
-        None => Err(ParserError::Generic),
+        None => error!(ErrorKind::Generic),
     }
 }
 
@@ -226,62 +219,37 @@ fn get_members<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Member>>
     loop {
         let mut default_index = false;
 
-        match ps.current() {
-            Some('*') => {
-                ps.next();
-                default_index = true;
+        ps.expect_char('\n')?;
+        ps.skip_line_ws();
+
+        if ps.current_is('*') {
+            ps.next();
+            default_index = true;
+        }
+
+        ps.expect_char('[')?;
+
+        let key = get_member_key(ps)?;
+
+        ps.expect_char(']')?;
+
+        ps.skip_line_ws();
+
+        let value = get_pattern(ps)?;
+
+        match value {
+            Some(pattern) => {
+                members.push(ast::Member {
+                    key: key,
+                    value: pattern,
+                    default: default_index,
+                });
             }
-            _ => {}
-        };
+            None => return error!(ErrorKind::ExpectedField { field: String::from("Pattern") }),
+        }
 
-        match ps.current() {
-            Some('[') => {
-                if ps.peek_char_is('[') {
-                    if default_index {
-                        return Err(ParserError::ExpectedField {
-                            field: String::from("Trait::key"),
-                        });
-                    }
-                    ps.reset_peek();
-                    break;
-                }
-
-                ps.next();
-
-                let key = get_member_key(ps)?;
-
-                ps.expect_char(']')?;
-
-                ps.skip_line_ws();
-
-                let value = get_pattern(ps)?;
-
-                match value {
-                    Some(pattern) => {
-                        members.push(ast::Member {
-                            key: key,
-                            value: pattern,
-                            default: default_index,
-                        });
-                    }
-                    None => {
-                        return Err(ParserError::ExpectedField { field: String::from("Pattern") })
-                    }
-                }
-
-                match ps.current() {
-                    Some('\n') => {
-                        ps.next();
-                        ps.skip_ws();
-                    }
-                    _ => {
-                        break;
-                    }
-                }
-            }
-            _ => {
-                break;
-            }
+        if !ps.is_peek_next_line_member_start() {
+            break;
         }
     }
     Ok(members)
@@ -305,7 +273,7 @@ fn get_key<I>(ps: &mut ParserStream<I>, start: bool, end_ws: bool) -> Result<ast
 
     while name.ends_with(' ') {
         if !end_ws {
-            return Err(ParserError::Generic);
+            return error!(ErrorKind::Generic);
         }
         name.pop();
     }
@@ -358,10 +326,10 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
                     num.push(ch);
                     ps.next();
                 }
-                _ => return Err(ParserError::Generic),
+                _ => return error!(ErrorKind::Generic),
             }
         }
-        None => return Err(ParserError::Generic),
+        None => return error!(ErrorKind::Generic),
     }
 
     loop {
@@ -436,7 +404,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                 match ch {
                     '\n' => {
                         if quote_delimited {
-                            return Err(ParserError::Generic);
+                            return error!(ErrorKind::Generic);
                         }
 
                         if first_line && !buffer.is_empty() {
@@ -461,7 +429,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                             }
                         } else {
                             if is_intended && !ps.take_char_if(' ') {
-                                return Err(ParserError::Generic);
+                                return error!(ErrorKind::Generic);
                             }
                         }
 
@@ -529,7 +497,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     }
 
     if quote_open {
-        return Err(ParserError::Generic);
+        return error!(ErrorKind::Generic);
     }
 
     if buffer.len() != 0 {
@@ -566,7 +534,7 @@ fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                 ps.next();
                 ps.skip_line_ws();
             }
-            _ => return Err(ParserError::Generic),
+            _ => return error!(ErrorKind::Generic),
         }
     }
 
@@ -589,22 +557,20 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
 
                     ps.skip_line_ws();
 
-                    ps.expect_char('\n')?;
-
-                    ps.skip_ws();
-
                     let members = get_members(ps)?;
 
                     if members.len() == 0 {
-                        return Err(ParserError::Generic);
+                        return error!(ErrorKind::Generic);
                     }
+
+                    ps.expect_char('\n')?;
 
                     return Ok(ast::Expression::SelectExpression {
                         exp: Box::new(selector),
                         vars: members,
                     });
                 }
-                _ => return Err(ParserError::Generic),
+                _ => return error!(ErrorKind::Generic),
             }
         }
         _ => {
@@ -636,7 +602,7 @@ fn get_call_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 args: args,
             });
         }
-        _ => Err(ParserError::Generic),
+        _ => error!(ErrorKind::Generic),
     }
 }
 
@@ -676,7 +642,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                                 });
                             }
                             _ => {
-                                return Err(ParserError::Generic);
+                                return error!(ErrorKind::Generic);
                             }
                         }
                     }
@@ -734,16 +700,16 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                                 ast::PatternElement::Text(ref t) => {
                                     ast::Expression::String(t.clone())
                                 }
-                                _ => return Err(ParserError::Generic),
+                                _ => return error!(ErrorKind::Generic),
                             }
                         }
                         Some(_) => {
-                            return Err(ParserError::ExpectedField {
+                            return error!(ErrorKind::ExpectedField {
                                 field: String::from("String"),
                             });
                         }
                         None => {
-                            return Err(ParserError::ExpectedField {
+                            return error!(ErrorKind::ExpectedField {
                                 field: String::from("String"),
                             });
                         }
@@ -756,14 +722,16 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 _ => ast::Expression::MessageReference { id: get_identifier(ps)? },
             }
         }
-        None => return Err(ParserError::Generic),
+        None => return error!(ErrorKind::Generic),
     };
 
     Ok(exp)
 }
 
-// fn get_junk_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::JunkEntry>
-//     where I: Iterator<Item = char>
-// {
-//     let next_entity = find_next_entry_start();
-// }
+fn get_junk_entry<I>(ps: &mut ParserStream<I>, entry_start: usize) -> ast::Entry
+    where I: Iterator<Item = char>
+{
+    // let next_entity = find_next_entry_start();
+
+    ast::Entry::Junk(ast::JunkEntry { body: String::from("") })
+}

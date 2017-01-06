@@ -24,7 +24,6 @@ key5=
 key6 =
  [one] One
  [two] Two
-
  [three] Three
 
 key7 =

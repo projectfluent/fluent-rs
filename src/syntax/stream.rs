@@ -1,9 +1,19 @@
 use super::errors::ParserError;
+use super::errors::ErrorKind;
 use super::iter::ParserStream;
 
 use std::result;
 
 type Result<T> = result::Result<T, ParserError>;
+
+macro_rules! error {
+    ($kind:expr) => {{
+        Err(ParserError {
+            info: None,
+            kind: $kind
+        })
+    }};
+}
 
 pub trait FTLParserStream<I> {
     fn peek_line_ws(&mut self);
@@ -16,6 +26,7 @@ pub trait FTLParserStream<I> {
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
 
     fn is_id_start(&mut self) -> bool;
+    fn is_peek_next_line_member_start(&mut self) -> bool;
     fn take_id_start(&mut self) -> Result<char>;
     fn take_id_char(&mut self) -> Option<char>;
     fn take_kw_char(&mut self) -> Option<char>;
@@ -77,7 +88,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
                 self.next();
                 Ok(())
             }
-            _ => Err(ParserError::ExpectedToken { token: ch }),
+            _ => error!(ErrorKind::ExpectedToken { token: ch }),
         }
     }
 
@@ -116,6 +127,26 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
     }
 
+    fn is_peek_next_line_member_start(&mut self) -> bool {
+        if !self.current_peek_is('\n') {
+            return false;
+        }
+        self.peek();
+
+        self.peek_line_ws();
+
+        if self.current_peek_is('*') {
+            self.peek();
+        }
+
+        if self.current_peek_is('[') && !self.peek_char_is('[') {
+            self.reset_peek();
+            return true;
+        }
+        self.reset_peek();
+        return false;
+    }
+
     fn take_id_start(&mut self) -> Result<char> {
         let closure = |x| match x {
             'a'...'z' | 'A'...'Z' | '_' => true,
@@ -125,7 +156,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         match self.take_char(closure) {
             Some(ch) => Ok(ch),
             None => {
-                Err(ParserError::ExpectedCharRange {
+                error!(ErrorKind::ExpectedCharRange {
                     range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
                 })
             }

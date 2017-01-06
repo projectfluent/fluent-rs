@@ -103,5 +103,5 @@ pub enum Expression {
 
 #[derive(Debug, PartialEq)]
 pub struct JunkEntry {
-    body: String,
+    pub body: String,
 }
