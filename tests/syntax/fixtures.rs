@@ -7,7 +7,6 @@ use std::fs::File;
 use std::io;
 
 use self::fluent::syntax::parse;
-use self::fluent::syntax::parser::ParserError;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));

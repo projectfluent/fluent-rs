@@ -2,7 +2,6 @@ use std::collections::HashMap;
 
 use super::syntax::ast;
 use super::syntax::parse;
-use super::syntax::parser::ParserError;
 
 pub struct MessageContext {
     messages: HashMap<String, ast::Message>,

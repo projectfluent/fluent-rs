@@ -176,6 +176,16 @@ fn reset_peek() {
     assert_eq!(Some('a'), ps.current_peek());
     assert_eq!(0, ps.get_peek_index());
     assert_eq!(0, ps.get_index());
+
+    assert_eq!(Some('b'), ps.peek());
+    assert_eq!(Some('a'), ps.current());
+    assert_eq!(Some('b'), ps.current_peek());
+    assert_eq!(1, ps.get_peek_index());
+    assert_eq!(0, ps.get_index());
+
+    assert_eq!(Some('c'), ps.peek());
+    assert_eq!(Some('d'), ps.peek());
+    assert_eq!(None, ps.peek());
 }
 
 #[test]

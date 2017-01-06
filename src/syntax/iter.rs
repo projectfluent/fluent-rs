@@ -48,18 +48,25 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     pub fn peek(&mut self) -> Option<char> {
         if !self.peek_end {
             self.peek_index += 1;
+        } else {
+            return None;
         }
-        match self.iter.next() {
-            Some(c) => {
-                self.buf.push(c);
-                let diff = (self.peek_index - self.index) as usize;
-                return Some(self.buf[diff - 1]);
-            }
-            None => {
-                self.peek_end = true;
-                return None;
+
+        let diff = (self.peek_index - self.index) as usize;
+
+        if diff > self.buf.len() {
+            match self.iter.next() {
+                Some(c) => {
+                    self.buf.push(c);
+                }
+                None => {
+                    self.peek_end = true;
+                    return None;
+                }
             }
         }
+
+        return Some(self.buf[diff - 1]);
     }
 
     pub fn get_index(&self) -> i32 {
@@ -93,6 +100,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
 
     pub fn reset_peek(&mut self) {
         self.peek_index = self.index;
+        self.peek_end = self.iter_end;
     }
 
     pub fn skip_to_peek(&mut self) {
