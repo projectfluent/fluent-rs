@@ -9,16 +9,7 @@ use std::result;
 
 use super::ast;
 
-type Result<T> = result::Result<T, ParserError>;
-
-macro_rules! error {
-    ($kind:expr) => {{
-        Err(ParserError {
-            info: None,
-            kind: $kind
-        })
-    }};
-}
+pub type Result<T> = result::Result<T, ParserError>;
 
 pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
     let mut errors = vec![];

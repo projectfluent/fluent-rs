@@ -1,3 +1,12 @@
+macro_rules! error {
+    ($kind:expr) => {{
+        Err(ParserError {
+            info: None,
+            kind: $kind
+        })
+    }};
+}
+
 #[derive(Debug)]
 pub struct ErrorInfo {
     pub slice: String,

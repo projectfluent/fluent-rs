@@ -1,19 +1,7 @@
 use super::errors::ParserError;
 use super::errors::ErrorKind;
 use super::iter::ParserStream;
-
-use std::result;
-
-type Result<T> = result::Result<T, ParserError>;
-
-macro_rules! error {
-    ($kind:expr) => {{
-        Err(ParserError {
-            info: None,
-            kind: $kind
-        })
-    }};
-}
+use super::parser::Result;
 
 pub trait FTLParserStream<I> {
     fn peek_line_ws(&mut self);
