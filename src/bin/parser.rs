@@ -62,10 +62,15 @@ fn main() {
         Ok(res) => print_entries_resource(&res),
         Err((res, errors)) => {
             print_entries_resource(&res);
-            println!("Parser encountered {} errors:", errors.len());
+            println!("==============================\n");
+            if errors.len() == 1 {
+                println!("Parser encountered one error:");
+            } else {
+                println!("Parser encountered {} errors:", errors.len());
+            }
             println!("-----------------------------");
             for err in errors {
-                println!("Error: {:?}", err);
+                println!("{}", err);
                 println!("-----------------------------");
             }
         }
