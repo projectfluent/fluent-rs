@@ -1,5 +1,6 @@
 pub use super::errors::ParserError;
 pub use super::errors::ErrorKind;
+pub use super::errors::get_error_slice;
 
 use super::iter::ParserStream;
 use super::stream::FTLParserStream;
@@ -33,10 +34,9 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
 
         match get_entry(&mut ps) {
             Ok(entry) => entries.push(entry),
-            Err(mut e) => {
+            Err(e) => {
                 errors.push(e);
-                entries.push(get_junk_entry(&mut ps, entry_start_pos));
-                break;
+                entries.push(get_junk_entry(&mut ps, source, entry_start_pos));
             }
         }
 
@@ -728,10 +728,12 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     Ok(exp)
 }
 
-fn get_junk_entry<I>(ps: &mut ParserStream<I>, entry_start: usize) -> ast::Entry
+fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize) -> ast::Entry
     where I: Iterator<Item = char>
 {
-    // let next_entity = find_next_entry_start();
+    ps.skip_to_next_entry_start();
 
-    ast::Entry::Junk(ast::JunkEntry { body: String::from("") })
+    let slice = get_error_slice(source, entry_start, ps.get_index() - 1);
+
+    ast::Entry::Junk(ast::JunkEntry { body: String::from(slice) })
 }

@@ -163,7 +163,6 @@ fn reset_peek() {
     assert_eq!(2, ps.get_peek_index());
     assert_eq!(1, ps.get_index());
 
-    println!("HERE----");
     assert_eq!(Some('d'), ps.peek());
     assert_eq!(None, ps.peek());
 }
