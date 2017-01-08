@@ -38,6 +38,16 @@ fn get_error_desc(err: &ErrorKind) -> (String, String) {
             return ("E0003".to_owned(),
                     "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned());
         }
+        &ErrorKind::ExpectedCharRange { ref range } => {
+            return ("E0004".to_owned(), format!("Expected a character from range ({}).", range));
+        }
+        &ErrorKind::MissingField { ref fields } => {
+            let list = fields.join(", ");
+            return ("E0005".to_owned(), format!("Expected one of the fields: {}.", list));
+        }
+        &ErrorKind::ExpectedField { ref field } => {
+            return ("E0006".to_owned(), format!("Expected field: {}.", field));
+        }
         &ErrorKind::ExpectedToken { token } => {
             return ("E0001".to_owned(), format!("expected token `{}`.", token));
         }
