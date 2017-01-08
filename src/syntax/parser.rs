@@ -1,6 +1,7 @@
 pub use super::errors::ParserError;
 pub use super::errors::ErrorKind;
 pub use super::errors::get_error_slice;
+pub use super::errors::get_error_info;
 
 use super::iter::ParserStream;
 use super::stream::FTLParserStream;
@@ -25,9 +26,12 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
 
         match get_entry(&mut ps) {
             Ok(entry) => entries.push(entry),
-            Err(e) => {
-                errors.push(e);
+            Err(mut e) => {
+                let error_pos = ps.get_index();
                 entries.push(get_junk_entry(&mut ps, source, entry_start_pos));
+
+                e.info = get_error_info(source, error_pos, entry_start_pos, ps.get_index());
+                errors.push(e);
             }
         }
 
@@ -58,13 +62,13 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
         return Ok(ast::Entry::Section(get_section(ps, comment)?));
     }
 
-    if comment.is_none() || ps.is_id_start() {
+    if ps.is_id_start() {
         return Ok(ast::Entry::Message(get_message(ps, comment)?));
-    } else {
-        match comment {
-            Some(comment) => Ok(ast::Entry::Comment(comment)),
-            None => error!(ErrorKind::Generic),
-        }
+    }
+
+    match comment {
+        Some(comment) => Ok(ast::Entry::Comment(comment)),
+        None => error!(ErrorKind::ExpectedEntry),
     }
 }
 
