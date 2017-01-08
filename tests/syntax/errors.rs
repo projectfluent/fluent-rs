@@ -29,10 +29,11 @@ fn empty_errors() {
             assert_eq!(ErrorKind::ExpectedEntry, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                slice: "".to_owned(),
-                line: 0,
-                pos: 0
-            }), error1.info);
+                           slice: "".to_owned(),
+                           line: 0,
+                           pos: 0,
+                       }),
+                       error1.info);
 
         }
     }
@@ -52,10 +53,11 @@ fn bad_id_start_errors() {
             assert_eq!(ErrorKind::ExpectedEntry, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                slice: "2".to_owned(),
-                line: 0,
-                pos: 0
-            }), error1.info);
+                           slice: "2".to_owned(),
+                           line: 0,
+                           pos: 0,
+                       }),
+                       error1.info);
 
         }
     }
@@ -75,10 +77,11 @@ fn just_id_errors() {
             assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                slice: "key".to_owned(),
-                line: 0,
-                pos: 3
-            }), error1.info);
+                           slice: "key".to_owned(),
+                           line: 0,
+                           pos: 3,
+                       }),
+                       error1.info);
 
         }
     }
@@ -98,10 +101,11 @@ fn no_equal_sign_errors() {
             assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                slice: "key Value".to_owned(),
-                line: 0,
-                pos: 4
-            }), error1.info);
+                           slice: "key Value".to_owned(),
+                           line: 0,
+                           pos: 4,
+                       }),
+                       error1.info);
 
         }
     }

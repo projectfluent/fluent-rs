@@ -68,7 +68,7 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 
     match comment {
         Some(comment) => Ok(ast::Entry::Comment(comment)),
-        None => error!(ErrorKind::ExpectedEntry)
+        None => error!(ErrorKind::ExpectedEntry),
     }
 }
 

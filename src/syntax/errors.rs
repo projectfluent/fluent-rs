@@ -35,22 +35,14 @@ pub struct ParserError {
 fn get_error_desc(err: &ErrorKind) -> (String, String) {
     match err {
         &ErrorKind::ExpectedEntry => {
-            return (
-                "E0003".to_owned(),
-                "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned()
-            );
-        },
+            return ("E0003".to_owned(),
+                    "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned());
+        }
         &ErrorKind::ExpectedToken { token } => {
-            return (
-                "E0001".to_owned(),
-                 format!("expected token `{}`.", token)
-            );
+            return ("E0001".to_owned(), format!("expected token `{}`.", token));
         }
         _ => {
-            return (
-                "E0002".to_owned(),
-                "generic error".to_owned()
-            );
+            return ("E0002".to_owned(), "generic error".to_owned());
         }
     }
 }
@@ -66,14 +58,14 @@ fn draw_line(line_num: usize, max_dig_space: usize, line: &str) -> String {
 
     let mut ln = (0..dig_diff).map(|_| " ").collect::<String>();
     if line_num != 0 {
-      ln.push_str(&line_num.to_string());
+        ln.push_str(&line_num.to_string());
     }
     return format!("{} | {}\n", ln, line);
 }
 
 fn draw_error_line(max_dig_space: usize, col: usize) -> String {
 
-    let mut ln = (0..max_dig_space).map(|_| " ").collect::<String>();
+    let ln = (0..max_dig_space).map(|_| " ").collect::<String>();
     let mut ln2 = (0..col).map(|_| " ").collect::<String>();
     ln2.push_str("^");
     return format!("{} | {}\n", ln, ln2);
@@ -81,13 +73,10 @@ fn draw_error_line(max_dig_space: usize, col: usize) -> String {
 
 impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        //write!(f, "{:#?}\n\n", self)?;
+        // write!(f, "{:#?}\n\n", self)?;
 
         let (error_name, error_desc) = get_error_desc(&self.kind);
-        write!(f,
-               "error[{}]: {}\n",
-               error_name,
-               error_desc)?;
+        write!(f, "error[{}]: {}\n", error_name, error_desc)?;
 
         if let Some(ref info) = self.info {
             let lines = info.slice.lines();
@@ -99,18 +88,18 @@ impl fmt::Display for ParserError {
 
 
             let v = draw_line(0, max_dig_space, "");
-            f.write_str(&v);
+            f.write_str(&v)?;
 
             let lines = info.slice.lines();
             let mut j = 0;
 
             for line in lines {
                 let v = draw_line(i, max_dig_space, line);
-                f.write_str(&v);
+                f.write_str(&v)?;
 
                 if j == error_line {
                     let v = draw_error_line(max_dig_space, error_col);
-                    f.write_str(&v);
+                    f.write_str(&v)?;
                 }
                 j += 1;
                 i += 1;
@@ -118,7 +107,7 @@ impl fmt::Display for ParserError {
 
             if j == 0 {
                 let v = draw_line(i, max_dig_space, "");
-                f.write_str(&v);
+                f.write_str(&v)?;
             }
         }
         Ok(())
@@ -199,7 +188,11 @@ pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
     return &slice[..endp];
 }
 
-pub fn get_error_info(source: &str, pos: usize, entry_start: usize, next_entry_start: usize) -> Option<ErrorInfo> {
+pub fn get_error_info(source: &str,
+                      pos: usize,
+                      entry_start: usize,
+                      next_entry_start: usize)
+                      -> Option<ErrorInfo> {
     let first_line_num = get_line_num(source, entry_start);
     let next_entry_line = get_line_num(source, next_entry_start);
 
@@ -208,6 +201,6 @@ pub fn get_error_info(source: &str, pos: usize, entry_start: usize, next_entry_s
     Some(ErrorInfo {
         slice: slice,
         line: first_line_num,
-        pos: pos - entry_start
+        pos: pos - entry_start,
     })
 }
