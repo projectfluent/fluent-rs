@@ -9,14 +9,14 @@ macro_rules! error {
     }};
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct ErrorInfo {
     pub slice: String,
     pub line: usize,
     pub pos: usize,
 }
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub enum ErrorKind {
     Generic,
     ExpectedEntry,
@@ -115,7 +115,7 @@ impl fmt::Display for ParserError {
                 j += 1;
                 i += 1;
             }
-            
+
             if j == 0 {
                 let v = draw_line(i, max_dig_space, "");
                 f.write_str(&v);
