@@ -1,3 +1,5 @@
+extern crate term;
+
 use std::fmt;
 
 macro_rules! error {
@@ -24,6 +26,9 @@ pub enum ErrorKind {
     ExpectedCharRange { range: String },
     ExpectedField { field: String },
     MissingField { fields: Vec<String> },
+    ForbiddenWhitespace,
+    ForbiddenCallee,
+    ForbiddenKey,
 }
 
 #[derive(Debug)]
@@ -39,25 +44,34 @@ fn get_error_desc(err: &ErrorKind) -> (String, String) {
                     "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned());
         }
         &ErrorKind::ExpectedCharRange { ref range } => {
-            return ("E0004".to_owned(), format!("Expected a character from range ({}).", range));
+            return ("E0004".to_owned(), format!("Expected a character from range ({})", range));
         }
         &ErrorKind::MissingField { ref fields } => {
             let list = fields.join(", ");
-            return ("E0005".to_owned(), format!("Expected one of the fields: {}.", list));
+            return ("E0005".to_owned(), format!("Expected one of the fields: {}", list));
         }
         &ErrorKind::ExpectedField { ref field } => {
-            return ("E0006".to_owned(), format!("Expected field: {}.", field));
+            return ("E0006".to_owned(), format!("Expected field: {}", field));
         }
         &ErrorKind::ExpectedToken { token } => {
-            return ("E0001".to_owned(), format!("expected token `{}`.", token));
+            return ("E0001".to_owned(), format!("expected token `{}`", token));
         }
-        _ => {
+        &ErrorKind::ForbiddenWhitespace => {
+            return ("E0007".to_owned(), "keyword cannot end with a whitespace".to_owned());
+        }
+        &ErrorKind::ForbiddenCallee => {
+            return ("E0008".to_owned(), "a callee has to be a simple identifier".to_owned());
+        }
+        &ErrorKind::ForbiddenKey => {
+            return ("E0009".to_owned(), "a key has to be a simple identifier".to_owned());
+        }
+        &ErrorKind::Generic => {
             return ("E0002".to_owned(), "generic error".to_owned());
         }
     }
 }
 
-fn draw_line(line_num: usize, max_dig_space: usize, line: &str) -> String {
+fn draw_line(line_num: usize, max_dig_space: usize) -> String {
 
     let dig_diff = if line_num == 0 {
         max_dig_space
@@ -70,23 +84,29 @@ fn draw_line(line_num: usize, max_dig_space: usize, line: &str) -> String {
     if line_num != 0 {
         ln.push_str(&line_num.to_string());
     }
-    return format!("{} | {}\n", ln, line);
+    return ln;
 }
 
-fn draw_error_line(max_dig_space: usize, col: usize) -> String {
-
+fn draw_error_line(max_dig_space: usize, col: usize) -> (String, String) {
     let ln = (0..max_dig_space).map(|_| " ").collect::<String>();
     let mut ln2 = (0..col).map(|_| " ").collect::<String>();
     ln2.push_str("^");
-    return format!("{} | {}\n", ln, ln2);
+    return (ln, ln2);
 }
 
 impl fmt::Display for ParserError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         // write!(f, "{:#?}\n\n", self)?;
+        //
+        let mut t = term::stdout().unwrap();
 
         let (error_name, error_desc) = get_error_desc(&self.kind);
-        write!(f, "error[{}]: {}\n", error_name, error_desc)?;
+        t.fg(term::color::BRIGHT_RED).unwrap();
+        t.attr(term::Attr::Bold);
+        write!(t, "error[{}]", error_name);
+        t.fg(term::color::WHITE).unwrap();
+        write!(t, ": {}\n", error_desc);
+        t.reset().unwrap();
 
         if let Some(ref info) = self.info {
             let lines = info.slice.lines();
@@ -97,27 +117,46 @@ impl fmt::Display for ParserError {
             let max_dig_space = (i + lines.count()).to_string().len();
 
 
-            let v = draw_line(0, max_dig_space, "");
-            f.write_str(&v)?;
+            let ln = draw_line(0, max_dig_space);
+            t.fg(term::color::BRIGHT_BLUE).unwrap();
+            t.attr(term::Attr::Bold);
+            write!(t, "{} | ", ln);
+            t.reset().unwrap();
+            write!(t, "\n");
 
             let lines = info.slice.lines();
             let mut j = 0;
 
             for line in lines {
-                let v = draw_line(i, max_dig_space, line);
-                f.write_str(&v)?;
+                let ln = draw_line(i, max_dig_space);
+                t.fg(term::color::BRIGHT_BLUE).unwrap();
+                t.attr(term::Attr::Bold);
+                write!(t, "{} | ", ln);
+                t.reset().unwrap();
+                write!(t, "{}\n", line);
 
                 if j == error_line {
-                    let v = draw_error_line(max_dig_space, error_col);
-                    f.write_str(&v)?;
+                    let (ln, ln2) = draw_error_line(max_dig_space, error_col);
+                    t.fg(term::color::BRIGHT_BLUE).unwrap();
+                    t.attr(term::Attr::Bold);
+                    write!(t, "{} | ", ln);
+                    t.reset().unwrap();
+                    t.fg(term::color::BRIGHT_RED).unwrap();
+                    t.attr(term::Attr::Bold);
+                    write!(t, "{}\n", ln2);
+                    t.reset().unwrap();
                 }
                 j += 1;
                 i += 1;
             }
 
             if j == 0 {
-                let v = draw_line(i, max_dig_space, "");
-                f.write_str(&v)?;
+                let ln = draw_line(i, max_dig_space);
+                t.fg(term::color::BRIGHT_BLUE).unwrap();
+                t.attr(term::Attr::Bold);
+                write!(t, "{} | ", ln);
+                t.reset().unwrap();
+                write!(t, "\n");
             }
         }
         Ok(())
@@ -131,7 +170,7 @@ pub fn get_line_pos(source: &str, pos: usize) -> (usize, usize) {
     let lines = source.lines();
 
     for line in lines {
-        let len = line.len();
+        let len = line.chars().count();
         if ptr + len + 1 > pos {
             break;
         }
@@ -150,7 +189,8 @@ fn get_line_num(source: &str, pos: usize) -> usize {
     let lines = source.lines();
 
     for line in lines {
-        ptr += line.len() + 1;
+        let lnlen = line.chars().count();
+        ptr += lnlen + 1;
 
         if ptr > pos {
             break;
@@ -175,7 +215,7 @@ pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
 }
 
 pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
-    let len = source.len();
+    let len = source.chars().count();
 
     let start_pos;
     let mut slice_len = end - start;

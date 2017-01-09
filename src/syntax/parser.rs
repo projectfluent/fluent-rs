@@ -202,7 +202,7 @@ fn get_member_key<I>(ps: &mut ParserStream<I>) -> Result<ast::MemberKey>
                 }
             }
         }
-        None => error!(ErrorKind::Generic),
+        None => error!(ErrorKind::ExpectedField { field: "Keyword | Number".to_owned() }),
     }
 }
 
@@ -268,7 +268,7 @@ fn get_key<I>(ps: &mut ParserStream<I>, start: bool, end_ws: bool) -> Result<ast
 
     while name.ends_with(' ') {
         if !end_ws {
-            return error!(ErrorKind::Generic);
+            return error!(ErrorKind::ForbiddenWhitespace);
         }
         name.pop();
     }
@@ -321,10 +321,10 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
                     num.push(ch);
                     ps.next();
                 }
-                _ => return error!(ErrorKind::Generic),
+                _ => return error!(ErrorKind::ExpectedCharRange { range: "0...9".to_owned() }),
             }
         }
-        None => return error!(ErrorKind::Generic),
+        None => return error!(ErrorKind::ExpectedCharRange { range: "0...9".to_owned() }),
     }
 
     loop {
@@ -399,7 +399,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                 match ch {
                     '\n' => {
                         if quote_delimited {
-                            return error!(ErrorKind::Generic);
+                            return error!(ErrorKind::ExpectedToken { token: '"' });
                         }
 
                         if first_line && !buffer.is_empty() {
@@ -492,7 +492,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     }
 
     if quote_open {
-        return error!(ErrorKind::Generic);
+        return error!(ErrorKind::ExpectedToken { token: '"' });
     }
 
     if buffer.len() != 0 {
@@ -529,7 +529,7 @@ fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                 ps.next();
                 ps.skip_line_ws();
             }
-            _ => return error!(ErrorKind::Generic),
+            _ => return error!(ErrorKind::ExpectedCharRange { range: "'}', ','".to_owned() }),
         }
     }
 
@@ -565,7 +565,7 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
                         vars: members,
                     });
                 }
-                _ => return error!(ErrorKind::Generic),
+                _ => return error!(ErrorKind::ExpectedToken { token: '>' }),
             }
         }
         _ => {
@@ -597,7 +597,7 @@ fn get_call_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 args: args,
             });
         }
-        _ => error!(ErrorKind::Generic),
+        _ => error!(ErrorKind::ForbiddenCallee),
     }
 }
 
@@ -637,7 +637,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Expression>>
                                 });
                             }
                             _ => {
-                                return error!(ErrorKind::Generic);
+                                return error!(ErrorKind::ForbiddenKey);
                             }
                         }
                     }
@@ -695,7 +695,11 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                                 ast::PatternElement::Text(ref t) => {
                                     ast::Expression::String(t.clone())
                                 }
-                                _ => return error!(ErrorKind::Generic),
+                                _ => {
+                                    return error!(ErrorKind::ExpectedField {
+                                        field: String::from("String"),
+                                    })
+                                }
                             }
                         }
                         Some(_) => {
@@ -717,7 +721,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 _ => ast::Expression::MessageReference { id: get_identifier(ps)? },
             }
         }
-        None => return error!(ErrorKind::Generic),
+        None => return error!(ErrorKind::ExpectedField { field: String::from("Literal") }),
     };
 
     Ok(exp)

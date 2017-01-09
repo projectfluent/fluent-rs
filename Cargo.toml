@@ -8,6 +8,7 @@ authors = [
 
 [dependencies]
 getopts = "0.2.14"
+term = "0.4.4"
 
 [dev-dependencies]
 glob = "0.2.11"
