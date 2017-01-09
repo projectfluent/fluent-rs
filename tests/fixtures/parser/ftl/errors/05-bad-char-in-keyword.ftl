@@ -1,0 +1,2 @@
+key = Value
+ [#] Foo
