@@ -461,7 +461,9 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                     '{' => {
                         ps.next();
 
-                        elements.push(ast::PatternElement::Text(buffer));
+                        if !buffer.is_empty() {
+                            elements.push(ast::PatternElement::Text(buffer));
+                        }
 
                         buffer = String::new();
 
@@ -492,7 +494,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
         return error!(ErrorKind::ExpectedToken { token: '"' });
     }
 
-    if buffer.len() != 0 {
+    if !buffer.is_empty() {
         elements.push(ast::PatternElement::Text(buffer));
     }
 
