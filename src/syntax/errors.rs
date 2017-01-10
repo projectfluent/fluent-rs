@@ -95,17 +95,17 @@ fn draw_error_line(max_dig_space: usize, col: usize) -> (String, String) {
 }
 
 impl fmt::Display for ParserError {
-    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
         // write!(f, "{:#?}\n\n", self)?;
         //
         let mut t = term::stdout().unwrap();
 
         let (error_name, error_desc) = get_error_desc(&self.kind);
         t.fg(term::color::BRIGHT_RED).unwrap();
-        t.attr(term::Attr::Bold);
-        write!(t, "error[{}]", error_name);
+        t.attr(term::Attr::Bold).unwrap();
+        write!(t, "error[{}]", error_name).unwrap();
         t.fg(term::color::WHITE).unwrap();
-        write!(t, ": {}\n", error_desc);
+        write!(t, ": {}\n", error_desc).unwrap();
         t.reset().unwrap();
 
         if let Some(ref info) = self.info {
@@ -119,10 +119,10 @@ impl fmt::Display for ParserError {
 
             let ln = draw_line(0, max_dig_space);
             t.fg(term::color::BRIGHT_BLUE).unwrap();
-            t.attr(term::Attr::Bold);
-            write!(t, "{} | ", ln);
+            t.attr(term::Attr::Bold).unwrap();
+            write!(t, "{} | ", ln).unwrap();
             t.reset().unwrap();
-            write!(t, "\n");
+            write!(t, "\n").unwrap();
 
             let lines = info.slice.lines();
             let mut j = 0;
@@ -130,20 +130,20 @@ impl fmt::Display for ParserError {
             for line in lines {
                 let ln = draw_line(i, max_dig_space);
                 t.fg(term::color::BRIGHT_BLUE).unwrap();
-                t.attr(term::Attr::Bold);
-                write!(t, "{} | ", ln);
+                t.attr(term::Attr::Bold).unwrap();
+                write!(t, "{} | ", ln).unwrap();
                 t.reset().unwrap();
-                write!(t, "{}\n", line);
+                write!(t, "{}\n", line).unwrap();
 
                 if j == error_line {
                     let (ln, ln2) = draw_error_line(max_dig_space, error_col);
                     t.fg(term::color::BRIGHT_BLUE).unwrap();
-                    t.attr(term::Attr::Bold);
-                    write!(t, "{} | ", ln);
+                    t.attr(term::Attr::Bold).unwrap();
+                    write!(t, "{} | ", ln).unwrap();
                     t.reset().unwrap();
                     t.fg(term::color::BRIGHT_RED).unwrap();
-                    t.attr(term::Attr::Bold);
-                    write!(t, "{}\n", ln2);
+                    t.attr(term::Attr::Bold).unwrap();
+                    write!(t, "{}\n", ln2).unwrap();
                     t.reset().unwrap();
                 }
                 j += 1;
@@ -153,10 +153,10 @@ impl fmt::Display for ParserError {
             if j == 0 {
                 let ln = draw_line(i, max_dig_space);
                 t.fg(term::color::BRIGHT_BLUE).unwrap();
-                t.attr(term::Attr::Bold);
-                write!(t, "{} | ", ln);
+                t.attr(term::Attr::Bold).unwrap();
+                write!(t, "{} | ", ln).unwrap();
                 t.reset().unwrap();
-                write!(t, "\n");
+                write!(t, "\n").unwrap();
             }
         }
         Ok(())
