@@ -202,7 +202,10 @@ fn get_line_num(source: &str, pos: usize) -> usize {
 }
 
 pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
-    let lines = source.lines().skip(start).take(end - start);
+
+    let l = if start < end { end - start } else { 1 };
+
+    let lines = source.lines().skip(start).take(l);
 
     let mut s = String::new();
 

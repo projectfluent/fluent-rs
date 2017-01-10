@@ -29,7 +29,7 @@ fn empty_errors() {
             assert_eq!(ErrorKind::ExpectedEntry, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                           slice: "".to_owned(),
+                           slice: " key = value".to_owned(),
                            line: 0,
                            pos: 0,
                        }),

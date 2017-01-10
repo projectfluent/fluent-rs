@@ -21,7 +21,8 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
 
     let mut entries = vec![];
 
-    loop {
+
+    while ps.current().is_some() {
         let entry_start_pos = ps.get_index();
 
         match get_entry(&mut ps) {
@@ -36,10 +37,6 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
         }
 
         ps.skip_ws_lines();
-
-        if !ps.has_more() {
-            break;
-        }
     }
 
     if errors.len() > 0 {
@@ -732,7 +729,7 @@ fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize)
 {
     ps.skip_to_next_entry_start();
 
-    let slice = get_error_slice(source, entry_start, ps.get_index() - 1);
+    let slice = get_error_slice(source, entry_start, ps.get_index());
 
     ast::Entry::Junk(ast::JunkEntry { body: String::from(slice) })
 }
