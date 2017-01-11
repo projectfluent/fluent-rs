@@ -1,6 +1,7 @@
 #[derive(Debug, PartialEq)]
 pub struct Resource {
     pub body: Vec<Entry>,
+    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]

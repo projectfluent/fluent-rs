@@ -14,6 +14,7 @@ pub type Result<T> = result::Result<T, ParserError>;
 
 pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
     let mut errors = vec![];
+    let mut comment = None;
 
     let mut ps = ParserStream::new(source.chars());
 
@@ -26,7 +27,20 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
         let entry_start_pos = ps.get_index();
 
         match get_entry(&mut ps) {
-            Ok(entry) => entries.push(entry),
+            Ok(entry) => {
+                if entry_start_pos == 0 {
+                    match entry {
+                        ast::Entry::Comment(c) => {
+                            comment = Some(c);
+                        }
+                        _ => {
+                            entries.push(entry);
+                        }
+                    }
+                } else {
+                    entries.push(entry);
+                }
+            }
             Err(mut e) => {
                 let error_pos = ps.get_index();
                 entries.push(get_junk_entry(&mut ps, source, entry_start_pos));
@@ -40,9 +54,16 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     }
 
     if errors.len() > 0 {
-        Err((ast::Resource { body: entries }, errors))
+        Err((ast::Resource {
+                 body: entries,
+                 comment: comment,
+             },
+             errors))
     } else {
-        Ok(ast::Resource { body: entries })
+        Ok(ast::Resource {
+            body: entries,
+            comment: comment,
+        })
     }
 }
 
