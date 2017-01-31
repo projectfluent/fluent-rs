@@ -5,31 +5,19 @@ pub struct Resource {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Comment {
-    pub body: String,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Section {
-    pub key: Key,
-    pub body: Vec<Entry>,
+pub struct Message {
+    pub id: Identifier,
+    pub value: Option<Pattern>,
+    pub attributes: Option<Vec<Attribute>>,
     pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
-    Comment(Comment),
     Section(Section),
+    Comment(Comment),
     Junk(JunkEntry),
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Message {
-    pub id: Identifier,
-    pub value: Option<Pattern>,
-    pub traits: Option<Vec<Member>>,
-    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
@@ -39,9 +27,60 @@ pub struct Pattern {
 }
 
 #[derive(Debug, PartialEq)]
-pub enum PatternElement {
-    Text(String),
-    Placeable { expressions: Vec<Expression> },
+pub enum Expression {
+    Selector(SelectorExpression),
+    SelectExpression {
+        exp: SelectorExpression,
+        variants: Vec<Variant>
+    },
+}
+
+#[derive(Debug, PartialEq)]
+pub enum SelectorExpression {
+    MessageReference(Identifier),
+    ExternalArgument(Identifier),
+    CallExpression {
+        callee: Builtin,
+        args: Vec<SelectorExpression>,
+    },
+    VariantExpression {
+        id: Identifier,
+        key: VariantKey
+    },
+    AttributeExpression {
+        id: Identifier,
+        attr: Identifier
+    },
+    KeyValueArgument {
+        id: Identifier,
+        val: ArgValue
+    },
+    Number(Number),
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Attribute {
+    pub id: Identifier,
+    pub value: Pattern
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Variant {
+    pub key: VariantKey,
+    pub value: Pattern,
+    pub default: bool,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum VariantKey {
+    Keyword(Keyword),
+    Number(Number),
+}
+
+#[derive(Debug, PartialEq)]
+pub enum ArgValue {
+    Number(Number),
+    String(String)
 }
 
 #[derive(Debug, PartialEq)]
@@ -50,8 +89,26 @@ pub struct Identifier {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Key {
+pub struct Keyword {
     pub name: String,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Comment {
+    pub body: String,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Section {
+    pub key: Keyword,
+    pub body: Vec<Entry>,
+    pub comment: Option<Comment>,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum PatternElement {
+    Text(String),
+    Placeable(Expression),
 }
 
 #[derive(Debug, PartialEq)]
@@ -60,47 +117,7 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Keyword {
-    pub ns: Option<Identifier>,
-    pub name: Key,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum MemberKey {
-    Keyword(Keyword),
-    Number(Number),
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Member {
-    pub key: MemberKey,
-    pub value: Pattern,
-    pub default: bool,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Expression {
-    MessageReference { id: Identifier },
-    ExternalArgument { id: Identifier },
-    CallExpression {
-        callee: Identifier,
-        args: Vec<Expression>,
-    },
-    SelectExpression {
-        exp: Box<Expression>,
-        vars: Vec<Member>,
-    },
-    KeyValueArgument {
-        name: Identifier,
-        val: Box<Expression>,
-    },
-    Number(Number),
-    String(String),
-    Member {
-        obj: Box<Expression>,
-        key: MemberKey,
-    },
-}
+pub struct Builtin(pub Identifier);
 
 #[derive(Debug, PartialEq)]
 pub struct JunkEntry {
