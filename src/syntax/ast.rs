@@ -31,8 +31,8 @@ pub enum Expression {
     Pattern(Pattern),
     String(String),
     Number(Number),
-    MessageReference(String),
-    ExternalArgument(String),
+    MessageReference { id: String },
+    ExternalArgument { id: String },
     SelectExpression {
         exp: Option<Box<Expression>>,
         variants: Vec<Variant>,
@@ -40,7 +40,7 @@ pub enum Expression {
     AttributeExpression { id: Identifier, name: Identifier },
     VariantExpression { id: Identifier, key: VariantKey },
     CallExpression {
-        callee: Builtin,
+        callee: Function,
         args: Vec<Argument>,
     },
     Expression(Box<Expression>),
@@ -84,7 +84,7 @@ pub struct Identifier {
 
 #[derive(Debug, PartialEq)]
 pub struct Keyword {
-    pub value: String,
+    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]
@@ -95,7 +95,6 @@ pub struct Comment {
 #[derive(Debug, PartialEq)]
 pub struct Section {
     pub key: Keyword,
-    pub body: Vec<Entry>,
     pub comment: Option<Comment>,
 }
 
@@ -105,8 +104,8 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Builtin {
-    pub id: String,
+pub struct Function {
+    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]

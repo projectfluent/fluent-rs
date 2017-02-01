@@ -36,12 +36,12 @@ impl MessageContext {
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
             &ast::Expression::String(ref val) => Some(val.clone()),
-            &ast::Expression::MessageReference(ref name) => {
+            &ast::Expression::MessageReference { ref id } => {
                 self.messages
-                    .get(name)
+                    .get(id)
                     .and_then(|msg| self.format(msg))
             }
-            &ast::Expression::ExternalArgument(ref name) => Some(format!("${}", name)),
+            &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id)),
             _ => unimplemented!(),
         }
     }

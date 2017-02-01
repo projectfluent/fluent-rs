@@ -147,7 +147,6 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     Ok(ast::Section {
         key: key,
-        body: vec![],
         comment: comment,
     })
 }
@@ -331,7 +330,7 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
         name.pop();
     }
 
-    Ok(ast::Keyword { value: name })
+    Ok(ast::Keyword { name: name })
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
@@ -594,13 +593,13 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
     let literal = get_literal(ps)?;
 
     match literal {
-        ast::Expression::MessageReference(name) => {
+        ast::Expression::MessageReference { id } => {
             match ps.ch {
                 Some('.') => {
                     ps.next();
                     let attr = get_identifier(ps)?;
                     Ok(ast::Expression::AttributeExpression {
-                        id: ast::Identifier { name: name },
+                        id: ast::Identifier { name: id },
                         name: attr,
                     })
                 }
@@ -610,7 +609,7 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     ps.expect_char(']')?;
 
                     Ok(ast::Expression::VariantExpression {
-                        id: ast::Identifier { name: name },
+                        id: ast::Identifier { name: id },
                         key: key,
                     })
                 }
@@ -619,11 +618,11 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     let args = get_call_args(ps)?;
                     ps.expect_char(')')?;
                     Ok(ast::Expression::CallExpression {
-                        callee: ast::Builtin { id: name },
+                        callee: ast::Function { name: id },
                         args: args,
                     })
                 }
-                _ => Ok(ast::Expression::MessageReference(name)),
+                _ => Ok(ast::Expression::MessageReference { id: id }),
             }
         }
         _ => Ok(literal),
@@ -650,7 +649,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
                 match ps.current() {
                     Some(':') => {
                         match exp {
-                            ast::Expression::MessageReference(id) => {
+                            ast::Expression::MessageReference { id } => {
                                 ps.next();
                                 ps.skip_line_ws();
 
@@ -736,7 +735,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 '0'...'9' | '-' => ast::Expression::Number(get_number(ps)?),
                 '$' => {
                     ps.next();
-                    ast::Expression::ExternalArgument(get_identifier(ps)?.name)
+                    ast::Expression::ExternalArgument { id: get_identifier(ps)?.name }
                 }
                 '"' => {
 
@@ -759,7 +758,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                     ps.expect_char('}')?;
                     exp
                 }
-                _ => ast::Expression::MessageReference(get_identifier(ps)?.name),
+                _ => ast::Expression::MessageReference { id: get_identifier(ps)?.name },
             }
         }
         None => return error!(ErrorKind::ExpectedField { field: String::from("Literal") }),
