@@ -1,6 +1,6 @@
 [package]
 name = "fluent"
-version = "0.0.1"
+version = "0.0.2"
 description = """
 A localization library designed to unleash the entire expressive power of
 natural language translations.

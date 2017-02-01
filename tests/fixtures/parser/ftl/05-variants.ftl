@@ -1,33 +1,37 @@
 key1 = Value
- [gender] male
+ .gender = male
 
 key2 =
- [gender] male
+ .gender = male
 
-key3 =
+key3 = {
  *[masculine] Variant for masculine
   [feminine] Variant for feminine
+}
 
-key4=
- [html/aria-label] Test
+key4
+ .aria-label = Test
 
-key5=
- [html/aria-label] Test
- [joomla/loop] Foo
+key5
+ .aria-label = Test
+ .loop = Foo
 
-key5=
- [m] Foo
+key5
+ .m = Foo
 
 [[ section ]]
 
 
-key6 =
- [one] One
+key6 = {
+*[one] One
  [two] Two
  [three] Three
+}
 
-key7 =
-  [a b] A
+key7 = {
+ *[a b] A
+}
 
-key8 =
-  [x/a b] A
+key8 = {
+  *[a b] A
+}

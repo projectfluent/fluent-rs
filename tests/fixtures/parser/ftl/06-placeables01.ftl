@@ -3,21 +3,21 @@ key1 = AA { $num } BB
 key2 = { brand-name }
 
 key4 = { $num ->
-  [one] One
+ *[one] One
   [two] Two
 }
 
 key5 = { LEN($num) ->
-  [one] One
+ *[one] One
   [two] Two
 }
 
 key6 = { LEN(NEL($num)) ->
-  [one] One
+ *[one] One
   [two] Two
 }
 
-key7 = { $user1, $user2 }
+key7 = { LIST($user1, $user2) }
 
 key9 = { LEN(2, 2.5, -3.12, -1.00) }
 
@@ -35,9 +35,9 @@ key19 = { len(bar: 1) }
 
 key20 = { len(bar: -1) }
 
-key21 = { len(bar: $user) }
+key21 = { len(bar: "user") }
 
-key22 = { brand-name[masculine][nominative] }
+key22 = { brand-name[masculine] }
 
 key23 = { number(style: "percent") }
 

@@ -35,14 +35,13 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::MessageReference { id: ast::Identifier { ref name } } => {
+            &ast::Expression::String(ref val) => Some(val.clone()),
+            &ast::Expression::MessageReference { ref id } => {
                 self.messages
-                    .get(name)
+                    .get(id)
                     .and_then(|msg| self.format(msg))
             }
-            &ast::Expression::ExternalArgument { id: ast::Identifier { ref name } } => {
-                Some(format!("${}", name))
-            }
+            &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id)),
             _ => unimplemented!(),
         }
     }
@@ -50,17 +49,7 @@ impl MessageContext {
     fn eval_pattern(&self, pat: &ast::Pattern) -> Option<String> {
         let &ast::Pattern { ref elements, .. } = pat;
         let val = elements.iter()
-            .map(|elem| {
-                match elem {
-                    &ast::PatternElement::Text(ref val) => val.clone(),
-                    &ast::PatternElement::Placeable { ref expressions } => {
-                        expressions.iter()
-                            .map(|expr| self.eval_expr(expr).unwrap_or(String::from("___")))
-                            .collect::<Vec<String>>()
-                            .join(", ")
-                    }
-                }
-            })
+            .map(|elem| self.eval_expr(elem).unwrap_or(String::from("___")))
             .collect::<Vec<String>>()
             .join("");
         Some(val)
