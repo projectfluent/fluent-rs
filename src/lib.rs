@@ -42,4 +42,4 @@ mod tests {
 
 
 pub mod syntax;
-//pub mod context;
+pub mod context;

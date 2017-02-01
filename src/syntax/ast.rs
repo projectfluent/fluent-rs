@@ -86,10 +86,14 @@ pub enum ArgValue {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Identifier(pub String);
+pub struct Identifier {
+    pub name: String
+}
 
 #[derive(Debug, PartialEq)]
-pub struct Keyword(pub String);
+pub struct Keyword {
+    pub value: String
+}
 
 #[derive(Debug, PartialEq)]
 pub struct Comment {
@@ -115,7 +119,9 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Builtin(pub String);
+pub struct Builtin {
+    pub id: String
+}
 
 #[derive(Debug, PartialEq)]
 pub struct JunkEntry {

@@ -35,12 +35,21 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::MessageReference { id: ast::Identifier { ref name } } => {
+            &ast::Expression::SelectExpression { .. } => {
+                unimplemented!()
+            },
+            &ast::Expression::Selector(ref exp) => self.eval_selector_expr(exp)
+        }
+    }
+
+    fn eval_selector_expr(&self, exp: &ast::SelectorExpression) -> Option<String> {
+        match exp {
+            &ast::SelectorExpression::MessageReference(ref name) => {
                 self.messages
                     .get(name)
                     .and_then(|msg| self.format(msg))
             }
-            &ast::Expression::ExternalArgument { id: ast::Identifier { ref name } } => {
+            &ast::SelectorExpression::ExternalArgument(ref name) => {
                 Some(format!("${}", name))
             }
             _ => unimplemented!(),
@@ -53,11 +62,8 @@ impl MessageContext {
             .map(|elem| {
                 match elem {
                     &ast::PatternElement::Text(ref val) => val.clone(),
-                    &ast::PatternElement::Placeable { ref expressions } => {
-                        expressions.iter()
-                            .map(|expr| self.eval_expr(expr).unwrap_or(String::from("___")))
-                            .collect::<Vec<String>>()
-                            .join(", ")
+                    &ast::PatternElement::Placeable(ref expression) => {
+                        self.eval_expr(expression).unwrap_or(String::from("___"))
                     }
                 }
             })

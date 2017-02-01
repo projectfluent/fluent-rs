@@ -204,7 +204,7 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
         }
     }
 
-    Ok(ast::Identifier(name))
+    Ok(ast::Identifier{ name: name })
 }
 
 fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
@@ -331,7 +331,7 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
         name.pop();
     }
 
-    Ok(ast::Keyword(name))
+    Ok(ast::Keyword { value: name })
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
@@ -602,7 +602,7 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorE
                     ps.next();
                     let attr = get_identifier(ps)?;
                     Ok(ast::SelectorExpression::AttributeExpression {
-                        id: ast::Identifier(name),
+                        id: ast::Identifier {name: name},
                         attr: attr
                     })
                 }
@@ -612,7 +612,7 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorE
                     ps.expect_char(']')?;
 
                     Ok(ast::SelectorExpression::VariantExpression {
-                        id: ast::Identifier(name),
+                        id: ast::Identifier {name: name},
                         key: key
                     })
                 }
@@ -621,7 +621,7 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorE
                     let args = get_call_args(ps)?;
                     ps.expect_char(')')?;
                     Ok(ast::SelectorExpression::CallExpression {
-                        callee: ast::Builtin(name),
+                        callee: ast::Builtin {id: name },
                         args: args
                     })
                 }
@@ -659,7 +659,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                                 let val = get_arg_val(ps)?;
                                 println!("{:?}", val);
                                 args.push(ast::SelectorExpression::KeyValueArgument {
-                                    id: ast::Identifier(id),
+                                    id: ast::Identifier{ name: id },
                                     val: val,
                                 });
                             }
@@ -736,7 +736,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
                 '0'...'9' | '-' => ast::SelectorExpression::Number(get_number(ps)?),
                 '$' => {
                     ps.next();
-                    ast::SelectorExpression::ExternalArgument(get_identifier(ps)?.0)
+                    ast::SelectorExpression::ExternalArgument(get_identifier(ps)?.name)
                 },
                 '"' => {
 
@@ -755,7 +755,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
                     ps.expect_char('}')?;
                     ast::SelectorExpression::Placeable(Box::new(exp))
                 },
-                _ => ast::SelectorExpression::MessageReference(get_identifier(ps)?.0),
+                _ => ast::SelectorExpression::MessageReference(get_identifier(ps)?.name),
             }
         }
         None => return error!(ErrorKind::ExpectedField { field: String::from("Literal") }),
