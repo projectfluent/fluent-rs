@@ -35,23 +35,12 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::SelectExpression { .. } => {
-                unimplemented!()
-            },
-            &ast::Expression::Selector(ref exp) => self.eval_selector_expr(exp)
-        }
-    }
-
-    fn eval_selector_expr(&self, exp: &ast::SelectorExpression) -> Option<String> {
-        match exp {
-            &ast::SelectorExpression::MessageReference(ref name) => {
+            &ast::Expression::MessageReference(ref name) => {
                 self.messages
                     .get(name)
                     .and_then(|msg| self.format(msg))
             }
-            &ast::SelectorExpression::ExternalArgument(ref name) => {
-                Some(format!("${}", name))
-            }
+            &ast::Expression::ExternalArgument(ref name) => Some(format!("${}", name)),
             _ => unimplemented!(),
         }
     }

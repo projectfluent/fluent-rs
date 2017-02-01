@@ -28,42 +28,28 @@ pub struct Pattern {
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
-    Selector(SelectorExpression),
-    SelectExpression {
-        exp: Option<SelectorExpression>,
-        variants: Vec<Variant>
-    },
-}
-
-#[derive(Debug, PartialEq)]
-pub enum SelectorExpression {
     Pattern(Pattern),
+    String,
+    Number(Number),
     MessageReference(String),
     ExternalArgument(String),
+    SelectExpression {
+        exp: Option<Box<Expression>>,
+        variants: Vec<Variant>,
+    },
+    AttributeExpression { id: Identifier, attr: Identifier },
+    VariantExpression { id: Identifier, key: VariantKey },
     CallExpression {
         callee: Builtin,
-        args: Vec<SelectorExpression>,
+        args: Vec<Argument>,
     },
-    VariantExpression {
-        id: Identifier,
-        key: VariantKey
-    },
-    AttributeExpression {
-        id: Identifier,
-        attr: Identifier
-    },
-    KeyValueArgument {
-        id: Identifier,
-        val: ArgValue
-    },
-    Number(Number),
-    Placeable(Box<Expression>),
+    Expression(Box<Expression>),
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Attribute {
     pub id: Identifier,
-    pub value: Pattern
+    pub value: Pattern,
 }
 
 #[derive(Debug, PartialEq)]
@@ -80,19 +66,25 @@ pub enum VariantKey {
 }
 
 #[derive(Debug, PartialEq)]
+pub enum Argument {
+    Expression(Expression),
+    NamedArgument { name: Identifier, val: ArgValue },
+}
+
+#[derive(Debug, PartialEq)]
 pub enum ArgValue {
     Number(Number),
-    String(String)
+    String(String),
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Identifier {
-    pub name: String
+    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Keyword {
-    pub value: String
+    pub value: String,
 }
 
 #[derive(Debug, PartialEq)]
@@ -120,7 +112,7 @@ pub struct Number {
 
 #[derive(Debug, PartialEq)]
 pub struct Builtin {
-    pub id: String
+    pub id: String,
 }
 
 #[derive(Debug, PartialEq)]

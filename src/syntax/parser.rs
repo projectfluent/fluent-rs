@@ -204,7 +204,7 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
         }
     }
 
-    Ok(ast::Identifier{ name: name })
+    Ok(ast::Identifier { name: name })
 }
 
 fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
@@ -496,9 +496,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 
                         buffer = String::new();
 
-                        elements.push(ast::PatternElement::Placeable(
-                            get_placeable_expression(ps)?,
-                        ));
+                        elements.push(ast::PatternElement::Placeable(get_expression(ps)?));
 
                         ps.skip_line_ws();
 
@@ -539,7 +537,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     }))
 }
 
-fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
+fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
     if ps.is_peek_next_line_variant_start() {
@@ -549,7 +547,7 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
 
         return Ok(ast::Expression::SelectExpression {
             exp: None,
-            variants: variants
+            variants: variants,
         });
     }
 
@@ -575,7 +573,7 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
                     ps.expect_char('\n')?;
 
                     return Ok(ast::Expression::SelectExpression {
-                        exp: Some(selector),
+                        exp: Some(Box::new(selector)),
                         variants: variants,
                     });
                 }
@@ -587,23 +585,23 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
         }
     }
 
-    Ok(ast::Expression::Selector(selector))
+    Ok(selector)
 }
 
-fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
+fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
     let literal = get_literal(ps)?;
 
     match literal {
-        ast::SelectorExpression::MessageReference(name) => {
+        ast::Expression::MessageReference(name) => {
             match ps.ch {
                 Some('.') => {
                     ps.next();
                     let attr = get_identifier(ps)?;
-                    Ok(ast::SelectorExpression::AttributeExpression {
-                        id: ast::Identifier {name: name},
-                        attr: attr
+                    Ok(ast::Expression::AttributeExpression {
+                        id: ast::Identifier { name: name },
+                        attr: attr,
                     })
                 }
                 Some('[') => {
@@ -611,28 +609,28 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorE
                     let key = get_variant_key(ps)?;
                     ps.expect_char(']')?;
 
-                    Ok(ast::SelectorExpression::VariantExpression {
-                        id: ast::Identifier {name: name},
-                        key: key
+                    Ok(ast::Expression::VariantExpression {
+                        id: ast::Identifier { name: name },
+                        key: key,
                     })
                 }
                 Some('(') => {
                     ps.next();
                     let args = get_call_args(ps)?;
                     ps.expect_char(')')?;
-                    Ok(ast::SelectorExpression::CallExpression {
-                        callee: ast::Builtin {id: name },
-                        args: args
+                    Ok(ast::Expression::CallExpression {
+                        callee: ast::Builtin { id: name },
+                        args: args,
                     })
                 }
-                _ => Ok(ast::SelectorExpression::MessageReference(name))
+                _ => Ok(ast::Expression::MessageReference(name)),
             }
-        },
-        _ => Ok(literal)
+        }
+        _ => Ok(literal),
     }
 }
 
-fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpression>>
+fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
     where I: Iterator<Item = char>
 {
     let mut args = vec![];
@@ -652,14 +650,14 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                 match ps.current() {
                     Some(':') => {
                         match exp {
-                            ast::SelectorExpression::MessageReference(id) => {
+                            ast::Expression::MessageReference(id) => {
                                 ps.next();
                                 ps.skip_line_ws();
 
                                 let val = get_arg_val(ps)?;
                                 println!("{:?}", val);
-                                args.push(ast::SelectorExpression::KeyValueArgument {
-                                    id: ast::Identifier{ name: id },
+                                args.push(ast::Argument::NamedArgument {
+                                    name: ast::Identifier { name: id },
                                     val: val,
                                 });
                             }
@@ -669,7 +667,7 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                         }
                     }
                     _ => {
-                        args.push(exp);
+                        args.push(ast::Argument::Expression(exp));
                     }
                 }
 
@@ -680,12 +678,14 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                         ps.next();
                         ps.skip_line_ws();
                         continue;
-                    },
+                    }
                     Some(')') => {
                         break;
-                    },
+                    }
                     _ => {
-                        return error!(ErrorKind::ExpectedCharRange { range: "\",\" or \"}\"".to_owned() });
+                        return error!(ErrorKind::ExpectedCharRange {
+                            range: "\",\" or \"}\"".to_owned(),
+                        });
                     }
                 }
             }
@@ -726,36 +726,40 @@ fn get_string<I>(ps: &mut ParserStream<I>) -> Result<String>
     Ok(val)
 }
 
-fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
+fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
 
     let exp = match ps.current() {
         Some(ch) => {
             match ch {
-                '0'...'9' | '-' => ast::SelectorExpression::Number(get_number(ps)?),
+                '0'...'9' | '-' => ast::Expression::Number(get_number(ps)?),
                 '$' => {
                     ps.next();
-                    ast::SelectorExpression::ExternalArgument(get_identifier(ps)?.name)
-                },
+                    ast::Expression::ExternalArgument(get_identifier(ps)?.name)
+                }
                 '"' => {
 
                     let pattern = get_pattern(ps)?;
 
                     match pattern {
-                        Some(p) => ast::SelectorExpression::Pattern(p),
-                        _ => return error!(ErrorKind::ExpectedField { field: String::from("String") })
+                        Some(p) => ast::Expression::Pattern(p),
+                        _ => {
+                            return error!(ErrorKind::ExpectedField {
+                                field: String::from("String"),
+                            })
+                        }
                     }
-                },
+                }
                 '{' => {
                     ps.next();
                     ps.skip_line_ws();
-                    let exp = get_placeable_expression(ps)?;
+                    let exp = get_expression(ps)?;
                     ps.skip_line_ws();
                     ps.expect_char('}')?;
-                    ast::SelectorExpression::Placeable(Box::new(exp))
-                },
-                _ => ast::SelectorExpression::MessageReference(get_identifier(ps)?.name),
+                    exp
+                }
+                _ => ast::Expression::MessageReference(get_identifier(ps)?.name),
             }
         }
         None => return error!(ErrorKind::ExpectedField { field: String::from("Literal") }),

@@ -68,7 +68,8 @@ fn get_error_desc(err: &ErrorKind) -> (String, String) {
             return ("E0009".to_owned(), "a key has to be a simple identifier".to_owned());
         }
         &ErrorKind::MissingDefaultVariant => {
-            return ("E0010".to_owned(), "Expected one of the variants to be marked as default (*).".to_owned());
+            return ("E0010".to_owned(),
+                    "Expected one of the variants to be marked as default (*).".to_owned());
         }
         &ErrorKind::MissingVariants => {
             return ("E0010".to_owned(), "Expected at least one variant after \"->\".".to_owned());
