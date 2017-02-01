@@ -1,5 +1,3 @@
-#![feature(untagged_unions)]
-
 #![cfg_attr(test, feature(test))]
 
 #[cfg(test)]
@@ -30,14 +28,14 @@ mod tests {
         });
     }
 
-    // #[bench]
-    // fn bench_parser_workout_low(b: &mut Bencher) {
-    //     let f = read_file("./tests/workload-low.ftl").expect("Couldn't load file");
+    #[bench]
+    fn bench_parser_workout_low(b: &mut Bencher) {
+        let f = read_file("./tests/workload-low.ftl").expect("Couldn't load file");
 
-    //     b.iter(|| {
-    //         parse(&f).unwrap();
-    //     });
-    // }
+        b.iter(|| {
+            parse(&f).unwrap();
+        });
+    }
 }
 
 
