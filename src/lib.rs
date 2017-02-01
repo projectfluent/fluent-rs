@@ -1,3 +1,5 @@
+#![feature(untagged_unions)]
+
 #![cfg_attr(test, feature(test))]
 
 #[cfg(test)]

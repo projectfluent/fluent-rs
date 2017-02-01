@@ -26,6 +26,8 @@ pub enum ErrorKind {
     ExpectedCharRange { range: String },
     ExpectedField { field: String },
     MissingField { fields: Vec<String> },
+    MissingDefaultVariant,
+    MissingVariants,
     ForbiddenWhitespace,
     ForbiddenCallee,
     ForbiddenKey,
@@ -64,6 +66,12 @@ fn get_error_desc(err: &ErrorKind) -> (String, String) {
         }
         &ErrorKind::ForbiddenKey => {
             return ("E0009".to_owned(), "a key has to be a simple identifier".to_owned());
+        }
+        &ErrorKind::MissingDefaultVariant => {
+            return ("E0010".to_owned(), "Expected one of the variants to be marked as default (*).".to_owned());
+        }
+        &ErrorKind::MissingVariants => {
+            return ("E0010".to_owned(), "Expected at least one variant after \"->\".".to_owned());
         }
         &ErrorKind::Generic => {
             return ("E0002".to_owned(), "generic error".to_owned());

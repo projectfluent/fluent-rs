@@ -204,7 +204,7 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
         }
     }
 
-    Ok(ast::Identifier { name: name })
+    Ok(ast::Identifier(name))
 }
 
 fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
@@ -256,7 +256,7 @@ fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VariantKey>
                 }
                 _ => {
                     ps.reset_peek();
-                    return Ok(ast::VariantKey::Keyword(get_keyword(ps)?));
+                    return Ok(ast::VariantKey::Key(get_keyword(ps)?));
                 }
             }
         }
@@ -268,6 +268,7 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
     where I: Iterator<Item = char>
 {
     let mut variants = vec![];
+    let mut has_default = false;
 
     loop {
         let mut default_index = false;
@@ -278,6 +279,7 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
         if ps.current_is('*') {
             ps.next();
             default_index = true;
+            has_default = true;
         }
 
         ps.expect_char('[')?;
@@ -305,6 +307,9 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
             break;
         }
     }
+    if !has_default {
+        return error!(ErrorKind::MissingDefaultVariant);
+    }
     Ok(variants)
 }
 
@@ -326,7 +331,7 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
         name.pop();
     }
 
-    Ok(ast::Keyword { name: name })
+    Ok(ast::Keyword(name))
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
@@ -537,6 +542,17 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     where I: Iterator<Item = char>
 {
+    if ps.is_peek_next_line_variant_start() {
+        let variants = get_variants(ps)?;
+
+        ps.expect_char('\n')?;
+
+        return Ok(ast::Expression::SelectExpression {
+            exp: None,
+            variants: variants
+        });
+    }
+
     let selector = get_selector_expression(ps)?;
 
     ps.skip_line_ws();
@@ -553,13 +569,13 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
                     let variants = get_variants(ps)?;
 
                     if variants.len() == 0 {
-                        return error!(ErrorKind::Generic);
+                        return error!(ErrorKind::MissingVariants);
                     }
 
                     ps.expect_char('\n')?;
 
                     return Ok(ast::Expression::SelectExpression {
-                        exp: selector,
+                        exp: Some(selector),
                         variants: variants,
                     });
                 }
@@ -577,31 +593,42 @@ fn get_placeable_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressi
 fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
     where I: Iterator<Item = char>
 {
-    let exp = get_call_expression(ps)?;
-    Ok(exp)
-}
+    let literal = get_literal(ps)?;
 
-fn get_call_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
-    where I: Iterator<Item = char>
-{
-    let exp = get_literal(ps)?;
+    match literal {
+        ast::SelectorExpression::MessageReference(name) => {
+            match ps.ch {
+                Some('.') => {
+                    ps.next();
+                    let attr = get_identifier(ps)?;
+                    Ok(ast::SelectorExpression::AttributeExpression {
+                        id: ast::Identifier(name),
+                        attr: attr
+                    })
+                }
+                Some('[') => {
+                    ps.next();
+                    let key = get_variant_key(ps)?;
+                    ps.expect_char(']')?;
 
-    if !ps.take_char_if('(') {
-        return Ok(exp);
-    }
-
-    match exp {
-        ast::SelectorExpression::MessageReference(id)=> {
-
-            let args = get_call_args(ps)?;
-
-            ps.expect_char(')')?;
-            return Ok(ast::SelectorExpression::CallExpression {
-                callee: ast::Builtin(id),
-               args: args,
-            });
-        }
-        _ => return error!(ErrorKind::ForbiddenCallee),
+                    Ok(ast::SelectorExpression::VariantExpression {
+                        id: ast::Identifier(name),
+                        key: key
+                    })
+                }
+                Some('(') => {
+                    ps.next();
+                    let args = get_call_args(ps)?;
+                    ps.expect_char(')')?;
+                    Ok(ast::SelectorExpression::CallExpression {
+                        callee: ast::Builtin(name),
+                        args: args
+                    })
+                }
+                _ => Ok(ast::SelectorExpression::MessageReference(name))
+            }
+        },
+        _ => Ok(literal)
     }
 }
 
@@ -617,10 +644,6 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
             Some(')') => {
                 break;
             }
-            Some(',') => {
-                ps.next();
-                ps.skip_line_ws();
-            }
             _ => {
                 let exp = get_selector_expression(ps)?;
 
@@ -634,8 +657,9 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                                 ps.skip_line_ws();
 
                                 let val = get_arg_val(ps)?;
+                                println!("{:?}", val);
                                 args.push(ast::SelectorExpression::KeyValueArgument {
-                                    id: id,
+                                    id: ast::Identifier(id),
                                     val: val,
                                 });
                             }
@@ -646,6 +670,22 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::SelectorExpress
                     }
                     _ => {
                         args.push(exp);
+                    }
+                }
+
+                ps.skip_line_ws();
+
+                match ps.current() {
+                    Some(',') => {
+                        ps.next();
+                        ps.skip_line_ws();
+                        continue;
+                    },
+                    Some(')') => {
+                        break;
+                    },
+                    _ => {
+                        return error!(ErrorKind::ExpectedCharRange { range: "\",\" or \"}\"".to_owned() });
                     }
                 }
             }
@@ -675,43 +715,16 @@ fn get_string<I>(ps: &mut ParserStream<I>) -> Result<String>
 {
     let mut val = String::new();
 
-    loop {
-        if !ps.current_is('"') {
-            break;
-        }
-        val.push(ps.ch.unwrap());
-    };
+    ps.expect_char('"')?;
+
+    while let Some(ch) = ps.take_char(|x| x != '"') {
+        val.push(ch);
+    }
+
+    ps.next();
 
     Ok(val)
 }
-
-// fn get_variant_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
-//     where I: Iterator<Item = char>
-// {
-//     let mut exp = get_literal(ps)?;
-
-//     loop {
-//         match ps.current() {
-//             Some('[') => {
-//                 ps.next();
-//                 let keyword = get_variant_key(ps)?;
-
-//                 ps.expect_char(']')?;
-
-//                 exp = ast::SelectorExpression::VariantExpression {
-//                     id: exp,
-//                     key: keyword,
-//                 }
-//             }
-//             _ => {
-//                 break;
-//             }
-//         }
-//     }
-
-//     Ok(exp)
-// }
-
 
 fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
     where I: Iterator<Item = char>
@@ -723,9 +736,26 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::SelectorExpression>
                 '0'...'9' | '-' => ast::SelectorExpression::Number(get_number(ps)?),
                 '$' => {
                     ps.next();
-                    ast::SelectorExpression::ExternalArgument(get_identifier(ps)?)
-                }
-                _ => ast::SelectorExpression::MessageReference(get_identifier(ps)?),
+                    ast::SelectorExpression::ExternalArgument(get_identifier(ps)?.0)
+                },
+                '"' => {
+
+                    let pattern = get_pattern(ps)?;
+
+                    match pattern {
+                        Some(p) => ast::SelectorExpression::Pattern(p),
+                        _ => return error!(ErrorKind::ExpectedField { field: String::from("String") })
+                    }
+                },
+                '{' => {
+                    ps.next();
+                    ps.skip_line_ws();
+                    let exp = get_placeable_expression(ps)?;
+                    ps.skip_line_ws();
+                    ps.expect_char('}')?;
+                    ast::SelectorExpression::Placeable(Box::new(exp))
+                },
+                _ => ast::SelectorExpression::MessageReference(get_identifier(ps)?.0),
             }
         }
         None => return error!(ErrorKind::ExpectedField { field: String::from("Literal") }),

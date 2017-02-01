@@ -30,15 +30,16 @@ pub struct Pattern {
 pub enum Expression {
     Selector(SelectorExpression),
     SelectExpression {
-        exp: SelectorExpression,
+        exp: Option<SelectorExpression>,
         variants: Vec<Variant>
     },
 }
 
 #[derive(Debug, PartialEq)]
 pub enum SelectorExpression {
-    MessageReference(Identifier),
-    ExternalArgument(Identifier),
+    Pattern(Pattern),
+    MessageReference(String),
+    ExternalArgument(String),
     CallExpression {
         callee: Builtin,
         args: Vec<SelectorExpression>,
@@ -56,6 +57,7 @@ pub enum SelectorExpression {
         val: ArgValue
     },
     Number(Number),
+    Placeable(Box<Expression>),
 }
 
 #[derive(Debug, PartialEq)]
@@ -73,7 +75,7 @@ pub struct Variant {
 
 #[derive(Debug, PartialEq)]
 pub enum VariantKey {
-    Keyword(Keyword),
+    Key(Keyword),
     Number(Number),
 }
 
@@ -84,14 +86,10 @@ pub enum ArgValue {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Identifier {
-    pub name: String,
-}
+pub struct Identifier(pub String);
 
 #[derive(Debug, PartialEq)]
-pub struct Keyword {
-    pub name: String,
-}
+pub struct Keyword(pub String);
 
 #[derive(Debug, PartialEq)]
 pub struct Comment {
@@ -117,7 +115,7 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Builtin(pub Identifier);
+pub struct Builtin(pub String);
 
 #[derive(Debug, PartialEq)]
 pub struct JunkEntry {
