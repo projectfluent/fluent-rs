@@ -50,10 +50,8 @@ impl MessageContext {
         let val = elements.iter()
             .map(|elem| {
                 match elem {
-                    &ast::PatternElement::Text(ref val) => val.clone(),
-                    &ast::PatternElement::Placeable(ref expression) => {
-                        self.eval_expr(expression).unwrap_or(String::from("___"))
-                    }
+                    &ast::Expression::String(ref val) => val.clone(),
+                    _ => self.eval_expr(elem).unwrap_or(String::from("___")),
                 }
             })
             .collect::<Vec<String>>()

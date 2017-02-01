@@ -22,14 +22,14 @@ pub enum Entry {
 
 #[derive(Debug, PartialEq)]
 pub struct Pattern {
-    pub elements: Vec<PatternElement>,
+    pub elements: Vec<Expression>,
     pub quoted: bool,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
     Pattern(Pattern),
-    String,
+    String(String),
     Number(Number),
     MessageReference(String),
     ExternalArgument(String),
@@ -37,7 +37,7 @@ pub enum Expression {
         exp: Option<Box<Expression>>,
         variants: Vec<Variant>,
     },
-    AttributeExpression { id: Identifier, attr: Identifier },
+    AttributeExpression { id: Identifier, name: Identifier },
     VariantExpression { id: Identifier, key: VariantKey },
     CallExpression {
         callee: Builtin,
@@ -97,12 +97,6 @@ pub struct Section {
     pub key: Keyword,
     pub body: Vec<Entry>,
     pub comment: Option<Comment>,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum PatternElement {
-    Text(String),
-    Placeable(Expression),
 }
 
 #[derive(Debug, PartialEq)]

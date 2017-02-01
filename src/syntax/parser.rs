@@ -491,12 +491,12 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                         ps.skip_line_ws();
 
                         if !buffer.is_empty() {
-                            elements.push(ast::PatternElement::Text(buffer));
+                            elements.push(ast::Expression::String(buffer));
                         }
 
                         buffer = String::new();
 
-                        elements.push(ast::PatternElement::Placeable(get_expression(ps)?));
+                        elements.push(get_expression(ps)?);
 
                         ps.skip_line_ws();
 
@@ -524,7 +524,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     }
 
     if !buffer.is_empty() {
-        elements.push(ast::PatternElement::Text(buffer));
+        elements.push(ast::Expression::String(buffer));
     }
 
     if !quote_delimited && elements.len() == 0 {
@@ -601,7 +601,7 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     let attr = get_identifier(ps)?;
                     Ok(ast::Expression::AttributeExpression {
                         id: ast::Identifier { name: name },
-                        attr: attr,
+                        name: attr,
                     })
                 }
                 Some('[') => {
