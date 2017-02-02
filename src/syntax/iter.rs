@@ -93,14 +93,6 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         self.peek_index
     }
 
-    pub fn has_more(&mut self) -> bool {
-        let ret = self.peek().is_some();
-
-        self.reset_peek();
-
-        ret
-    }
-
     pub fn peek_char_is(&mut self, c: char) -> bool {
         if self.peek_end {
             return false;
