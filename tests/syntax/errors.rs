@@ -74,7 +74,7 @@ fn just_id_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
+            assert_eq!(ErrorKind::MissingField { fields: vec!["Value".to_owned(), "Attribute".to_owned()] }, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key".to_owned(),
@@ -98,7 +98,7 @@ fn no_equal_sign_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
+            assert_eq!(ErrorKind::MissingField { fields: vec!["Value".to_owned(), "Attribute".to_owned()] }, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key Value".to_owned(),
@@ -128,7 +128,7 @@ fn wrong_char_in_id_errors() {
                        error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                           slice: "key = Value\n [#] Foo".to_owned(),
+                           slice: "key = Value\n .# = Foo".to_owned(),
                            line: 0,
                            pos: 14,
                        }),
@@ -149,13 +149,13 @@ fn missing_trait_value_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::ExpectedField { field: "Pattern".to_owned() },
+            assert_eq!(ErrorKind::ExpectedToken { token: '=' },
                        error1.kind);
 
             assert_eq!(Some(ErrorInfo {
-                           slice: "key = Value\n [foo]".to_owned(),
+                           slice: "key = Value\n .foo".to_owned(),
                            line: 0,
-                           pos: 18,
+                           pos: 17,
                        }),
                        error1.info);
 
@@ -175,7 +175,7 @@ fn message_missing_fields_errors() {
             let ref error1 = errors[0];
 
             assert_eq!(ErrorKind::MissingField {
-                           fields: vec!["Value".to_owned(), "Traits".to_owned()],
+                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
                        },
                        error1.kind);
 

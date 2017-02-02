@@ -1,2 +1,2 @@
 key = Value
- [foo]
+ .foo
