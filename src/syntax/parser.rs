@@ -409,7 +409,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     let mut quote_delimited = false;
     let mut quote_open = false;
     let mut first_line = true;
-    let mut is_intended = false;
+    let mut is_indented = false;
 
     if ps.take_char_if('"') {
         quote_delimited = true;
@@ -443,10 +443,10 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 
                         if first_line {
                             if ps.take_char_if(' ') {
-                                is_intended = true;
+                                is_indented = true;
                             }
                         } else {
-                            if is_intended && !ps.take_char_if(' ') {
+                            if is_indented && !ps.take_char_if(' ') {
                                 return error!(ErrorKind::Generic);
                             }
                         }
