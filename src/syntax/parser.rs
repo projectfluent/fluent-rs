@@ -654,7 +654,6 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
                                 ps.skip_line_ws();
 
                                 let val = get_arg_val(ps)?;
-                                println!("{:?}", val);
                                 args.push(ast::Argument::NamedArgument {
                                     name: ast::Identifier { name: id },
                                     val: val,
