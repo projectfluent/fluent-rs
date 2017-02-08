@@ -1,4 +1,4 @@
-mod iter;
+mod stream;
 mod fixtures;
 mod junk;
 mod errors;

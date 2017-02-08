@@ -1,226 +1,152 @@
-use super::errors::ParserError;
-use super::errors::ErrorKind;
-use super::iter::ParserStream;
-use super::parser::Result;
+use std::iter::Fuse;
 
-pub trait FTLParserStream<I> {
-    fn peek_line_ws(&mut self);
-    fn skip_ws_lines(&mut self);
-    fn skip_line_ws(&mut self);
-    fn skip_ws(&mut self);
-    fn expect_char(&mut self, ch: char) -> Result<()>;
-    fn take_char_if(&mut self, ch: char) -> bool;
+#[derive(Clone, Debug)]
+pub struct ParserStream<I>
+    where I: Iterator
+{
+    iter: Fuse<I>,
+    pub buf: Vec<char>,
+    peek_index: usize,
+    index: usize,
 
-    fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
+    pub ch: Option<char>,
 
-    fn is_id_start(&mut self) -> bool;
-    fn is_peek_next_line_variant_start(&mut self) -> bool;
-    fn is_peek_next_line_attribute_start(&mut self) -> bool;
-    fn skip_to_next_entry_start(&mut self);
-    fn take_id_start(&mut self) -> Result<char>;
-    fn take_id_char(&mut self) -> Option<char>;
-    fn take_kw_char(&mut self) -> Option<char>;
+    iter_end: bool,
+    peek_end: bool,
 }
 
-impl<I> FTLParserStream<I> for ParserStream<I>
-    where I: Iterator<Item = char>
-{
-    fn peek_line_ws(&mut self) {
-        while let Some(ch) = self.current_peek() {
-            if ch != ' ' && ch != '\t' {
-                break;
-            }
+impl<I: Iterator<Item = char>> ParserStream<I> {
+    pub fn new(iterable: I) -> ParserStream<I> {
+        let mut iter = iterable.into_iter().fuse();
+        let ch = iter.next();
 
-            self.peek();
+        ParserStream {
+            iter: iter,
+            buf: vec![],
+            peek_index: 0,
+            index: 0,
+            ch: ch,
+
+            iter_end: false,
+            peek_end: false,
         }
     }
 
-    fn skip_ws_lines(&mut self) {
-        loop {
-            self.peek_line_ws();
-
-            match self.current_peek() {
-                Some('\n') => {
-                    self.skip_to_peek();
-                    self.next();
-                }
-                _ => {
-                    self.reset_peek();
-                    break;
-                }
-            }
-        }
+    pub fn current(&mut self) -> Option<char> {
+        self.ch
     }
 
-    fn skip_line_ws(&mut self) {
-        while let Some(ch) = self.ch {
-            if ch != ' ' && ch != '\t' {
-                break;
-            }
-
-            self.next();
-        }
+    pub fn current_is(&mut self, ch: char) -> bool {
+        self.ch == Some(ch)
     }
 
-    fn skip_ws(&mut self) {
-        while let Some(ch) = self.ch {
-            if ch != ' ' && ch != '\n' && ch != '\t' && ch != '\r' {
-                break;
-            }
-
-            self.next();
+    pub fn current_peek(&self) -> Option<char> {
+        if self.peek_end {
+            return None;
         }
+
+        let diff = self.peek_index - self.index;
+
+        if diff == 0 {
+            return self.ch;
+        }
+
+        return Some(self.buf[diff - 1]);
     }
 
-    fn expect_char(&mut self, ch: char) -> Result<()> {
-        match self.ch {
-            Some(ch2) if ch == ch2 => {
-                self.next();
-                Ok(())
-            }
-            _ => error!(ErrorKind::ExpectedToken { token: ch }),
-        }
-    }
-
-    fn take_char_if(&mut self, ch: char) -> bool {
-        match self.ch {
-            Some(ch2) if ch == ch2 => {
-                self.next();
-                true
-            }
-            _ => false,
-        }
-    }
-
-    fn take_char<F>(&mut self, f: F) -> Option<char>
-        where F: Fn(char) -> bool
-    {
-
-        match self.ch {
-            Some(ch) if f(ch) => {
-                self.next();
-                Some(ch)
-            }
-            _ => None,
-        }
-    }
-
-    fn is_id_start(&mut self) -> bool {
-        match self.ch {
-            Some(ch) => {
-                match ch {
-                    'a'...'z' | 'A'...'Z' | '_' => true,
-                    _ => false,
-                }
-            }
+    pub fn current_peek_is(&mut self, ch: char) -> bool {
+        match self.current_peek() {
+            Some(c) => ch == c,
             None => false,
         }
     }
 
-    fn is_peek_next_line_variant_start(&mut self) -> bool {
-        if !self.current_peek_is('\n') {
-            return false;
-        }
-        self.peek();
-
-        self.peek_line_ws();
-
-        if self.current_peek_is('*') {
-            self.peek();
+    pub fn peek(&mut self) -> Option<char> {
+        if self.peek_end {
+            return None;
         }
 
-        if self.current_peek_is('[') && !self.peek_char_is('[') {
-            self.reset_peek();
-            return true;
-        }
-        self.reset_peek();
-        return false;
-    }
+        self.peek_index += 1;
 
-    fn is_peek_next_line_attribute_start(&mut self) -> bool {
-        if !self.current_peek_is('\n') {
-            return false;
-        }
-        self.peek();
+        let diff = self.peek_index - self.index;
 
-        self.peek_line_ws();
-
-        if self.current_peek_is('.') {
-            self.reset_peek();
-            return true;
-        }
-
-        self.reset_peek();
-        return false;
-    }
-
-    fn skip_to_next_entry_start(&mut self) {
-        loop {
-            if self.current_is('\n') {
-                if !self.peek_char_is('\n') {
-                    match self.next() {
-                        Some(ch) => {
-                            match ch {
-                                'a'...'z' | 'A'...'Z' | '_' => break,
-                                '#' => break,
-                                '[' => {
-                                    if self.peek_char_is('[') {
-                                        break;
-                                    }
-                                }
-                                _ => {}
-                            }
-                        }
-                        None => {
-                            break;
-                        }
-                    }
+        if diff > self.buf.len() {
+            match self.iter.next() {
+                Some(c) => {
+                    self.buf.push(c);
+                }
+                None => {
+                    self.peek_end = true;
+                    return None;
                 }
             }
-
-            if self.next().is_none() {
-                break;
-            }
         }
+
+        return Some(self.buf[diff - 1]);
     }
 
-    fn take_id_start(&mut self) -> Result<char> {
-        let closure = |x| match x {
-            'a'...'z' | 'A'...'Z' | '_' => true,
+    pub fn get_index(&self) -> usize {
+        self.index
+    }
+
+    pub fn get_peek_index(&self) -> usize {
+        self.peek_index
+    }
+
+    pub fn peek_char_is(&mut self, c: char) -> bool {
+        if self.peek_end {
+            return false;
+        }
+        let ret = match self.peek() {
+            Some(ch) if ch == c => true,
             _ => false,
         };
 
-        match self.take_char(closure) {
-            Some(ch) => Ok(ch),
-            None => {
-                error!(ErrorKind::ExpectedCharRange {
-                    range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
-                })
-            }
-        }
+        self.peek_index -= 1;
+        return ret;
     }
 
-    fn take_id_char(&mut self) -> Option<char> {
-        let closure = |x| match x {
-            'a'...'z' | 'A'...'Z' | '0'...'9' | '_' | '-' => true,
-            _ => false,
-        };
-
-        match self.take_char(closure) {
-            Some(ch) => Some(ch),
-            None => None,
-        }
+    pub fn reset_peek(&mut self) {
+        self.peek_index = self.index;
+        self.peek_end = self.iter_end;
     }
 
-    fn take_kw_char(&mut self) -> Option<char> {
-        let closure = |x| match x {
-            'a'...'z' | 'A'...'Z' | '0'...'9' | '_' | '-' | ' ' => true,
-            _ => false,
-        };
+    pub fn skip_to_peek(&mut self) {
+        let diff = self.peek_index - self.index;
 
-        match self.take_char(closure) {
-            Some(ch) => Some(ch),
-            None => None,
+        for _ in 0..diff {
+            self.ch = Some(self.buf.remove(0));
         }
+
+        self.index = self.peek_index;
+    }
+}
+
+impl<I> Iterator for ParserStream<I>
+    where I: Iterator<Item = char>
+{
+    type Item = char;
+
+    fn next(&mut self) -> Option<char> {
+        if self.iter_end {
+            return None;
+        }
+
+        if self.buf.is_empty() {
+            self.ch = self.iter.next();
+        } else {
+            self.ch = Some(self.buf.remove(0));
+        }
+
+        self.index += 1;
+
+        if self.ch.is_none() {
+            self.iter_end = true;
+            self.peek_end = true;
+        }
+
+        self.peek_index = self.index;
+
+        self.ch
     }
 }

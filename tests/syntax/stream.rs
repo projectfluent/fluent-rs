@@ -1,6 +1,6 @@
 extern crate fluent;
 
-use self::fluent::syntax::iter::ParserStream;
+use self::fluent::syntax::stream::ParserStream;
 
 #[test]
 fn next() {
