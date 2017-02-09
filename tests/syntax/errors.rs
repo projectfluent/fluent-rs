@@ -74,7 +74,10 @@ fn just_id_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::MissingField { fields: vec!["Value".to_owned(), "Attribute".to_owned()] }, error1.kind);
+            assert_eq!(ErrorKind::MissingField {
+                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
+                       },
+                       error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key".to_owned(),
@@ -98,7 +101,10 @@ fn no_equal_sign_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::MissingField { fields: vec!["Value".to_owned(), "Attribute".to_owned()] }, error1.kind);
+            assert_eq!(ErrorKind::MissingField {
+                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
+                       },
+                       error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key Value".to_owned(),
@@ -149,8 +155,7 @@ fn missing_trait_value_errors() {
 
             let ref error1 = errors[0];
 
-            assert_eq!(ErrorKind::ExpectedToken { token: '=' },
-                       error1.kind);
+            assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key = Value\n .foo".to_owned(),

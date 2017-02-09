@@ -545,7 +545,7 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
         ps.expect_char('\n')?;
 
         return Ok(ast::Expression::SelectExpression {
-            exp: None,
+            expression: None,
             variants: variants,
         });
     }
@@ -572,7 +572,7 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                     ps.expect_char('\n')?;
 
                     return Ok(ast::Expression::SelectExpression {
-                        exp: Some(Box::new(selector)),
+                        expression: Some(Box::new(selector)),
                         variants: variants,
                     });
                 }
@@ -773,5 +773,5 @@ fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize)
 
     let slice = get_error_slice(source, entry_start, ps.get_index());
 
-    ast::Entry::Junk(ast::JunkEntry { body: String::from(slice) })
+    ast::Entry::Junk(ast::JunkEntry { content: String::from(slice) })
 }

@@ -34,7 +34,7 @@ pub enum Expression {
     MessageReference { id: String },
     ExternalArgument { id: String },
     SelectExpression {
-        exp: Option<Box<Expression>>,
+        expression: Option<Box<Expression>>,
         variants: Vec<Variant>,
     },
     AttributeExpression { id: Identifier, name: Identifier },
@@ -110,5 +110,5 @@ pub struct Function {
 
 #[derive(Debug, PartialEq)]
 pub struct JunkEntry {
-    pub body: String,
+    pub content: String,
 }

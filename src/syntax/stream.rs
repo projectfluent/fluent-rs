@@ -48,10 +48,10 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         let diff = self.peek_index - self.index;
 
         if diff == 0 {
-            return self.ch;
+            self.ch
+        } else {
+            Some(self.buf[diff - 1])
         }
-
-        return Some(self.buf[diff - 1]);
     }
 
     pub fn current_peek_is(&mut self, ch: char) -> bool {
@@ -132,11 +132,11 @@ impl<I> Iterator for ParserStream<I>
             return None;
         }
 
-        if self.buf.is_empty() {
-            self.ch = self.iter.next();
+        self.ch = if self.buf.is_empty() {
+            self.iter.next()
         } else {
-            self.ch = Some(self.buf.remove(0));
-        }
+            Some(self.buf.remove(0))
+        };
 
         self.index += 1;
 

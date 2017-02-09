@@ -156,24 +156,22 @@ impl<I> FTLParserStream<I> for ParserStream<I>
 
     fn skip_to_next_entry_start(&mut self) {
         loop {
-            if self.current_is('\n') {
-                if !self.peek_char_is('\n') {
-                    match self.next() {
-                        Some(ch) => {
-                            match ch {
-                                'a'...'z' | 'A'...'Z' | '_' => break,
-                                '#' => break,
-                                '[' => {
-                                    if self.peek_char_is('[') {
-                                        break;
-                                    }
+            if self.current_is('\n') && !self.peek_char_is('\n') {
+                match self.next() {
+                    Some(ch) => {
+                        match ch {
+                            'a'...'z' | 'A'...'Z' | '_' => break,
+                            '#' => break,
+                            '[' => {
+                                if self.peek_char_is('[') {
+                                    break;
                                 }
-                                _ => {}
                             }
+                            _ => {}
                         }
-                        None => {
-                            break;
-                        }
+                    }
+                    None => {
+                        break;
                     }
                 }
             }
