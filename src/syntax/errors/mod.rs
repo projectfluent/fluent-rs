@@ -1,5 +1,10 @@
 extern crate term;
 
+pub mod display;
+mod list;
+
+pub use self::list::ItemName as items;
+pub use self::list::get_item;
 use std::fmt;
 
 macro_rules! error {
@@ -79,6 +84,10 @@ fn get_error_desc(err: &ErrorKind) -> (String, String) {
         }
     }
 }
+
+// fn get_error_hint(err: ErrorKind) -> str {
+//     "Did you mean to put \"=\" after the ID?".to_owned()
+// }
 
 fn draw_line(line_num: usize, max_dig_space: usize) -> String {
 

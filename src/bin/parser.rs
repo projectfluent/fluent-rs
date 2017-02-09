@@ -10,6 +10,8 @@ use getopts::Options;
 
 use fluent::syntax::parser::parse;
 use fluent::syntax::ast::Resource;
+use fluent::syntax::errors::display::annotate_slice;
+use fluent::syntax::errors;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
@@ -58,21 +60,37 @@ fn main() {
         return;
     };
 
-    match res {
-        Ok(res) => print_entries_resource(&res),
-        Err((res, errors)) => {
-            print_entries_resource(&res);
-            println!("==============================\n");
-            if errors.len() == 1 {
-                println!("Parser encountered one error:");
-            } else {
-                println!("Parser encountered {} errors:", errors.len());
-            }
-            println!("-----------------------------");
-            for err in errors {
-                println!("{}", err);
-                println!("-----------------------------");
-            }
-        }
-    };
+    let asl = annotate_slice(
+        "key = Value\n\nkey2 = Value 2".to_owned(),
+        Some("main.ftl".to_owned()),
+        errors::get_item(errors::items::GenericError),
+        0
+    );
+    println!("{}", asl);
+
+    let asl = annotate_slice(
+        "key = Value\n\nkey2 = Value 2".to_owned(),
+        Some("main.ftl".to_owned()),
+        errors::get_item(errors::items::UnusedVariable),
+        56
+    );
+    println!("{}", asl);
+
+    // match res {
+    //     Ok(res) => print_entries_resource(&res),
+    //     Err((res, errors)) => {
+    //         print_entries_resource(&res);
+    //         println!("==============================\n");
+    //         if errors.len() == 1 {
+    //             println!("Parser encountered one error:");
+    //         } else {
+    //             println!("Parser encountered {} errors:", errors.len());
+    //         }
+    //         println!("-----------------------------");
+    //         for err in errors {
+    //             println!("{}", err);
+    //             println!("-----------------------------");
+    //         }
+    //     }
+    // };
 }
