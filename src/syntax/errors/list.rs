@@ -1,59 +1,70 @@
-
-
-pub struct ParserError2 {
+#[derive(Debug)]
+pub struct ParserError {
     pub info: Option<ErrorInfo>,
-    pub kind: ErrorKind
+    pub kind: ErrorKind,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum ItemName {
-    GenericError,
-    MissingField,
-    UnusedVariable,
+pub struct ErrorInfo {
+    pub slice: String,
+    pub line: usize,
+    pub col: usize,
+    pub pos: usize,
 }
 
-pub struct Item {
-    pub name: ItemName,
-    pub kind: ItemKind,
-    pub num: usize,
-    pub title: &'static str,
+
+#[derive(Debug, PartialEq)]
+pub enum ErrorKind {
+    Generic,
+    ExpectedEntry,
+    ExpectedToken { token: char },
+    ExpectedCharRange { range: String },
+    ExpectedField { field: String },
+    MissingField { entry_id: String, fields: Vec<&'static str> },
+    MissingDefaultVariant,
+    MissingVariants,
+    ForbiddenWhitespace,
+    ForbiddenCallee,
+    ForbiddenKey,
 }
 
-pub enum ItemKind {
-    Error,
-    Warning,
-}
-
-pub struct Label {
-    pub start_pos: usize,
-    pub end_pos: usize,
-    pub kind: LabelKind,
-    pub text: &'static str,
-}
-
-pub enum LabelKind {
-    Primary,
-    Secondary,
-}
-
-pub static ITEMS: [Item; 2] = [Item {
-                                   name: ItemName::GenericError,
-                                   kind: ItemKind::Error,
-                                   num: 1,
-                                   title: "generic error",
-                               },
-                               Item {
-                                   name: ItemName::MissingField,
-                                   kind: ItemKind::Error,
-                                   num: 2,
-                                   title: "missing field {} in {}",
-                               }];
-
-pub fn get_item(name: ItemName) -> &'static Item {
-    for x in &ITEMS {
-        if x.name == name {
-            return &x;
+pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String) {
+    match err {
+        &ErrorKind::Generic => {
+            return ("E0001", "generic error".to_owned());
+        }
+        &ErrorKind::ExpectedEntry => {
+            return ("E0002",
+                    "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned());
+        }
+        &ErrorKind::ExpectedToken { token } => {
+            return ("E0003", format!("expected token `{}`", token));
+        }
+        &ErrorKind::ExpectedCharRange { ref range } => {
+            return ("E0004", format!("Expected a character from range ({})", range));
+        }
+        &ErrorKind::MissingField { ref entry_id, ref fields } => {
+            let list = fields.join(", ");
+            return ("E0005", format!("Expected entry `{}` to have one of the fields: {}", entry_id, list));
+        }
+        &ErrorKind::ExpectedField { ref field } => {
+            return ("E0006", format!("Expected field: {}", field));
+        }
+        &ErrorKind::ForbiddenWhitespace => {
+            return ("E0007", "keyword cannot end with a whitespace".to_owned());
+        }
+        &ErrorKind::ForbiddenCallee => {
+            return ("E0008", "a callee has to be a simple identifier".to_owned());
+        }
+        &ErrorKind::ForbiddenKey => {
+            return ("E0009", "a key has to be a simple identifier".to_owned());
+        }
+        &ErrorKind::MissingDefaultVariant => {
+            return ("E0010",
+                    "Expected one of the variants to be marked as default (*).".to_owned());
+        }
+        &ErrorKind::MissingVariants => {
+            return ("E0010", "Expected at least one variant after \"->\".".to_owned());
         }
     }
-    panic!("Unknown item name: {:?}", name);
 }

@@ -11,7 +11,7 @@ use getopts::Options;
 use fluent::syntax::parser::parse;
 use fluent::syntax::ast::Resource;
 use fluent::syntax::errors::display::annotate_slice;
-use fluent::syntax::errors;
+use fluent::syntax::errors::display::Item;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
@@ -60,38 +60,6 @@ fn main() {
         return;
     };
 
-    // let asl = annotate_slice("key = Value\nkey2 = Value 2".to_owned(),
-    //                          Some("main.ftl".to_owned()),
-    //                          errors::get_item(errors::items::GenericError),
-    //                          0,
-    //                          &[
-    //                          errors::Label {
-    //                              start_pos: 8,
-    //                              end_pos: 13,
-    //                              kind: errors::LabelKind::Primary,
-    //                              text: "here's a primary label"
-    //                          },
-    //                          errors::Label {
-    //                              start_pos: 15,
-    //                              end_pos: 18,
-    //                              kind: errors::LabelKind::Secondary,
-    //                              text: "here's a secondary label"
-    //                          },
-    //                          ]);
-    // println!("{}", asl);
-
-    // let asl = annotate_slice("key = Value\n\nkey2 = Value 2".to_owned(),
-    //                          Some("main.ftl".to_owned()),
-    //                          errors::get_item(errors::items::UnusedVariable),
-    //                          56,
-    //                          &[errors::Label {
-    //                               start_pos: 0,
-    //                               end_pos: 3,
-    //                               kind: errors::LabelKind::Primary,
-    //                               text: "here's a primary label",
-    //                           }]);
-    // println!("{}", asl);
-
     match res {
         Ok(res) => print_entries_resource(&res),
         Err((res, errors)) => {
@@ -104,7 +72,12 @@ fn main() {
             }
             println!("-----------------------------");
             for err in errors {
-                println!("{}", err);
+                let info = err.info.unwrap();
+                let kind = err.kind;
+                let f = annotate_slice(info,
+                                       Some(input.to_owned()),
+                                       Item::Error(kind));
+                println!("{}", f);
                 println!("-----------------------------");
             }
         }

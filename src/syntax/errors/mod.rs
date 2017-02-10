@@ -3,11 +3,10 @@ extern crate term;
 pub mod display;
 mod list;
 
-pub use self::list::ItemName as items;
-pub use self::list::get_item;
-pub use self::list::LabelKind;
-pub use self::list::Label;
-use std::fmt;
+pub use self::list::ParserError;
+pub use self::list::ErrorKind;
+pub use self::list::ErrorInfo;
+pub use self::list::get_error_desc;
 
 macro_rules! error {
     ($kind:expr) => {{
@@ -16,199 +15,6 @@ macro_rules! error {
             kind: $kind
         })
     }};
-}
-
-macro_rules! error2 {
-    ($kind:expr) => {{
-        Err(ParserError {
-            info: None,
-            kind: $kind
-        })
-    }};
-}
-
-#[derive(Debug, PartialEq)]
-pub struct ErrorInfo {
-    pub slice: String,
-    pub line: usize,
-    pub pos: usize,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum ErrorKind {
-    Generic,
-    ExpectedEntry,
-    ExpectedToken { token: char },
-    ExpectedCharRange { range: String },
-    ExpectedField { field: String },
-    MissingField { fields: Vec<String> },
-    MissingDefaultVariant,
-    MissingVariants,
-    ForbiddenWhitespace,
-    ForbiddenCallee,
-    ForbiddenKey,
-}
-
-#[derive(Debug)]
-pub struct ParserError {
-    pub info: Option<ErrorInfo>,
-    pub kind: ErrorKind,
-}
-
-fn get_error_desc(err: &ErrorKind) -> (String, String) {
-    match err {
-        &ErrorKind::ExpectedEntry => {
-            return ("E0003".to_owned(),
-                    "Expected an entry start ('a'...'Z' | '_' | '[[' | '#')".to_owned());
-        }
-        &ErrorKind::ExpectedCharRange { ref range } => {
-            return ("E0004".to_owned(), format!("Expected a character from range ({})", range));
-        }
-        &ErrorKind::MissingField { ref fields } => {
-            let list = fields.join(", ");
-            return ("E0005".to_owned(), format!("Expected one of the fields: {}", list));
-        }
-        &ErrorKind::ExpectedField { ref field } => {
-            return ("E0006".to_owned(), format!("Expected field: {}", field));
-        }
-        &ErrorKind::ExpectedToken { token } => {
-            return ("E0001".to_owned(), format!("expected token `{}`", token));
-        }
-        &ErrorKind::ForbiddenWhitespace => {
-            return ("E0007".to_owned(), "keyword cannot end with a whitespace".to_owned());
-        }
-        &ErrorKind::ForbiddenCallee => {
-            return ("E0008".to_owned(), "a callee has to be a simple identifier".to_owned());
-        }
-        &ErrorKind::ForbiddenKey => {
-            return ("E0009".to_owned(), "a key has to be a simple identifier".to_owned());
-        }
-        &ErrorKind::MissingDefaultVariant => {
-            return ("E0010".to_owned(),
-                    "Expected one of the variants to be marked as default (*).".to_owned());
-        }
-        &ErrorKind::MissingVariants => {
-            return ("E0010".to_owned(), "Expected at least one variant after \"->\".".to_owned());
-        }
-        &ErrorKind::Generic => {
-            return ("E0002".to_owned(), "generic error".to_owned());
-        }
-    }
-}
-
-// fn get_error_hint(err: ErrorKind) -> str {
-//     "Did you mean to put \"=\" after the ID?".to_owned()
-// }
-
-fn draw_line(line_num: usize, max_dig_space: usize) -> String {
-
-    let dig_diff = if line_num == 0 {
-        max_dig_space
-    } else {
-        let dig_space = line_num.to_string().len();
-        max_dig_space - dig_space
-    };
-
-    let mut ln = (0..dig_diff).map(|_| " ").collect::<String>();
-    if line_num != 0 {
-        ln.push_str(&line_num.to_string());
-    }
-    return ln;
-}
-
-fn draw_error_line(max_dig_space: usize, col: usize) -> (String, String) {
-    let ln = (0..max_dig_space).map(|_| " ").collect::<String>();
-    let mut ln2 = (0..col).map(|_| " ").collect::<String>();
-    ln2.push_str("^");
-    return (ln, ln2);
-}
-
-impl fmt::Display for ParserError {
-    fn fmt(&self, _: &mut fmt::Formatter) -> fmt::Result {
-        // write!(f, "{:#?}\n\n", self)?;
-        //
-        let mut t = term::stdout().unwrap();
-
-        let (error_name, error_desc) = get_error_desc(&self.kind);
-        t.fg(term::color::BRIGHT_RED).unwrap();
-        t.attr(term::Attr::Bold).unwrap();
-        write!(t, "error[{}]", error_name).unwrap();
-        t.fg(term::color::WHITE).unwrap();
-        write!(t, ": {}\n", error_desc).unwrap();
-        t.reset().unwrap();
-
-        if let Some(ref info) = self.info {
-            let lines = info.slice.lines();
-            let mut i = info.line + 1;
-
-            let (error_line, error_col) = get_line_pos(&info.slice, info.pos);
-
-            let max_dig_space = (i + lines.count()).to_string().len();
-
-
-            let ln = draw_line(0, max_dig_space);
-            t.fg(term::color::BRIGHT_BLUE).unwrap();
-            t.attr(term::Attr::Bold).unwrap();
-            write!(t, "{} | ", ln).unwrap();
-            t.reset().unwrap();
-            write!(t, "\n").unwrap();
-
-            let lines = info.slice.lines();
-            let mut j = 0;
-
-            for line in lines {
-                let ln = draw_line(i, max_dig_space);
-                t.fg(term::color::BRIGHT_BLUE).unwrap();
-                t.attr(term::Attr::Bold).unwrap();
-                write!(t, "{} | ", ln).unwrap();
-                t.reset().unwrap();
-                write!(t, "{}\n", line).unwrap();
-
-                if j == error_line {
-                    let (ln, ln2) = draw_error_line(max_dig_space, error_col);
-                    t.fg(term::color::BRIGHT_BLUE).unwrap();
-                    t.attr(term::Attr::Bold).unwrap();
-                    write!(t, "{} | ", ln).unwrap();
-                    t.reset().unwrap();
-                    t.fg(term::color::BRIGHT_RED).unwrap();
-                    t.attr(term::Attr::Bold).unwrap();
-                    write!(t, "{}\n", ln2).unwrap();
-                    t.reset().unwrap();
-                }
-                j += 1;
-                i += 1;
-            }
-
-            if j == 0 {
-                let ln = draw_line(i, max_dig_space);
-                t.fg(term::color::BRIGHT_BLUE).unwrap();
-                t.attr(term::Attr::Bold).unwrap();
-                write!(t, "{} | ", ln).unwrap();
-                t.reset().unwrap();
-                write!(t, "\n").unwrap();
-            }
-        }
-        Ok(())
-    }
-}
-
-pub fn get_line_pos(source: &str, pos: usize) -> (usize, usize) {
-    let mut ptr = 0;
-    let mut i = 0;
-
-    let lines = source.lines();
-
-    for line in lines {
-        let len = line.chars().count();
-        if ptr + len + 1 > pos {
-            break;
-        }
-
-        ptr += len + 1;
-        i += 1;
-    }
-
-    return (i, pos - ptr);
 }
 
 fn get_line_num(source: &str, pos: usize) -> usize {
@@ -228,6 +34,24 @@ fn get_line_num(source: &str, pos: usize) -> usize {
     }
 
     return i;
+}
+
+fn get_col_num(source: &str, pos: usize) -> usize {
+    let mut ptr = 0;
+
+    let lines = source.lines();
+
+    for line in lines {
+        let lnlen = line.chars().count();
+
+        if ptr + lnlen + 1 > pos {
+            return pos - ptr;
+        }
+
+        ptr += lnlen + 1;
+    }
+
+    return 0;
 }
 
 pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
@@ -283,6 +107,7 @@ pub fn get_error_info(source: &str,
     Some(ErrorInfo {
         slice: slice,
         line: first_line_num,
+        col: get_col_num(source, pos),
         pos: pos - entry_start,
     })
 }

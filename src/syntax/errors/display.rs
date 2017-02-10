@@ -2,48 +2,81 @@ extern crate ansi_term;
 
 use std::cmp;
 use self::ansi_term::Colour::{Fixed, White};
+use super::list::ErrorKind;
+use super::list::ErrorInfo;
+use super::list::get_error_desc;
 
-use super::list;
+pub enum Item {
+    Error(ErrorKind),
+    Warning,
+}
 
-pub fn annotate_slice(slice: String,
+pub struct Label {
+    pub start_pos: usize,
+    pub end_pos: usize,
+    pub kind: LabelKind,
+    pub text: &'static str,
+}
+
+pub enum LabelKind {
+    Primary,
+    Secondary,
+}
+
+pub fn annotate_slice(info: ErrorInfo,
                       file_name: Option<String>,
-                      item: &list::Item,
-                      start_line: usize,
-                      labels: &[list::Label])
+                      item: Item)
                       -> String {
     let mut result = String::new();
 
-    let lines_num = cmp::max(slice.lines().count(), 1);
-    let max_ln_width = get_ln_width(start_line + lines_num);
+    let labels = [Label {
+        start_pos: info.pos,
+        end_pos: info.pos + 1,
+        kind: LabelKind::Primary,
+        text: ""
+    }];
 
-    result += &format_title_line(item);
+    let lines_num = cmp::max(info.slice.lines().count(), 1);
+    let max_ln_width = get_ln_width(info.line + lines_num);
+
+    result += &format_title_line(&item);
     if let Some(name) = file_name {
-        result += &format_pos_line(name, start_line, 0, max_ln_width);
+        result += &format_pos_line(name, info.line, info.col, max_ln_width);
     }
-    result += &format_slice(slice,
+    result += &format_slice(info.slice,
                             lines_num,
                             max_ln_width,
-                            start_line,
-                            &item.kind,
-                            labels);
+                            info.line,
+                            &item,
+                            &labels);
 
     return result;
 }
 
-fn format_title_line(item: &list::Item) -> String {
-    let kind = match item.kind {
-        list::ItemKind::Error => "error",
-        list::ItemKind::Warning => "warning",
+fn format_title_line(item: &Item) -> String {
+    let kind = match item {
+        &Item::Error(_) => "error",
+        &Item::Warning => "warning",
     };
 
-    let color = match item.kind {
-        list::ItemKind::Error => Fixed(9),
-        list::ItemKind::Warning => Fixed(11),
+    let color = match item {
+        &Item::Error(_) => Fixed(9),
+        &Item::Warning => Fixed(11),
     };
 
-    let id = item.num.to_string();
+    let info = match item {
+        &Item::Error(ref kind) => {
+            Some(get_error_desc(kind))
+        },
+        &Item::Warning => None
+    };
 
-    let title = format!(": {}", item.title);
+    let (id, title) = match info {
+        Some(i) => i,
+        None => ("", "".to_owned())
+    };
+
+    let title = format!(": {}", title);
 
     let head = format!("{}[{}]", kind, id);
 
@@ -56,8 +89,8 @@ fn format_slice(slice: String,
                 lines_num: usize,
                 max_ln_width: usize,
                 start_line: usize,
-                item_kind: &list::ItemKind,
-                labels: &[list::Label])
+                item: &Item,
+                labels: &[Label])
                 -> String {
     let mut result = String::new();
 
@@ -82,7 +115,7 @@ fn format_slice(slice: String,
         if let Some(label_line) = format_labels(prev_line_start,
                                                 prev_line_end,
                                                 max_ln_width,
-                                                item_kind,
+                                                item,
                                                 labels) {
             result += &label_line;
         } else if i == lines_num - 1 {
@@ -99,21 +132,21 @@ fn format_slice(slice: String,
 fn format_labels(start_pos: usize,
                  end_pos: usize,
                  max_ln_width: usize,
-                 item_kind: &list::ItemKind,
-                 labels: &[list::Label])
+                 item: &Item,
+                 labels: &[Label])
                  -> Option<String> {
     let mut result = String::new();
 
     for label in labels {
         if label.start_pos >= start_pos && label.start_pos <= end_pos {
             let color = match label.kind {
-                list::LabelKind::Primary => {
-                    match item_kind {
-                        &list::ItemKind::Error => Fixed(9).bold(),
-                        &list::ItemKind::Warning => Fixed(11).bold(),
+                LabelKind::Primary => {
+                    match item {
+                        &Item::Error(_) => Fixed(9).bold(),
+                        &Item::Warning => Fixed(11).bold(),
                     }
                 }
-                list::LabelKind::Secondary => Fixed(12).bold(),
+                LabelKind::Secondary => Fixed(12).bold(),
             };
 
             let line_length = end_pos - start_pos;
