@@ -74,9 +74,7 @@ fn main() {
             for err in errors {
                 let info = err.info.unwrap();
                 let kind = err.kind;
-                let f = annotate_slice(info,
-                                       Some(input.to_owned()),
-                                       Item::Error(kind));
+                let f = annotate_slice(info, Some(input.to_owned()), Item::Error(kind));
                 println!("{}", f);
                 println!("-----------------------------");
             }

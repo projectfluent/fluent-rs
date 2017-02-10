@@ -23,23 +23,28 @@ pub enum LabelKind {
     Secondary,
 }
 
-pub fn annotate_slice(info: ErrorInfo,
-                      file_name: Option<String>,
-                      item: Item)
-                      -> String {
+pub fn annotate_slice(info: ErrorInfo, file_name: Option<String>, item: Item) -> String {
     let mut result = String::new();
 
+    let desc = match item {
+        Item::Error(ref kind) => Some(get_error_desc(kind)),
+        Item::Warning => None,
+    };
+
+    let (id, title, text) = desc.unwrap_or(("", "".to_owned(), ""));
+
     let labels = [Label {
-        start_pos: info.pos,
-        end_pos: info.pos + 1,
-        kind: LabelKind::Primary,
-        text: ""
-    }];
+                      start_pos: info.pos,
+                      end_pos: info.pos + 1,
+                      kind: LabelKind::Primary,
+                      text: text,
+                  }];
 
     let lines_num = cmp::max(info.slice.lines().count(), 1);
     let max_ln_width = get_ln_width(info.line + lines_num);
 
-    result += &format_title_line(&item);
+
+    result += &format_title_line(&item, id, title);
     if let Some(name) = file_name {
         result += &format_pos_line(name, info.line, info.col, max_ln_width);
     }
@@ -53,7 +58,7 @@ pub fn annotate_slice(info: ErrorInfo,
     return result;
 }
 
-fn format_title_line(item: &Item) -> String {
+fn format_title_line(item: &Item, id: &str, title: String) -> String {
     let kind = match item {
         &Item::Error(_) => "error",
         &Item::Warning => "warning",
@@ -62,18 +67,6 @@ fn format_title_line(item: &Item) -> String {
     let color = match item {
         &Item::Error(_) => Fixed(9),
         &Item::Warning => Fixed(11),
-    };
-
-    let info = match item {
-        &Item::Error(ref kind) => {
-            Some(get_error_desc(kind))
-        },
-        &Item::Warning => None
-    };
-
-    let (id, title) = match info {
-        Some(i) => i,
-        None => ("", "".to_owned())
     };
 
     let title = format!(": {}", title);
