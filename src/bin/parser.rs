@@ -60,37 +60,53 @@ fn main() {
         return;
     };
 
-    let asl = annotate_slice(
-        "key = Value\n\nkey2 = Value 2".to_owned(),
-        Some("main.ftl".to_owned()),
-        errors::get_item(errors::items::GenericError),
-        0
-    );
-    println!("{}", asl);
+    // let asl = annotate_slice("key = Value\nkey2 = Value 2".to_owned(),
+    //                          Some("main.ftl".to_owned()),
+    //                          errors::get_item(errors::items::GenericError),
+    //                          0,
+    //                          &[
+    //                          errors::Label {
+    //                              start_pos: 8,
+    //                              end_pos: 13,
+    //                              kind: errors::LabelKind::Primary,
+    //                              text: "here's a primary label"
+    //                          },
+    //                          errors::Label {
+    //                              start_pos: 15,
+    //                              end_pos: 18,
+    //                              kind: errors::LabelKind::Secondary,
+    //                              text: "here's a secondary label"
+    //                          },
+    //                          ]);
+    // println!("{}", asl);
 
-    let asl = annotate_slice(
-        "key = Value\n\nkey2 = Value 2".to_owned(),
-        Some("main.ftl".to_owned()),
-        errors::get_item(errors::items::UnusedVariable),
-        56
-    );
-    println!("{}", asl);
+    // let asl = annotate_slice("key = Value\n\nkey2 = Value 2".to_owned(),
+    //                          Some("main.ftl".to_owned()),
+    //                          errors::get_item(errors::items::UnusedVariable),
+    //                          56,
+    //                          &[errors::Label {
+    //                               start_pos: 0,
+    //                               end_pos: 3,
+    //                               kind: errors::LabelKind::Primary,
+    //                               text: "here's a primary label",
+    //                           }]);
+    // println!("{}", asl);
 
-    // match res {
-    //     Ok(res) => print_entries_resource(&res),
-    //     Err((res, errors)) => {
-    //         print_entries_resource(&res);
-    //         println!("==============================\n");
-    //         if errors.len() == 1 {
-    //             println!("Parser encountered one error:");
-    //         } else {
-    //             println!("Parser encountered {} errors:", errors.len());
-    //         }
-    //         println!("-----------------------------");
-    //         for err in errors {
-    //             println!("{}", err);
-    //             println!("-----------------------------");
-    //         }
-    //     }
-    // };
+    match res {
+        Ok(res) => print_entries_resource(&res),
+        Err((res, errors)) => {
+            print_entries_resource(&res);
+            println!("==============================\n");
+            if errors.len() == 1 {
+                println!("Parser encountered one error:");
+            } else {
+                println!("Parser encountered {} errors:", errors.len());
+            }
+            println!("-----------------------------");
+            for err in errors {
+                println!("{}", err);
+                println!("-----------------------------");
+            }
+        }
+    };
 }

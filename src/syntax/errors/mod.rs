@@ -5,9 +5,20 @@ mod list;
 
 pub use self::list::ItemName as items;
 pub use self::list::get_item;
+pub use self::list::LabelKind;
+pub use self::list::Label;
 use std::fmt;
 
 macro_rules! error {
+    ($kind:expr) => {{
+        Err(ParserError {
+            info: None,
+            kind: $kind
+        })
+    }};
+}
+
+macro_rules! error2 {
     ($kind:expr) => {{
         Err(ParserError {
             info: None,
