@@ -16,6 +16,7 @@ pub trait FTLParserStream<I> {
     fn is_id_start(&mut self) -> bool;
     fn is_peek_next_line_variant_start(&mut self) -> bool;
     fn is_peek_next_line_attribute_start(&mut self) -> bool;
+    fn is_peek_next_line_tag_start(&mut self) -> bool;
     fn skip_to_next_entry_start(&mut self);
     fn take_id_start(&mut self) -> Result<char>;
     fn take_id_char(&mut self) -> Option<char>;
@@ -146,6 +147,23 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         self.peek_line_ws();
 
         if self.current_peek_is('.') {
+            self.reset_peek();
+            return true;
+        }
+
+        self.reset_peek();
+        return false;
+    }
+
+    fn is_peek_next_line_tag_start(&mut self) -> bool {
+        if !self.current_peek_is('\n') {
+            return false;
+        }
+        self.peek();
+
+        self.peek_line_ws();
+
+        if self.current_peek_is('#') {
             self.reset_peek();
             return true;
         }

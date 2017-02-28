@@ -177,6 +177,12 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
         None
     };
 
+    let tags = if ps.is_peek_next_line_tag_start() {
+        Some(get_tags(ps)?)
+    } else {
+        None
+    };
+
     if pattern.is_none() && attributes.is_none() {
         return error!(ErrorKind::MissingField {
             entry_id: id.name,
@@ -188,7 +194,7 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
         id: id,
         value: pattern,
         attributes: attributes,
-        tags: None,
+        tags: tags,
         comment: comment,
     })
 }
@@ -245,6 +251,29 @@ fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
         }
     }
     Ok(attributes)
+}
+
+fn get_tags<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Tag>>
+    where I: Iterator<Item = char>
+{
+    let mut tags = vec![];
+    loop {
+        ps.expect_char('\n')?;
+        ps.skip_line_ws();
+
+        ps.expect_char('#')?;
+
+        let symbol = get_symbol(ps)?;
+
+        tags.push(ast::Tag {
+            name: symbol,
+        });
+
+        if !ps.is_peek_next_line_tag_start() {
+            break;
+        }
+    }
+    Ok(tags)
 }
 
 fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VarKey>
