@@ -177,7 +177,8 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     if pattern.is_none() && attributes.is_none() {
         return error!(ErrorKind::MissingField {
-            fields: vec![String::from("Value"), String::from("Attribute")],
+            entry_id: id.name,
+            fields: vec!["Value", "Attribute"],
         });
     }
 

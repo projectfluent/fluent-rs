@@ -10,6 +10,8 @@ use getopts::Options;
 
 use fluent::syntax::parser::parse;
 use fluent::syntax::ast::Resource;
+use fluent::syntax::errors::display::annotate_slice;
+use fluent::syntax::errors::display::Item;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
@@ -70,7 +72,10 @@ fn main() {
             }
             println!("-----------------------------");
             for err in errors {
-                println!("{}", err);
+                let info = err.info.unwrap();
+                let kind = err.kind;
+                let f = annotate_slice(info, Some(input.to_owned()), Item::Error(kind));
+                println!("{}", f);
                 println!("-----------------------------");
             }
         }
