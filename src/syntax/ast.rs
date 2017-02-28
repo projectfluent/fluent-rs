@@ -5,20 +5,22 @@ pub struct Resource {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Message {
-    pub id: Identifier,
-    pub value: Option<Pattern>,
-    pub attributes: Option<Vec<Attribute>>,
-    pub tags: Option<Vec<Tag>>,
-    pub comment: Option<Comment>,
-}
-
-#[derive(Debug, PartialEq)]
 pub enum Entry {
-    Message(Message),
-    Section(Section),
+    Message {
+        id: Identifier,
+        value: Option<Pattern>,
+        attributes: Option<Vec<Attribute>>,
+        tags: Option<Vec<Tag>>,
+        comment: Option<Comment>,
+    },
+    Section {
+        name: Symbol,
+        comment: Option<Comment>,
+    },
     Comment(Comment),
-    Junk(JunkEntry),
+    Junk {
+        content: String,
+    },
 }
 
 #[derive(Debug, PartialEq)]
@@ -93,14 +95,8 @@ pub struct Symbol {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Comment {
-    pub body: String,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Section {
-    pub name: Symbol,
-    pub comment: Option<Comment>,
+pub struct Function {
+    pub name: String,
 }
 
 #[derive(Debug, PartialEq)]
@@ -109,11 +105,6 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Function {
-    pub name: String,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct JunkEntry {
-    pub content: String,
+pub struct Comment {
+    pub body: String,
 }

@@ -76,11 +76,11 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
     }
 
     if ps.current_is('[') {
-        return Ok(ast::Entry::Section(get_section(ps, comment)?));
+        return Ok(get_section(ps, comment)?);
     }
 
     if ps.is_id_start() {
-        return Ok(ast::Entry::Message(get_message(ps, comment)?));
+        return Ok(get_message(ps, comment)?);
     }
 
     match comment {
@@ -128,7 +128,7 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
     Ok(ast::Comment { body: content })
 }
 
-fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Section>
+fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
     where I: Iterator<Item = char>
 {
     ps.expect_char('[')?;
@@ -147,14 +147,14 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     ps.expect_char('\n')?;
 
-    Ok(ast::Section {
+    Ok(ast::Entry::Section {
         name: symb,
         comment: comment,
     })
 }
 
 
-fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Message>
+fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
     where I: Iterator<Item = char>
 {
     let id = get_identifier(ps)?;
@@ -190,7 +190,7 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
         });
     }
 
-    Ok(ast::Message {
+    Ok(ast::Entry::Message {
         id: id,
         value: pattern,
         attributes: attributes,
@@ -539,8 +539,6 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
         }
     }
 
-    println!("----");
-    println!("{:?}", elements);
     if quote_open {
         return error!(ErrorKind::ExpectedToken { token: '"' });
     }
@@ -788,5 +786,5 @@ fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize)
 
     let slice = get_error_slice(source, entry_start, ps.get_index());
 
-    ast::Entry::Junk(ast::JunkEntry { content: String::from(slice) })
+    ast::Entry::Junk{ content: String::from(slice) }
 }
