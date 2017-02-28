@@ -71,7 +71,7 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 {
     let mut comment: Option<ast::Comment> = None;
 
-    if ps.current_is('#') {
+    if ps.current_is('/') {
         comment = Some(get_comment(ps)?);
     }
 
@@ -92,7 +92,8 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
     where I: Iterator<Item = char>
 {
-    ps.expect_char('#')?;
+    ps.expect_char('/')?;
+    ps.expect_char('/')?;
     ps.take_char_if(' ');
 
     let mut content = String::new();
@@ -107,9 +108,10 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
         match ps.current() {
             Some(ch) => {
                 match ch {
-                    '#' => {
+                    '/' => {
                         content.push('\n');
                         ps.next();
+                        ps.expect_char('/')?;
                         ps.take_char_if(' ');
                     }
                     _ => {

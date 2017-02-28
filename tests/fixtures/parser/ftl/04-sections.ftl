@@ -4,7 +4,7 @@ key1 = This entity is standalone
 
 key2 = This entity belongs to section 1
 
-# Section comment
+// Section comment
 [[ menu ]]
 
 key3 = This entity belongs to section 2
