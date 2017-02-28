@@ -9,6 +9,7 @@ pub struct Message {
     pub id: Identifier,
     pub value: Option<Pattern>,
     pub attributes: Option<Vec<Attribute>>,
+    pub tags: Option<Vec<Tag>>,
     pub comment: Option<Comment>,
 }
 
@@ -28,7 +29,6 @@ pub struct Pattern {
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
-    Pattern(Pattern),
     String(String),
     Number(Number),
     MessageReference { id: String },
@@ -38,7 +38,7 @@ pub enum Expression {
         variants: Vec<Variant>,
     },
     AttributeExpression { id: Identifier, name: Identifier },
-    VariantExpression { id: Identifier, key: VariantKey },
+    VariantExpression { id: Identifier, key: VarKey },
     CallExpression {
         callee: Function,
         args: Vec<Argument>,
@@ -53,15 +53,20 @@ pub struct Attribute {
 }
 
 #[derive(Debug, PartialEq)]
+pub struct Tag {
+    pub name: Symbol,
+}
+
+#[derive(Debug, PartialEq)]
 pub struct Variant {
-    pub key: VariantKey,
+    pub key: VarKey,
     pub value: Pattern,
     pub default: bool,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum VariantKey {
-    Key(Keyword),
+pub enum VarKey {
+    Symbol(Symbol),
     Number(Number),
 }
 
@@ -83,7 +88,7 @@ pub struct Identifier {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Keyword {
+pub struct Symbol {
     pub name: String,
 }
 
@@ -94,7 +99,7 @@ pub struct Comment {
 
 #[derive(Debug, PartialEq)]
 pub struct Section {
-    pub key: Keyword,
+    pub name: Symbol,
     pub comment: Option<Comment>,
 }
 

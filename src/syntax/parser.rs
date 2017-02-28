@@ -134,7 +134,7 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     ps.skip_line_ws();
 
-    let key = get_keyword(ps)?;
+    let symb = get_symbol(ps)?;
 
     ps.skip_line_ws();
 
@@ -146,7 +146,7 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
     ps.expect_char('\n')?;
 
     Ok(ast::Section {
-        key: key,
+        name: symb,
         comment: comment,
     })
 }
@@ -186,6 +186,7 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
         id: id,
         value: pattern,
         attributes: attributes,
+        tags: None,
         comment: comment,
     })
 }
@@ -244,7 +245,7 @@ fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
     Ok(attributes)
 }
 
-fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VariantKey>
+fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VarKey>
     where I: Iterator<Item = char>
 {
     match ps.current() {
@@ -252,15 +253,15 @@ fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VariantKey>
             match ch {
                 '0'...'9' | '-' => {
                     let num = get_number(ps)?;
-                    return Ok(ast::VariantKey::Number(num));
+                    return Ok(ast::VarKey::Number(num));
                 }
                 _ => {
                     ps.reset_peek();
-                    return Ok(ast::VariantKey::Key(get_keyword(ps)?));
+                    return Ok(ast::VarKey::Symbol(get_symbol(ps)?));
                 }
             }
         }
-        None => error!(ErrorKind::ExpectedField { field: "Keyword | Number".to_owned() }),
+        None => error!(ErrorKind::ExpectedField { field: "Symbol | Number".to_owned() }),
     }
 }
 
@@ -313,7 +314,7 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
     Ok(variants)
 }
 
-fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
+fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
     where I: Iterator<Item = char>
 {
     let mut name = String::new();
@@ -331,7 +332,7 @@ fn get_keyword<I>(ps: &mut ParserStream<I>) -> Result<ast::Keyword>
         name.pop();
     }
 
-    Ok(ast::Keyword { name: name })
+    Ok(ast::Symbol { name: name })
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
@@ -739,16 +740,8 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 }
                 '"' => {
 
-                    let pattern = get_pattern(ps)?;
-
-                    match pattern {
-                        Some(p) => ast::Expression::Pattern(p),
-                        _ => {
-                            return error!(ErrorKind::ExpectedField {
-                                field: String::from("String"),
-                            })
-                        }
-                    }
+                    let string = get_string(ps)?;
+                    ast::Expression::String(string)
                 }
                 '{' => {
                     ps.next();
