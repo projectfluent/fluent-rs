@@ -1,28 +1,37 @@
-key1 =
+key1 = {
  [:key] Value
+}
 
-key3 =
+key3 = {
  [] Value
+}
 
-key4 =
+key4 = {
  **[f] Foo
+}
 
-key5 =
+key5 = {
  *fw] Foo
+}
 
-key6 =
+key6 = {
   [ a] A
+}
 
-key7 =
+key7 = {
   [ x/a] XA
+}
 
-key8 =
+key8 = {
   [x y/a] XYA
+}
 
-key9 =
+key9 = {
  [a ] A
  [a b ] AB
+}
 
-key10 =
+key10 = {
  [x/a ] XA
  [x/a b ] XAB
+}

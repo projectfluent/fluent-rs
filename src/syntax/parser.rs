@@ -442,7 +442,6 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     let mut quote_delimited = false;
     let mut quote_open = false;
     let mut first_line = true;
-    let mut is_indented = false;
 
     if ps.take_char_if('"') {
         quote_delimited = true;
@@ -464,25 +463,14 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 
                         ps.peek();
 
-                        ps.peek_line_ws();
-
-                        if !ps.current_peek_is('|') {
+                        if !ps.current_peek_is(' ') {
                             ps.reset_peek();
                             break;
-                        } else {
-                            ps.skip_to_peek();
-                            ps.next();
                         }
 
-                        if first_line {
-                            if ps.take_char_if(' ') {
-                                is_indented = true;
-                            }
-                        } else {
-                            if is_indented && !ps.take_char_if(' ') {
-                                return error!(ErrorKind::Generic);
-                            }
-                        }
+                        ps.peek_line_ws();
+
+                        ps.skip_to_peek();
 
                         first_line = false;
 
@@ -551,6 +539,8 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
         }
     }
 
+    println!("----");
+    println!("{:?}", elements);
     if quote_open {
         return error!(ErrorKind::ExpectedToken { token: '"' });
     }

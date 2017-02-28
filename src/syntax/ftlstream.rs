@@ -14,6 +14,7 @@ pub trait FTLParserStream<I> {
     fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
 
     fn is_id_start(&mut self) -> bool;
+    fn is_peek_next_line_indented(&mut self) -> bool;
     fn is_peek_next_line_variant_start(&mut self) -> bool;
     fn is_peek_next_line_attribute_start(&mut self) -> bool;
     fn is_peek_next_line_tag_start(&mut self) -> bool;
@@ -116,6 +117,21 @@ impl<I> FTLParserStream<I> for ParserStream<I>
             }
             None => false,
         }
+    }
+
+    fn is_peek_next_line_indented(&mut self) -> bool {
+        if !self.current_peek_is('\n') {
+            return false;
+        }
+        self.peek();
+
+        if self.current_peek_is(' ') {
+            self.reset_peek();
+            return true;
+        }
+
+        self.reset_peek();
+        return false;
     }
 
     fn is_peek_next_line_variant_start(&mut self) -> bool {
