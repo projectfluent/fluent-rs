@@ -17,7 +17,6 @@ authors = [
 
 [dependencies]
 getopts = "0.2.14"
-term = "0.4.4"
 ansi_term = "0.9"
 
 [dev-dependencies]

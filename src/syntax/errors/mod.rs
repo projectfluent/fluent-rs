@@ -1,5 +1,3 @@
-extern crate term;
-
 pub mod display;
 mod list;
 
