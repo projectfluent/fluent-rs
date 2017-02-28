@@ -31,6 +31,7 @@ fn empty_errors() {
             assert_eq!(Some(ErrorInfo {
                            slice: " key = value".to_owned(),
                            line: 0,
+                           col: 0,
                            pos: 0,
                        }),
                        error1.info);
@@ -55,6 +56,7 @@ fn bad_id_start_errors() {
             assert_eq!(Some(ErrorInfo {
                            slice: "2".to_owned(),
                            line: 0,
+                           col: 0,
                            pos: 0,
                        }),
                        error1.info);
@@ -75,13 +77,15 @@ fn just_id_errors() {
             let ref error1 = errors[0];
 
             assert_eq!(ErrorKind::MissingField {
-                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
+                           entry_id: "key".to_owned(),
+                           fields: vec!["Value", "Attribute"],
                        },
                        error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key".to_owned(),
                            line: 0,
+                           col: 3,
                            pos: 3,
                        }),
                        error1.info);
@@ -102,13 +106,15 @@ fn no_equal_sign_errors() {
             let ref error1 = errors[0];
 
             assert_eq!(ErrorKind::MissingField {
-                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
+                           entry_id: "key".to_owned(),
+                           fields: vec!["Value", "Attribute"],
                        },
                        error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key Value".to_owned(),
                            line: 0,
+                           col: 4,
                            pos: 4,
                        }),
                        error1.info);
@@ -136,6 +142,7 @@ fn wrong_char_in_id_errors() {
             assert_eq!(Some(ErrorInfo {
                            slice: "key = Value\n .# = Foo".to_owned(),
                            line: 0,
+                           col: 2,
                            pos: 14,
                        }),
                        error1.info);
@@ -160,6 +167,7 @@ fn missing_trait_value_errors() {
             assert_eq!(Some(ErrorInfo {
                            slice: "key = Value\n .foo".to_owned(),
                            line: 0,
+                           col: 5,
                            pos: 17,
                        }),
                        error1.info);
@@ -180,13 +188,15 @@ fn message_missing_fields_errors() {
             let ref error1 = errors[0];
 
             assert_eq!(ErrorKind::MissingField {
-                           fields: vec!["Value".to_owned(), "Attribute".to_owned()],
+                           entry_id: "key".to_owned(),
+                           fields: vec!["Value", "Attribute"],
                        },
                        error1.kind);
 
             assert_eq!(Some(ErrorInfo {
                            slice: "key =".to_owned(),
                            line: 0,
+                           col: 5,
                            pos: 5,
                        }),
                        error1.info);
