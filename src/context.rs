@@ -4,7 +4,7 @@ use super::syntax::ast;
 use super::syntax::parse;
 
 pub struct MessageContext {
-    messages: HashMap<String, ast::Message>,
+    messages: HashMap<String, ast::Entry>,
 }
 
 impl MessageContext {
@@ -16,26 +16,38 @@ impl MessageContext {
         let res = parse(source).unwrap_or_else(|x| x.0);
 
         for entry in res.body {
-            match entry {
-                ast::Entry::Message(msg @ ast::Message { .. }) => {
-                    self.messages.insert(msg.id.name.clone(), msg);
+            let id = match entry {
+                ast::Entry::Message{ref id, ..} => {
+                    id.name.clone()
                 }
-                _ => unimplemented!(),
-            }
+                _ => continue
+            };
+
+            match entry {
+                ast::Entry::Message{..} => {
+                    self.messages.insert(id, entry);
+                }
+                _ => continue
+            };
         }
     }
 
-    pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
+    pub fn get_message(&self, id: &str) -> Option<&ast::Entry> {
         self.messages.get(id)
     }
 
-    pub fn format(&self, msg: &ast::Message) -> Option<String> {
-        msg.value.as_ref().and_then(|pattern| self.eval_pattern(pattern))
+    pub fn format(&self, entry: &ast::Entry) -> Option<String> {
+        match entry {
+            &ast::Entry::Message{ref value, ..} => {
+                value.as_ref().and_then(|pattern| self.eval_pattern(pattern))
+            },
+            _ => unimplemented!(),
+        } 
     }
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::String(ref val) => Some(val.clone()),
+            &ast::Expression::StringExpression(ref val) => Some(val.clone()),
             &ast::Expression::MessageReference { ref id } => {
                 self.messages
                     .get(id)
@@ -46,10 +58,19 @@ impl MessageContext {
         }
     }
 
+    fn eval_pattern_elem(&self, expr: &ast::PatternElement) -> Option<String> {
+        match expr {
+            &ast::PatternElement::TextElement(ref val) => Some(val.clone()),
+            &ast::PatternElement::Expression(ref exp) => {
+                self.eval_expr(exp)
+            }
+        }
+    }
+
     fn eval_pattern(&self, pat: &ast::Pattern) -> Option<String> {
         let &ast::Pattern { ref elements, .. } = pat;
         let val = elements.iter()
-            .map(|elem| self.eval_expr(elem).unwrap_or(String::from("___")))
+            .map(|elem| self.eval_pattern_elem(elem).unwrap_or(String::from("___")))
             .collect::<Vec<String>>()
             .join("");
         Some(val)

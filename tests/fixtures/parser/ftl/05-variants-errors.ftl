@@ -1,28 +1,40 @@
-key1 =
- [:key] Value
+key1 = {
+  [:key] Value
+ *[ok] Valid
+}
 
-key3 =
- [] Value
+key3 = {
+  [] Value
+ *[ok] Valid
+}
 
-key4 =
+key4 = {
  **[f] Foo
+ *[ok] Valid
+}
 
-key5 =
+key5 = {
  *fw] Foo
+ *[ok] Valid
+}
 
-key6 =
+key6 = {
   [ a] A
+ *[ok] Valid
+}
 
-key7 =
+key7 = {
   [ x/a] XA
+ *[ok] Valid
+}
 
-key8 =
+key8 = {
   [x y/a] XYA
+ *[ok] Valid
+}
 
-key9 =
- [a ] A
- [a b ] AB
-
-key10 =
+key10 = {
  [x/a ] XA
  [x/a b ] XAB
+ *[ok] Valid
+}

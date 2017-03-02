@@ -23,4 +23,4 @@ id
 19 = Foo2
 
 key13 = Single Value
-  | Multi Value
+  Multi Value

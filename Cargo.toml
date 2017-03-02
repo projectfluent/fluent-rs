@@ -6,7 +6,7 @@ A localization library designed to unleash the entire expressive power of
 natural language translations.
 """
 keywords = ["localization", "l10n"]
-homepage = "https://wiki.mozilla.org/Fluent"
+homepage = "http://www.projectfluent.io"
 license = "Apache-2.0"
 readme = "README.md"
 repository = "https://github.com/projectfluent/fluent-rs"
