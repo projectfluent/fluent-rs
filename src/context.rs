@@ -47,7 +47,7 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::String(ref val) => Some(val.clone()),
+            &ast::Expression::StringExpression(ref val) => Some(val.clone()),
             &ast::Expression::MessageReference { ref id } => {
                 self.messages
                     .get(id)
@@ -58,10 +58,19 @@ impl MessageContext {
         }
     }
 
+    fn eval_pattern_elem(&self, expr: &ast::PatternElement) -> Option<String> {
+        match expr {
+            &ast::PatternElement::TextElement(ref val) => Some(val.clone()),
+            &ast::PatternElement::Expression(ref exp) => {
+                self.eval_expr(exp)
+            }
+        }
+    }
+
     fn eval_pattern(&self, pat: &ast::Pattern) -> Option<String> {
         let &ast::Pattern { ref elements, .. } = pat;
         let val = elements.iter()
-            .map(|elem| self.eval_expr(elem).unwrap_or(String::from("___")))
+            .map(|elem| self.eval_pattern_elem(elem).unwrap_or(String::from("___")))
             .collect::<Vec<String>>()
             .join("");
         Some(val)

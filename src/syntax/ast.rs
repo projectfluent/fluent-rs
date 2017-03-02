@@ -25,14 +25,20 @@ pub enum Entry {
 
 #[derive(Debug, PartialEq)]
 pub struct Pattern {
-    pub elements: Vec<Expression>,
+    pub elements: Vec<PatternElement>,
     pub quoted: bool,
 }
 
 #[derive(Debug, PartialEq)]
+pub enum PatternElement {
+    TextElement(String),
+    Expression(Expression)
+}
+
+#[derive(Debug, PartialEq)]
 pub enum Expression {
-    String(String),
-    Number(Number),
+    StringExpression(String),
+    NumberExpression(Number),
     MessageReference { id: String },
     ExternalArgument { id: String },
     SelectExpression {
@@ -106,5 +112,5 @@ pub struct Number {
 
 #[derive(Debug, PartialEq)]
 pub struct Comment {
-    pub body: String,
+    pub content: String,
 }

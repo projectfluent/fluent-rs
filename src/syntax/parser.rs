@@ -125,7 +125,7 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
         }
     }
 
-    Ok(ast::Comment { body: content })
+    Ok(ast::Comment { content: content })
 }
 
 fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
@@ -511,12 +511,12 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                         ps.skip_line_ws();
 
                         if !buffer.is_empty() {
-                            elements.push(ast::Expression::String(buffer));
+                            elements.push(ast::PatternElement::TextElement(buffer));
                         }
 
                         buffer = String::new();
 
-                        elements.push(get_expression(ps)?);
+                        elements.push(ast::PatternElement::Expression(get_expression(ps)?));
 
                         ps.skip_line_ws();
 
@@ -544,7 +544,7 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     }
 
     if !buffer.is_empty() {
-        elements.push(ast::Expression::String(buffer));
+        elements.push(ast::PatternElement::TextElement(buffer));
     }
 
     if !quote_delimited && elements.len() == 0 {
@@ -752,7 +752,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     let exp = match ps.current() {
         Some(ch) => {
             match ch {
-                '0'...'9' | '-' => ast::Expression::Number(get_number(ps)?),
+                '0'...'9' | '-' => ast::Expression::NumberExpression(get_number(ps)?),
                 '$' => {
                     ps.next();
                     ast::Expression::ExternalArgument { id: get_identifier(ps)?.name }
@@ -760,7 +760,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 '"' => {
 
                     let string = get_string(ps)?;
-                    ast::Expression::String(string)
+                    ast::Expression::StringExpression(string)
                 }
                 '{' => {
                     ps.next();
