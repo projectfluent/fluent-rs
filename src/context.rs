@@ -20,14 +20,14 @@ impl MessageContext {
                 ast::Entry::Message{ref id, ..} => {
                     id.name.clone()
                 }
-                _ => unimplemented!(),
+                _ => continue
             };
 
             match entry {
                 ast::Entry::Message{..} => {
                     self.messages.insert(id, entry);
                 }
-                _ => unimplemented!(),
+                _ => continue
             };
         }
     }
