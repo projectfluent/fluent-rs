@@ -55,10 +55,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
     }
 
     pub fn current_peek_is(&mut self, ch: char) -> bool {
-        match self.current_peek() {
-            Some(c) => ch == c,
-            None => false,
-        }
+        self.current_peek() == Some(ch)
     }
 
     pub fn peek(&mut self) -> Option<char> {
@@ -82,7 +79,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
             }
         }
 
-        return Some(self.buf[diff - 1]);
+        Some(self.buf[diff - 1])
     }
 
     pub fn get_index(&self) -> usize {
@@ -93,14 +90,12 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         self.peek_index
     }
 
-    pub fn peek_char_is(&mut self, c: char) -> bool {
+    pub fn peek_char_is(&mut self, ch: char) -> bool {
         if self.peek_end {
             return false;
         }
-        let ret = match self.peek() {
-            Some(ch) if ch == c => true,
-            _ => false,
-        };
+
+        let ret = self.peek() == Some(ch);
 
         self.peek_index -= 1;
         return ret;

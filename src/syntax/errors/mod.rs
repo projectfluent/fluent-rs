@@ -88,7 +88,11 @@ pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
         iter.by_ref().nth(start_pos - 1);
     }
     let slice = iter.as_str();
-    let endp = slice.char_indices().nth(slice_len).map(|(n, _)| n).unwrap_or(len);
+    let endp = slice
+        .char_indices()
+        .nth(slice_len)
+        .map(|(n, _)| n)
+        .unwrap_or(len);
     return &slice[..endp];
 }
 
@@ -103,9 +107,9 @@ pub fn get_error_info(source: &str,
     let slice = get_error_lines(source, first_line_num, next_entry_line);
 
     Some(ErrorInfo {
-        slice: slice,
-        line: first_line_num,
-        col: get_col_num(source, pos),
-        pos: pos - entry_start,
-    })
+             slice: slice,
+             line: first_line_num,
+             col: get_col_num(source, pos),
+             pos: pos - entry_start,
+         })
 }

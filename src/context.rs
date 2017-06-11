@@ -17,17 +17,15 @@ impl MessageContext {
 
         for entry in res.body {
             let id = match entry {
-                ast::Entry::Message{ref id, ..} => {
-                    id.name.clone()
-                }
-                _ => continue
+                ast::Entry::Message { ref id, .. } => id.name.clone(),
+                _ => continue,
             };
 
             match entry {
-                ast::Entry::Message{..} => {
+                ast::Entry::Message { .. } => {
                     self.messages.insert(id, entry);
                 }
-                _ => continue
+                _ => continue,
             };
         }
     }
@@ -38,20 +36,20 @@ impl MessageContext {
 
     pub fn format(&self, entry: &ast::Entry) -> Option<String> {
         match entry {
-            &ast::Entry::Message{ref value, ..} => {
-                value.as_ref().and_then(|pattern| self.eval_pattern(pattern))
-            },
+            &ast::Entry::Message { ref value, .. } => {
+                value
+                    .as_ref()
+                    .and_then(|pattern| self.eval_pattern(pattern))
+            }
             _ => unimplemented!(),
-        } 
+        }
     }
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
             &ast::Expression::StringExpression(ref val) => Some(val.clone()),
             &ast::Expression::MessageReference { ref id } => {
-                self.messages
-                    .get(id)
-                    .and_then(|msg| self.format(msg))
+                self.messages.get(id).and_then(|msg| self.format(msg))
             }
             &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id)),
             _ => unimplemented!(),
@@ -61,15 +59,14 @@ impl MessageContext {
     fn eval_pattern_elem(&self, expr: &ast::PatternElement) -> Option<String> {
         match expr {
             &ast::PatternElement::TextElement(ref val) => Some(val.clone()),
-            &ast::PatternElement::Expression(ref exp) => {
-                self.eval_expr(exp)
-            }
+            &ast::PatternElement::Expression(ref exp) => self.eval_expr(exp),
         }
     }
 
     fn eval_pattern(&self, pat: &ast::Pattern) -> Option<String> {
         let &ast::Pattern { ref elements, .. } = pat;
-        let val = elements.iter()
+        let val = elements
+            .iter()
             .map(|elem| self.eval_pattern_elem(elem).unwrap_or(String::from("___")))
             .collect::<Vec<String>>()
             .join("");

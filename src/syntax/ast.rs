@@ -18,21 +18,18 @@ pub enum Entry {
         comment: Option<Comment>,
     },
     Comment(Comment),
-    Junk {
-        content: String,
-    },
+    Junk { content: String },
 }
 
 #[derive(Debug, PartialEq)]
 pub struct Pattern {
     pub elements: Vec<PatternElement>,
-    pub quoted: bool,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum PatternElement {
     TextElement(String),
-    Expression(Expression)
+    Expression(Expression),
 }
 
 #[derive(Debug, PartialEq)]

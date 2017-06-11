@@ -93,7 +93,10 @@ fn format_slice(slice: String,
     let mut lines = slice.lines();
 
     let empty_ln = " ".repeat(max_ln_width);
-    result += &Fixed(12).bold().paint(format!("{} |\n", empty_ln)).to_string();
+    result += &Fixed(12)
+                   .bold()
+                   .paint(format!("{} |\n", empty_ln))
+                   .to_string();
 
     for i in 0..lines_num {
         let line = lines.next().unwrap_or("");
@@ -112,7 +115,10 @@ fn format_slice(slice: String,
                                                 labels) {
             result += &label_line;
         } else if i == lines_num - 1 {
-            result += &Fixed(12).bold().paint(format!("{} |\n", empty_ln)).to_string();
+            result += &Fixed(12)
+                           .bold()
+                           .paint(format!("{} |\n", empty_ln))
+                           .to_string();
         }
 
         line_num += 1
@@ -155,8 +161,10 @@ fn format_labels(start_pos: usize,
                 "^".repeat(mark_length)
             };
             result += &format!("{} {}\n",
-                               Fixed(12).bold().paint(format!("{} |", " ".repeat(max_ln_width))),
-                               format!("{}{} {}", pad, color.paint(mark), color.paint(label.text)));
+                    Fixed(12)
+                        .bold()
+                        .paint(format!("{} |", " ".repeat(max_ln_width))),
+                    format!("{}{} {}", pad, color.paint(mark), color.paint(label.text)));
             return Some(result);
         }
     }

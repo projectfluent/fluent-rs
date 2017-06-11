@@ -1,3 +1,3 @@
-key =
+key
 
 key2 = Value

@@ -47,7 +47,10 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
         &ErrorKind::ExpectedCharRange { ref range } => {
             return ("E0004", format!("Expected a character from range ({})", range), "");
         }
-        &ErrorKind::MissingField { ref entry_id, ref fields } => {
+        &ErrorKind::MissingField {
+            ref entry_id,
+            ref fields,
+        } => {
             let list = fields.join(", ");
             return ("E0005",
                     format!("Expected entry `{}` to have one of the fields: {}",

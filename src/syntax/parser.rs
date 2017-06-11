@@ -60,9 +60,9 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
              errors))
     } else {
         Ok(ast::Resource {
-            body: entries,
-            comment: comment,
-        })
+               body: entries,
+               comment: comment,
+           })
     }
 }
 
@@ -148,9 +148,9 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
     ps.expect_char('\n')?;
 
     Ok(ast::Entry::Section {
-        name: symb,
-        comment: comment,
-    })
+           name: symb,
+           comment: comment,
+       })
 }
 
 
@@ -185,18 +185,18 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     if pattern.is_none() && attributes.is_none() {
         return error!(ErrorKind::MissingField {
-            entry_id: id.name,
-            fields: vec!["Value", "Attribute"],
-        });
+                          entry_id: id.name,
+                          fields: vec!["Value", "Attribute"],
+                      });
     }
 
     Ok(ast::Entry::Message {
-        id: id,
-        value: pattern,
-        attributes: attributes,
-        tags: tags,
-        comment: comment,
-    })
+           id: id,
+           value: pattern,
+           attributes: attributes,
+           tags: tags,
+           comment: comment,
+       })
 }
 
 fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
@@ -239,9 +239,9 @@ fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
         match value {
             Some(pattern) => {
                 attributes.push(ast::Attribute {
-                    id: key,
-                    value: pattern,
-                });
+                                    id: key,
+                                    value: pattern,
+                                });
             }
             None => return error!(ErrorKind::ExpectedField { field: String::from("Pattern") }),
         }
@@ -265,9 +265,7 @@ fn get_tags<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Tag>>
 
         let symbol = get_symbol(ps)?;
 
-        tags.push(ast::Tag {
-            name: symbol,
-        });
+        tags.push(ast::Tag { name: symbol });
 
         if !ps.is_peek_next_line_tag_start() {
             break;
@@ -327,10 +325,10 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
         match value {
             Some(pattern) => {
                 variants.push(ast::Variant {
-                    key: key,
-                    value: pattern,
-                    default: default_index,
-                });
+                                  key: key,
+                                  value: pattern,
+                                  default: default_index,
+                              });
             }
             None => return error!(ErrorKind::ExpectedField { field: String::from("Pattern") }),
         }
@@ -353,7 +351,7 @@ fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
     name.push(ps.take_id_start()?);
 
     loop {
-        match ps.take_kw_char() {
+        match ps.take_symb_char() {
             Some(ch) => name.push(ch),
             _ => break,
         }
@@ -439,44 +437,29 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 {
     let mut buffer = String::new();
     let mut elements = vec![];
-    let mut quote_delimited = false;
-    let mut quote_open = false;
     let mut first_line = true;
-
-    if ps.take_char_if('"') {
-        quote_delimited = true;
-        quote_open = true;
-    }
 
     loop {
         match ps.current() {
             Some(ch) => {
                 match ch {
                     '\n' => {
-                        if quote_delimited {
-                            return error!(ErrorKind::ExpectedToken { token: '"' });
-                        }
-
                         if first_line && !buffer.is_empty() {
                             break;
                         }
 
-                        ps.peek();
-
-                        if !ps.current_peek_is(' ') {
-                            ps.reset_peek();
+                        if !ps.is_peek_next_line_pattern() {
                             break;
                         }
 
-                        ps.peek_line_ws();
+                        ps.next();
+                        ps.skip_line_ws();
 
-                        ps.skip_to_peek();
-
-                        first_line = false;
-
-                        if !buffer.is_empty() {
+                        if !first_line {
                             buffer.push(ch);
                         }
+
+                        first_line = false;
                         continue;
                     }
                     '\\' => {
@@ -484,10 +467,6 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
                             Some(ch2) => {
                                 match ch2 {
                                     '{' => {
-                                        buffer.push(ch2);
-                                        ps.next();
-                                    }
-                                    '"' if quote_delimited => {
                                         buffer.push(ch2);
                                         ps.next();
                                     }
@@ -524,11 +503,6 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 
                         continue;
                     }
-                    '"' if quote_open => {
-                        ps.next();
-                        quote_open = false;
-                        break;
-                    }
                     _ => {
                         buffer.push(ch);
                     }
@@ -539,22 +513,11 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
         }
     }
 
-    if quote_open {
-        return error!(ErrorKind::ExpectedToken { token: '"' });
-    }
-
     if !buffer.is_empty() {
         elements.push(ast::PatternElement::TextElement(buffer));
     }
 
-    if !quote_delimited && elements.len() == 0 {
-        return Ok(None);
-    }
-
-    Ok(Some(ast::Pattern {
-        elements: elements,
-        quoted: quote_delimited,
-    }))
+    Ok(Some(ast::Pattern { elements: elements }))
 }
 
 fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
@@ -566,9 +529,9 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
         ps.expect_char('\n')?;
 
         return Ok(ast::Expression::SelectExpression {
-            expression: None,
-            variants: variants,
-        });
+                      expression: None,
+                      variants: variants,
+                  });
     }
 
     let selector = get_selector_expression(ps)?;
@@ -593,9 +556,9 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                     ps.expect_char('\n')?;
 
                     return Ok(ast::Expression::SelectExpression {
-                        expression: Some(Box::new(selector)),
-                        variants: variants,
-                    });
+                                  expression: Some(Box::new(selector)),
+                                  variants: variants,
+                              });
                 }
                 _ => return error!(ErrorKind::ExpectedToken { token: '>' }),
             }
@@ -620,9 +583,9 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     ps.next();
                     let attr = get_identifier(ps)?;
                     Ok(ast::Expression::AttributeExpression {
-                        id: ast::Identifier { name: id },
-                        name: attr,
-                    })
+                           id: ast::Identifier { name: id },
+                           name: attr,
+                       })
                 }
                 Some('[') => {
                     ps.next();
@@ -630,18 +593,18 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     ps.expect_char(']')?;
 
                     Ok(ast::Expression::VariantExpression {
-                        id: ast::Identifier { name: id },
-                        key: key,
-                    })
+                           id: ast::Identifier { name: id },
+                           key: key,
+                       })
                 }
                 Some('(') => {
                     ps.next();
                     let args = get_call_args(ps)?;
                     ps.expect_char(')')?;
                     Ok(ast::Expression::CallExpression {
-                        callee: ast::Function { name: id },
-                        args: args,
-                    })
+                           callee: ast::Function { name: id },
+                           args: args,
+                       })
                 }
                 _ => Ok(ast::Expression::MessageReference { id: id }),
             }
@@ -676,9 +639,9 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
 
                                 let val = get_arg_val(ps)?;
                                 args.push(ast::Argument::NamedArgument {
-                                    name: ast::Identifier { name: id },
-                                    val: val,
-                                });
+                                              name: ast::Identifier { name: id },
+                                              val: val,
+                                          });
                             }
                             _ => {
                                 return error!(ErrorKind::ForbiddenKey);
@@ -703,8 +666,8 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
                     }
                     _ => {
                         return error!(ErrorKind::ExpectedCharRange {
-                            range: "\",\" or \"}\"".to_owned(),
-                        });
+                                          range: "\",\" or \"}\"".to_owned(),
+                                      });
                     }
                 }
             }
@@ -786,5 +749,5 @@ fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize)
 
     let slice = get_error_slice(source, entry_start, ps.get_index());
 
-    ast::Entry::Junk{ content: String::from(slice) }
+    ast::Entry::Junk { content: String::from(slice) }
 }
