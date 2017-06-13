@@ -715,7 +715,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
     let exp = match ps.current() {
         Some(ch) => {
             match ch {
-                '0'...'9' | '-' => ast::Expression::NumberExpression(get_number(ps)?),
+                '0'...'9' | '-' => ast::Expression::NumberExpression { value: get_number(ps)? },
                 '$' => {
                     ps.next();
                     ast::Expression::ExternalArgument { id: get_identifier(ps)?.name }
@@ -723,7 +723,7 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
                 '"' => {
 
                     let string = get_string(ps)?;
-                    ast::Expression::StringExpression(string)
+                    ast::Expression::StringExpression { value: string }
                 }
                 '{' => {
                     ps.next();

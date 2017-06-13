@@ -47,7 +47,7 @@ impl MessageContext {
 
     fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
         match expr {
-            &ast::Expression::StringExpression(ref val) => Some(val.clone()),
+            &ast::Expression::StringExpression { ref value } => Some(value.clone()),
             &ast::Expression::MessageReference { ref id } => {
                 self.messages.get(id).and_then(|msg| self.format(msg))
             }

@@ -34,8 +34,8 @@ pub enum PatternElement {
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
-    StringExpression(String),
-    NumberExpression(Number),
+    StringExpression { value: String },
+    NumberExpression { value: Number },
     MessageReference { id: String },
     ExternalArgument { id: String },
     SelectExpression {
@@ -48,7 +48,6 @@ pub enum Expression {
         callee: Function,
         args: Vec<Argument>,
     },
-    Expression(Box<Expression>),
 }
 
 #[derive(Debug, PartialEq)]
@@ -92,15 +91,6 @@ pub struct Identifier {
     pub name: String,
 }
 
-#[derive(Debug, PartialEq)]
-pub struct Symbol {
-    pub name: String,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Function {
-    pub name: String,
-}
 
 #[derive(Debug, PartialEq)]
 pub struct Number {
@@ -108,6 +98,22 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
+pub struct Symbol {
+    pub name: String,
+}
+
+#[derive(Debug, PartialEq)]
 pub struct Comment {
     pub content: String,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Section {
+    pub name: String,
+    pub comment: Option<Comment>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Function {
+    pub name: String,
 }
