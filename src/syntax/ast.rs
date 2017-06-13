@@ -36,8 +36,8 @@ pub enum PatternElement {
 pub enum Expression {
     StringExpression { value: String },
     NumberExpression { value: Number },
-    MessageReference { id: String },
-    ExternalArgument { id: String },
+    MessageReference { id: Identifier },
+    ExternalArgument { id: Identifier },
     SelectExpression {
         expression: Option<Box<Expression>>,
         variants: Vec<Variant>,

@@ -49,9 +49,9 @@ impl MessageContext {
         match expr {
             &ast::Expression::StringExpression { ref value } => Some(value.clone()),
             &ast::Expression::MessageReference { ref id } => {
-                self.messages.get(id).and_then(|msg| self.format(msg))
+                self.messages.get(&id.name).and_then(|msg| self.format(msg))
             }
-            &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id)),
+            &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id.name)),
             _ => unimplemented!(),
         }
     }
