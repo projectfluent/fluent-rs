@@ -3,19 +3,19 @@ key1 = AA { $num } BB
 key2 = { brand-name }
 
 key4 = { $num ->
- *[one] One
-  [two] Two
-}
+   *[one] One
+    [two] Two
+  }
 
 key5 = { LEN($num) ->
- *[one] One
-  [two] Two
-}
+   *[one] One
+    [two] Two
+  }
 
 key6 = { LEN(NEL($num)) ->
- *[one] One
-  [two] Two
-}
+   *[one] One
+    [two] Two
+  }
 
 key7 = { LIST($user1, $user2) }
 

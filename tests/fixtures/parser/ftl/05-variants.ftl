@@ -5,9 +5,9 @@ key2 =
  .gender = male
 
 key3 = {
- *[masculine] Variant for masculine
-  [feminine] Variant for feminine
-}
+   *[masculine] Variant for masculine
+    [feminine] Variant for feminine
+  }
 
 key4
  .aria-label = Test
@@ -23,15 +23,15 @@ key5
 
 
 key6 = {
-  *[one] One
-   [two] Two
-   [three] Three
-}
+    *[one] One
+     [two] Two
+     [three] Three
+  }
 
 key7 = {
- *[a b] A
-}
+   *[a b] A
+  }
 
 key8 = {
-  *[a b] A
-}
+    *[a b] A
+  }
