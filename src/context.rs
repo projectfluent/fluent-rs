@@ -47,9 +47,9 @@ impl MessageContext {
 
     pub fn format(&self,
                   message: &ast::Entry,
-                  args: Option<HashMap<String, String>>)
+                  args: Option<&HashMap<String, String>>)
                   -> Option<String> {
-        let result = resolver::resolve(&self, message);
+        let result = resolver::resolve(&self, args, message);
 
         return Some(types::value_of(result));
     }
