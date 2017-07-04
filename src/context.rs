@@ -49,7 +49,7 @@ impl MessageContext {
                   message: &ast::Entry,
                   args: Option<HashMap<String, String>>)
                   -> Option<String> {
-        let result = resolver::resolve(message);
+        let result = resolver::resolve(&self, message);
 
         return Some(types::value_of(result));
     }
