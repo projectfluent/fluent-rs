@@ -15,7 +15,7 @@ fn eval_expr(env: &Env, expr: &ast::Expression) -> String {
             env.ctx
                 .messages
                 .get(&id.name)
-                .and_then(|msg| env.ctx.format(msg, None))
+                .and_then(|msg| env.ctx.format(msg, env.args))
                 .unwrap_or(String::from("___"))
         }
         &ast::Expression::ExternalArgument { ref id } => {
