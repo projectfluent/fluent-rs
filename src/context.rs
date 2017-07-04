@@ -2,14 +2,28 @@ use std::collections::HashMap;
 
 use super::syntax::ast;
 use super::syntax::parse;
+use super::types;
+use super::resolver;
 
 pub struct MessageContext {
-    messages: HashMap<String, ast::Entry>,
+    locales: Vec<String>,
+    pub messages: HashMap<String, ast::Entry>,
 }
 
 impl MessageContext {
-    pub fn new() -> MessageContext {
-        MessageContext { messages: HashMap::new() }
+    pub fn new(locales: Vec<String>) -> MessageContext {
+        MessageContext {
+            locales: locales,
+            messages: HashMap::new(),
+        }
+    }
+
+    pub fn has_message(&self, id: &str) -> bool {
+        self.messages.contains_key(id)
+    }
+
+    pub fn get_message(&self, id: &str) -> Option<&ast::Entry> {
+        self.messages.get(id)
     }
 
     pub fn add_messages(&mut self, source: &str) {
@@ -30,46 +44,13 @@ impl MessageContext {
         }
     }
 
-    pub fn get_message(&self, id: &str) -> Option<&ast::Entry> {
-        self.messages.get(id)
-    }
 
-    pub fn format(&self, entry: &ast::Entry) -> Option<String> {
-        match entry {
-            &ast::Entry::Message { ref value, .. } => {
-                value
-                    .as_ref()
-                    .and_then(|pattern| self.eval_pattern(pattern))
-            }
-            _ => unimplemented!(),
-        }
-    }
+    pub fn format(&self,
+                  message: &ast::Entry,
+                  args: Option<HashMap<String, String>>)
+                  -> Option<String> {
+        let result = resolver::resolve(message);
 
-    fn eval_expr(&self, expr: &ast::Expression) -> Option<String> {
-        match expr {
-            &ast::Expression::StringExpression { ref value } => Some(value.clone()),
-            &ast::Expression::MessageReference { ref id } => {
-                self.messages.get(&id.name).and_then(|msg| self.format(msg))
-            }
-            &ast::Expression::ExternalArgument { ref id } => Some(format!("${}", id.name)),
-            _ => unimplemented!(),
-        }
-    }
-
-    fn eval_pattern_elem(&self, expr: &ast::PatternElement) -> Option<String> {
-        match expr {
-            &ast::PatternElement::TextElement(ref val) => Some(val.clone()),
-            &ast::PatternElement::Expression(ref exp) => self.eval_expr(exp),
-        }
-    }
-
-    fn eval_pattern(&self, pat: &ast::Pattern) -> Option<String> {
-        let &ast::Pattern { ref elements, .. } = pat;
-        let val = elements
-            .iter()
-            .map(|elem| self.eval_pattern_elem(elem).unwrap_or(String::from("___")))
-            .collect::<Vec<String>>()
-            .join("");
-        Some(val)
+        return Some(types::value_of(result));
     }
 }
