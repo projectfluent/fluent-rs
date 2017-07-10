@@ -11,19 +11,19 @@ pub enum FluentArgument {
 }
 
 impl From<String> for FluentArgument {
-    fn from(s: String) -> FluentArgument {
+    fn from(s: String) -> Self {
         return FluentArgument::String(s);
     }
 }
 
 impl From<&'static str> for FluentArgument {
-    fn from(s: &'static str) -> FluentArgument {
+    fn from(s: &'static str) -> Self {
         return FluentArgument::String(String::from(s));
     }
 }
 
 impl From<i8> for FluentArgument {
-    fn from(n: i8) -> FluentArgument {
+    fn from(n: i8) -> Self {
         return FluentArgument::Number(n);
     }
 }
