@@ -3,10 +3,11 @@ use std::collections::HashMap;
 use super::types::FluentType;
 use super::syntax::ast;
 use super::context::MessageContext;
+use super::context::FluentArgument;
 
 struct Env<'a> {
     ctx: &'a MessageContext,
-    args: Option<&'a HashMap<String, String>>,
+    args: Option<&'a HashMap<String, FluentArgument>>,
 }
 
 fn eval_expr(env: &Env, expr: &ast::Expression) -> String {
@@ -21,7 +22,14 @@ fn eval_expr(env: &Env, expr: &ast::Expression) -> String {
         &ast::Expression::ExternalArgument { ref id } => {
             if let Some(args) = env.args {
                 if let Some(arg) = args.get(&id.name) {
-                    return arg.clone();
+                    match arg {
+                        &FluentArgument::String(ref s) => {
+                            return s.clone();
+                        }
+                        &FluentArgument::Number(ref n) => {
+                            return format!("{}", n);
+                        }
+                    }
                 }
             }
             return String::from("___");
@@ -44,7 +52,7 @@ fn resolve_pattern(env: &Env, pattern: &ast::Pattern) -> String {
 }
 
 pub fn resolve(ctx: &MessageContext,
-               args: Option<&HashMap<String, String>>,
+               args: Option<&HashMap<String, FluentArgument>>,
                message: &ast::Entry)
                -> FluentType {
     let env = Env {

@@ -1,6 +1,7 @@
 extern crate fluent;
 
 use fluent::context::MessageContext;
+use fluent::context::FluentArgument;
 use std::collections::HashMap;
 
 fn main() {
@@ -9,9 +10,10 @@ fn main() {
 
     ctx.add_messages("hello-world = Hello { $name }");
     ctx.add_messages("ref = The previous message says { hello-world }");
+    ctx.add_messages("unread-emails = You have { $emailCount } unread emails");
 
     let mut args = HashMap::new();
-    args.insert(String::from("name"), String::from("John"));
+    args.insert(String::from("name"), FluentArgument::from("John"));
 
     match ctx.get_message("hello-world")
               .and_then(|msg| ctx.format(&msg, Some(&args))) {
@@ -20,6 +22,15 @@ fn main() {
     }
 
     match ctx.get_message("ref")
+              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+        Some(value) => println!("{}", value),
+        None => println!("None"),
+    }
+
+    let mut args = HashMap::new();
+    args.insert(String::from("emailCount"), FluentArgument::from(5));
+
+    match ctx.get_message("unread-emails")
               .and_then(|msg| ctx.format(&msg, Some(&args))) {
         Some(value) => println!("{}", value),
         None => println!("None"),

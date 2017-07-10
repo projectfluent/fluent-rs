@@ -5,6 +5,29 @@ use super::syntax::parse;
 use super::types;
 use super::resolver;
 
+pub enum FluentArgument {
+    String(String),
+    Number(i8),
+}
+
+impl From<String> for FluentArgument {
+    fn from(s: String) -> FluentArgument {
+        return FluentArgument::String(s);
+    }
+}
+
+impl From<&'static str> for FluentArgument {
+    fn from(s: &'static str) -> FluentArgument {
+        return FluentArgument::String(String::from(s));
+    }
+}
+
+impl From<i8> for FluentArgument {
+    fn from(n: i8) -> FluentArgument {
+        return FluentArgument::Number(n);
+    }
+}
+
 pub struct MessageContext {
     locales: Vec<String>,
     pub messages: HashMap<String, ast::Entry>,
@@ -47,7 +70,7 @@ impl MessageContext {
 
     pub fn format(&self,
                   message: &ast::Entry,
-                  args: Option<&HashMap<String, String>>)
+                  args: Option<&HashMap<String, FluentArgument>>)
                   -> Option<String> {
         let result = resolver::resolve(&self, args, message);
 
