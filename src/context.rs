@@ -28,9 +28,10 @@ impl From<i8> for FluentArgument {
     }
 }
 
+#[allow(dead_code)]
 pub struct MessageContext {
     locales: Vec<String>,
-    pub messages: HashMap<String, ast::Entry>,
+    messages: HashMap<String, ast::Entry>,
 }
 
 impl MessageContext {
@@ -70,7 +71,7 @@ impl MessageContext {
 
     pub fn format(&self,
                   message: &ast::Entry,
-                  args: Option<&HashMap<String, FluentArgument>>)
+                  args: Option<&HashMap<&str, FluentArgument>>)
                   -> Option<String> {
         let result = resolver::resolve(&self, args, message);
 

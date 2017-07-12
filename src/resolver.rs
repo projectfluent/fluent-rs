@@ -7,21 +7,20 @@ use super::context::FluentArgument;
 
 struct Env<'a> {
     ctx: &'a MessageContext,
-    args: Option<&'a HashMap<String, FluentArgument>>,
+    args: Option<&'a HashMap<&'a str, FluentArgument>>,
 }
 
 fn eval_expr(env: &Env, expr: &ast::Expression) -> String {
     match expr {
         &ast::Expression::MessageReference { ref id } => {
             env.ctx
-                .messages
-                .get(&id.name)
+                .get_message(&id.name)
                 .and_then(|msg| env.ctx.format(msg, env.args))
                 .unwrap_or(String::from("___"))
         }
         &ast::Expression::ExternalArgument { ref id } => {
             if let Some(args) = env.args {
-                if let Some(arg) = args.get(&id.name) {
+                if let Some(arg) = args.get(&id.name.as_ref()) {
                     match arg {
                         &FluentArgument::String(ref s) => {
                             return s.clone();
@@ -52,7 +51,7 @@ fn resolve_pattern(env: &Env, pattern: &ast::Pattern) -> String {
 }
 
 pub fn resolve(ctx: &MessageContext,
-               args: Option<&HashMap<String, FluentArgument>>,
+               args: Option<&HashMap<&str, FluentArgument>>,
                message: &ast::Entry)
                -> FluentType {
     let env = Env {
