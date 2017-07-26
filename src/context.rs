@@ -34,10 +34,39 @@ pub struct MessageContext {
     messages: HashMap<String, ast::Entry>,
 }
 
+pub trait VecOrOne<String> {
+  fn into_vec(self) -> Vec<String>;
+}
+
+impl VecOrOne<String> for Vec<String> {
+    fn into_vec(self) -> Vec<String> {
+        return self;
+    }
+}
+
+impl VecOrOne<String> for String {
+    fn into_vec(self) -> Vec<String> {
+        return vec![self];
+    }
+}
+
+impl VecOrOne<String> for &'static str {
+    fn into_vec(self) -> Vec<String> {
+        return vec![String::from(self)];
+    }
+}
+
+impl VecOrOne<String> for Vec<&'static str> {
+    fn into_vec(self) -> Vec<String> {
+        return self.iter().map(|&loc| String::from(loc)).collect();
+    }
+}
+
 impl MessageContext {
-    pub fn new(locales: Vec<String>) -> MessageContext {
+    pub fn new<L>(locales: L) -> MessageContext
+      where L: VecOrOne<String> {
         MessageContext {
-            locales: locales,
+            locales: locales.into_vec(),
             messages: HashMap::new(),
         }
     }

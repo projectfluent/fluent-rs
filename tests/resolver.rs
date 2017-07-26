@@ -6,8 +6,7 @@ use std::collections::HashMap;
 
 #[test]
 fn external_argument_string() {
-    let locales = vec![String::from("pl")];
-    let mut ctx = MessageContext::new(locales);
+    let mut ctx = MessageContext::new("pl");
 
     ctx.add_messages("hello-world = Hello { $name }");
 
@@ -25,8 +24,7 @@ fn external_argument_string() {
 
 #[test]
 fn external_argument_number() {
-    let locales = vec![String::from("pl")];
-    let mut ctx = MessageContext::new(locales);
+    let mut ctx = MessageContext::new("pl");
 
     ctx.add_messages("unread-emails = You have { $emailsCount } unread emails");
 
@@ -44,8 +42,7 @@ fn external_argument_number() {
 
 #[test]
 fn reference_message_with_external_argument() {
-    let locales = vec![String::from("pl")];
-    let mut ctx = MessageContext::new(locales);
+    let mut ctx = MessageContext::new("pl");
 
     ctx.add_messages("greetings = Hello, { $userName }");
     ctx.add_messages("click-on = Click on the `{ greetings }` label.");

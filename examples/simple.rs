@@ -3,7 +3,7 @@ extern crate fluent;
 use fluent::context::MessageContext;
 
 fn main() {
-    let mut ctx = MessageContext::new(vec![String::from("und")]);
+    let mut ctx = MessageContext::new("und");
 
     ctx.add_messages("key1 = Value 1");
     ctx.add_messages("key2 = Value 2");

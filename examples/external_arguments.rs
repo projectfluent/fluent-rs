@@ -5,8 +5,7 @@ use fluent::context::FluentArgument;
 use std::collections::HashMap;
 
 fn main() {
-    let locales = vec![String::from("pl")];
-    let mut ctx = MessageContext::new(locales);
+    let mut ctx = MessageContext::new("pl");
 
     ctx.add_messages("hello-world = Hello { $name }");
     ctx.add_messages("ref = The previous message says { hello-world }");
