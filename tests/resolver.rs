@@ -14,7 +14,7 @@ fn external_argument_string() {
     args.insert("name", FluentArgument::from("John"));
 
     let val = match ctx.get_message("hello-world")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => value,
         None => String::from("None"),
     };
@@ -32,7 +32,7 @@ fn external_argument_number() {
     args.insert("emailsCount", FluentArgument::from(5));
 
     let val = match ctx.get_message("unread-emails")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => value,
         None => String::from("None"),
     };
@@ -51,7 +51,7 @@ fn reference_message_with_external_argument() {
     args.insert("userName", FluentArgument::from("Mary"));
 
     let val = match ctx.get_message("click-on")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => value,
         None => String::from("None"),
     };

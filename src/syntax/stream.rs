@@ -98,7 +98,7 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         let ret = self.peek() == Some(ch);
 
         self.peek_index -= 1;
-        return ret;
+        ret
     }
 
     pub fn reset_peek(&mut self) {

@@ -31,7 +31,7 @@ fn get_line_num(source: &str, pos: usize) -> usize {
         i += 1;
     }
 
-    return i;
+    i
 }
 
 fn get_col_num(source: &str, pos: usize) -> usize {
@@ -49,7 +49,7 @@ fn get_col_num(source: &str, pos: usize) -> usize {
         ptr += lnlen + 1;
     }
 
-    return 0;
+    0
 }
 
 pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
@@ -65,7 +65,7 @@ pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
         s.push('\n');
     }
 
-    return String::from(s.trim_right());
+    String::from(s.trim_right())
 }
 
 pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
@@ -93,7 +93,7 @@ pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
         .nth(slice_len)
         .map(|(n, _)| n)
         .unwrap_or(len);
-    return &slice[..endp];
+    &slice[..endp]
 }
 
 pub fn get_error_info(source: &str,

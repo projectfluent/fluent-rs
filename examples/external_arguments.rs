@@ -15,13 +15,13 @@ fn main() {
     args.insert("name", FluentArgument::from("John"));
 
     match ctx.get_message("hello-world")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
     match ctx.get_message("ref")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
@@ -30,7 +30,7 @@ fn main() {
     args.insert("emailCount", FluentArgument::from(5));
 
     match ctx.get_message("unread-emails")
-              .and_then(|msg| ctx.format(&msg, Some(&args))) {
+              .and_then(|msg| ctx.format(msg, Some(&args))) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

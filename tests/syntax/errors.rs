@@ -24,7 +24,7 @@ fn empty_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::ExpectedEntry, error1.kind);
 
@@ -49,7 +49,7 @@ fn bad_id_start_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::ExpectedEntry, error1.kind);
 
@@ -74,7 +74,7 @@ fn just_id_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::MissingField {
                            entry_id: "key".to_owned(),
@@ -103,7 +103,7 @@ fn no_equal_sign_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::MissingField {
                            entry_id: "key".to_owned(),
@@ -132,7 +132,7 @@ fn wrong_char_in_id_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::ExpectedCharRange {
                            range: "'a'...'z' | 'A'...'Z' | '_'".to_owned(),
@@ -160,7 +160,7 @@ fn missing_trait_value_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
 
@@ -185,7 +185,7 @@ fn message_missing_fields_errors() {
         Err((_, ref errors)) => {
             assert_eq!(1, errors.len());
 
-            let ref error1 = errors[0];
+            let error1 = &errors[0];
 
             assert_eq!(ErrorKind::MissingField {
                            entry_id: "key".to_owned(),

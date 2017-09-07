@@ -110,7 +110,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
 
         self.reset_peek();
-        return false;
+        false
     }
 
     fn is_peek_next_line_variant_start(&mut self) -> bool {
@@ -137,7 +137,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
             return true;
         }
         self.reset_peek();
-        return false;
+        false
     }
 
     fn is_peek_next_line_attribute_start(&mut self) -> bool {
@@ -161,7 +161,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
 
         self.reset_peek();
-        return false;
+        false
     }
 
     fn is_peek_next_line_pattern(&mut self) -> bool {
@@ -187,7 +187,7 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
 
         self.reset_peek();
-        return true;
+        true
     }
 
     fn is_peek_next_line_tag_start(&mut self) -> bool {
@@ -211,17 +211,16 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
 
         self.reset_peek();
-        return false;
+        false
     }
 
     fn skip_to_next_entry_start(&mut self) {
         while let Some(_) = self.next() {
-            if self.current_is('\n') && !self.peek_char_is('\n') {
-                if self.next() == None || self.is_id_start() || self.current_is('/') ||
-                   self.current_is('[') || self.peek_char_is('/') ||
-                   self.peek_char_is('[') {
-                    break;
-                }
+            if self.current_is('\n') && !self.peek_char_is('\n') &&
+               (self.next() == None || self.is_id_start() || self.current_is('/') ||
+                self.current_is('[') || self.peek_char_is('/') ||
+                self.peek_char_is('[')) {
+                break;
             }
         }
     }

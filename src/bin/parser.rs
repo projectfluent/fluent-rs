@@ -24,7 +24,7 @@ fn print_entries_resource(res: &Resource) {
     println!("{:#?}", res);
 }
 
-fn print_usage(program: &str, opts: Options) {
+fn print_usage(program: &str, opts: &Options) {
     let brief = format!("Usage: {} FILE [options]", program);
     print!("{}", opts.usage(&brief));
 }
@@ -42,13 +42,13 @@ fn main() {
         Err(f) => panic!(f.to_string()),
     };
     if matches.opt_present("h") {
-        print_usage(&program, opts);
+        print_usage(&program, &opts);
         return;
     }
     let input = if !matches.free.is_empty() {
         matches.free[0].clone()
     } else {
-        print_usage(&program, opts);
+        print_usage(&program, &opts);
         return;
     };
 
@@ -74,7 +74,7 @@ fn main() {
             for err in errors {
                 let info = err.info.unwrap();
                 let kind = err.kind;
-                let f = annotate_slice(info, Some(input.to_owned()), Item::Error(kind));
+                let f = annotate_slice(&info, Some(input.to_owned()), &Item::Error(kind));
                 println!("{}", f);
                 println!("-----------------------------");
             }

@@ -11,13 +11,13 @@ fn main() {
     ctx.add_messages("bazbar = { baz } Bar");
 
     match ctx.get_message("foobar")
-              .and_then(|msg| ctx.format(&msg, None)) {
+              .and_then(|msg| ctx.format(msg, None)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
     match ctx.get_message("bazbar")
-              .and_then(|msg| ctx.format(&msg, None)) {
+              .and_then(|msg| ctx.format(msg, None)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

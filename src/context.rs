@@ -12,19 +12,19 @@ pub enum FluentArgument {
 
 impl From<String> for FluentArgument {
     fn from(s: String) -> Self {
-        return FluentArgument::String(s);
+        FluentArgument::String(s)
     }
 }
 
 impl From<&'static str> for FluentArgument {
     fn from(s: &'static str) -> Self {
-        return FluentArgument::String(String::from(s));
+        FluentArgument::String(String::from(s))
     }
 }
 
 impl From<i8> for FluentArgument {
     fn from(n: i8) -> Self {
-        return FluentArgument::Number(n);
+        FluentArgument::Number(n)
     }
 }
 
@@ -35,36 +35,37 @@ pub struct MessageContext {
 }
 
 pub trait VecOrOne<String> {
-  fn into_vec(self) -> Vec<String>;
+    fn into_vec(self) -> Vec<String>;
 }
 
 impl VecOrOne<String> for Vec<String> {
     fn into_vec(self) -> Vec<String> {
-        return self;
+        self
     }
 }
 
 impl VecOrOne<String> for String {
     fn into_vec(self) -> Vec<String> {
-        return vec![self];
+        vec![self]
     }
 }
 
 impl VecOrOne<String> for &'static str {
     fn into_vec(self) -> Vec<String> {
-        return vec![String::from(self)];
+        vec![String::from(self)]
     }
 }
 
 impl VecOrOne<String> for Vec<&'static str> {
     fn into_vec(self) -> Vec<String> {
-        return self.iter().map(|&loc| String::from(loc)).collect();
+        self.iter().map(|&loc| String::from(loc)).collect()
     }
 }
 
 impl MessageContext {
     pub fn new<L>(locales: L) -> MessageContext
-      where L: VecOrOne<String> {
+        where L: VecOrOne<String>
+    {
         MessageContext {
             locales: locales.into_vec(),
             messages: HashMap::new(),
@@ -102,8 +103,8 @@ impl MessageContext {
                   message: &ast::Entry,
                   args: Option<&HashMap<&str, FluentArgument>>)
                   -> Option<String> {
-        let result = resolver::resolve(&self, args, message);
+        let result = resolver::resolve(self, args, message);
 
-        return Some(types::value_of(result));
+        Some(types::value_of(result))
     }
 }

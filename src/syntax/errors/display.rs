@@ -23,10 +23,10 @@ pub enum LabelKind {
     Secondary,
 }
 
-pub fn annotate_slice(info: ErrorInfo, file_name: Option<String>, item: Item) -> String {
+pub fn annotate_slice(info: &ErrorInfo, file_name: Option<String>, item: &Item) -> String {
     let mut result = String::new();
 
-    let desc = match item {
+    let desc = match *item {
         Item::Error(ref kind) => Some(get_error_desc(kind)),
         Item::Warning => None,
     };
@@ -44,29 +44,29 @@ pub fn annotate_slice(info: ErrorInfo, file_name: Option<String>, item: Item) ->
     let max_ln_width = get_ln_width(info.line + lines_num);
 
 
-    result += &format_title_line(&item, id, title);
+    result += &format_title_line(item, id, &title);
     if let Some(name) = file_name {
-        result += &format_pos_line(name, info.line, info.col, max_ln_width);
+        result += &format_pos_line(&name, info.line, info.col, max_ln_width);
     }
-    result += &format_slice(info.slice,
+    result += &format_slice(&info.slice,
                             lines_num,
                             max_ln_width,
                             info.line,
-                            &item,
+                            item,
                             &labels);
 
-    return result;
+    result
 }
 
-fn format_title_line(item: &Item, id: &str, title: String) -> String {
-    let kind = match item {
-        &Item::Error(_) => "error",
-        &Item::Warning => "warning",
+fn format_title_line(item: &Item, id: &str, title: &str) -> String {
+    let kind = match *item {
+        Item::Error(_) => "error",
+        Item::Warning => "warning",
     };
 
-    let color = match item {
-        &Item::Error(_) => Fixed(9),
-        &Item::Warning => Fixed(11),
+    let color = match *item {
+        Item::Error(_) => Fixed(9),
+        Item::Warning => Fixed(11),
     };
 
     let title = format!(": {}", title);
@@ -78,7 +78,7 @@ fn format_title_line(item: &Item, id: &str, title: String) -> String {
                    White.bold().paint(title));
 }
 
-fn format_slice(slice: String,
+fn format_slice(slice: &str,
                 lines_num: usize,
                 max_ln_width: usize,
                 start_line: usize,
@@ -125,7 +125,7 @@ fn format_slice(slice: String,
     }
 
 
-    return result;
+    result
 }
 
 fn format_labels(start_pos: usize,
@@ -140,9 +140,9 @@ fn format_labels(start_pos: usize,
         if label.start_pos >= start_pos && label.start_pos <= end_pos {
             let color = match label.kind {
                 LabelKind::Primary => {
-                    match item {
-                        &Item::Error(_) => Fixed(9).bold(),
-                        &Item::Warning => Fixed(11).bold(),
+                    match *item {
+                        Item::Error(_) => Fixed(9).bold(),
+                        Item::Warning => Fixed(11).bold(),
                     }
                 }
                 LabelKind::Secondary => Fixed(12).bold(),
@@ -169,11 +169,11 @@ fn format_labels(start_pos: usize,
         }
     }
 
-    return None;
+    None
 }
 
 fn get_ln_width(lines: usize) -> usize {
-    return lines.to_string().len();
+    lines.to_string().len()
 }
 
 fn format_ln(line_num: usize, max_ln_width: usize) -> String {
@@ -181,10 +181,10 @@ fn format_ln(line_num: usize, max_ln_width: usize) -> String {
 
     let diff = max_ln_width - ln_width;
 
-    return " ".repeat(diff) + &line_num.to_string();
+    " ".repeat(diff) + &line_num.to_string()
 }
 
-fn format_pos_line(file_name: String, line: usize, col: usize, max_ln_width: usize) -> String {
+fn format_pos_line(file_name: &str, line: usize, col: usize, max_ln_width: usize) -> String {
     return format!("{}{} {}:{}:{}\n",
                    " ".repeat(max_ln_width),
                    Fixed(12).bold().paint("-->"),

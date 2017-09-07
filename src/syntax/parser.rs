@@ -52,28 +52,28 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
         ps.skip_ws_lines();
     }
 
-    if errors.len() > 0 {
+    if errors.is_empty() {
+        Ok(ast::Resource {
+               body: entries,
+               comment,
+           })
+    } else {
         Err((ast::Resource {
                  body: entries,
                  comment,
              },
              errors))
-    } else {
-        Ok(ast::Resource {
-               body: entries,
-               comment,
-           })
     }
 }
 
 fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
     where I: Iterator<Item = char>
 {
-    let mut comment: Option<ast::Comment> = None;
-
-    if ps.current_is('/') {
-        comment = Some(get_comment(ps)?);
-    }
+    let comment = if ps.current_is('/') {
+        Some(get_comment(ps)?)
+    } else {
+        None
+    };
 
     if ps.current_is('[') {
         return Ok(get_section(ps, comment)?);
@@ -254,12 +254,8 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
 
     name.push(ps.take_id_start()?);
 
-    loop {
-        if let Some(ch) = ps.take_id_char() {
-            name.push(ch);
-        } else {
-            break;
-        }
+    while let Some(ch) = ps.take_id_char() {
+        name.push(ch);
     }
 
     Ok(ast::Identifier { name })
@@ -339,12 +335,8 @@ fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
 
     name.push(ps.take_id_start()?);
 
-    loop {
-        if let Some(ch) = ps.take_symb_char() {
-            name.push(ch);
-        } else {
-            break;
-        }
+    while let Some(ch) = ps.take_symb_char() {
+        name.push(ch);
     }
 
     while name.ends_with(' ') {
@@ -371,19 +363,15 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
         return error!(ErrorKind::ExpectedCharRange { range: "0...9".to_owned() });
     }
 
-    loop {
-        if let Some(ch) = ps.current() {
-            match ch {
-                '0'...'9' => {
-                    num.push(ch);
-                    ps.next();
-                }
-                _ => {
-                    break;
-                }
+    while let Some(ch) = ps.current() {
+        match ch {
+            '0'...'9' => {
+                num.push(ch);
+                ps.next();
             }
-        } else {
-            break;
+            _ => {
+                break;
+            }
         }
     }
 
@@ -417,72 +405,68 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
     let mut elements = vec![];
     let mut first_line = true;
 
-    loop {
-        if let Some(ch) = ps.current() {
-            match ch {
-                '\n' => {
-                    if first_line && !buffer.is_empty() {
-                        break;
-                    }
-
-                    if !ps.is_peek_next_line_pattern() {
-                        break;
-                    }
-
-                    ps.next();
-                    ps.skip_line_ws();
-
-                    if !first_line {
-                        buffer.push(ch);
-                    }
-
-                    first_line = false;
-                    continue;
+    while let Some(ch) = ps.current() {
+        match ch {
+            '\n' => {
+                if first_line && !buffer.is_empty() {
+                    break;
                 }
-                '\\' => {
-                    if let Some(ch2) = ps.peek() {
-                        match ch2 {
-                            '{' => {
-                                buffer.push(ch2);
-                                ps.next();
-                            }
-                            _ => {
-                                buffer.push(ch);
-                                buffer.push(ch2);
-                                ps.next();
-                            }
-                        }
-                    } else {
-                        ps.reset_peek();
-                        buffer.push(ch);
-                        break;
-                    }
+
+                if !ps.is_peek_next_line_pattern() {
+                    break;
                 }
-                '{' => {
-                    ps.next();
 
-                    ps.skip_line_ws();
+                ps.next();
+                ps.skip_line_ws();
 
-                    if !buffer.is_empty() {
-                        elements.push(ast::PatternElement::TextElement(buffer));
-                    }
-
-                    buffer = String::new();
-
-                    elements.push(ast::PatternElement::Expression(get_expression(ps)?));
-
-                    ps.expect_char('}')?;
-
-                    continue;
-                }
-                _ => {
+                if !first_line {
                     buffer.push(ch);
                 }
+
+                first_line = false;
+                continue;
             }
-            ps.next();
-        } else {
-            break;
+            '\\' => {
+                if let Some(ch2) = ps.peek() {
+                    match ch2 {
+                        '{' => {
+                            buffer.push(ch2);
+                            ps.next();
+                        }
+                        _ => {
+                            buffer.push(ch);
+                            buffer.push(ch2);
+                            ps.next();
+                        }
+                    }
+                } else {
+                    ps.reset_peek();
+                    buffer.push(ch);
+                    break;
+                }
+            }
+            '{' => {
+                ps.next();
+
+                ps.skip_line_ws();
+
+                if !buffer.is_empty() {
+                    elements.push(ast::PatternElement::TextElement(buffer));
+                }
+
+                buffer = String::new();
+
+                elements.push(ast::PatternElement::Expression(get_expression(ps)?));
+
+                ps.expect_char('}')?;
+
+                continue;
+            }
+            _ => {
+                buffer.push(ch);
+            }
         }
+        ps.next();
     }
 
     if !buffer.is_empty() {
@@ -521,7 +505,7 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 
             let variants = get_variants(ps)?;
 
-            if variants.len() == 0 {
+            if variants.is_empty() {
                 return error!(ErrorKind::MissingVariants);
             }
 

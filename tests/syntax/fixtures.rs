@@ -60,7 +60,7 @@ fn error_ftl() {
 
         for chunk in chunks {
             println!("Testing chunk: {:?}", chunk);
-            match attempt_parse(&chunk) {
+            match attempt_parse(chunk) {
                 Ok(_) => panic!("Test didn't fail"),
                 Err(_) => continue,
             }
