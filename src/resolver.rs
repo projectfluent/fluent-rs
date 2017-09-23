@@ -33,6 +33,38 @@ fn eval_expr(env: &Env, expr: &ast::Expression) -> String {
             }
             String::from("___")
         }
+        ast::Expression::SelectExpression {
+            ref expression,
+            ref variants,
+        } => {
+            let exp = match *expression {
+                Some(ref e) => Some(eval_expr(env, &*e)),
+                None => None,
+            };
+
+            for variant in variants {
+                if let Some(ref e) = exp {
+                    match variant.key {
+                        ast::VarKey::Symbol(ref s) => {
+                            if e == &s.name {
+                                return resolve_pattern(env, &variant.value);
+                            }
+                        }
+                        ast::VarKey::Number(ref i) => {
+                            if e == &i.value {
+                                return resolve_pattern(env, &variant.value);
+                            }
+                        }
+                    }
+                }
+            }
+            for variant in variants {
+                if variant.default {
+                    return resolve_pattern(env, &variant.value);
+                }
+            }
+            String::from("___")
+        }
         _ => unimplemented!(),
     }
 }
