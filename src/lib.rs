@@ -37,5 +37,5 @@ mod tests {
 
 pub mod syntax;
 pub mod context;
-pub mod resolver;
+pub mod resolve;
 pub mod types;
