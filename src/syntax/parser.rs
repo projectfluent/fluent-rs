@@ -54,20 +54,23 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
 
     if errors.is_empty() {
         Ok(ast::Resource {
-               body: entries,
-               comment,
-           })
+            body: entries,
+            comment,
+        })
     } else {
-        Err((ast::Resource {
-                 body: entries,
-                 comment,
-             },
-             errors))
+        Err((
+            ast::Resource {
+                body: entries,
+                comment,
+            },
+            errors,
+        ))
     }
 }
 
 fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let comment = if ps.current_is('/') {
         Some(get_comment(ps)?)
@@ -90,7 +93,8 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 }
 
 fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     ps.expect_char('/')?;
     ps.expect_char('/')?;
@@ -119,7 +123,8 @@ fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
 }
 
 fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     ps.expect_char('[')?;
     ps.expect_char('[')?;
@@ -138,14 +143,15 @@ fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
     ps.expect_char('\n')?;
 
     Ok(ast::Entry::Section {
-           name: symb,
-           comment,
-       })
+        name: symb,
+        comment,
+    })
 }
 
 
 fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let id = get_identifier(ps)?;
 
@@ -178,22 +184,23 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 
     if pattern.is_none() && attributes.is_none() {
         return error!(ErrorKind::MissingField {
-                          entry_id: id.name,
-                          fields: vec!["Value", "Attribute"],
-                      });
+            entry_id: id.name,
+            fields: vec!["Value", "Attribute"],
+        });
     }
 
     Ok(ast::Entry::Message {
-           id,
-           value: pattern,
-           attributes,
-           tags,
-           comment,
-       })
+        id,
+        value: pattern,
+        attributes,
+        tags,
+        comment,
+    })
 }
 
 fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut attributes = vec![];
     loop {
@@ -212,9 +219,9 @@ fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
 
         if let Some(pattern) = get_pattern(ps)? {
             attributes.push(ast::Attribute {
-                                id: key,
-                                value: pattern,
-                            });
+                id: key,
+                value: pattern,
+            });
         } else {
             return error!(ErrorKind::ExpectedField { field: String::from("Pattern") });
         }
@@ -227,7 +234,8 @@ fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
 }
 
 fn get_tags<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Tag>>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut tags = vec![];
     loop {
@@ -248,7 +256,8 @@ fn get_tags<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Tag>>
 }
 
 fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut name = String::new();
 
@@ -263,7 +272,8 @@ fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
 
 
 fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VarKey>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     if let Some(ch) = ps.current() {
         match ch {
@@ -275,12 +285,15 @@ fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VarKey>
             }
         }
     } else {
-        return error!(ErrorKind::ExpectedField { field: "Symbol | Number".to_owned() });
+        return error!(ErrorKind::ExpectedField {
+            field: "Symbol | Number".to_owned(),
+        });
     }
 }
 
 fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut variants = vec![];
     let mut has_default = false;
@@ -310,10 +323,10 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
 
         if let Some(pattern) = get_pattern(ps)? {
             variants.push(ast::Variant {
-                              key,
-                              value: pattern,
-                              default: default_index,
-                          });
+                key,
+                value: pattern,
+                default: default_index,
+            });
         } else {
             return error!(ErrorKind::ExpectedField { field: String::from("Pattern") });
         }
@@ -329,7 +342,8 @@ fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
 }
 
 fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut name = String::new();
 
@@ -347,7 +361,8 @@ fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut num = String::new();
 
@@ -379,7 +394,8 @@ fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
 }
 
 fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut num = String::new();
 
@@ -399,7 +415,8 @@ fn get_number<I>(ps: &mut ParserStream<I>) -> Result<ast::Number>
 }
 
 fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut buffer = String::new();
     let mut elements = vec![];
@@ -477,7 +494,8 @@ fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 }
 
 fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     if ps.is_peek_next_line_variant_start() {
         let variants = get_variants(ps)?;
@@ -487,9 +505,9 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
         ps.skip_line_ws();
 
         return Ok(ast::Expression::SelectExpression {
-                      expression: None,
-                      variants,
-                  });
+            expression: None,
+            variants,
+        });
     }
 
     let selector = get_selector_expression(ps)?;
@@ -514,9 +532,9 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
             ps.skip_line_ws();
 
             return Ok(ast::Expression::SelectExpression {
-                          expression: Some(Box::new(selector)),
-                          variants,
-                      });
+                expression: Some(Box::new(selector)),
+                variants,
+            });
         } else {
             ps.reset_peek();
         }
@@ -526,7 +544,8 @@ fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 }
 
 fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let literal = get_literal(ps)?;
 
@@ -550,9 +569,9 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
                     let args = get_call_args(ps)?;
                     ps.expect_char(')')?;
                     Ok(ast::Expression::CallExpression {
-                           callee: ast::Function { name: id.name },
-                           args: args,
-                       })
+                        callee: ast::Function { name: id.name },
+                        args: args,
+                    })
                 }
                 _ => Ok(ast::Expression::MessageReference { id: id }),
             }
@@ -562,7 +581,8 @@ fn get_selector_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expressio
 }
 
 fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut args = vec![];
 
@@ -609,13 +629,18 @@ fn get_call_args<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Argument>>
 }
 
 fn get_arg_val<I>(ps: &mut ParserStream<I>) -> Result<ast::ArgValue>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     if let Some(ch) = ps.current() {
         match ch {
             '0'...'9' | '-' => Ok(ast::ArgValue::Number(get_number(ps)?)),
             '"' => Ok(ast::ArgValue::String(get_string(ps)?)),
-            _ => error!(ErrorKind::ExpectedField { field: String::from("Argument value") }),
+            _ => {
+                error!(ErrorKind::ExpectedField {
+                    field: String::from("Argument value"),
+                })
+            }
         }
     } else {
         error!(ErrorKind::ExpectedField { field: String::from("Literal") })
@@ -623,7 +648,8 @@ fn get_arg_val<I>(ps: &mut ParserStream<I>) -> Result<ast::ArgValue>
 }
 
 fn get_string<I>(ps: &mut ParserStream<I>) -> Result<String>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     let mut val = String::new();
 
@@ -639,7 +665,8 @@ fn get_string<I>(ps: &mut ParserStream<I>) -> Result<String>
 }
 
 fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
 
     if let Some(ch) = ps.current() {
@@ -659,7 +686,8 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 }
 
 fn get_junk_entry<I>(ps: &mut ParserStream<I>, source: &str, entry_start: usize) -> ast::Entry
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     ps.skip_to_next_entry_start();
 

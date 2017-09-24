@@ -13,8 +13,9 @@ fn external_argument_string() {
     let mut args = HashMap::new();
     args.insert("name", FluentArgument::from("John"));
 
-    let val = match ctx.get_message("hello-world")
-              .and_then(|msg| ctx.format(msg, Some(&args))) {
+    let val = match ctx.get_message("hello-world").and_then(|msg| {
+        ctx.format(msg, Some(&args))
+    }) {
         Some(value) => value,
         None => String::from("None"),
     };
@@ -31,8 +32,9 @@ fn external_argument_number() {
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentArgument::from(5));
 
-    let val = match ctx.get_message("unread-emails")
-              .and_then(|msg| ctx.format(msg, Some(&args))) {
+    let val = match ctx.get_message("unread-emails").and_then(|msg| {
+        ctx.format(msg, Some(&args))
+    }) {
         Some(value) => value,
         None => String::from("None"),
     };
@@ -50,8 +52,9 @@ fn reference_message_with_external_argument() {
     let mut args = HashMap::new();
     args.insert("userName", FluentArgument::from("Mary"));
 
-    let val = match ctx.get_message("click-on")
-              .and_then(|msg| ctx.format(msg, Some(&args))) {
+    let val = match ctx.get_message("click-on").and_then(|msg| {
+        ctx.format(msg, Some(&args))
+    }) {
         Some(value) => value,
         None => String::from("None"),
     };

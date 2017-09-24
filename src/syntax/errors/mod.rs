@@ -96,20 +96,21 @@ pub fn get_error_slice(source: &str, start: usize, end: usize) -> &str {
     &slice[..endp]
 }
 
-pub fn get_error_info(source: &str,
-                      pos: usize,
-                      entry_start: usize,
-                      next_entry_start: usize)
-                      -> Option<ErrorInfo> {
+pub fn get_error_info(
+    source: &str,
+    pos: usize,
+    entry_start: usize,
+    next_entry_start: usize,
+) -> Option<ErrorInfo> {
     let first_line_num = get_line_num(source, entry_start);
     let next_entry_line = get_line_num(source, next_entry_start);
 
     let slice = get_error_lines(source, first_line_num, next_entry_line);
 
     Some(ErrorInfo {
-             slice: slice,
-             line: first_line_num,
-             col: get_col_num(source, pos),
-             pos: pos - entry_start,
-         })
+        slice: slice,
+        line: first_line_num,
+        col: get_col_num(source, pos),
+        pos: pos - entry_start,
+    })
 }

@@ -64,7 +64,8 @@ impl VecOrOne<String> for Vec<&'static str> {
 
 impl MessageContext {
     pub fn new<L>(locales: L) -> MessageContext
-        where L: VecOrOne<String>
+    where
+        L: VecOrOne<String>,
     {
         MessageContext {
             locales: locales.into_vec(),
@@ -99,10 +100,11 @@ impl MessageContext {
     }
 
 
-    pub fn format(&self,
-                  message: &ast::Entry,
-                  args: Option<&HashMap<&str, FluentArgument>>)
-                  -> Option<String> {
+    pub fn format(
+        &self,
+        message: &ast::Entry,
+        args: Option<&HashMap<&str, FluentArgument>>,
+    ) -> Option<String> {
         let result = resolver::resolve(self, args, message);
 
         Some(types::value_of(result))

@@ -10,7 +10,9 @@ pub trait FTLParserStream<I> {
     fn expect_char(&mut self, ch: char) -> Result<()>;
     fn take_char_if(&mut self, ch: char) -> bool;
 
-    fn take_char<F>(&mut self, f: F) -> Option<char> where F: Fn(char) -> bool;
+    fn take_char<F>(&mut self, f: F) -> Option<char>
+    where
+        F: Fn(char) -> bool;
 
     fn is_id_start(&mut self) -> bool;
     fn is_peek_next_line_indented(&mut self) -> bool;
@@ -26,7 +28,8 @@ pub trait FTLParserStream<I> {
 }
 
 impl<I> FTLParserStream<I> for ParserStream<I>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     fn peek_line_ws(&mut self) {
         while let Some(ch) = self.current_peek() {
@@ -77,7 +80,8 @@ impl<I> FTLParserStream<I> for ParserStream<I>
     }
 
     fn take_char<F>(&mut self, f: F) -> Option<char>
-        where F: Fn(char) -> bool
+    where
+        F: Fn(char) -> bool,
     {
         if let Some(ch) = self.ch {
             if f(ch) {
@@ -91,9 +95,9 @@ impl<I> FTLParserStream<I> for ParserStream<I>
     fn is_id_start(&mut self) -> bool {
         if let Some(ch) = self.ch {
             return match ch {
-                       'a'...'z' | 'A'...'Z' | '_' => true,
-                       _ => false,
-                   };
+                'a'...'z' | 'A'...'Z' | '_' => true,
+                _ => false,
+            };
         }
         false
     }
@@ -180,8 +184,9 @@ impl<I> FTLParserStream<I> for ParserStream<I>
         }
 
         if self.current_peek_is('}') || self.current_peek_is('.') ||
-           self.current_peek_is('#') || self.current_peek_is('[') ||
-           self.current_peek_is('*') {
+            self.current_peek_is('#') || self.current_peek_is('[') ||
+            self.current_peek_is('*')
+        {
             self.reset_peek();
             return false;
         }
@@ -217,9 +222,10 @@ impl<I> FTLParserStream<I> for ParserStream<I>
     fn skip_to_next_entry_start(&mut self) {
         while let Some(_) = self.next() {
             if self.current_is('\n') && !self.peek_char_is('\n') &&
-               (self.next() == None || self.is_id_start() || self.current_is('/') ||
-                self.current_is('[') || self.peek_char_is('/') ||
-                self.peek_char_is('[')) {
+                (self.next() == None || self.is_id_start() || self.current_is('/') ||
+                     self.current_is('[') || self.peek_char_is('/') ||
+                     self.peek_char_is('['))
+            {
                 break;
             }
         }
@@ -235,8 +241,8 @@ impl<I> FTLParserStream<I> for ParserStream<I>
             Some(ch) => Ok(ch),
             None => {
                 error!(ErrorKind::ExpectedCharRange {
-                           range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
-                       })
+                    range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
+                })
             }
         }
     }

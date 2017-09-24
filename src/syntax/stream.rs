@@ -2,7 +2,8 @@ use std::iter::Fuse;
 
 #[derive(Clone, Debug)]
 pub struct ParserStream<I>
-    where I: Iterator
+where
+    I: Iterator,
 {
     iter: Fuse<I>,
     pub buf: Vec<char>,
@@ -118,7 +119,8 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
 }
 
 impl<I> Iterator for ParserStream<I>
-    where I: Iterator<Item = char>
+where
+    I: Iterator<Item = char>,
 {
     type Item = char;
 

@@ -74,16 +74,17 @@ fn resolve_pattern(env: &Env, pattern: &ast::Pattern) -> String {
         .elements
         .iter()
         .map(|elem| match *elem {
-                 ast::PatternElement::TextElement(ref s) => s.clone(),
-                 ast::PatternElement::Expression(ref e) => eval_expr(env, e),
-             })
+            ast::PatternElement::TextElement(ref s) => s.clone(),
+            ast::PatternElement::Expression(ref e) => eval_expr(env, e),
+        })
         .collect::<String>()
 }
 
-pub fn resolve(ctx: &MessageContext,
-               args: Option<&HashMap<&str, FluentArgument>>,
-               message: &ast::Entry)
-               -> FluentType {
+pub fn resolve(
+    ctx: &MessageContext,
+    args: Option<&HashMap<&str, FluentArgument>>,
+    message: &ast::Entry,
+) -> FluentType {
     let env = Env {
         ctx: ctx,
         args: args,
