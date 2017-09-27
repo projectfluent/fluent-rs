@@ -29,7 +29,12 @@ pub struct Pattern {
 #[derive(Debug, PartialEq)]
 pub enum PatternElement {
     TextElement(String),
-    Expression(Expression),
+    Placeable(Placeable),
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Placeable {
+  pub expression: Expression
 }
 
 #[derive(Debug, PartialEq)]

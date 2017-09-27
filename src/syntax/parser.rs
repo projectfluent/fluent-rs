@@ -473,7 +473,9 @@ where
 
                 buffer = String::new();
 
-                elements.push(ast::PatternElement::Expression(get_expression(ps)?));
+                elements.push(ast::PatternElement::Placeable(
+                    ast::Placeable { expression: get_expression(ps)? },
+                ));
 
                 ps.expect_char('}')?;
 

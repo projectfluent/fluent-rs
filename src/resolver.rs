@@ -75,7 +75,7 @@ fn resolve_pattern(env: &Env, pattern: &ast::Pattern) -> String {
         .iter()
         .map(|elem| match *elem {
             ast::PatternElement::TextElement(ref s) => s.clone(),
-            ast::PatternElement::Expression(ref e) => eval_expr(env, e),
+            ast::PatternElement::Placeable(ref p) => eval_expr(env, &p.expression),
         })
         .collect::<String>()
 }
