@@ -107,6 +107,19 @@ impl ResolveValue for ast::Expression {
 
                 select_default(variants).and_then(|variant| variant.value.to_value(env))
             }
+            ast::Expression::AttributeExpression { ref id, ref name } => {
+                let attributes = env.ctx.get_message(&id.name).as_ref().and_then(|message| {
+                    message.attributes.as_ref()
+                });
+                if let Some(attributes) = attributes {
+                    for attribute in attributes {
+                        if attribute.id.name == name.name {
+                            return attribute.value.to_value(env);
+                        }
+                    }
+                }
+                None
+            }
             _ => unimplemented!(),
         }
     }
