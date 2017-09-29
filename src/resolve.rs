@@ -120,17 +120,18 @@ impl ResolveValue for ast::Expression {
             } => {
                 let selector = expression.as_ref().and_then(|expr| expr.to_value(env));
 
-                if let Some(selector) = selector {
+                if let Some(ref selector) = selector {
                     for variant in variants {
                         match variant.key {
                             ast::VarKey::Symbol(ref symbol) => {
-                                if selector == FluentValue::from(symbol.name.clone()) {
+                                let key = FluentValue::from(symbol.name.clone());
+                                if key.matches(env, selector) {
                                     return variant.value.to_value(env);
                                 }
                             }
                             ast::VarKey::Number(ref number) => {
-                                if let Some(number) = number.to_value(env) {
-                                    if selector == number {
+                                if let Some(key) = number.to_value(env) {
+                                    if key.matches(env, selector) {
                                         return variant.value.to_value(env);
                                     }
                                 }

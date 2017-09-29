@@ -79,9 +79,9 @@ bar =
 
 baz =
     { 3.14 ->
-       *[1] Bar 1
-        [3] Bar 3
-        [3.14] Bar Pi
+       *[1] Baz 1
+        [3] Baz 3
+        [3.14] Baz Pi
     }
 ",
     );
@@ -93,7 +93,46 @@ baz =
     assert_eq!(value, Some("Bar 1".to_string()));
 
     let value = ctx.get_message("baz").and_then(|msg| ctx.format(msg, None));
-    assert_eq!(value, Some("Bar Pi".to_string()));
+    assert_eq!(value, Some("Baz Pi".to_string()));
+}
+
+#[test]
+fn select_expression_plurals() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo =
+    { 3 ->
+        [one] Foo One
+        [3] Foo 3
+       *[other] Foo Other
+    }
+
+bar =
+    { 1 ->
+        [one] Bar One
+        [2] Bar 2
+       *[other] Bar Other
+    }
+
+baz =
+    { \"one\" ->
+        [1] Bar One
+        [3] Bar 3
+       *[other] Bar Other
+    }
+",
+    );
+
+    let value = ctx.get_message("foo").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Foo 3".to_string()));
+
+    let value = ctx.get_message("bar").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Bar One".to_string()));
+
+    let value = ctx.get_message("baz").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Bar Other".to_string()));
 }
 
 #[test]
