@@ -81,6 +81,29 @@ impl ResolveValue for ast::Expression {
                 ref variants,
             } => select_default(variants).and_then(|variant| variant.value.to_value(env)),
             ast::Expression::SelectExpression {
+                expression: Some(box ast::Expression::MessageReference { ref id }),
+                ref variants,
+            } => {
+                let tags = env.ctx.get_message(&id.name).and_then(|message| message.tags.as_ref());
+
+                if let Some(tags) = tags {
+                    for variant in variants {
+                        match variant.key {
+                            ast::VarKey::Symbol(ref symbol) => {
+                                for tag in tags.iter() {
+                                    if symbol.name == tag.name.name {
+                                        return variant.value.to_value(env);
+                                    }
+                                }
+                            }
+                            _ => ()
+                        }
+                    }
+                }
+
+                select_default(variants).and_then(|variant| variant.value.to_value(env))
+            }
+            ast::Expression::SelectExpression {
                 ref expression,
                 ref variants,
             } => {

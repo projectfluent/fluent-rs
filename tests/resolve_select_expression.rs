@@ -208,3 +208,48 @@ baz-unknown =
     });
     assert_eq!(value, Some("Baz 1".to_string()));
 }
+
+#[test]
+fn select_expression_message_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo = Foo
+bar = Bar
+    #tag
+baz = Baz
+    #tag1
+    #tag2
+
+use-foo =
+    { foo ->
+        [Foo] Foo
+       *[other] Other
+    }
+
+use-bar =
+    { bar ->
+        [tag] Bar
+       *[other] Other
+    }
+
+use-baz =
+    { baz ->
+        [tag2] Baz 2
+        [tag1] Baz 1
+       *[other] Other
+    }
+
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Other".to_string()));
+
+    let value = ctx.get_message("use-bar").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Bar".to_string()));
+
+    let value = ctx.get_message("use-baz").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Baz 2".to_string()));
+}
