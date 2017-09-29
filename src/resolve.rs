@@ -5,13 +5,27 @@ use super::types::FluentValue;
 use super::syntax::ast;
 use super::context::MessageContext;
 
-struct Env<'a> {
-    ctx: &'a MessageContext,
-    args: Option<&'a HashMap<&'a str, FluentValue>>,
+pub struct Env<'a> {
+    pub ctx: &'a MessageContext,
+    pub args: Option<&'a HashMap<&'a str, FluentValue>>,
 }
 
-trait ResolveValue {
+pub trait ResolveValue {
     fn to_value(&self, env: &Env) -> Option<FluentValue>;
+}
+
+impl ResolveValue for ast::Message {
+    fn to_value(&self, env: &Env) -> Option<FluentValue> {
+        self.value.as_ref().and_then(
+            |pattern| pattern.to_value(env),
+        )
+    }
+}
+
+impl ResolveValue for ast::Attribute {
+    fn to_value(&self, env: &Env) -> Option<FluentValue> {
+        self.value.to_value(env)
+    }
 }
 
 impl ResolveValue for ast::Pattern {
@@ -134,7 +148,7 @@ impl ResolveValue for ast::Expression {
                 if let Some(attributes) = attributes {
                     for attribute in attributes {
                         if attribute.id.name == name.name {
-                            return attribute.value.to_value(env);
+                            return attribute.to_value(env);
                         }
                     }
                 }
@@ -189,15 +203,4 @@ fn select_default(variants: &[ast::Variant]) -> Option<&ast::Variant> {
     }
 
     None
-}
-
-pub fn resolve(
-    ctx: &MessageContext,
-    args: Option<&HashMap<&str, FluentValue>>,
-    message: &ast::Message,
-) -> Option<FluentValue> {
-    let env = Env { ctx, args };
-    message.value.as_ref().and_then(
-        |pattern| pattern.to_value(&env),
-    )
 }
