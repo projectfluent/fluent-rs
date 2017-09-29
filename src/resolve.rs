@@ -125,12 +125,16 @@ impl ResolveValue for ast::Expression {
                 let variants = message.as_ref().and_then(|message| {
                     message.value.as_ref()
                 }).and_then(|pattern| {
-                    match pattern.elements.as_slice() {
-                       &[ast::PatternElement::Placeable(ast::Placeable {
+                    if pattern.elements.len() > 1 {
+                        return None;
+                    }
+
+                    match pattern.elements.first() {
+                       Some(&ast::PatternElement::Placeable(ast::Placeable {
                            expression: ast::Expression::SelectExpression {
                                expression: None, ref variants
                            }
-                       })] => Some(variants),
+                       })) => Some(variants),
                         _ => None
                     }
                 });

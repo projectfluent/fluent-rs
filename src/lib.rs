@@ -1,5 +1,3 @@
-#![feature(slice_patterns)]
-
 #![cfg_attr(test, feature(test))]
 
 #[cfg(test)]
