@@ -84,7 +84,9 @@ impl ResolveValue for ast::Expression {
                 expression: Some(box ast::Expression::MessageReference { ref id }),
                 ref variants,
             } => {
-                let tags = env.ctx.get_message(&id.name).and_then(|message| message.tags.as_ref());
+                let tags = env.ctx.get_message(&id.name).and_then(
+                    |message| message.tags.as_ref(),
+                );
 
                 if let Some(tags) = tags {
                     for variant in variants {
@@ -96,7 +98,7 @@ impl ResolveValue for ast::Expression {
                                     }
                                 }
                             }
-                            _ => ()
+                            _ => (),
                         }
                     }
                 }
@@ -145,22 +147,23 @@ impl ResolveValue for ast::Expression {
             }
             ast::Expression::VariantExpression { ref id, ref key } => {
                 let message = env.ctx.get_message(&id.name);
-                let variants = message.as_ref().and_then(|message| {
-                    message.value.as_ref()
-                }).and_then(|pattern| {
-                    if pattern.elements.len() > 1 {
-                        return None;
-                    }
+                let variants = message
+                    .as_ref()
+                    .and_then(|message| message.value.as_ref())
+                    .and_then(|pattern| {
+                        if pattern.elements.len() > 1 {
+                            return None;
+                        }
 
-                    match pattern.elements.first() {
-                       Some(&ast::PatternElement::Placeable(ast::Placeable {
+                        match pattern.elements.first() {
+                            Some(&ast::PatternElement::Placeable(ast::Placeable {
                            expression: ast::Expression::SelectExpression {
                                expression: None, ref variants
                            }
                        })) => Some(variants),
-                        _ => None
-                    }
-                });
+                            _ => None,
+                        }
+                    });
 
                 if let Some(variants) = variants {
                     for variant in variants {
@@ -172,7 +175,8 @@ impl ResolveValue for ast::Expression {
                     return select_default(variants).and_then(|variant| variant.value.to_value(env));
                 }
 
-                message.as_ref()
+                message
+                    .as_ref()
                     .and_then(|message| message.value.as_ref())
                     .and_then(|pattern| pattern.to_value(env))
 

@@ -244,12 +244,18 @@ use-baz =
 ",
     );
 
-    let value = ctx.get_message("use-foo").and_then(|msg| ctx.format(msg, None));
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
     assert_eq!(value, Some("Other".to_string()));
 
-    let value = ctx.get_message("use-bar").and_then(|msg| ctx.format(msg, None));
+    let value = ctx.get_message("use-bar").and_then(
+        |msg| ctx.format(msg, None),
+    );
     assert_eq!(value, Some("Bar".to_string()));
 
-    let value = ctx.get_message("use-baz").and_then(|msg| ctx.format(msg, None));
+    let value = ctx.get_message("use-baz").and_then(
+        |msg| ctx.format(msg, None),
+    );
     assert_eq!(value, Some("Baz 2".to_string()));
 }
