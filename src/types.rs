@@ -33,6 +33,6 @@ impl From<f32> for FluentValue {
 
 impl From<i8> for FluentValue {
     fn from(n: i8) -> Self {
-        FluentValue::Number(n as f32)
+        FluentValue::Number(f32::from(n))
     }
 }
