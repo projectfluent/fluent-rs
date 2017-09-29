@@ -298,3 +298,52 @@ use-baz =
     );
     assert_eq!(value, Some("Baz 2".to_string()));
 }
+
+#[test]
+fn select_expression_attribute_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo = Foo
+    .attr = Foo Attr
+
+use-foo =
+    { foo.attr ->
+        [Foo Attr] Foo
+       *[other] Other
+    }
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Foo".to_string()));
+}
+
+#[test]
+fn select_expression_variant_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo =
+    {
+       *[a] Foo A
+        [b] Foo B
+    }
+
+use-foo =
+    { foo[b] ->
+        [Foo B] Foo
+       *[other] Other
+    }
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Foo".to_string()));
+}
