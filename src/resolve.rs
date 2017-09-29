@@ -120,6 +120,36 @@ impl ResolveValue for ast::Expression {
                 }
                 None
             }
+            ast::Expression::VariantExpression { ref id, ref key } => {
+                let message = env.ctx.get_message(&id.name);
+                let variants = message.as_ref().and_then(|message| {
+                    message.value.as_ref()
+                }).and_then(|pattern| {
+                    match pattern.elements.as_slice() {
+                       &[ast::PatternElement::Placeable(ast::Placeable {
+                           expression: ast::Expression::SelectExpression {
+                               expression: None, ref variants
+                           }
+                       })] => Some(variants),
+                        _ => None
+                    }
+                });
+
+                if let Some(variants) = variants {
+                    for variant in variants {
+                        if variant.key == *key {
+                            return variant.value.to_value(env);
+                        }
+                    }
+
+                    return select_default(variants).and_then(|variant| variant.value.to_value(env));
+                }
+
+                message.as_ref()
+                    .and_then(|message| message.value.as_ref())
+                    .and_then(|pattern| pattern.to_value(env))
+
+            }
             _ => unimplemented!(),
         }
     }
