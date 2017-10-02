@@ -189,13 +189,13 @@ where
         });
     }
 
-    Ok(ast::Entry::Message {
+    Ok(ast::Entry::Message(ast::Message {
         id,
         value: pattern,
         attributes,
         tags,
         comment,
-    })
+    }))
 }
 
 fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>

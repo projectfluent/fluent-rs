@@ -2,36 +2,14 @@ use std::collections::HashMap;
 
 use super::syntax::ast;
 use super::syntax::parse;
-use super::types;
-use super::resolver;
+use super::types::FluentValue;
+use super::resolve::resolve;
 
-pub enum FluentArgument {
-    String(String),
-    Number(i8),
-}
-
-impl From<String> for FluentArgument {
-    fn from(s: String) -> Self {
-        FluentArgument::String(s)
-    }
-}
-
-impl From<&'static str> for FluentArgument {
-    fn from(s: &'static str) -> Self {
-        FluentArgument::String(String::from(s))
-    }
-}
-
-impl From<i8> for FluentArgument {
-    fn from(n: i8) -> Self {
-        FluentArgument::Number(n)
-    }
-}
 
 #[allow(dead_code)]
 pub struct MessageContext {
     locales: Vec<String>,
-    messages: HashMap<String, ast::Entry>,
+    messages: HashMap<String, ast::Message>,
 }
 
 pub trait VecOrOne<String> {
@@ -77,7 +55,7 @@ impl MessageContext {
         self.messages.contains_key(id)
     }
 
-    pub fn get_message(&self, id: &str) -> Option<&ast::Entry> {
+    pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
         self.messages.get(id)
     }
 
@@ -86,13 +64,13 @@ impl MessageContext {
 
         for entry in res.body {
             let id = match entry {
-                ast::Entry::Message { ref id, .. } => id.name.clone(),
+                ast::Entry::Message(ast::Message { ref id, .. }) => id.name.clone(),
                 _ => continue,
             };
 
             match entry {
-                ast::Entry::Message { .. } => {
-                    self.messages.insert(id, entry);
+                ast::Entry::Message(message) => {
+                    self.messages.insert(id, message);
                 }
                 _ => continue,
             };
@@ -102,11 +80,10 @@ impl MessageContext {
 
     pub fn format(
         &self,
-        message: &ast::Entry,
-        args: Option<&HashMap<&str, FluentArgument>>,
+        message: &ast::Message,
+        args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<String> {
-        let result = resolver::resolve(self, args, message);
-
-        Some(types::value_of(result))
+        let value = resolve(self, args, message);
+        value.map(|value| value.format())
     }
 }

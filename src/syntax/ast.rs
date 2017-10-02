@@ -6,19 +6,22 @@ pub struct Resource {
 
 #[derive(Debug, PartialEq)]
 pub enum Entry {
-    Message {
-        id: Identifier,
-        value: Option<Pattern>,
-        attributes: Option<Vec<Attribute>>,
-        tags: Option<Vec<Tag>>,
-        comment: Option<Comment>,
-    },
+    Message(Message),
     Section {
         name: Symbol,
         comment: Option<Comment>,
     },
     Comment(Comment),
     Junk { content: String },
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Message {
+    pub id: Identifier,
+    pub value: Option<Pattern>,
+    pub attributes: Option<Vec<Attribute>>,
+    pub tags: Option<Vec<Tag>>,
+    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
@@ -34,7 +37,7 @@ pub enum PatternElement {
 
 #[derive(Debug, PartialEq)]
 pub struct Placeable {
-  pub expression: Expression
+    pub expression: Expression,
 }
 
 #[derive(Debug, PartialEq)]
