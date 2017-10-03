@@ -79,9 +79,9 @@ bar =
 
 baz =
     { 3.14 ->
-       *[1] Bar 1
-        [3] Bar 3
-        [3.14] Bar Pi
+       *[1] Baz 1
+        [3] Baz 3
+        [3.14] Baz Pi
     }
 ",
     );
@@ -93,7 +93,46 @@ baz =
     assert_eq!(value, Some("Bar 1".to_string()));
 
     let value = ctx.get_message("baz").and_then(|msg| ctx.format(msg, None));
-    assert_eq!(value, Some("Bar Pi".to_string()));
+    assert_eq!(value, Some("Baz Pi".to_string()));
+}
+
+#[test]
+fn select_expression_plurals() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo =
+    { 3 ->
+        [one] Foo One
+        [3] Foo 3
+       *[other] Foo Other
+    }
+
+bar =
+    { 1 ->
+        [one] Bar One
+        [2] Bar 2
+       *[other] Bar Other
+    }
+
+baz =
+    { \"one\" ->
+        [1] Bar One
+        [3] Bar 3
+       *[other] Bar Other
+    }
+",
+    );
+
+    let value = ctx.get_message("foo").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Foo 3".to_string()));
+
+    let value = ctx.get_message("bar").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Bar One".to_string()));
+
+    let value = ctx.get_message("baz").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Bar Other".to_string()));
 }
 
 #[test]
@@ -207,4 +246,104 @@ baz-unknown =
         ctx.format(msg, Some(&args))
     });
     assert_eq!(value, Some("Baz 1".to_string()));
+}
+
+#[test]
+fn select_expression_message_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo = Foo
+bar = Bar
+    #tag
+baz = Baz
+    #tag1
+    #tag2
+
+use-foo =
+    { foo ->
+        [Foo] Foo
+       *[other] Other
+    }
+
+use-bar =
+    { bar ->
+        [tag] Bar
+       *[other] Other
+    }
+
+use-baz =
+    { baz ->
+        [tag2] Baz 2
+        [tag1] Baz 1
+       *[other] Other
+    }
+
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Other".to_string()));
+
+    let value = ctx.get_message("use-bar").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Bar".to_string()));
+
+    let value = ctx.get_message("use-baz").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Baz 2".to_string()));
+}
+
+#[test]
+fn select_expression_attribute_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo = Foo
+    .attr = Foo Attr
+
+use-foo =
+    { foo.attr ->
+        [Foo Attr] Foo
+       *[other] Other
+    }
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Foo".to_string()));
+}
+
+#[test]
+fn select_expression_variant_selector() {
+    let mut ctx = MessageContext::new("x-testing");
+
+    ctx.add_messages(
+        "
+foo =
+    {
+       *[a] Foo A
+        [b] Foo B
+    }
+
+use-foo =
+    { foo[b] ->
+        [Foo B] Foo
+       *[other] Other
+    }
+",
+    );
+
+    let value = ctx.get_message("use-foo").and_then(
+        |msg| ctx.format(msg, None),
+    );
+    assert_eq!(value, Some("Foo".to_string()));
 }

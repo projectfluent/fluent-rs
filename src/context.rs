@@ -3,7 +3,7 @@ use std::collections::HashMap;
 use super::syntax::ast;
 use super::syntax::parse;
 use super::types::FluentValue;
-use super::resolve::resolve;
+use super::resolve::{Env, ResolveValue};
 
 
 #[allow(dead_code)]
@@ -78,12 +78,12 @@ impl MessageContext {
     }
 
 
-    pub fn format(
+    pub fn format<T: ResolveValue>(
         &self,
-        message: &ast::Message,
+        resolvable: &T,
         args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<String> {
-        let value = resolve(self, args, message);
-        value.map(|value| value.format())
+        let env = Env { ctx: self, args };
+        resolvable.to_value(&env).map(|value| value.format())
     }
 }
