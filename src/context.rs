@@ -8,7 +8,7 @@ use super::resolve::{Env, ResolveValue};
 
 #[allow(dead_code)]
 pub struct MessageContext {
-    locales: Vec<String>,
+    pub locales: Vec<String>,
     messages: HashMap<String, ast::Message>,
 }
 
@@ -28,13 +28,13 @@ impl VecOrOne<String> for String {
     }
 }
 
-impl VecOrOne<String> for &'static str {
+impl<'a> VecOrOne<String> for &'a str {
     fn into_vec(self) -> Vec<String> {
         vec![String::from(self)]
     }
 }
 
-impl VecOrOne<String> for Vec<&'static str> {
+impl<'a> VecOrOne<String> for Vec<&'a str> {
     fn into_vec(self) -> Vec<String> {
         self.iter().map(|&loc| String::from(loc)).collect()
     }

@@ -1,5 +1,7 @@
 use std::f32;
+use std::boxed::FnBox;
 use super::resolve::Env;
+use super::context::MessageContext;
 
 #[derive(Clone, Debug, PartialEq)]
 pub enum FluentValue {
@@ -7,13 +9,14 @@ pub enum FluentValue {
     Number(f32),
 }
 
-// XXX Replace this with a proper plural rule based on the MessageContext's locales.
-fn mock_plural(num: &f32) -> &'static str {
-    if (*num - 1.0).abs() < f32::EPSILON {
-        "one"
-    } else {
-        "other"
+// XXX Replace this with a proper plural rule
+fn get_plural_rule<'a>(ctx: &MessageContext) -> Box<FnBox(f32) -> &'static str> {
+    let locale = &ctx.locales[0];
+
+    if locale == "pl" {
+        return Box::new(|num| if num == 1.0 { "one" } else { "other" });
     }
+    return Box::new(|num| if num == 1.0 { "one" } else { "other" });
 }
 
 impl FluentValue {
@@ -30,7 +33,11 @@ impl FluentValue {
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => {
                 (a - b).abs() < f32::EPSILON
             }
-            (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => a == mock_plural(b),
+            (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
+                let pr = get_plural_rule(_env.ctx);
+                let category = pr(*b);
+                a == category
+            }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
         }
     }
@@ -42,8 +49,8 @@ impl From<String> for FluentValue {
     }
 }
 
-impl From<&'static str> for FluentValue {
-    fn from(s: &'static str) -> Self {
+impl<'a> From<&'a str> for FluentValue {
+    fn from(s: &'a str) -> Self {
         FluentValue::String(String::from(s))
     }
 }

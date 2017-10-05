@@ -1,4 +1,5 @@
 #![feature(box_patterns)]
+#![feature(fnbox)]
 
 #![cfg_attr(test, feature(test))]
 
