@@ -84,6 +84,6 @@ impl MessageContext {
         args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<String> {
         let env = Env { ctx: self, args };
-        resolvable.to_value(&env).map(|value| value.format())
+        resolvable.to_value(&env).map(|value| value.format(self))
     }
 }

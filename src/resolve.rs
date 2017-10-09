@@ -33,10 +33,9 @@ impl ResolveValue for ast::Pattern {
         let string = self.elements
             .iter()
             .map(|elem| {
-                elem.to_value(env).map_or(
-                    String::from("___"),
-                    |elem| elem.format(),
-                )
+                elem.to_value(env).map_or(String::from("___"), |elem| {
+                    elem.format(env.ctx)
+                })
             })
             .collect::<String>();
         Some(FluentValue::from(string))
@@ -125,13 +124,13 @@ impl ResolveValue for ast::Expression {
                         match variant.key {
                             ast::VarKey::Symbol(ref symbol) => {
                                 let key = FluentValue::from(symbol.name.clone());
-                                if key.matches(env, selector) {
+                                if key.matches(env.ctx, selector) {
                                     return variant.value.to_value(env);
                                 }
                             }
                             ast::VarKey::Number(ref number) => {
                                 if let Some(key) = number.to_value(env) {
-                                    if key.matches(env, selector) {
+                                    if key.matches(env.ctx, selector) {
                                         return variant.value.to_value(env);
                                     }
                                 }
