@@ -3,8 +3,7 @@ extern crate fluent;
 use fluent::context::MessageContext;
 
 fn main() {
-    let locales = vec!["pl", "en-US"];
-    let mut ctx = MessageContext::new(locales);
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("foo = Foo");
     ctx.add_messages("foobar = { foo } Bar");

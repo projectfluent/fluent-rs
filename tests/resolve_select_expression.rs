@@ -7,7 +7,7 @@ use self::fluent::types::FluentValue;
 
 #[test]
 fn select_expression_without_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -34,7 +34,7 @@ bar =
 
 #[test]
 fn select_expression_string_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -61,7 +61,7 @@ bar =
 
 #[test]
 fn select_expression_number_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -98,7 +98,7 @@ baz =
 
 #[test]
 fn select_expression_plurals() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -137,7 +137,7 @@ baz =
 
 #[test]
 fn select_expression_external_argument_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -250,7 +250,7 @@ baz-unknown =
 
 #[test]
 fn select_expression_message_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -301,7 +301,7 @@ use-baz =
 
 #[test]
 fn select_expression_attribute_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -324,7 +324,7 @@ use-foo =
 
 #[test]
 fn select_expression_variant_selector() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "

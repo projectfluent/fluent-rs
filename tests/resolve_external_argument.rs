@@ -7,7 +7,7 @@ use self::fluent::types::FluentValue;
 
 #[test]
 fn external_argument_string() {
-    let mut ctx = MessageContext::new("pl");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("hello-world = Hello { $name }");
 
@@ -23,7 +23,7 @@ fn external_argument_string() {
 
 #[test]
 fn external_argument_number() {
-    let mut ctx = MessageContext::new("pl");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("unread-emails = You have { $emailsCount } unread emails.");
 
@@ -39,7 +39,7 @@ fn external_argument_number() {
 
 #[test]
 fn reference_message_with_external_argument() {
-    let mut ctx = MessageContext::new("pl");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("greetings = Hello, { $userName }");
     ctx.add_messages("click-on = Click on the `{ greetings }` label.");

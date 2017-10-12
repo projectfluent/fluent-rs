@@ -5,9 +5,9 @@ use super::types::FluentValue;
 use super::syntax::ast;
 use super::context::MessageContext;
 
-pub struct Env<'a> {
-    pub ctx: &'a MessageContext,
-    pub args: Option<&'a HashMap<&'a str, FluentValue>>,
+pub struct Env<'env> {
+    pub ctx: &'env MessageContext<'env>,
+    pub args: Option<&'env HashMap<&'env str, FluentValue>>,
 }
 
 pub trait ResolveValue {
