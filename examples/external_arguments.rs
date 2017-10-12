@@ -5,7 +5,7 @@ use fluent::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
-    let mut ctx = MessageContext::new("pl");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("hello-world = Hello { $name }");
     ctx.add_messages("ref = The previous message says { hello-world }");

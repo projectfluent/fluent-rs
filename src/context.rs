@@ -7,46 +7,15 @@ use super::resolve::{Env, ResolveValue};
 
 
 #[allow(dead_code)]
-pub struct MessageContext {
-    pub locales: Vec<String>,
+pub struct MessageContext<'ctx> {
+    pub locales: &'ctx [&'ctx str],
     messages: HashMap<String, ast::Message>,
 }
 
-pub trait VecOrOne<String> {
-    fn into_vec(self) -> Vec<String>;
-}
-
-impl VecOrOne<String> for Vec<String> {
-    fn into_vec(self) -> Vec<String> {
-        self
-    }
-}
-
-impl VecOrOne<String> for String {
-    fn into_vec(self) -> Vec<String> {
-        vec![self]
-    }
-}
-
-impl<'a> VecOrOne<String> for &'a str {
-    fn into_vec(self) -> Vec<String> {
-        vec![String::from(self)]
-    }
-}
-
-impl<'a> VecOrOne<String> for Vec<&'a str> {
-    fn into_vec(self) -> Vec<String> {
-        self.iter().map(|&loc| String::from(loc)).collect()
-    }
-}
-
-impl MessageContext {
-    pub fn new<L>(locales: L) -> MessageContext
-    where
-        L: VecOrOne<String>,
-    {
+impl<'ctx> MessageContext<'ctx> {
+    pub fn new(locales: &'ctx [&'ctx str]) -> MessageContext {
         MessageContext {
-            locales: locales.into_vec(),
+            locales,
             messages: HashMap::new(),
         }
     }

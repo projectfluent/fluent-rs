@@ -1,3 +1,4 @@
+mod context;
 mod syntax;
 mod resolve_attribute;
 mod resolve_attribute_expression;

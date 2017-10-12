@@ -4,7 +4,7 @@ use self::fluent::context::MessageContext;
 
 #[test]
 fn attribute_expression() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "

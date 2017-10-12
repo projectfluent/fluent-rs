@@ -10,13 +10,11 @@ pub enum FluentValue {
 }
 
 // XXX Replace this with a proper plural rule
-fn get_plural_rule<'a>(ctx: &MessageContext) -> Box<FnBox(f32) -> &'static str> {
-    let locale = &ctx.locales[0];
-
-    if locale == "pl" {
-        return Box::new(|num| if num == 1.0 { "one" } else { "other" });
+fn get_plural_rule(ctx: &MessageContext) -> Box<FnBox(f32) -> &'static str> {
+    match ctx.locales[0] {
+        "x-testing" => Box::new(|num| if num == 1.0 { "one" } else { "other" }),
+        _ => Box::new(|_| "other"),
     }
-    return Box::new(|num| if num == 1.0 { "one" } else { "other" });
 }
 
 impl FluentValue {

@@ -4,7 +4,7 @@ use self::fluent::context::MessageContext;
 
 #[test]
 fn message_reference() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -19,7 +19,7 @@ bar = { foo } Bar
 
 #[test]
 fn message_reference_nested() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
@@ -35,7 +35,7 @@ baz = { bar } Baz
 
 #[test]
 fn message_reference_missing() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("bar = { foo } Bar");
 
@@ -46,7 +46,7 @@ fn message_reference_missing() {
 #[test]
 #[ignore]
 fn message_reference_cyclic() {
-    let mut ctx = MessageContext::new("x-testing");
+    let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages(
         "
