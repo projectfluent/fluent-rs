@@ -1,3 +1,9 @@
+//! Resolve module evaluates Fluent values and resolves them
+//!
+//! This is mostly an internal API used by MessageContext to evaluate
+//! Messages and resolve them using context variables and developer
+//! arguments.
+
 use std::collections::HashMap;
 use std::str::FromStr;
 

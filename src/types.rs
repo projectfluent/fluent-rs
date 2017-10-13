@@ -1,3 +1,5 @@
+//! Primitive types used by Fluent as arguments for formatting.
+
 use std::f32;
 use std::boxed::FnBox;
 
