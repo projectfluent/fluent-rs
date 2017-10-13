@@ -2,6 +2,10 @@
 
 ## Unreleased
 
+  - …
+
+## fluent 0.1.0 (October 13, 2017)
+
   - Support parsing Fluent Syntax 0.3.
   - Support formatting Messages and Attributes alike.
   - Support string- and Number-typed external arguments
