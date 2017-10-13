@@ -37,7 +37,9 @@ use fluent::MessageContext;
 let ctx = MessageContext::new(&["en-US"]);
 ctx.add_messages("hello-world = Hello World in Fluent!");
 
-let value = ctx.format("hello-world").unwrap();
+let msg = ctx.get_message("hello-world").unwrap();
+let value = ctx.format(msg, None).unwrap();
+
 println!(value);
 ```
 
