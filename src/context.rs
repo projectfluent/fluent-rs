@@ -1,10 +1,8 @@
-//! Context is a collection of localization messages in Fluent.
+//! `MessageContext` is a collection of localization messages in Fluent.
 //!
-//! It stores a list of messages in a single locale which can reference one another,
-//! use same internationalization formatters, functions, environmental variables
-//! and are expected to be used together.
-//!
-//! The main structure is called `MessageContext`.
+//! It stores a list of messages in a single locale which can reference one another, use the same
+//! internationalization formatters, functions, environmental variables and are expected to be used
+//! together.
 
 use std::collections::HashMap;
 
@@ -13,40 +11,32 @@ use super::syntax::parse;
 use super::types::FluentValue;
 use super::resolve::{Env, ResolveValue};
 
-/// MessageContext is a collection of localization messages that are meant to
-/// be used together in a single localization context.
+/// `MessageContext` is a collection of localization messages which are meant to be used together
+/// in a single view, widget or any other UI abstraction.
 ///
-/// An example of such structure is a single UI widget, panel or view.
+/// # `MessageContext` Life-cycle
 ///
-/// # MessageContext life-cycle
+/// To create a context, call `MessageContext::new` with a locale list that represents the best
+/// possible fallback chain for a given locale.  The simplest case is a one-locale list.
 ///
-/// To create a context, call `MessageContext::new` with a locale list that
-/// represents the best possible fallback chain for a given locale.
-/// The simplest case is a one-locale list.
+/// Next, call `add_messages` one or more times, supplying translations in the FTL syntax. The
+/// `MessageContext` instance is now ready to be used for localization.
 ///
-/// Next, call `add_messages` one or more times, providing it with a list
-/// of localization messages formatted using FTL syntax.
+/// To format a translation, call `get_message` to retrieve a `fluent::context::Message` structure
+/// and then `format` it within the context.
 ///
-/// From that moment, the `MessageContext` object is ready to be used for localization.
-///
-/// At any point when a translation is neeeded, call `get_message` to retrieve a
-/// `fluent::context::Message` structure and then `format` within the context.
-///
-/// The result is always a single string that should be displayed in the UI.
-/// Like all internationalization operations, the resulting string is not to
-/// be examined for testing purposes or altered before displaying in anyway.
-///
-/// It is recommended to treat such string as opaque from the perspective of the
-/// program and use it only to display localized messages.
+/// The result is an Option warpping a single string that should be displayed in the UI.  It is
+/// recommended to treat the result as opaque from the perspective of the program and use it only
+/// to display localized messages. Do not examine it or alter in any way before displaying.  This
+/// is a general good practice as far as all internationalization operations are concerned.
 ///
 ///
 /// # Locale Fallback Chain
 ///
-/// MessageContext stores messages in a single locale, but keeps a locale
-/// fallback chain for language negotaition with internationalization formatters
-/// purposes. For example if date and time formatting is impossible in the main
-/// language, MessageContext can negotiate with date and time internationalization
-/// formatter to use a sensible fallback locale based on the fallback chain.
+/// `MessageContext` stores messages in a single locale, but keeps a locale fallback chain for the
+/// purpose of language negotiation with i18n formatters. For instance, if date and time formatting
+/// are not available in the first locale, `MessageContext` will use its `locales` fallback chain
+/// to negotiate a sensible fallback for date and time formatting.
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],

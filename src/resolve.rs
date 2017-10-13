@@ -1,8 +1,10 @@
-//! Resolve module evaluates Fluent values and resolves them
+//! The `ResolveValue` trait resolves Fluent AST nodes to [`FluentValues`].
 //!
-//! This is mostly an internal API used by MessageContext to evaluate
-//! Messages and resolve them using context variables and developer
-//! arguments.
+//! This is an internal API used by [`MessageContext`] to evaluate Messages, Attributes and other
+//! AST nodes to [`FluentValues`] which can be then formatted to strings.
+//!
+//! [`FluentValues`]: ../types/enum.FluentValue.html
+//! [`MessageContext`]: ../context/struct.MessageContext.html
 
 use std::collections::HashMap;
 use std::str::FromStr;
@@ -11,11 +13,15 @@ use super::types::FluentValue;
 use super::syntax::ast;
 use super::context::MessageContext;
 
+/// State for a single `ResolveValue::to_value` call.
 pub struct Env<'env> {
+    /// The current `MessageContext` instance.
     pub ctx: &'env MessageContext<'env>,
+    /// The current arguments passed by the developer.
     pub args: Option<&'env HashMap<&'env str, FluentValue>>,
 }
 
+/// Converts an AST node to a `FluentValue`.
 pub trait ResolveValue {
     fn to_value(&self, env: &Env) -> Option<FluentValue>;
 }

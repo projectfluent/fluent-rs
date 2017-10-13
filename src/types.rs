@@ -1,13 +1,27 @@
-//! Primitive types used by Fluent as arguments for formatting.
+//! The `FluentValue` enum represents values which can be formatted to a String.
+//!
+//! The [`ResolveValue`][] trait from the [`resolve`][] module evaluates AST nodes into
+//! `FluentValues` which can then be formatted to Strings using the i18n formatters stored by the
+//! `MessageContext` instance if required.
+//!
+//! The arguments `HashMap` passed to [`MessageContext::format`][] should also use `FluentValues`
+//! as values of arguments.
+//!
+//! [`ResolveValue`]: ../resolve/trait.ResolveValue.html
+//! [`resolve`]: ../resolve
+//! [`MessageContext::format`]: ../context/struct.MessageContext.html#method.format
 
 use std::f32;
 use std::boxed::FnBox;
 
 use super::context::MessageContext;
 
+/// Value types which can be formatted to a String.
 #[derive(Clone, Debug, PartialEq)]
 pub enum FluentValue {
+    /// Fluent String type.
     String(String),
+    /// Fluent Number type.
     Number(f32),
 }
 
