@@ -1,5 +1,9 @@
-Project Fluent
-==============
+# Fluent
+
+**Fluent is a localization library designed to improve how software is translated.**
+
+Introduction
+------------
 
 This is a Rust implementation of Project Fluent, a localization framework
 designed to unleash the entire expressive power of natural language
@@ -10,6 +14,30 @@ The syntax used for describing translations is easy to read and understand.  At
 the same time it allows, when necessary, to represent complex concepts from
 natural languages like gender, plurals, conjugations, and others.
 
+Installation
+------------
+
+```toml
+[dependencies]
+fluent = "0.1.0"
+```
+
+Usage
+-----
+
+```rust
+extern crate fluent;
+
+use fluent::MessageContext;
+
+let ctx = MessageContext::new(&["en-US"]);
+ctx.add_messages("hello-world = Hello WOrld in Fluent!");
+
+let value = ctx.format("hello-world").unwrap();
+println!(value);
+```
+
+See [docs.rs][https://docs.rs/fluent/] for more examples.
 
 Status
 ------
@@ -19,12 +47,6 @@ Fluent's spec.  Consult the [list of milestones][] for more information about
 release planning and scope.
 
 [list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
-
-Install
--------
-
-    cargo install fluent
-
 
 Develop
 -------
