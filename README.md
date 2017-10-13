@@ -1,23 +1,24 @@
 # Fluent
 
-[![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
-[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
-[![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
-
-
-Introduction
-------------
-
 `fluent-rs` is a Rust implementation of [Project Fluent][], a localization
 framework designed to unleash the entire expressive power of natural language
 translations.
+
+[![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
+[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
+[![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
 
 Project Fluent keeps simple things simple and makes complex things possible.
 The syntax used for describing translations is easy to read and understand.  At
 the same time it allows, when necessary, to represent complex concepts from
 natural languages like gender, plurals, conjugations, and others.
 
+[Documentation][]
+
 [Project Fluent]: http://projectfluent.io
+[Documentation]: https://docs.rs/fluent/
+
+
 
 
 Installation
@@ -46,10 +47,6 @@ let value = ctx.get_message("hello-world").and_then(
 
 assert_eq!(value, Some("Hello, world!".to_string()));
 ```
-
-See [docs.rs][] for more examples and the API documentation.
-
-[docs.rs]: https://docs.rs/fluent/
 
 
 Status
