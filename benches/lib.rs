@@ -7,7 +7,8 @@ use std::io;
 use std::io::Read;
 use std::fs::File;
 use test::Bencher;
-use fluent::syntax::parse;
+use fluent::syntax::{ast, parse};
+use fluent::context::MessageContext;
 
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -19,15 +20,78 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 
 
 #[bench]
-fn bench_parser_simple(b: &mut Bencher) {
-    let f = read_file("./benches/simple.ftl").expect("Couldn't load file");
+fn bench_simple_parse(b: &mut Bencher) {
+    let source = read_file("./benches/simple.ftl").expect("Couldn't load file");
 
-    b.iter(|| { parse(&f).unwrap(); });
+    b.iter(|| { parse(&source).unwrap(); });
 }
 
 #[bench]
-fn bench_parser_menubar(b: &mut Bencher) {
-    let f = read_file("./benches/menubar.ftl").expect("Couldn't load file");
+fn bench_simple_format(b: &mut Bencher) {
+    let source = read_file("./benches/simple.ftl").expect("Couldn't load file");
+    let resource = parse(&source).unwrap();
 
-    b.iter(|| { parse(&f).unwrap(); });
+    let mut ids = Vec::new();
+
+    for entry in resource.body {
+        match entry {
+            ast::Entry::Message(ast::Message { id, .. }) => ids.push(id.name),
+            _ => continue,
+        };
+    }
+
+    let mut ctx = MessageContext::new(&["x-testing"]);
+    ctx.add_messages(&source);
+
+    b.iter(|| {
+        for id in &ids {
+            if let Some(message) = ctx.get_message(id.as_str()) {
+                let _value = ctx.format(message, None);
+            }
+        }
+    });
+}
+
+#[bench]
+fn bench_menubar_parse(b: &mut Bencher) {
+    let source = read_file("./benches/menubar.ftl").expect("Couldn't load file");
+
+    b.iter(|| { parse(&source).unwrap(); });
+}
+
+#[bench]
+fn bench_menubar_format(b: &mut Bencher) {
+    let source = read_file("./benches/menubar.ftl").expect("Couldn't load file");
+    let resource = parse(&source).unwrap();
+
+    let mut ids = Vec::new();
+
+    for entry in resource.body {
+        match entry {
+            ast::Entry::Message(ast::Message { id, .. }) => ids.push(id.name),
+            _ => continue,
+        };
+    }
+
+    let mut ctx = MessageContext::new(&["x-testing"]);
+    ctx.add_messages(&source);
+
+    b.iter(|| {
+        for id in &ids {
+            // In real-life usage we'd have different fallback strategies for missing messages
+            // depending on the type of the widget this message was supposed to translate.  Some
+            // widgets may only expect attributes and they shouldn't be forced to display a value.
+            // Here however it doesn't matter because we know for certain that the message for `id`
+            // exists.
+            if let Some(message) = ctx.get_message(id.as_str()) {
+                let _value = ctx.format(message, None);
+
+                if let Some(ref attributes) = message.attributes {
+                    for attr in attributes {
+                        let _value = ctx.format(attr, None);
+                    }
+                }
+            }
+        }
+    });
 }
