@@ -20,14 +20,14 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 
 #[bench]
 fn bench_parser_simple(b: &mut Bencher) {
-    let f = read_file("./tests/simple.ftl").expect("Couldn't load file");
+    let f = read_file("./benches/simple.ftl").expect("Couldn't load file");
 
     b.iter(|| { parse(&f).unwrap(); });
 }
 
 #[bench]
-fn bench_parser_workout_low(b: &mut Bencher) {
-    let f = read_file("./tests/workload-low.ftl").expect("Couldn't load file");
+fn bench_parser_menubar(b: &mut Bencher) {
+    let f = read_file("./benches/menubar.ftl").expect("Couldn't load file");
 
     b.iter(|| { parse(&f).unwrap(); });
 }
