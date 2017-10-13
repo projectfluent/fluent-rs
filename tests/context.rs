@@ -33,7 +33,9 @@ fn context_new_from_strings() {
     let _ = MessageContext::new(&vec_of_str[..]);
 
     let iter_of_strings = arr_of_strings.iter();
-    let vec_from_iter = iter_of_strings.map(|elem| elem.as_str()).collect::<Vec<_>>();
+    let vec_from_iter = iter_of_strings
+        .map(|elem| elem.as_str())
+        .collect::<Vec<_>>();
     let _ = MessageContext::new(&vec_from_iter);
     let _ = MessageContext::new(&vec_from_iter[..]);
 }
