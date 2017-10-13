@@ -1,23 +1,24 @@
 [package]
 name = "fluent"
-version = "0.0.2"
 description = """
 A localization library designed to unleash the entire expressive power of
 natural language translations.
 """
-keywords = ["localization", "l10n"]
-homepage = "http://www.projectfluent.io"
-license = "Apache-2.0"
-readme = "README.md"
-repository = "https://github.com/projectfluent/fluent-rs"
+version = "0.0.2"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
 ]
+homepage = "http://www.projectfluent.io"
+license = "Apache-2.0"
+repository = "https://github.com/projectfluent/fluent-rs"
+readme = "README.md"
+keywords = ["localization", "l10n"]
+categories = ["localization"]
 
 [dependencies]
-getopts = "0.2.14"
-ansi_term = "0.9"
+getopts = "0.2.15"
+ansi_term = "0.10.2"
 
 [dev-dependencies]
 glob = "0.2.11"
