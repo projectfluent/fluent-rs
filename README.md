@@ -35,12 +35,13 @@ extern crate fluent;
 use fluent::MessageContext;
 
 let ctx = MessageContext::new(&["en-US"]);
-ctx.add_messages("hello-world = Hello World in Fluent!");
+ctx.add_messages("hello-world = Hello, world!");
 
-let msg = ctx.get_message("hello-world").unwrap();
-let value = ctx.format(msg, None).unwrap();
+let value = ctx.get_message("hello-world").and_then(
+    |message| ctx.format(message, None),
+);
 
-println!(value);
+assert_eq!(value, Some("Hello, world!".to_string()));
 ```
 
 See [docs.rs][] for more examples.

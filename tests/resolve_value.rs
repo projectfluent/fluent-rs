@@ -3,6 +3,21 @@ extern crate fluent;
 use self::fluent::context::MessageContext;
 
 #[test]
+fn format_message() {
+    let mut ctx = MessageContext::new(&["x-testing"]);
+
+    ctx.add_messages(
+        "
+foo = Foo
+",
+    );
+
+    let value = ctx.get_message("foo").and_then(|msg| ctx.format(msg, None));
+
+    assert_eq!(value, Some("Foo".to_string()));
+}
+
+#[test]
 fn format_attribute() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
