@@ -35,7 +35,7 @@ extern crate fluent;
 use fluent::MessageContext;
 
 let ctx = MessageContext::new(&["en-US"]);
-ctx.add_messages("hello-world = Hello WOrld in Fluent!");
+ctx.add_messages("hello-world = Hello World in Fluent!");
 
 let value = ctx.format("hello-world").unwrap();
 println!(value);
