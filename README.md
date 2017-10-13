@@ -2,6 +2,10 @@
 
 **Fluent is a localization library designed to improve how software is translated.**
 
+[![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent
+[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
+[![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
+
 Introduction
 ------------
 
