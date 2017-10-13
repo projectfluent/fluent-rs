@@ -37,7 +37,9 @@ let value = ctx.format("hello-world").unwrap();
 println!(value);
 ```
 
-See [docs.rs][https://docs.rs/fluent/] for more examples.
+See [docs.rs][] for more examples.
+
+[docs.rs]: https://docs.rs/fluent/
 
 Status
 ------
