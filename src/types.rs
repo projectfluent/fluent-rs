@@ -12,9 +12,9 @@
 //! [`MessageContext::format`]: ../context/struct.MessageContext.html#method.format
 
 use std::f32;
-use std::boxed::FnBox;
 
 use super::context::MessageContext;
+use super::intl::PluralRules;
 
 /// Value types which can be formatted to a String.
 #[derive(Clone, Debug, PartialEq)]
@@ -23,14 +23,6 @@ pub enum FluentValue {
     String(String),
     /// Fluent Number type.
     Number(f32),
-}
-
-// XXX Replace this with a proper plural rule
-fn get_plural_rule(ctx: &MessageContext) -> Box<FnBox(f32) -> &'static str> {
-    match ctx.locales[0] {
-        "x-testing" => Box::new(|num| if num == 1.0 { "one" } else { "other" }),
-        _ => Box::new(|_| "other"),
-    }
 }
 
 impl FluentValue {
@@ -48,8 +40,10 @@ impl FluentValue {
                 (a - b).abs() < f32::EPSILON
             }
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                let plural_rule = get_plural_rule(ctx);
-                plural_rule(*b) == a
+                //XXX: This is a dirty hack and should be replaced with a
+                //lazy resolved cache on the context.
+                let pr = PluralRules::new(ctx.locales);
+                pr.select(*b) == a
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
         }

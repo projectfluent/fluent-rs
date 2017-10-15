@@ -19,6 +19,7 @@ categories = ["localization"]
 [dependencies]
 getopts = "0.2.15"
 ansi_term = "0.10.2"
+fluent-locale = "0.3.0"
 
 [dev-dependencies]
 glob = "0.2.11"
