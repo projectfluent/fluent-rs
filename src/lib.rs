@@ -44,6 +44,6 @@ pub mod syntax;
 pub mod context;
 pub mod resolve;
 pub mod types;
-mod intl;
+pub mod intl;
 
 pub use context::MessageContext;

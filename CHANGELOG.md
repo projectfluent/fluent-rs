@@ -4,7 +4,7 @@
 
   - …
 
-## fluent 0.1.1 (October 14, 2017)
+## fluent 0.1.2 (October 14, 2017)
 
   - Add more complex PluralRules support
 
