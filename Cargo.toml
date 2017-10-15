@@ -4,7 +4,7 @@ description = """
 A localization library designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.1.0"
+version = "0.1.1"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"

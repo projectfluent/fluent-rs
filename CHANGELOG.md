@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.1.1 (October 14, 2017)
+
+  - Add more complex PluralRules support
+
 ## fluent 0.1.0 (October 13, 2017)
 
   - Support parsing Fluent Syntax 0.3.

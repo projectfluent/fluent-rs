@@ -26,7 +26,7 @@ Installation
 
 ```toml
 [dependencies]
-fluent = "0.1.0"
+fluent = "0.1.1"
 ```
 
 
