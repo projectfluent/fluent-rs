@@ -1,5 +1,4 @@
 #![feature(box_patterns)]
-#![feature(fnbox)]
 
 //! Fluent is a localization system designed to improve how software is translated.
 //!
@@ -45,4 +44,6 @@ pub mod syntax;
 pub mod context;
 pub mod resolve;
 pub mod types;
+mod intl;
+
 pub use context::MessageContext;

@@ -98,7 +98,7 @@ baz =
 
 #[test]
 fn select_expression_plurals() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
+    let mut ctx = MessageContext::new(&["en"]);
 
     ctx.add_messages(
         "
