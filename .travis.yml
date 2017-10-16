@@ -16,16 +16,15 @@ addons:
       - kalakris-cmake
 
 before_script:
-  - |
-      cargo install --force cargo-travis &&
-      export PATH=$HOME/.cargo/bin:$PATH
+  - cargo install --force cargo-travis
+  - export PATH=$HOME/.cargo/bin:$PATH
+  - which rustfmt || cargo install rustfmt
 
-# the main build
 script:
-  - |
-      cargo build &&
-      cargo test &&
-      cargo doc
+  - cargo fmt -- --write-mode=diff
+  - cargo build
+  - cargo test
+  - cargo doc
 
 after_success:
 # measure code coverage and upload to coveralls.io

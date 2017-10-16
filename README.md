@@ -38,13 +38,16 @@ extern crate fluent;
 
 use fluent::MessageContext;
 
-let ctx = MessageContext::new(&["en-US"]);
-ctx.add_messages("hello-world = Hello, world!");
+fn main() {
+    let mut ctx = MessageContext::new(&["en-US"]);
+    ctx.add_messages("hello-world = Hello, world!");
 
-let value = ctx.get_message("hello-world")
-               .and_then(|message| ctx.format(message, None));
+    let value = ctx.get_message("hello-world").and_then(|message| {
+        ctx.format(message, None)
+    });
 
-assert_eq!(value, Some("Hello, world!".to_string()));
+    assert_eq!(value, Some("Hello, world!".to_string()));
+}
 ```
 
 
@@ -64,7 +67,11 @@ Local Development
     cargo build
     cargo test
     cargo bench
-    cargo run --example simple
+    cargo run --example hello
+
+When submitting a PR please use  [`cargo fmt`][] (stable).
+
+[`cargo fmt`]: https://github.com/rust-lang-nursery/rustfmt
 
 
 Learn the FTL syntax

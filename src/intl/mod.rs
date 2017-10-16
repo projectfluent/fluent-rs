@@ -644,11 +644,8 @@ pub struct PluralRules {
 
 impl PluralRules {
     pub fn new(locales: &[&str]) -> PluralRules {
-        let supported = negotiate_languages(
-            locales,
-            LOCALES,
-            Some("en"),
-            &NegotiationStrategy::Lookup);
+        let supported =
+            negotiate_languages(locales, LOCALES, Some("en"), &NegotiationStrategy::Lookup);
 
         let locale = supported[0].to_owned();
         let f = match get_plural_rule(supported[0]) {
