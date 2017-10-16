@@ -53,7 +53,6 @@ fn get_col_num(source: &str, pos: usize) -> usize {
 }
 
 pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
-
     let l = if start < end { end - start } else { 1 };
 
     let lines = source.lines().skip(start).take(l);

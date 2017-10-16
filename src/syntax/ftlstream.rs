@@ -183,9 +183,8 @@ where
             return false;
         }
 
-        if self.current_peek_is('}') || self.current_peek_is('.') ||
-            self.current_peek_is('#') || self.current_peek_is('[') ||
-            self.current_peek_is('*')
+        if self.current_peek_is('}') || self.current_peek_is('.') || self.current_peek_is('#')
+            || self.current_peek_is('[') || self.current_peek_is('*')
         {
             self.reset_peek();
             return false;
@@ -221,10 +220,10 @@ where
 
     fn skip_to_next_entry_start(&mut self) {
         while let Some(_) = self.next() {
-            if self.current_is('\n') && !self.peek_char_is('\n') &&
-                (self.next() == None || self.is_id_start() || self.current_is('/') ||
-                     self.current_is('[') || self.peek_char_is('/') ||
-                     self.peek_char_is('['))
+            if self.current_is('\n') && !self.peek_char_is('\n')
+                && (self.next() == None || self.is_id_start() || self.current_is('/')
+                    || self.current_is('[') || self.peek_char_is('/')
+                    || self.peek_char_is('['))
             {
                 break;
             }
@@ -239,11 +238,9 @@ where
 
         match self.take_char(closure) {
             Some(ch) => Ok(ch),
-            None => {
-                error!(ErrorKind::ExpectedCharRange {
-                    range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
-                })
-            }
+            None => error!(ErrorKind::ExpectedCharRange {
+                range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
+            }),
         }
     }
 

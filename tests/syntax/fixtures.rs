@@ -25,7 +25,6 @@ fn attempt_parse(source: &str) -> Result<(), ()> {
 #[test]
 fn parse_ftl() {
     for entry in glob("./tests/fixtures/parser/ftl/*.ftl").expect("Failed to read glob pattern") {
-
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
 
@@ -44,7 +43,6 @@ fn parse_ftl() {
 #[test]
 fn error_ftl() {
     for entry in glob("./tests/fixtures/parser/ftl/*.ftl").expect("Failed to read glob pattern") {
-
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
 

@@ -21,9 +21,9 @@ hello-world2 = Hello { $name ->
 ",
     );
 
-    match ctx.get_message("hello-world").and_then(
-        |msg| ctx.format(msg, None),
-    ) {
+    match ctx.get_message("hello-world")
+        .and_then(|msg| ctx.format(msg, None))
+    {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
@@ -31,9 +31,9 @@ hello-world2 = Hello { $name ->
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("moon"));
 
-    match ctx.get_message("hello-world2").and_then(|msg| {
-        ctx.format(msg, Some(&args))
-    }) {
+    match ctx.get_message("hello-world2")
+        .and_then(|msg| ctx.format(msg, Some(&args)))
+    {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
