@@ -37,7 +37,6 @@ fn empty_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -64,7 +63,6 @@ fn bad_id_start_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -97,7 +95,6 @@ fn just_id_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -130,7 +127,6 @@ fn no_equal_sign_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -147,7 +143,9 @@ fn wrong_char_in_id_errors() {
             let error1 = &errors[0];
 
             assert_eq!(
-                ErrorKind::ExpectedCharRange { range: "'a'...'z' | 'A'...'Z' | '_'".to_owned() },
+                ErrorKind::ExpectedCharRange {
+                    range: "'a'...'z' | 'A'...'Z' | '_'".to_owned(),
+                },
                 error1.kind
             );
 
@@ -160,7 +158,6 @@ fn wrong_char_in_id_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -187,7 +184,6 @@ fn missing_trait_value_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }
@@ -220,7 +216,6 @@ fn message_missing_fields_errors() {
                 }),
                 error1.info
             );
-
         }
     }
 }

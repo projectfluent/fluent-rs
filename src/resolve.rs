@@ -28,9 +28,9 @@ pub trait ResolveValue {
 
 impl ResolveValue for ast::Message {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.value.as_ref().and_then(
-            |pattern| pattern.to_value(env),
-        )
+        self.value
+            .as_ref()
+            .and_then(|pattern| pattern.to_value(env))
     }
 }
 
@@ -45,9 +45,8 @@ impl ResolveValue for ast::Pattern {
         let string = self.elements
             .iter()
             .map(|elem| {
-                elem.to_value(env).map_or(String::from("___"), |elem| {
-                    elem.format(env.ctx)
-                })
+                elem.to_value(env)
+                    .map_or(String::from("___"), |elem| elem.format(env.ctx))
             })
             .collect::<String>();
         Some(FluentValue::from(string))
@@ -88,17 +87,13 @@ impl ResolveValue for ast::Expression {
                 Some(FluentValue::from(value.clone()))
             }
             ast::Expression::NumberExpression { ref value } => value.to_value(env),
-            ast::Expression::MessageReference { ref id } => {
-                env.ctx
-                    .get_message(&id.name)
-                    .and_then(|message| message.value.as_ref())
-                    .and_then(|pattern| pattern.to_value(env))
-            }
-            ast::Expression::ExternalArgument { ref id } => {
-                env.args
-                    .and_then(|args| args.get(&id.name.as_ref()))
-                    .cloned()
-            }
+            ast::Expression::MessageReference { ref id } => env.ctx
+                .get_message(&id.name)
+                .and_then(|message| message.value.as_ref())
+                .and_then(|pattern| pattern.to_value(env)),
+            ast::Expression::ExternalArgument { ref id } => env.args
+                .and_then(|args| args.get(&id.name.as_ref()))
+                .cloned(),
             ast::Expression::SelectExpression {
                 expression: None,
                 ref variants,
@@ -107,9 +102,9 @@ impl ResolveValue for ast::Expression {
                 expression: Some(box ast::Expression::MessageReference { ref id }),
                 ref variants,
             } => {
-                let tags = env.ctx.get_message(&id.name).and_then(
-                    |message| message.tags.as_ref(),
-                );
+                let tags = env.ctx
+                    .get_message(&id.name)
+                    .and_then(|message| message.tags.as_ref());
 
                 if let Some(tags) = tags {
                     for variant in variants {
@@ -154,9 +149,10 @@ impl ResolveValue for ast::Expression {
                 select_default(variants).and_then(|variant| variant.value.to_value(env))
             }
             ast::Expression::AttributeExpression { ref id, ref name } => {
-                let attributes = env.ctx.get_message(&id.name).as_ref().and_then(|message| {
-                    message.attributes.as_ref()
-                });
+                let attributes = env.ctx
+                    .get_message(&id.name)
+                    .as_ref()
+                    .and_then(|message| message.attributes.as_ref());
                 if let Some(attributes) = attributes {
                     for attribute in attributes {
                         if attribute.id.name == name.name {
@@ -177,11 +173,15 @@ impl ResolveValue for ast::Expression {
                         }
 
                         match pattern.elements.first() {
-                            Some(&ast::PatternElement::Placeable(ast::Placeable {
-                           expression: ast::Expression::SelectExpression {
-                               expression: None, ref variants
-                           }
-                       })) => Some(variants),
+                            Some(
+                                &ast::PatternElement::Placeable(ast::Placeable {
+                                    expression:
+                                        ast::Expression::SelectExpression {
+                                            expression: None,
+                                            ref variants,
+                                        },
+                                }),
+                            ) => Some(variants),
                             _ => None,
                         }
                     });
@@ -200,7 +200,6 @@ impl ResolveValue for ast::Expression {
                     .as_ref()
                     .and_then(|message| message.value.as_ref())
                     .and_then(|pattern| pattern.to_value(env))
-
             }
             _ => unimplemented!(),
         }

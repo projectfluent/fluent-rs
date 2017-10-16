@@ -1,7 +1,7 @@
 #![feature(test)]
 
-extern crate test;
 extern crate fluent;
+extern crate test;
 
 use std::io;
 use std::io::Read;

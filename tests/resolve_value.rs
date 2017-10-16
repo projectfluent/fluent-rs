@@ -28,13 +28,12 @@ foo = Foo
 ",
     );
 
-    if let Some(attributes) = ctx.get_message("foo").and_then(
-        |message| message.attributes.as_ref(),
-    )
+    if let Some(attributes) = ctx.get_message("foo")
+        .and_then(|message| message.attributes.as_ref())
     {
-        let value = attributes.first().and_then(
-            |attribute| ctx.format(attribute, None),
-        );
+        let value = attributes
+            .first()
+            .and_then(|attribute| ctx.format(attribute, None));
 
         assert_eq!(value, Some("Foo Attr".to_string()));
     }

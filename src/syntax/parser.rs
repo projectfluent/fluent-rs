@@ -26,20 +26,18 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
         let entry_start_pos = ps.get_index();
 
         match get_entry(&mut ps) {
-            Ok(entry) => {
-                if entry_start_pos == 0 {
-                    match entry {
-                        ast::Entry::Comment(c) => {
-                            comment = Some(c);
-                        }
-                        _ => {
-                            entries.push(entry);
-                        }
+            Ok(entry) => if entry_start_pos == 0 {
+                match entry {
+                    ast::Entry::Comment(c) => {
+                        comment = Some(c);
                     }
-                } else {
-                    entries.push(entry);
+                    _ => {
+                        entries.push(entry);
+                    }
                 }
-            }
+            } else {
+                entries.push(entry);
+            },
             Err(mut e) => {
                 let error_pos = ps.get_index();
                 entries.push(get_junk_entry(&mut ps, source, entry_start_pos));
@@ -223,7 +221,9 @@ where
                 value: pattern,
             });
         } else {
-            return error!(ErrorKind::ExpectedField { field: String::from("Pattern") });
+            return error!(ErrorKind::ExpectedField {
+                field: String::from("Pattern"),
+            });
         }
 
         if !ps.is_peek_next_line_attribute_start() {
@@ -328,7 +328,9 @@ where
                 default: default_index,
             });
         } else {
-            return error!(ErrorKind::ExpectedField { field: String::from("Pattern") });
+            return error!(ErrorKind::ExpectedField {
+                field: String::from("Pattern"),
+            });
         }
 
         if !ps.is_peek_next_line_variant_start() {
@@ -372,10 +374,16 @@ where
                 num.push(ch);
                 ps.next();
             }
-            _ => return error!(ErrorKind::ExpectedCharRange { range: "0...9".to_owned() }),
+            _ => {
+                return error!(ErrorKind::ExpectedCharRange {
+                    range: "0...9".to_owned(),
+                })
+            }
         }
     } else {
-        return error!(ErrorKind::ExpectedCharRange { range: "0...9".to_owned() });
+        return error!(ErrorKind::ExpectedCharRange {
+            range: "0...9".to_owned(),
+        });
     }
 
     while let Some(ch) = ps.current() {
@@ -443,25 +451,23 @@ where
                 first_line = false;
                 continue;
             }
-            '\\' => {
-                if let Some(ch2) = ps.peek() {
-                    match ch2 {
-                        '{' => {
-                            buffer.push(ch2);
-                            ps.next();
-                        }
-                        _ => {
-                            buffer.push(ch);
-                            buffer.push(ch2);
-                            ps.next();
-                        }
+            '\\' => if let Some(ch2) = ps.peek() {
+                match ch2 {
+                    '{' => {
+                        buffer.push(ch2);
+                        ps.next();
                     }
-                } else {
-                    ps.reset_peek();
-                    buffer.push(ch);
-                    break;
+                    _ => {
+                        buffer.push(ch);
+                        buffer.push(ch2);
+                        ps.next();
+                    }
                 }
-            }
+            } else {
+                ps.reset_peek();
+                buffer.push(ch);
+                break;
+            },
             '{' => {
                 ps.next();
 
@@ -473,9 +479,9 @@ where
 
                 buffer = String::new();
 
-                elements.push(ast::PatternElement::Placeable(
-                    ast::Placeable { expression: get_expression(ps)? },
-                ));
+                elements.push(ast::PatternElement::Placeable(ast::Placeable {
+                    expression: get_expression(ps)?,
+                }));
 
                 ps.expect_char('}')?;
 
@@ -552,32 +558,30 @@ where
     let literal = get_literal(ps)?;
 
     match literal {
-        ast::Expression::MessageReference { id } => {
-            match ps.ch {
-                Some('.') => {
-                    ps.next();
-                    let attr = get_identifier(ps)?;
-                    Ok(ast::Expression::AttributeExpression { id, name: attr })
-                }
-                Some('[') => {
-                    ps.next();
-                    let key = get_variant_key(ps)?;
-                    ps.expect_char(']')?;
-
-                    Ok(ast::Expression::VariantExpression { id, key: key })
-                }
-                Some('(') => {
-                    ps.next();
-                    let args = get_call_args(ps)?;
-                    ps.expect_char(')')?;
-                    Ok(ast::Expression::CallExpression {
-                        callee: ast::Function { name: id.name },
-                        args: args,
-                    })
-                }
-                _ => Ok(ast::Expression::MessageReference { id: id }),
+        ast::Expression::MessageReference { id } => match ps.ch {
+            Some('.') => {
+                ps.next();
+                let attr = get_identifier(ps)?;
+                Ok(ast::Expression::AttributeExpression { id, name: attr })
             }
-        }
+            Some('[') => {
+                ps.next();
+                let key = get_variant_key(ps)?;
+                ps.expect_char(']')?;
+
+                Ok(ast::Expression::VariantExpression { id, key: key })
+            }
+            Some('(') => {
+                ps.next();
+                let args = get_call_args(ps)?;
+                ps.expect_char(')')?;
+                Ok(ast::Expression::CallExpression {
+                    callee: ast::Function { name: id.name },
+                    args: args,
+                })
+            }
+            _ => Ok(ast::Expression::MessageReference { id: id }),
+        },
         _ => Ok(literal),
     }
 }
@@ -638,14 +642,14 @@ where
         match ch {
             '0'...'9' | '-' => Ok(ast::ArgValue::Number(get_number(ps)?)),
             '"' => Ok(ast::ArgValue::String(get_string(ps)?)),
-            _ => {
-                error!(ErrorKind::ExpectedField {
-                    field: String::from("Argument value"),
-                })
-            }
+            _ => error!(ErrorKind::ExpectedField {
+                field: String::from("Argument value"),
+            }),
         }
     } else {
-        error!(ErrorKind::ExpectedField { field: String::from("Literal") })
+        error!(ErrorKind::ExpectedField {
+            field: String::from("Literal"),
+        })
     }
 }
 
@@ -670,20 +674,29 @@ fn get_literal<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
 where
     I: Iterator<Item = char>,
 {
-
     if let Some(ch) = ps.current() {
         let exp = match ch {
-            '0'...'9' | '-' => ast::Expression::NumberExpression { value: get_number(ps)? },
-            '"' => ast::Expression::StringExpression { value: get_string(ps)? },
+            '0'...'9' | '-' => ast::Expression::NumberExpression {
+                value: get_number(ps)?,
+            },
+            '"' => ast::Expression::StringExpression {
+                value: get_string(ps)?,
+            },
             '$' => {
                 ps.next();
-                ast::Expression::ExternalArgument { id: get_identifier(ps)? }
+                ast::Expression::ExternalArgument {
+                    id: get_identifier(ps)?,
+                }
             }
-            _ => ast::Expression::MessageReference { id: get_identifier(ps)? },
+            _ => ast::Expression::MessageReference {
+                id: get_identifier(ps)?,
+            },
         };
         Ok(exp)
     } else {
-        return error!(ErrorKind::ExpectedField { field: String::from("Literal") });
+        return error!(ErrorKind::ExpectedField {
+            field: String::from("Literal"),
+        });
     }
 }
 
@@ -695,5 +708,7 @@ where
 
     let slice = get_error_slice(source, entry_start, ps.get_index());
 
-    ast::Entry::Junk { content: String::from(slice) }
+    ast::Entry::Junk {
+        content: String::from(slice),
+    }
 }

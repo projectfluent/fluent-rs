@@ -320,8 +320,8 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
         if is_between(n % 10.0, 2.0, 4.0) && !is_between(n % 100.0, 12.0, 14.0) {
             return "few";
         }
-        if n != 1.0 && is_between(n % 10.0, 0.0, 1.0) || is_between(n % 10.0, 5.0, 9.0) ||
-            is_between(n % 100.0, 12.0, 14.0)
+        if n != 1.0 && is_between(n % 10.0, 0.0, 1.0) || is_between(n % 10.0, 5.0, 9.0)
+            || is_between(n % 100.0, 12.0, 14.0)
         {
             return "many";
         }
@@ -403,9 +403,9 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
     },
     /* 20 */
     |n| {
-        if (is_between(n % 10.0, 3.0, 4.0) || n % 10.0 == 9.0) &&
-            !(is_between(n % 100.0, 10.0, 19.0) || is_between(n % 100.0, 70.0, 79.0) ||
-                  is_between(n % 100.0, 90.0, 99.0))
+        if (is_between(n % 10.0, 3.0, 4.0) || n % 10.0 == 9.0)
+            && !(is_between(n % 100.0, 10.0, 19.0) || is_between(n % 100.0, 70.0, 79.0)
+                || is_between(n % 100.0, 90.0, 99.0))
         {
             return "few";
         }
@@ -438,9 +438,7 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
         "other"
     },
     /* 23 */
-    |n| if is_between(n, 0.0, 1.0) ||
-        is_between(n, 11.0, 99.0)
-    {
+    |n| if is_between(n, 0.0, 1.0) || is_between(n, 11.0, 99.0) {
         "one"
     } else {
         "other"

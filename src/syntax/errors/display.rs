@@ -115,13 +115,8 @@ fn format_slice(
         pos += line.chars().count() + 1;
         let prev_line_end = pos;
 
-        if let Some(label_line) = format_labels(
-            prev_line_start,
-            prev_line_end,
-            max_ln_width,
-            item,
-            labels,
-        )
+        if let Some(label_line) =
+            format_labels(prev_line_start, prev_line_end, max_ln_width, item, labels)
         {
             result += &label_line;
         } else if i == lines_num - 1 {
@@ -150,12 +145,10 @@ fn format_labels(
     for label in labels {
         if label.start_pos >= start_pos && label.start_pos <= end_pos {
             let color = match label.kind {
-                LabelKind::Primary => {
-                    match *item {
-                        Item::Error(_) => Fixed(9).bold(),
-                        Item::Warning => Fixed(11).bold(),
-                    }
-                }
+                LabelKind::Primary => match *item {
+                    Item::Error(_) => Fixed(9).bold(),
+                    Item::Warning => Fixed(11).bold(),
+                },
                 LabelKind::Secondary => Fixed(12).bold(),
             };
 
@@ -173,9 +166,9 @@ fn format_labels(
             };
             result += &format!(
                 "{} {}\n",
-                Fixed(12).bold().paint(
-                    format!("{} |", " ".repeat(max_ln_width)),
-                ),
+                Fixed(12)
+                    .bold()
+                    .paint(format!("{} |", " ".repeat(max_ln_width)),),
                 format!("{}{} {}", pad, color.paint(mark), color.paint(label.text))
             );
             return Some(result);
