@@ -16,7 +16,7 @@ addons:
       - kalakris-cmake
 
 before_script:
-  - cargo install --force cargo-travis
+  - cargo install cargo-travis || echo "cargo-travis already installed"
   - export PATH=$HOME/.cargo/bin:$PATH
   - which rustfmt || cargo install rustfmt-nightly
 
