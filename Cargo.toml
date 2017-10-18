@@ -10,7 +10,7 @@ authors = [
     "Staś Małolepszy <stas@mozilla.com>"
 ]
 homepage = "http://www.projectfluent.io"
-license = "Apache-2.0"
+license = "Apache-2.0/MIT"
 repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
 keywords = ["localization", "l10n"]
