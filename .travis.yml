@@ -16,8 +16,8 @@ addons:
       - kalakris-cmake
 
 before_script:
-  - cargo install --force cargo-travis
   - export PATH=$HOME/.cargo/bin:$PATH
+  - which cargo-coveralls || cargo install cargo-travis
   - which rustfmt || cargo install rustfmt-nightly
 
 script:
