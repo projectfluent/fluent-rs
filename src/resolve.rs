@@ -173,15 +173,13 @@ impl ResolveValue for ast::Expression {
                         }
 
                         match pattern.elements.first() {
-                            Some(
-                                &ast::PatternElement::Placeable(ast::Placeable {
-                                    expression:
-                                        ast::Expression::SelectExpression {
-                                            expression: None,
-                                            ref variants,
-                                        },
-                                }),
-                            ) => Some(variants),
+                            Some(&ast::PatternElement::Placeable(ast::Placeable {
+                                expression:
+                                    ast::Expression::SelectExpression {
+                                        expression: None,
+                                        ref variants,
+                                    },
+                            })) => Some(variants),
                             _ => None,
                         }
                     });

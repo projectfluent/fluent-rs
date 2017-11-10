@@ -43,9 +43,11 @@ fn bench_simple_format(b: &mut Bencher) {
     let mut ctx = MessageContext::new(&["x-testing"]);
     ctx.add_messages(&source);
 
-    b.iter(|| for id in &ids {
-        if let Some(message) = ctx.get_message(id.as_str()) {
-            let _value = ctx.format(message, None);
+    b.iter(|| {
+        for id in &ids {
+            if let Some(message) = ctx.get_message(id.as_str()) {
+                let _value = ctx.format(message, None);
+            }
         }
     });
 }
@@ -74,18 +76,20 @@ fn bench_menubar_format(b: &mut Bencher) {
     let mut ctx = MessageContext::new(&["x-testing"]);
     ctx.add_messages(&source);
 
-    b.iter(|| for id in &ids {
-        // In real-life usage we'd have different fallback strategies for missing messages
-        // depending on the type of the widget this message was supposed to translate.  Some
-        // widgets may only expect attributes and they shouldn't be forced to display a value.
-        // Here however it doesn't matter because we know for certain that the message for `id`
-        // exists.
-        if let Some(message) = ctx.get_message(id.as_str()) {
-            let _value = ctx.format(message, None);
+    b.iter(|| {
+        for id in &ids {
+            // In real-life usage we'd have different fallback strategies for missing messages
+            // depending on the type of the widget this message was supposed to translate.  Some
+            // widgets may only expect attributes and they shouldn't be forced to display a value.
+            // Here however it doesn't matter because we know for certain that the message for `id`
+            // exists.
+            if let Some(message) = ctx.get_message(id.as_str()) {
+                let _value = ctx.format(message, None);
 
-            if let Some(ref attributes) = message.attributes {
-                for attr in attributes {
-                    let _value = ctx.format(attr, None);
+                if let Some(ref attributes) = message.attributes {
+                    for attr in attributes {
+                        let _value = ctx.format(attr, None);
+                    }
                 }
             }
         }
