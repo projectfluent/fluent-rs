@@ -5,8 +5,12 @@ use fluent::context::MessageContext;
 fn main() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
-    ctx.add_messages("key1 = Value 1");
-    ctx.add_messages("key2 = Value 2");
+    ctx.add_messages(
+        "
+key1 = Value 1
+key2 = Value 2
+",
+    );
 
     match ctx.get_message("key1")
         .and_then(|msg| ctx.format(msg, None))

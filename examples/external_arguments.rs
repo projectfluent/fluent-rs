@@ -7,9 +7,13 @@ use std::collections::HashMap;
 fn main() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
-    ctx.add_messages("hello-world = Hello { $name }");
-    ctx.add_messages("ref = The previous message says { hello-world }");
-    ctx.add_messages("unread-emails = You have { $emailCount } unread emails");
+    ctx.add_messages(
+        "
+hello-world = Hello { $name }
+ref = The previous message says { hello-world }
+unread-emails = You have { $emailCount } unread emails
+",
+    );
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
