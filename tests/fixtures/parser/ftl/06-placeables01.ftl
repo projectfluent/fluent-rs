@@ -21,24 +21,24 @@ key7 = { LIST($user1, $user2) }
 
 key9 = { LEN(2, 2.5, -3.12, -1.00) }
 
-key11 = { len() }
+key11 = { LEN() }
 
-key12 = { len(1) }
+key12 = { LEN(1) }
 
-key13 = { len(-1) }
+key13 = { LEN(-1) }
 
-key14 = { len($foo) }
+key14 = { LEN($foo) }
 
-key15 = { len(foo) }
+key15 = { LEN(foo) }
 
-key19 = { len(bar: 1) }
+key19 = { LEN(bar: 1) }
 
-key20 = { len(bar: -1) }
+key20 = { LEN(bar: -1) }
 
-key21 = { len(bar: "user") }
+key21 = { LEN(bar: "user") }
 
 key22 = { brand-name[masculine] }
 
-key23 = { number(style: "percent") }
+key23 = { NUMBER(style: "percent") }
 
-key24 = { number($num, style: "percent", foo: "bar") }
+key24 = { NUMBER_SPECIAL($num, style: "percent", foo: "bar") }

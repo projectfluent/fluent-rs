@@ -34,6 +34,9 @@ pub enum ErrorKind {
     ForbiddenWhitespace,
     ForbiddenCallee,
     ForbiddenKey,
+    ForbiddenPrivateAttributeExpression,
+    ForbiddenPublicAttributeExpression,
+    ForbiddenVariantExpression,
 }
 
 pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
@@ -69,17 +72,17 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
         }
         ErrorKind::ForbiddenWhitespace => (
             "E0007",
-            "keyword cannot end with a whitespace".to_owned(),
+            "Keyword cannot end with a whitespace".to_owned(),
             "",
         ),
         ErrorKind::ForbiddenCallee => (
             "E0008",
-            "a callee has to be a simple identifier".to_owned(),
+            "The callee has to be a simple, upper-case, identifier".to_owned(),
             "",
         ),
         ErrorKind::ForbiddenKey => (
             "E0009",
-            "a key has to be a simple identifier".to_owned(),
+            "The key has to be a simple identifier".to_owned(),
             "",
         ),
         ErrorKind::MissingDefaultVariant => (
@@ -88,8 +91,23 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
             "",
         ),
         ErrorKind::MissingVariants => (
-            "E0010",
+            "E0011",
             "Expected at least one variant after \"->\".".to_owned(),
+            "",
+        ),
+        ErrorKind::ForbiddenPrivateAttributeExpression => (
+            "E0012",
+            "Attributes of private messages cannot be used as placeables.".to_owned(),
+            "",
+        ),
+        ErrorKind::ForbiddenPublicAttributeExpression => (
+            "E0013",
+            "Attributes of public messages cannot be used as selectors.".to_owned(),
+            "",
+        ),
+        ErrorKind::ForbiddenVariantExpression => (
+            "E0014",
+            "Variants cannot be used as selectors.".to_owned(),
             "",
         ),
     }

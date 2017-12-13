@@ -80,7 +80,7 @@ where
         return Ok(get_section(ps, comment)?);
     }
 
-    if ps.is_id_start() {
+    if ps.is_message_id_start() {
         return Ok(get_message(ps, comment)?);
     }
 
@@ -150,7 +150,7 @@ fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Re
 where
     I: Iterator<Item = char>,
 {
-    let id = get_identifier(ps)?;
+    let id = get_private_identifier(ps)?;
 
     ps.skip_line_ws();
 
@@ -196,7 +196,7 @@ where
 
         ps.expect_char('.')?;
 
-        let key = get_identifier(ps)?;
+        let key = get_public_identifier(ps)?;
 
         ps.skip_line_ws();
 
@@ -222,13 +222,27 @@ where
     Ok(attributes)
 }
 
-fn get_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
+fn get_private_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
+where
+    I: Iterator<Item = char>,
+{
+    get_identifier(ps, true)
+}
+
+fn get_public_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
+where
+    I: Iterator<Item = char>,
+{
+    get_identifier(ps, false)
+}
+
+fn get_identifier<I>(ps: &mut ParserStream<I>, allow_private: bool) -> Result<ast::Identifier>
 where
     I: Iterator<Item = char>,
 {
     let mut name = String::new();
 
-    name.push(ps.take_id_start()?);
+    name.push(ps.take_id_start(allow_private)?);
 
     while let Some(ch) = ps.take_id_char() {
         name.push(ch);
@@ -315,7 +329,7 @@ where
 {
     let mut name = String::new();
 
-    name.push(ps.take_id_start()?);
+    name.push(ps.take_id_start(false)?);
 
     while let Some(ch) = ps.take_symb_char() {
         name.push(ch);
@@ -490,6 +504,13 @@ where
 
     if ps.current_is('-') {
         if let Some('>') = ps.peek() {
+            if let ast::Expression::AttributeExpression { ref id, .. } = selector {
+                if !id.name.starts_with('-') {
+                    return error!(ErrorKind::ForbiddenPublicAttributeExpression);
+                }
+            } else if let ast::Expression::VariantExpression { .. } = selector {
+                return error!(ErrorKind::ForbiddenVariantExpression);
+            }
             ps.next();
             ps.next();
 
@@ -512,6 +533,12 @@ where
         } else {
             ps.reset_peek();
         }
+    } else {
+        if let ast::Expression::AttributeExpression { ref id, .. } = selector {
+            if id.name.starts_with('-') {
+                return error!(ErrorKind::ForbiddenPrivateAttributeExpression);
+            }
+        }
     }
 
     Ok(selector)
@@ -527,7 +554,7 @@ where
         ast::Expression::MessageReference { id } => match ps.ch {
             Some('.') => {
                 ps.next();
-                let attr = get_identifier(ps)?;
+                let attr = get_public_identifier(ps)?;
                 Ok(ast::Expression::AttributeExpression { id, name: attr })
             }
             Some('[') => {
@@ -538,6 +565,9 @@ where
                 Ok(ast::Expression::VariantExpression { id, key: key })
             }
             Some('(') => {
+                if id.name.starts_with('-') || id.name.chars().any(|c| c.is_lowercase()) {
+                    return error!(ErrorKind::ForbiddenCallee);
+                }
                 ps.next();
                 let args = get_call_args(ps)?;
                 ps.expect_char(')')?;
@@ -642,8 +672,19 @@ where
 {
     if let Some(ch) = ps.current() {
         let exp = match ch {
-            '0'...'9' | '-' => ast::Expression::NumberExpression {
+            '0'...'9' => ast::Expression::NumberExpression {
                 value: get_number(ps)?,
+            },
+            '-' => if let Some('0'...'9') = ps.peek() {
+                ps.reset_peek();
+                ast::Expression::NumberExpression {
+                    value: get_number(ps)?,
+                }
+            } else {
+                ps.reset_peek();
+                ast::Expression::MessageReference {
+                    id: get_private_identifier(ps)?,
+                }
             },
             '"' => ast::Expression::StringExpression {
                 value: get_string(ps)?,
@@ -651,11 +692,11 @@ where
             '$' => {
                 ps.next();
                 ast::Expression::ExternalArgument {
-                    id: get_identifier(ps)?,
+                    id: get_public_identifier(ps)?,
                 }
             }
             _ => ast::Expression::MessageReference {
-                id: get_identifier(ps)?,
+                id: get_private_identifier(ps)?,
             },
         };
         Ok(exp)

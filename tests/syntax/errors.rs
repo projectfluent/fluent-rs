@@ -144,7 +144,7 @@ fn wrong_char_in_id_errors() {
 
             assert_eq!(
                 ErrorKind::ExpectedCharRange {
-                    range: "'a'...'z' | 'A'...'Z' | '_'".to_owned(),
+                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned(),
                 },
                 error1.kind
             );
@@ -215,6 +215,90 @@ fn message_missing_fields_errors() {
                     pos: 3,
                 }),
                 error1.info
+            );
+        }
+    }
+}
+
+#[test]
+fn private_errors() {
+    let path = "./tests/fixtures/parser/ftl/errors/08-private.ftl";
+    let source = read_file(path).expect("Failed to read");
+    match parse(&source) {
+        Ok(_) => panic!("Expected errors in the file"),
+        Err((_, ref errors)) => {
+            assert_eq!(4, errors.len());
+
+            let error1 = &errors[0];
+
+            assert_eq!(
+                ErrorKind::ExpectedCharRange {
+                    range: "0...9".to_owned()
+                },
+                error1.kind
+            );
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "key =\n    { $foo ->\n        [one] Foo\n       *[-other] Foo 2\n    }".to_owned(),
+                    line: 1,
+                    col: 10,
+                    pos: 48,
+                }),
+                error1.info
+            );
+
+            let error2 = &errors[1];
+
+            assert_eq!(
+                ErrorKind::ExpectedCharRange {
+                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned()
+                },
+                error2.kind
+            );
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "key2 = { $-foo }".to_owned(),
+                    line: 7,
+                    col: 10,
+                    pos: 10,
+                }),
+                error2.info
+            );
+
+            let error3 = &errors[2];
+
+            assert_eq!(
+                ErrorKind::ForbiddenPrivateAttributeExpression,
+                error3.kind
+            );
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "key3 = { -brand.gender }".to_owned(),
+                    line: 9,
+                    col: 23,
+                    pos: 23,
+                }),
+                error3.info
+            );
+
+            let error4 = &errors[3];
+
+            assert_eq!(
+                ErrorKind::ForbiddenCallee,
+                error4.kind
+            );
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "key4 = { -brand() }".to_owned(),
+                    line: 11,
+                    col: 15,
+                    pos: 15,
+                }),
+                error4.info
             );
         }
     }

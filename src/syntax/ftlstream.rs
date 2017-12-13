@@ -14,13 +14,14 @@ pub trait FTLParserStream<I> {
     where
         F: Fn(char) -> bool;
 
-    fn is_id_start(&mut self) -> bool;
+    fn is_char_id_start(&mut self, ch: Option<char>) -> bool;
+    fn is_message_id_start(&mut self) -> bool;
     fn is_peek_next_line_indented(&mut self) -> bool;
     fn is_peek_next_line_variant_start(&mut self) -> bool;
     fn is_peek_next_line_attribute_start(&mut self) -> bool;
     fn is_peek_next_line_pattern(&mut self) -> bool;
     fn skip_to_next_entry_start(&mut self);
-    fn take_id_start(&mut self) -> Result<char>;
+    fn take_id_start(&mut self, allow_private: bool) -> Result<char>;
     fn take_id_char(&mut self) -> Option<char>;
     fn take_symb_char(&mut self) -> Option<char>;
     fn take_digit(&mut self) -> Option<char>;
@@ -91,14 +92,21 @@ where
         None
     }
 
-    fn is_id_start(&mut self) -> bool {
-        if let Some(ch) = self.ch {
-            return match ch {
-                'a'...'z' | 'A'...'Z' | '_' => true,
-                _ => false,
-            };
+    fn is_char_id_start(&mut self, ch: Option<char>) -> bool {
+        match ch {
+            Some('a'...'z') | Some('A'...'Z') => true,
+            _ => false,
         }
-        false
+    }
+
+    fn is_message_id_start(&mut self) -> bool {
+        if let Some('-') = self.ch {
+            self.peek();
+        }
+        let ch = self.current_peek();
+        let is_id = self.is_char_id_start(ch);
+        self.reset_peek();
+        is_id
     }
 
     fn is_peek_next_line_indented(&mut self) -> bool {
@@ -196,7 +204,7 @@ where
     fn skip_to_next_entry_start(&mut self) {
         while let Some(_) = self.next() {
             if self.current_is('\n') && !self.peek_char_is('\n')
-                && (self.next() == None || self.is_id_start() || self.current_is('/')
+                && (self.next() == None || self.is_message_id_start() || self.current_is('/')
                     || self.current_is('[') || self.peek_char_is('/')
                     || self.peek_char_is('['))
             {
@@ -205,17 +213,23 @@ where
         }
     }
 
-    fn take_id_start(&mut self) -> Result<char> {
+    fn take_id_start(&mut self, allow_private: bool) -> Result<char> {
         let closure = |x| match x {
-            'a'...'z' | 'A'...'Z' | '_' => true,
+            'a'...'z' | 'A'...'Z' => true,
+            '-' => allow_private,
             _ => false,
         };
 
-        match self.take_char(closure) {
-            Some(ch) => Ok(ch),
-            None => error!(ErrorKind::ExpectedCharRange {
-                range: String::from("'a'...'z' | 'A'...'Z' | '_'"),
-            }),
+        if let Some(ch) = self.take_char(closure) {
+            Ok(ch)
+        } else if allow_private {
+            error!(ErrorKind::ExpectedCharRange {
+                range: String::from("'a'...'z' | 'A'...'Z'"),
+            })
+        } else {
+            error!(ErrorKind::ExpectedCharRange {
+                range: String::from("'a'...'z' | 'A'...'Z' | '-'"),
+            })
         }
     }
 
