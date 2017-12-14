@@ -77,7 +77,6 @@ impl<'ctx> MessageContext<'ctx> {
         }
     }
 
-
     pub fn format<T: ResolveValue>(
         &self,
         resolvable: &T,

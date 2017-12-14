@@ -12,14 +12,19 @@ pub struct ErrorInfo {
     pub pos: usize,
 }
 
-
 #[derive(Debug, PartialEq)]
 pub enum ErrorKind {
     Generic,
     ExpectedEntry,
-    ExpectedToken { token: char },
-    ExpectedCharRange { range: String },
-    ExpectedField { field: String },
+    ExpectedToken {
+        token: char,
+    },
+    ExpectedCharRange {
+        range: String,
+    },
+    ExpectedField {
+        field: String,
+    },
     MissingField {
         entry_id: String,
         fields: Vec<&'static str>,
@@ -54,8 +59,7 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
                 "E0005",
                 format!(
                     "Expected entry `{}` to have one of the fields: {}",
-                    entry_id,
-                    list
+                    entry_id, list
                 ),
                 "",
             )

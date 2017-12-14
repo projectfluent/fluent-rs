@@ -146,7 +146,6 @@ where
     })
 }
 
-
 fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
 where
     I: Iterator<Item = char>,
@@ -269,7 +268,6 @@ where
 
     Ok(ast::Identifier { name })
 }
-
 
 fn get_variant_key<I>(ps: &mut ParserStream<I>) -> Result<ast::VarKey>
 where

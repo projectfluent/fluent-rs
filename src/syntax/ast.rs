@@ -12,7 +12,9 @@ pub enum Entry {
         comment: Option<Comment>,
     },
     Comment(Comment),
-    Junk { content: String },
+    Junk {
+        content: String,
+    },
 }
 
 #[derive(Debug, PartialEq)]
@@ -42,16 +44,30 @@ pub struct Placeable {
 
 #[derive(Debug, PartialEq)]
 pub enum Expression {
-    StringExpression { value: String },
-    NumberExpression { value: Number },
-    MessageReference { id: Identifier },
-    ExternalArgument { id: Identifier },
+    StringExpression {
+        value: String,
+    },
+    NumberExpression {
+        value: Number,
+    },
+    MessageReference {
+        id: Identifier,
+    },
+    ExternalArgument {
+        id: Identifier,
+    },
     SelectExpression {
         expression: Option<Box<Expression>>,
         variants: Vec<Variant>,
     },
-    AttributeExpression { id: Identifier, name: Identifier },
-    VariantExpression { id: Identifier, key: VarKey },
+    AttributeExpression {
+        id: Identifier,
+        name: Identifier,
+    },
+    VariantExpression {
+        id: Identifier,
+        key: VarKey,
+    },
     CallExpression {
         callee: Function,
         args: Vec<Argument>,
@@ -98,7 +114,6 @@ pub enum ArgValue {
 pub struct Identifier {
     pub name: String,
 }
-
 
 #[derive(Debug, PartialEq)]
 pub struct Number {

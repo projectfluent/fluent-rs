@@ -45,7 +45,6 @@ pub fn annotate_slice(info: &ErrorInfo, file_name: Option<String>, item: &Item) 
     let lines_num = cmp::max(info.slice.lines().count(), 1);
     let max_ln_width = get_ln_width(info.line + lines_num);
 
-
     result += &format_title_line(item, id, &title);
     if let Some(name) = file_name {
         result += &format_pos_line(&name, info.line, info.col, max_ln_width);
@@ -128,7 +127,6 @@ fn format_slice(
 
         line_num += 1
     }
-
 
     result
 }

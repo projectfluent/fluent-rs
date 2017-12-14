@@ -6,178 +6,19 @@ use self::fluent_locale::negotiate_languages;
 use self::fluent_locale::NegotiationStrategy;
 
 static LOCALES: &[&'static str] = &[
-    "af",
-    "ak",
-    "am",
-    "ar",
-    "asa",
-    "az",
-    "be",
-    "bem",
-    "bez",
-    "bg",
-    "bh",
-    "bm",
-    "bn",
-    "bo",
-    "br",
-    "brx",
-    "bs",
-    "ca",
-    "cgg",
-    "chr",
-    "cs",
-    "cy",
-    "da",
-    "de",
-    "dv",
-    "dz",
-    "ee",
-    "el",
-    "en",
-    "eo",
-    "es",
-    "et",
-    "eu",
-    "fa",
-    "ff",
-    "fi",
-    "fil",
-    "fo",
-    "fr",
-    "fur",
-    "fy",
-    "ga",
-    "gd",
-    "gl",
-    "gsw",
-    "gu",
-    "guw",
-    "gv",
-    "ha",
-    "haw",
-    "he",
-    "hi",
-    "hr",
-    "hu",
-    "id",
-    "ig",
-    "ii",
-    "is",
-    "it",
-    "iu",
-    "ja",
-    "jmc",
-    "jv",
-    "ka",
-    "kab",
-    "kaj",
-    "kcg",
-    "kde",
-    "kea",
-    "kk",
-    "kl",
-    "km",
-    "kn",
-    "ko",
-    "ksb",
-    "ksh",
-    "ku",
-    "kw",
-    "lag",
-    "lb",
-    "lg",
-    "ln",
-    "lo",
-    "lt",
-    "lv",
-    "mas",
-    "mg",
-    "mk",
-    "ml",
-    "mn",
-    "mo",
-    "mr",
-    "ms",
-    "mt",
-    "my",
-    "nah",
-    "naq",
-    "nb",
-    "nd",
-    "ne",
-    "nl",
-    "nn",
-    "no",
-    "nr",
-    "nso",
-    "ny",
-    "nyn",
-    "om",
-    "or",
-    "pa",
-    "pap",
-    "pl",
-    "ps",
-    "pt",
-    "rm",
-    "ro",
-    "rof",
-    "ru",
-    "rwk",
-    "sah",
-    "saq",
-    "se",
-    "seh",
-    "ses",
-    "sg",
-    "sh",
-    "shi",
-    "sk",
-    "sl",
-    "sma",
-    "smi",
-    "smj",
-    "smn",
-    "sms",
-    "sn",
-    "so",
-    "sq",
-    "sr",
-    "ss",
-    "ssy",
-    "st",
-    "sv",
-    "sw",
-    "syr",
-    "ta",
-    "te",
-    "teo",
-    "th",
-    "ti",
-    "tig",
-    "tk",
-    "tl",
-    "tn",
-    "to",
-    "tr",
-    "ts",
-    "tzm",
-    "uk",
-    "ur",
-    "ve",
-    "vi",
-    "vun",
-    "wa",
-    "wae",
-    "wo",
-    "xh",
-    "xog",
-    "yo",
-    "zh",
-    "zu",
+    "af", "ak", "am", "ar", "asa", "az", "be", "bem", "bez", "bg", "bh", "bm", "bn", "bo", "br",
+    "brx", "bs", "ca", "cgg", "chr", "cs", "cy", "da", "de", "dv", "dz", "ee", "el", "en", "eo",
+    "es", "et", "eu", "fa", "ff", "fi", "fil", "fo", "fr", "fur", "fy", "ga", "gd", "gl", "gsw",
+    "gu", "guw", "gv", "ha", "haw", "he", "hi", "hr", "hu", "id", "ig", "ii", "is", "it", "iu",
+    "ja", "jmc", "jv", "ka", "kab", "kaj", "kcg", "kde", "kea", "kk", "kl", "km", "kn", "ko",
+    "ksb", "ksh", "ku", "kw", "lag", "lb", "lg", "ln", "lo", "lt", "lv", "mas", "mg", "mk", "ml",
+    "mn", "mo", "mr", "ms", "mt", "my", "nah", "naq", "nb", "nd", "ne", "nl", "nn", "no", "nr",
+    "nso", "ny", "nyn", "om", "or", "pa", "pap", "pl", "ps", "pt", "rm", "ro", "rof", "ru", "rwk",
+    "sah", "saq", "se", "seh", "ses", "sg", "sh", "shi", "sk", "sl", "sma", "smi", "smj", "smn",
+    "sms", "sn", "so", "sq", "sr", "ss", "ssy", "st", "sv", "sw", "syr", "ta", "te", "teo", "th",
+    "ti", "tig", "tk", "tl", "tn", "to", "tr", "ts", "tzm", "uk", "ur", "ve", "vi", "vun", "wa",
+    "wae", "wo", "xh", "xog", "yo", "zh", "zu",
 ];
-
 
 fn is_between(n: f32, start: f32, end: f32) -> bool {
     start <= n && n <= end
@@ -225,16 +66,20 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
     /* 3 */
     |n| if n == 1.0 { "one" } else { "other" },
     /* 4 */
-    |n| if is_between(n, 0.0, 1.0) {
-        "one"
-    } else {
-        "other"
+    |n| {
+        if is_between(n, 0.0, 1.0) {
+            "one"
+        } else {
+            "other"
+        }
     },
     /* 5 */
-    |n| if is_between(n, 0.0, 2.0) {
-        "one"
-    } else {
-        "other"
+    |n| {
+        if is_between(n, 0.0, 2.0) {
+            "one"
+        } else {
+            "other"
+        }
     },
     /* 6 */
     |n| {
@@ -357,10 +202,12 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
         "other"
     },
     /* 16 */
-    |n| if n % 10.0 == 1.0 && n != 11.0 {
-        "one"
-    } else {
-        "other"
+    |n| {
+        if n % 10.0 == 1.0 && n != 11.0 {
+            "one"
+        } else {
+            "other"
+        }
     },
     /* 17 */
     |n| {
@@ -438,10 +285,12 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
         "other"
     },
     /* 23 */
-    |n| if is_between(n, 0.0, 1.0) || is_between(n, 11.0, 99.0) {
-        "one"
-    } else {
-        "other"
+    |n| {
+        if is_between(n, 0.0, 1.0) || is_between(n, 11.0, 99.0) {
+            "one"
+        } else {
+            "other"
+        }
     },
     /* 24 */
     |n| {
