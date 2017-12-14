@@ -22,7 +22,6 @@ pub struct Message {
     pub id: Identifier,
     pub value: Option<Pattern>,
     pub attributes: Option<Vec<Attribute>>,
-    pub tags: Option<Vec<Tag>>,
     pub comment: Option<Comment>,
 }
 
@@ -78,11 +77,6 @@ pub enum Expression {
 pub struct Attribute {
     pub id: Identifier,
     pub value: Pattern,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Tag {
-    pub name: Symbol,
 }
 
 #[derive(Debug, PartialEq)]

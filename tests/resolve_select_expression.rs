@@ -240,6 +240,7 @@ baz-unknown =
 }
 
 #[test]
+#[ignore]
 fn select_expression_message_selector() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
