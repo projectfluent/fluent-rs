@@ -14,7 +14,6 @@ pub type Result<T> = result::Result<T, ParserError>;
 
 pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
     let mut errors = vec![];
-    let mut comment = None;
 
     let mut ps = ParserStream::new(source.chars());
 
@@ -26,18 +25,9 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
         let entry_start_pos = ps.get_index();
 
         match get_entry(&mut ps) {
-            Ok(entry) => if entry_start_pos == 0 {
-                match entry {
-                    ast::Entry::Comment(c) => {
-                        comment = Some(c);
-                    }
-                    _ => {
-                        entries.push(entry);
-                    }
-                }
-            } else {
+            Ok(entry) => {
                 entries.push(entry);
-            },
+            }
             Err(mut e) => {
                 let error_pos = ps.get_index();
                 entries.push(get_junk_entry(&mut ps, source, entry_start_pos));
@@ -51,18 +41,9 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     }
 
     if errors.is_empty() {
-        Ok(ast::Resource {
-            body: entries,
-            comment,
-        })
+        Ok(ast::Resource { body: entries })
     } else {
-        Err((
-            ast::Resource {
-                body: entries,
-                comment,
-            },
-            errors,
-        ))
+        Err((ast::Resource { body: entries }, errors))
     }
 }
 
@@ -70,18 +51,19 @@ fn get_entry<I>(ps: &mut ParserStream<I>) -> Result<ast::Entry>
 where
     I: Iterator<Item = char>,
 {
-    let comment = if ps.current_is('/') {
+    let comment = if ps.current_is('#') {
         Some(get_comment(ps)?)
     } else {
         None
     };
 
-    if ps.current_is('[') {
-        return Ok(get_section(ps, comment)?);
-    }
-
     if ps.is_message_id_start() {
-        return Ok(get_message(ps, comment)?);
+        match comment {
+            None | Some(ast::Comment::Comment { .. }) => {
+                return Ok(get_message(ps, comment)?);
+            }
+            _ => {}
+        };
     }
 
     match comment {
@@ -90,13 +72,52 @@ where
     }
 }
 
+#[derive(PartialEq, Copy, Clone)]
+enum CommentLevel {
+    Comment = 0,
+    GroupComment = 1,
+    ResourceComment = 2,
+}
+
+fn get_comment_start<I>(ps: &mut ParserStream<I>, level: &CommentLevel) -> Result<()>
+where
+    I: Iterator<Item = char>,
+{
+    let depth = *level as u8;
+    for _ in 0..(depth + 1) {
+        ps.expect_char('#')?;
+    }
+
+    if !ps.current_is('\n') {
+        ps.expect_char(' ')?;
+    }
+    Ok(())
+}
+
+fn get_comment_level<I>(ps: &mut ParserStream<I>) -> Result<CommentLevel>
+where
+    I: Iterator<Item = char>,
+{
+    let mut level = CommentLevel::Comment;
+    ps.peek();
+    if ps.current_peek_is('#') {
+        ps.peek();
+        if ps.current_peek_is('#') {
+            level = CommentLevel::ResourceComment;
+        } else {
+            level = CommentLevel::GroupComment;
+        }
+    }
+    ps.reset_peek();
+    Ok(level)
+}
+
 fn get_comment<I>(ps: &mut ParserStream<I>) -> Result<ast::Comment>
 where
     I: Iterator<Item = char>,
 {
-    ps.expect_char('/')?;
-    ps.expect_char('/')?;
-    ps.take_char_if(' ');
+    let level = get_comment_level(ps)?;
+    get_comment_start(ps, &level)?;
 
     let mut content = String::new();
 
@@ -107,43 +128,18 @@ where
 
         ps.next();
 
-        if ps.current_is('/') {
-            content.push('\n');
-            ps.next();
-            ps.expect_char('/')?;
-            ps.take_char_if(' ');
-        } else {
+        if !ps.current_is('#') || level != get_comment_level(ps)? {
             break;
+        } else {
+            get_comment_start(ps, &level)?;
         }
     }
 
-    Ok(ast::Comment { content })
-}
-
-fn get_section<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
-where
-    I: Iterator<Item = char>,
-{
-    ps.expect_char('[')?;
-    ps.expect_char('[')?;
-
-    ps.skip_line_ws();
-
-    let symb = get_symbol(ps)?;
-
-    ps.skip_line_ws();
-
-    ps.expect_char(']')?;
-    ps.expect_char(']')?;
-
-    ps.skip_line_ws();
-
-    ps.expect_char('\n')?;
-
-    Ok(ast::Entry::Section {
-        name: symb,
-        comment,
-    })
+    match level {
+        CommentLevel::Comment => Ok(ast::Comment::Comment { content }),
+        CommentLevel::GroupComment => Ok(ast::Comment::GroupComment { content }),
+        CommentLevel::ResourceComment => Ok(ast::Comment::ResourceComment { content }),
+    }
 }
 
 fn get_message<I>(ps: &mut ParserStream<I>, comment: Option<ast::Comment>) -> Result<ast::Entry>
@@ -261,12 +257,12 @@ where
                 return Ok(ast::VarKey::Number(get_number(ps)?));
             }
             _ => {
-                return Ok(ast::VarKey::Symbol(get_symbol(ps)?));
+                return Ok(ast::VarKey::VariantName(get_variant_name(ps)?));
             }
         }
     } else {
         return error!(ErrorKind::ExpectedField {
-            field: "Symbol | Number".to_owned(),
+            field: "VariantName | Number".to_owned(),
         });
     }
 }
@@ -323,7 +319,7 @@ where
     Ok(variants)
 }
 
-fn get_symbol<I>(ps: &mut ParserStream<I>) -> Result<ast::Symbol>
+fn get_variant_name<I>(ps: &mut ParserStream<I>) -> Result<ast::VariantName>
 where
     I: Iterator<Item = char>,
 {
@@ -339,7 +335,7 @@ where
         name.pop();
     }
 
-    Ok(ast::Symbol { name })
+    Ok(ast::VariantName { name })
 }
 
 fn get_digits<I>(ps: &mut ParserStream<I>) -> Result<String>
