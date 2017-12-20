@@ -19,7 +19,7 @@ key5
 key5
  .m = Foo
 
-[[ section ]]
+## section
 
 
 key6 = {

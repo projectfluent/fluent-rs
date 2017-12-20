@@ -74,7 +74,7 @@ impl ResolveValue for ast::Number {
     }
 }
 
-impl ResolveValue for ast::Symbol {
+impl ResolveValue for ast::VariantName {
     fn to_value(&self, _env: &Env) -> Option<FluentValue> {
         Some(FluentValue::from(self.name.clone()))
     }
@@ -107,7 +107,7 @@ impl ResolveValue for ast::Expression {
                 if let Some(ref selector) = selector {
                     for variant in variants {
                         match variant.key {
-                            ast::VarKey::Symbol(ref symbol) => {
+                            ast::VarKey::VariantName(ref symbol) => {
                                 let key = FluentValue::from(symbol.name.clone());
                                 if key.matches(env.ctx, selector) {
                                     return variant.value.to_value(env);

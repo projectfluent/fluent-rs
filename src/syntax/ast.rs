@@ -1,20 +1,13 @@
 #[derive(Debug, PartialEq)]
 pub struct Resource {
     pub body: Vec<Entry>,
-    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
-    Section {
-        name: Symbol,
-        comment: Option<Comment>,
-    },
     Comment(Comment),
-    Junk {
-        content: String,
-    },
+    Junk { content: String },
 }
 
 #[derive(Debug, PartialEq)]
@@ -88,7 +81,7 @@ pub struct Variant {
 
 #[derive(Debug, PartialEq)]
 pub enum VarKey {
-    Symbol(Symbol),
+    VariantName(VariantName),
     Number(Number),
 }
 
@@ -115,19 +108,15 @@ pub struct Number {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Symbol {
+pub struct VariantName {
     pub name: String,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Comment {
-    pub content: String,
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Section {
-    pub name: String,
-    pub comment: Option<Comment>,
+pub enum Comment {
+    Comment { content: String },
+    GroupComment { content: String },
+    ResourceComment { content: String },
 }
 
 #[derive(Debug, PartialEq)]
