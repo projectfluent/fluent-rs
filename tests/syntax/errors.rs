@@ -298,3 +298,43 @@ fn private_errors() {
         }
     }
 }
+
+#[test]
+fn block_expr_errors() {
+    let path = "./tests/fixtures/parser/ftl/errors/09-block-expr.ftl";
+    let source = read_file(path).expect("Failed to read");
+    match parse(&source) {
+        Ok(_) => panic!("Expected errors in the file"),
+        Err((_, ref errors)) => {
+            assert_eq!(2, errors.len());
+
+            let error1 = &errors[0];
+
+            assert_eq!(ErrorKind::ExpectedToken { token: ' ' }, error1.kind);
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "key = Test { $foo ->\n  *[other] Value\n}".to_owned(),
+                    line: 0,
+                    col: 0,
+                    pos: 38,
+                }),
+                error1.info
+            );
+
+            let error2 = &errors[1];
+
+            assert_eq!(ErrorKind::ExpectedEntry, error2.kind);
+
+            assert_eq!(
+                Some(ErrorInfo {
+                    slice: "} Test".to_owned(),
+                    line: 6,
+                    col: 1,
+                    pos: 0,
+                }),
+                error2.info
+            );
+        }
+    }
+}

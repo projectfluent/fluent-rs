@@ -481,7 +481,7 @@ fn get_plural_rule(loc: &str) -> Option<usize> {
         "zu" => 3,
         _ => return None,
     };
-    return Some(num);
+    Some(num)
 }
 
 pub struct PluralRules {

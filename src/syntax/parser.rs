@@ -150,41 +150,93 @@ where
 
     ps.skip_line_ws();
 
-    let pattern = if ps.current_is('=') {
-        ps.next();
+    let value;
+    let attributes;
 
-        ps.skip_line_ws();
-
-        get_pattern(ps)?
+    if id.name.starts_with('-') {
+        value = get_value(ps)?;
+        if value.is_none() {
+            return error!(ErrorKind::MissingField {
+                entry_id: id.name,
+                fields: vec!["Value"],
+            });
+        }
+        attributes = get_attributes(ps)?;
     } else {
-        None
-    };
-
-    let attributes = if ps.is_peek_next_line_attribute_start() {
-        Some(get_attributes(ps)?)
-    } else {
-        None
-    };
-
-    if pattern.is_none() && attributes.is_none() {
-        return error!(ErrorKind::MissingField {
-            entry_id: id.name,
-            fields: vec!["Value", "Attribute"],
-        });
+        value = get_value(ps)?;
+        attributes = get_attributes(ps)?;
+        if value.is_none() && attributes.is_none() {
+            return error!(ErrorKind::MissingField {
+                entry_id: id.name,
+                fields: vec!["Value", "Attribute"],
+            });
+        }
     }
 
     Ok(ast::Entry::Message(ast::Message {
         id,
-        value: pattern,
+        value,
         attributes,
         comment,
     }))
 }
 
-fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Attribute>>
+fn get_value<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
 where
     I: Iterator<Item = char>,
 {
+    ps.skip_line_ws();
+
+    if !ps.current_is('=') {
+        return Ok(None);
+    }
+
+    ps.next();
+    ps.skip_line_ws();
+
+    let pattern;
+
+    if ps.current_is('{') {
+        ps.next();
+        ps.skip_line_ws();
+
+        let expression = get_expression(ps)?;
+
+        match expression {
+            ast::Expression::SelectExpression { .. }
+            | ast::Expression::VariantExpression { .. } => {
+                let elements = vec![
+                    ast::PatternElement::Placeable(ast::Placeable { expression }),
+                ];
+
+                ps.skip_ws_lines();
+
+                ps.skip_line_ws();
+
+                ps.expect_char('}')?;
+                pattern = Some(ast::Pattern { elements });
+            }
+            _ => {
+                ps.skip_ws_lines();
+
+                ps.expect_char('}')?;
+                pattern = get_pattern(ps, Some(expression))?;
+            }
+        }
+    } else {
+        pattern = get_pattern(ps, None)?;
+    }
+
+    Ok(pattern)
+}
+
+fn get_attributes<I>(ps: &mut ParserStream<I>) -> Result<Option<Vec<ast::Attribute>>>
+where
+    I: Iterator<Item = char>,
+{
+    if !ps.is_peek_next_line_attribute_start() {
+        return Ok(None);
+    }
     let mut attributes = vec![];
     loop {
         ps.expect_char('\n')?;
@@ -200,7 +252,7 @@ where
 
         ps.skip_line_ws();
 
-        if let Some(pattern) = get_pattern(ps)? {
+        if let Some(pattern) = get_pattern(ps, None)? {
             attributes.push(ast::Attribute {
                 id: key,
                 value: pattern,
@@ -215,7 +267,7 @@ where
             break;
         }
     }
-    Ok(attributes)
+    Ok(Some(attributes))
 }
 
 fn get_private_identifier<I>(ps: &mut ParserStream<I>) -> Result<ast::Identifier>
@@ -267,7 +319,7 @@ where
     }
 }
 
-fn get_variants<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
+fn get_variant_list<I>(ps: &mut ParserStream<I>) -> Result<Vec<ast::Variant>>
 where
     I: Iterator<Item = char>,
 {
@@ -297,7 +349,7 @@ where
 
         ps.skip_line_ws();
 
-        if let Some(pattern) = get_pattern(ps)? {
+        if let Some(pattern) = get_pattern(ps, None)? {
             variants.push(ast::Variant {
                 key,
                 value: pattern,
@@ -398,13 +450,22 @@ where
     Ok(ast::Number { value: num })
 }
 
-fn get_pattern<I>(ps: &mut ParserStream<I>) -> Result<Option<ast::Pattern>>
+fn get_pattern<I>(
+    ps: &mut ParserStream<I>,
+    expression: Option<ast::Expression>,
+) -> Result<Option<ast::Pattern>>
 where
     I: Iterator<Item = char>,
 {
     let mut buffer = String::new();
     let mut elements = vec![];
     let mut first_line = true;
+
+    if let Some(expression) = expression {
+        elements.push(ast::PatternElement::Placeable(ast::Placeable {
+            expression,
+        }));
+    }
 
     while let Some(ch) = ps.current() {
         match ch {
@@ -459,6 +520,11 @@ where
                     expression: get_expression(ps)?,
                 }));
 
+                if ps.current_is('\n') {
+                    ps.skip_ws_lines();
+                    ps.expect_char(' ')?;
+                }
+                ps.skip_line_ws();
                 ps.expect_char('}')?;
 
                 continue;
@@ -482,11 +548,7 @@ where
     I: Iterator<Item = char>,
 {
     if ps.is_peek_next_line_variant_start() {
-        let variants = get_variants(ps)?;
-
-        ps.expect_char('\n')?;
-        ps.expect_char(' ')?;
-        ps.skip_line_ws();
+        let variants = get_variant_list(ps)?;
 
         return Ok(ast::Expression::SelectExpression {
             expression: None,
@@ -512,15 +574,11 @@ where
 
             ps.skip_line_ws();
 
-            let variants = get_variants(ps)?;
+            let variants = get_variant_list(ps)?;
 
             if variants.is_empty() {
                 return error!(ErrorKind::MissingVariants);
             }
-
-            ps.expect_char('\n')?;
-            ps.expect_char(' ')?;
-            ps.skip_line_ws();
 
             return Ok(ast::Expression::SelectExpression {
                 expression: Some(Box::new(selector)),
@@ -529,11 +587,9 @@ where
         } else {
             ps.reset_peek();
         }
-    } else {
-        if let ast::Expression::AttributeExpression { ref id, .. } = selector {
-            if id.name.starts_with('-') {
-                return error!(ErrorKind::ForbiddenPrivateAttributeExpression);
-            }
+    } else if let ast::Expression::AttributeExpression { ref id, .. } = selector {
+        if id.name.starts_with('-') {
+            return error!(ErrorKind::ForbiddenPrivateAttributeExpression);
         }
     }
 
