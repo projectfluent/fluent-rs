@@ -18,11 +18,11 @@ addons:
 before_script:
   - export LD_LIBRARY_PATH=$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH
   - export PATH=$HOME/.cargo/bin:$PATH
-  - which cargo-coveralls || cargo install cargo-travis
-  - which rustfmt || cargo install rustfmt-nightly
+#  - cargo install rustfmt-nightly || echo "rustfmt-nightly already installed"
+  - cargo install cargo-travis || echo "cargo-travis already installed"
 
 script:
-  - cargo fmt -- --write-mode=diff
+#  - cargo fmt -- --write-mode=diff
   - cargo build
   - cargo test
   - cargo doc
