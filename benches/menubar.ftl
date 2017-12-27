@@ -1,12 +1,11 @@
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
+# browser/locales/en-US/browser/menubar.ftl
 
-// browser/locales/en-US/browser/menubar.ftl
-
-[[ File menu ]]
+## File menu
 
 file-menu
     .label =     File
@@ -30,8 +29,8 @@ new-private-window-menuitem
 new-non-remote-window-menuitem
     .label =      New Non-e10s Window
 
-// Only displayed on OS X, and only on windows that aren't main browser windows,
-// or when there are no windows but Firefox is still running.
+# Only displayed on OS X, and only on windows that aren't main browser windows,
+# or when there are no windows but Firefox is still running.
 open-location-menuitem
     .label =      Open Location…
 open-file-menuitem
@@ -49,7 +48,7 @@ close-window-menuitem
     .label =      Close Window
     .accesskey =  d
 
-// .accesskey2 = is for content area context menu
+# .accesskey2 = is for content area context menu
 save-page-menuitem
     .label =      Save Page As…
     .accesskey =  A
@@ -85,11 +84,11 @@ quit-application-menuitem-win
     .accesskey =  x
 quit-application-menuitem-mac
     .label =      Quit { brand-shorter-name }
-// Used by both Linux and OSX builds
+# Used by both Linux and OSX builds
 quit-application-key-unix
     .key =        Q
 
-[[ Edit menu ]]
+## Edit menu
 
 edit-menu
     .label =      Edit
@@ -159,7 +158,7 @@ preferences-menuitem-unix
     .accesskey =  n
 
 
-[[ View menu ]]
+## View menu
 
 view-menu
     .label =      View
@@ -221,8 +220,8 @@ bidi-switch-page-direction-menuitem
     .label =      Switch Page Direction
     .accesskey =  D
 
-// Match what Safari and other Apple applications use on OS X Lion.
-[[ Full Screen controls ]]
+## Full Screen controls
+## Match what Safari and other Apple applications use on OS X Lion.
 
 enter-full-screen-menuitem
     .label =      Enter Full Screen
@@ -237,7 +236,7 @@ full-screen-key
     .key =        f
 
 
-[[ History menu ]]
+## History menu
 
 history-menu
     .label =        History
@@ -258,7 +257,7 @@ history-undo-window-menu
     .label =        Recently Closed Windows
 
 
-[[ Bookmarks menu ]]
+# Bookmarks menu
 
 bookmarks-menu
     .label =      Bookmarks
@@ -267,8 +266,8 @@ show-all-bookmarks-menuitem
     .label =      Show All Bookmarks
 show-all-bookmarks-key
     .key =        b
-// .key = should not contain the letters A-F since the are reserved shortcut
-// keys on Linux.
+# .key = should not contain the letters A-F since the are reserved shortcut
+# keys on Linux.
 show-all-bookmarks-key-gtk
     .key =        o
 bookmark-this-page-broadcaster
@@ -293,7 +292,7 @@ personalbar-menu
     .accesskey =  B
 
 
-[[ Tools menu ]]
+## Tools menu
 
 tools-menu
     .label =      Tools
@@ -342,14 +341,14 @@ mirror-tab-menu
     .accesskey =  m
 
 
-// browser/locales/en-US/browser/toolbar.ftl
+# browser/locales/en-US/browser/toolbar.ftl
 
 urlbar-textbox
     .placeholder = Search or enter address
     .accesskey =   d
 
 
-[[ Toolbar items ]]
+## Toolbar items
 
 view-bookmarks-broadcaster
     .label =      Bookmarks
@@ -366,7 +365,7 @@ view-tabs-broadcaster
     .label =      Synced Tabs
 
 
-// browser/branding/official/locales/en-US/brand.ftl
+# browser/branding/official/locales/en-US/brand.ftl
 
 brand-shorter-name    = Firefox
 brand-short-name      = Firefox
@@ -377,14 +376,14 @@ trademark-info =
   | Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
 
 sync-brand-short-name = Sync
-// This Source Code Form is subject to the terms of the Mozilla Public
-// License, v. 2.0. If a copy of the MPL was not distributed with this
-// file, You can obtain one at http://mozilla.org/MPL/2.0/.
+# This Source Code Form is subject to the terms of the Mozilla Public
+# License, v. 2.0. If a copy of the MPL was not distributed with this
+# file, You can obtain one at http://mozilla.org/MPL/2.0/.
 
 
-// browser/locales/en-US/browser/menubar.ftl
+# browser/locales/en-US/browser/menubar.ftl
 
-[[ File menu ]]
+## File menu
 
 file-menu
     .label =     File
@@ -408,8 +407,8 @@ new-private-window-menuitem
 new-non-remote-window-menuitem
     .label =      New Non-e10s Window
 
-// Only displayed on OS X, and only on windows that aren't main browser windows,
-// or when there are no windows but Firefox is still running.
+# Only displayed on OS X, and only on windows that aren't main browser windows,
+# or when there are no windows but Firefox is still running.
 open-location-menuitem
     .label =      Open Location…
 open-file-menuitem
@@ -427,7 +426,7 @@ close-window-menuitem
     .label =      Close Window
     .accesskey =  d
 
-// .accesskey2 = is for content area context menu
+# .accesskey2 = is for content area context menu
 save-page-menuitem
     .label =      Save Page As…
     .accesskey =  A
@@ -463,11 +462,11 @@ quit-application-menuitem-win
     .accesskey =  x
 quit-application-menuitem-mac
     .label =      Quit { brand-shorter-name }
-// Used by both Linux and OSX builds
+# Used by both Linux and OSX builds
 quit-application-key-unix
     .key =        Q
 
-[[ Edit menu ]]
+## Edit menu
 
 edit-menu
     .label =      Edit
@@ -537,7 +536,7 @@ preferences-menuitem-unix
     .accesskey =  n
 
 
-[[ View menu ]]
+## View menu
 
 view-menu
     .label =      View
@@ -599,8 +598,8 @@ bidi-switch-page-direction-menuitem
     .label =      Switch Page Direction
     .accesskey =  D
 
-// Match what Safari and other Apple applications use on OS X Lion.
-[[ Full Screen controls ]]
+## Full Screen controls
+## Match what Safari and other Apple applications use on OS X Lion.
 
 enter-full-screen-menuitem
     .label =      Enter Full Screen
@@ -615,7 +614,7 @@ full-screen-key
     .key =        f
 
 
-[[ History menu ]]
+## History menu
 
 history-menu
     .label =        History
@@ -636,7 +635,7 @@ history-undo-window-menu
     .label =        Recently Closed Windows
 
 
-[[ Bookmarks menu ]]
+## Bookmarks menu
 
 bookmarks-menu
     .label =      Bookmarks
@@ -645,8 +644,8 @@ show-all-bookmarks-menuitem
     .label =      Show All Bookmarks
 show-all-bookmarks-key
     .key =        b
-// .key = should not contain the letters A-F since the are reserved shortcut
-// keys on Linux.
+# .key = should not contain the letters A-F since the are reserved shortcut
+# keys on Linux.
 show-all-bookmarks-key-gtk
     .key =        o
 bookmark-this-page-broadcaster
@@ -671,7 +670,7 @@ personalbar-menu
     .accesskey =  B
 
 
-[[ Tools menu ]]
+## Tools menu
 
 tools-menu
     .label =      Tools
@@ -720,14 +719,14 @@ mirror-tab-menu
     .accesskey =  m
 
 
-// browser/locales/en-US/browser/toolbar.ftl
+# browser/locales/en-US/browser/toolbar.ftl
 
 urlbar-textbox
     .placeholder = Search or enter address
     .accesskey =   d
 
 
-[[ Toolbar items ]]
+## Toolbar items
 
 view-bookmarks-broadcaster
     .label =      Bookmarks
@@ -744,7 +743,7 @@ view-tabs-broadcaster
     .label =      Synced Tabs
 
 
-// browser/branding/official/locales/en-US/brand.ftl
+# browser/branding/official/locales/en-US/brand.ftl
 
 brand-shorter-name    = Firefox
 brand-short-name      = Firefox
