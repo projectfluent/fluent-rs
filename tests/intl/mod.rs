@@ -2,7 +2,6 @@ extern crate fluent;
 
 use self::fluent::intl::PluralRules;
 
-
 #[test]
 fn plural_rules() {
     let pr = PluralRules::new(&["pl"]);

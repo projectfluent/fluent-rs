@@ -233,14 +233,15 @@ fn private_errors() {
 
             assert_eq!(
                 ErrorKind::ExpectedCharRange {
-                    range: "0...9".to_owned()
+                    range: "0...9".to_owned(),
                 },
                 error1.kind
             );
 
             assert_eq!(
                 Some(ErrorInfo {
-                    slice: "key =\n    { $foo ->\n        [one] Foo\n       *[-other] Foo 2\n    }".to_owned(),
+                    slice: "key =\n    { $foo ->\n        [one] Foo\n       *[-other] Foo 2\n    }"
+                        .to_owned(),
                     line: 1,
                     col: 10,
                     pos: 48,
@@ -252,7 +253,7 @@ fn private_errors() {
 
             assert_eq!(
                 ErrorKind::ExpectedCharRange {
-                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned()
+                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned(),
                 },
                 error2.kind
             );
@@ -269,10 +270,7 @@ fn private_errors() {
 
             let error3 = &errors[2];
 
-            assert_eq!(
-                ErrorKind::ForbiddenPrivateAttributeExpression,
-                error3.kind
-            );
+            assert_eq!(ErrorKind::ForbiddenPrivateAttributeExpression, error3.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
@@ -286,10 +284,7 @@ fn private_errors() {
 
             let error4 = &errors[3];
 
-            assert_eq!(
-                ErrorKind::ForbiddenCallee,
-                error4.kind
-            );
+            assert_eq!(ErrorKind::ForbiddenCallee, error4.kind);
 
             assert_eq!(
                 Some(ErrorInfo {

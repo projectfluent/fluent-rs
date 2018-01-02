@@ -204,9 +204,7 @@ where
     fn skip_to_next_entry_start(&mut self) {
         while let Some(_) = self.next() {
             if self.current_is('\n') && !self.peek_char_is('\n')
-                && (self.next() == None || self.is_message_id_start() || self.current_is('/')
-                    || self.current_is('[') || self.peek_char_is('/')
-                    || self.peek_char_is('['))
+                && (self.next() == None || self.is_message_id_start() || self.current_is('#'))
             {
                 break;
             }

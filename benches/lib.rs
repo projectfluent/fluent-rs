@@ -10,14 +10,12 @@ use test::Bencher;
 use fluent::syntax::{ast, parse};
 use fluent::context::MessageContext;
 
-
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
     let mut s = String::new();
     try!(f.read_to_string(&mut s));
     Ok(s)
 }
-
 
 #[bench]
 fn bench_simple_parse(b: &mut Bencher) {

@@ -64,3 +64,16 @@ fn multiline_junk() {
         }
     }
 }
+
+#[test]
+fn recover_at_comment() {
+    let path = "./tests/fixtures/parser/ftl/junk/05-comment.ftl";
+    let source = read_file(path).expect("Failed to read");
+    match parse(&source) {
+        Ok(_) => panic!("Expected junk in the file"),
+        Err((res, errors)) => {
+            assert_eq!(1, errors.len());
+            assert_eq!(4, res.body.len());
+        }
+    }
+}
