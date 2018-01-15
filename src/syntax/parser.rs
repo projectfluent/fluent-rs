@@ -132,6 +132,7 @@ where
             break;
         } else {
             get_comment_start(ps, &level)?;
+            content.push('\n');
         }
     }
 
