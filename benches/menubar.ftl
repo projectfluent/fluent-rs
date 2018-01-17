@@ -373,7 +373,7 @@ brand-full-name       = Mozilla Firefox
 vendor-short-name     = Mozilla
 
 trademark-info =
-  | Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
+    Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
 
 sync-brand-short-name = Sync
 # This Source Code Form is subject to the terms of the Mozilla Public
@@ -751,6 +751,6 @@ brand-full-name       = Mozilla Firefox
 vendor-short-name     = Mozilla
 
 trademark-info =
-  | Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
+    Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
 
 sync-brand-short-name = Sync
