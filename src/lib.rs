@@ -1,5 +1,3 @@
-#![feature(box_patterns)]
-
 //! Fluent is a localization system designed to improve how software is translated.
 //!
 //! The Rust implementation provides the low level components for syntax operations, like parser
