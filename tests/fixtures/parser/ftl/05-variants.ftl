@@ -9,14 +9,14 @@ key3 = {
     [feminine] Variant for feminine
   }
 
-key4
+key4 =
  .aria-label = Test
 
-key5
+key5 =
  .aria-label = Test
  .loop = Foo
 
-key5
+key5 =
  .m = Foo
 
 ## section

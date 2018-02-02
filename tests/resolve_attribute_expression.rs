@@ -10,7 +10,7 @@ fn attribute_expression() {
         "
 foo = Foo
     .attr = Foo Attr
-bar
+bar =
     .attr = Bar Attr
 
 use-foo = { foo }

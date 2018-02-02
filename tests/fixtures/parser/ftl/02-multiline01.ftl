@@ -1,14 +1,14 @@
 key1 =
-     | This is a new line
+    This is a new line
 
-key4=
- | <p>
- |   So
- |     Many
- |   Lines
- | </p>
+key4 =
+  <p>
+    So
+      Many
+    Lines
+  </p>
 
 key5 =        
- |<p>
- | Foo
- |</p>
+ <p>
+  Foo
+ </p>

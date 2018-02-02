@@ -16,27 +16,24 @@ pub struct ErrorInfo {
 pub enum ErrorKind {
     Generic,
     ExpectedEntry,
-    ExpectedToken {
-        token: char,
-    },
-    ExpectedCharRange {
-        range: String,
-    },
-    ExpectedField {
-        field: String,
-    },
-    MissingField {
-        entry_id: String,
-        fields: Vec<&'static str>,
-    },
-    MissingDefaultVariant,
-    MissingVariants,
+    ExpectedToken { token: char },
+    ExpectedCharRange { range: String },
+    ExpectedMessageField { entry_id: String },
+    ExpectedTermField { entry_id: String },
     ForbiddenWhitespace,
     ForbiddenCallee,
     ForbiddenKey,
-    ForbiddenPrivateAttributeExpression,
-    ForbiddenPublicAttributeExpression,
-    ForbiddenVariantExpression,
+    MissingDefaultVariant,
+    MissingVariants,
+    MissingValue,
+    MissingVariantKey,
+    MissingLiteral,
+    MultipleDefaultVariants,
+    MessageReferenceAsSelector,
+    VariantAsSelector,
+    MessageAttributeAsSelector,
+    TermAttributeAsSelector,
+    UnterminatedStringExpression,
 }
 
 pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
@@ -45,7 +42,7 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
         ErrorKind::ExpectedEntry => (
             "E0002",
             "Expected an entry start".to_owned(),
-            "Expected one of ('a'...'Z' | '_' | '[[' | '#') here",
+            "Expected one of ('a'...'Z' | '_' | #') here",
         ),
         ErrorKind::ExpectedToken { token } => ("E0003", format!("expected token `{}`", token), ""),
         ErrorKind::ExpectedCharRange { ref range } => (
@@ -53,23 +50,19 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
             format!("Expected a character from range ({})", range),
             "",
         ),
-        ErrorKind::MissingField {
-            ref entry_id,
-            ref fields,
-        } => {
-            let list = fields.join(", ");
-            (
-                "E0005",
-                format!(
-                    "Expected entry `{}` to have one of the fields: {}",
-                    entry_id, list
-                ),
-                "",
-            )
-        }
-        ErrorKind::ExpectedField { ref field } => {
-            ("E0006", format!("Expected field: {}", field), "")
-        }
+        ErrorKind::ExpectedMessageField { ref entry_id } => (
+            "E0005",
+            format!(
+                "Expected message `{}` to have a value or attributes",
+                entry_id
+            ),
+            "",
+        ),
+        ErrorKind::ExpectedTermField { ref entry_id } => (
+            "E0006",
+            format!("Expected term `{}` to have a value", entry_id),
+            "",
+        ),
         ErrorKind::ForbiddenWhitespace => (
             "E0007",
             "Keyword cannot end with a whitespace".to_owned(),
@@ -95,20 +88,36 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
             "Expected at least one variant after \"->\".".to_owned(),
             "",
         ),
-        ErrorKind::ForbiddenPrivateAttributeExpression => (
-            "E0012",
-            "Attributes of private messages cannot be used as placeables.".to_owned(),
+        ErrorKind::MissingValue => ("E0012", "Expected value".to_owned(), ""),
+        ErrorKind::MissingVariantKey => ("E0013", "Expected variant key".to_owned(), ""),
+        ErrorKind::MissingLiteral => ("E0014", "Expected literal".to_owned(), ""),
+        ErrorKind::MultipleDefaultVariants => (
+            "E0015",
+            "Only one variant can be marked as default (*)".to_owned(),
             "",
         ),
-        ErrorKind::ForbiddenPublicAttributeExpression => (
-            "E0013",
-            "Attributes of public messages cannot be used as selectors.".to_owned(),
+        ErrorKind::MessageReferenceAsSelector => (
+            "E0016",
+            "Message references cannot be used as selectors".to_owned(),
             "",
         ),
-        ErrorKind::ForbiddenVariantExpression => (
-            "E0014",
-            "Variants cannot be used as selectors.".to_owned(),
+        ErrorKind::VariantAsSelector => (
+            "E0017",
+            "Variants cannot be used as selectors".to_owned(),
             "",
         ),
+        ErrorKind::MessageAttributeAsSelector => (
+            "E0018",
+            "Attributes of messages cannot be used as selectors.".to_owned(),
+            "",
+        ),
+        ErrorKind::TermAttributeAsSelector => (
+            "E0019",
+            "Attributes of terms cannot be used as selectors.".to_owned(),
+            "",
+        ),
+        ErrorKind::UnterminatedStringExpression => {
+            ("E0020", "Underminated string expression".to_owned(), "")
+        }
     }
 }

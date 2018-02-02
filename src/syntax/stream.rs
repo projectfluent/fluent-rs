@@ -102,9 +102,19 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         ret
     }
 
-    pub fn reset_peek(&mut self) {
-        self.peek_index = self.index;
-        self.peek_end = self.iter_end;
+    pub fn reset_peek(&mut self, pos: Option<usize>) {
+        match pos {
+            Some(pos) => {
+                if pos < self.peek_index {
+                    self.peek_end = false
+                }
+                self.peek_index = pos
+            }
+            None => {
+                self.peek_index = self.index;
+                self.peek_end = self.iter_end;
+            }
+        }
     }
 
     pub fn skip_to_peek(&mut self) {

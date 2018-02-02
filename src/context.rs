@@ -41,6 +41,7 @@ use super::resolve::{Env, ResolveValue};
 pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
     messages: HashMap<String, ast::Message>,
+    terms: HashMap<String, ast::Term>,
 }
 
 impl<'ctx> MessageContext<'ctx> {
@@ -48,6 +49,7 @@ impl<'ctx> MessageContext<'ctx> {
         MessageContext {
             locales,
             messages: HashMap::new(),
+            terms: HashMap::new(),
         }
     }
 
@@ -59,18 +61,26 @@ impl<'ctx> MessageContext<'ctx> {
         self.messages.get(id)
     }
 
+    pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
+        self.terms.get(id)
+    }
+
     pub fn add_messages(&mut self, source: &str) {
         let res = parse(source).unwrap_or_else(|x| x.0);
 
         for entry in res.body {
             let id = match entry {
                 ast::Entry::Message(ast::Message { ref id, .. }) => id.name.clone(),
+                ast::Entry::Term(ast::Term { ref id, .. }) => id.name.clone(),
                 _ => continue,
             };
 
             match entry {
                 ast::Entry::Message(message) => {
                     self.messages.insert(id, message);
+                }
+                ast::Entry::Term(term) => {
+                    self.terms.insert(id, term);
                 }
                 _ => continue,
             };

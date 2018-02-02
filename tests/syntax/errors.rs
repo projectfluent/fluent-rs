@@ -78,13 +78,7 @@ fn just_id_errors() {
 
             let error1 = &errors[0];
 
-            assert_eq!(
-                ErrorKind::MissingField {
-                    entry_id: "key".to_owned(),
-                    fields: vec!["Value", "Attribute"],
-                },
-                error1.kind
-            );
+            assert_eq!(ErrorKind::ExpectedToken { token: '\u{2424}' }, error1.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
@@ -110,13 +104,7 @@ fn no_equal_sign_errors() {
 
             let error1 = &errors[0];
 
-            assert_eq!(
-                ErrorKind::MissingField {
-                    entry_id: "key".to_owned(),
-                    fields: vec!["Value", "Attribute"],
-                },
-                error1.kind
-            );
+            assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
@@ -144,7 +132,7 @@ fn wrong_char_in_id_errors() {
 
             assert_eq!(
                 ErrorKind::ExpectedCharRange {
-                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned(),
+                    range: "'a'...'z' | 'A'...'Z'".to_owned(),
                 },
                 error1.kind
             );
@@ -173,7 +161,7 @@ fn missing_trait_value_errors() {
 
             let error1 = &errors[0];
 
-            assert_eq!(ErrorKind::ExpectedToken { token: '=' }, error1.kind);
+            assert_eq!(ErrorKind::ExpectedToken { token: '\u{2424}' }, error1.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
@@ -199,13 +187,7 @@ fn message_missing_fields_errors() {
 
             let error1 = &errors[0];
 
-            assert_eq!(
-                ErrorKind::MissingField {
-                    entry_id: "key".to_owned(),
-                    fields: vec!["Value", "Attribute"],
-                },
-                error1.kind
-            );
+            assert_eq!(ErrorKind::ExpectedToken { token: '\u{2424}' }, error1.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
@@ -253,7 +235,7 @@ fn private_errors() {
 
             assert_eq!(
                 ErrorKind::ExpectedCharRange {
-                    range: "'a'...'z' | 'A'...'Z' | '-'".to_owned(),
+                    range: "'a'...'z' | 'A'...'Z'".to_owned(),
                 },
                 error2.kind
             );
@@ -270,7 +252,7 @@ fn private_errors() {
 
             let error3 = &errors[2];
 
-            assert_eq!(ErrorKind::ForbiddenPrivateAttributeExpression, error3.kind);
+            assert_eq!(ErrorKind::TermAttributeAsSelector, error3.kind);
 
             assert_eq!(
                 Some(ErrorInfo {
