@@ -133,7 +133,7 @@ fn reset_peek() {
     ps.next();
     ps.peek();
     ps.peek();
-    ps.reset_peek();
+    ps.reset_peek(None);
 
     assert_eq!(Some('b'), ps.current());
     assert_eq!(Some('b'), ps.current_peek());
@@ -150,7 +150,7 @@ fn reset_peek() {
     ps.peek();
     ps.peek();
     ps.peek();
-    ps.reset_peek();
+    ps.reset_peek(None);
 
     assert_eq!(Some('b'), ps.current());
     assert_eq!(Some('b'), ps.current_peek());

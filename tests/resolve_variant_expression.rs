@@ -8,22 +8,23 @@ fn variant_expression() {
 
     ctx.add_messages(
         "
-foo = Foo
-bar =
+-foo = Foo
+-bar =
     {
        *[nominative] Bar
         [genitive] Bar's
     }
+bar = { -bar }
 
-use-foo = { foo }
-use-foo-missing = { foo[missing] }
+use-foo = { -foo }
+use-foo-missing = { -foo[missing] }
 
-use-bar = { bar }
-use-bar-nominative = { bar[nominative] }
-use-bar-genitive = { bar[genitive] }
-use-bar-missing = { bar[missing] }
+use-bar = { -bar }
+use-bar-nominative = { -bar[nominative] }
+use-bar-genitive = { -bar[genitive] }
+use-bar-missing = { -bar[missing] }
 
-missing-missing = { missing[missing] }
+missing-missing = { -missing[missing] }
 ",
     );
 

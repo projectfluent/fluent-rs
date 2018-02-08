@@ -18,6 +18,21 @@ bar = { foo } Bar
 }
 
 #[test]
+fn term_reference() {
+    let mut ctx = MessageContext::new(&["x-testing"]);
+
+    ctx.add_messages(
+        "
+-foo = Foo
+bar = { -foo } Bar
+",
+    );
+
+    let value = ctx.get_message("bar").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Foo Bar".to_string()));
+}
+
+#[test]
 fn message_reference_nested() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 

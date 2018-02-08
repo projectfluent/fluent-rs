@@ -34,6 +34,12 @@ impl ResolveValue for ast::Message {
     }
 }
 
+impl ResolveValue for ast::Term {
+    fn to_value(&self, env: &Env) -> Option<FluentValue> {
+        self.value.to_value(env)
+    }
+}
+
 impl ResolveValue for ast::Attribute {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
         self.value.to_value(env)
@@ -62,12 +68,6 @@ impl ResolveValue for ast::PatternElement {
     }
 }
 
-impl ResolveValue for ast::Placeable {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.expression.to_value(env)
-    }
-}
-
 impl ResolveValue for ast::Number {
     fn to_value(&self, _env: &Env) -> Option<FluentValue> {
         f32::from_str(&self.value).ok().map(FluentValue::from)
@@ -87,10 +87,12 @@ impl ResolveValue for ast::Expression {
                 Some(FluentValue::from(value.clone()))
             }
             ast::Expression::NumberExpression { ref value } => value.to_value(env),
+            ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env.ctx
+                .get_term(&id.name)
+                .and_then(|term| term.to_value(env)),
             ast::Expression::MessageReference { ref id } => env.ctx
                 .get_message(&id.name)
-                .and_then(|message| message.value.as_ref())
-                .and_then(|pattern| pattern.to_value(env)),
+                .and_then(|message| message.to_value(env)),
             ast::Expression::ExternalArgument { ref id } => env.args
                 .and_then(|args| args.get(&id.name.as_ref()))
                 .cloned(),
@@ -127,10 +129,15 @@ impl ResolveValue for ast::Expression {
                 select_default(variants).and_then(|variant| variant.value.to_value(env))
             }
             ast::Expression::AttributeExpression { ref id, ref name } => {
-                let attributes = env.ctx
-                    .get_message(&id.name)
-                    .as_ref()
-                    .and_then(|message| message.attributes.as_ref());
+                let attributes = if id.name.starts_with('-') {
+                    env.ctx
+                        .get_term(&id.name)
+                        .and_then(|term| term.attributes.as_ref())
+                } else {
+                    env.ctx
+                        .get_message(&id.name)
+                        .and_then(|message| message.attributes.as_ref())
+                };
                 if let Some(attributes) = attributes {
                     for attribute in attributes {
                         if attribute.id.name == name.name {
@@ -140,27 +147,23 @@ impl ResolveValue for ast::Expression {
                 }
                 None
             }
-            ast::Expression::VariantExpression { ref id, ref key } => {
-                let message = env.ctx.get_message(&id.name);
-                let variants = message
-                    .as_ref()
-                    .and_then(|message| message.value.as_ref())
-                    .and_then(|pattern| {
-                        if pattern.elements.len() > 1 {
-                            return None;
-                        }
+            ast::Expression::VariantExpression { ref id, ref key } if id.name.starts_with('-') => {
+                let term = env.ctx.get_term(&id.name);
+                let variants = term.as_ref().and_then(|term| {
+                    if term.value.elements.len() > 1 {
+                        return None;
+                    }
 
-                        match pattern.elements.first() {
-                            Some(&ast::PatternElement::Placeable(ast::Placeable {
-                                expression:
-                                    ast::Expression::SelectExpression {
-                                        expression: None,
-                                        ref variants,
-                                    },
-                            })) => Some(variants),
-                            _ => None,
-                        }
-                    });
+                    match term.value.elements.first() {
+                        Some(&ast::PatternElement::Placeable(
+                            ast::Expression::SelectExpression {
+                                expression: None,
+                                ref variants,
+                            },
+                        )) => Some(variants),
+                        _ => None,
+                    }
+                });
 
                 if let Some(variants) = variants {
                     for variant in variants {
@@ -172,10 +175,7 @@ impl ResolveValue for ast::Expression {
                     return select_default(variants).and_then(|variant| variant.value.to_value(env));
                 }
 
-                message
-                    .as_ref()
-                    .and_then(|message| message.value.as_ref())
-                    .and_then(|pattern| pattern.to_value(env))
+                term.and_then(|term| term.value.to_value(env))
             }
             _ => unimplemented!(),
         }

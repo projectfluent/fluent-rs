@@ -245,15 +245,8 @@ fn select_expression_message_selector() {
 
     ctx.add_messages(
         "
-foo = Foo
 -bar = Bar
     .attr = attr val
-
-use-foo =
-    { foo ->
-        [Foo 2] Foo
-       *[other] Other
-    }
 
 use-bar =
     { -bar.attr ->
@@ -262,10 +255,6 @@ use-bar =
     }
 ",
     );
-
-    let value = ctx.get_message("use-foo")
-        .and_then(|msg| ctx.format(msg, None));
-    assert_eq!(value, Some("Other".to_string()));
 
     let value = ctx.get_message("use-bar")
         .and_then(|msg| ctx.format(msg, None));

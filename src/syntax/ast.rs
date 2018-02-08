@@ -6,6 +6,7 @@ pub struct Resource {
 #[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
+    Term(Term),
     Comment(Comment),
     Junk { content: String },
 }
@@ -19,6 +20,14 @@ pub struct Message {
 }
 
 #[derive(Debug, PartialEq)]
+pub struct Term {
+    pub id: Identifier,
+    pub value: Pattern,
+    pub attributes: Option<Vec<Attribute>>,
+    pub comment: Option<Comment>,
+}
+
+#[derive(Debug, PartialEq)]
 pub struct Pattern {
     pub elements: Vec<PatternElement>,
 }
@@ -26,12 +35,7 @@ pub struct Pattern {
 #[derive(Debug, PartialEq)]
 pub enum PatternElement {
     TextElement(String),
-    Placeable(Placeable),
-}
-
-#[derive(Debug, PartialEq)]
-pub struct Placeable {
-    pub expression: Expression,
+    Placeable(Expression),
 }
 
 #[derive(Debug, PartialEq)]
