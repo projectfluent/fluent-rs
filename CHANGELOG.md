@@ -4,6 +4,12 @@
 
   - …
 
+## fluent 0.2.0 (February 11, 2018)
+
+  - Support Rust 1.23 stable
+  - Support Fluent 0.5 syntax
+  - Dual-license Apache 2.0 and MIT
+
 ## fluent 0.1.2 (October 14, 2017)
 
   - Add more complex PluralRules support

@@ -4,7 +4,7 @@ description = """
 A localization library designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.1.2"
+version = "0.2.0"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
@@ -13,11 +13,11 @@ homepage = "http://www.projectfluent.org"
 license = "Apache-2.0/MIT"
 repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
-keywords = ["localization", "l10n"]
+keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-getopts = "0.2.15"
+getopts = "0.2.17"
 ansi_term = "0.10.2"
 fluent-locale = "0.3.1"
 
