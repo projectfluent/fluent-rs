@@ -14,12 +14,12 @@ license = "Apache-2.0/MIT"
 repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
 keywords = ["localization", "l10n"]
-categories = ["localization"]
+categories = ["localization", "internationalization"]
 
 [dependencies]
 getopts = "0.2.15"
 ansi_term = "0.10.2"
-fluent-locale = "0.3.0"
+fluent-locale = "0.3.1"
 
 [dev-dependencies]
 glob = "0.2.11"
