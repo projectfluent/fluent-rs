@@ -422,7 +422,7 @@ where
         ps.next();
     }
 
-    return Ok(ast::PatternElement::TextElement(buf));
+    Ok(ast::PatternElement::TextElement(buf))
 }
 
 fn get_placeable<I>(ps: &mut ParserStream<I>) -> Result<ast::PatternElement>
@@ -432,7 +432,7 @@ where
     ps.expect_char('{')?;
     let expression = get_expression(ps)?;
     ps.expect_char('}')?;
-    return Ok(ast::PatternElement::Placeable(expression));
+    Ok(ast::PatternElement::Placeable(expression))
 }
 
 fn get_expression<I>(ps: &mut ParserStream<I>) -> Result<ast::Expression>
@@ -561,10 +561,10 @@ where
             ps.skip_inline_ws();
 
             let val = get_arg_val(ps)?;
-            return Ok(ast::Argument::NamedArgument { name: id, val });
+            Ok(ast::Argument::NamedArgument { name: id, val })
         }
         _ => {
-            return error!(ErrorKind::ForbiddenKey);
+            error!(ErrorKind::ForbiddenKey)
         }
     }
 }

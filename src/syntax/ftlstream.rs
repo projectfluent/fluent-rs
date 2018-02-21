@@ -183,7 +183,7 @@ where
             }
         }
 
-        return self.is_peek_next_line_pattern_start();
+        self.is_peek_next_line_pattern_start()
     }
 
     fn is_peek_next_line_zero_four_style_comment(&mut self) -> bool {
@@ -200,7 +200,7 @@ where
             }
         }
         self.reset_peek(None);
-        return false;
+        false
     }
 
     fn is_peek_next_line_comment(&mut self, level: i8) -> bool {
@@ -231,7 +231,7 @@ where
             }
         }
         self.reset_peek(None);
-        return false;
+        false
     }
 
     fn is_peek_next_line_variant_start(&mut self) -> bool {
