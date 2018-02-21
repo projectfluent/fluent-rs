@@ -25,7 +25,7 @@ use super::resolve::{Env, ResolveValue};
 /// To format a translation, call `get_message` to retrieve a `fluent::context::Message` structure
 /// and then `format` it within the context.
 ///
-/// The result is an Option warpping a single string that should be displayed in the UI.  It is
+/// The result is an Option wrapping a single string that should be displayed in the UI.  It is
 /// recommended to treat the result as opaque from the perspective of the program and use it only
 /// to display localized messages. Do not examine it or alter in any way before displaying.  This
 /// is a general good practice as far as all internationalization operations are concerned.

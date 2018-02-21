@@ -3,7 +3,7 @@
 //! The Rust implementation provides the low level components for syntax operations, like parser
 //! and AST, and the core localization struct - `MessageContext`.
 //!
-//! `MessageContext` is the low level container for storing and formating localization messages. It
+//! `MessageContext` is the low level container for storing and formatting localization messages. It
 //! is expected that implementations will build on top of it by providing language negotiation
 //! between user requested languages and available resources and I/O for loading selected
 //! resources.
