@@ -42,6 +42,10 @@ pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
     messages: HashMap<String, ast::Message>,
     terms: HashMap<String, ast::Term>,
+    functions: HashMap<
+        String,
+        Box<Fn(&[FluentValue], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
+    >,
 }
 
 impl<'ctx> MessageContext<'ctx> {
@@ -50,6 +54,7 @@ impl<'ctx> MessageContext<'ctx> {
             locales,
             messages: HashMap::new(),
             terms: HashMap::new(),
+            functions: HashMap::new(),
         }
     }
 
@@ -63,6 +68,27 @@ impl<'ctx> MessageContext<'ctx> {
 
     pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
         self.terms.get(id)
+    }
+
+    pub fn add_function(
+        &mut self,
+        id: &str,
+        func: Box<Fn(&[FluentValue], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
+    ) {
+        self.functions.insert(id.to_string(), func);
+    }
+
+    pub fn exec_function(
+        &self,
+        id: &str,
+        args: &[FluentValue],
+        named_args: &HashMap<String, FluentValue>,
+    ) -> Option<FluentValue> {
+        if let Some(func) = self.functions.get(id) {
+            func(args, named_args)
+        } else {
+            None
+        }
     }
 
     pub fn add_messages(&mut self, source: &str) {

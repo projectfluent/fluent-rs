@@ -101,7 +101,7 @@ pub enum ArgValue {
     String(String),
 }
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq, Hash)]
 pub struct Identifier {
     pub name: String,
 }
