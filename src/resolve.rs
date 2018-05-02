@@ -181,34 +181,31 @@ impl ResolveValue for ast::Expression {
                 ref callee,
                 ref args,
             } => {
-                use resolve::ResolveValue;
-                use syntax;
 
                 let mut resolved_unnamed_args = Vec::new();
                 let mut resolved_named_args = HashMap::new();
 
                 for arg in args {
                     match arg {
-                        ast::Argument::Expression(expression) => {
+                        &ast::Argument::Expression(ref expression) => {
                             if let Some(resolved_expression) = expression.to_value(env) {
                                 resolved_unnamed_args.push(resolved_expression);
                             }
                         }
-                        ast::Argument::NamedArgument { name, val } => {
+                        &ast::Argument::NamedArgument { ref name, ref val } => {
                             let mut fluent_val: FluentValue;
 
                             match val {
-                                syntax::ast::ArgValue::Number(num) => {
+                                &ast::ArgValue::Number(ref num) => {
                                     fluent_val = num.to_value(env).unwrap();
                                 }
-                                syntax::ast::ArgValue::String(string) => {
+                                &ast::ArgValue::String(ref string) => {
                                     fluent_val = FluentValue::String(string.to_string());
                                 }
                             };
 
                             resolved_named_args.insert(name.name.clone(), fluent_val);
                         }
-                        _ => unimplemented!(),
                     }
                 }
 

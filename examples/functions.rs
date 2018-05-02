@@ -35,7 +35,7 @@ fn main() {
             let ownership = named_args.get("ownership").unwrap();
 
             return match ownership {
-                FluentValue::String(string) => {
+                &FluentValue::String(ref string) => {
                     Some(format!("All your base belong to {}", string).into())
                 }
                 _ => None,
