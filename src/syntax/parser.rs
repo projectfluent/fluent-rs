@@ -563,9 +563,7 @@ where
             let val = get_arg_val(ps)?;
             Ok(ast::Argument::NamedArgument { name: id, val })
         }
-        _ => {
-            error!(ErrorKind::ForbiddenKey)
-        }
+        _ => error!(ErrorKind::ForbiddenKey),
     }
 }
 

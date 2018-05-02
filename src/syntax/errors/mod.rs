@@ -7,10 +7,10 @@ pub use self::list::ErrorInfo;
 pub use self::list::get_error_desc;
 
 macro_rules! error {
-    ($kind:expr) => {{
+    ($kind: expr) => {{
         Err(ParserError {
             info: None,
-            kind: $kind
+            kind: $kind,
         })
     }};
 }
