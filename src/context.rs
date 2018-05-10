@@ -44,7 +44,7 @@ pub struct MessageContext<'ctx> {
     terms: HashMap<String, ast::Term>,
     functions: HashMap<
         String,
-        Box<Fn(&[FluentValue], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
+        Box<Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
     >,
 }
 
@@ -70,25 +70,21 @@ impl<'ctx> MessageContext<'ctx> {
         self.terms.get(id)
     }
 
-    pub fn add_function(
-        &mut self,
-        id: &str,
-        func: Box<Fn(&[FluentValue], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
-    ) {
-        self.functions.insert(id.to_string(), func);
+    pub fn add_function<F>(&mut self, id: &str, func: F)
+    where
+        F: 'static
+            + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
+    {
+        self.functions.insert(id.to_string(), Box::new(func));
     }
 
-    pub fn exec_function(
+    pub fn get_function(
         &self,
         id: &str,
-        args: &[FluentValue],
-        named_args: &HashMap<String, FluentValue>,
-    ) -> Option<FluentValue> {
-        if let Some(func) = self.functions.get(id) {
-            func(args, named_args)
-        } else {
-            None
-        }
+    ) -> Option<
+        &Box<Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>>,
+    > {
+        self.functions.get(id)
     }
 
     pub fn add_messages(&mut self, source: &str) {

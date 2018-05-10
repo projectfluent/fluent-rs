@@ -181,16 +181,13 @@ impl ResolveValue for ast::Expression {
                 ref callee,
                 ref args,
             } => {
-
                 let mut resolved_unnamed_args = Vec::new();
                 let mut resolved_named_args = HashMap::new();
 
                 for arg in args {
                     match arg {
                         &ast::Argument::Expression(ref expression) => {
-                            if let Some(resolved_expression) = expression.to_value(env) {
-                                resolved_unnamed_args.push(resolved_expression);
-                            }
+                            resolved_unnamed_args.push(expression.to_value(env));
                         }
                         &ast::Argument::NamedArgument { ref name, ref val } => {
                             let mut fluent_val: FluentValue;
@@ -200,7 +197,7 @@ impl ResolveValue for ast::Expression {
                                     fluent_val = num.to_value(env).unwrap();
                                 }
                                 &ast::ArgValue::String(ref string) => {
-                                    fluent_val = FluentValue::String(string.to_string());
+                                    fluent_val = FluentValue::from(string.as_str());
                                 }
                             };
 
@@ -209,11 +206,9 @@ impl ResolveValue for ast::Expression {
                     }
                 }
 
-                env.ctx.exec_function(
-                    &callee.name,
-                    resolved_unnamed_args.as_slice(),
-                    &resolved_named_args,
-                )
+                env.ctx
+                    .get_function(&callee.name)
+                    .and_then(|func| func(resolved_unnamed_args.as_slice(), &resolved_named_args))
             }
             _ => unimplemented!(),
         }

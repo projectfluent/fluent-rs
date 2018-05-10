@@ -7,41 +7,32 @@ fn main() {
     let mut ctx = MessageContext::new(&["en-US"]);
 
     // Test for a simple function that returns a string
-    ctx.add_function(
-        "HELLO",
-        Box::new(|_args, _named_args| {
-            return Some("I'm a function!".into());
-        }),
-    );
+    ctx.add_function("HELLO", |_args, _named_args| {
+        return Some("I'm a function!".into());
+    });
 
-    // Test for a function that accepts unnamed arguments
-    ctx.add_function(
-        "MEANING_OF_LIFE",
-        Box::new(|args, _named_args| {
-            if args.len() > 0 {
-                if args[0] == FluentValue::Number(42.0) {
-                    return Some("The answer to life, the universe, and everything".into());
-                }
+    // Test for a function that accepts unnamed positional arguments
+    ctx.add_function("MEANING_OF_LIFE", |args, _named_args| {
+        if let Some(arg0) = args.get(0) {
+            if *arg0 == Some(FluentValue::Number(42.0)) {
+                return Some("The answer to life, the universe, and everything".into());
             }
+        }
 
-            None
-        }),
-    );
+        None
+    });
 
     // Test for a function that accepts named arguments
-    ctx.add_function(
-        "BASE_OWNERSHIP",
-        Box::new(|_args, named_args| {
-            let ownership = named_args.get("ownership").unwrap();
+    ctx.add_function("BASE_OWNERSHIP", |_args, named_args| {
+        let ownership = named_args.get("ownership").unwrap();
 
-            return match ownership {
-                &FluentValue::String(ref string) => {
-                    Some(format!("All your base belong to {}", string).into())
-                }
-                _ => None,
-            };
-        }),
-    );
+        return match ownership {
+            &FluentValue::String(ref string) => {
+                Some(format!("All your base belong to {}", string).into())
+            }
+            _ => None,
+        };
+    });
 
     ctx.add_messages("hello-world = Hey there! { HELLO() }");
     ctx.add_messages("meaning-of-life = { MEANING_OF_LIFE(42) }");
