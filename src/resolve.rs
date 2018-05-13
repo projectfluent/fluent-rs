@@ -46,8 +46,7 @@ impl ResolveValue for ast::Attribute {
 
 impl ResolveValue for ast::Pattern {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        let string = self
-            .elements
+        let string = self.elements
             .iter()
             .map(|elem| {
                 elem.to_value(env)

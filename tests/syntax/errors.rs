@@ -32,7 +32,6 @@ fn empty_errors() {
                 Some(ErrorInfo {
                     slice: " key = value".to_owned(),
                     line: 0,
-                    col: 0,
                     pos: 0,
                 },),
                 error1.info
@@ -58,7 +57,6 @@ fn bad_id_start_errors() {
                 Some(ErrorInfo {
                     slice: "2".to_owned(),
                     line: 0,
-                    col: 0,
                     pos: 0,
                 },),
                 error1.info
@@ -84,7 +82,6 @@ fn just_id_errors() {
                 Some(ErrorInfo {
                     slice: "key".to_owned(),
                     line: 0,
-                    col: 3,
                     pos: 3,
                 },),
                 error1.info
@@ -110,7 +107,6 @@ fn no_equal_sign_errors() {
                 Some(ErrorInfo {
                     slice: "key Value".to_owned(),
                     line: 0,
-                    col: 4,
                     pos: 4,
                 },),
                 error1.info
@@ -141,7 +137,6 @@ fn wrong_char_in_id_errors() {
                 Some(ErrorInfo {
                     slice: "key = Value\n .# = Foo".to_owned(),
                     line: 0,
-                    col: 2,
                     pos: 14,
                 },),
                 error1.info
@@ -167,7 +162,6 @@ fn missing_trait_value_errors() {
                 Some(ErrorInfo {
                     slice: "key = Value\n .foo".to_owned(),
                     line: 0,
-                    col: 5,
                     pos: 17,
                 },),
                 error1.info
@@ -193,7 +187,6 @@ fn message_missing_fields_errors() {
                 Some(ErrorInfo {
                     slice: "key".to_owned(),
                     line: 0,
-                    col: 3,
                     pos: 3,
                 },),
                 error1.info
@@ -225,7 +218,6 @@ fn private_errors() {
                     slice: "key =\n    { $foo ->\n        [one] Foo\n       *[-other] Foo 2\n    }"
                         .to_owned(),
                     line: 1,
-                    col: 10,
                     pos: 48,
                 },),
                 error1.info
@@ -244,7 +236,6 @@ fn private_errors() {
                 Some(ErrorInfo {
                     slice: "key2 = { $-foo }".to_owned(),
                     line: 7,
-                    col: 10,
                     pos: 10,
                 },),
                 error2.info
@@ -258,7 +249,6 @@ fn private_errors() {
                 Some(ErrorInfo {
                     slice: "key3 = { -brand.gender }".to_owned(),
                     line: 9,
-                    col: 23,
                     pos: 23,
                 },),
                 error3.info
@@ -272,7 +262,6 @@ fn private_errors() {
                 Some(ErrorInfo {
                     slice: "key4 = { -brand() }".to_owned(),
                     line: 11,
-                    col: 15,
                     pos: 15,
                 },),
                 error4.info

@@ -34,24 +34,6 @@ fn get_line_num(source: &str, pos: usize) -> usize {
     i
 }
 
-fn get_col_num(source: &str, pos: usize) -> usize {
-    let mut ptr = 0;
-
-    let lines = source.lines();
-
-    for line in lines {
-        let lnlen = line.chars().count();
-
-        if ptr + lnlen + 1 > pos {
-            return pos - ptr;
-        }
-
-        ptr += lnlen + 1;
-    }
-
-    0
-}
-
 pub fn get_error_lines(source: &str, start: usize, end: usize) -> String {
     let l = if start < end { end - start } else { 1 };
 
@@ -109,7 +91,6 @@ pub fn get_error_info(
     Some(ErrorInfo {
         slice: slice,
         line: first_line_num,
-        col: get_col_num(source, pos),
         pos: pos - entry_start,
     })
 }
