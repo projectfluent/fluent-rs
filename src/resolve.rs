@@ -148,34 +148,23 @@ impl ResolveValue for ast::Expression {
                 None
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
-                let term = env.ctx.get_term(&id.name);
-                let variants = term.as_ref().and_then(|term| {
-                    if term.value.elements.len() > 1 {
-                        return None;
-                    }
+                let term = env.ctx.get_term(&id.name)?;
+                let variants = match term.value.elements.as_slice() {
+                    [ast::PatternElement::Placeable(ast::Expression::SelectExpression {
+                        expression: None,
+                        ref variants,
+                    })] => variants,
+                    _ => return term.value.to_value(env),
+                };
 
-                    match term.value.elements.first() {
-                        Some(&ast::PatternElement::Placeable(
-                            ast::Expression::SelectExpression {
-                                expression: None,
-                                ref variants,
-                            },
-                        )) => Some(variants),
-                        _ => None,
+                for variant in variants {
+                    if variant.key == *key {
+                        return variant.value.to_value(env);
                     }
-                });
-
-                if let Some(variants) = variants {
-                    for variant in variants {
-                        if variant.key == *key {
-                            return variant.value.to_value(env);
-                        }
-                    }
-
-                    return select_default(variants).and_then(|variant| variant.value.to_value(env));
                 }
 
-                term.and_then(|term| term.value.to_value(env))
+                select_default(variants).and_then(|variant| variant.value.to_value(env))
+
             }
             _ => unimplemented!(),
         }
