@@ -28,9 +28,7 @@ pub trait ResolveValue {
 
 impl ResolveValue for ast::Message {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.value
-            .as_ref()
-            .and_then(|pattern| pattern.to_value(env))
+        self.value.as_ref()?.to_value(env)
     }
 }
 
@@ -48,7 +46,8 @@ impl ResolveValue for ast::Attribute {
 
 impl ResolveValue for ast::Pattern {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        let string = self.elements
+        let string = self
+            .elements
             .iter()
             .map(|elem| {
                 elem.to_value(env)
@@ -83,28 +82,24 @@ impl ResolveValue for ast::VariantName {
 impl ResolveValue for ast::Expression {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
         match self {
-            ast::Expression::StringExpression { value } => {
-                Some(FluentValue::from(value.clone()))
-            }
+            ast::Expression::StringExpression { value } => Some(FluentValue::from(value.clone())),
             ast::Expression::NumberExpression { value } => value.to_value(env),
-            ast::Expression::MessageReference { id } if id.name.starts_with('-') => env.ctx
-                .get_term(&id.name)
-                .and_then(|term| term.to_value(env)),
-            ast::Expression::MessageReference { id } => env.ctx
-                .get_message(&id.name)
-                .and_then(|message| message.to_value(env)),
-            ast::Expression::ExternalArgument { id } => env.args
-                .and_then(|args| args.get(&id.name.as_ref()))
-                .cloned(),
+            ast::Expression::MessageReference { id } if id.name.starts_with('-') => {
+                env.ctx.get_term(&id.name)?.to_value(env)
+            }
+            ast::Expression::MessageReference { id } => {
+                env.ctx.get_message(&id.name)?.to_value(env)
+            }
+            ast::Expression::ExternalArgument { id } => env.args?.get(&id.name.as_ref()).cloned(),
             ast::Expression::SelectExpression {
                 expression: None,
                 variants,
-            } => select_default(variants).and_then(|variant| variant.value.to_value(env)),
+            } => select_default(variants)?.value.to_value(env),
             ast::Expression::SelectExpression {
                 expression,
                 variants,
             } => {
-                let selector = expression.as_ref().and_then(|expr| expr.to_value(env));
+                let selector = expression.as_ref()?.to_value(env);
 
                 if let Some(ref selector) = selector {
                     for variant in variants {
@@ -126,17 +121,13 @@ impl ResolveValue for ast::Expression {
                     }
                 }
 
-                select_default(variants).and_then(|variant| variant.value.to_value(env))
+                select_default(variants)?.value.to_value(env)
             }
             ast::Expression::AttributeExpression { id, name } => {
                 let attributes = if id.name.starts_with('-') {
-                    env.ctx
-                        .get_term(&id.name)
-                        .and_then(|term| term.attributes.as_ref())
+                    env.ctx.get_term(&id.name)?.attributes.as_ref()
                 } else {
-                    env.ctx
-                        .get_message(&id.name)
-                        .and_then(|message| message.attributes.as_ref())
+                    env.ctx.get_message(&id.name)?.attributes.as_ref()
                 };
                 if let Some(attributes) = attributes {
                     for attribute in attributes {
@@ -163,8 +154,7 @@ impl ResolveValue for ast::Expression {
                     }
                 }
 
-                select_default(variants).and_then(|variant| variant.value.to_value(env))
-
+                select_default(variants)?.value.to_value(env)
             }
             _ => unimplemented!(),
         }
