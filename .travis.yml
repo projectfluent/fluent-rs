@@ -1,34 +1,21 @@
-sudo: false
 language: rust
+sudo: required
 cache: cargo
+dist: trusty
 rust:
   - stable
   - beta
   - nightly
-# Dependencies of kcov, used by coverage
 addons:
-  apt:
-    packages:
-      - libcurl4-openssl-dev
-      - libelf-dev
-      - libdw-dev
-      - binutils-dev
-      - cmake
-    sources:
-      - kalakris-cmake
-
-before_script:
-  - export LD_LIBRARY_PATH=$(rustc --print sysroot)/lib:$LD_LIBRARY_PATH
-  - export PATH=$HOME/.cargo/bin:$PATH
-#  - cargo install rustfmt-nightly || echo "rustfmt-nightly already installed"
-  - cargo install cargo-travis || echo "cargo-travis already installed"
+    apt:
+        packages:
+            - libssl-dev
 
 script:
-#  - cargo fmt -- --write-mode=diff
   - cargo build
   - cargo test
   - cargo doc
 
-after_success:
-# measure code coverage and upload to coveralls.io
-  - cargo coveralls
+after_success: |
+  bash <(curl https://raw.githubusercontent.com/xd009642/tarpaulin/master/travis-install.sh)
+  cargo tarpaulin --ciserver travis-ci --ignore-tests --coveralls $TRAVIS_JOB_ID
