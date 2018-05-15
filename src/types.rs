@@ -27,9 +27,9 @@ pub enum FluentValue {
 
 impl FluentValue {
     pub fn format(&self, _ctx: &MessageContext) -> String {
-        match *self {
-            FluentValue::String(ref s) => s.clone(),
-            FluentValue::Number(ref n) => format!("{}", n),
+        match self {
+            FluentValue::String(s) => s.clone(),
+            FluentValue::Number(n) => format!("{}", n),
         }
     }
 
