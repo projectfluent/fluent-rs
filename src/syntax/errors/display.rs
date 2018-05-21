@@ -26,8 +26,8 @@ pub enum LabelKind {
 pub fn annotate_slice(info: &ErrorInfo, file_name: Option<String>, item: &Item) -> String {
     let mut result = String::new();
 
-    let desc = match *item {
-        Item::Error(ref kind) => Some(get_error_desc(kind)),
+    let desc = match item {
+        Item::Error(kind) => Some(get_error_desc(kind)),
         Item::Warning => None,
     };
 
@@ -60,12 +60,12 @@ pub fn annotate_slice(info: &ErrorInfo, file_name: Option<String>, item: &Item) 
 }
 
 fn format_title_line(item: &Item, id: &str, title: &str) -> String {
-    let kind = match *item {
+    let kind = match item {
         Item::Error(_) => "error",
         Item::Warning => "warning",
     };
 
-    let color = match *item {
+    let color = match item {
         Item::Error(_) => Fixed(9),
         Item::Warning => Fixed(11),
     };
@@ -141,7 +141,7 @@ fn format_labels(
     for label in labels {
         if label.start_pos >= start_pos && label.start_pos <= end_pos {
             let color = match label.kind {
-                LabelKind::Primary => match *item {
+                LabelKind::Primary => match item {
                     Item::Error(_) => Fixed(9).bold(),
                     Item::Warning => Fixed(11).bold(),
                 },

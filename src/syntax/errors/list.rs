@@ -37,7 +37,7 @@ pub enum ErrorKind {
 }
 
 pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
-    match *err {
+    match err {
         ErrorKind::Generic => ("E0001", "generic error".to_owned(), ""),
         ErrorKind::ExpectedEntry => (
             "E0002",
@@ -45,12 +45,12 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
             "Expected one of ('a'...'Z' | '_' | #') here",
         ),
         ErrorKind::ExpectedToken { token } => ("E0003", format!("expected token `{}`", token), ""),
-        ErrorKind::ExpectedCharRange { ref range } => (
+        ErrorKind::ExpectedCharRange { range } => (
             "E0004",
             format!("Expected a character from range ({})", range),
             "",
         ),
-        ErrorKind::ExpectedMessageField { ref entry_id } => (
+        ErrorKind::ExpectedMessageField { entry_id } => (
             "E0005",
             format!(
                 "Expected message `{}` to have a value or attributes",
@@ -58,7 +58,7 @@ pub fn get_error_desc(err: &ErrorKind) -> (&'static str, String, &'static str) {
             ),
             "",
         ),
-        ErrorKind::ExpectedTermField { ref entry_id } => (
+        ErrorKind::ExpectedTermField { entry_id } => (
             "E0006",
             format!("Expected term `{}` to have a value", entry_id),
             "",
