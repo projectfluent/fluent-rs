@@ -9,9 +9,9 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use super::types::FluentValue;
-use super::syntax::ast;
 use super::context::MessageContext;
+use super::syntax::ast;
+use super::types::FluentValue;
 
 /// State for a single `ResolveValue::to_value` call.
 pub struct Env<'env> {
@@ -48,7 +48,8 @@ impl ResolveValue for ast::Attribute {
 
 impl ResolveValue for ast::Pattern {
     fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        let string = self.elements
+        let string = self
+            .elements
             .iter()
             .map(|elem| {
                 elem.to_value(env)
@@ -87,13 +88,16 @@ impl ResolveValue for ast::Expression {
                 Some(FluentValue::from(value.clone()))
             }
             ast::Expression::NumberExpression { ref value } => value.to_value(env),
-            ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env.ctx
+            ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
+                .ctx
                 .get_term(&id.name)
                 .and_then(|term| term.to_value(env)),
-            ast::Expression::MessageReference { ref id } => env.ctx
+            ast::Expression::MessageReference { ref id } => env
+                .ctx
                 .get_message(&id.name)
                 .and_then(|message| message.to_value(env)),
-            ast::Expression::ExternalArgument { ref id } => env.args
+            ast::Expression::ExternalArgument { ref id } => env
+                .args
                 .and_then(|args| args.get(&id.name.as_ref()))
                 .cloned(),
             ast::Expression::SelectExpression {

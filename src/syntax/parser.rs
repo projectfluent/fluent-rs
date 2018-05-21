@@ -1,10 +1,10 @@
-pub use super::errors::ParserError;
-pub use super::errors::ErrorKind;
-pub use super::errors::get_error_slice;
 pub use super::errors::get_error_info;
+pub use super::errors::get_error_slice;
+pub use super::errors::ErrorKind;
+pub use super::errors::ParserError;
 
-use super::stream::ParserStream;
 use super::ftlstream::FTLParserStream;
+use super::stream::ParserStream;
 
 use std::result;
 

@@ -3,12 +3,12 @@
 extern crate fluent;
 extern crate test;
 
+use fluent::context::MessageContext;
+use fluent::syntax::{ast, parse};
+use std::fs::File;
 use std::io;
 use std::io::Read;
-use std::fs::File;
 use test::Bencher;
-use fluent::syntax::{ast, parse};
-use fluent::context::MessageContext;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));

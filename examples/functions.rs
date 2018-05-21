@@ -1,7 +1,7 @@
 extern crate fluent;
 
-use fluent::MessageContext;
 use fluent::types::FluentValue;
+use fluent::MessageContext;
 
 fn main() {
     let mut ctx = MessageContext::new(&["en-US"]);
@@ -38,18 +38,21 @@ fn main() {
     ctx.add_messages("meaning-of-life = { MEANING_OF_LIFE(42) }");
     ctx.add_messages("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }");
 
-    let value = ctx.get_message("hello-world")
+    let value = ctx
+        .get_message("hello-world")
         .and_then(|message| ctx.format(message, None));
     assert_eq!(value, Some("Hey there! I'm a function!".to_string()));
 
-    let value = ctx.get_message("meaning-of-life")
+    let value = ctx
+        .get_message("meaning-of-life")
         .and_then(|message| ctx.format(message, None));
     assert_eq!(
         value,
         Some("The answer to life, the universe, and everything".to_string())
     );
 
-    let value = ctx.get_message("all-your-base")
+    let value = ctx
+        .get_message("all-your-base")
         .and_then(|message| ctx.format(message, None));
     assert_eq!(value, Some("All your base belong to us".to_string()));
 }

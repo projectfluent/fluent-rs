@@ -18,14 +18,16 @@ unread-emails = You have { $emailCount } unread emails
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
 
-    match ctx.get_message("hello-world")
+    match ctx
+        .get_message("hello-world")
         .and_then(|msg| ctx.format(msg, Some(&args)))
     {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
-    match ctx.get_message("ref")
+    match ctx
+        .get_message("ref")
         .and_then(|msg| ctx.format(msg, Some(&args)))
     {
         Some(value) => println!("{}", value),
@@ -35,7 +37,8 @@ unread-emails = You have { $emailCount } unread emails
     let mut args = HashMap::new();
     args.insert("emailCount", FluentValue::from(5));
 
-    match ctx.get_message("unread-emails")
+    match ctx
+        .get_message("unread-emails")
         .and_then(|msg| ctx.format(msg, Some(&args)))
     {
         Some(value) => println!("{}", value),
