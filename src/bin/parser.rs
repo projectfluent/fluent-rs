@@ -71,7 +71,7 @@ fn main() {
             }
             println!("-----------------------------");
             for err in errors {
-                let f = annotate_error(&err, Some(input.to_string()));
+                let f = annotate_error(&err, Some(input.to_string()), true);
                 println!("{}", f);
                 println!("-----------------------------");
             }
