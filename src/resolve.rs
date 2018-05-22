@@ -87,7 +87,6 @@ impl ResolveValue for ast::Expression {
             ast::Expression::MessageReference { id } if id.name.starts_with('-') => {
                 env.ctx.get_term(&id.name)?.to_value(env)
             }
-            ast::Expression::NumberExpression { ref value } => value.to_value(env),
             ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
                 .ctx
                 .get_term(&id.name)

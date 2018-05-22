@@ -8,7 +8,6 @@ pub struct ParserError {
 pub struct ErrorInfo {
     pub slice: String,
     pub line: usize,
-    pub col: usize,
     pub pos: usize,
 }
 

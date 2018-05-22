@@ -9,8 +9,7 @@ use std::io::Read;
 use getopts::Options;
 
 use fluent::syntax::ast::Resource;
-use fluent::syntax::errors::display::annotate_slice;
-use fluent::syntax::errors::display::Item;
+use fluent::syntax::errors::display::annotate_error;
 use fluent::syntax::parser::parse;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -72,9 +71,7 @@ fn main() {
             }
             println!("-----------------------------");
             for err in errors {
-                let info = err.info.unwrap();
-                let kind = err.kind;
-                let f = annotate_slice(&info, Some(input.to_owned()), &Item::Error(kind));
+                let f = annotate_error(&err, Some(input.to_string()), true);
                 println!("{}", f);
                 println!("-----------------------------");
             }
