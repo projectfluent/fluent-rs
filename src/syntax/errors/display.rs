@@ -1,10 +1,10 @@
 extern crate ansi_term;
 
-use std::cmp;
 use self::ansi_term::Colour::{Fixed, White};
-use super::list::ErrorKind;
-use super::list::ErrorInfo;
 use super::list::get_error_desc;
+use super::list::ErrorInfo;
+use super::list::ErrorKind;
+use std::cmp;
 
 pub enum Item {
     Error(ErrorKind),
@@ -33,14 +33,12 @@ pub fn annotate_slice(info: &ErrorInfo, file_name: Option<String>, item: &Item) 
 
     let (id, title, text) = desc.unwrap_or(("", "".to_owned(), ""));
 
-    let labels = [
-        Label {
-            start_pos: info.pos,
-            end_pos: info.pos + 1,
-            kind: LabelKind::Primary,
-            text: text,
-        },
-    ];
+    let labels = [Label {
+        start_pos: info.pos,
+        end_pos: info.pos + 1,
+        kind: LabelKind::Primary,
+        text: text,
+    }];
 
     let lines_num = cmp::max(info.slice.lines().count(), 1);
     let max_ln_width = get_ln_width(info.line + lines_num);
@@ -166,7 +164,7 @@ fn format_labels(
                 "{} {}\n",
                 Fixed(12)
                     .bold()
-                    .paint(format!("{} |", " ".repeat(max_ln_width)),),
+                    .paint(format!("{} |", " ".repeat(max_ln_width))),
                 format!("{}{} {}", pad, color.paint(mark), color.paint(label.text))
             );
             return Some(result);

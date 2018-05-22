@@ -1,4 +1,4 @@
-mod stream;
+mod errors;
 mod fixtures;
 mod junk;
-mod errors;
+mod stream;

@@ -6,10 +6,10 @@
 
 use std::collections::HashMap;
 
+use super::resolve::{Env, ResolveValue};
 use super::syntax::ast;
 use super::syntax::parse;
 use super::types::FluentValue;
-use super::resolve::{Env, ResolveValue};
 
 /// `MessageContext` is a collection of localization messages which are meant to be used together
 /// in a single view, widget or any other UI abstraction.
@@ -42,6 +42,12 @@ pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
     messages: HashMap<String, ast::Message>,
     terms: HashMap<String, ast::Term>,
+    functions: HashMap<
+        String,
+        Box<
+            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
+        >,
+    >,
 }
 
 impl<'ctx> MessageContext<'ctx> {
@@ -50,6 +56,7 @@ impl<'ctx> MessageContext<'ctx> {
             locales,
             messages: HashMap::new(),
             terms: HashMap::new(),
+            functions: HashMap::new(),
         }
     }
 
@@ -63,6 +70,24 @@ impl<'ctx> MessageContext<'ctx> {
 
     pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
         self.terms.get(id)
+    }
+
+    pub fn add_function<F>(&mut self, id: &str, func: F)
+    where
+        F: 'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
+    {
+        self.functions.insert(id.to_string(), Box::new(func));
+    }
+
+    pub fn get_function(
+        &self,
+        id: &str,
+    ) -> Option<
+        &Box<
+            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
+        >,
+    > {
+        self.functions.get(id)
     }
 
     pub fn add_messages(&mut self, source: &str) {

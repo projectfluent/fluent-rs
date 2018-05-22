@@ -1,12 +1,12 @@
 extern crate fluent;
 
-use std::io::prelude::*;
 use std::fs::File;
 use std::io;
+use std::io::prelude::*;
 
-use self::fluent::syntax::parse;
-use self::fluent::syntax::errors::ErrorKind;
 use self::fluent::syntax::errors::ErrorInfo;
+use self::fluent::syntax::errors::ErrorKind;
+use self::fluent::syntax::parse;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));
@@ -34,7 +34,7 @@ fn empty_errors() {
                     line: 0,
                     col: 0,
                     pos: 0,
-                }),
+                },),
                 error1.info
             );
         }
@@ -60,7 +60,7 @@ fn bad_id_start_errors() {
                     line: 0,
                     col: 0,
                     pos: 0,
-                }),
+                },),
                 error1.info
             );
         }
@@ -86,7 +86,7 @@ fn just_id_errors() {
                     line: 0,
                     col: 3,
                     pos: 3,
-                }),
+                },),
                 error1.info
             );
         }
@@ -112,7 +112,7 @@ fn no_equal_sign_errors() {
                     line: 0,
                     col: 4,
                     pos: 4,
-                }),
+                },),
                 error1.info
             );
         }
@@ -143,7 +143,7 @@ fn wrong_char_in_id_errors() {
                     line: 0,
                     col: 2,
                     pos: 14,
-                }),
+                },),
                 error1.info
             );
         }
@@ -169,7 +169,7 @@ fn missing_trait_value_errors() {
                     line: 0,
                     col: 5,
                     pos: 17,
-                }),
+                },),
                 error1.info
             );
         }
@@ -195,7 +195,7 @@ fn message_missing_fields_errors() {
                     line: 0,
                     col: 3,
                     pos: 3,
-                }),
+                },),
                 error1.info
             );
         }
@@ -227,7 +227,7 @@ fn private_errors() {
                     line: 1,
                     col: 10,
                     pos: 48,
-                }),
+                },),
                 error1.info
             );
 
@@ -246,7 +246,7 @@ fn private_errors() {
                     line: 7,
                     col: 10,
                     pos: 10,
-                }),
+                },),
                 error2.info
             );
 
@@ -260,7 +260,7 @@ fn private_errors() {
                     line: 9,
                     col: 23,
                     pos: 23,
-                }),
+                },),
                 error3.info
             );
 
@@ -274,7 +274,7 @@ fn private_errors() {
                     line: 11,
                     col: 15,
                     pos: 15,
-                }),
+                },),
                 error4.info
             );
         }

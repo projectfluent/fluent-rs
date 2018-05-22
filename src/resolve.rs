@@ -9,9 +9,9 @@
 use std::collections::HashMap;
 use std::str::FromStr;
 
-use super::types::FluentValue;
-use super::syntax::ast;
 use super::context::MessageContext;
+use super::syntax::ast;
+use super::types::FluentValue;
 
 /// State for a single `ResolveValue::to_value` call.
 pub struct Env<'env> {
@@ -87,10 +87,19 @@ impl ResolveValue for ast::Expression {
             ast::Expression::MessageReference { id } if id.name.starts_with('-') => {
                 env.ctx.get_term(&id.name)?.to_value(env)
             }
-            ast::Expression::MessageReference { id } => {
-                env.ctx.get_message(&id.name)?.to_value(env)
-            }
-            ast::Expression::ExternalArgument { id } => env.args?.get(&id.name.as_ref()).cloned(),
+            ast::Expression::NumberExpression { ref value } => value.to_value(env),
+            ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
+                .ctx
+                .get_term(&id.name)
+                .and_then(|term| term.to_value(env)),
+            ast::Expression::MessageReference { ref id } => env
+                .ctx
+                .get_message(&id.name)
+                .and_then(|message| message.to_value(env)),
+            ast::Expression::ExternalArgument { ref id } => env
+                .args
+                .and_then(|args| args.get(&id.name.as_ref()))
+                .cloned(),
             ast::Expression::SelectExpression {
                 expression: None,
                 variants,
@@ -155,6 +164,39 @@ impl ResolveValue for ast::Expression {
                 }
 
                 select_default(variants)?.value.to_value(env)
+            }
+            ast::Expression::CallExpression {
+                ref callee,
+                ref args,
+            } => {
+                let mut resolved_unnamed_args = Vec::new();
+                let mut resolved_named_args = HashMap::new();
+
+                for arg in args {
+                    match arg {
+                        &ast::Argument::Expression(ref expression) => {
+                            resolved_unnamed_args.push(expression.to_value(env));
+                        }
+                        &ast::Argument::NamedArgument { ref name, ref val } => {
+                            let mut fluent_val: FluentValue;
+
+                            match val {
+                                &ast::ArgValue::Number(ref num) => {
+                                    fluent_val = num.to_value(env).unwrap();
+                                }
+                                &ast::ArgValue::String(ref string) => {
+                                    fluent_val = FluentValue::from(string.as_str());
+                                }
+                            };
+
+                            resolved_named_args.insert(name.name.clone(), fluent_val);
+                        }
+                    }
+                }
+
+                env.ctx
+                    .get_function(&callee.name)
+                    .and_then(|func| func(resolved_unnamed_args.as_slice(), &resolved_named_args))
             }
             _ => unimplemented!(),
         }

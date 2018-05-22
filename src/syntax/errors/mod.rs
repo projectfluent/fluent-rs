@@ -1,16 +1,16 @@
 pub mod display;
 mod list;
 
-pub use self::list::ParserError;
-pub use self::list::ErrorKind;
-pub use self::list::ErrorInfo;
 pub use self::list::get_error_desc;
+pub use self::list::ErrorInfo;
+pub use self::list::ErrorKind;
+pub use self::list::ParserError;
 
 macro_rules! error {
     ($kind:expr) => {{
         Err(ParserError {
             info: None,
-            kind: $kind
+            kind: $kind,
         })
     }};
 }

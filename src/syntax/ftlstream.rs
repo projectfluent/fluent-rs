@@ -1,7 +1,7 @@
-use super::errors::ParserError;
 use super::errors::ErrorKind;
-use super::stream::ParserStream;
+use super::errors::ParserError;
 use super::parser::Result;
+use super::stream::ParserStream;
 
 pub trait FTLParserStream<I> {
     fn skip_inline_ws(&mut self);
@@ -320,7 +320,9 @@ where
             if self.current_is('\n') && !self.peek_char_is('\n') {
                 self.next();
 
-                if self.ch.is_none() || self.is_entry_id_start() || self.current_is('#')
+                if self.ch.is_none()
+                    || self.is_entry_id_start()
+                    || self.current_is('#')
                     || (self.current_is('/') && self.peek_char_is('/'))
                     || (self.current_is('[') && self.peek_char_is('['))
                 {

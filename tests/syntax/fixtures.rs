@@ -2,9 +2,9 @@ extern crate fluent;
 extern crate glob;
 
 use self::glob::glob;
-use std::io::prelude::*;
 use std::fs::File;
 use std::io;
+use std::io::prelude::*;
 
 use self::fluent::syntax::parse;
 

@@ -1,10 +1,10 @@
-pub use super::errors::ParserError;
-pub use super::errors::ErrorKind;
-pub use super::errors::get_error_slice;
 pub use super::errors::get_error_info;
+pub use super::errors::get_error_slice;
+pub use super::errors::ErrorKind;
+pub use super::errors::ParserError;
 
-use super::stream::ParserStream;
 use super::ftlstream::FTLParserStream;
+use super::stream::ParserStream;
 
 use std::result;
 
@@ -563,9 +563,7 @@ where
             let val = get_arg_val(ps)?;
             Ok(ast::Argument::NamedArgument { name: id, val })
         }
-        _ => {
-            error!(ErrorKind::ForbiddenKey)
-        }
+        _ => error!(ErrorKind::ForbiddenKey),
     }
 }
 

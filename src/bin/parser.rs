@@ -1,17 +1,17 @@
 extern crate fluent;
 extern crate getopts;
 
-use std::fs::File;
-use std::io::Read;
-use std::io;
 use std::env;
+use std::fs::File;
+use std::io;
+use std::io::Read;
 
 use getopts::Options;
 
-use fluent::syntax::parser::parse;
 use fluent::syntax::ast::Resource;
 use fluent::syntax::errors::display::annotate_slice;
 use fluent::syntax::errors::display::Item;
+use fluent::syntax::parser::parse;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));

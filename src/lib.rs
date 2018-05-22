@@ -38,10 +38,10 @@
 //! assert_eq!(value, "Welcome, John.");
 //! ```
 
-pub mod syntax;
 pub mod context;
-pub mod resolve;
-pub mod types;
 pub mod intl;
+pub mod resolve;
+pub mod syntax;
+pub mod types;
 
 pub use context::MessageContext;

@@ -28,7 +28,8 @@ foo = Foo
 ",
     );
 
-    if let Some(attributes) = ctx.get_message("foo")
+    if let Some(attributes) = ctx
+        .get_message("foo")
         .and_then(|message| message.attributes.as_ref())
     {
         let value = attributes

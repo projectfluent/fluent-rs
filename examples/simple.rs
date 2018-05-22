@@ -12,14 +12,16 @@ key2 = Value 2
 ",
     );
 
-    match ctx.get_message("key1")
+    match ctx
+        .get_message("key1")
         .and_then(|msg| ctx.format(msg, None))
     {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
-    match ctx.get_message("key2")
+    match ctx
+        .get_message("key2")
         .and_then(|msg| ctx.format(msg, None))
     {
         Some(value) => println!("{}", value),

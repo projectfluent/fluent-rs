@@ -202,39 +202,48 @@ baz-unknown =
     args.insert("int", FluentValue::from(3));
     args.insert("float", FluentValue::from(2.72));
 
-    let value = ctx.get_message("foo-hit")
+    let value = ctx
+        .get_message("foo-hit")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Qux".to_string()));
 
-    let value = ctx.get_message("foo-miss")
+    let value = ctx
+        .get_message("foo-miss")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx.get_message("foo-unknown")
+    let value = ctx
+        .get_message("foo-unknown")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx.get_message("bar-hit")
+    let value = ctx
+        .get_message("bar-hit")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Bar 3".to_string()));
 
-    let value = ctx.get_message("bar-miss")
+    let value = ctx
+        .get_message("bar-miss")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Bar 1".to_string()));
 
-    let value = ctx.get_message("bar-unknown")
+    let value = ctx
+        .get_message("bar-unknown")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Bar 1".to_string()));
 
-    let value = ctx.get_message("baz-hit")
+    let value = ctx
+        .get_message("baz-hit")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Baz E".to_string()));
 
-    let value = ctx.get_message("baz-miss")
+    let value = ctx
+        .get_message("baz-miss")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Baz 1".to_string()));
 
-    let value = ctx.get_message("baz-unknown")
+    let value = ctx
+        .get_message("baz-unknown")
         .and_then(|msg| ctx.format(msg, Some(&args)));
     assert_eq!(value, Some("Baz 1".to_string()));
 }
@@ -256,7 +265,8 @@ use-bar =
 ",
     );
 
-    let value = ctx.get_message("use-bar")
+    let value = ctx
+        .get_message("use-bar")
         .and_then(|msg| ctx.format(msg, None));
     assert_eq!(value, Some("Bar".to_string()));
 }
@@ -278,7 +288,8 @@ use-foo =
 ",
     );
 
-    let value = ctx.get_message("use-foo")
+    let value = ctx
+        .get_message("use-foo")
         .and_then(|msg| ctx.format(msg, None));
     assert_eq!(value, Some("Foo".to_string()));
 }
