@@ -7,7 +7,7 @@ use self::annotate_snippets::display_list::DisplayList;
 use self::annotate_snippets::formatter::DisplayListFormatter;
 use self::annotate_snippets::snippet;
 
-pub fn annotate_error(err: &ParserError, file_name: Option<String>, color: bool) -> String {
+pub fn annotate_error(err: &ParserError, file_name: &Option<String>, color: bool) -> String {
     let desc = get_error_desc(&err.kind);
 
     let (source, line_start, pos) = if let Some(ref info) = err.info {

@@ -22,11 +22,11 @@ impl<I: Iterator<Item = char>> ParserStream<I> {
         let ch = iter.next();
 
         ParserStream {
-            iter: iter,
+            iter,
             buf: vec![],
             peek_index: 0,
             index: 0,
-            ch: ch,
+            ch,
 
             iter_end: false,
             peek_end: false,

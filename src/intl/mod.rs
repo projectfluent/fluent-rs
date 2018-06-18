@@ -258,7 +258,7 @@ static PLURAL_RULES: &[fn(f32) -> &'static str] = &[
         {
             return "few";
         }
-        if n % 1000000.0 == 0.0 && n != 0.0 {
+        if n % 1_000_000.0 == 0.0 && n != 0.0 {
             return "many";
         }
         if n % 10.0 == 2.0 && !is_in(n % 100.0, &[12.0, 72.0, 92.0]) {
@@ -502,7 +502,7 @@ impl PluralRules {
             None => unimplemented!("Plural rule for this language is not available"),
         };
         PluralRules {
-            locale: locale,
+            locale,
             selector: f,
         }
     }

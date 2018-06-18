@@ -13,7 +13,7 @@ fn test_annotate_errors() {
         Ok(_) => panic!("Should have return an error!"),
         Err((_, errors)) => {
             assert_eq!(errors.len(), 1);
-            let err = annotate_error(&errors[0], None, false);
+            let err = annotate_error(&errors[0], &None, false);
             assert_eq!(
                 err,
                 "error[E0003]: expected token `=`\n  |\n0 | key Value\n  |     ^\n  |"

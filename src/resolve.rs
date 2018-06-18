@@ -173,17 +173,17 @@ impl ResolveValue for ast::Expression {
 
                 for arg in args {
                     match arg {
-                        &ast::Argument::Expression(ref expression) => {
+                        ast::Argument::Expression(ref expression) => {
                             resolved_unnamed_args.push(expression.to_value(env));
                         }
-                        &ast::Argument::NamedArgument { ref name, ref val } => {
+                        ast::Argument::NamedArgument { ref name, ref val } => {
                             let mut fluent_val: FluentValue;
 
                             match val {
-                                &ast::ArgValue::Number(ref num) => {
+                                ast::ArgValue::Number(ref num) => {
                                     fluent_val = num.to_value(env).unwrap();
                                 }
-                                &ast::ArgValue::String(ref string) => {
+                                ast::ArgValue::String(ref string) => {
                                     fluent_val = FluentValue::from(string.as_str());
                                 }
                             };

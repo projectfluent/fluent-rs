@@ -246,15 +246,15 @@ fn get_variant<I>(ps: &mut ParserStream<I>, has_default: bool) -> Result<ast::Va
 where
     I: Iterator<Item = char>,
 {
-    let mut default_index = false;
-
-    if ps.current_is('*') {
+    let default_index = if ps.current_is('*') {
         if has_default {
             return error!(ErrorKind::MultipleDefaultVariants);
         }
         ps.next();
-        default_index = true;
-    }
+        true
+    } else {
+        false
+    };
 
     ps.expect_char('[')?;
 
@@ -523,7 +523,7 @@ where
                 let key = get_variant_key(ps)?;
                 ps.expect_char(']')?;
 
-                Ok(ast::Expression::VariantExpression { id, key: key })
+                Ok(ast::Expression::VariantExpression { id, key })
             }
             Some('(') => {
                 if id.name.starts_with('-') || id.name.chars().any(|c| c.is_lowercase()) {
@@ -536,10 +536,10 @@ where
                 // XXX Make sure that id.name is [A-Z][A-Z_?-]*
                 Ok(ast::Expression::CallExpression {
                     callee: ast::Function { name: id.name },
-                    args: args,
+                    args,
                 })
             }
-            _ => Ok(ast::Expression::MessageReference { id: id }),
+            _ => Ok(ast::Expression::MessageReference { id }),
         },
         _ => Ok(literal),
     }

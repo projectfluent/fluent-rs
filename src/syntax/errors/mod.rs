@@ -89,7 +89,7 @@ pub fn get_error_info(
     let slice = get_error_lines(source, first_line_num, next_entry_line);
 
     Some(ErrorInfo {
-        slice: slice,
+        slice,
         line: first_line_num,
         pos: pos - entry_start,
     })
