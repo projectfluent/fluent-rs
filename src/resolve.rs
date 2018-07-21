@@ -6,12 +6,21 @@
 //! [`FluentValues`]: ../types/enum.FluentValue.html
 //! [`MessageContext`]: ../context/struct.MessageContext.html
 
+use std::cell::RefCell;
+use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
+use std::hash::{Hash, Hasher};
 use std::str::FromStr;
 
 use super::context::MessageContext;
 use super::syntax::ast;
 use super::types::FluentValue;
+
+#[derive(Debug)]
+pub enum FluentError {
+    None,
+    Cyclic,
+}
 
 /// State for a single `ResolveValue::to_value` call.
 pub struct Env<'env> {
@@ -19,97 +28,147 @@ pub struct Env<'env> {
     pub ctx: &'env MessageContext<'env>,
     /// The current arguments passed by the developer.
     pub args: Option<&'env HashMap<&'env str, FluentValue>>,
+    /// Tracks hashes to prevent infinite recursion.
+    pub travelled: RefCell<Vec<u64>>,
+}
+
+impl<'env> Env<'env> {
+    fn track<F>(&self, identifier: &str, action: F) -> Result<FluentValue, FluentError>
+    where
+        F: FnMut() -> Result<FluentValue, FluentError>,
+    {
+        let mut hasher = DefaultHasher::new();
+        identifier.hash(&mut hasher);
+        let hash = hasher.finish();
+
+        if self.travelled.borrow().contains(&hash) {
+            Err(FluentError::Cyclic)
+        } else {
+            self.travelled.borrow_mut().push(hash);
+            self.scope(action)
+        }
+    }
+
+    fn scope<T, F: FnMut() -> T>(&self, mut action: F) -> T {
+        let level = self.travelled.borrow().len();
+        let output = action();
+        self.travelled.borrow_mut().truncate(level);
+        output
+    }
 }
 
 /// Converts an AST node to a `FluentValue`.
 pub trait ResolveValue {
-    fn to_value(&self, env: &Env) -> Option<FluentValue>;
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError>;
 }
 
 impl ResolveValue for ast::Message {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.value.as_ref()?.to_value(env)
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+        env.track(&self.id.name, || {
+            self.value
+                .as_ref()
+                .ok_or(FluentError::None)?
+                .to_value(env)
+        })
     }
 }
 
 impl ResolveValue for ast::Term {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.value.to_value(env)
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+        env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
 impl ResolveValue for ast::Attribute {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        self.value.to_value(env)
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+        env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
 impl ResolveValue for ast::Pattern {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
-        let string = self
-            .elements
-            .iter()
-            .map(|elem| {
-                elem.to_value(env)
-                    .map_or(String::from("___"), |elem| elem.format(env.ctx))
-            })
-            .collect::<String>();
-        Some(FluentValue::from(string))
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+        let mut string = String::with_capacity(128);
+        for elem in &self.elements {
+            let result: Result<String, ()> = env.scope(|| match elem.to_value(env) {
+                Err(FluentError::Cyclic) => Err(()),
+                Err(_) => Ok("___".into()),
+                Ok(elem) => Ok(elem.format(env.ctx)),
+            });
+
+            match result {
+                Err(()) => return Ok("___".into()),
+                Ok(value) => {
+                    string.push_str(&value);
+                }
+            }
+        }
+        string.shrink_to_fit();
+        Ok(FluentValue::from(string))
     }
 }
 
 impl ResolveValue for ast::PatternElement {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
         match self {
-            ast::PatternElement::TextElement(s) => Some(FluentValue::from(s.clone())),
+            ast::PatternElement::TextElement(s) => Ok(FluentValue::from(s.clone())),
             ast::PatternElement::Placeable(p) => p.to_value(env),
         }
     }
 }
 
 impl ResolveValue for ast::Number {
-    fn to_value(&self, _env: &Env) -> Option<FluentValue> {
-        f32::from_str(&self.value).ok().map(FluentValue::from)
+    fn to_value(&self, _env: &Env) -> Result<FluentValue, FluentError> {
+        f32::from_str(&self.value)
+            .map_err(|_| FluentError::None)
+            .map(FluentValue::from)
     }
 }
 
 impl ResolveValue for ast::VariantName {
-    fn to_value(&self, _env: &Env) -> Option<FluentValue> {
-        Some(FluentValue::from(self.name.clone()))
+    fn to_value(&self, _env: &Env) -> Result<FluentValue, FluentError> {
+        Ok(FluentValue::from(self.name.clone()))
     }
 }
 
 impl ResolveValue for ast::Expression {
-    fn to_value(&self, env: &Env) -> Option<FluentValue> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
         match self {
-            ast::Expression::StringExpression { value } => Some(FluentValue::from(value.clone())),
+            ast::Expression::StringExpression { value } => Ok(FluentValue::from(value.clone())),
             ast::Expression::NumberExpression { value } => value.to_value(env),
-            ast::Expression::MessageReference { id } if id.name.starts_with('-') => {
-                env.ctx.get_term(&id.name)?.to_value(env)
-            }
+            ast::Expression::MessageReference { id } if id.name.starts_with('-') => env
+                .ctx
+                .get_term(&id.name)
+                .ok_or(FluentError::None)?
+                .to_value(env),
             ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
                 .ctx
                 .get_term(&id.name)
+                .ok_or(FluentError::None)
                 .and_then(|term| term.to_value(env)),
             ast::Expression::MessageReference { ref id } => env
                 .ctx
                 .get_message(&id.name)
+                .ok_or(FluentError::None)
                 .and_then(|message| message.to_value(env)),
             ast::Expression::ExternalArgument { ref id } => env
                 .args
                 .and_then(|args| args.get(&id.name.as_ref()))
-                .cloned(),
+                .cloned()
+                .ok_or(FluentError::None),
             ast::Expression::SelectExpression {
                 expression: None,
                 variants,
-            } => select_default(variants)?.value.to_value(env),
+            } => select_default(variants)
+                .ok_or(FluentError::None)?
+                .value
+                .to_value(env),
             ast::Expression::SelectExpression {
                 expression,
                 variants,
             } => {
-                let selector = expression.as_ref()?.to_value(env);
+                let selector = expression.as_ref().ok_or(FluentError::None)?.to_value(env);
 
-                if let Some(ref selector) = selector {
+                if let Ok(ref selector) = selector {
                     for variant in variants {
                         match variant.key {
                             ast::VarKey::VariantName(ref symbol) => {
@@ -119,7 +178,7 @@ impl ResolveValue for ast::Expression {
                                 }
                             }
                             ast::VarKey::Number(ref number) => {
-                                if let Some(key) = number.to_value(env) {
+                                if let Ok(key) = number.to_value(env) {
                                     if key.matches(env.ctx, selector) {
                                         return variant.value.to_value(env);
                                     }
@@ -129,13 +188,24 @@ impl ResolveValue for ast::Expression {
                     }
                 }
 
-                select_default(variants)?.value.to_value(env)
+                select_default(variants)
+                    .ok_or(FluentError::None)?
+                    .value
+                    .to_value(env)
             }
             ast::Expression::AttributeExpression { id, name } => {
                 let attributes = if id.name.starts_with('-') {
-                    env.ctx.get_term(&id.name)?.attributes.as_ref()
+                    env.ctx
+                        .get_term(&id.name)
+                        .ok_or(FluentError::None)?
+                        .attributes
+                        .as_ref()
                 } else {
-                    env.ctx.get_message(&id.name)?.attributes.as_ref()
+                    env.ctx
+                        .get_message(&id.name)
+                        .ok_or(FluentError::None)?
+                        .attributes
+                        .as_ref()
                 };
                 if let Some(attributes) = attributes {
                     for attribute in attributes {
@@ -144,10 +214,10 @@ impl ResolveValue for ast::Expression {
                         }
                     }
                 }
-                None
+                Err(FluentError::None)
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
-                let term = env.ctx.get_term(&id.name)?;
+                let term = env.ctx.get_term(&id.name).ok_or(FluentError::None)?;
                 let variants = match term.value.elements.as_slice() {
                     [ast::PatternElement::Placeable(ast::Expression::SelectExpression {
                         expression: None,
@@ -162,19 +232,22 @@ impl ResolveValue for ast::Expression {
                     }
                 }
 
-                select_default(variants)?.value.to_value(env)
+                select_default(variants)
+                    .ok_or(FluentError::None)?
+                    .value
+                    .to_value(env)
             }
             ast::Expression::CallExpression {
                 ref callee,
                 ref args,
             } => {
-                let mut resolved_unnamed_args = Vec::new();
-                let mut resolved_named_args = HashMap::new();
+                let resolved_unnamed_args = &mut Vec::new();
+                let resolved_named_args = &mut HashMap::new();
 
                 for arg in args {
-                    match arg {
+                    env.scope(|| match arg {
                         ast::Argument::Expression(ref expression) => {
-                            resolved_unnamed_args.push(expression.to_value(env));
+                            resolved_unnamed_args.push(expression.to_value(env).ok());
                         }
                         ast::Argument::NamedArgument { ref name, ref val } => {
                             let mut fluent_val: FluentValue;
@@ -190,12 +263,16 @@ impl ResolveValue for ast::Expression {
 
                             resolved_named_args.insert(name.name.clone(), fluent_val);
                         }
-                    }
+                    });
                 }
 
                 env.ctx
                     .get_function(&callee.name)
-                    .and_then(|func| func(resolved_unnamed_args.as_slice(), &resolved_named_args))
+                    .ok_or(FluentError::None)
+                    .and_then(|func| {
+                        func(resolved_unnamed_args.as_slice(), &resolved_named_args)
+                            .ok_or(FluentError::None)
+                    })
             }
             _ => unimplemented!(),
         }

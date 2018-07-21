@@ -59,7 +59,6 @@ fn message_reference_missing() {
 }
 
 #[test]
-#[ignore]
 fn message_reference_cyclic() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
@@ -72,4 +71,19 @@ bar = { foo } Bar
 
     let value = ctx.get_message("foo").and_then(|msg| ctx.format(msg, None));
     assert_eq!(value, Some("Foo ___".to_string()));
+}
+
+#[test]
+fn message_reference_multiple() {
+    let mut ctx = MessageContext::new(&["x-testing"]);
+
+    ctx.add_messages(
+        "
+foo = Foo
+bar = { foo } Bar { foo }
+",
+    );
+
+    let value = ctx.get_message("bar").and_then(|msg| ctx.format(msg, None));
+    assert_eq!(value, Some("Foo Bar Foo".to_string()));
 }
