@@ -1,12 +1,11 @@
+extern crate clap;
 extern crate fluent;
-extern crate getopts;
 
-use std::env;
 use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use getopts::Options;
+use clap::App;
 
 use fluent::syntax::ast::Resource;
 use fluent::syntax::errors::display::annotate_error;
@@ -23,39 +22,23 @@ fn print_entries_resource(res: &Resource) {
     println!("{:#?}", res);
 }
 
-fn print_usage(program: &str, opts: &Options) {
-    let brief = format!("Usage: {} FILE [options]", program);
-    print!("{}", opts.usage(&brief));
-}
-
 fn main() {
-    let args: Vec<String> = env::args().collect();
-    let program = args[0].clone();
+    let matches = App::new("Fluent Parser")
+        .version("1.0")
+        .about("Parses FTL file into an AST")
+        .args_from_usage(
+            "-s, --silence 'disable output'
+             <INPUT> 'Sets the input file to use'",
+        )
+        .get_matches();
 
-    let mut opts = Options::new();
-    opts.optflag("s", "silence", "disable output");
-    opts.optflag("r", "raw", "print raw result");
-    opts.optflag("h", "help", "print this help menu");
-    let matches = match opts.parse(&args[1..]) {
-        Ok(m) => m,
-        Err(f) => panic!(f.to_string()),
-    };
-    if matches.opt_present("h") {
-        print_usage(&program, &opts);
-        return;
-    }
-    let input = if !matches.free.is_empty() {
-        matches.free[0].clone()
-    } else {
-        print_usage(&program, &opts);
-        return;
-    };
+    let input = matches.value_of("INPUT").unwrap();
 
     let source = read_file(&input).expect("Read file failed");
 
     let res = parse(&source);
 
-    if matches.opt_present("s") {
+    if matches.is_present("silence") {
         return;
     };
 

@@ -17,7 +17,7 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-getopts = "0.2.17"
+clap = "2.32.0"
 fluent-locale = "0.3.1"
 annotate-snippets = {version = "0.1", features = ["color"]}
 
