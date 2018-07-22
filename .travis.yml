@@ -17,5 +17,7 @@ script:
   - cargo doc
 
 after_success: |
-  bash <(curl https://raw.githubusercontent.com/xd009642/tarpaulin/master/travis-install.sh)
-  cargo tarpaulin --ciserver travis-ci --ignore-tests --coveralls $TRAVIS_JOB_ID
+  if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
+    RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+  fi
