@@ -65,10 +65,7 @@ pub trait ResolveValue {
 impl ResolveValue for ast::Message {
     fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
         env.track(&self.id.name, || {
-            self.value
-                .as_ref()
-                .ok_or(FluentError::None)?
-                .to_value(env)
+            self.value.as_ref().ok_or(FluentError::None)?.to_value(env)
         })
     }
 }

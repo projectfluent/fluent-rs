@@ -5,14 +5,15 @@
 //! together.
 
 use std::cell::RefCell;
-use std::collections::HashMap;
+use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
+use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::syntax::ast;
 use super::syntax::parse;
 use super::types::FluentValue;
 
-enum Variant<'ctx> {
+enum Entry<'ctx> {
     Message(ast::Message),
     Term(ast::Term),
     Function(
@@ -51,7 +52,7 @@ enum Variant<'ctx> {
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
-    map: HashMap<String, Variant<'ctx>>,
+    map: HashMap<String, Entry<'ctx>>,
 }
 
 impl<'ctx> MessageContext<'ctx> {
@@ -64,7 +65,7 @@ impl<'ctx> MessageContext<'ctx> {
 
     pub fn has_message(&self, id: &str) -> bool {
         self.map.get(id).map_or(false, |id| {
-            if let Variant::Message(_) = id {
+            if let Entry::Message(_) = id {
                 true
             } else {
                 false
@@ -74,7 +75,7 @@ impl<'ctx> MessageContext<'ctx> {
 
     pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
         self.map.get(id).and_then(|id| {
-            if let Variant::Message(ref msg) = id {
+            if let Entry::Message(ref msg) = id {
                 Some(msg)
             } else {
                 None
@@ -84,7 +85,7 @@ impl<'ctx> MessageContext<'ctx> {
 
     pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
         self.map.get(id).and_then(|id| {
-            if let Variant::Term(ref term) = id {
+            if let Entry::Term(ref term) = id {
                 Some(term)
             } else {
                 None
@@ -92,12 +93,20 @@ impl<'ctx> MessageContext<'ctx> {
         })
     }
 
-    pub fn add_function<F>(&mut self, id: &str, func: F)
+    pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
     {
-        self.map
-            .insert(id.to_string(), Variant::Function(Box::new(func)));
+        match self.map.entry(id.to_owned()) {
+            HashEntry::Vacant(entry) => {
+                entry.insert(Entry::Function(Box::new(func)));
+                Ok(())
+            }
+            HashEntry::Occupied(_) => Err(FluentError::Overriding {
+                kind: "function",
+                id: id.to_owned(),
+            }),
+        }
     }
 
     pub fn get_function(
@@ -109,7 +118,7 @@ impl<'ctx> MessageContext<'ctx> {
         >,
     > {
         self.map.get(id).and_then(|id| {
-            if let Variant::Function(ref func) = id {
+            if let Entry::Function(ref func) = id {
                 Some(func)
             } else {
                 None
@@ -117,7 +126,7 @@ impl<'ctx> MessageContext<'ctx> {
         })
     }
 
-    pub fn add_messages(&mut self, source: &str) {
+    pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
         let res = parse(source).unwrap_or_else(|x| x.0);
 
         for entry in res.body {
@@ -127,16 +136,23 @@ impl<'ctx> MessageContext<'ctx> {
                 _ => continue,
             };
 
-            match entry {
-                ast::Entry::Message(message) => {
-                    self.map.insert(id, Variant::Message(message));
-                }
-                ast::Entry::Term(term) => {
-                    self.map.insert(id, Variant::Term(term));
-                }
+            let (entry, kind) = match entry {
+                ast::Entry::Message(message) => (Entry::Message(message), "message"),
+                ast::Entry::Term(term) => (Entry::Term(term), "term"),
                 _ => continue,
             };
+
+            match self.map.entry(id.clone()) {
+                HashEntry::Vacant(empty) => {
+                    empty.insert(entry);
+                }
+                HashEntry::Occupied(_) => {
+                    return Err(FluentError::Overriding { kind, id });
+                }
+            }
         }
+
+        Ok(())
     }
 
     pub fn format<T: ResolveValue>(
