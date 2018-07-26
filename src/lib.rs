@@ -38,7 +38,12 @@
 //! assert_eq!(value, "Welcome, John.");
 //! ```
 
+extern crate failure;
+#[macro_use]
+extern crate failure_derive;
+
 pub mod context;
+pub mod errors;
 pub mod intl;
 pub mod resolve;
 pub mod syntax;

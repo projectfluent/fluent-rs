@@ -20,6 +20,8 @@ categories = ["localization", "internationalization"]
 clap = "2.32.0"
 fluent-locale = "0.3.1"
 annotate-snippets = {version = "0.1", features = ["color"]}
+failure = "0.1.1"
+failure_derive = "0.1.1"
 
 [dev-dependencies]
 glob = "0.2.11"

@@ -4,12 +4,24 @@
 //! internationalization formatters, functions, environmental variables and are expected to be used
 //! together.
 
-use std::collections::HashMap;
+use std::cell::RefCell;
+use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
+use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::syntax::ast;
 use super::syntax::parse;
 use super::types::FluentValue;
+
+enum Entry<'ctx> {
+    Message(ast::Message),
+    Term(ast::Term),
+    Function(
+        Box<
+            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
+        >,
+    ),
+}
 
 /// `MessageContext` is a collection of localization messages which are meant to be used together
 /// in a single view, widget or any other UI abstraction.
@@ -40,43 +52,61 @@ use super::types::FluentValue;
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
-    messages: HashMap<String, ast::Message>,
-    terms: HashMap<String, ast::Term>,
-    functions: HashMap<
-        String,
-        Box<
-            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
-        >,
-    >,
+    map: HashMap<String, Entry<'ctx>>,
 }
 
 impl<'ctx> MessageContext<'ctx> {
     pub fn new(locales: &'ctx [&'ctx str]) -> MessageContext {
         MessageContext {
             locales,
-            messages: HashMap::new(),
-            terms: HashMap::new(),
-            functions: HashMap::new(),
+            map: HashMap::new(),
         }
     }
 
     pub fn has_message(&self, id: &str) -> bool {
-        self.messages.contains_key(id)
+        self.map.get(id).map_or(false, |id| {
+            if let Entry::Message(_) = id {
+                true
+            } else {
+                false
+            }
+        })
     }
 
     pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        self.messages.get(id)
+        self.map.get(id).and_then(|id| {
+            if let Entry::Message(ref msg) = id {
+                Some(msg)
+            } else {
+                None
+            }
+        })
     }
 
     pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        self.terms.get(id)
+        self.map.get(id).and_then(|id| {
+            if let Entry::Term(ref term) = id {
+                Some(term)
+            } else {
+                None
+            }
+        })
     }
 
-    pub fn add_function<F>(&mut self, id: &str, func: F)
+    pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
     {
-        self.functions.insert(id.to_string(), Box::new(func));
+        match self.map.entry(id.to_owned()) {
+            HashEntry::Vacant(entry) => {
+                entry.insert(Entry::Function(Box::new(func)));
+                Ok(())
+            }
+            HashEntry::Occupied(_) => Err(FluentError::Overriding {
+                kind: "function",
+                id: id.to_owned(),
+            }),
+        }
     }
 
     pub fn get_function(
@@ -87,10 +117,16 @@ impl<'ctx> MessageContext<'ctx> {
             'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
         >,
     > {
-        self.functions.get(id)
+        self.map.get(id).and_then(|id| {
+            if let Entry::Function(ref func) = id {
+                Some(func)
+            } else {
+                None
+            }
+        })
     }
 
-    pub fn add_messages(&mut self, source: &str) {
+    pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
         let res = parse(source).unwrap_or_else(|x| x.0);
 
         for entry in res.body {
@@ -100,16 +136,23 @@ impl<'ctx> MessageContext<'ctx> {
                 _ => continue,
             };
 
-            match entry {
-                ast::Entry::Message(message) => {
-                    self.messages.insert(id, message);
-                }
-                ast::Entry::Term(term) => {
-                    self.terms.insert(id, term);
-                }
+            let (entry, kind) = match entry {
+                ast::Entry::Message(message) => (Entry::Message(message), "message"),
+                ast::Entry::Term(term) => (Entry::Term(term), "term"),
                 _ => continue,
             };
+
+            match self.map.entry(id.clone()) {
+                HashEntry::Vacant(empty) => {
+                    empty.insert(entry);
+                }
+                HashEntry::Occupied(_) => {
+                    return Err(FluentError::Overriding { kind, id });
+                }
+            }
         }
+
+        Ok(())
     }
 
     pub fn format<T: ResolveValue>(
@@ -117,7 +160,14 @@ impl<'ctx> MessageContext<'ctx> {
         resolvable: &T,
         args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<String> {
-        let env = Env { ctx: self, args };
-        resolvable.to_value(&env).map(|value| value.format(self))
+        let env = Env {
+            ctx: self,
+            args,
+            travelled: RefCell::new(Vec::new()),
+        };
+        resolvable
+            .to_value(&env)
+            .ok()
+            .map(|value| value.format(self))
     }
 }
