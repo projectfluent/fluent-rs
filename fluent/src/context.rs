@@ -9,9 +9,9 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
-use super::syntax::ast;
-use super::syntax::parse;
 use super::types::FluentValue;
+use fluent_syntax::ast;
+use fluent_syntax::parser::parse;
 
 enum Entry<'ctx> {
     Message(ast::Message),

@@ -1,5 +1,6 @@
 extern crate clap;
 extern crate fluent;
+extern crate fluent_syntax;
 
 use std::fs::File;
 use std::io;
@@ -7,9 +8,9 @@ use std::io::Read;
 
 use clap::App;
 
-use fluent::syntax::ast::Resource;
-use fluent::syntax::errors::display::annotate_error;
-use fluent::syntax::parser::parse;
+use fluent_syntax::ast::Resource;
+use fluent_syntax::parser::errors::display::annotate_error;
+use fluent_syntax::parser::parse;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = try!(File::open(path));

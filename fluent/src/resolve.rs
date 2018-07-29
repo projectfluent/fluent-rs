@@ -13,8 +13,8 @@ use std::hash::{Hash, Hasher};
 use std::str::FromStr;
 
 use super::context::MessageContext;
-use super::syntax::ast;
 use super::types::FluentValue;
+use fluent_syntax::ast;
 
 #[derive(Debug)]
 pub enum FluentError {

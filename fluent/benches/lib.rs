@@ -1,10 +1,11 @@
 #![feature(test)]
 
 extern crate fluent;
+extern crate fluent_syntax;
 extern crate test;
 
 use fluent::context::MessageContext;
-use fluent::syntax::{ast, parse};
+use fluent_syntax::{ast, parser::parse};
 use std::fs::File;
 use std::io;
 use std::io::Read;
@@ -15,13 +16,6 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     let mut s = String::new();
     try!(f.read_to_string(&mut s));
     Ok(s)
-}
-
-#[bench]
-fn bench_simple_parse(b: &mut Bencher) {
-    let source = read_file("./benches/simple.ftl").expect("Couldn't load file");
-
-    b.iter(|| parse(&source).unwrap());
 }
 
 #[bench]
@@ -48,13 +42,6 @@ fn bench_simple_format(b: &mut Bencher) {
             }
         }
     });
-}
-
-#[bench]
-fn bench_menubar_parse(b: &mut Bencher) {
-    let source = read_file("./benches/menubar.ftl").expect("Couldn't load file");
-
-    b.iter(|| parse(&source).unwrap());
 }
 
 #[bench]

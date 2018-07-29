@@ -41,12 +41,12 @@
 extern crate failure;
 #[macro_use]
 extern crate failure_derive;
+extern crate fluent_syntax;
 
 pub mod context;
 pub mod errors;
 pub mod intl;
 pub mod resolve;
-pub mod syntax;
 pub mod types;
 
 pub use context::MessageContext;
