@@ -1,0 +1,10 @@
+[package]
+name = "fluent-syntax"
+version = "0.1.0"
+authors = ["Zibi Braniecki <gandalf@mozilla.com>"]
+
+[dependencies]
+annotate-snippets = "0.1"
+
+[dev-dependencies]
+glob = "0.2"
