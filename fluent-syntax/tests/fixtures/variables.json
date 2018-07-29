@@ -1,0 +1,119 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "key01"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "VariableReference",
+                            "id": {
+                                "name": "var"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key02"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "VariableReference",
+                            "id": {
+                                "name": "var"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key03"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "VariableReference",
+                            "id": {
+                                "name": "var"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key04"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "VariableReference",
+                            "id": {
+                                "name": "var"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Errors"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Missing variable identifier"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "err01 = {$}\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Double $$"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "err02 = {$$var}\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Invalid first char of the identifier"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "err03 = {$-var}\n"
+        }
+    ]
+}

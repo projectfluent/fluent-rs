@@ -1,0 +1,922 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "positional-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                },
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "named-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                },
+                                {
+                                    "name": {
+                                        "name": "y"
+                                    },
+                                    "value": {
+                                        "type": "StringLiteral",
+                                        "value": "Y"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "dense-named-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                },
+                                {
+                                    "name": {
+                                        "name": "y"
+                                    },
+                                    "value": {
+                                        "type": "StringLiteral",
+                                        "value": "Y"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "mixed-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                },
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                },
+                                {
+                                    "name": {
+                                        "name": "y"
+                                    },
+                                    "value": {
+                                        "type": "StringLiteral",
+                                        "value": "Y"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Positional arg must not follow keyword args"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "shuffled-args = {FUN(1, x: 1, \"a\", y: \"Y\", msg)}\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Named arguments must be unique"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "duplicate-named-args = {FUN(x: 1, x: \"X\")}\n"
+        },
+        {
+            "type": "GroupComment",
+            "content": "Whitespace around arguments"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "sparse-inline-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                },
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "empty-inline-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "multiline-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                },
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "sparse-multiline-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                },
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "empty-multiline-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-number"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-string"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "StringLiteral",
+                                    "value": "a"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-msg-ref"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-term-ref"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "TermReference",
+                                    "id": {
+                                        "name": "msg"
+                                    }
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-var-ref"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "VariableReference",
+                                    "id": {
+                                        "name": "var"
+                                    }
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-arg-call"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "CallExpression",
+                                    "callee": {
+                                        "name": "OTHER"
+                                    },
+                                    "positional": [],
+                                    "named": []
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-named-arg"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-closing-paren"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "MessageReference",
+                                    "id": {
+                                        "name": "x"
+                                    }
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Optional trailing comma"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "one-argument"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "many-arguments"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "3"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "inline-sparse-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "2"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "3"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "mulitline-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "2"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "mulitline-sparse-args"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                },
+                                {
+                                    "type": "NumberLiteral",
+                                    "value": "2"
+                                }
+                            ],
+                            "named": []
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Syntax errors for trailing comma"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "one-argument = {FUN(1,,)}\nmissing-arg = {FUN(,)}\nmissing-sparse-arg = {FUN(   ,   )}\n"
+        },
+        {
+            "type": "GroupComment",
+            "content": "Whitespace in named arguments"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "sparse-named-arg"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                },
+                                {
+                                    "name": {
+                                        "name": "y"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "2"
+                                    }
+                                },
+                                {
+                                    "name": {
+                                        "name": "z"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "3"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-colon"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unindented-value"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "CallExpression",
+                            "callee": {
+                                "name": "FUN"
+                            },
+                            "positional": [],
+                            "named": [
+                                {
+                                    "name": {
+                                        "name": "x"
+                                    },
+                                    "value": {
+                                        "type": "NumberLiteral",
+                                        "value": "1"
+                                    }
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}

@@ -1,0 +1,587 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-1tbs-inline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-1tbs-newline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-1tbs-indent"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-allman-inline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-allman-newline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-allman-indent"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-gnu-inline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-gnu-newline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-gnu-indent"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-no-indent"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                },
+                                {
+                                    "key": {
+                                        "name": "other"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Other"
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-no-indent-multiline"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value\n"
+                                            },
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Continued"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                },
+                                {
+                                    "key": {
+                                        "name": "other"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Other\n"
+                                            },
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Multiline"
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR (Multiline text must be indented)"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "select-no-indent-multiline = { $selector ->\n   *[key] Value\nContinued without indent.\n}\n"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-flat"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                },
+                                {
+                                    "key": {
+                                        "name": "other"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Other"
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "select-flat-with-trailing-spaces"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "VariableReference",
+                                "id": {
+                                    "name": "selector"
+                                }
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "key"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                },
+                                {
+                                    "key": {
+                                        "name": "other"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Other"
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "Each line ends with 5 spaces."
+            }
+        }
+    ]
+}

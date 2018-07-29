@@ -3,16 +3,16 @@
 extern crate fluent_syntax;
 extern crate test;
 
+use self::test::Bencher;
 use fluent_syntax::parser::parse;
 use std::fs::File;
 use std::io;
 use std::io::Read;
-use test::Bencher;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
-    let mut f = try!(File::open(path));
+    let mut f = File::open(path)?;
     let mut s = String::new();
-    try!(f.read_to_string(&mut s));
+    f.read_to_string(&mut s)?;
     Ok(s)
 }
 

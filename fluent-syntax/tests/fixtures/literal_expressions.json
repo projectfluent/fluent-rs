@@ -1,0 +1,61 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "string-expression"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "StringLiteral",
+                            "value": "abc"
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "number-expression"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "NumberLiteral",
+                            "value": "123"
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "number-expression"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "NumberLiteral",
+                            "value": "-3.14"
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}

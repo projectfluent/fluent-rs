@@ -1,0 +1,135 @@
+{
+    "body": [
+        {
+            "type": "Term",
+            "id": {
+                "name": "simple-identifier"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "identifier-surrounded-by-whitespace"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "int-number"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "value": "1"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "float-number"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "value": "3.14"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-invalid-identifier =\n    {\n       *[two words] value\n    }\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-invalid-int =\n    {\n       *[1 apple] value\n    }\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-invalid-int =\n    {\n       *[3.14 apples] value\n    }\n"
+        }
+    ]
+}

@@ -1,0 +1,160 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "key01"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key02"
+            },
+            "value": null,
+            "attributes": [
+                {
+                    "id": {
+                        "name": "attr"
+                    },
+                    "value": {
+                        "elements": [
+                            {
+                                "type": "TextElement",
+                                "value": "Attribute"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key03"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "Continued\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "Over multiple\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "Lines"
+                    }
+                ]
+            },
+            "attributes": [
+                {
+                    "id": {
+                        "name": "attr"
+                    },
+                    "value": {
+                        "elements": [
+                            {
+                                "type": "TextElement",
+                                "value": "Attribute"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key05"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key06"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "selector": {
+                                "type": "NumberLiteral",
+                                "value": "1"
+                            },
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "one"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "One"
+                                            }
+                                        ]
+                                    },
+                                    "default": false
+                                },
+                                {
+                                    "key": {
+                                        "name": "two"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Two"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}

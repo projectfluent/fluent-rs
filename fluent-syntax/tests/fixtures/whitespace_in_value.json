@@ -1,0 +1,51 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "key"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "first line\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "last line"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "Caution, lines 6 and 7 contain white-space-only lines"
+            }
+        }
+    ]
+}

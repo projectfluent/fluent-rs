@@ -1,0 +1,122 @@
+{
+    "body": [
+        {
+            "type": "Term",
+            "id": {
+                "name": "variants-1tbs"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "variants-allman"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "variants-gnu"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "variants-no-indent"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    },
+                    {
+                        "key": {
+                            "name": "other"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Other"
+                                }
+                            ]
+                        },
+                        "default": false
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}

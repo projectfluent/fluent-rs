@@ -1,0 +1,98 @@
+{
+    "body": [
+        {
+            "type": "Term",
+            "id": {
+                "name": "term01"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value"
+                    }
+                ]
+            },
+            "attributes": [
+                {
+                    "id": {
+                        "name": "attr"
+                    },
+                    "value": {
+                        "elements": [
+                            {
+                                "type": "TextElement",
+                                "value": "Attribute"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "term02"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "StringLiteral",
+                            "value": ""
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "JUNK Missing value"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-term03 =\n    .attr = Attribute\n"
+        },
+        {
+            "type": "Comment",
+            "content": "JUNK Missing value\n       <  whitespace  >"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-term04 =                \n    .attr1 = Attribute 1\n"
+        },
+        {
+            "type": "Comment",
+            "content": "JUNK Missing value"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-term05 =\n"
+        },
+        {
+            "type": "Comment",
+            "content": "JUNK Missing value\n       <  whitespace  >"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-term06 =                \n"
+        },
+        {
+            "type": "Comment",
+            "content": "JUNK Missing ="
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-term07\n"
+        }
+    ]
+}

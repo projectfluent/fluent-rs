@@ -1,0 +1,115 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "backslash"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value with \\\\ (an escaped backslash)"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "closing-brace"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value with \\{ (a closing brace)"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "unicode-escape"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "\\u0041"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "escaped-unicode"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "\\\\u0041"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "String Expressions"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "quote-in-string"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "StringLiteral",
+                            "value": "\\\""
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "backslash-in-string"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "StringLiteral",
+                            "value": "\\\\"
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "mismatched-quote = {\"\\\\\"\"}\n"
+        }
+    ]
+}

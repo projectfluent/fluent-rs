@@ -1,0 +1,70 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "nested-placeable"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "Placeable",
+                            "expression": {
+                                "type": "Placeable",
+                                "expression": {
+                                    "type": "NumberLiteral",
+                                    "value": "1"
+                                }
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "padded-placeable"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "NumberLiteral",
+                            "value": "1"
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "sparse-placeable"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "Placeable",
+                            "expression": {
+                                "type": "NumberLiteral",
+                                "value": "1"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}

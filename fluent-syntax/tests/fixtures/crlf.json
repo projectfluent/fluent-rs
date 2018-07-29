@@ -1,0 +1,49 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "key01"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value 01"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "key02"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value 02\r\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "Continued"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR (Missing value or attributes)"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "key03\r\n"
+        }
+    ]
+}

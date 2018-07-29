@@ -1,0 +1,188 @@
+{
+    "body": [
+        {
+            "type": "Term",
+            "id": {
+                "name": "variant-list-in-term"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "key"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "TextElement",
+                                    "value": "Value"
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "variant-list-in-term-attr"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "ERROR Attributes of Terms must be Patterns."
+            }
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "    .attr =\n        {\n           *[key] Value\n        }\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Message values must be Patterns."
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "variant-list-in-message =\n    {\n       *[key] Value\n    }\n"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "variant-list-in-message-attr"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "ERROR Attributes of Messages must be Patterns."
+            }
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "    .attr =\n        {\n           *[key] Value\n        }\n"
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "nested-variant-list-in-term"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "one"
+                        },
+                        "value": {
+                            "variants": [
+                                {
+                                    "key": {
+                                        "name": "two"
+                                    },
+                                    "value": {
+                                        "elements": [
+                                            {
+                                                "type": "TextElement",
+                                                "value": "Value"
+                                            }
+                                        ]
+                                    },
+                                    "default": true
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "name": "nested-select"
+            },
+            "value": {
+                "variants": [
+                    {
+                        "key": {
+                            "name": "one"
+                        },
+                        "value": {
+                            "elements": [
+                                {
+                                    "type": "Placeable",
+                                    "expression": {
+                                        "selector": {
+                                            "type": "NumberLiteral",
+                                            "value": "2"
+                                        },
+                                        "variants": [
+                                            {
+                                                "key": {
+                                                    "name": "two"
+                                                },
+                                                "value": {
+                                                    "elements": [
+                                                        {
+                                                            "type": "TextElement",
+                                                            "value": "Value"
+                                                        }
+                                                    ]
+                                                },
+                                                "default": true
+                                            }
+                                        ]
+                                    }
+                                }
+                            ]
+                        },
+                        "default": true
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR VariantLists may not appear in SelectExpressions"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "nested-select-then-variant-list =\n    {\n       *[one] { 2 ->\n          *[two] {\n             *[three] Value\n          }\n       }\n    }\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR VariantLists are value types and may not appear in Placeables"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "variant-list-in-placeable =\n    A prefix here {\n       *[key] Value\n    } and a postfix here make this a Pattern.\n"
+        }
+    ]
+}

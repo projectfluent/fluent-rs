@@ -1,0 +1,67 @@
+{
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "name": "variant-expression"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "VariantExpression",
+                            "ref": {
+                                "type": "TermReference",
+                                "id": {
+                                    "name": "term"
+                                }
+                            },
+                            "key": {
+                                "name": "case"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "attribute-expression"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "AttributeExpression",
+                            "ref": {
+                                "type": "MessageReference",
+                                "id": {
+                                    "name": "msg"
+                                }
+                            },
+                            "name": {
+                                "name": "attr"
+                            }
+                        }
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Invalid syntax"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "variant-expression = {msg[case]}\nattribute-expression = {-term.attr}\n"
+        }
+    ]
+}

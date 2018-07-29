@@ -1,0 +1,24 @@
+{
+    "body": [
+        {
+            "type": "ResourceComment",
+            "content": "NOTE: Disable final newline insertion when editing this file."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "name": "no-eol"
+            },
+            "value": {
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "No EOL"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}
