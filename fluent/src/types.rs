@@ -45,11 +45,8 @@ impl FluentValue {
                 (a - b).abs() < f32::EPSILON
             }
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                // //XXX: This is a dirty hack and should be replaced with a
-                // //lazy resolved cache on the context.
-
-                // ^ This has been replaced with the code below.
-
+                //XXX: This is a dirty hack and should be replaced with a
+                //lazy resolved cache on the context.
                 let cat = match a.as_str() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,
@@ -60,16 +57,14 @@ impl FluentValue {
                     _ => return false,
                 };
 
-                let supported = negotiate_languages(
+                let locales = negotiate_languages(
                     ctx.locales,
                     IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
                     Some("en"),
                     &NegotiationStrategy::Lookup,
                 );
 
-                let locale = supported[0].to_owned();
-
-                let pr = IntlPluralRules::create(&locale, PluralRuleType::CARDINAL).unwrap();
+                let pr = IntlPluralRules::create(locales[0], PluralRuleType::CARDINAL).unwrap();
                 pr.select(*b) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
