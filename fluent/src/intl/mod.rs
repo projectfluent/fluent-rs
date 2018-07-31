@@ -1,6 +1,8 @@
 /// This is a mock implementation of Unicode Plural Rules.
 /// It's meant to be replaced with a real implementation as soon as possible.
 extern crate fluent_locale;
+/// This is the real implementation
+pub extern crate intl_pluralrules;
 
 use self::fluent_locale::negotiate_languages;
 use self::fluent_locale::NegotiationStrategy;
@@ -486,28 +488,28 @@ fn get_plural_rule(loc: &str) -> Option<usize> {
     Some(num)
 }
 
-pub struct PluralRules {
-    pub locale: String,
-    selector: Box<Fn(f32) -> &'static str>,
-}
+// pub struct PluralRules {
+//     pub locale: String,
+//     selector: Box<Fn(f32) -> &'static str>,
+// }
 
-impl PluralRules {
-    pub fn new(locales: &[&str]) -> PluralRules {
-        let supported =
-            negotiate_languages(locales, LOCALES, Some("en"), &NegotiationStrategy::Lookup);
+// impl PluralRules {
+//     pub fn new(locales: &[&str]) -> PluralRules {
+//         let supported =
+//             negotiate_languages(locales, LOCALES, Some("en"), &NegotiationStrategy::Lookup);
 
-        let locale = supported[0].to_owned();
-        let f = match get_plural_rule(supported[0]) {
-            Some(n) => Box::new(PLURAL_RULES[n]),
-            None => unimplemented!("Plural rule for this language is not available"),
-        };
-        PluralRules {
-            locale,
-            selector: f,
-        }
-    }
+//         let locale = supported[0].to_owned();
+//         let f = match get_plural_rule(supported[0]) {
+//             Some(n) => Box::new(PLURAL_RULES[n]),
+//             None => unimplemented!("Plural rule for this language is not available"),
+//         };
+//         PluralRules {
+//             locale,
+//             selector: f,
+//         }
+//     }
 
-    pub fn select(&self, num: f32) -> &'static str {
-        (self.selector)(num)
-    }
-}
+//     pub fn select(&self, num: f32) -> &'static str {
+//         (self.selector)(num)
+//     }
+// }

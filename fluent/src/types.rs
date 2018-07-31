@@ -11,10 +11,15 @@
 //! [`resolve`]: ../resolve
 //! [`MessageContext::format`]: ../context/struct.MessageContext.html#method.format
 
+extern crate fluent_locale;
+use self::fluent_locale::{negotiate_languages, NegotiationStrategy};
+
+extern crate intl_pluralrules;
+use self::intl_pluralrules::{IntlPluralRules, PluralCategory, PluralRuleType};
+
 use std::f32;
 
 use super::context::MessageContext;
-use super::intl::PluralRules;
 
 /// Value types which can be formatted to a String.
 #[derive(Clone, Debug, PartialEq)]
@@ -40,10 +45,32 @@ impl FluentValue {
                 (a - b).abs() < f32::EPSILON
             }
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                //XXX: This is a dirty hack and should be replaced with a
-                //lazy resolved cache on the context.
-                let pr = PluralRules::new(ctx.locales);
-                pr.select(*b) == a
+                // //XXX: This is a dirty hack and should be replaced with a
+                // //lazy resolved cache on the context.
+
+                // ^ This has been replaced with the code below.
+
+                let cat = match a.as_str() {
+                    "zero" => PluralCategory::ZERO,
+                    "one" => PluralCategory::ONE,
+                    "two" => PluralCategory::TWO,
+                    "few" => PluralCategory::FEW,
+                    "many" => PluralCategory::MANY,
+                    "other" => PluralCategory::OTHER,
+                    _ => return false,
+                };
+
+                let supported = negotiate_languages(
+                    ctx.locales,
+                    IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
+                    Some("en"),
+                    &NegotiationStrategy::Lookup,
+                );
+
+                let locale = supported[0].to_owned();
+
+                let pr = IntlPluralRules::create(&locale, PluralRuleType::CARDINAL).unwrap();
+                pr.select(*b) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
         }
