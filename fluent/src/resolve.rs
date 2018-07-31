@@ -10,7 +10,6 @@ use std::cell::RefCell;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
-use std::str::FromStr;
 
 use super::context::MessageContext;
 use super::types::FluentValue;
@@ -115,9 +114,7 @@ impl ResolveValue for ast::PatternElement {
 
 impl ResolveValue for ast::Number {
     fn to_value(&self, _env: &Env) -> Result<FluentValue, FluentError> {
-        f32::from_str(&self.value)
-            .map_err(|_| FluentError::None)
-            .map(FluentValue::from)
+        FluentValue::as_number(&self.value).map_err(|_| FluentError::None)
     }
 }
 

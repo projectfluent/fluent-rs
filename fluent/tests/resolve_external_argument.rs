@@ -26,15 +26,23 @@ fn external_argument_number() {
     let mut ctx = MessageContext::new(&["x-testing"]);
 
     ctx.add_messages("unread-emails = You have { $emailsCount } unread emails.");
+    ctx.add_messages("unread-emails-dec = You have { $emailsCountDec } unread emails.");
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(5));
+    args.insert("emailsCountDec", FluentValue::as_number("5.0").unwrap());
 
     let value = ctx
         .get_message("unread-emails")
         .and_then(|msg| ctx.format(msg, Some(&args)));
 
     assert_eq!(value, Some("You have 5 unread emails.".to_string()));
+
+    let value = ctx
+        .get_message("unread-emails-dec")
+        .and_then(|msg| ctx.format(msg, Some(&args)));
+
+    assert_eq!(value, Some("You have 5.0 unread emails.".to_string()));
 }
 
 #[test]

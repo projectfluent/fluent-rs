@@ -14,7 +14,7 @@ fn main() {
     // Test for a function that accepts unnamed positional arguments
     ctx.add_function("MEANING_OF_LIFE", |args, _named_args| {
         if let Some(arg0) = args.get(0) {
-            if *arg0 == Some(FluentValue::Number(42.0)) {
+            if *arg0 == Some(FluentValue::Number(String::from("42"))) {
                 return Some("The answer to life, the universe, and everything".into());
             }
         }

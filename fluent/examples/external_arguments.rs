@@ -5,13 +5,17 @@ use fluent::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
+    let mut ctx = MessageContext::new(&["en"]);
 
     ctx.add_messages(
         "
 hello-world = Hello { $name }
 ref = The previous message says { hello-world }
-unread-emails = You have { $emailCount } unread emails
+unread-emails =
+    { $emailCount ->
+        [one] You have { $emailCount } unread email
+       *[other] You have { $emailCount } unread emails
+    }
 ",
     );
 
@@ -35,7 +39,7 @@ unread-emails = You have { $emailCount } unread emails
     }
 
     let mut args = HashMap::new();
-    args.insert("emailCount", FluentValue::from(5));
+    args.insert("emailCount", FluentValue::as_number("1.0").unwrap());
 
     match ctx
         .get_message("unread-emails")

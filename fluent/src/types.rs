@@ -18,6 +18,8 @@ extern crate intl_pluralrules;
 use self::intl_pluralrules::{IntlPluralRules, PluralCategory, PluralRuleType};
 
 use std::f32;
+use std::num::ParseFloatError;
+use std::str::FromStr;
 
 use super::context::MessageContext;
 
@@ -27,24 +29,27 @@ pub enum FluentValue {
     /// Fluent String type.
     String(String),
     /// Fluent Number type.
-    Number(f32),
+    Number(String),
 }
 
 impl FluentValue {
+    pub fn as_number<S: ToString>(v: S) -> Result<Self, ParseFloatError> {
+        f64::from_str(&v.to_string()).map(|_| FluentValue::Number(v.to_string()))
+    }
+
     pub fn format(&self, _ctx: &MessageContext) -> String {
         match self {
             FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => format!("{}", n),
+            FluentValue::Number(n) => n.clone(),
         }
     }
 
     pub fn matches(&self, ctx: &MessageContext, other: &FluentValue) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
-            (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => {
-                (a - b).abs() < f32::EPSILON
-            }
+            (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
+                println!("Number: {:#?}", b);
                 //XXX: This is a dirty hack and should be replaced with a
                 //lazy resolved cache on the context.
                 let cat = match a.as_str() {
@@ -65,7 +70,7 @@ impl FluentValue {
                 );
 
                 let pr = IntlPluralRules::create(locales[0], PluralRuleType::CARDINAL).unwrap();
-                pr.select(*b) == Ok(cat)
+                pr.select(&b) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
         }
@@ -86,12 +91,12 @@ impl<'a> From<&'a str> for FluentValue {
 
 impl From<f32> for FluentValue {
     fn from(n: f32) -> Self {
-        FluentValue::Number(n)
+        FluentValue::Number(n.to_string())
     }
 }
 
 impl From<i8> for FluentValue {
     fn from(n: i8) -> Self {
-        FluentValue::Number(f32::from(n))
+        FluentValue::Number(n.to_string())
     }
 }
