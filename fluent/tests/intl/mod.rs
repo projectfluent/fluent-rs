@@ -1,5 +1,5 @@
-extern crate fluent;
-use self::fluent::intl::intl_pluralrules::{IntlPluralRules, PluralCategory, PluralRuleType};
+extern crate intl_pluralrules;
+use self::intl_pluralrules::{IntlPluralRules, PluralCategory, PluralRuleType};
 
 #[test]
 fn plural_rules() {
