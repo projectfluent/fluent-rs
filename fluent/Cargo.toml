@@ -17,9 +17,9 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-clap = "2.32.0"
-fluent-locale = "0.3.1"
-fluent-syntax = "0.1.0"
-failure = "0.1.1"
-failure_derive = "0.1.1"
-intl_pluralrules = "0.8.1"
+clap = "2.32"
+fluent-locale = "0.3"
+fluent-syntax = "0.1"
+failure = "0.1"
+failure_derive = "0.1"
+intl_pluralrules = "0.8"
