@@ -4,6 +4,18 @@
 
   - …
 
+## fluent 0.3.0 (August 3, 2018)
+
+  - Add support for custom functions in MessageContext. (#50)
+  - Switch error handling to `annotate-snippets crate`.
+  - Separate `fluent` and `fluent-syntax` crates.
+  - Handle cyclic references. (#55)
+  - Switch parser binary to use `clap`.
+  - Switch plural rules handling to `intl_pluralrules`. (#56)
+  - Add `FluentValue::as_number`
+  - Move `IntlPluralRules` initialization into `MessageContext::new`
+  - General cleanups in line with `cargo fmt` and `cargo clippy`
+
 ## fluent 0.2.0 (February 11, 2018)
 
   - Support Rust 1.23 stable

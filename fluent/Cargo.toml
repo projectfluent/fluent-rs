@@ -4,7 +4,7 @@ description = """
 A localization library designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.2.0"
+version = "0.3.0"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
@@ -22,4 +22,4 @@ fluent-locale = "0.3"
 fluent-syntax = "0.1"
 failure = "0.1"
 failure_derive = "0.1"
-intl_pluralrules = "0.8"
+intl_pluralrules = "0.9"
