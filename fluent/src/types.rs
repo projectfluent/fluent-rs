@@ -11,15 +11,11 @@
 //! [`resolve`]: ../resolve
 //! [`MessageContext::format`]: ../context/struct.MessageContext.html#method.format
 
-extern crate fluent_locale;
-use self::fluent_locale::{negotiate_languages, NegotiationStrategy};
-
-extern crate intl_pluralrules;
-use self::intl_pluralrules::{IntlPluralRules, PluralCategory, PluralRuleType};
-
 use std::f32;
 use std::num::ParseFloatError;
 use std::str::FromStr;
+
+use intl_pluralrules::PluralCategory;
 
 use super::context::MessageContext;
 
@@ -49,9 +45,6 @@ impl FluentValue {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                println!("Number: {:#?}", b);
-                //XXX: This is a dirty hack and should be replaced with a
-                //lazy resolved cache on the context.
                 let cat = match a.as_str() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,
@@ -62,14 +55,7 @@ impl FluentValue {
                     _ => return false,
                 };
 
-                let locales = negotiate_languages(
-                    ctx.locales,
-                    IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
-                    Some("en"),
-                    &NegotiationStrategy::Lookup,
-                );
-
-                let pr = IntlPluralRules::create(locales[0], PluralRuleType::CARDINAL).unwrap();
+                let pr = &ctx.plural_rules;
                 pr.select(&b) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,

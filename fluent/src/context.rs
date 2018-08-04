@@ -10,8 +10,10 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::types::FluentValue;
+use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
+use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
 enum Entry<'ctx> {
     Message(ast::Message),
@@ -53,13 +55,23 @@ enum Entry<'ctx> {
 pub struct MessageContext<'ctx> {
     pub locales: &'ctx [&'ctx str],
     map: HashMap<String, Entry<'ctx>>,
+    pub plural_rules: IntlPluralRules,
 }
 
 impl<'ctx> MessageContext<'ctx> {
     pub fn new(locales: &'ctx [&'ctx str]) -> MessageContext {
+        let pr_locale = negotiate_languages(
+            locales,
+            IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
+            Some("en"),
+            &NegotiationStrategy::Lookup,
+        )[0];
+
+        let pr = IntlPluralRules::create(pr_locale, PluralRuleType::CARDINAL).unwrap();
         MessageContext {
             locales,
             map: HashMap::new(),
+            plural_rules: pr,
         }
     }
 
