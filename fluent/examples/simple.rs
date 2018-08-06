@@ -5,6 +5,18 @@
 //! so that we can focus on understanding how
 //! the application can be made localizable
 //! via Fluent.
+//!
+//! To try the app launch `cargo run --example simple NUM (LOCALES)`
+//!
+//! NUM is a number to be calculated, and LOCALES is an optional
+//! parameter with a comma-separated list of locales requested by the user.
+//!
+//! Example:
+//!   
+//!   caron run --example simple 123 de,pl
+//!
+//! If the second argument is omitted, `en-US` locale is used as the
+//! default one.
 extern crate fluent;
 extern crate fluent_locale;
 
@@ -113,23 +125,36 @@ fn main() {
     }
 
     // 6. Check if the input is provided.
-    match args.get(2) {
+    match args.get(1) {
         Some(input) => {
             // 6.1. Cast it to a number.
-            let i = i8::from_str(&input).unwrap();
-
-            // 6.2. Construct a map of arguments
-            //      to format the message.
-            let mut args = HashMap::new();
-            args.insert("input", FluentValue::from(i));
-            args.insert("value", FluentValue::from(collatz(i)));
-            // 6.3. Format the message.
-            println!(
-                "{}",
-                ctx.get_message("response-msg")
-                    .and_then(|msg| ctx.format(msg, Some(&args)))
-                    .unwrap()
-            );
+            match isize::from_str(&input) {
+                Ok(i) => {
+                    // 6.2. Construct a map of arguments
+                    //      to format the message.
+                    let mut args = HashMap::new();
+                    args.insert("input", FluentValue::from(i));
+                    args.insert("value", FluentValue::from(collatz(i)));
+                    // 6.3. Format the message.
+                    println!(
+                        "{}",
+                        ctx.get_message("response-msg")
+                            .and_then(|msg| ctx.format(msg, Some(&args)))
+                            .unwrap()
+                    );
+                }
+                Err(err) => {
+                    let mut args = HashMap::new();
+                    args.insert("input", FluentValue::from(input.to_string()));
+                    args.insert("reason", FluentValue::from(err.to_string()));
+                    println!(
+                        "{}",
+                        ctx.get_message("input-parse-error")
+                            .and_then(|msg| ctx.format(msg, Some(&args)))
+                            .unwrap()
+                    );
+                }
+            }
         }
         None => {
             println!(
@@ -143,7 +168,7 @@ fn main() {
 }
 
 /// Collatz conjecture calculating function.
-fn collatz(n: i8) -> i8 {
+fn collatz(n: isize) -> isize {
     match n {
         1 => 0,
         _ => match n % 2 {
