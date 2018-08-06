@@ -4,6 +4,12 @@
 
   - …
 
+## fluent 0.3.1 (August 6, 2018)
+
+  - Update `fluent-locale` to 0.4.1.
+  - Switch MessageContext::locales to be an owned Vec\<String>
+  - Switch FluentValue::From\<i8> to FluentValue::From\<isize>
+
 ## fluent 0.3.0 (August 3, 2018)
 
   - Add support for custom functions in MessageContext. (#50)
