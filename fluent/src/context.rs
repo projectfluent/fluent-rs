@@ -53,21 +53,26 @@ enum Entry<'ctx> {
 /// to negotiate a sensible fallback for date and time formatting.
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
-    pub locales: &'ctx [&'ctx str],
+    pub locales: Vec<String>,
     map: HashMap<String, Entry<'ctx>>,
     pub plural_rules: IntlPluralRules,
 }
 
 impl<'ctx> MessageContext<'ctx> {
-    pub fn new(locales: &'ctx [&'ctx str]) -> MessageContext {
+    pub fn new<S: ToString>(locales: &[S]) -> MessageContext {
+        let locales = locales
+            .into_iter()
+            .map(|s| s.to_string())
+            .collect::<Vec<_>>();
         let pr_locale = negotiate_languages(
-            locales,
+            &locales,
             IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
             Some("en"),
             &NegotiationStrategy::Lookup,
-        )[0];
+        )[0]
+            .to_owned();
 
-        let pr = IntlPluralRules::create(pr_locale, PluralRuleType::CARDINAL).unwrap();
+        let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
         MessageContext {
             locales,
             map: HashMap::new(),
