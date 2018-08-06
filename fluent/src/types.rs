@@ -81,8 +81,8 @@ impl From<f32> for FluentValue {
     }
 }
 
-impl From<i8> for FluentValue {
-    fn from(n: i8) -> Self {
+impl From<isize> for FluentValue {
+    fn from(n: isize) -> Self {
         FluentValue::Number(n.to_string())
     }
 }
