@@ -129,11 +129,6 @@ impl ResolveValue for ast::Expression {
         match self {
             ast::Expression::StringExpression { value } => Ok(FluentValue::from(value.clone())),
             ast::Expression::NumberExpression { value } => value.to_value(env),
-            ast::Expression::MessageReference { id } if id.name.starts_with('-') => env
-                .ctx
-                .get_term(&id.name)
-                .ok_or(FluentError::None)?
-                .to_value(env),
             ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
                 .ctx
                 .get_term(&id.name)
