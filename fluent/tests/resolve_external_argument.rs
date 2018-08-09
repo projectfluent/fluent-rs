@@ -14,10 +14,7 @@ fn external_argument_string() {
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
 
-    let value = ctx
-        .get_message("hello-world")
-        .and_then(|msg| ctx.format(msg, Some(&args)));
-
+    let value = ctx.format("hello-world", Some(&args));
     assert_eq!(value, Some("Hello John".to_string()));
 }
 
@@ -32,16 +29,10 @@ fn external_argument_number() {
     args.insert("emailsCount", FluentValue::from(5));
     args.insert("emailsCountDec", FluentValue::as_number("5.0").unwrap());
 
-    let value = ctx
-        .get_message("unread-emails")
-        .and_then(|msg| ctx.format(msg, Some(&args)));
-
+    let value = ctx.format("unread-emails", Some(&args));
     assert_eq!(value, Some("You have 5 unread emails.".to_string()));
 
-    let value = ctx
-        .get_message("unread-emails-dec")
-        .and_then(|msg| ctx.format(msg, Some(&args)));
-
+    let value = ctx.format("unread-emails-dec", Some(&args));
     assert_eq!(value, Some("You have 5.0 unread emails.".to_string()));
 }
 
@@ -55,9 +46,6 @@ fn reference_message_with_external_argument() {
     let mut args = HashMap::new();
     args.insert("userName", FluentValue::from("Mary"));
 
-    let value = ctx
-        .get_message("click-on")
-        .and_then(|msg| ctx.format(msg, Some(&args)));
-
+    let value = ctx.format("click-on", Some(&args));
     assert_eq!(value, Some("Click on the `Hello, Mary` label.".to_string()));
 }

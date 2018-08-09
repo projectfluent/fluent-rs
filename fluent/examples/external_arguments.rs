@@ -1,12 +1,11 @@
 extern crate fluent;
 
-use fluent::context::MessageContext;
+use fluent::MessageContext;
 use fluent::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
     let mut ctx = MessageContext::new(&["en"]);
-
     ctx.add_messages(
         "
 hello-world = Hello { $name }
@@ -22,18 +21,12 @@ unread-emails =
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
 
-    match ctx
-        .get_message("hello-world")
-        .and_then(|msg| ctx.format(msg, Some(&args)))
-    {
+    match ctx.format("hello-world", Some(&args)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
-    match ctx
-        .get_message("ref")
-        .and_then(|msg| ctx.format(msg, Some(&args)))
-    {
+    match ctx.format("ref", Some(&args)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
@@ -41,10 +34,7 @@ unread-emails =
     let mut args = HashMap::new();
     args.insert("emailCount", FluentValue::as_number("1.0").unwrap());
 
-    match ctx
-        .get_message("unread-emails")
-        .and_then(|msg| ctx.format(msg, Some(&args)))
-    {
+    match ctx.format("unread-emails", Some(&args)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

@@ -138,8 +138,8 @@ fn main() {
                     // 6.3. Format the message.
                     println!(
                         "{}",
-                        ctx.get_message("response-msg")
-                            .and_then(|msg| ctx.format(msg, Some(&args)))
+                        ctx
+                            .format("response-msg", Some(&args))
                             .unwrap()
                     );
                 }
@@ -149,8 +149,8 @@ fn main() {
                     args.insert("reason", FluentValue::from(err.to_string()));
                     println!(
                         "{}",
-                        ctx.get_message("input-parse-error")
-                            .and_then(|msg| ctx.format(msg, Some(&args)))
+                        ctx
+                            .format("input-parse-error-msg", Some(&args))
                             .unwrap()
                     );
                 }
@@ -159,8 +159,8 @@ fn main() {
         None => {
             println!(
                 "{}",
-                ctx.get_message("missing-arg-error")
-                    .and_then(|msg| ctx.format(msg, None))
+                ctx
+                    .format("missing-arg-error", None)
                     .unwrap()
             );
         }

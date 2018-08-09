@@ -15,7 +15,7 @@ use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
-enum Entry<'ctx> {
+pub enum Entry<'ctx> {
     Message(ast::Message),
     Term(ast::Term),
     Function(
@@ -54,7 +54,7 @@ enum Entry<'ctx> {
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
     pub locales: Vec<String>,
-    map: HashMap<String, Entry<'ctx>>,
+    pub entries: HashMap<String, Entry<'ctx>>,
     pub plural_rules: IntlPluralRules,
 }
 
@@ -75,13 +75,13 @@ impl<'ctx> MessageContext<'ctx> {
         let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
         MessageContext {
             locales,
-            map: HashMap::new(),
+            entries: HashMap::new(),
             plural_rules: pr,
         }
     }
 
     pub fn has_message(&self, id: &str) -> bool {
-        self.map.get(id).map_or(false, |id| {
+        self.entries.get(id).map_or(false, |id| {
             if let Entry::Message(_) = id {
                 true
             } else {
@@ -91,7 +91,7 @@ impl<'ctx> MessageContext<'ctx> {
     }
 
     pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        self.map.get(id).and_then(|id| {
+        self.entries.get(id).and_then(|id| {
             if let Entry::Message(ref msg) = id {
                 Some(msg)
             } else {
@@ -101,7 +101,7 @@ impl<'ctx> MessageContext<'ctx> {
     }
 
     pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        self.map.get(id).and_then(|id| {
+        self.entries.get(id).and_then(|id| {
             if let Entry::Term(ref term) = id {
                 Some(term)
             } else {
@@ -114,7 +114,7 @@ impl<'ctx> MessageContext<'ctx> {
     where
         F: 'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
     {
-        match self.map.entry(id.to_owned()) {
+        match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {
                 entry.insert(Entry::Function(Box::new(func)));
                 Ok(())
@@ -134,7 +134,7 @@ impl<'ctx> MessageContext<'ctx> {
             'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
         >,
     > {
-        self.map.get(id).and_then(|id| {
+        self.entries.get(id).and_then(|id| {
             if let Entry::Function(ref func) = id {
                 Some(func)
             } else {
@@ -159,7 +159,7 @@ impl<'ctx> MessageContext<'ctx> {
                 _ => continue,
             };
 
-            match self.map.entry(id.clone()) {
+            match self.entries.entry(id.clone()) {
                 HashEntry::Vacant(empty) => {
                     empty.insert(entry);
                 }
@@ -172,9 +172,9 @@ impl<'ctx> MessageContext<'ctx> {
         Ok(())
     }
 
-    pub fn format<T: ResolveValue>(
+    pub fn format(
         &self,
-        resolvable: &T,
+        id: &str,
         args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<String> {
         let env = Env {
@@ -182,9 +182,14 @@ impl<'ctx> MessageContext<'ctx> {
             args,
             travelled: RefCell::new(Vec::new()),
         };
-        resolvable
-            .to_value(&env)
-            .ok()
-            .map(|value| value.format(self))
+
+        match self.entries.get(id) {
+            None => None,
+            Some(Entry::Term(_)) => None,
+            Some(Entry::Function(_)) => None,
+            Some(Entry::Message(ref msg)) => {
+                msg.to_value(&env).map(|value| value.format(self)).ok()
+            }
+        }
     }
 }

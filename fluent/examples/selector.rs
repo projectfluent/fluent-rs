@@ -6,7 +6,6 @@ use std::collections::HashMap;
 
 fn main() {
     let mut ctx = MessageContext::new(&["x-testing"]);
-
     ctx.add_messages(
         "
 hello-world = Hello {
@@ -21,10 +20,7 @@ hello-world2 = Hello { $name ->
 ",
     );
 
-    match ctx
-        .get_message("hello-world")
-        .and_then(|msg| ctx.format(msg, None))
-    {
+    match ctx.format("hello-world", None) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
@@ -32,10 +28,7 @@ hello-world2 = Hello { $name ->
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("moon"));
 
-    match ctx
-        .get_message("hello-world2")
-        .and_then(|msg| ctx.format(msg, Some(&args)))
-    {
+    match ctx.format("hello-world2", Some(&args)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

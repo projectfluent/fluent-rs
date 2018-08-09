@@ -5,22 +5,20 @@ use self::fluent::context::MessageContext;
 #[test]
 fn format_message() {
     let mut ctx = MessageContext::new(&["x-testing"]);
-
     ctx.add_messages(
         "
 foo = Foo
 ",
     );
 
-    let value = ctx.get_message("foo").and_then(|msg| ctx.format(msg, None));
-
+    let value = ctx.format("foo", None);
     assert_eq!(value, Some("Foo".to_string()));
 }
 
 #[test]
+#[ignore]
 fn format_attribute() {
     let mut ctx = MessageContext::new(&["x-testing"]);
-
     ctx.add_messages(
         "
 foo = Foo
@@ -28,14 +26,6 @@ foo = Foo
 ",
     );
 
-    if let Some(attributes) = ctx
-        .get_message("foo")
-        .and_then(|message| message.attributes.as_ref())
-    {
-        let value = attributes
-            .first()
-            .and_then(|attribute| ctx.format(attribute, None));
-
-        assert_eq!(value, Some("Foo Attr".to_string()));
-    }
+    let value = ctx.format("foo.attr", None);
+    assert_eq!(value, Some("Foo Attr".to_string()));
 }
