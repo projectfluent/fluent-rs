@@ -1,7 +1,7 @@
 extern crate fluent;
 
-use fluent::MessageContext;
 use fluent::types::FluentValue;
+use fluent::MessageContext;
 use std::collections::HashMap;
 
 fn main() {

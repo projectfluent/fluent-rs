@@ -16,7 +16,6 @@ foo = Foo
 }
 
 #[test]
-#[ignore]
 fn format_attribute() {
     let mut ctx = MessageContext::new(&["x-testing"]);
     ctx.add_messages(

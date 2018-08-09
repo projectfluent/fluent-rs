@@ -172,24 +172,38 @@ impl<'ctx> MessageContext<'ctx> {
         Ok(())
     }
 
-    pub fn format(
-        &self,
-        id: &str,
-        args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<String> {
+    pub fn format(&self, path: &str, args: Option<&HashMap<&str, FluentValue>>) -> Option<String> {
         let env = Env {
             ctx: self,
             args,
             travelled: RefCell::new(Vec::new()),
         };
 
-        match self.entries.get(id) {
-            None => None,
-            Some(Entry::Term(_)) => None,
-            Some(Entry::Function(_)) => None,
-            Some(Entry::Message(ref msg)) => {
-                msg.to_value(&env).map(|value| value.format(self)).ok()
-            }
+        // `path` may be a simple message identifier (`identifier`) or a path to
+        // an attribute of a message (`identifier.attrname`).
+        let mut parts = path.split('.');
+
+        // Retrieve the message by id from the context.
+        let message_id = parts.next()?;
+        let message = self.get_message(message_id)?;
+
+        // Check the second and the third part of the path. The second part may
+        // be an attribute name. If the third part is present, the path is
+        // invalid and contains more than one period (e.g. `foo.bar.baz`).
+        match (parts.next(), parts.next()) {
+            (None, None) => message.to_value(&env).map(|value| value.format(self)).ok(),
+            (Some(attr_name), None) => message.attributes.as_ref().and_then(|attributes| {
+                for attribute in attributes {
+                    if attribute.id.name == attr_name {
+                        return attribute
+                            .to_value(&env)
+                            .map(|value| value.format(self))
+                            .ok();
+                    }
+                }
+                None
+            }),
+            _ => None,
         }
     }
 }
