@@ -90,20 +90,10 @@ impl<'ctx> MessageContext<'ctx> {
         })
     }
 
-    pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
+    fn get_message(&self, id: &str) -> Option<&ast::Message> {
         self.entries.get(id).and_then(|id| {
             if let Entry::Message(ref msg) = id {
                 Some(msg)
-            } else {
-                None
-            }
-        })
-    }
-
-    pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        self.entries.get(id).and_then(|id| {
-            if let Entry::Term(ref term) = id {
-                Some(term)
             } else {
                 None
             }
@@ -124,23 +114,6 @@ impl<'ctx> MessageContext<'ctx> {
                 id: id.to_owned(),
             }),
         }
-    }
-
-    pub fn get_function(
-        &self,
-        id: &str,
-    ) -> Option<
-        &Box<
-            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
-        >,
-    > {
-        self.entries.get(id).and_then(|id| {
-            if let Entry::Function(ref func) = id {
-                Some(func)
-            } else {
-                None
-            }
-        })
     }
 
     pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
