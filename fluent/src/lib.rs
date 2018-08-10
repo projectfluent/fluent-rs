@@ -41,6 +41,7 @@ extern crate fluent_syntax;
 extern crate intl_pluralrules;
 
 pub mod context;
+pub mod entry;
 pub mod errors;
 pub mod resolve;
 pub mod types;

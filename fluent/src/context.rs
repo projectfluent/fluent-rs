@@ -7,6 +7,7 @@
 use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
+use super::entry::{Entry, GetEntry};
 use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::types::FluentValue;
@@ -14,16 +15,6 @@ use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
-
-pub enum Entry<'ctx> {
-    Message(ast::Message),
-    Term(ast::Term),
-    Function(
-        Box<
-            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
-        >,
-    ),
-}
 
 /// `MessageContext` is a collection of localization messages which are meant to be used together
 /// in a single view, widget or any other UI abstraction.
@@ -81,23 +72,7 @@ impl<'ctx> MessageContext<'ctx> {
     }
 
     pub fn has_message(&self, id: &str) -> bool {
-        self.entries.get(id).map_or(false, |id| {
-            if let Entry::Message(_) = id {
-                true
-            } else {
-                false
-            }
-        })
-    }
-
-    fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        self.entries.get(id).and_then(|id| {
-            if let Entry::Message(ref msg) = id {
-                Some(msg)
-            } else {
-                None
-            }
-        })
+        self.entries.get_message(id).is_some()
     }
 
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
@@ -158,7 +133,7 @@ impl<'ctx> MessageContext<'ctx> {
 
         // Retrieve the message by id from the context.
         let message_id = parts.next()?;
-        let message = self.get_message(message_id)?;
+        let message = self.entries.get_message(message_id)?;
 
         // Check the second and the third part of the path. The second part may
         // be an attribute name. If the third part is present, the path is
