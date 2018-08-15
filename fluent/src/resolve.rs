@@ -211,7 +211,11 @@ impl ResolveValue for ast::Expression {
                 Err(FluentError::None)
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
-                let term = env.ctx.entries.get_term(&id.name).ok_or(FluentError::None)?;
+                let term = env
+                    .ctx
+                    .entries
+                    .get_term(&id.name)
+                    .ok_or(FluentError::None)?;
                 let variants = match term.value.elements.as_slice() {
                     [ast::PatternElement::Placeable(ast::Expression::SelectExpression {
                         expression: None,

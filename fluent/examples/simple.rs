@@ -136,12 +136,7 @@ fn main() {
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
                     // 6.3. Format the message.
-                    println!(
-                        "{}",
-                        ctx
-                            .format("response-msg", Some(&args))
-                            .unwrap()
-                    );
+                    println!("{}", ctx.format("response-msg", Some(&args)).unwrap());
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
@@ -149,20 +144,13 @@ fn main() {
                     args.insert("reason", FluentValue::from(err.to_string()));
                     println!(
                         "{}",
-                        ctx
-                            .format("input-parse-error-msg", Some(&args))
-                            .unwrap()
+                        ctx.format("input-parse-error-msg", Some(&args)).unwrap()
                     );
                 }
             }
         }
         None => {
-            println!(
-                "{}",
-                ctx
-                    .format("missing-arg-error", None)
-                    .unwrap()
-            );
+            println!("{}", ctx.format("missing-arg-error", None).unwrap());
         }
     }
 }

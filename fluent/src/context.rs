@@ -60,8 +60,7 @@ impl<'ctx> MessageContext<'ctx> {
             IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
             Some("en"),
             &NegotiationStrategy::Lookup,
-        )[0]
-            .to_owned();
+        )[0].to_owned();
 
         let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
         MessageContext {

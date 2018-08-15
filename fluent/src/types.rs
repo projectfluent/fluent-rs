@@ -56,7 +56,7 @@ impl FluentValue {
                 };
 
                 let pr = &ctx.plural_rules;
-                pr.select(&b) == Ok(cat)
+                pr.select(b.as_str()) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,
         }
