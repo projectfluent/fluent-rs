@@ -7,6 +7,7 @@
 use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
+use super::entry::{Entry, GetEntry};
 use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::types::FluentValue;
@@ -14,16 +15,6 @@ use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
-
-enum Entry<'ctx> {
-    Message(ast::Message),
-    Term(ast::Term),
-    Function(
-        Box<
-            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
-        >,
-    ),
-}
 
 /// `MessageContext` is a collection of localization messages which are meant to be used together
 /// in a single view, widget or any other UI abstraction.
@@ -54,7 +45,7 @@ enum Entry<'ctx> {
 #[allow(dead_code)]
 pub struct MessageContext<'ctx> {
     pub locales: Vec<String>,
-    map: HashMap<String, Entry<'ctx>>,
+    pub entries: HashMap<String, Entry<'ctx>>,
     pub plural_rules: IntlPluralRules,
 }
 
@@ -75,46 +66,20 @@ impl<'ctx> MessageContext<'ctx> {
         let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
         MessageContext {
             locales,
-            map: HashMap::new(),
+            entries: HashMap::new(),
             plural_rules: pr,
         }
     }
 
     pub fn has_message(&self, id: &str) -> bool {
-        self.map.get(id).map_or(false, |id| {
-            if let Entry::Message(_) = id {
-                true
-            } else {
-                false
-            }
-        })
-    }
-
-    pub fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        self.map.get(id).and_then(|id| {
-            if let Entry::Message(ref msg) = id {
-                Some(msg)
-            } else {
-                None
-            }
-        })
-    }
-
-    pub fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        self.map.get(id).and_then(|id| {
-            if let Entry::Term(ref term) = id {
-                Some(term)
-            } else {
-                None
-            }
-        })
+        self.entries.get_message(id).is_some()
     }
 
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
     {
-        match self.map.entry(id.to_owned()) {
+        match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {
                 entry.insert(Entry::Function(Box::new(func)));
                 Ok(())
@@ -124,23 +89,6 @@ impl<'ctx> MessageContext<'ctx> {
                 id: id.to_owned(),
             }),
         }
-    }
-
-    pub fn get_function(
-        &self,
-        id: &str,
-    ) -> Option<
-        &Box<
-            'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>,
-        >,
-    > {
-        self.map.get(id).and_then(|id| {
-            if let Entry::Function(ref func) = id {
-                Some(func)
-            } else {
-                None
-            }
-        })
     }
 
     pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
@@ -159,7 +107,7 @@ impl<'ctx> MessageContext<'ctx> {
                 _ => continue,
             };
 
-            match self.map.entry(id.clone()) {
+            match self.entries.entry(id.clone()) {
                 HashEntry::Vacant(empty) => {
                     empty.insert(entry);
                 }
@@ -172,19 +120,38 @@ impl<'ctx> MessageContext<'ctx> {
         Ok(())
     }
 
-    pub fn format<T: ResolveValue>(
-        &self,
-        resolvable: &T,
-        args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<String> {
+    pub fn format(&self, path: &str, args: Option<&HashMap<&str, FluentValue>>) -> Option<String> {
         let env = Env {
             ctx: self,
             args,
             travelled: RefCell::new(Vec::new()),
         };
-        resolvable
-            .to_value(&env)
-            .ok()
-            .map(|value| value.format(self))
+
+        // `path` may be a simple message identifier (`identifier`) or a path to
+        // an attribute of a message (`identifier.attrname`).
+        let mut parts = path.split('.');
+
+        // Retrieve the message by id from the context.
+        let message_id = parts.next()?;
+        let message = self.entries.get_message(message_id)?;
+
+        // Check the second and the third part of the path. The second part may
+        // be an attribute name. If the third part is present, the path is
+        // invalid and contains more than one period (e.g. `foo.bar.baz`).
+        match (parts.next(), parts.next()) {
+            (None, None) => message.to_value(&env).map(|value| value.format(self)).ok(),
+            (Some(attr_name), None) => message.attributes.as_ref().and_then(|attributes| {
+                for attribute in attributes {
+                    if attribute.id.name == attr_name {
+                        return attribute
+                            .to_value(&env)
+                            .map(|value| value.format(self))
+                            .ok();
+                    }
+                }
+                None
+            }),
+            _ => None,
+        }
     }
 }

@@ -16,7 +16,6 @@
 //! use std::collections::HashMap;
 //!
 //! let mut ctx = MessageContext::new(&["en-US"]);
-//!
 //! ctx.add_messages(
 //!     "
 //! hello-world = Hello, world!
@@ -24,17 +23,13 @@
 //! "
 //!     );
 //!
-//! let msg = ctx.get_message("hello-world").unwrap();
-//! let value = ctx.format(msg, None).unwrap();
-//!
+//! let value = ctx.format("hello-world", None).unwrap();
 //! assert_eq!(value, "Hello, world!");
 //!
 //! let mut args = HashMap::new();
 //! args.insert("name", FluentValue::from("John"));
 //!
-//! let msg = ctx.get_message("intro").unwrap();
-//! let value = ctx.format(msg, Some(&args)).unwrap();
-//!
+//! let value = ctx.format("intro", Some(&args)).unwrap();
 //! assert_eq!(value, "Welcome, John.");
 //! ```
 
@@ -46,6 +41,7 @@ extern crate fluent_syntax;
 extern crate intl_pluralrules;
 
 pub mod context;
+pub mod entry;
 pub mod errors;
 pub mod resolve;
 pub mod types;

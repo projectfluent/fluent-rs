@@ -12,6 +12,7 @@ use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
 use super::context::MessageContext;
+use super::entry::GetEntry;
 use super::types::FluentValue;
 use fluent_syntax::ast;
 
@@ -131,11 +132,13 @@ impl ResolveValue for ast::Expression {
             ast::Expression::NumberExpression { value } => value.to_value(env),
             ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
                 .ctx
+                .entries
                 .get_term(&id.name)
                 .ok_or(FluentError::None)?
                 .to_value(env),
             ast::Expression::MessageReference { ref id } => env
                 .ctx
+                .entries
                 .get_message(&id.name)
                 .ok_or(FluentError::None)?
                 .to_value(env),
@@ -185,12 +188,14 @@ impl ResolveValue for ast::Expression {
             ast::Expression::AttributeExpression { id, name } => {
                 let attributes = if id.name.starts_with('-') {
                     env.ctx
+                        .entries
                         .get_term(&id.name)
                         .ok_or(FluentError::None)?
                         .attributes
                         .as_ref()
                 } else {
                     env.ctx
+                        .entries
                         .get_message(&id.name)
                         .ok_or(FluentError::None)?
                         .attributes
@@ -206,7 +211,7 @@ impl ResolveValue for ast::Expression {
                 Err(FluentError::None)
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
-                let term = env.ctx.get_term(&id.name).ok_or(FluentError::None)?;
+                let term = env.ctx.entries.get_term(&id.name).ok_or(FluentError::None)?;
                 let variants = match term.value.elements.as_slice() {
                     [ast::PatternElement::Placeable(ast::Expression::SelectExpression {
                         expression: None,
@@ -256,6 +261,7 @@ impl ResolveValue for ast::Expression {
                 }
 
                 env.ctx
+                    .entries
                     .get_function(&callee.name)
                     .ok_or(FluentError::None)
                     .and_then(|func| {

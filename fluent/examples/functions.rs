@@ -38,21 +38,15 @@ fn main() {
     ctx.add_messages("meaning-of-life = { MEANING_OF_LIFE(42) }");
     ctx.add_messages("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }");
 
-    let value = ctx
-        .get_message("hello-world")
-        .and_then(|message| ctx.format(message, None));
+    let value = ctx.format("hello-world", None);
     assert_eq!(value, Some("Hey there! I'm a function!".to_string()));
 
-    let value = ctx
-        .get_message("meaning-of-life")
-        .and_then(|message| ctx.format(message, None));
+    let value = ctx.format("meaning-of-life", None);
     assert_eq!(
         value,
         Some("The answer to life, the universe, and everything".to_string())
     );
 
-    let value = ctx
-        .get_message("all-your-base")
-        .and_then(|message| ctx.format(message, None));
+    let value = ctx.format("all-your-base", None);
     assert_eq!(value, Some("All your base belong to us".to_string()));
 }

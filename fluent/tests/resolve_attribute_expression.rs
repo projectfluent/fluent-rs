@@ -23,33 +23,21 @@ missing-missing = { missing.missing }
 ",
     );
 
-    let value = ctx
-        .get_message("use-foo")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("use-foo", None);
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx
-        .get_message("use-foo-attr")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("use-foo-attr", None);
     assert_eq!(value, Some("Foo Attr".to_string()));
 
-    let value = ctx
-        .get_message("use-bar")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("use-bar", None);
     assert_eq!(value, Some("___".to_string()));
 
-    let value = ctx
-        .get_message("use-bar-attr")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("use-bar-attr", None);
     assert_eq!(value, Some("Bar Attr".to_string()));
 
-    let value = ctx
-        .get_message("missing-attr")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("missing-attr", None);
     assert_eq!(value, Some("___".to_string()));
 
-    let value = ctx
-        .get_message("missing-missing")
-        .and_then(|msg| ctx.format(msg, None));
+    let value = ctx.format("missing-missing", None);
     assert_eq!(value, Some("___".to_string()));
 }
