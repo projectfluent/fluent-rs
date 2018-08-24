@@ -16,6 +16,12 @@ use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
+#[derive(Debug)]
+pub struct Message {
+    pub value: Option<String>,
+    pub attributes: HashMap<String, String>,
+}
+
 /// `MessageContext` is a collection of localization messages which are meant to be used together
 /// in a single view, widget or any other UI abstraction.
 ///
@@ -152,5 +158,36 @@ impl<'ctx> MessageContext<'ctx> {
             }),
             _ => None,
         }
+    }
+
+    pub fn format_message(
+        &self,
+        message_id: &str,
+        args: Option<&HashMap<&str, FluentValue>>,
+    ) -> Option<Message> {
+        let env = Env {
+            ctx: self,
+            args,
+            travelled: RefCell::new(Vec::new()),
+        };
+        let message = self.entries.get_message(message_id)?;
+
+        // XXX: We should report errors in formatting
+        let value = message.to_value(&env).map(|value| value.format(self)).ok();
+
+        let mut attributes = HashMap::new();
+
+        if let Some(ref attrs) = message.attributes {
+            for attr in attrs {
+                // XXX: We should report errors in formatting
+                attr.to_value(&env)
+                    .map(|value| value.format(self))
+                    .map(|val| {
+                        attributes.insert(attr.id.name.to_owned(), val);
+                    });
+            }
+        }
+
+        Some(Message { value, attributes })
     }
 }
