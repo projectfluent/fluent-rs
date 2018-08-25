@@ -1,25 +1,25 @@
-//! `Entry` is used to store Messages, Terms and Functions in `MessageContext` instances.
+//! `Entry` is used to store Messages, Terms and Functions in `FluentBundle` instances.
 use std::collections::hash_map::HashMap;
 
 use super::types::FluentValue;
 use fluent_syntax::ast;
 
-type FluentFunction<'ctx> =
-    Box<'ctx + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>>;
+type FluentFunction<'bundle> =
+    Box<'bundle + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>>;
 
-pub enum Entry<'ctx> {
+pub enum Entry<'bundle> {
     Message(ast::Message),
     Term(ast::Term),
-    Function(FluentFunction<'ctx>),
+    Function(FluentFunction<'bundle>),
 }
 
-pub trait GetEntry<'ctx> {
+pub trait GetEntry<'bundle> {
     fn get_term(&self, id: &str) -> Option<&ast::Term>;
     fn get_message(&self, id: &str) -> Option<&ast::Message>;
-    fn get_function(&self, id: &str) -> Option<&FluentFunction<'ctx>>;
+    fn get_function(&self, id: &str) -> Option<&FluentFunction<'bundle>>;
 }
 
-impl<'ctx> GetEntry<'ctx> for HashMap<String, Entry<'ctx>> {
+impl<'bundle> GetEntry<'bundle> for HashMap<String, Entry<'bundle>> {
     fn get_term(&self, id: &str) -> Option<&ast::Term> {
         self.get(id).and_then(|entry| match entry {
             Entry::Term(term) => Some(term),
@@ -34,7 +34,7 @@ impl<'ctx> GetEntry<'ctx> for HashMap<String, Entry<'ctx>> {
         })
     }
 
-    fn get_function(&self, id: &str) -> Option<&FluentFunction<'ctx>> {
+    fn get_function(&self, id: &str) -> Option<&FluentFunction<'bundle>> {
         self.get(id).and_then(|entry| match entry {
             Entry::Function(function) => Some(function),
             _ => None,

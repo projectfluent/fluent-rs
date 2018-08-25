@@ -4,7 +4,7 @@ extern crate fluent;
 extern crate fluent_syntax;
 extern crate test;
 
-use fluent::context::MessageContext;
+use fluent::context::FluentBundle;
 use fluent_syntax::{ast, parser::parse};
 use std::fs::File;
 use std::io;
@@ -32,13 +32,13 @@ fn bench_simple_format(b: &mut Bencher) {
         };
     }
 
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(&source);
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(&source);
 
     b.iter(|| {
         for id in &ids {
-            if let Some(message) = ctx.get_message(id.as_str()) {
-                let _value = ctx.format(message, None);
+            if let Some(message) = bundle.get_message(id.as_str()) {
+                let _value = bundle.format(message, None);
             }
         }
     });
@@ -58,8 +58,8 @@ fn bench_menubar_format(b: &mut Bencher) {
         };
     }
 
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(&source);
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(&source);
 
     b.iter(|| {
         for id in &ids {
@@ -68,12 +68,12 @@ fn bench_menubar_format(b: &mut Bencher) {
             // widgets may only expect attributes and they shouldn't be forced to display a value.
             // Here however it doesn't matter because we know for certain that the message for `id`
             // exists.
-            if let Some(message) = ctx.get_message(id.as_str()) {
-                let _value = ctx.format(message, None);
+            if let Some(message) = bundle.get_message(id.as_str()) {
+                let _value = bundle.format(message, None);
 
                 if let Some(ref attributes) = message.attributes {
                     for attr in attributes {
-                        let _value = ctx.format(attr, None);
+                        let _value = bundle.format(attr, None);
                     }
                 }
             }

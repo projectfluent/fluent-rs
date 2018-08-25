@@ -1,10 +1,10 @@
 extern crate fluent;
 
-use fluent::context::MessageContext;
+use fluent::context::FluentBundle;
 
 fn main() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 foo = Foo
 foobar = { foo } Bar
@@ -12,12 +12,12 @@ bazbar = { baz } Bar
 ",
     );
 
-    match ctx.format("foobar", None) {
+    match bundle.format("foobar", None) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
 
-    match ctx.format("bazbar", None) {
+    match bundle.format("bazbar", None) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

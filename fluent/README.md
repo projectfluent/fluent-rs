@@ -24,14 +24,14 @@ Usage
 ```rust
 extern crate fluent;
 
-use fluent::MessageContext;
+use fluent::FluentBundle;
 
 fn main() {
-    let mut ctx = MessageContext::new(&["en-US"]);
-    ctx.add_messages("hello-world = Hello, world!");
+    let mut bundle = FluentBundle::new(&["en-US"]);
+    bundle.add_messages("hello-world = Hello, world!");
 
-    let value = ctx.get_message("hello-world")
-        .and_then(|message| ctx.format(message, None));
+    let value = bundle.get_message("hello-world")
+        .and_then(|message| bundle.format(message, None));
 
     assert_eq!(value, Some("Hello, world!".to_string()));
 }

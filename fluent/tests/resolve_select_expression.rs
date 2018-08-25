@@ -2,14 +2,14 @@ extern crate fluent;
 
 use std::collections::HashMap;
 
-use self::fluent::context::MessageContext;
+use self::fluent::context::FluentBundle;
 use self::fluent::types::FluentValue;
 
 #[test]
 fn select_expression_without_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
+    let mut bundle = FluentBundle::new(&["x-testing"]);
 
-    ctx.add_messages(
+    bundle.add_messages(
         "
 foo =
     {
@@ -25,17 +25,17 @@ bar =
 ",
     );
 
-    let value = ctx.format("foo", None);
+    let value = bundle.format("foo", None);
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx.format("bar", None);
+    let value = bundle.format("bar", None);
     assert_eq!(value, Some("Bar".to_string()));
 }
 
 #[test]
 fn select_expression_string_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 foo =
     { \"genitive\" ->
@@ -51,17 +51,17 @@ bar =
 ",
     );
 
-    let value = ctx.format("foo", None);
+    let value = bundle.format("foo", None);
     assert_eq!(value, Some("Foo's".to_string()));
 
-    let value = ctx.format("bar", None);
+    let value = bundle.format("bar", None);
     assert_eq!(value, Some("Bar".to_string()));
 }
 
 #[test]
 fn select_expression_number_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 foo =
     { 3 ->
@@ -84,20 +84,20 @@ baz =
 ",
     );
 
-    let value = ctx.format("foo", None);
+    let value = bundle.format("foo", None);
     assert_eq!(value, Some("Foo 3".to_string()));
 
-    let value = ctx.format("bar", None);
+    let value = bundle.format("bar", None);
     assert_eq!(value, Some("Bar 1".to_string()));
 
-    let value = ctx.format("baz", None);
+    let value = bundle.format("baz", None);
     assert_eq!(value, Some("Baz Pi".to_string()));
 }
 
 #[test]
 fn select_expression_plurals() {
-    let mut ctx = MessageContext::new(&["en"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["en"]);
+    bundle.add_messages(
         "
 foo =
     { 3 ->
@@ -122,20 +122,20 @@ baz =
 ",
     );
 
-    let value = ctx.format("foo", None);
+    let value = bundle.format("foo", None);
     assert_eq!(value, Some("Foo 3".to_string()));
 
-    let value = ctx.format("bar", None);
+    let value = bundle.format("bar", None);
     assert_eq!(value, Some("Bar One".to_string()));
 
-    let value = ctx.format("baz", None);
+    let value = bundle.format("baz", None);
     assert_eq!(value, Some("Bar Other".to_string()));
 }
 
 #[test]
 fn select_expression_external_argument_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 foo-hit =
     { $str ->
@@ -198,38 +198,38 @@ baz-unknown =
     args.insert("int", FluentValue::from(3));
     args.insert("float", FluentValue::from(2.72));
 
-    let value = ctx.format("foo-hit", Some(&args));
+    let value = bundle.format("foo-hit", Some(&args));
     assert_eq!(value, Some("Qux".to_string()));
 
-    let value = ctx.format("foo-miss", Some(&args));
+    let value = bundle.format("foo-miss", Some(&args));
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx.format("foo-unknown", Some(&args));
+    let value = bundle.format("foo-unknown", Some(&args));
     assert_eq!(value, Some("Foo".to_string()));
 
-    let value = ctx.format("bar-hit", Some(&args));
+    let value = bundle.format("bar-hit", Some(&args));
     assert_eq!(value, Some("Bar 3".to_string()));
 
-    let value = ctx.format("bar-miss", Some(&args));
+    let value = bundle.format("bar-miss", Some(&args));
     assert_eq!(value, Some("Bar 1".to_string()));
 
-    let value = ctx.format("bar-unknown", Some(&args));
+    let value = bundle.format("bar-unknown", Some(&args));
     assert_eq!(value, Some("Bar 1".to_string()));
 
-    let value = ctx.format("baz-hit", Some(&args));
+    let value = bundle.format("baz-hit", Some(&args));
     assert_eq!(value, Some("Baz E".to_string()));
 
-    let value = ctx.format("baz-miss", Some(&args));
+    let value = bundle.format("baz-miss", Some(&args));
     assert_eq!(value, Some("Baz 1".to_string()));
 
-    let value = ctx.format("baz-unknown", Some(&args));
+    let value = bundle.format("baz-unknown", Some(&args));
     assert_eq!(value, Some("Baz 1".to_string()));
 }
 
 #[test]
 fn select_expression_message_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 -bar = Bar
     .attr = attr val
@@ -242,14 +242,14 @@ use-bar =
 ",
     );
 
-    let value = ctx.format("use-bar", None);
+    let value = bundle.format("use-bar", None);
     assert_eq!(value, Some("Bar".to_string()));
 }
 
 #[test]
 fn select_expression_attribute_selector() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 -foo = Foo
     .attr = Foo Attr
@@ -262,6 +262,6 @@ use-foo =
 ",
     );
 
-    let value = ctx.format("use-foo", None);
+    let value = bundle.format("use-foo", None);
     assert_eq!(value, Some("Foo".to_string()));
 }

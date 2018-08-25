@@ -1,17 +1,17 @@
 //! The `ResolveValue` trait resolves Fluent AST nodes to [`FluentValues`].
 //!
-//! This is an internal API used by [`MessageContext`] to evaluate Messages, Attributes and other
+//! This is an internal API used by [`FluentBundle`] to evaluate Messages, Attributes and other
 //! AST nodes to [`FluentValues`] which can be then formatted to strings.
 //!
 //! [`FluentValues`]: ../types/enum.FluentValue.html
-//! [`MessageContext`]: ../context/struct.MessageContext.html
+//! [`FluentBundle`]: ../context/struct.FluentBundle.html
 
 use std::cell::RefCell;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
-use super::context::MessageContext;
+use super::context::FluentBundle;
 use super::entry::GetEntry;
 use super::types::FluentValue;
 use fluent_syntax::ast;
@@ -24,8 +24,8 @@ pub enum FluentError {
 
 /// State for a single `ResolveValue::to_value` call.
 pub struct Env<'env> {
-    /// The current `MessageContext` instance.
-    pub ctx: &'env MessageContext<'env>,
+    /// The current `FluentBundle` instance.
+    pub bundle: &'env FluentBundle<'env>,
     /// The current arguments passed by the developer.
     pub args: Option<&'env HashMap<&'env str, FluentValue>>,
     /// Tracks hashes to prevent infinite recursion.
@@ -89,7 +89,7 @@ impl ResolveValue for ast::Pattern {
             let result: Result<String, ()> = env.scope(|| match elem.to_value(env) {
                 Err(FluentError::Cyclic) => Err(()),
                 Err(_) => Ok("___".into()),
-                Ok(elem) => Ok(elem.format(env.ctx)),
+                Ok(elem) => Ok(elem.format(env.bundle)),
             });
 
             match result {
@@ -131,13 +131,13 @@ impl ResolveValue for ast::Expression {
             ast::Expression::StringExpression { value } => Ok(FluentValue::from(value.clone())),
             ast::Expression::NumberExpression { value } => value.to_value(env),
             ast::Expression::MessageReference { ref id } if id.name.starts_with('-') => env
-                .ctx
+                .bundle
                 .entries
                 .get_term(&id.name)
                 .ok_or(FluentError::None)?
                 .to_value(env),
             ast::Expression::MessageReference { ref id } => env
-                .ctx
+                .bundle
                 .entries
                 .get_message(&id.name)
                 .ok_or(FluentError::None)?
@@ -165,13 +165,13 @@ impl ResolveValue for ast::Expression {
                         match variant.key {
                             ast::VarKey::VariantName(ref symbol) => {
                                 let key = FluentValue::from(symbol.name.clone());
-                                if key.matches(env.ctx, selector) {
+                                if key.matches(env.bundle, selector) {
                                     return variant.value.to_value(env);
                                 }
                             }
                             ast::VarKey::Number(ref number) => {
                                 if let Ok(key) = number.to_value(env) {
-                                    if key.matches(env.ctx, selector) {
+                                    if key.matches(env.bundle, selector) {
                                         return variant.value.to_value(env);
                                     }
                                 }
@@ -187,14 +187,14 @@ impl ResolveValue for ast::Expression {
             }
             ast::Expression::AttributeExpression { id, name } => {
                 let attributes = if id.name.starts_with('-') {
-                    env.ctx
+                    env.bundle
                         .entries
                         .get_term(&id.name)
                         .ok_or(FluentError::None)?
                         .attributes
                         .as_ref()
                 } else {
-                    env.ctx
+                    env.bundle
                         .entries
                         .get_message(&id.name)
                         .ok_or(FluentError::None)?
@@ -212,7 +212,7 @@ impl ResolveValue for ast::Expression {
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
                 let term = env
-                    .ctx
+                    .bundle
                     .entries
                     .get_term(&id.name)
                     .ok_or(FluentError::None)?;
@@ -264,7 +264,7 @@ impl ResolveValue for ast::Expression {
                     });
                 }
 
-                env.ctx
+                env.bundle
                     .entries
                     .get_function(&callee.name)
                     .ok_or(FluentError::None)

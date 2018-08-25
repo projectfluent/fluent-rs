@@ -2,14 +2,14 @@
 //!
 //! The [`ResolveValue`][] trait from the [`resolve`][] module evaluates AST nodes into
 //! `FluentValues` which can then be formatted to Strings using the i18n formatters stored by the
-//! `MessageContext` instance if required.
+//! `FluentBundle` instance if required.
 //!
-//! The arguments `HashMap` passed to [`MessageContext::format`][] should also use `FluentValues`
+//! The arguments `HashMap` passed to [`FluentBundle::format`][] should also use `FluentValues`
 //! as values of arguments.
 //!
 //! [`ResolveValue`]: ../resolve/trait.ResolveValue.html
 //! [`resolve`]: ../resolve
-//! [`MessageContext::format`]: ../context/struct.MessageContext.html#method.format
+//! [`FluentBundle::format`]: ../context/struct.FluentBundle.html#method.format
 
 use std::f32;
 use std::num::ParseFloatError;
@@ -17,7 +17,7 @@ use std::str::FromStr;
 
 use intl_pluralrules::PluralCategory;
 
-use super::context::MessageContext;
+use super::context::FluentBundle;
 
 /// Value types which can be formatted to a String.
 #[derive(Clone, Debug, PartialEq)]
@@ -33,14 +33,14 @@ impl FluentValue {
         f64::from_str(&v.to_string()).map(|_| FluentValue::Number(v.to_string()))
     }
 
-    pub fn format(&self, _ctx: &MessageContext) -> String {
+    pub fn format(&self, _bundle: &FluentBundle) -> String {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
         }
     }
 
-    pub fn matches(&self, ctx: &MessageContext, other: &FluentValue) -> bool {
+    pub fn matches(&self, bundle: &FluentBundle, other: &FluentValue) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
@@ -55,7 +55,7 @@ impl FluentValue {
                     _ => return false,
                 };
 
-                let pr = &ctx.plural_rules;
+                let pr = &bundle.plural_rules;
                 pr.select(b.as_str()) == Ok(cat)
             }
             (&FluentValue::Number(..), &FluentValue::String(..)) => false,

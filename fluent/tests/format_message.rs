@@ -1,11 +1,11 @@
 extern crate fluent;
 
-use self::fluent::context::MessageContext;
+use self::fluent::context::FluentBundle;
 
 #[test]
 fn format() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 foo = Foo
     .attr = Attribute
@@ -13,7 +13,7 @@ foo = Foo
 ",
     );
 
-    let msg = ctx.format_message("foo", None);
+    let msg = bundle.format_message("foo", None);
     assert!(msg.is_some());
     let msg = msg.unwrap();
     assert_eq!(msg.value, Some("Foo".to_string()));

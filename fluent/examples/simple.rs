@@ -20,7 +20,7 @@
 extern crate fluent;
 extern crate fluent_locale;
 
-use fluent::context::MessageContext;
+use fluent::context::FluentBundle;
 use fluent::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
@@ -107,9 +107,9 @@ fn main() {
     // 3. Negotiate it against the avialable ones
     let locales = get_app_locales(&requested).expect("Failed to retrieve available locales");
 
-    // 4. Create a new Fluent MessageContext using the
+    // 4. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut ctx = MessageContext::new(&locales);
+    let mut bundle = FluentBundle::new(&locales);
 
     // 5. Load the localization resource
     for path in L10N_RESOURCES {
@@ -120,8 +120,8 @@ fn main() {
         );
         let res = read_file(&full_path).unwrap();
         // 5.1 Insert the loaded resource into the
-        //     Fluent MessageContext.
-        ctx.add_messages(&res).unwrap();
+        //     Fluent FluentBundle.
+        bundle.add_messages(&res).unwrap();
     }
 
     // 6. Check if the input is provided.
@@ -136,7 +136,7 @@ fn main() {
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
                     // 6.3. Format the message.
-                    println!("{}", ctx.format("response-msg", Some(&args)).unwrap());
+                    println!("{}", bundle.format("response-msg", Some(&args)).unwrap());
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
@@ -144,13 +144,13 @@ fn main() {
                     args.insert("reason", FluentValue::from(err.to_string()));
                     println!(
                         "{}",
-                        ctx.format("input-parse-error-msg", Some(&args)).unwrap()
+                        bundle.format("input-parse-error-msg", Some(&args)).unwrap()
                     );
                 }
             }
         }
         None => {
-            println!("{}", ctx.format("missing-arg-error", None).unwrap());
+            println!("{}", bundle.format("missing-arg-error", None).unwrap());
         }
     }
 }

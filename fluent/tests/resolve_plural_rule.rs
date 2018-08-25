@@ -2,13 +2,13 @@ extern crate fluent;
 
 use std::collections::HashMap;
 
-use self::fluent::context::MessageContext;
+use self::fluent::context::FluentBundle;
 use self::fluent::types::FluentValue;
 
 #[test]
 fn external_argument_number() {
-    let mut ctx = MessageContext::new(&["en"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["en"]);
+    bundle.add_messages(
         "
 unread-emails =
     { $emailsCount ->
@@ -29,17 +29,17 @@ unread-emails-dec =
     args.insert("emailsCount", FluentValue::from(1));
     args.insert("emailsCountDec", FluentValue::as_number("1.0").unwrap());
 
-    let value = ctx.format("unread-emails", Some(&args));
+    let value = bundle.format("unread-emails", Some(&args));
     assert_eq!(value, Some("You have 1 unread email.".to_string()));
 
-    let value = ctx.format("unread-emails-dec", Some(&args));
+    let value = bundle.format("unread-emails-dec", Some(&args));
     assert_eq!(value, Some("You have 1.0 unread emails.".to_string()));
 }
 
 #[test]
 fn exact_match() {
-    let mut ctx = MessageContext::new(&["en"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["en"]);
+    bundle.add_messages(
         "
 unread-emails =
     { $emailsCount ->
@@ -62,9 +62,9 @@ unread-emails-dec =
     args.insert("emailsCount", FluentValue::from(1));
     args.insert("emailsCountDec", FluentValue::as_number("1.0").unwrap());
 
-    let value = ctx.format("unread-emails", Some(&args));
+    let value = bundle.format("unread-emails", Some(&args));
     assert_eq!(value, Some("You have one unread email.".to_string()));
 
-    let value = ctx.format("unread-emails-dec", Some(&args));
+    let value = bundle.format("unread-emails-dec", Some(&args));
     assert_eq!(value, Some("You have one unread email.".to_string()));
 }

@@ -1,12 +1,12 @@
 extern crate fluent;
 
-use fluent::context::MessageContext;
+use fluent::context::FluentBundle;
 use fluent::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
-    let mut ctx = MessageContext::new(&["x-testing"]);
-    ctx.add_messages(
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_messages(
         "
 hello-world = Hello {
        *[one] World
@@ -20,7 +20,7 @@ hello-world2 = Hello { $name ->
 ",
     );
 
-    match ctx.format("hello-world", None) {
+    match bundle.format("hello-world", None) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }
@@ -28,7 +28,7 @@ hello-world2 = Hello { $name ->
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("moon"));
 
-    match ctx.format("hello-world2", Some(&args)) {
+    match bundle.format("hello-world2", Some(&args)) {
         Some(value) => println!("{}", value),
         None => println!("None"),
     }

@@ -1,11 +1,11 @@
 extern crate fluent;
 
-use fluent::MessageContext;
+use fluent::FluentBundle;
 
 fn main() {
-    let mut ctx = MessageContext::new(&["en-US"]);
-    ctx.add_messages("hello-world = Hello, world!");
+    let mut bundle = FluentBundle::new(&["en-US"]);
+    bundle.add_messages("hello-world = Hello, world!");
 
-    let value = ctx.format("hello-world", None);
+    let value = bundle.format("hello-world", None);
     assert_eq!(value, Some("Hello, world!".to_string()));
 }
