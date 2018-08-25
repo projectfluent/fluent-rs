@@ -44,6 +44,7 @@ pub mod context;
 pub mod entry;
 pub mod errors;
 pub mod resolve;
+pub mod resource;
 pub mod types;
 
 pub use context::FluentBundle;

@@ -10,10 +10,10 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use super::entry::{Entry, GetEntry};
 use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
+use super::resource::FluentResource;
 use super::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
-use fluent_syntax::parser::parse;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
 #[derive(Debug)]
@@ -98,9 +98,12 @@ impl<'bundle> FluentBundle<'bundle> {
     }
 
     pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
-        let res = parse(source).unwrap_or_else(|x| x.0);
+        let res = FluentResource::from_string(source);
+        self.add_resource(res)
+    }
 
-        for entry in res.body {
+    pub fn add_resource(&mut self, res: FluentResource) -> Result<(), FluentError> {
+        for entry in res.ast.body {
             let id = match entry {
                 ast::Entry::Message(ast::Message { ref id, .. }) => id.name.clone(),
                 ast::Entry::Term(ast::Term { ref id, .. }) => id.name.clone(),
