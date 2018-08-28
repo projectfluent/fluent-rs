@@ -37,9 +37,7 @@ fn bench_simple_format(b: &mut Bencher) {
 
     b.iter(|| {
         for id in &ids {
-            if let Some(message) = bundle.get_message(id.as_str()) {
-                let _value = bundle.format(message, None);
-            }
+            bundle.format(id.as_str(), None);
         }
     });
 }
@@ -68,15 +66,7 @@ fn bench_menubar_format(b: &mut Bencher) {
             // widgets may only expect attributes and they shouldn't be forced to display a value.
             // Here however it doesn't matter because we know for certain that the message for `id`
             // exists.
-            if let Some(message) = bundle.get_message(id.as_str()) {
-                let _value = bundle.format(message, None);
-
-                if let Some(ref attributes) = message.attributes {
-                    for attr in attributes {
-                        let _value = bundle.format(attr, None);
-                    }
-                }
-            }
+            bundle.format_message(id.as_str(), None);
         }
     });
 }
