@@ -11,9 +11,6 @@ addons:
         packages:
             - libssl-dev
 
-  if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
-  fi
-
 script:
   - cargo build
   - cargo test
