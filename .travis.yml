@@ -2,19 +2,19 @@ language: rust
 sudo: required
 cache: cargo
 dist: trusty
-rust:
-  - stable
-  - beta
-  - nightly
 addons:
     apt:
         packages:
             - libssl-dev
+rust:
+  - nightly
+  - beta
+  - stable
 
 script:
-  - cargo build
-  - cargo test
-  - cargo doc
+- cargo clean
+- cargo build
+- cargo test
 
 before_cache: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
