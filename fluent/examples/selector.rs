@@ -21,15 +21,15 @@ hello-world2 = Hello { $name ->
     );
 
     match bundle.format("hello-world", None) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("moon"));
 
     match bundle.format("hello-world2", Some(&args)) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 }

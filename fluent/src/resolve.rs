@@ -16,8 +16,8 @@ use super::entry::GetEntry;
 use super::types::FluentValue;
 use fluent_syntax::ast;
 
-#[derive(Debug)]
-pub enum FluentError {
+#[derive(Debug, PartialEq)]
+pub enum ResolverError {
     None,
     Cyclic,
 }
@@ -33,16 +33,16 @@ pub struct Env<'env> {
 }
 
 impl<'env> Env<'env> {
-    fn track<F>(&self, identifier: &str, action: F) -> Result<FluentValue, FluentError>
+    fn track<F>(&self, identifier: &str, action: F) -> Result<FluentValue, ResolverError>
     where
-        F: FnMut() -> Result<FluentValue, FluentError>,
+        F: FnMut() -> Result<FluentValue, ResolverError>,
     {
         let mut hasher = DefaultHasher::new();
         identifier.hash(&mut hasher);
         let hash = hasher.finish();
 
         if self.travelled.borrow().contains(&hash) {
-            Err(FluentError::Cyclic)
+            Err(ResolverError::Cyclic)
         } else {
             self.travelled.borrow_mut().push(hash);
             self.scope(action)
@@ -59,35 +59,38 @@ impl<'env> Env<'env> {
 
 /// Converts an AST node to a `FluentValue`.
 pub trait ResolveValue {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError>;
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError>;
 }
 
 impl ResolveValue for ast::Message {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || {
-            self.value.as_ref().ok_or(FluentError::None)?.to_value(env)
+            self.value
+                .as_ref()
+                .ok_or(ResolverError::None)?
+                .to_value(env)
         })
     }
 }
 
 impl ResolveValue for ast::Term {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
 impl ResolveValue for ast::Attribute {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
 impl ResolveValue for ast::Pattern {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         let mut string = String::with_capacity(128);
         for elem in &self.elements {
             let result: Result<String, ()> = env.scope(|| match elem.to_value(env) {
-                Err(FluentError::Cyclic) => Err(()),
+                Err(ResolverError::Cyclic) => Err(()),
                 Err(_) => Ok("___".into()),
                 Ok(elem) => Ok(elem.format(env.bundle)),
             });
@@ -105,7 +108,7 @@ impl ResolveValue for ast::Pattern {
 }
 
 impl ResolveValue for ast::PatternElement {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::PatternElement::TextElement(s) => Ok(FluentValue::from(s.clone())),
             ast::PatternElement::Placeable(p) => p.to_value(env),
@@ -114,19 +117,19 @@ impl ResolveValue for ast::PatternElement {
 }
 
 impl ResolveValue for ast::Number {
-    fn to_value(&self, _env: &Env) -> Result<FluentValue, FluentError> {
-        FluentValue::as_number(&self.value).map_err(|_| FluentError::None)
+    fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
+        FluentValue::as_number(&self.value).map_err(|_| ResolverError::None)
     }
 }
 
 impl ResolveValue for ast::VariantName {
-    fn to_value(&self, _env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
         Ok(FluentValue::from(self.name.clone()))
     }
 }
 
 impl ResolveValue for ast::Expression {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, FluentError> {
+    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::Expression::StringExpression { value } => Ok(FluentValue::from(value.clone())),
             ast::Expression::NumberExpression { value } => value.to_value(env),
@@ -134,31 +137,34 @@ impl ResolveValue for ast::Expression {
                 .bundle
                 .entries
                 .get_term(&id.name)
-                .ok_or(FluentError::None)?
+                .ok_or(ResolverError::None)?
                 .to_value(env),
             ast::Expression::MessageReference { ref id } => env
                 .bundle
                 .entries
                 .get_message(&id.name)
-                .ok_or(FluentError::None)?
+                .ok_or(ResolverError::None)?
                 .to_value(env),
             ast::Expression::ExternalArgument { ref id } => env
                 .args
                 .and_then(|args| args.get(&id.name.as_ref()))
                 .cloned()
-                .ok_or(FluentError::None),
+                .ok_or(ResolverError::None),
             ast::Expression::SelectExpression {
                 expression: None,
                 variants,
             } => select_default(variants)
-                .ok_or(FluentError::None)?
+                .ok_or(ResolverError::None)?
                 .value
                 .to_value(env),
             ast::Expression::SelectExpression {
                 expression,
                 variants,
             } => {
-                let selector = expression.as_ref().ok_or(FluentError::None)?.to_value(env);
+                let selector = expression
+                    .as_ref()
+                    .ok_or(ResolverError::None)?
+                    .to_value(env);
 
                 if let Ok(ref selector) = selector {
                     for variant in variants {
@@ -181,7 +187,7 @@ impl ResolveValue for ast::Expression {
                 }
 
                 select_default(variants)
-                    .ok_or(FluentError::None)?
+                    .ok_or(ResolverError::None)?
                     .value
                     .to_value(env)
             }
@@ -190,14 +196,14 @@ impl ResolveValue for ast::Expression {
                     env.bundle
                         .entries
                         .get_term(&id.name)
-                        .ok_or(FluentError::None)?
+                        .ok_or(ResolverError::None)?
                         .attributes
                         .as_ref()
                 } else {
                     env.bundle
                         .entries
                         .get_message(&id.name)
-                        .ok_or(FluentError::None)?
+                        .ok_or(ResolverError::None)?
                         .attributes
                         .as_ref()
                 };
@@ -208,14 +214,14 @@ impl ResolveValue for ast::Expression {
                         }
                     }
                 }
-                Err(FluentError::None)
+                Err(ResolverError::None)
             }
             ast::Expression::VariantExpression { id, key } if id.name.starts_with('-') => {
                 let term = env
                     .bundle
                     .entries
                     .get_term(&id.name)
-                    .ok_or(FluentError::None)?;
+                    .ok_or(ResolverError::None)?;
                 let variants = match term.value.elements.as_slice() {
                     [ast::PatternElement::Placeable(ast::Expression::SelectExpression {
                         expression: None,
@@ -231,7 +237,7 @@ impl ResolveValue for ast::Expression {
                 }
 
                 select_default(variants)
-                    .ok_or(FluentError::None)?
+                    .ok_or(ResolverError::None)?
                     .value
                     .to_value(env)
             }
@@ -267,10 +273,10 @@ impl ResolveValue for ast::Expression {
                 env.bundle
                     .entries
                     .get_function(&callee.name)
-                    .ok_or(FluentError::None)
+                    .ok_or(ResolverError::None)
                     .and_then(|func| {
                         func(resolved_unnamed_args.as_slice(), &resolved_named_args)
-                            .ok_or(FluentError::None)
+                            .ok_or(ResolverError::None)
                     })
             }
             _ => unimplemented!(),

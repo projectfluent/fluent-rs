@@ -1,4 +1,5 @@
 use fluent_syntax::ast;
+use fluent_syntax::parser::errors::ParserError;
 use fluent_syntax::parser::parse;
 
 pub struct FluentResource {
@@ -6,8 +7,10 @@ pub struct FluentResource {
 }
 
 impl FluentResource {
-    pub fn from_string(source: &str) -> Self {
-        let ast = parse(source).unwrap_or_else(|x| x.0);
-        FluentResource { ast }
+    pub fn from_string(source: &str) -> Result<Self, (Self, Vec<ParserError>)> {
+        match parse(source) {
+            Ok(ast) => Ok(FluentResource { ast }),
+            Err((ast, errors)) => Err((FluentResource { ast }, errors)),
+        }
     }
 }

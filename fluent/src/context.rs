@@ -8,7 +8,7 @@ use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::entry::{Entry, GetEntry};
-use super::errors::FluentError;
+pub use super::errors::FluentError;
 use super::resolve::{Env, ResolveValue};
 use super::resource::FluentResource;
 use super::types::FluentValue;
@@ -16,7 +16,7 @@ use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct Message {
     pub value: Option<String>,
     pub attributes: HashMap<String, String>,
@@ -97,12 +97,28 @@ impl<'bundle> FluentBundle<'bundle> {
         }
     }
 
-    pub fn add_messages(&mut self, source: &str) -> Result<(), FluentError> {
-        let res = FluentResource::from_string(source);
-        self.add_resource(res)
+    pub fn add_messages(&mut self, source: &str) -> Result<(), Vec<FluentError>> {
+        match FluentResource::from_string(source) {
+            Ok(res) => self.add_resource(res),
+            Err((res, err)) => {
+                let mut errors: Vec<FluentError> = err
+                    .into_iter()
+                    .map(FluentError::ParserError)
+                    .collect();
+
+                self.add_resource(res).map_err(|err| {
+                    for e in err {
+                        errors.push(e);
+                    }
+                    errors
+                })
+            }
+        }
     }
 
-    pub fn add_resource(&mut self, res: FluentResource) -> Result<(), FluentError> {
+    pub fn add_resource(&mut self, res: FluentResource) -> Result<(), Vec<FluentError>> {
+        let mut errors = vec![];
+
         for entry in res.ast.body {
             let id = match entry {
                 ast::Entry::Message(ast::Message { ref id, .. }) => id.name.clone(),
@@ -121,54 +137,75 @@ impl<'bundle> FluentBundle<'bundle> {
                     empty.insert(entry);
                 }
                 HashEntry::Occupied(_) => {
-                    return Err(FluentError::Overriding { kind, id });
+                    errors.push(FluentError::Overriding { kind, id });
                 }
             }
         }
 
-        Ok(())
+        if errors.is_empty() {
+            Ok(())
+        } else {
+            Err(errors)
+        }
     }
 
-    pub fn format(&self, path: &str, args: Option<&HashMap<&str, FluentValue>>) -> Option<String> {
+    pub fn format(
+        &self,
+        path: &str,
+        args: Option<&HashMap<&str, FluentValue>>,
+    ) -> Option<Result<String, (String, Vec<FluentError>)>> {
         let env = Env {
             bundle: self,
             args,
             travelled: RefCell::new(Vec::new()),
         };
+        let mut errors = vec![];
 
-        // `path` may be a simple message identifier (`identifier`) or a path to
-        // an attribute of a message (`identifier.attrname`).
-        let mut parts = path.split('.');
-
-        // Retrieve the message by id from the context.
-        let message_id = parts.next()?;
-        let message = self.entries.get_message(message_id)?;
-
-        // Check the second and the third part of the path. The second part may
-        // be an attribute name. If the third part is present, the path is
-        // invalid and contains more than one period (e.g. `foo.bar.baz`).
-        match (parts.next(), parts.next()) {
-            (None, None) => message.to_value(&env).map(|value| value.format(self)).ok(),
-            (Some(attr_name), None) => message.attributes.as_ref().and_then(|attributes| {
+        if let Some(ptr_pos) = path.find('.') {
+            let message_id = &path[..ptr_pos];
+            let message = self.entries.get_message(message_id)?;
+            let attr_name = &path[(ptr_pos + 1)..];
+            if let Some(ref attributes) = message.attributes {
                 for attribute in attributes {
                     if attribute.id.name == attr_name {
-                        return attribute
-                            .to_value(&env)
-                            .map(|value| value.format(self))
-                            .ok();
+                        match attribute.to_value(&env) {
+                            Ok(val) => {
+                                let s = val.format(self);
+                                return Some(Ok(s));
+                            }
+                            Err(err) => {
+                                errors.push(FluentError::ResolverError(err));
+                                return Some(Err((path.to_string(), errors)));
+                            }
+                        }
                     }
                 }
-                None
-            }),
-            _ => None,
+            }
+        } else {
+            let message_id = path;
+            let message = self.entries.get_message(message_id)?;
+            match message.to_value(&env) {
+                Ok(val) => {
+                    let s = val.format(self);
+                    return Some(Ok(s));
+                }
+                Err(err) => {
+                    errors.push(FluentError::ResolverError(err));
+                    return Some(Err((message_id.to_string(), errors)));
+                }
+            }
         }
+
+        None
     }
 
     pub fn format_message(
         &self,
         message_id: &str,
         args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<Message> {
+    ) -> Option<Result<Message, (Message, Vec<FluentError>)>> {
+        let mut errors = vec![];
+
         let env = Env {
             bundle: self,
             args,
@@ -176,22 +213,30 @@ impl<'bundle> FluentBundle<'bundle> {
         };
         let message = self.entries.get_message(message_id)?;
 
-        // XXX: We should report errors in formatting
-        let value = message.to_value(&env).map(|value| value.format(self)).ok();
+        let value = match message.to_value(&env) {
+            Ok(value) => Some(value.format(self)),
+            Err(err) => {
+                errors.push(FluentError::ResolverError(err));
+                None
+            }
+        };
 
         let mut attributes = HashMap::new();
 
         if let Some(ref attrs) = message.attributes {
             for attr in attrs {
-                // XXX: We should report errors in formatting
-                attr.to_value(&env)
-                    .map(|value| value.format(self))
-                    .map(|val| {
+                match attr.to_value(&env) {
+                    Ok(value) => {
+                        let val = value.format(self);
                         attributes.insert(attr.id.name.to_owned(), val);
-                    });
+                    }
+                    Err(err) => {
+                        errors.push(FluentError::ResolverError(err));
+                    }
+                }
             }
         }
 
-        Some(Message { value, attributes })
+        Some(Ok(Message { value, attributes }))
     }
 }

@@ -13,12 +13,12 @@ bazbar = { baz } Bar
     );
 
     match bundle.format("foobar", None) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 
     match bundle.format("bazbar", None) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 }

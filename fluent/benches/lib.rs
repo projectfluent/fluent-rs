@@ -33,7 +33,7 @@ fn bench_simple_format(b: &mut Bencher) {
     }
 
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(&source);
+    bundle.add_messages(&source).unwrap();
 
     b.iter(|| {
         for id in &ids {
@@ -57,7 +57,7 @@ fn bench_menubar_format(b: &mut Bencher) {
     }
 
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(&source);
+    bundle.add_messages(&source).unwrap();
 
     b.iter(|| {
         for id in &ids {

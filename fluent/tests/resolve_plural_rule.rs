@@ -1,14 +1,17 @@
 extern crate fluent;
 
+mod helpers;
+
 use std::collections::HashMap;
 
 use self::fluent::context::FluentBundle;
 use self::fluent::types::FluentValue;
+use helpers::{assert_add_messages_no_errors, assert_format_no_errors};
 
 #[test]
 fn external_argument_number() {
     let mut bundle = FluentBundle::new(&["en"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 unread-emails =
     { $emailsCount ->
@@ -23,23 +26,27 @@ unread-emails-dec =
     }
 
 ",
-    );
+    ));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
     args.insert("emailsCountDec", FluentValue::as_number("1.0").unwrap());
 
-    let value = bundle.format("unread-emails", Some(&args));
-    assert_eq!(value, Some("You have 1 unread email.".to_string()));
+    assert_format_no_errors(
+        bundle.format("unread-emails", Some(&args)),
+        "You have 1 unread email.",
+    );
 
-    let value = bundle.format("unread-emails-dec", Some(&args));
-    assert_eq!(value, Some("You have 1.0 unread emails.".to_string()));
+    assert_format_no_errors(
+        bundle.format("unread-emails-dec", Some(&args)),
+        "You have 1.0 unread emails.",
+    );
 }
 
 #[test]
 fn exact_match() {
     let mut bundle = FluentBundle::new(&["en"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 unread-emails =
     { $emailsCount ->
@@ -56,15 +63,19 @@ unread-emails-dec =
     }
 
 ",
-    );
+    ));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
     args.insert("emailsCountDec", FluentValue::as_number("1.0").unwrap());
 
-    let value = bundle.format("unread-emails", Some(&args));
-    assert_eq!(value, Some("You have one unread email.".to_string()));
+    assert_format_no_errors(
+        bundle.format("unread-emails", Some(&args)),
+        "You have one unread email.",
+    );
 
-    let value = bundle.format("unread-emails-dec", Some(&args));
-    assert_eq!(value, Some("You have one unread email.".to_string()));
+    assert_format_no_errors(
+        bundle.format("unread-emails-dec", Some(&args)),
+        "You have one unread email.",
+    );
 }

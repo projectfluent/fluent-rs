@@ -22,20 +22,20 @@ unread-emails =
     args.insert("name", FluentValue::from("John"));
 
     match bundle.format("hello-world", Some(&args)) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 
     match bundle.format("ref", Some(&args)) {
-        Some(value) => println!("{}", value),
-        None => println!("None"),
+        Some(Ok(value)) => println!("{}", value),
+        _ => println!("None"),
     }
 
     let mut args = HashMap::new();
     args.insert("emailCount", FluentValue::as_number("1.0").unwrap());
 
     match bundle.format("unread-emails", Some(&args)) {
-        Some(value) => println!("{}", value),
+        Some(value) => println!("{}", value.unwrap()),
         None => println!("None"),
     }
 }

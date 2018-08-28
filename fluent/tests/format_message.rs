@@ -1,25 +1,32 @@
 extern crate fluent;
 
-use self::fluent::context::FluentBundle;
+mod helpers;
+
+use fluent::context::FluentBundle;
+use fluent::context::Message;
+use helpers::{assert_add_messages_no_errors, assert_format_message_no_errors};
+use std::collections::HashMap;
 
 #[test]
 fn format() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo = Foo
     .attr = Attribute
     .attr2 = Attribute 2
 ",
-    );
+    ));
 
-    let msg = bundle.format_message("foo", None);
-    assert!(msg.is_some());
-    let msg = msg.unwrap();
-    assert_eq!(msg.value, Some("Foo".to_string()));
-    assert_eq!(msg.attributes.get("attr"), Some(&"Attribute".to_string()));
-    assert_eq!(
-        msg.attributes.get("attr2"),
-        Some(&"Attribute 2".to_string())
+    let mut attrs = HashMap::new();
+    attrs.insert("attr".to_string(), "Attribute".to_string());
+    attrs.insert("attr2".to_string(), "Attribute 2".to_string());
+
+    assert_format_message_no_errors(
+        bundle.format_message("foo", None),
+        Message {
+            value: Some("Foo".to_string()),
+            attributes: attrs,
+        },
     );
 }

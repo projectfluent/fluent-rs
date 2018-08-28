@@ -1,15 +1,18 @@
 extern crate fluent;
 
+mod helpers;
+
 use std::collections::HashMap;
 
 use self::fluent::context::FluentBundle;
 use self::fluent::types::FluentValue;
+use helpers::{assert_add_messages_no_errors, assert_format_no_errors};
 
 #[test]
 fn select_expression_without_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
 
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo =
     {
@@ -23,19 +26,17 @@ bar =
        *[nominative] Bar
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("foo", None);
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("foo", None), "Foo");
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Bar");
 }
 
 #[test]
 fn select_expression_string_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo =
     { \"genitive\" ->
@@ -49,19 +50,17 @@ bar =
         [genitive] Bar's
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("foo", None);
-    assert_eq!(value, Some("Foo's".to_string()));
+    assert_format_no_errors(bundle.format("foo", None), "Foo's");
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Bar");
 }
 
 #[test]
 fn select_expression_number_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo =
     { 3 ->
@@ -82,22 +81,19 @@ baz =
         [3.14] Baz Pi
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("foo", None);
-    assert_eq!(value, Some("Foo 3".to_string()));
+    assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Bar 1".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Bar 1");
 
-    let value = bundle.format("baz", None);
-    assert_eq!(value, Some("Baz Pi".to_string()));
+    assert_format_no_errors(bundle.format("baz", None), "Baz Pi");
 }
 
 #[test]
 fn select_expression_plurals() {
     let mut bundle = FluentBundle::new(&["en"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo =
     { 3 ->
@@ -120,22 +116,19 @@ baz =
        *[other] Bar Other
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("foo", None);
-    assert_eq!(value, Some("Foo 3".to_string()));
+    assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Bar One".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Bar One");
 
-    let value = bundle.format("baz", None);
-    assert_eq!(value, Some("Bar Other".to_string()));
+    assert_format_no_errors(bundle.format("baz", None), "Bar Other");
 }
 
 #[test]
 fn select_expression_external_argument_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo-hit =
     { $str ->
@@ -191,45 +184,36 @@ baz-unknown =
         [2] Baz 2
     }
 ",
-    );
+    ));
 
     let mut args = HashMap::new();
     args.insert("str", FluentValue::from("qux"));
     args.insert("int", FluentValue::from(3));
     args.insert("float", FluentValue::from(2.72));
 
-    let value = bundle.format("foo-hit", Some(&args));
-    assert_eq!(value, Some("Qux".to_string()));
+    assert_format_no_errors(bundle.format("foo-hit", Some(&args)), "Qux");
 
-    let value = bundle.format("foo-miss", Some(&args));
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("foo-miss", Some(&args)), "Foo");
 
-    let value = bundle.format("foo-unknown", Some(&args));
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("foo-unknown", Some(&args)), "Foo");
 
-    let value = bundle.format("bar-hit", Some(&args));
-    assert_eq!(value, Some("Bar 3".to_string()));
+    assert_format_no_errors(bundle.format("bar-hit", Some(&args)), "Bar 3");
 
-    let value = bundle.format("bar-miss", Some(&args));
-    assert_eq!(value, Some("Bar 1".to_string()));
+    assert_format_no_errors(bundle.format("bar-miss", Some(&args)), "Bar 1");
 
-    let value = bundle.format("bar-unknown", Some(&args));
-    assert_eq!(value, Some("Bar 1".to_string()));
+    assert_format_no_errors(bundle.format("bar-unknown", Some(&args)), "Bar 1");
 
-    let value = bundle.format("baz-hit", Some(&args));
-    assert_eq!(value, Some("Baz E".to_string()));
+    assert_format_no_errors(bundle.format("baz-hit", Some(&args)), "Baz E");
 
-    let value = bundle.format("baz-miss", Some(&args));
-    assert_eq!(value, Some("Baz 1".to_string()));
+    assert_format_no_errors(bundle.format("baz-miss", Some(&args)), "Baz 1");
 
-    let value = bundle.format("baz-unknown", Some(&args));
-    assert_eq!(value, Some("Baz 1".to_string()));
+    assert_format_no_errors(bundle.format("baz-unknown", Some(&args)), "Baz 1");
 }
 
 #[test]
 fn select_expression_message_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 -bar = Bar
     .attr = attr val
@@ -240,16 +224,15 @@ use-bar =
        *[other] Other
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("use-bar", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("use-bar", None), "Bar");
 }
 
 #[test]
 fn select_expression_attribute_selector() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 -foo = Foo
     .attr = Foo Attr
@@ -260,8 +243,7 @@ use-foo =
        *[other] Other
     }
 ",
-    );
+    ));
 
-    let value = bundle.format("use-foo", None);
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 }

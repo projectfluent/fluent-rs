@@ -1,102 +1,96 @@
 extern crate fluent;
 
+mod helpers;
+
 use self::fluent::context::FluentBundle;
+use helpers::{assert_add_messages_no_errors, assert_format_no_errors};
 
 #[test]
 fn message_reference() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo = Foo
 bar = { foo } Bar
 ",
-    );
+    ));
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Foo Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Foo Bar");
 }
 
 #[test]
 fn term_reference() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 -foo = Foo
 bar = { -foo } Bar
 ",
-    );
+    ));
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Foo Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Foo Bar");
 }
 
 #[test]
 fn message_reference_nested() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo = Foo
 bar = { foo } Bar
 baz = { bar } Baz
 ",
-    );
+    ));
 
-    let value = bundle.format("baz", None);
-    assert_eq!(value, Some("Foo Bar Baz".to_string()));
+    assert_format_no_errors(bundle.format("baz", None), "Foo Bar Baz");
 }
 
 #[test]
 fn message_reference_missing() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages("bar = { foo } Bar");
+    assert_add_messages_no_errors(bundle.add_messages("bar = { foo } Bar"));
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("___ Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "___ Bar");
 }
 
 #[test]
 fn message_reference_cyclic() {
     {
         let mut bundle = FluentBundle::new(&["x-testing"]);
-        bundle.add_messages(
+        assert_add_messages_no_errors(bundle.add_messages(
             "
 foo = Foo { bar }
 bar = { foo } Bar
 ",
-        );
+        ));
 
-        let value = bundle.format("foo", None);
-        assert_eq!(value, Some("Foo ___".to_string()));
-        let value = bundle.format("bar", None);
-        assert_eq!(value, Some("___ Bar".to_string()));
+        assert_format_no_errors(bundle.format("foo", None), "Foo ___");
+        assert_format_no_errors(bundle.format("bar", None), "___ Bar");
     }
 
     {
         let mut bundle = FluentBundle::new(&["x-testing"]);
-        bundle.add_messages(
+        assert_add_messages_no_errors(bundle.add_messages(
             "
 foo = { bar }
 bar = { foo }
 ",
-        );
+        ));
 
-        let value = bundle.format("foo", None);
-        assert_eq!(value, Some("___".to_string()));
-        let value = bundle.format("bar", None);
-        assert_eq!(value, Some("___".to_string()));
+        assert_format_no_errors(bundle.format("foo", None), "___");
+        assert_format_no_errors(bundle.format("bar", None), "___");
     }
 }
 
 #[test]
 fn message_reference_multiple() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 foo = Foo
 bar = { foo } Bar { foo }
 ",
-    );
+    ));
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Foo Bar Foo".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Foo Bar Foo");
 }

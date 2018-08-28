@@ -23,14 +23,14 @@
 //! "
 //!     );
 //!
-//! let value = bundle.format("hello-world", None).unwrap();
-//! assert_eq!(value, "Hello, world!");
+//! let value = bundle.format("hello-world", None);
+//! assert_eq!(value, Some(Ok("Hello, world!".to_string())));
 //!
 //! let mut args = HashMap::new();
 //! args.insert("name", FluentValue::from("John"));
 //!
-//! let value = bundle.format("intro", Some(&args)).unwrap();
-//! assert_eq!(value, "Welcome, John.");
+//! let value = bundle.format("intro", Some(&args));
+//! assert_eq!(value, Some(Ok("Welcome, John.".to_string())));
 //! ```
 
 extern crate failure;

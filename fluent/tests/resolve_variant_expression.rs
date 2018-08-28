@@ -1,11 +1,14 @@
 extern crate fluent;
 
+mod helpers;
+
 use self::fluent::context::FluentBundle;
+use helpers::{assert_add_messages_no_errors, assert_format_no_errors};
 
 #[test]
 fn variant_expression() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
+    assert_add_messages_no_errors(bundle.add_messages(
         "
 -foo = Foo
 -bar =
@@ -25,29 +28,21 @@ use-bar-missing = { -bar[missing] }
 
 missing-missing = { -missing[missing] }
 ",
-    );
+    ));
 
-    let value = bundle.format("bar", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("bar", None), "Bar");
 
-    let value = bundle.format("use-foo", None);
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 
-    let value = bundle.format("use-foo-missing", None);
-    assert_eq!(value, Some("Foo".to_string()));
+    assert_format_no_errors(bundle.format("use-foo-missing", None), "Foo");
 
-    let value = bundle.format("use-bar", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("use-bar", None), "Bar");
 
-    let value = bundle.format("use-bar-nominative", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("use-bar-nominative", None), "Bar");
 
-    let value = bundle.format("use-bar-genitive", None);
-    assert_eq!(value, Some("Bar's".to_string()));
+    assert_format_no_errors(bundle.format("use-bar-genitive", None), "Bar's");
 
-    let value = bundle.format("use-bar-missing", None);
-    assert_eq!(value, Some("Bar".to_string()));
+    assert_format_no_errors(bundle.format("use-bar-missing", None), "Bar");
 
-    let value = bundle.format("missing-missing", None);
-    assert_eq!(value, Some("___".to_string()));
+    assert_format_no_errors(bundle.format("missing-missing", None), "___");
 }
