@@ -3,7 +3,7 @@ name = "fluent-syntax"
 description = """
 Parser/Serializer tools for Fluent Syntax. 
 """
-version = "0.1.0"
+version = "0.1.1"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
