@@ -1,4 +1,4 @@
-#[derive(Debug)]
+#[derive(Debug, PartialEq)]
 pub struct ParserError {
     pub info: Option<ErrorInfo>,
     pub kind: ErrorKind,
