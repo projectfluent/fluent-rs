@@ -9,7 +9,7 @@
 //!
 //! [`ResolveValue`]: ../resolve/trait.ResolveValue.html
 //! [`resolve`]: ../resolve
-//! [`FluentBundle::format`]: ../context/struct.FluentBundle.html#method.format
+//! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
 use std::f32;
 use std::num::ParseFloatError;
@@ -17,7 +17,7 @@ use std::str::FromStr;
 
 use intl_pluralrules::PluralCategory;
 
-use super::context::FluentBundle;
+use super::bundle::FluentBundle;
 
 /// Value types which can be formatted to a String.
 #[derive(Clone, Debug, PartialEq)]

@@ -20,7 +20,7 @@
 extern crate fluent;
 extern crate fluent_locale;
 
-use fluent::context::FluentBundle;
+use fluent::bundle::FluentBundle;
 use fluent::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;

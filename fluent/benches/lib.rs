@@ -4,7 +4,7 @@ extern crate fluent;
 extern crate fluent_syntax;
 extern crate test;
 
-use fluent::context::FluentBundle;
+use fluent::bundle::FluentBundle;
 use fluent_syntax::{ast, parser::parse};
 use std::fs::File;
 use std::io;

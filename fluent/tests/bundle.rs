@@ -1,9 +1,9 @@
 extern crate fluent;
 
-use self::fluent::context::FluentBundle;
+use self::fluent::bundle::FluentBundle;
 
 #[test]
-fn context_new_from_str() {
+fn bundle_new_from_str() {
     let arr_of_str = ["x-testing"];
     let _ = FluentBundle::new(&arr_of_str);
     let _ = FluentBundle::new(&arr_of_str[..]);
@@ -19,7 +19,7 @@ fn context_new_from_str() {
 }
 
 #[test]
-fn context_new_from_strings() {
+fn bundle_new_from_strings() {
     let arr_of_strings = ["x-testing".to_string()];
     let arr_of_str = [arr_of_strings[0].as_str()];
 

@@ -1,6 +1,6 @@
 extern crate fluent;
 
-use fluent::context::FluentBundle;
+use fluent::bundle::FluentBundle;
 
 fn main() {
     let mut bundle = FluentBundle::new(&["x-testing"]);

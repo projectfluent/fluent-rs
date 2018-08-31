@@ -27,14 +27,14 @@ pub struct Message {
 ///
 /// # `FluentBundle` Life-cycle
 ///
-/// To create a context, call `FluentBundle::new` with a locale list that represents the best
+/// To create a bundle, call `FluentBundle::new` with a locale list that represents the best
 /// possible fallback chain for a given locale.  The simplest case is a one-locale list.
 ///
 /// Next, call `add_messages` one or more times, supplying translations in the FTL syntax. The
 /// `FluentBundle` instance is now ready to be used for localization.
 ///
-/// To format a translation, call `get_message` to retrieve a `fluent::context::Message` structure
-/// and then `format` it within the context.
+/// To format a translation, call `get_message` to retrieve a `fluent::bundle::Message` structure
+/// and then `format` it within the bundle.
 ///
 /// The result is an Option wrapping a single string that should be displayed in the UI.  It is
 /// recommended to treat the result as opaque from the perspective of the program and use it only

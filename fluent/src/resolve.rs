@@ -4,14 +4,14 @@
 //! AST nodes to [`FluentValues`] which can be then formatted to strings.
 //!
 //! [`FluentValues`]: ../types/enum.FluentValue.html
-//! [`FluentBundle`]: ../context/struct.FluentBundle.html
+//! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
 
 use std::cell::RefCell;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
-use super::context::FluentBundle;
+use super::bundle::FluentBundle;
 use super::entry::GetEntry;
 use super::types::FluentValue;
 use fluent_syntax::ast;

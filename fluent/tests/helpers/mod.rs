@@ -1,5 +1,5 @@
-use fluent::context::FluentError;
-use fluent::context::Message;
+use fluent::bundle::FluentError;
+use fluent::bundle::Message;
 
 #[allow(dead_code)]
 pub fn assert_format_none(result: Option<(String, Vec<FluentError>)>) {

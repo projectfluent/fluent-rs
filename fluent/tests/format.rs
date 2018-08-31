@@ -2,7 +2,7 @@ extern crate fluent;
 
 mod helpers;
 
-use self::fluent::context::FluentBundle;
+use self::fluent::bundle::FluentBundle;
 use helpers::{assert_add_messages_no_errors, assert_format_no_errors, assert_format_none};
 
 #[test]

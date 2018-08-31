@@ -1,6 +1,6 @@
 extern crate fluent;
 
-use fluent::FluentBundle;
+use fluent::bundle::FluentBundle;
 
 fn main() {
     let mut bundle = FluentBundle::new(&["en-US"]);

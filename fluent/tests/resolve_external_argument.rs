@@ -4,7 +4,7 @@ mod helpers;
 
 use std::collections::HashMap;
 
-use self::fluent::context::FluentBundle;
+use self::fluent::bundle::FluentBundle;
 use self::fluent::types::FluentValue;
 use helpers::{assert_add_messages_no_errors, assert_format_no_errors};
 

@@ -1,6 +1,6 @@
 extern crate fluent;
 
-use fluent::context::FluentBundle;
+use fluent::bundle::FluentBundle;
 use fluent::types::FluentValue;
 use std::collections::HashMap;
 

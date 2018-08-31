@@ -11,7 +11,7 @@
 //! # Example
 //!
 //! ```
-//! use fluent::FluentBundle;
+//! use fluent::bundle::FluentBundle;
 //! use fluent::types::FluentValue;
 //! use std::collections::HashMap;
 //!
@@ -40,11 +40,9 @@ extern crate fluent_locale;
 extern crate fluent_syntax;
 extern crate intl_pluralrules;
 
-pub mod context;
+pub mod bundle;
 pub mod entry;
 pub mod errors;
 pub mod resolve;
 pub mod resource;
 pub mod types;
-
-pub use context::FluentBundle;

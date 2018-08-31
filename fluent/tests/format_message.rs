@@ -2,8 +2,8 @@ extern crate fluent;
 
 mod helpers;
 
-use fluent::context::FluentBundle;
-use fluent::context::Message;
+use fluent::bundle::FluentBundle;
+use fluent::bundle::Message;
 use helpers::{assert_add_messages_no_errors, assert_format_message_no_errors};
 use std::collections::HashMap;
 
