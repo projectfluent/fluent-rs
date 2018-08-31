@@ -6,8 +6,9 @@ use std::collections::HashMap;
 
 fn main() {
     let mut bundle = FluentBundle::new(&["en"]);
-    bundle.add_messages(
-        "
+    bundle
+        .add_messages(
+            "
 hello-world = Hello { $name }
 ref = The previous message says { hello-world }
 unread-emails =
@@ -16,18 +17,18 @@ unread-emails =
        *[other] You have { $emailCount } unread emails
     }
 ",
-    );
+        ).unwrap();
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
 
     match bundle.format("hello-world", Some(&args)) {
-        Some(Ok(value)) => println!("{}", value),
+        Some((value, _)) => println!("{}", value),
         _ => println!("None"),
     }
 
     match bundle.format("ref", Some(&args)) {
-        Some(Ok(value)) => println!("{}", value),
+        Some((value, _)) => println!("{}", value),
         _ => println!("None"),
     }
 
@@ -35,7 +36,7 @@ unread-emails =
     args.insert("emailCount", FluentValue::as_number("1.0").unwrap());
 
     match bundle.format("unread-emails", Some(&args)) {
-        Some(value) => println!("{}", value.unwrap()),
+        Some((value, _)) => println!("{}", value),
         None => println!("None"),
     }
 }

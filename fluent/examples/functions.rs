@@ -48,16 +48,20 @@ fn main() {
         .unwrap();
 
     let value = bundle.format("hello-world", None);
-    assert_eq!(value, Some(Ok("Hey there! I'm a function!".to_string())));
+    assert_eq!(
+        value,
+        Some(("Hey there! I'm a function!".to_string(), vec![]))
+    );
 
     let value = bundle.format("meaning-of-life", None);
     assert_eq!(
         value,
-        Some(Ok(
-            "The answer to life, the universe, and everything".to_string()
+        Some((
+            "The answer to life, the universe, and everything".to_string(),
+            vec![]
         ))
     );
 
-    let value = bundle.format("all-your-base", None).unwrap().unwrap();
+    let (value, _) = bundle.format("all-your-base", None).unwrap();
     assert_eq!(&value, "All your base belong to us");
 }

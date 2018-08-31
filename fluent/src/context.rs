@@ -101,10 +101,8 @@ impl<'bundle> FluentBundle<'bundle> {
         match FluentResource::from_string(source) {
             Ok(res) => self.add_resource(res),
             Err((res, err)) => {
-                let mut errors: Vec<FluentError> = err
-                    .into_iter()
-                    .map(FluentError::ParserError)
-                    .collect();
+                let mut errors: Vec<FluentError> =
+                    err.into_iter().map(FluentError::ParserError).collect();
 
                 self.add_resource(res).map_err(|err| {
                     for e in err {
@@ -153,12 +151,13 @@ impl<'bundle> FluentBundle<'bundle> {
         &self,
         path: &str,
         args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<Result<String, (String, Vec<FluentError>)>> {
+    ) -> Option<(String, Vec<FluentError>)> {
         let env = Env {
             bundle: self,
             args,
             travelled: RefCell::new(Vec::new()),
         };
+
         let mut errors = vec![];
 
         if let Some(ptr_pos) = path.find('.') {
@@ -170,12 +169,14 @@ impl<'bundle> FluentBundle<'bundle> {
                     if attribute.id.name == attr_name {
                         match attribute.to_value(&env) {
                             Ok(val) => {
-                                let s = val.format(self);
-                                return Some(Ok(s));
+                                return Some((val.format(self), errors));
                             }
                             Err(err) => {
                                 errors.push(FluentError::ResolverError(err));
-                                return Some(Err((path.to_string(), errors)));
+                                // XXX: In the future we'll want to get the partial
+                                // value out of resolver and return it here.
+                                // We also expect to get a Vec or errors out of resolver.
+                                return Some((path.to_string(), errors));
                             }
                         }
                     }
@@ -187,11 +188,11 @@ impl<'bundle> FluentBundle<'bundle> {
             match message.to_value(&env) {
                 Ok(val) => {
                     let s = val.format(self);
-                    return Some(Ok(s));
+                    return Some((s, errors));
                 }
                 Err(err) => {
                     errors.push(FluentError::ResolverError(err));
-                    return Some(Err((message_id.to_string(), errors)));
+                    return Some((message_id.to_string(), errors));
                 }
             }
         }
@@ -203,7 +204,7 @@ impl<'bundle> FluentBundle<'bundle> {
         &self,
         message_id: &str,
         args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<Result<Message, (Message, Vec<FluentError>)>> {
+    ) -> Option<(Message, Vec<FluentError>)> {
         let mut errors = vec![];
 
         let env = Env {
@@ -237,6 +238,6 @@ impl<'bundle> FluentBundle<'bundle> {
             }
         }
 
-        Some(Ok(Message { value, attributes }))
+        Some((Message { value, attributes }, errors))
     }
 }

@@ -6,8 +6,9 @@ use std::collections::HashMap;
 
 fn main() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle.add_messages(
-        "
+    bundle
+        .add_messages(
+            "
 hello-world = Hello {
        *[one] World
         [two] Moon
@@ -18,10 +19,10 @@ hello-world2 = Hello { $name ->
         [moon] Moon
     }
 ",
-    );
+        ).unwrap();
 
     match bundle.format("hello-world", None) {
-        Some(Ok(value)) => println!("{}", value),
+        Some((value, _)) => println!("{}", value),
         _ => println!("None"),
     }
 
@@ -29,7 +30,7 @@ hello-world2 = Hello { $name ->
     args.insert("name", FluentValue::from("moon"));
 
     match bundle.format("hello-world2", Some(&args)) {
-        Some(Ok(value)) => println!("{}", value),
+        Some((value, _)) => println!("{}", value),
         _ => println!("None"),
     }
 }

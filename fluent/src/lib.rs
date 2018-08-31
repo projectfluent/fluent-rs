@@ -24,13 +24,13 @@
 //!     );
 //!
 //! let value = bundle.format("hello-world", None);
-//! assert_eq!(value, Some(Ok("Hello, world!".to_string())));
+//! assert_eq!(value, Some(("Hello, world!".to_string(), vec![])));
 //!
 //! let mut args = HashMap::new();
 //! args.insert("name", FluentValue::from("John"));
 //!
 //! let value = bundle.format("intro", Some(&args));
-//! assert_eq!(value, Some(Ok("Welcome, John.".to_string())));
+//! assert_eq!(value, Some(("Welcome, John.".to_string(), vec![])));
 //! ```
 
 extern crate failure;
