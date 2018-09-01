@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.4.1 (August 31, 2018)
+
+  - Update README to make the example match  new API
+
 ## fluent 0.4.0 (August 31, 2018)
 
   - Rename MessageContext to FluentBundle
