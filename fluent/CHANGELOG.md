@@ -4,6 +4,16 @@
 
   - …
 
+## fluent 0.4.0 (August 31, 2018)
+
+  - Rename MessageContext to FluentBundle
+  - Update the FluentBundle API to match fluent.js 0.8
+  - Update intl-pluralrules to 1.0
+  - Add FluentBundle::format_message
+  - Add FluentResource for external resource caching
+  - Update fluent-syntax to 0.1.1
+  - Update the signature of FluentBundle::format and FluentBundle::format_message
+
 ## fluent 0.3.1 (August 6, 2018)
 
   - Update `fluent-locale` to 0.4.1.
