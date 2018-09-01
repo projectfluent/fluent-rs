@@ -28,12 +28,11 @@ use fluent::FluentBundle;
 
 fn main() {
     let mut bundle = FluentBundle::new(&["en-US"]);
-    bundle.add_messages("hello-world = Hello, world!");
+    bundle.add_messages("hello-world = Hello, world!").unwrap();
 
-    let value = bundle.get_message("hello-world")
-        .and_then(|message| bundle.format(message, None));
+    let (value, errors) = bundle.format("hello-world", None).unwrap();
 
-    assert_eq!(value, Some("Hello, world!".to_string()));
+    assert_eq!(&value, "Hello, world!");
 }
 ```
 
