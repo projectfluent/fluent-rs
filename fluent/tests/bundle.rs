@@ -39,3 +39,13 @@ fn bundle_new_from_strings() {
     let _ = FluentBundle::new(&vec_from_iter);
     let _ = FluentBundle::new(&vec_from_iter[..]);
 }
+
+fn create_bundle<'a, 'b>(locales: &'b Vec<&'b str>) -> FluentBundle<'a> {
+    FluentBundle::new(locales)
+}
+
+#[test]
+fn bundle_locale_diff_scope() {
+    let locales = vec!("x-testing");
+    create_bundle(&locales);
+}
