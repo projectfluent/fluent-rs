@@ -56,7 +56,7 @@ pub struct FluentBundle<'bundle> {
 }
 
 impl<'bundle> FluentBundle<'bundle> {
-    pub fn new<S: ToString>(locales: &[S]) -> FluentBundle {
+    pub fn new<'a, S: ToString>(locales: &'a [S]) -> FluentBundle<'bundle> {
         let locales = locales
             .into_iter()
             .map(|s| s.to_string())
