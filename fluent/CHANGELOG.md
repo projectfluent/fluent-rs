@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.4.2 (October 1, 2018)
+
+  - Separate lifetimes of `FluentBundle::new` and return values. (#68)
+
 ## fluent 0.4.1 (August 31, 2018)
 
   - Update README to make the example match  new API
