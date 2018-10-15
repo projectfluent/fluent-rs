@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.4.3 (October 13, 2018)
+
+  - Support Sync+Send in Entry (#70)
+
 ## fluent 0.4.2 (October 1, 2018)
 
   - Separate lifetimes of `FluentBundle::new` and return values. (#68)
