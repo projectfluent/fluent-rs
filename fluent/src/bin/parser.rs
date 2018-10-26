@@ -30,7 +30,8 @@ fn main() {
         .args_from_usage(
             "-s, --silence 'disable output'
              <INPUT> 'Sets the input file to use'",
-        ).get_matches();
+        )
+        .get_matches();
 
     let input = matches.value_of("INPUT").unwrap();
 

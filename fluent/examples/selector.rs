@@ -19,7 +19,8 @@ hello-world2 = Hello { $name ->
         [moon] Moon
     }
 ",
-        ).unwrap();
+        )
+        .unwrap();
 
     match bundle.format("hello-world", None) {
         Some((value, _)) => println!("{}", value),

@@ -17,7 +17,8 @@ unread-emails =
        *[other] You have { $emailCount } unread emails
     }
 ",
-        ).unwrap();
+        )
+        .unwrap();
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));

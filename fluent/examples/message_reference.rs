@@ -11,7 +11,8 @@ foo = Foo
 foobar = { foo } Bar
 bazbar = { baz } Bar
 ",
-        ).unwrap();
+        )
+        .unwrap();
 
     match bundle.format("foobar", None) {
         Some((value, _)) => println!("{}", value),

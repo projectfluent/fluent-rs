@@ -66,7 +66,8 @@ impl<'bundle> FluentBundle<'bundle> {
             IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
             Some("en"),
             &NegotiationStrategy::Lookup,
-        )[0].to_owned();
+        )[0]
+        .to_owned();
 
         let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
         FluentBundle {
@@ -83,7 +84,9 @@ impl<'bundle> FluentBundle<'bundle> {
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'bundle
-            + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue> + Sync + Send,
+            + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>
+            + Sync
+            + Send,
     {
         match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {

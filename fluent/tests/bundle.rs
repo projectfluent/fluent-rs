@@ -46,6 +46,6 @@ fn create_bundle<'a, 'b>(locales: &'b Vec<&'b str>) -> FluentBundle<'a> {
 
 #[test]
 fn bundle_locale_diff_scope() {
-    let locales = vec!("x-testing");
+    let locales = vec!["x-testing"];
     create_bundle(&locales);
 }

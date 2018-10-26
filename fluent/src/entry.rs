@@ -4,8 +4,12 @@ use std::collections::hash_map::HashMap;
 use super::types::FluentValue;
 use fluent_syntax::ast;
 
-type FluentFunction<'bundle> =
-    Box<'bundle + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue> + Send + Sync>;
+type FluentFunction<'bundle> = Box<
+    'bundle
+        + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>
+        + Send
+        + Sync,
+>;
 
 pub enum Entry<'bundle> {
     Message(ast::Message),

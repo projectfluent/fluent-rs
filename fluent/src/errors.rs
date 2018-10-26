@@ -3,11 +3,7 @@ use fluent_syntax::parser::errors::ParserError;
 
 #[derive(Debug, Fail, PartialEq)]
 pub enum FluentError {
-    #[fail(
-        display = "attempted to override an existing {}: {}",
-        kind,
-        id
-    )]
+    #[fail(display = "attempted to override an existing {}: {}", kind, id)]
     Overriding { kind: &'static str, id: String },
     #[fail(display = "Parser error")]
     ParserError(ParserError),

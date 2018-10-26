@@ -10,7 +10,8 @@ fn main() {
     bundle
         .add_function("HELLO", |_args, _named_args| {
             return Some("I'm a function!".into());
-        }).unwrap();
+        })
+        .unwrap();
 
     // Test for a function that accepts unnamed positional arguments
     bundle
@@ -22,7 +23,8 @@ fn main() {
             }
 
             None
-        }).unwrap();
+        })
+        .unwrap();
 
     // Test for a function that accepts named arguments
     bundle
@@ -35,7 +37,8 @@ fn main() {
                 }
                 _ => None,
             };
-        }).unwrap();
+        })
+        .unwrap();
 
     bundle
         .add_messages("hello-world = Hey there! { HELLO() }")

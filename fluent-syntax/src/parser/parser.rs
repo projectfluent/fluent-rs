@@ -639,17 +639,19 @@ where
             '0'...'9' => ast::Expression::NumberExpression {
                 value: get_number(ps)?,
             },
-            '-' => if let Some('0'...'9') = ps.peek() {
-                ps.reset_peek(None);
-                ast::Expression::NumberExpression {
-                    value: get_number(ps)?,
+            '-' => {
+                if let Some('0'...'9') = ps.peek() {
+                    ps.reset_peek(None);
+                    ast::Expression::NumberExpression {
+                        value: get_number(ps)?,
+                    }
+                } else {
+                    ps.reset_peek(None);
+                    ast::Expression::MessageReference {
+                        id: get_entry_identifier(ps)?,
+                    }
                 }
-            } else {
-                ps.reset_peek(None);
-                ast::Expression::MessageReference {
-                    id: get_entry_identifier(ps)?,
-                }
-            },
+            }
             '"' => ast::Expression::StringExpression {
                 value: get_string(ps)?,
             },
