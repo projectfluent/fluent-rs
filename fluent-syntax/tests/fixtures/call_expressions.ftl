@@ -1,3 +1,5 @@
+## Arguments
+
 positional-args = {FUN(1, "a", msg)}
 named-args = {FUN(x: 1, y: "Y")}
 dense-named-args = {FUN(x:1, y:"Y")}

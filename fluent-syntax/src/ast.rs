@@ -61,11 +61,6 @@ pub struct Identifier<'ast> {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Function<'ast> {
-    pub name: &'ast str,
-}
-
-#[derive(Debug, PartialEq)]
 pub struct Variant<'ast> {
     pub key: VariantKey<'ast>,
     pub value: Value<'ast>,
@@ -88,7 +83,7 @@ pub enum Comment<'ast> {
 #[derive(Debug, PartialEq)]
 pub enum InlineExpression<'ast> {
     StringLiteral {
-        value: &'ast str,
+        raw: &'ast str,
     },
     NumberLiteral {
         value: &'ast str,
@@ -97,7 +92,7 @@ pub enum InlineExpression<'ast> {
         id: Identifier<'ast>,
     },
     CallExpression {
-        callee: Function<'ast>,
+        callee: Box<InlineExpression<'ast>>,
         positional: Vec<InlineExpression<'ast>>,
         named: Vec<NamedArgument<'ast>>,
     },
@@ -113,6 +108,9 @@ pub enum InlineExpression<'ast> {
         id: Identifier<'ast>,
     },
     TermReference {
+        id: Identifier<'ast>,
+    },
+    FunctionReference {
         id: Identifier<'ast>,
     },
     Placeable {

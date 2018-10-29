@@ -1,4 +1,5 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "ResourceComment",

@@ -1,11 +1,14 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key01"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -26,7 +29,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "key02\t= Value 02\n"
+            "content": "key02\t= Value 02\n\n"
         },
         {
             "type": "Comment",
@@ -35,14 +38,16 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "key03 =\n\tThis line isn't properly indented.\n"
+            "content": "key03 =\n\tThis line isn't properly indented.\n\n"
         },
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key04"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",

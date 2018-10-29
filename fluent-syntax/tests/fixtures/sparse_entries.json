@@ -1,11 +1,14 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key01"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -19,15 +22,19 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key02"
             },
             "value": null,
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -42,42 +49,27 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key03"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
-                        "value": "Value\n"
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "Continued\n"
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "\n"
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "\n"
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "Over multiple\n"
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "Lines"
+                        "value": "Value\nContinued\n\n\nOver multiple\nLines"
                     }
                 ]
             },
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -92,9 +84,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key05"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -108,23 +102,29 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key06"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
+                            "type": "SelectExpression",
                             "selector": {
                                 "type": "NumberLiteral",
                                 "value": "1"
                             },
                             "variants": [
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "one"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "TextElement",
@@ -135,10 +135,13 @@
                                     "default": false
                                 },
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "two"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "TextElement",

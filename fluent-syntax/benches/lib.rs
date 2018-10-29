@@ -1,13 +1,12 @@
 #![feature(test)]
 
-extern crate fluent_syntax;
 extern crate test;
 
-use self::test::Bencher;
 use fluent_syntax::parser::parse;
 use std::fs::File;
 use std::io;
 use std::io::Read;
+use test::Bencher;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;

@@ -1,17 +1,23 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variant-list-in-term"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "key"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",
@@ -29,9 +35,11 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variant-list-in-term-attr"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -48,7 +56,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "    .attr =\n        {\n           *[key] Value\n        }\n"
+            "content": "    .attr =\n        {\n           *[key] Value\n        }\n\n"
         },
         {
             "type": "Comment",
@@ -57,14 +65,16 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "variant-list-in-message =\n    {\n       *[key] Value\n    }\n"
+            "content": "variant-list-in-message =\n    {\n       *[key] Value\n    }\n\n"
         },
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "variant-list-in-message-attr"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -81,70 +91,52 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "    .attr =\n        {\n           *[key] Value\n        }\n"
+            "content": "    .attr =\n        {\n           *[key] Value\n        }\n\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR VariantLists cannot be Variant values."
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "-nested-variant-list-in-term =\n    {\n       *[one] {\n          *[two] Value\n       }\n    }\n\n"
         },
         {
             "type": "Term",
             "id": {
-                "name": "nested-variant-list-in-term"
-            },
-            "value": {
-                "variants": [
-                    {
-                        "key": {
-                            "name": "one"
-                        },
-                        "value": {
-                            "variants": [
-                                {
-                                    "key": {
-                                        "name": "two"
-                                    },
-                                    "value": {
-                                        "elements": [
-                                            {
-                                                "type": "TextElement",
-                                                "value": "Value"
-                                            }
-                                        ]
-                                    },
-                                    "default": true
-                                }
-                            ]
-                        },
-                        "default": true
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Term",
-            "id": {
+                "type": "Identifier",
                 "name": "nested-select"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "one"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "Placeable",
                                     "expression": {
+                                        "type": "SelectExpression",
                                         "selector": {
                                             "type": "NumberLiteral",
                                             "value": "2"
                                         },
                                         "variants": [
                                             {
+                                                "type": "Variant",
                                                 "key": {
+                                                    "type": "Identifier",
                                                     "name": "two"
                                                 },
                                                 "value": {
+                                                    "type": "Pattern",
                                                     "elements": [
                                                         {
                                                             "type": "TextElement",
@@ -168,12 +160,12 @@
         },
         {
             "type": "Comment",
-            "content": "ERROR VariantLists may not appear in SelectExpressions"
+            "content": "ERROR VariantLists cannot be Variant values."
         },
         {
             "type": "Junk",
             "annotations": [],
-            "content": "nested-select-then-variant-list =\n    {\n       *[one] { 2 ->\n          *[two] {\n             *[three] Value\n          }\n       }\n    }\n"
+            "content": "nested-select-then-variant-list =\n    {\n       *[one] { 2 ->\n          *[two] {\n             *[three] Value\n          }\n       }\n    }\n\n"
         },
         {
             "type": "Comment",

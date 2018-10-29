@@ -37,7 +37,7 @@ impl<'p> ParserStream<'p> {
 
     pub fn expect_byte(&mut self, b: u8) -> Result<()> {
         if !self.is_current_byte(b) {
-            return error!(self, ErrorKind::ExpectedToken(b as char));
+            return error!(ErrorKind::ExpectedToken(b as char), self.ptr);
         }
         self.ptr += 1;
         Ok(())
@@ -77,7 +77,7 @@ impl<'p> ParserStream<'p> {
         }
     }
 
-    pub fn skip_blank_inline(&mut self) -> bool {
+    pub fn skip_blank_inline(&mut self) -> usize {
         let start = self.ptr;
         while self.ptr < self.length {
             let b = self.source[self.ptr];
@@ -87,7 +87,7 @@ impl<'p> ParserStream<'p> {
                 break;
             }
         }
-        start != self.ptr
+        self.ptr - start
     }
 
     pub fn skip_to_next_entry_start(&mut self) {
@@ -133,36 +133,52 @@ impl<'p> ParserStream<'p> {
         (b >= b'a' && b <= b'z') || (b >= b'A' && b <= b'Z') || b == b'-'
     }
 
-    pub fn skip_to_value_start(&mut self) -> bool {
-        let start = self.ptr;
+    pub fn skip_to_value_start(&mut self) -> Option<bool> {
         self.skip_blank_inline();
 
-        if self.ptr >= self.length {
-            return false;
-        }
         if !self.is_eol() {
-            return true;
+            return Some(true);
         }
-        self.skip_to_next_line_value(start)
-    }
 
-    pub fn skip_to_next_line_value(&mut self, start: usize) -> bool {
         self.skip_blank_block();
+
         let inline = self.skip_blank_inline();
 
         if self.is_current_byte(b'{') {
-            return true;
+            //self.ptr -= inline;
+            return Some(true);
         }
-        if !inline {
-            self.ptr = start;
-            return false;
+
+        if inline == 0 {
+            return None;
         }
 
         if !self.is_char_pattern_continuation() {
-            self.ptr = start;
-            return false;
+            return None;
         }
-        true
+        self.ptr -= inline;
+        Some(false)
+    }
+
+    pub fn skip_unicode_escape_sequence(&mut self, length: usize) -> Result<()> {
+        let start = self.ptr;
+        for _ in 0..length {
+            match self.source[self.ptr] {
+                b'0'...b'9' => self.ptr += 1,
+                b'a'...b'f' => self.ptr += 1,
+                b'A'...b'F' => self.ptr += 1,
+                _ => break,
+            }
+        }
+        if self.ptr - start != length {
+            return error!(
+                ErrorKind::InvalidUnicodeEscapeSequence(
+                    self.get_slice(start, self.ptr + 1).to_owned()
+                ),
+                self.ptr
+            );
+        }
+        Ok(())
     }
 
     pub fn is_char_pattern_continuation(&self) -> bool {
@@ -172,14 +188,6 @@ impl<'p> ParserStream<'p> {
 
         let b = self.source[self.ptr];
         b != b'}' && b != b'.' && b != b'[' && b != b'*'
-    }
-
-    pub fn is_pattern_start(&self) -> bool {
-        if self.ptr >= self.length {
-            return false;
-        }
-        let b = self.source[self.ptr];
-        b != b'.' && b != b'[' && b != b'*' && b != b'}'
     }
 
     pub fn is_identifier_start(&self) -> bool {
@@ -199,10 +207,6 @@ impl<'p> ParserStream<'p> {
     }
 
     pub fn is_eol(&self) -> bool {
-        if self.ptr >= self.length {
-            return false;
-        }
-
         if self.is_current_byte(b'\n') {
             return true;
         }

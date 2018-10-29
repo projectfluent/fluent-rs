@@ -1,4 +1,5 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Comment",
@@ -7,9 +8,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "foo"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -26,9 +29,11 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "term"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",

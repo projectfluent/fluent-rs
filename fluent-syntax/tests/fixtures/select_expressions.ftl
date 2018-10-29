@@ -4,14 +4,26 @@ new-messages =
        *[other] {""}Other
     }
 
-valid-selector =
+valid-selector-term-attribute =
     { -term.case ->
        *[key] value
     }
 
 # ERROR
-invalid-selector =
+invalid-selector-term-value =
+    { -term ->
+       *[key] value
+    }
+
+# ERROR
+invalid-selector-term-variant =
     { -term[case] ->
+       *[key] value
+    }
+
+# ERROR
+invalid-selector-term-call =
+    { -term(case: "nominative") ->
        *[key] value
     }
 
@@ -27,10 +39,15 @@ nested-select =
        }
     }
 
-# ERROR VariantLists cannot appear in SelectExpressions
+# ERROR VariantLists cannot be Variant values.
 nested-variant-list =
     { 1 ->
        *[one] {
           *[two] Value
        }
     }
+
+# ERROR Missing line end after variant list
+missing-line-end =
+    { 1 ->
+        *[one] One}

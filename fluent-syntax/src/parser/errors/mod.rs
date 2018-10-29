@@ -1,14 +1,21 @@
 #[derive(Debug, PartialEq)]
 pub struct ParserError {
-    pub pos: usize,
+    pub pos: (usize, usize),
     pub slice: Option<(usize, usize)>,
     pub kind: ErrorKind,
 }
 
 macro_rules! error {
-    ($ps:ident, $kind:expr) => {{
+    ($kind:expr, $start:expr) => {{
         Err(ParserError {
-            pos: $ps.ptr,
+            pos: ($start, $start + 1),
+            slice: None,
+            kind: $kind,
+        })
+    }};
+    ($kind:expr, $start:expr, $end:expr) => {{
+        Err(ParserError {
+            pos: ($start, $end),
             slice: None,
             kind: $kind,
         })

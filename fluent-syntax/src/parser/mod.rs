@@ -2,6 +2,7 @@
 pub mod errors;
 mod ftlstream;
 
+use std::cmp;
 use std::result;
 use std::str;
 
@@ -20,107 +21,48 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     let mut body = vec![];
 
     ps.skip_blank_block();
-
-    let mut last_entry_end = ps.ptr;
     let mut last_comment = None;
+    let mut last_blank_count = 0;
 
     while ps.ptr < ps.length {
         let entry_start = ps.ptr;
-        match get_entry(&mut ps) {
+        let mut entry = get_entry(&mut ps, entry_start);
+
+        if let Some(comment) = last_comment.take() {
+            match entry {
+                Ok(ast::Entry::Message(ref mut msg)) if last_blank_count < 2 => {
+                    msg.comment = Some(comment);
+                }
+                Ok(ast::Entry::Term(ref mut term)) if last_blank_count < 2 => {
+                    term.comment = Some(comment);
+                }
+                _ => {
+                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                }
+            }
+        }
+
+        match entry {
+            Ok(ast::Entry::Comment(comment @ ast::Comment::Comment { .. })) => {
+                last_comment = Some(comment);
+            }
             Ok(entry) => {
-                if last_entry_end != entry_start {
-                    let mut te = 0;
-                    while ps.is_byte_at(b'\n', entry_start - te - 1) {
-                        te += 1;
-                    }
-                    let te = if te > 1 { te - 1 } else { 0 };
-                    let slice = ps.get_slice(last_entry_end, entry_start - te);
-                    body.push(ast::ResourceEntry::Junk(slice));
-                }
-                if let Some(content) = last_comment {
-                    match entry {
-                        ast::Entry::Message(mut msg) => {
-                            msg.comment = Some(ast::Comment::Comment { content });
-                            body.push(ast::ResourceEntry::Entry(ast::Entry::Message(msg)));
-                            last_comment = None;
-                        }
-                        ast::Entry::Term(mut term) => {
-                            term.comment = Some(ast::Comment::Comment { content });
-                            body.push(ast::ResourceEntry::Entry(ast::Entry::Term(term)));
-                            last_comment = None;
-                        }
-                        ast::Entry::Comment(new_comment) => {
-                            body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-                                ast::Comment::Comment { content },
-                            )));
-                            if let ast::Comment::Comment { content } = new_comment {
-                                last_comment = Some(content);
-                            } else {
-                                body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-                                    new_comment,
-                                )));
-                                last_comment = None;
-                            }
-                        }
-                    }
-                } else {
-                    match entry {
-                        ast::Entry::Comment(ast::Comment::Comment { content }) => {
-                            last_comment = Some(content);
-                        }
-                        _ => {
-                            body.push(ast::ResourceEntry::Entry(entry));
-                        }
-                    }
-                }
-                ps.skip_eol();
-                if ps.skip_blank_block() > 0 {
-                    if let Some(content) = last_comment {
-                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-                            ast::Comment::Comment { content },
-                        )));
-                        last_comment = None;
-                    }
-                }
-                last_entry_end = ps.ptr;
+                body.push(ast::ResourceEntry::Entry(entry));
             }
             Err(mut err) => {
-                if let Some(content) = last_comment {
-                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-                        ast::Comment::Comment { content },
-                    )));
-                    last_comment = None;
-                }
                 ps.skip_to_next_entry_start();
-                let mut te = 0;
-                while ps.is_byte_at(b'\n', ps.ptr - te - 1) {
-                    te += 1;
-                }
-                err.slice = Some((last_entry_end, ps.ptr - te));
+                err.slice = Some((entry_start, ps.ptr));
                 errors.push(err);
-                if te > 1 {
-                    let slice = ps.get_slice(last_entry_end, ps.ptr - te + 1);
-                    body.push(ast::ResourceEntry::Junk(slice));
-                    last_entry_end = ps.ptr;
-                }
+                let slice = ps.get_slice(entry_start, ps.ptr);
+                body.push(ast::ResourceEntry::Junk(slice));
             }
         }
-    }
-    if let Some(content) = last_comment {
-        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-            ast::Comment::Comment { content },
-        )));
-    }
-    if last_entry_end != ps.ptr {
-        let mut te = 0;
-        while ps.is_byte_at(b'\n', ps.ptr - te - 1) {
-            te += 1;
-        }
-        let te = if te > 1 { te - 1 } else { 0 };
-        let slice = ps.get_slice(last_entry_end, ps.ptr - te);
-        body.push(ast::ResourceEntry::Junk(slice));
+        last_blank_count = ps.skip_blank_block();
     }
 
+    if let Some(last_comment) = last_comment.take() {
+        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(last_comment)));
+    }
     if errors.is_empty() {
         Ok(ast::Resource { body })
     } else {
@@ -128,26 +70,21 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     }
 }
 
-fn get_entry<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Entry<'p>> {
+fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Entry<'p>> {
     let entry = match ps.source[ps.ptr] {
         b'#' => ast::Entry::Comment(get_comment(ps)?),
-        b'-' => ast::Entry::Term(get_term(ps)?),
-        _ => ast::Entry::Message(get_message(ps)?),
+        b'-' => ast::Entry::Term(get_term(ps, entry_start)?),
+        _ => ast::Entry::Message(get_message(ps, entry_start)?),
     };
     Ok(entry)
 }
 
-fn get_message<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Message<'p>> {
+fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Message<'p>> {
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
     ps.expect_byte(b'=')?;
-    ps.skip_blank_inline();
 
-    let pattern = if ps.skip_to_value_start() {
-        get_pattern(ps)?
-    } else {
-        None
-    };
+    let pattern = get_pattern(ps)?;
 
     ps.skip_blank_block();
 
@@ -162,10 +99,10 @@ fn get_message<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Message<'p>> {
 
     if pattern.is_none() && attributes.is_empty() {
         return error!(
-            ps,
             ErrorKind::ExpectedMessageField {
                 entry_id: id.name.to_string()
-            }
+            },
+            entry_start, ps.ptr
         );
     }
 
@@ -177,7 +114,7 @@ fn get_message<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Message<'p>> {
     })
 }
 
-fn get_term<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Term<'p>> {
+fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Term<'p>> {
     ps.expect_byte(b'-')?;
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
@@ -206,16 +143,16 @@ fn get_term<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Term<'p>> {
         })
     } else {
         error!(
-            ps,
             ErrorKind::ExpectedTermField {
                 entry_id: id.name.to_string()
-            }
+            },
+            entry_start, ps.ptr
         )
     }
 }
 
 fn get_value<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Value<'p>>> {
-    if !ps.skip_to_value_start() {
+    if ps.skip_to_value_start().is_none() {
         return Ok(None);
     }
 
@@ -224,7 +161,7 @@ fn get_value<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Value<'p>>> {
         ps.ptr += 1;
         ps.skip_blank();
         if ps.is_current_byte(b'*') || ps.is_current_byte(b'[') {
-            let variants = get_variants(ps, true)?;
+            let variants = get_variants(ps)?;
             ps.expect_byte(b'}')?;
             return Ok(Some(ast::Value::VariantList { variants }));
         }
@@ -241,27 +178,35 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Attribute<'p
 
     loop {
         let line_start = ps.ptr;
-
         ps.skip_blank_inline();
-
         if !ps.is_current_byte(b'.') {
             ps.ptr = line_start;
             break;
         }
-        ps.ptr += 1; // .
-        let id = get_identifier(ps)?;
-        ps.skip_blank_inline();
-        ps.expect_byte(b'=')?;
-        ps.skip_blank_inline();
-        let pattern = get_pattern(ps)?;
 
-        match pattern {
-            Some(pattern) => attributes.push(ast::Attribute { id, value: pattern }),
-            None => panic!("Expected Value!"),
-        };
+        match get_attribute(ps) {
+            Ok(attr) => attributes.push(attr),
+            Err(_) => {
+                ps.ptr = line_start;
+                break;
+            }
+        }
         ps.skip_eol();
     }
     Ok(attributes)
+}
+
+fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
+    ps.expect_byte(b'.')?;
+    let id = get_identifier(ps)?;
+    ps.skip_blank_inline();
+    ps.expect_byte(b'=')?;
+    let pattern = get_pattern(ps)?;
+
+    match pattern {
+        Some(pattern) => Ok(ast::Attribute { id, value: pattern }),
+        None => error!(ErrorKind::MissingValue, ps.ptr),
+    }
 }
 
 fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
@@ -274,10 +219,10 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
                 ps.ptr += 1;
             } else {
                 return error!(
-                    ps,
                     ErrorKind::ExpectedCharRange {
                         range: "a-zA-Z".to_string()
-                    }
+                    },
+                    ps.ptr
                 );
             }
         } else if (b >= b'a' && b <= b'z')
@@ -298,7 +243,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
 
 fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>> {
     if !ps.take_if(b'[') {
-        return error!(ps, ErrorKind::ExpectedToken('['));
+        return error!(ErrorKind::ExpectedToken('['), ps.ptr);
     }
     ps.skip_blank();
 
@@ -319,10 +264,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
     Ok(key)
 }
 
-fn get_variants<'p>(
-    ps: &mut ParserStream<'p>,
-    variant_lists: bool,
-) -> Result<Vec<ast::Variant<'p>>> {
+fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> {
     let mut variants = vec![];
     let mut has_default = false;
 
@@ -331,7 +273,7 @@ fn get_variants<'p>(
 
         if default {
             if has_default {
-                return error!(ps, ErrorKind::MultipleDefaultVariants);
+                return error!(ErrorKind::MultipleDefaultVariants, ps.ptr);
             } else {
                 has_default = true;
             }
@@ -339,13 +281,7 @@ fn get_variants<'p>(
 
         let key = get_variant_key(ps)?;
 
-        ps.skip_blank_inline();
-
-        let value = if variant_lists {
-            get_value(ps)?
-        } else {
-            get_pattern(ps)?.map(ast::Value::Pattern)
-        };
+        let value = get_pattern(ps)?.map(ast::Value::Pattern);
 
         if let Some(value) = value {
             variants.push(ast::Variant {
@@ -355,126 +291,217 @@ fn get_variants<'p>(
             });
             ps.skip_blank();
         } else {
-            return error!(ps, ErrorKind::MissingValue);
+            return error!(ErrorKind::MissingValue, ps.ptr);
         }
     }
 
     if !has_default {
-        error!(ps, ErrorKind::MissingDefaultVariant)
+        error!(ErrorKind::MissingDefaultVariant, ps.ptr)
     } else {
         Ok(variants)
     }
 }
 
+#[derive(Debug, PartialEq)]
+enum TextElementTermination {
+    LineFeed,
+    CarriageReturn,
+    PlaceableStart,
+    EOF,
+}
+
+#[derive(Debug)]
+enum PatternElementPointers<'a> {
+    Placeable(ast::Expression<'a>),
+    TextElement(usize, usize, usize, TextElementPosition),
+}
+
+#[derive(Debug, PartialEq)]
+enum TextElementPosition {
+    InitialLineStart,
+    LineStart,
+    Continuation,
+}
+
+#[derive(Debug, PartialEq)]
+enum TextElementType {
+    Blank,
+    NonBlank,
+}
+
 fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>> {
-    let start = ps.ptr;
-    if ps.skip_eol() {
-        ps.skip_blank_block();
-        if !ps.skip_blank_inline() || !ps.is_pattern_start() {
-            ps.ptr = start;
-            return Ok(None);
-        }
-    }
-
     let mut elements = vec![];
+    let mut last_non_blank = None;
+    let mut common_indent = 10;
 
-    loop {
-        let mut start_pos = ps.ptr;
+    ps.skip_blank_inline();
 
-        while ps.ptr < ps.length {
-            if ps.skip_eol() {
-                break;
-            }
-            let b = ps.source[ps.ptr];
-            match b {
-                b'\\' => {
-                    ps.ptr += 1;
-                    let b = ps.source[ps.ptr];
-                    match b {
-                        b'{' => ps.ptr += 1,
-                        b'\\' => ps.ptr += 1,
-                        b'u' => {
-                            ps.ptr += 2;
-                            let start = ps.ptr;
-                            for _ in 0..4 {
-                                match ps.source[ps.ptr] {
-                                    b'0'...b'9' => ps.ptr += 1,
-                                    b'a'...b'f' => ps.ptr += 1,
-                                    b'A'...b'F' => ps.ptr += 1,
-                                    _ => break,
-                                }
-                            }
-                            if start == ps.ptr {
-                                return error!(
-                                    ps,
-                                    ErrorKind::InvalidUnicodeEscapeSequence(
-                                        ps.get_slice(start, ps.ptr + 1).to_owned()
-                                    )
-                                );
-                            }
-                        }
-                        _ => panic!(),
-                    }
-                }
-                b'{' => {
-                    if start_pos != ps.ptr {
-                        let value = ps.get_slice(start_pos, ps.ptr);
-                        elements.push(ast::PatternElement::TextElement(value));
-                    }
-                    ps.ptr += 1; // {
-                    ps.skip_blank();
-                    let exp = get_expression(ps)?;
-                    elements.push(ast::PatternElement::Placeable(exp));
-                    ps.skip_blank_inline();
-                    ps.expect_byte(b'}')?;
-                    start_pos = ps.ptr;
-                }
-                _ => ps.ptr += 1,
-            }
-        }
-
-        if start_pos != ps.ptr {
-            let value = ps.get_slice(start_pos, ps.ptr);
-            elements.push(ast::PatternElement::TextElement(value));
-        }
-
-        let end_of_line = ps.ptr;
-
-        let bl = ps.skip_blank_block();
-
-        if !ps.skip_blank_inline() || !ps.is_pattern_start() {
-            ps.ptr = end_of_line;
-            break;
-        } else {
-            for _ in 0..bl {
-                elements.push(ast::PatternElement::TextElement("\n"));
-            }
-        }
-    }
-
-    if !elements.is_empty() {
-        let last_pos = elements.len() - 1;
-        let val = &elements[last_pos];
-        let mut new_val = "";
-        let mut modified = false;
-        if let ast::PatternElement::TextElement(te) = val {
-            new_val = te.trim_right();
-            modified = &new_val != te;
-        }
-        if modified {
-            elements.pop();
-            if !new_val.is_empty() {
-                elements.insert(last_pos, ast::PatternElement::TextElement(new_val));
-                ps.ptr -= 1; // move before last \n
-            }
-        }
-    }
-
-    if elements.is_empty() {
-        Ok(None)
+    let mut text_element_role = if ps.skip_eol() {
+        ps.skip_blank_block();
+        TextElementPosition::LineStart
     } else {
-        Ok(Some(ast::Pattern { elements }))
+        TextElementPosition::InitialLineStart
+    };
+
+    while ps.ptr < ps.length {
+        if ps.source[ps.ptr] == b'{' {
+            if text_element_role == TextElementPosition::LineStart {
+                common_indent = 0;
+            }
+            let exp = get_placeable(ps)?;
+            last_non_blank = Some(elements.len());
+            elements.push(PatternElementPointers::Placeable(exp));
+            text_element_role = TextElementPosition::Continuation;
+        } else {
+            let slice_start = ps.ptr;
+            let mut indent = 0;
+            if text_element_role == TextElementPosition::LineStart {
+                indent = ps.skip_blank_inline();
+                if indent == 0 {
+                    if ps.source[ps.ptr] != b'\n' && ps.source[ps.ptr] != b'\r' {
+                        break;
+                    }
+                } else if ps.source[ps.ptr] == b'.'
+                    || ps.source[ps.ptr] == b'}'
+                    || ps.source[ps.ptr] == b'*'
+                    || ps.source[ps.ptr] == b'['
+                {
+                    ps.ptr = slice_start;
+                    break;
+                }
+            }
+            let (start, end, text_element_type, termination_reason) = get_text_slice(ps)?;
+            if start != end {
+                if text_element_role == TextElementPosition::LineStart
+                    && text_element_type == TextElementType::NonBlank
+                    && indent < common_indent
+                {
+                    common_indent = indent;
+                }
+                if text_element_role != TextElementPosition::LineStart
+                    || text_element_type == TextElementType::NonBlank
+                    || termination_reason == TextElementTermination::LineFeed
+                {
+                    if text_element_type == TextElementType::NonBlank {
+                        last_non_blank = Some(elements.len());
+                    }
+                    elements.push(PatternElementPointers::TextElement(
+                        slice_start,
+                        end,
+                        indent,
+                        text_element_role,
+                    ));
+                }
+            }
+
+            text_element_role = match termination_reason {
+                TextElementTermination::LineFeed => TextElementPosition::LineStart,
+                TextElementTermination::CarriageReturn => TextElementPosition::Continuation,
+                TextElementTermination::PlaceableStart => TextElementPosition::Continuation,
+                TextElementTermination::EOF => TextElementPosition::Continuation,
+            };
+        }
     }
+
+    if let Some(last_non_blank) = last_non_blank {
+        let mut collected_elems = 0;
+        let elements = elements.into_iter().filter(|_| {
+            if collected_elems > last_non_blank {
+                return false;
+            }
+            collected_elems += 1;
+            true
+        });
+
+        let elements = elements
+            .enumerate()
+            .filter_map(|(i, elem)| match elem {
+                PatternElementPointers::Placeable(exp) => Some(ast::PatternElement::Placeable(exp)),
+                PatternElementPointers::TextElement(start, end, indent, role) => {
+                    let start = if role == TextElementPosition::LineStart {
+                        start + cmp::min(indent, common_indent)
+                    } else {
+                        start
+                    };
+                    let slice = ps.get_slice(start, end);
+                    if last_non_blank == i {
+                        if slice == "\n" {
+                            return None;
+                        }
+                        Some(ast::PatternElement::TextElement(slice.trim_end()))
+                    } else {
+                        Some(ast::PatternElement::TextElement(slice))
+                    }
+                }
+            })
+            .collect();
+        return Ok(Some(ast::Pattern { elements }));
+    }
+
+    Ok(None)
+}
+
+fn get_text_slice<'p>(
+    ps: &mut ParserStream<'p>,
+) -> Result<(usize, usize, TextElementType, TextElementTermination)> {
+    let start_pos = ps.ptr;
+    let mut text_element_type = TextElementType::Blank;
+
+    while ps.ptr < ps.length {
+        if ps.source[ps.ptr] == b'\n' {
+            ps.ptr += 1;
+            return Ok((
+                start_pos,
+                ps.ptr,
+                text_element_type,
+                TextElementTermination::LineFeed,
+            ));
+        } else if ps.source[ps.ptr] == b'\r' && ps.is_byte_at(b'\n', ps.ptr + 1) {
+            ps.ptr += 1;
+            return Ok((
+                start_pos,
+                ps.ptr - 1,
+                text_element_type,
+                TextElementTermination::CarriageReturn,
+            ));
+        }
+        match ps.source[ps.ptr] {
+            b'{' => {
+                return Ok((
+                    start_pos,
+                    ps.ptr,
+                    text_element_type,
+                    TextElementTermination::PlaceableStart,
+                ));
+            }
+            b'}' => {
+                return error!(ErrorKind::Generic, ps.ptr);
+            }
+            b'\\' => {
+                text_element_type = TextElementType::NonBlank;
+                ps.ptr += 1;
+                match ps.source[ps.ptr] {
+                    b'\\' => ps.ptr += 1,
+                    b'u' => {
+                        ps.ptr += 1;
+                        ps.skip_unicode_escape_sequence(4)?;
+                    }
+                    _ => {}
+                }
+            }
+            b' ' => ps.ptr += 1,
+            _ => {
+                text_element_type = TextElementType::NonBlank;
+                ps.ptr += 1
+            }
+        }
+    }
+    Ok((
+        start_pos,
+        ps.ptr,
+        text_element_type,
+        TextElementTermination::EOF,
+    ))
 }
 
 fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
@@ -533,33 +560,77 @@ fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     Ok(str::from_utf8(&ps.source[start_pos..ps.ptr]).unwrap())
 }
 
+fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
+    ps.expect_byte(b'{')?;
+    ps.skip_blank();
+    let exp = get_expression(ps)?;
+    ps.skip_blank_inline();
+    ps.expect_byte(b'}')?;
+
+    let invalid_expression_found = match &exp {
+        ast::Expression::InlineExpression(ast::InlineExpression::AttributeExpression {
+            ref reference,
+            ..
+        }) => {
+            if let ast::InlineExpression::TermReference { .. } = **reference {
+                true
+            } else {
+                false
+            }
+        }
+        ast::Expression::InlineExpression(ast::InlineExpression::CallExpression {
+            callee, ..
+        }) => {
+            if let ast::InlineExpression::AttributeExpression { .. } = **callee {
+                true
+            } else {
+                false
+            }
+        }
+        _ => false,
+    };
+    if invalid_expression_found {
+        return error!(ErrorKind::TermAttributeAsPlaceable, ps.ptr);
+    }
+
+    Ok(exp)
+}
+
 fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
-    let exp = get_inline_expression(ps)?;
+    let exp = get_call_expression(ps)?;
 
     ps.skip_blank();
 
     if !ps.is_current_byte(b'-') || !ps.is_byte_at(b'>', ps.ptr + 1) {
-        if let ast::InlineExpression::AttributeExpression { ref reference, .. } = exp {
-            if let box ast::InlineExpression::TermReference { .. } = reference {
-                return error!(ps, ErrorKind::TermAttributeAsPlaceable);
-            }
-        }
         return Ok(ast::Expression::InlineExpression(exp));
     }
 
-    match exp {
-        ast::InlineExpression::MessageReference { .. } => {
-            return error!(ps, ErrorKind::MessageReferenceAsSelector);
-        }
+    let is_valid = match exp {
+        ast::InlineExpression::StringLiteral { .. } => true,
+        ast::InlineExpression::NumberLiteral { .. } => true,
+        ast::InlineExpression::VariableReference { .. } => true,
         ast::InlineExpression::AttributeExpression { ref reference, .. } => {
-            if let box ast::InlineExpression::MessageReference { .. } = reference {
-                return error!(ps, ErrorKind::MessageAttributeAsSelector);
+            if let ast::InlineExpression::TermReference { .. } = **reference {
+                true
+            } else {
+                false
             }
         }
-        ast::InlineExpression::VariantExpression { .. } => {
-            return error!(ps, ErrorKind::VariantAsSelector);
+        ast::InlineExpression::CallExpression { ref callee, .. } => {
+            if let ast::InlineExpression::FunctionReference { .. } = **callee {
+                true
+            } else if let ast::InlineExpression::AttributeExpression { .. } = **callee {
+                true
+            } else {
+                false
+            }
         }
-        _ => {}
+        _ => false,
+    };
+
+    if !is_valid {
+        //XXX: Generalize error type
+        return error!(ErrorKind::MessageReferenceAsSelector, ps.ptr);
     }
 
     ps.ptr += 2; // ->
@@ -568,7 +639,7 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     ps.expect_byte(b'\n')?;
     ps.skip_blank();
 
-    let variants = get_variants(ps, false)?;
+    let variants = get_variants(ps)?;
 
     Ok(ast::Expression::SelectExpression {
         selector: exp,
@@ -576,7 +647,67 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     })
 }
 
-fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+fn get_call_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+    let mut callee = get_attribute_expression(ps)?;
+
+    let expr = if ps.is_current_byte(b'(') {
+        let is_valid = match callee {
+            ast::InlineExpression::AttributeExpression { ref reference, .. } => {
+                if let ast::InlineExpression::TermReference { .. } = **reference {
+                    true
+                } else {
+                    false
+                }
+            }
+            ast::InlineExpression::TermReference { .. } => true,
+            ast::InlineExpression::MessageReference { ref id, .. } => {
+                id.name.find(|c: char| c.is_ascii_lowercase()).is_none()
+            }
+            _ => false,
+        };
+
+        if is_valid {
+            if let ast::InlineExpression::MessageReference { id } = callee {
+                callee = ast::InlineExpression::FunctionReference { id };
+            }
+            let (positional, named) = get_call_args(ps)?;
+            ast::InlineExpression::CallExpression {
+                callee: Box::new(callee),
+                positional,
+                named,
+            }
+        } else {
+            return error!(ErrorKind::ForbiddenCallee, ps.ptr);
+        }
+    } else {
+        callee
+    };
+
+    Ok(expr)
+}
+
+fn get_attribute_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+    let reference = get_literal(ps)?;
+
+    match reference {
+        ast::InlineExpression::MessageReference { .. }
+        | ast::InlineExpression::TermReference { .. } => {
+            if ps.is_current_byte(b'.') {
+                ps.ptr += 1; // .
+                let attr = get_identifier(ps)?;
+                Ok(ast::InlineExpression::AttributeExpression {
+                    reference: Box::new(reference),
+                    name: attr,
+                })
+            } else {
+                Ok(reference)
+            }
+        }
+        _ => Ok(reference),
+    }
+}
+
+fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
     match ps.source.get(ps.ptr) {
         Some(b'"') => {
             ps.ptr += 1; // "
@@ -589,37 +720,27 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
                         b'"' => ps.ptr += 2,
                         b'u' => {
                             ps.ptr += 2;
-                            let start = ps.ptr;
-                            for _ in 0..4 {
-                                match ps.source[ps.ptr] {
-                                    b'0'...b'9' => ps.ptr += 1,
-                                    b'a'...b'f' => ps.ptr += 1,
-                                    b'A'...b'F' => ps.ptr += 1,
-                                    _ => break,
-                                }
-                            }
-                            if start == ps.ptr {
-                                return error!(
-                                    ps,
-                                    ErrorKind::InvalidUnicodeEscapeSequence(
-                                        ps.get_slice(start, ps.ptr + 1).to_owned()
-                                    )
-                                );
-                            }
+                            ps.skip_unicode_escape_sequence(4)?;
                         }
-                        _ => panic!(),
+                        b'U' => {
+                            ps.ptr += 2;
+                            ps.skip_unicode_escape_sequence(6)?;
+                        }
+                        _ => return error!(ErrorKind::Generic, ps.ptr),
                     },
                     b'"' => {
                         break;
+                    }
+                    b'\n' => {
+                        return error!(ErrorKind::Generic, ps.ptr);
                     }
                     _ => ps.ptr += 1,
                 }
             }
 
             ps.expect_byte(b'"')?;
-            Ok(ast::InlineExpression::StringLiteral {
-                value: ps.get_slice(start, ps.ptr - 1),
-            })
+            let slice = ps.get_slice(start, ps.ptr - 1);
+            Ok(ast::InlineExpression::StringLiteral { raw: slice })
         }
         Some(b'0'...b'9') => {
             let num = get_number_literal(ps)?;
@@ -630,14 +751,6 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             if ps.is_identifier_start() {
                 let id = get_identifier(ps)?;
                 match ps.source[ps.ptr] {
-                    b'.' => {
-                        ps.ptr += 1; // .
-                        let attr = get_identifier(ps)?;
-                        Ok(ast::InlineExpression::AttributeExpression {
-                            reference: Box::new(ast::InlineExpression::TermReference { id }),
-                            name: attr,
-                        })
-                    }
                     b'[' => {
                         let key = get_variant_key(ps)?;
                         Ok(ast::InlineExpression::VariantExpression {
@@ -660,48 +773,16 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
         }
         Some(b'a'...b'z') | Some(b'A'...b'Z') => {
             let id = get_identifier(ps)?;
-
-            match ps.source[ps.ptr] {
-                b'(' => get_call_expression(ps, Some(id)),
-                b'.' => {
-                    ps.ptr += 1; // .
-                    let attr = get_identifier(ps)?;
-                    Ok(ast::InlineExpression::AttributeExpression {
-                        reference: Box::new(ast::InlineExpression::MessageReference { id }),
-                        name: attr,
-                    })
-                }
-                _ => Ok(ast::InlineExpression::MessageReference { id }),
-            }
+            Ok(ast::InlineExpression::MessageReference { id })
         }
         Some(b'{') => {
-            ps.ptr += 1; // {
-            ps.skip_blank();
-            let exp = get_expression(ps)?;
-            ps.skip_blank_inline();
-            ps.expect_byte(b'}')?;
+            let exp = get_placeable(ps)?;
             Ok(ast::InlineExpression::Placeable {
                 expression: Box::new(exp),
             })
         }
-        _ => error!(ps, ErrorKind::MissingLiteral),
+        _ => error!(ErrorKind::MissingLiteral, ps.ptr),
     }
-}
-
-fn get_call_expression<'p>(
-    ps: &mut ParserStream<'p>,
-    id: Option<ast::Identifier<'p>>,
-) -> Result<ast::InlineExpression<'p>> {
-    let id = match id {
-        Some(id) => id,
-        None => get_identifier(ps)?,
-    };
-    let (positional, named) = get_call_args(ps)?;
-    Ok(ast::InlineExpression::CallExpression {
-        callee: ast::Function { name: id.name },
-        positional,
-        named,
-    })
 }
 
 fn get_call_args<'p>(
@@ -719,39 +800,40 @@ fn get_call_args<'p>(
         if b == b')' {
             break;
         }
-        let id = if ps.is_identifier_start() {
-            Some(get_identifier(ps)?)
-        } else {
-            None
-        };
 
-        if let Some(id) = id {
-            ps.skip_blank();
-            if ps.is_current_byte(b':') {
-                if argument_names.contains(&id.name.to_owned()) {
-                    return error!(ps, ErrorKind::DuplicatedNamedArgument(id.name.to_owned()));
-                }
-                ps.ptr += 1;
+        let expr = get_call_expression(ps)?;
+
+        match expr {
+            ast::InlineExpression::MessageReference { ref id } => {
                 ps.skip_blank();
-                let val = get_inline_expression(ps)?;
-                argument_names.push(id.name.to_owned());
-                named.push(ast::NamedArgument {
-                    name: id,
-                    value: val,
-                });
-            } else if ps.is_current_byte(b'(') {
-                positional.push(get_call_expression(ps, Some(id))?);
-            } else {
-                if !argument_names.is_empty() {
-                    return error!(ps, ErrorKind::PositionalArgumentFollowsNamed);
+                if ps.is_current_byte(b':') {
+                    if argument_names.contains(&id.name.to_owned()) {
+                        return error!(
+                            ErrorKind::DuplicatedNamedArgument(id.name.to_owned()),
+                            ps.ptr
+                        );
+                    }
+                    ps.ptr += 1;
+                    ps.skip_blank();
+                    let val = get_call_expression(ps)?;
+                    argument_names.push(id.name.to_owned());
+                    named.push(ast::NamedArgument {
+                        name: ast::Identifier { name: id.name },
+                        value: val,
+                    });
+                } else {
+                    if !argument_names.is_empty() {
+                        return error!(ErrorKind::PositionalArgumentFollowsNamed, ps.ptr);
+                    }
+                    positional.push(expr);
                 }
-                positional.push(ast::InlineExpression::MessageReference { id });
             }
-        } else {
-            if !argument_names.is_empty() {
-                return error!(ps, ErrorKind::PositionalArgumentFollowsNamed);
+            _ => {
+                if !argument_names.is_empty() {
+                    return error!(ErrorKind::PositionalArgumentFollowsNamed, ps.ptr);
+                }
+                positional.push(expr);
             }
-            positional.push(get_inline_expression(ps)?);
         }
 
         ps.skip_blank();

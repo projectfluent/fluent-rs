@@ -1,17 +1,21 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key01"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "VariableReference",
                             "id": {
+                                "type": "Identifier",
                                 "name": "var"
                             }
                         }
@@ -24,15 +28,18 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key02"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "VariableReference",
                             "id": {
+                                "type": "Identifier",
                                 "name": "var"
                             }
                         }
@@ -45,15 +52,18 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key03"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "VariableReference",
                             "id": {
+                                "type": "Identifier",
                                 "name": "var"
                             }
                         }
@@ -66,15 +76,18 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key04"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "VariableReference",
                             "id": {
+                                "type": "Identifier",
                                 "name": "var"
                             }
                         }

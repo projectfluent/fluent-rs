@@ -1,11 +1,14 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "face-with-tears-of-joy"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -19,9 +22,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "tetragram-for-centre"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -35,9 +40,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "surrogates-in-text"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -51,15 +58,18 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "surrogates-in-string"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
-                            "value": "\\uD83D\\uDE02"
+                            "raw": "\\uD83D\\uDE02",
+                            "value": "��"
                         }
                     }
                 ]
@@ -70,22 +80,26 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "surrogates-in-adjacent-strings"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
-                            "value": "\\uD83D"
+                            "raw": "\\uD83D",
+                            "value": "�"
                         }
                     },
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
-                            "value": "\\uDE02"
+                            "raw": "\\uDE02",
+                            "value": "�"
                         }
                     }
                 ]
@@ -96,9 +110,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "emoji-in-text"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -112,14 +128,17 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "emoji-in-string"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
+                            "raw": "A face 😂 with tears of joy.",
                             "value": "A face 😂 with tears of joy."
                         }
                     }
@@ -135,7 +154,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "err-😂 = Value\n"
+            "content": "err-😂 = Value\n\n"
         },
         {
             "type": "Comment",
@@ -144,7 +163,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "err-invalid-expression = { 😂 }\n"
+            "content": "err-invalid-expression = { 😂 }\n\n"
         },
         {
             "type": "Comment",

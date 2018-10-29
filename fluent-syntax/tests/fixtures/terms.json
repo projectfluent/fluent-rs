@@ -1,11 +1,14 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "term01"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -15,10 +18,13 @@
             },
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -33,14 +39,17 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "term02"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
+                            "raw": "",
                             "value": ""
                         }
                     }
@@ -56,7 +65,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "-term03 =\n    .attr = Attribute\n"
+            "content": "-term03 =\n    .attr = Attribute\n\n"
         },
         {
             "type": "Comment",
@@ -65,7 +74,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "-term04 =                \n    .attr1 = Attribute 1\n"
+            "content": "-term04 =                \n    .attr1 = Attribute 1\n\n"
         },
         {
             "type": "Comment",
@@ -74,7 +83,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "-term05 =\n"
+            "content": "-term05 =\n\n"
         },
         {
             "type": "Comment",
@@ -83,7 +92,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "-term06 =                \n"
+            "content": "-term06 =                \n\n"
         },
         {
             "type": "Comment",

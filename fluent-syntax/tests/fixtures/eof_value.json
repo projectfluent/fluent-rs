@@ -1,4 +1,5 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "ResourceComment",
@@ -7,9 +8,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "no-eol"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",

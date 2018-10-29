@@ -1,11 +1,14 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key01"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -19,9 +22,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key02"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -31,10 +36,13 @@
             },
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -49,9 +57,11 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key02"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "TextElement",
@@ -61,10 +71,13 @@
             },
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr1"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -74,10 +87,13 @@
                     }
                 },
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr2"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -92,15 +108,19 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key03"
             },
             "value": null,
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -115,15 +135,19 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key04"
             },
             "value": null,
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr1"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -133,10 +157,13 @@
                     }
                 },
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr2"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -151,15 +178,19 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key05"
             },
             "value": null,
             "attributes": [
                 {
+                    "type": "Attribute",
                     "id": {
+                        "type": "Identifier",
                         "name": "attr1"
                     },
                     "value": {
+                        "type": "Pattern",
                         "elements": [
                             {
                                 "type": "TextElement",
@@ -177,14 +208,17 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "key06"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
                             "type": "StringLiteral",
+                            "raw": "",
                             "value": ""
                         }
                     }
@@ -200,7 +234,7 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "key07 =\n"
+            "content": "key07 =\n\n"
         },
         {
             "type": "Comment",
@@ -209,7 +243,25 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "key08\n"
+            "content": "key08\n\n"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "KEY09"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Value 09"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
         }
     ]
 }

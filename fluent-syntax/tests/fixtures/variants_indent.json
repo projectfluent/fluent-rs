@@ -1,17 +1,23 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variants-1tbs"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "key"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",
@@ -29,15 +35,20 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variants-allman"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "key"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",
@@ -55,15 +66,20 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variants-gnu"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "key"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",
@@ -81,15 +97,20 @@
         {
             "type": "Term",
             "id": {
+                "type": "Identifier",
                 "name": "variants-no-indent"
             },
             "value": {
+                "type": "VariantList",
                 "variants": [
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "key"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",
@@ -100,10 +121,13 @@
                         "default": true
                     },
                     {
+                        "type": "Variant",
                         "key": {
+                            "type": "Identifier",
                             "name": "other"
                         },
                         "value": {
+                            "type": "Pattern",
                             "elements": [
                                 {
                                     "type": "TextElement",

@@ -17,31 +17,14 @@
 //!
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
-extern crate fluent;
-extern crate fluent_locale;
-
-use fluent::bundle::FluentBundle;
-use fluent::types::FluentValue;
+use fluent::resource_manager::ResourceManager;
+use fluent_bundle::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
 use std::env;
 use std::fs;
-use std::fs::File;
 use std::io;
-use std::io::prelude::*;
 use std::str::FromStr;
-
-/// We need a generic file read helper function to
-/// read the localization resource file.
-///
-/// The resource files are stored in
-/// `./examples/resources/{locale}` directory.
-fn read_file(path: &str) -> Result<String, io::Error> {
-    let mut f = try!(File::open(path));
-    let mut s = String::new();
-    try!(f.read_to_string(&mut s));
-    Ok(s)
-}
 
 /// This helper function allows us to read the list
 /// of available locales by reading the list of
@@ -89,11 +72,13 @@ fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
         .collect::<Vec<String>>());
 }
 
-static L10N_RESOURCES: &[&str] = &["simple.ftl"];
+static L10N_RESOURCES: &[&str] = &["simple.ftl", "errors.ftl"];
 
 fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
+
+    let mgr = ResourceManager::new();
 
     // 2. If the argument length is more than 1,
     //    take the second argument as a comma-separated
@@ -109,20 +94,19 @@ fn main() {
 
     // 4. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut bundle = FluentBundle::new(&locales);
+    let paths = L10N_RESOURCES
+        .iter()
+        .map(|path| {
+            format!(
+                "./examples/resources/{locale}/{path}",
+                locale = locales[0],
+                path = path
+            )
+        })
+        .collect();
 
-    // 5. Load the localization resource
-    for path in L10N_RESOURCES {
-        let full_path = format!(
-            "./examples/resources/{locale}/{path}",
-            locale = locales[0],
-            path = path
-        );
-        let res = read_file(&full_path).unwrap();
-        // 5.1 Insert the loaded resource into the
-        //     Fluent FluentBundle.
-        bundle.add_messages(&res).unwrap();
-    }
+    // 5. Get a bundle for given paths and locales.
+    let bundle = mgr.get_bundle(&locales, &paths);
 
     // 6. Check if the input is provided.
     match args.get(1) {

@@ -1,29 +1,40 @@
 {
+    "type": "Resource",
     "body": [
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "new-messages"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
+                            "type": "SelectExpression",
                             "selector": {
                                 "type": "CallExpression",
                                 "callee": {
-                                    "name": "BUILTIN"
+                                    "type": "FunctionReference",
+                                    "id": {
+                                        "type": "Identifier",
+                                        "name": "BUILTIN"
+                                    }
                                 },
                                 "positional": [],
                                 "named": []
                             },
                             "variants": [
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "NumberLiteral",
                                         "value": "0"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "TextElement",
@@ -34,15 +45,19 @@
                                     "default": false
                                 },
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "other"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "Placeable",
                                                 "expression": {
                                                     "type": "StringLiteral",
+                                                    "raw": "",
                                                     "value": ""
                                                 }
                                             },
@@ -65,31 +80,39 @@
         {
             "type": "Message",
             "id": {
-                "name": "valid-selector"
+                "type": "Identifier",
+                "name": "valid-selector-term-attribute"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
+                            "type": "SelectExpression",
                             "selector": {
                                 "type": "AttributeExpression",
                                 "ref": {
                                     "type": "TermReference",
                                     "id": {
+                                        "type": "Identifier",
                                         "name": "term"
                                     }
                                 },
                                 "name": {
+                                    "type": "Identifier",
                                     "name": "case"
                                 }
                             },
                             "variants": [
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "key"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "TextElement",
@@ -114,33 +137,58 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "invalid-selector =\n    { -term[case] ->\n       *[key] value\n    }\n"
+            "content": "invalid-selector-term-value =\n    { -term ->\n       *[key] value\n    }\n\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "invalid-selector-term-variant =\n    { -term[case] ->\n       *[key] value\n    }\n\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "invalid-selector-term-call =\n    { -term(case: \"nominative\") ->\n       *[key] value\n    }\n\n"
         },
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "empty-variant"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
+                            "type": "SelectExpression",
                             "selector": {
                                 "type": "NumberLiteral",
                                 "value": "1"
                             },
                             "variants": [
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "one"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "Placeable",
                                                 "expression": {
                                                     "type": "StringLiteral",
+                                                    "raw": "",
                                                     "value": ""
                                                 }
                                             }
@@ -159,37 +207,47 @@
         {
             "type": "Message",
             "id": {
+                "type": "Identifier",
                 "name": "nested-select"
             },
             "value": {
+                "type": "Pattern",
                 "elements": [
                     {
                         "type": "Placeable",
                         "expression": {
+                            "type": "SelectExpression",
                             "selector": {
                                 "type": "NumberLiteral",
                                 "value": "1"
                             },
                             "variants": [
                                 {
+                                    "type": "Variant",
                                     "key": {
+                                        "type": "Identifier",
                                         "name": "one"
                                     },
                                     "value": {
+                                        "type": "Pattern",
                                         "elements": [
                                             {
                                                 "type": "Placeable",
                                                 "expression": {
+                                                    "type": "SelectExpression",
                                                     "selector": {
                                                         "type": "NumberLiteral",
                                                         "value": "2"
                                                     },
                                                     "variants": [
                                                         {
+                                                            "type": "Variant",
                                                             "key": {
+                                                                "type": "Identifier",
                                                                 "name": "two"
                                                             },
                                                             "value": {
+                                                                "type": "Pattern",
                                                                 "elements": [
                                                                     {
                                                                         "type": "TextElement",
@@ -216,12 +274,21 @@
         },
         {
             "type": "Comment",
-            "content": "ERROR VariantLists cannot appear in SelectExpressions"
+            "content": "ERROR VariantLists cannot be Variant values."
         },
         {
             "type": "Junk",
             "annotations": [],
-            "content": "nested-variant-list =\n    { 1 ->\n       *[one] {\n          *[two] Value\n       }\n    }\n"
+            "content": "nested-variant-list =\n    { 1 ->\n       *[one] {\n          *[two] Value\n       }\n    }\n\n"
+        },
+        {
+            "type": "Comment",
+            "content": "ERROR Missing line end after variant list"
+        },
+        {
+            "type": "Junk",
+            "annotations": [],
+            "content": "missing-line-end =\n    { 1 ->\n        *[one] One}\n"
         }
     ]
 }
