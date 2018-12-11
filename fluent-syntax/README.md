@@ -1,6 +1,6 @@
 # Fluent Syntax
 
-`fluent-syntax` is a parser/serializer API for the Fluent Syntax, part of the [Project Fluent][], a localization
+`fluent-syntax` is a parser/serializer API for the Fluent Syntax, part of the [Project Fluent](https://projectfluent.org/), a localization
 framework designed to unleash the entire expressive power of natural language translations.
 
 [![crates.io](http://meritbadge.herokuapp.com/fluent-syntax)](https://crates.io/crates/fluent-syntax)
