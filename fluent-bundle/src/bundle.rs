@@ -36,10 +36,10 @@ pub struct Message {
 /// bundle.add_messages("intro = Welcome, { $name }.");
 ///
 /// let mut args = HashMap::new();
-/// args.insert("name", FluentValue::from("John"));
+/// args.insert("name", FluentValue::from("Rustacean"));
 ///
 /// let value = bundle.format("intro", Some(&args));
-/// assert_eq!(value, Some(("Welcome, John.".to_string(), vec![])));
+/// assert_eq!(value, Some(("Welcome, Rustacean.".to_string(), vec![])));
 ///
 /// ```
 ///
@@ -146,7 +146,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     ///
     /// // Register a fn that maps from string to string length
-    /// bundle.add_function("STRLEN", |positional, named| match positional {
+    /// bundle.add_function("STRLEN", |positional, _named| match positional {
     ///     [Some(FluentValue::String(str))] => Some(FluentValue::Number(str.len().to_string())),
     ///     _ => None,
     /// }).unwrap();
@@ -256,10 +256,10 @@ impl<'bundle> FluentBundle<'bundle> {
     /// bundle.add_messages("intro = Welcome, { $name }.");
     ///
     /// let mut args = HashMap::new();
-    /// args.insert("name", FluentValue::from("John"));
+    /// args.insert("name", FluentValue::from("Rustacean"));
     ///
     /// let value = bundle.format("intro", Some(&args));
-    /// assert_eq!(value, Some(("Welcome, John.".to_string(), vec![])));
+    /// assert_eq!(value, Some(("Welcome, Rustacean.".to_string(), vec![])));
     ///
     /// ```
     ///
