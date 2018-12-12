@@ -281,8 +281,10 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// # Errors
     ///
-    /// On error, the string returned will be the path. This allows
-    /// for slightly graceful fallback during errors.
+    /// If the message id or path is not found in the bundle, `format`
+    /// returns None. On Fluent processing errors after initial lookup
+    /// `format` returns `Some((path, errors)`. `path` is the path you
+    /// originally provided, and `errors` explains what went wrong.
     pub fn format(
         &self,
         path: &str,
