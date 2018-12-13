@@ -281,10 +281,28 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// # Errors
     ///
-    /// If the message id or path is not found in the bundle, `format`
-    /// returns None. On Fluent processing errors after initial lookup
-    /// `format` returns `Some((path, errors)`. `path` is the path you
-    /// originally provided, and `errors` explains what went wrong.
+    /// If no message is found at `path`, then `format` returns `None`.
+    /// 
+    /// In all other cases, `format` returns a string even if it
+    /// encountered errors. `format` uses two fallback techniques to
+    /// create the fallback string. If there are bad references in the
+    /// message, then they will be substituted with `'___'`. If there
+    /// are more extensive errors, then `format` will fall back to using
+    /// `path` itself as the formatted string. Sometimes, but not always,
+    /// these partial failures will emit extra error information in the
+    /// second term of the return tuple.
+    /// 
+    /// ```
+    /// use fluent::bundle::FluentBundle;
+    ///
+    /// // Create a message with bad cyclic reference
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_messages("foo = a { foo } b");
+    ///
+    /// // The result falls back to "___"
+    /// let value = bundle.format("foo", None);
+    /// assert_eq!(value, Some(("___".to_string(), vec![])));
+    /// ```
     pub fn format(
         &self,
         path: &str,
