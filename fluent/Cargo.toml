@@ -20,3 +20,4 @@ categories = ["localization", "internationalization"]
 [dependencies]
 fluent-bundle = { path = "../fluent-bundle" }
 fluent-locale = "^0.4.1"
+elsa = "^0.1.2"

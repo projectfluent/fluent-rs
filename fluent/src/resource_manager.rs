@@ -1,11 +1,9 @@
+use elsa::FrozenMap;
 use fluent_bundle::bundle::FluentBundle;
 use fluent_bundle::resource::FluentResource;
-use std::cell::UnsafeCell;
-use std::collections::hash_map::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
-use std::ops::Deref;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;
@@ -14,42 +12,9 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     Ok(s)
 }
 
-unsafe trait Allocated: Deref {}
-
-unsafe impl Allocated for String {}
-unsafe impl<T> Allocated for Box<T> {}
-
-struct FrozenMap<T> {
-    map: UnsafeCell<HashMap<String, T>>,
-}
-
-impl<T: Allocated> FrozenMap<T> {
-    // under no circumstances implement delete() on this
-    // under no circumstances return an &T
-    pub fn new() -> Self {
-        Self {
-            map: UnsafeCell::new(Default::default()),
-        }
-    }
-
-    pub fn insert(&self, k: String, v: T) -> &T::Target {
-        unsafe {
-            let map = self.map.get();
-            &*(*map).entry(k).or_insert(v)
-        }
-    }
-
-    pub fn get(&self, k: &str) -> Option<&T::Target> {
-        unsafe {
-            let map = self.map.get();
-            (*map).get(k).map(|x| &**x)
-        }
-    }
-}
-
 pub struct ResourceManager<'mgr> {
-    strings: FrozenMap<String>,
-    resources: FrozenMap<Box<FluentResource<'mgr>>>,
+    strings: FrozenMap<String, String>,
+    resources: FrozenMap<String, Box<FluentResource<'mgr>>>,
 }
 
 impl<'mgr> ResourceManager<'mgr> {
