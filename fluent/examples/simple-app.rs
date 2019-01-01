@@ -17,14 +17,28 @@
 //!
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
-use fluent::resource_manager::ResourceManager;
+use fluent::bundle::FluentBundle;
 use fluent::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
 use std::env;
 use std::fs;
+use std::fs::File;
 use std::io;
+use std::io::prelude::*;
 use std::str::FromStr;
+
+/// We need a generic file read helper function to
+/// read the localization resource file.
+///
+/// The resource files are stored in
+/// `./examples/resources/{locale}` directory.
+fn read_file(path: &str) -> Result<String, io::Error> {
+    let mut f = File::open(path)?;
+    let mut s = String::new();
+    f.read_to_string(&mut s)?;
+    Ok(s)
+}
 
 /// This helper function allows us to read the list
 /// of available locales by reading the list of
@@ -72,13 +86,12 @@ fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
         .collect::<Vec<String>>());
 }
 
-static L10N_RESOURCES: &[&str] = &["simple.ftl", "errors.ftl"];
+static L10N_RESOURCES: &[&str] = &["simple.ftl"];
 
 fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
-
-    let mgr = ResourceManager::new();
+    let mut sources: Vec<String> = vec![];
 
     // 2. If the argument length is more than 1,
     //    take the second argument as a comma-separated
@@ -94,19 +107,22 @@ fn main() {
 
     // 4. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let paths = L10N_RESOURCES
-        .iter()
-        .map(|path| {
-            format!(
-                "./examples/resources/{locale}/{path}",
-                locale = locales[0],
-                path = path
-            )
-        })
-        .collect();
+    let mut bundle = FluentBundle::new(&locales, None);
 
-    // 5. Get a bundle for given paths and locales.
-    let bundle = mgr.get_bundle(&locales, &paths);
+    // 5. Load the localization resource
+    for path in L10N_RESOURCES {
+        let full_path = format!(
+            "./examples/resources/{locale}/{path}",
+            locale = locales[0],
+            path = path
+        );
+        let source = read_file(&full_path).unwrap();
+        sources.push(source);
+    }
+
+    for source in &sources {
+        bundle.add_messages(&source).unwrap();
+    }
 
     // 6. Check if the input is provided.
     match args.get(1) {

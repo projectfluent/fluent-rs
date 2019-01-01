@@ -18,7 +18,7 @@
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
 use fluent::resource_manager::ResourceManager;
-use fluent::types::FluentValue;
+use fluent_bundle::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
 use std::env;
