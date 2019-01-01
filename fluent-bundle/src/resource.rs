@@ -2,6 +2,7 @@ use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use fluent_syntax::parser::ParserError;
 
+#[derive(Debug)]
 pub struct FluentResource<'resource> {
     pub ast: ast::Resource<'resource>,
 }

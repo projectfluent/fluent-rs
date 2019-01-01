@@ -1,7 +1,14 @@
 use fluent_bundle::bundle::FluentBundle;
+use fluent_bundle::resource::FluentResource;
 use fluent_bundle::types::FluentValue;
 
 fn main() {
+    let res1 = FluentResource::from_string("hello-world = Hey there! { HELLO() }").unwrap();
+    let res2 = FluentResource::from_string("meaning-of-life = { MEANING_OF_LIFE(42) }").unwrap();
+    let res3 =
+        FluentResource::from_string("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }")
+            .unwrap();
+
     let mut bundle = FluentBundle::new(&["en-US"]);
 
     // Test for a simple function that returns a string
@@ -38,15 +45,9 @@ fn main() {
         })
         .unwrap();
 
-    bundle
-        .add_messages("hello-world = Hey there! { HELLO() }")
-        .unwrap();
-    bundle
-        .add_messages("meaning-of-life = { MEANING_OF_LIFE(42) }")
-        .unwrap();
-    bundle
-        .add_messages("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }")
-        .unwrap();
+    bundle.add_resource(&res1).unwrap();
+    bundle.add_resource(&res2).unwrap();
+    bundle.add_resource(&res3).unwrap();
 
     let value = bundle.format("hello-world", None);
     assert_eq!(

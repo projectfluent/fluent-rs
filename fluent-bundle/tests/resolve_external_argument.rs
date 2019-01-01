@@ -10,7 +10,9 @@ use fluent_bundle::types::FluentValue;
 fn external_argument_string() {
     let mut bundle = FluentBundle::new(&["x-testing"]);
 
-    assert_add_messages_no_errors(bundle.add_messages("hello-world = Hello { $name }"));
+    assert_add_messages_no_errors(
+        bundle.add_resource(FluentResource::from_string("hello-world = Hello { $name }")),
+    );
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));

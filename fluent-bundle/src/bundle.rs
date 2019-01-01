@@ -97,23 +97,6 @@ impl<'bundle> FluentBundle<'bundle> {
         }
     }
 
-    //pub fn add_messages(&mut self, source: &'bundle str) -> Result<(), Vec<FluentError>> {
-    //match FluentResource::from_string(source) {
-    //Ok(res) => self.add_resource(&res),
-    //Err((res, err)) => {
-    //let mut errors: Vec<FluentError> =
-    //err.into_iter().map(FluentError::ParserError).collect();
-
-    //self.add_resource(&res).map_err(|err| {
-    //for e in err {
-    //errors.push(e);
-    //}
-    //errors
-    //})
-    //}
-    //}
-    //}
-
     pub fn add_resource(
         &mut self,
         res: &'bundle FluentResource<'bundle>,
