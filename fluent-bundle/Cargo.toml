@@ -1,15 +1,15 @@
 [package]
-name = "fluent"
+name = "fluent-bundle"
 description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
 version = "0.4.3"
+edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
 ]
-edition = "2018"
 homepage = "http://www.projectfluent.org"
 license = "Apache-2.0/MIT"
 repository = "https://github.com/projectfluent/fluent-rs"
@@ -18,6 +18,8 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-bundle = { path = "../fluent-bundle" }
 fluent-locale = "^0.4.1"
-elsa = "^0.1.2"
+fluent-syntax = { path = "../fluent-syntax" }
+failure = "0.1"
+failure_derive = "0.1"
+intl_pluralrules = "1.0"

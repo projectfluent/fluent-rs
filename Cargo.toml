@@ -1,6 +1,7 @@
 [workspace]
 members = [
     "fluent-syntax",
+    "fluent-bundle",
     "fluent-cli",
     "fluent",
 ]
