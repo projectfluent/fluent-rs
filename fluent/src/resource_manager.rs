@@ -29,11 +29,11 @@ impl<'mgr> ResourceManager<'mgr> {
         let strings = &self.strings;
 
         if strings.get(path).is_some() {
-            return self.resources.get(path).unwrap();
+            self.resources.get(path).unwrap()
         } else {
             let string = read_file(path).unwrap();
             let val = self.strings.insert(path.to_string(), string);
-            let res = match FluentResource::from_string(val) {
+            let res = match FluentResource::from_str(val) {
                 Ok(res) => res,
                 Err((res, _err)) => res,
             };
@@ -41,16 +41,12 @@ impl<'mgr> ResourceManager<'mgr> {
         }
     }
 
-    pub fn get_bundle(
-        &'mgr self,
-        locales: &Vec<String>,
-        paths: &Vec<String>,
-    ) -> FluentBundle<'mgr> {
+    pub fn get_bundle(&'mgr self, locales: &[String], paths: &[String]) -> FluentBundle<'mgr> {
         let mut bundle = FluentBundle::new(locales);
         for path in paths {
             let res = self.get_resource(path);
             bundle.add_resource(res).unwrap();
         }
-        return bundle;
+        bundle
     }
 }

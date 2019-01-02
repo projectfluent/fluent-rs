@@ -18,6 +18,7 @@
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
 use fluent_bundle::bundle::FluentBundle;
+use fluent_bundle::resource::FluentResource;
 use fluent_bundle::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
@@ -91,9 +92,12 @@ static L10N_RESOURCES: &[&str] = &["simple.ftl"];
 fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
-    let mut sources: Vec<String> = vec![];
 
-    // 2. If the argument length is more than 1,
+    // 2. Allocate strings and their resources.
+    let mut sources: Vec<String> = vec![];
+    let mut resources: Vec<FluentResource> = vec![];
+
+    // 3. If the argument length is more than 1,
     //    take the second argument as a comma-separated
     //    list of requested locales.
     //
@@ -102,40 +106,44 @@ fn main() {
         .get(2)
         .map_or(vec!["en-US"], |arg| arg.split(",").collect());
 
-    // 3. Negotiate it against the avialable ones
+    // 4. Negotiate it against the avialable ones
     let locales = get_app_locales(&requested).expect("Failed to retrieve available locales");
 
-    // 4. Create a new Fluent FluentBundle using the
+    // 5. Create a new Fluent FluentBundle using the
     //    resolved locales.
     let mut bundle = FluentBundle::new(&locales);
 
-    // 5. Load the localization resource
+    // 6. Load the localization resource
     for path in L10N_RESOURCES {
         let full_path = format!(
             "./examples/resources/{locale}/{path}",
             locale = locales[0],
             path = path
         );
-        let source = read_file(&full_path).unwrap();
-        sources.push(source);
+        sources.push(read_file(&full_path).unwrap());
     }
 
     for source in &sources {
-        bundle.add_messages(&source).unwrap();
+        let resource = FluentResource::from_str(source).unwrap();
+        resources.push(resource);
     }
 
-    // 6. Check if the input is provided.
+    for res in &resources {
+        bundle.add_resource(res).unwrap();
+    }
+
+    // 7. Check if the input is provided.
     match args.get(1) {
         Some(input) => {
-            // 6.1. Cast it to a number.
+            // 7.1. Cast it to a number.
             match isize::from_str(&input) {
                 Ok(i) => {
-                    // 6.2. Construct a map of arguments
+                    // 7.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = HashMap::new();
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
-                    // 6.3. Format the message.
+                    // 7.3. Format the message.
                     println!("{}", bundle.format("response-msg", Some(&args)).unwrap().0);
                 }
                 Err(err) => {
