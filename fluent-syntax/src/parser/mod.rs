@@ -357,15 +357,15 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             let mut indent = 0;
             if text_element_role == TextElementPosition::LineStart {
                 indent = ps.skip_blank_inline();
+                if ps.ptr >= ps.length {
+                    break;
+                }
+                let b = ps.source[ps.ptr];
                 if indent == 0 {
-                    if ps.source[ps.ptr] != b'\n' && ps.source[ps.ptr] != b'\r' {
+                    if b != b'\n' && b != b'\r' {
                         break;
                     }
-                } else if ps.source[ps.ptr] == b'.'
-                    || ps.source[ps.ptr] == b'}'
-                    || ps.source[ps.ptr] == b'*'
-                    || ps.source[ps.ptr] == b'['
-                {
+                } else if b == b'.' || b == b'}' || b == b'*' || b == b'[' {
                     ps.ptr = slice_start;
                     break;
                 }

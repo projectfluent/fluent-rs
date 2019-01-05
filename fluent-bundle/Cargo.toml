@@ -20,6 +20,7 @@ categories = ["localization", "internationalization"]
 [dependencies]
 fluent-locale = "^0.4.1"
 fluent-syntax = { path = "../fluent-syntax" }
-failure = "0.1"
-failure_derive = "0.1"
-intl_pluralrules = "1.0"
+failure = "^0.1"
+failure_derive = "^0.1"
+intl_pluralrules = "^1.0"
+rental = "^0.5.2"

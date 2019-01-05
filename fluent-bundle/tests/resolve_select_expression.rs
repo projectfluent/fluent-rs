@@ -2,14 +2,14 @@ mod helpers;
 
 use std::collections::HashMap;
 
-use self::helpers::{assert_add_messages_no_errors, assert_format_no_errors};
-use fluent_bundle::bundle::FluentBundle;
+use self::helpers::{
+    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+};
 use fluent_bundle::types::FluentValue;
 
 #[test]
 fn select_expression_string_selector() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo =
     { \"genitive\" ->
@@ -22,8 +22,9 @@ bar =
        *[nominative] Bar
         [genitive] Bar's
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo's");
 
@@ -32,8 +33,7 @@ bar =
 
 #[test]
 fn select_expression_number_selector() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo =
     { 3 ->
@@ -53,8 +53,9 @@ baz =
         [3] Baz 3
         [3.14] Baz Pi
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
@@ -65,8 +66,7 @@ baz =
 
 #[test]
 fn select_expression_plurals() {
-    let mut bundle = FluentBundle::new(&["en"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo =
     { 3 ->
@@ -88,8 +88,9 @@ baz =
         [3] Bar 3
        *[other] Bar Other
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
 
     assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
@@ -100,8 +101,7 @@ baz =
 
 #[test]
 fn select_expression_external_argument_selector() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo-hit =
     { $str ->
@@ -156,8 +156,9 @@ baz-unknown =
        *[1] Baz 1
         [2] Baz 2
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     let mut args = HashMap::new();
     args.insert("str", FluentValue::from("qux"));
@@ -185,8 +186,7 @@ baz-unknown =
 
 #[test]
 fn select_expression_message_selector() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 -bar = Bar
     .attr = attr_val
@@ -196,16 +196,16 @@ use-bar =
         [attr_val] Bar
        *[other] Other
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("use-bar", None), "Bar");
 }
 
 #[test]
 fn select_expression_attribute_selector() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 -foo = Foo
     .attr = FooAttr
@@ -215,8 +215,9 @@ use-foo =
         [FooAttr] Foo
        *[other] Other
     }
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 }

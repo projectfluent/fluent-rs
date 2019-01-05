@@ -1,12 +1,11 @@
 use fluent_bundle::bundle::FluentBundle;
+use fluent_bundle::resource::FluentResource;
 use fluent_bundle::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    bundle
-        .add_messages(
-            "
+    let res = FluentResource::try_new(
+        "
 hello-world = Hello {
        *[one] World
         [two] Moon
@@ -16,9 +15,12 @@ hello-world2 = Hello { $name ->
        *[world] World
         [moon] Moon
     }
-",
-        )
-        .unwrap();
+    "
+        .to_owned(),
+    )
+    .unwrap();
+    let mut bundle = FluentBundle::new(&["x-testing"]);
+    bundle.add_resource(&res).unwrap();
 
     match bundle.format("hello-world", None) {
         Some((value, _)) => println!("{}", value),

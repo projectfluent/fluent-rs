@@ -97,13 +97,10 @@ impl<'bundle> FluentBundle<'bundle> {
         }
     }
 
-    pub fn add_resource(
-        &mut self,
-        res: &'bundle FluentResource<'bundle>,
-    ) -> Result<(), Vec<FluentError>> {
+    pub fn add_resource(&mut self, res: &'bundle FluentResource) -> Result<(), Vec<FluentError>> {
         let mut errors = vec![];
 
-        for entry in &res.ast.body {
+        for entry in &res.ast().body {
             let id = match entry {
                 ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
                 | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,

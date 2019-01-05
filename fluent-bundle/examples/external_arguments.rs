@@ -1,12 +1,11 @@
 use fluent_bundle::bundle::FluentBundle;
+use fluent_bundle::resource::FluentResource;
 use fluent_bundle::types::FluentValue;
 use std::collections::HashMap;
 
 fn main() {
-    let mut bundle = FluentBundle::new(&["en"]);
-    bundle
-        .add_messages(
-            "
+    let res = FluentResource::try_new(
+        "
 hello-world = Hello { $name }
 ref = The previous message says { hello-world }
 unread-emails =
@@ -14,9 +13,12 @@ unread-emails =
         [one] You have { $emailCount } unread email
        *[other] You have { $emailCount } unread emails
     }
-",
-        )
-        .unwrap();
+"
+        .to_owned(),
+    )
+    .unwrap();
+    let mut bundle = FluentBundle::new(&["en"]);
+    bundle.add_resource(&res).unwrap();
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));

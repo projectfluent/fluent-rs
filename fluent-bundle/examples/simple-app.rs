@@ -93,8 +93,7 @@ fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
 
-    // 2. Allocate strings and their resources.
-    let mut sources: Vec<String> = vec![];
+    // 2. Allocate resources.
     let mut resources: Vec<FluentResource> = vec![];
 
     // 3. If the argument length is more than 1,
@@ -120,11 +119,8 @@ fn main() {
             locale = locales[0],
             path = path
         );
-        sources.push(read_file(&full_path).unwrap());
-    }
-
-    for source in &sources {
-        let resource = FluentResource::from_str(source).unwrap();
+        let source = read_file(&full_path).unwrap();
+        let resource = FluentResource::try_new(source).unwrap();
         resources.push(resource);
     }
 

@@ -5,9 +5,13 @@ use fluent_bundle::types::FluentValue;
 fn main() {
     // We define the resources here so that they outlive
     // the bundle.
-    let res1;
-    let res2;
-    let res3;
+    let res1 = FluentResource::try_new("hello-world = Hey there! { HELLO() }".to_owned()).unwrap();
+    let res2 =
+        FluentResource::try_new("meaning-of-life = { MEANING_OF_LIFE(42) }".to_owned()).unwrap();
+    let res3 = FluentResource::try_new(
+        "all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }".to_owned(),
+    )
+    .unwrap();
 
     let mut bundle = FluentBundle::new(&["en-US"]);
 
@@ -45,12 +49,8 @@ fn main() {
         })
         .unwrap();
 
-    res1 = FluentResource::from_str("hello-world = Hey there! { HELLO() }").unwrap();
     bundle.add_resource(&res1).unwrap();
-    res2 = FluentResource::from_str("meaning-of-life = { MEANING_OF_LIFE(42) }").unwrap();
     bundle.add_resource(&res2).unwrap();
-    res3 = FluentResource::from_str("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }")
-        .unwrap();
     bundle.add_resource(&res3).unwrap();
 
     let value = bundle.format("hello-world", None);

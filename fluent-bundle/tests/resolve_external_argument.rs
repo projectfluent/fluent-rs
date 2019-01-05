@@ -2,17 +2,15 @@ mod helpers;
 
 use std::collections::HashMap;
 
-use self::helpers::{assert_add_messages_no_errors, assert_format_no_errors};
-use fluent_bundle::bundle::FluentBundle;
+use self::helpers::{
+    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+};
 use fluent_bundle::types::FluentValue;
 
 #[test]
 fn external_argument_string() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-
-    assert_add_messages_no_errors(
-        bundle.add_resource(FluentResource::from_string("hello-world = Hello { $name }")),
-    );
+    let res = assert_get_resource_from_str_no_errors("hello-world = Hello { $name }");
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
@@ -22,14 +20,13 @@ fn external_argument_string() {
 
 #[test]
 fn external_argument_number() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-
-    assert_add_messages_no_errors(
-        bundle.add_messages("unread-emails = You have { $emailsCount } unread emails."),
+    let res = assert_get_resource_from_str_no_errors(
+        "
+unread-emails = You have { $emailsCount } unread emails.
+unread-emails-dec = You have { $emailsCountDec } unread emails.
+    ",
     );
-    assert_add_messages_no_errors(
-        bundle.add_messages("unread-emails-dec = You have { $emailsCountDec } unread emails."),
-    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(5));
@@ -48,12 +45,13 @@ fn external_argument_number() {
 
 #[test]
 fn reference_message_with_external_argument() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-
-    assert_add_messages_no_errors(bundle.add_messages("greetings = Hello, { $userName }"));
-    assert_add_messages_no_errors(
-        bundle.add_messages("click-on = Click on the `{ greetings }` label."),
+    let res = assert_get_resource_from_str_no_errors(
+        "
+greetings = Hello, { $userName }
+click-on = Click on the `{ greetings }` label.
+    ",
     );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     let mut args = HashMap::new();
     args.insert("userName", FluentValue::from("Mary"));

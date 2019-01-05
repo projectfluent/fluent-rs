@@ -2,14 +2,14 @@ mod helpers;
 
 use std::collections::HashMap;
 
-use self::helpers::{assert_add_messages_no_errors, assert_format_no_errors};
-use fluent_bundle::bundle::FluentBundle;
+use self::helpers::{
+    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+};
 use fluent_bundle::types::FluentValue;
 
 #[test]
 fn external_argument_number() {
-    let mut bundle = FluentBundle::new(&["en"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 unread-emails =
     { $emailsCount ->
@@ -22,9 +22,9 @@ unread-emails-dec =
         [one] You have { $emailsCountDec } unread email.
        *[other] You have { $emailsCountDec } unread emails.
     }
-
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
@@ -43,8 +43,7 @@ unread-emails-dec =
 
 #[test]
 fn exact_match() {
-    let mut bundle = FluentBundle::new(&["en"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 unread-emails =
     { $emailsCount ->
@@ -59,9 +58,9 @@ unread-emails-dec =
         [one] You have { $emailsCountDec } unread email.
        *[other] You have { $emailsCountDec } unread emails.
     }
-
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));

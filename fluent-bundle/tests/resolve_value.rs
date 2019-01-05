@@ -1,29 +1,30 @@
 mod helpers;
 
-use self::helpers::{assert_add_messages_no_errors, assert_format_no_errors};
-use fluent_bundle::bundle::FluentBundle;
+use self::helpers::{
+    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+};
 
 #[test]
 fn format_message() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo = Foo
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo");
 }
 
 #[test]
 fn format_attribute() {
-    let mut bundle = FluentBundle::new(&["x-testing"]);
-    assert_add_messages_no_errors(bundle.add_messages(
+    let res = assert_get_resource_from_str_no_errors(
         "
 foo = Foo
     .attr = Foo Attr
-",
-    ));
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
 
     assert_format_no_errors(bundle.format("foo.attr", None), "Foo Attr");
 }

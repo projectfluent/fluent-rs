@@ -12,28 +12,25 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     Ok(s)
 }
 
-pub struct ResourceManager<'mgr> {
-    strings: FrozenMap<String, String>,
-    resources: FrozenMap<String, Box<FluentResource<'mgr>>>,
+pub struct ResourceManager {
+    resources: FrozenMap<String, Box<FluentResource>>,
 }
 
-impl<'mgr> ResourceManager<'mgr> {
+impl ResourceManager {
     pub fn new() -> Self {
         ResourceManager {
-            strings: FrozenMap::new(),
             resources: FrozenMap::new(),
         }
     }
 
-    pub fn get_resource(&'mgr self, path: &str) -> &'mgr FluentResource<'mgr> {
-        let strings = &self.strings;
+    pub fn get_resource(&self, path: &str) -> &FluentResource {
+        let resources = &self.resources;
 
-        if strings.get(path).is_some() {
+        if resources.get(path).is_some() {
             self.resources.get(path).unwrap()
         } else {
             let string = read_file(path).unwrap();
-            let val = self.strings.insert(path.to_string(), string);
-            let res = match FluentResource::from_str(val) {
+            let res = match FluentResource::try_new(string) {
                 Ok(res) => res,
                 Err((res, _err)) => res,
             };
@@ -41,7 +38,7 @@ impl<'mgr> ResourceManager<'mgr> {
         }
     }
 
-    pub fn get_bundle(&'mgr self, locales: &[String], paths: &[String]) -> FluentBundle<'mgr> {
+    pub fn get_bundle(&self, locales: &[String], paths: &Vec<String>) -> FluentBundle {
         let mut bundle = FluentBundle::new(locales);
         for path in paths {
             let res = self.get_resource(path);

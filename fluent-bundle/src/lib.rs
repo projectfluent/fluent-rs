@@ -13,15 +13,17 @@
 //! ```
 //! use fluent_bundle::bundle::FluentBundle;
 //! use fluent_bundle::types::FluentValue;
+//! use fluent_bundle::resource::FluentResource;
 //! use std::collections::HashMap;
 //!
-//! let mut bundle = FluentBundle::new(&["en-US"]);
-//! bundle.add_messages(
-//!     "
+//! let res = FluentResource::try_new("
 //! hello-world = Hello, world!
 //! intro = Welcome, { $name }.
-//! "
-//!     );
+//! ".to_owned()).expect("Failed to parse FTL.");
+//!
+//! let mut bundle = FluentBundle::new(&["en-US"]);
+//!
+//! bundle.add_resource(&res).expect("Failed to add FluentResource to Bundle.");
 //!
 //! let value = bundle.format("hello-world", None);
 //! assert_eq!(value, Some(("Hello, world!".to_string(), vec![])));
@@ -33,6 +35,8 @@
 //! assert_eq!(value, Some(("Welcome, John.".to_string(), vec![])));
 //! ```
 
+#[macro_use]
+extern crate rental;
 extern crate failure;
 #[macro_use]
 extern crate failure_derive;
