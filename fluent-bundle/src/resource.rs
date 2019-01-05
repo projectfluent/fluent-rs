@@ -28,17 +28,13 @@ impl FluentResource {
         });
 
         if let Some(errors) = errors {
-            return Err((Self(res), errors));
+            return Err((FluentResource(res), errors));
         } else {
-            return Ok(Self(res));
+            return Ok(FluentResource(res));
         }
     }
 
-    pub fn ast<'a>(&'a self) -> &ast::Resource<'a> {
+    pub fn ast(&self) -> &ast::Resource {
         self.0.all().ast
-    }
-
-    pub fn string<'a>(&'a self) -> &'a str {
-        self.0.all().string
     }
 }
