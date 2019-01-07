@@ -332,7 +332,7 @@ enum TextElementType {
 fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>> {
     let mut elements = vec![];
     let mut last_non_blank = None;
-    let mut common_indent = 10;
+    let mut common_indent = None;
 
     ps.skip_blank_inline();
 
@@ -346,7 +346,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     while ps.ptr < ps.length {
         if ps.source[ps.ptr] == b'{' {
             if text_element_role == TextElementPosition::LineStart {
-                common_indent = 0;
+                common_indent = Some(0);
             }
             let exp = get_placeable(ps)?;
             last_non_blank = Some(elements.len());
@@ -374,9 +374,14 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             if start != end {
                 if text_element_role == TextElementPosition::LineStart
                     && text_element_type == TextElementType::NonBlank
-                    && indent < common_indent
                 {
-                    common_indent = indent;
+                    if let Some(common) = common_indent {
+                        if indent < common {
+                            common_indent = Some(indent);
+                        }
+                    } else {
+                        common_indent = Some(indent);
+                    }
                 }
                 if text_element_role != TextElementPosition::LineStart
                     || text_element_type == TextElementType::NonBlank
@@ -419,7 +424,11 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                 PatternElementPointers::Placeable(exp) => Some(ast::PatternElement::Placeable(exp)),
                 PatternElementPointers::TextElement(start, end, indent, role) => {
                     let start = if role == TextElementPosition::LineStart {
-                        start + cmp::min(indent, common_indent)
+                        if let Some(common_indent) = common_indent {
+                            start + cmp::min(indent, common_indent)
+                        } else {
+                            start + indent
+                        }
                     } else {
                         start
                     };
@@ -448,24 +457,26 @@ fn get_text_slice<'p>(
     let mut text_element_type = TextElementType::Blank;
 
     while ps.ptr < ps.length {
-        if ps.source[ps.ptr] == b'\n' {
-            ps.ptr += 1;
-            return Ok((
-                start_pos,
-                ps.ptr,
-                text_element_type,
-                TextElementTermination::LineFeed,
-            ));
-        } else if ps.source[ps.ptr] == b'\r' && ps.is_byte_at(b'\n', ps.ptr + 1) {
-            ps.ptr += 1;
-            return Ok((
-                start_pos,
-                ps.ptr - 1,
-                text_element_type,
-                TextElementTermination::CarriageReturn,
-            ));
-        }
         match ps.source[ps.ptr] {
+            b' ' => ps.ptr += 1,
+            b'\n' => {
+                ps.ptr += 1;
+                return Ok((
+                    start_pos,
+                    ps.ptr,
+                    text_element_type,
+                    TextElementTermination::LineFeed,
+                ));
+            }
+            b'\r' if ps.is_byte_at(b'\n', ps.ptr + 1) => {
+                ps.ptr += 1;
+                return Ok((
+                    start_pos,
+                    ps.ptr - 1,
+                    text_element_type,
+                    TextElementTermination::CarriageReturn,
+                ));
+            }
             b'{' => {
                 return Ok((
                     start_pos,
@@ -489,7 +500,6 @@ fn get_text_slice<'p>(
                     _ => {}
                 }
             }
-            b' ' => ps.ptr += 1,
             _ => {
                 text_element_type = TextElementType::NonBlank;
                 ps.ptr += 1
@@ -530,12 +540,10 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
         ps.skip_eol();
     }
 
-    let comment = if level == Some(3) {
-        ast::Comment::ResourceComment { content }
-    } else if level == Some(2) {
-        ast::Comment::GroupComment { content }
-    } else {
-        ast::Comment::Comment { content }
+    let comment = match level {
+        Some(3) => ast::Comment::ResourceComment { content },
+        Some(2) => ast::Comment::GroupComment { content },
+        _ => ast::Comment::Comment { content },
     };
     Ok(comment)
 }
@@ -557,7 +565,7 @@ fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
         ps.ptr += 1;
     }
 
-    Ok(str::from_utf8(&ps.source[start_pos..ps.ptr]).unwrap())
+    Ok(ps.get_slice(start_pos, ps.ptr))
 }
 
 fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
