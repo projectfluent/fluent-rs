@@ -28,12 +28,14 @@ pub struct Message {
 /// # Examples
 ///
 /// ```
-/// use fluent::bundle::FluentBundle;
-/// use fluent::types::FluentValue;
+/// use fluent_bundle::bundle::FluentBundle;
+/// use fluent_bundle::resource::FluentResource;
+/// use fluent_bundle::types::FluentValue;
 /// use std::collections::HashMap;
 ///
+/// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
 /// let mut bundle = FluentBundle::new(&["en-US"]);
-/// bundle.add_messages("intro = Welcome, { $name }.");
+/// bundle.add_resource(&resource);
 ///
 /// let mut args = HashMap::new();
 /// args.insert("name", FluentValue::from("Rustacean"));
@@ -89,7 +91,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
+    /// use fluent_bundle::bundle::FluentBundle;
     ///
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     /// ```
@@ -120,11 +122,14 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
     ///
+    /// let resource = FluentResource::try_new("hello = Hi!".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_messages("hello = Hi!");
+    /// bundle.add_resource(&resource);
     /// assert_eq!(true, bundle.has_message("hello"));
+    /// 
     /// ```
     pub fn has_message(&self, id: &str) -> bool {
         self.entries.get_message(id).is_some()
@@ -140,10 +145,13 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
-    /// use fluent::types::FluentValue;
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::types::FluentValue;
     ///
+    /// let resource = FluentResource::try_new("length = { STRLEN(\"12345\") }".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(&resource);
     ///
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
@@ -151,7 +159,6 @@ impl<'bundle> FluentBundle<'bundle> {
     ///     _ => None,
     /// }).unwrap();
     ///
-    /// bundle.add_messages("length = { STRLEN(\"12345\") }").unwrap();
     /// let (value, _) = bundle.format("length", None).unwrap();
     /// assert_eq!(&value, "5");
     /// ```
@@ -182,13 +189,15 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
     ///
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_messages("
+    /// let resource = FluentResource::try_new("
     /// hello = Hi!
     /// goodbye = Bye!
-    /// ");
+    /// ".to_string()).unwrap();
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(&resource);
     /// assert_eq!(true, bundle.has_message("hello"));
     /// ```
     ///
@@ -248,12 +257,14 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
-    /// use fluent::types::FluentValue;
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::types::FluentValue;
     /// use std::collections::HashMap;
     ///
+    /// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_messages("intro = Welcome, { $name }.");
+    /// bundle.add_resource(&resource);
     ///
     /// let mut args = HashMap::new();
     /// args.insert("name", FluentValue::from("Rustacean"));
@@ -266,14 +277,16 @@ impl<'bundle> FluentBundle<'bundle> {
     /// An example with attributes and no args:
     ///
     /// ```
-    /// use fluent::bundle::FluentBundle;
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
     ///
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_messages("
+    /// let resource = FluentResource::try_new("
     /// hello =
     ///     .title = Hi!
     ///     .tooltip = This says 'Hi!'
-    /// ");
+    /// ".to_string()).unwrap();
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(&resource);
     ///
     /// let value = bundle.format("hello.title", None);
     /// assert_eq!(value, Some(("Hi!".to_string(), vec![])));
@@ -291,18 +304,6 @@ impl<'bundle> FluentBundle<'bundle> {
     /// `path` itself as the formatted string. Sometimes, but not always,
     /// these partial failures will emit extra error information in the
     /// second term of the return tuple.
-    /// 
-    /// ```
-    /// use fluent::bundle::FluentBundle;
-    ///
-    /// // Create a message with bad cyclic reference
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_messages("foo = a { foo } b");
-    ///
-    /// // The result falls back to "___"
-    /// let value = bundle.format("foo", None);
-    /// assert_eq!(value, Some(("___".to_string(), vec![])));
-    /// ```
     pub fn format(
         &self,
         path: &str,
@@ -354,7 +355,6 @@ impl<'bundle> FluentBundle<'bundle> {
         None
     }
 
-    /// Use [`format`](./struct.FluentBundle.html#method.format) instead.
     pub fn format_message(
         &self,
         message_id: &str,
