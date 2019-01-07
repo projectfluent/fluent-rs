@@ -409,16 +409,9 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     }
 
     if let Some(last_non_blank) = last_non_blank {
-        let mut collected_elems = 0;
-        let elements = elements.into_iter().filter(|_| {
-            if collected_elems > last_non_blank {
-                return false;
-            }
-            collected_elems += 1;
-            true
-        });
-
         let elements = elements
+            .into_iter()
+            .take(last_non_blank + 1)
             .enumerate()
             .filter_map(|(i, elem)| match elem {
                 PatternElementPointers::Placeable(exp) => Some(ast::PatternElement::Placeable(exp)),
