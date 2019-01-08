@@ -63,7 +63,7 @@ pub struct Identifier<'ast> {
 #[derive(Debug, PartialEq)]
 pub struct Variant<'ast> {
     pub key: VariantKey<'ast>,
-    pub value: Value<'ast>,
+    pub value: Pattern<'ast>,
     pub default: bool,
 }
 

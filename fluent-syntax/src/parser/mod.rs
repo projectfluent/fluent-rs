@@ -275,7 +275,7 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
 
         let key = get_variant_key(ps)?;
 
-        let value = get_pattern(ps)?.map(ast::Value::Pattern);
+        let value = get_pattern(ps)?;
 
         if let Some(value) = value {
             variants.push(ast::Variant {

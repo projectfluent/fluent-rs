@@ -122,8 +122,8 @@ pub struct IdentifierDef<'ast> {
 pub struct VariantDef<'ast> {
     #[serde(with = "VariantKeyDef")]
     pub key: ast::VariantKey<'ast>,
-    #[serde(with = "ValueDef")]
-    pub value: ast::Value<'ast>,
+    #[serde(with = "PatternDef")]
+    pub value: ast::Pattern<'ast>,
     pub default: bool,
 }
 
