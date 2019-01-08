@@ -250,9 +250,9 @@ impl<'bundle> FluentBundle<'bundle> {
         }
     }
 
-    /// Formats the message value identified by `path` using `args`.
-    /// `path` is either a message id ("hello"), or message id plus
-    /// attribute ("hello.tooltip").
+    /// Formats the message value identified by `path` using `args` to
+    /// provide variables. `path` is either a message id ("hello"), or
+    /// message id plus attribute ("hello.tooltip").
     ///
     /// # Examples
     ///
@@ -304,6 +304,20 @@ impl<'bundle> FluentBundle<'bundle> {
     /// `path` itself as the formatted string. Sometimes, but not always,
     /// these partial failures will emit extra error information in the
     /// second term of the return tuple.
+    /// 
+    /// ```
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
+    /// 
+    /// // Create a message with bad cyclic reference
+    /// let mut res = FluentResource::try_new("foo = a { foo } b".to_string()).unwrap();
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(&res);
+    /// 
+    /// // The result falls back to "___"
+    /// let value = bundle.format("foo", None);
+    /// assert_eq!(value, Some(("___".to_string(), vec![])));
+    /// ```
     pub fn format(
         &self,
         path: &str,
@@ -355,6 +369,43 @@ impl<'bundle> FluentBundle<'bundle> {
         None
     }
 
+    /// Formats both the message value and attributes identified by `message_id`
+    /// using `args` to provide variables.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::types::FluentValue;
+    /// use std::collections::HashMap;
+    ///
+    /// let mut res = FluentResource::try_new("
+    /// login-input = Predefined value
+    ///     .placeholder = example@email.com
+    ///     .aria-label = Login input value
+    ///     .title = Type your login email".to_string()).unwrap();
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(&res);
+    /// 
+    /// let (message, _) = bundle.format_message("login-input", None).unwrap();
+    /// assert_eq!(message.value, Some("Predefined value".to_string()));
+    /// assert_eq!(message.attributes.get("title"), Some(&"Type your login email".to_string()));
+    /// ```
+    ///
+    /// # Errors
+    ///
+    /// If no message is found at `message_id`, then `format_message`
+    /// returns `None`.
+    /// 
+    /// In all other cases, `format_message` returns a `Message` even if it
+    /// encountered errors. `format_message` uses two fallback techniques to
+    /// create the fallback string. If there are bad references in the
+    /// message, then they will be substituted with `'___'`. If there
+    /// are more extensive errors, then `format_message` will fall back to using
+    /// `path` itself as the formatted string. Sometimes, but not always,
+    /// these partial failures will emit extra error information in the
+    /// second term of the return tuple.
     pub fn format_message(
         &self,
         message_id: &str,
