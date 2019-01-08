@@ -110,6 +110,9 @@ pub enum InlineExpression<'ast> {
     TermReference {
         id: Identifier<'ast>,
     },
+    // This node is standalone in EBNF, but it
+    // is more convinient for us to store it a
+    // variant of the InlineExpression in Rust.
     FunctionReference {
         id: Identifier<'ast>,
     },
