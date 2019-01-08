@@ -48,7 +48,6 @@ pub struct Message {
 /// purpose of language negotiation with i18n formatters. For instance, if date and time formatting
 /// are not available in the first locale, `FluentBundle` will use its `locales` fallback chain
 /// to negotiate a sensible fallback for date and time formatting.
-#[allow(dead_code)]
 pub struct FluentBundle<'bundle> {
     pub locales: Vec<String>,
     pub entries: HashMap<String, Entry<'bundle>>,

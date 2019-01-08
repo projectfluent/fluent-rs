@@ -89,13 +89,10 @@ fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast:
     ps.skip_blank_block();
 
     let ptr = ps.ptr;
-    let attributes = match get_attributes(ps) {
-        Ok(attrs) => attrs,
-        Err(_err) => {
-            ps.ptr = ptr;
-            vec![]
-        }
-    };
+    let attributes = get_attributes(ps).unwrap_or_else(|_| {
+        ps.ptr = ptr;
+        vec![]
+    });
 
     if pattern.is_none() && attributes.is_empty() {
         return error!(
@@ -126,13 +123,10 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
     ps.skip_blank_block();
 
     let ptr = ps.ptr;
-    let attributes = match get_attributes(ps) {
-        Ok(attrs) => attrs,
-        Err(_err) => {
-            ps.ptr = ptr;
-            vec![]
-        }
-    };
+    let attributes = get_attributes(ps).unwrap_or_else(|_| {
+        ps.ptr = ptr;
+        vec![]
+    });
 
     if let Some(value) = value {
         Ok(ast::Term {
@@ -344,7 +338,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     };
 
     while ps.ptr < ps.length {
-        if ps.source[ps.ptr] == b'{' {
+        if ps.is_current_byte(b'{') {
             if text_element_role == TextElementPosition::LineStart {
                 common_indent = Some(0);
             }
@@ -483,10 +477,9 @@ fn get_text_slice<'p>(
             }
             b'\\' => {
                 text_element_type = TextElementType::NonBlank;
-                ps.ptr += 1;
-                match ps.source[ps.ptr] {
-                    b'\\' => ps.ptr += 1,
-                    b'u' => {
+                match ps.source.get(ps.ptr) {
+                    Some(b'\\') => ps.ptr += 1,
+                    Some(b'u') => {
                         ps.ptr += 1;
                         ps.skip_unicode_escape_sequence(4)?;
                     }
@@ -715,15 +708,15 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let start = ps.ptr;
             while ps.ptr < ps.length {
                 match ps.source[ps.ptr] {
-                    b'\\' => match ps.source[ps.ptr + 1] {
-                        b'\\' => ps.ptr += 2,
-                        b'{' => ps.ptr += 2,
-                        b'"' => ps.ptr += 2,
-                        b'u' => {
+                    b'\\' => match ps.source.get(ps.ptr + 1) {
+                        Some(b'\\') => ps.ptr += 2,
+                        Some(b'{') => ps.ptr += 2,
+                        Some(b'"') => ps.ptr += 2,
+                        Some(b'u') => {
                             ps.ptr += 2;
                             ps.skip_unicode_escape_sequence(4)?;
                         }
-                        b'U' => {
+                        Some(b'U') => {
                             ps.ptr += 2;
                             ps.skip_unicode_escape_sequence(6)?;
                         }
@@ -751,8 +744,8 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             ps.ptr += 1; // -
             if ps.is_identifier_start() {
                 let id = get_identifier(ps)?;
-                match ps.source[ps.ptr] {
-                    b'[' => {
+                match ps.source.get(ps.ptr) {
+                    Some(b'[') => {
                         let key = get_variant_key(ps)?;
                         Ok(ast::InlineExpression::VariantExpression {
                             reference: Box::new(ast::InlineExpression::TermReference { id }),
@@ -797,8 +790,7 @@ fn get_call_args<'p>(
     ps.skip_blank();
 
     while ps.ptr < ps.length {
-        let b = ps.source[ps.ptr];
-        if b == b')' {
+        if ps.is_current_byte(b')') {
             break;
         }
 
@@ -849,12 +841,20 @@ fn get_call_args<'p>(
 fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     let start = ps.ptr;
     ps.take_if(b'-');
-    while ps.source[ps.ptr] >= b'0' && ps.source[ps.ptr] <= b'9' {
-        ps.ptr += 1;
+    while let Some(b) = ps.source.get(ps.ptr) {
+        if b >= &b'0' && b <= &b'9' {
+            ps.ptr += 1;
+        } else {
+            break;
+        }
     }
     ps.take_if(b'.');
-    while ps.source[ps.ptr] >= b'0' && ps.source[ps.ptr] <= b'9' {
-        ps.ptr += 1;
+    while let Some(b) = ps.source.get(ps.ptr) {
+        if b >= &b'0' && b <= &b'9' {
+            ps.ptr += 1;
+        } else {
+            break;
+        }
     }
 
     Ok(ps.get_slice(start, ps.ptr))
