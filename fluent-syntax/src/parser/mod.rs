@@ -841,20 +841,9 @@ fn get_call_args<'p>(
 fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     let start = ps.ptr;
     ps.take_if(b'-');
-    while let Some(b) = ps.source.get(ps.ptr) {
-        if b >= &b'0' && b <= &b'9' {
-            ps.ptr += 1;
-        } else {
-            break;
-        }
-    }
-    ps.take_if(b'.');
-    while let Some(b) = ps.source.get(ps.ptr) {
-        if b >= &b'0' && b <= &b'9' {
-            ps.ptr += 1;
-        } else {
-            break;
-        }
+    ps.skip_digits()?;
+    if ps.take_if(b'.') {
+        ps.skip_digits()?;
     }
 
     Ok(ps.get_slice(start, ps.ptr))

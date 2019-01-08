@@ -24,10 +24,6 @@ impl<'p> ParserStream<'p> {
         self.source[self.ptr] == b
     }
 
-    pub fn _get_current_byte(&self) -> String {
-        str::from_utf8(&[self.source[self.ptr]]).unwrap().to_owned()
-    }
-
     pub fn is_byte_at(&self, b: u8, pos: usize) -> bool {
         if pos >= self.length {
             return false;
@@ -125,14 +121,6 @@ impl<'p> ParserStream<'p> {
         false
     }
 
-    pub fn _is_entry_start(&self) -> bool {
-        if self.ptr >= self.length {
-            return false;
-        }
-        let b = self.source[self.ptr];
-        (b >= b'a' && b <= b'z') || (b >= b'A' && b <= b'Z') || b == b'-'
-    }
-
     pub fn skip_to_value_start(&mut self) -> Option<bool> {
         self.skip_blank_inline();
 
@@ -145,7 +133,6 @@ impl<'p> ParserStream<'p> {
         let inline = self.skip_blank_inline();
 
         if self.is_current_byte(b'{') {
-            //self.ptr -= inline;
             return Some(true);
         }
 
@@ -216,5 +203,26 @@ impl<'p> ParserStream<'p> {
 
     pub fn get_slice(&self, start: usize, end: usize) -> &'p str {
         unsafe { str::from_utf8_unchecked(&self.source[start..end]) }
+    }
+
+    pub fn skip_digits(&mut self) -> Result<()> {
+        let start = self.ptr;
+        while let Some(b) = self.source.get(self.ptr) {
+            if b >= &b'0' && b <= &b'9' {
+                self.ptr += 1;
+            } else {
+                break;
+            }
+        }
+        if start == self.ptr {
+            error!(
+                ErrorKind::ExpectedCharRange {
+                    range: "0-9".to_string()
+                },
+                self.ptr
+            )
+        } else {
+            Ok(())
+        }
     }
 }
