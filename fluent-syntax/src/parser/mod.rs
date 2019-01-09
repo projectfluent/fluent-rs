@@ -356,7 +356,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                 }
                 let b = ps.source[ps.ptr];
                 if indent == 0 {
-                    if b != b'\n' && b != b'\r' {
+                    if b != b'\n' {
                         break;
                     }
                 } else if b == b'.' || b == b'}' || b == b'*' || b == b'[' {
