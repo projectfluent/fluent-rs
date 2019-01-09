@@ -185,7 +185,6 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Attribute<'p
                 break;
             }
         }
-        ps.skip_eol();
     }
     Ok(attributes)
 }
@@ -204,33 +203,26 @@ fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
 }
 
 fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
-    let start_pos = ps.ptr;
+    let mut ptr = ps.ptr;
 
-    while ps.ptr < ps.length {
-        let b = ps.source[ps.ptr];
-        if start_pos == ps.ptr {
-            if ps.is_identifier_start() {
-                ps.ptr += 1;
-            } else {
-                return error!(
-                    ErrorKind::ExpectedCharRange {
-                        range: "a-zA-Z".to_string()
-                    },
-                    ps.ptr
-                );
-            }
-        } else if (b >= b'a' && b <= b'z')
-            || (b >= b'A' && b <= b'Z')
-            || (b >= b'0' && b <= b'9')
-            || b == b'_'
-            || b == b'-'
-        {
-            ps.ptr += 1;
+    while let Some(b) = ps.source.get(ptr) {
+        if ps.is_byte_alphabetic(*b) {
+            ptr += 1;
+        } else if ptr == ps.ptr {
+            return error!(
+                ErrorKind::ExpectedCharRange {
+                    range: "a-zA-Z".to_string()
+                },
+                ptr
+            );
+        } else if ps.is_byte_digit(*b) || [b'_', b'-'].contains(&b) {
+            ptr += 1;
         } else {
             break;
         }
     }
-    let name = ps.get_slice(start_pos, ps.ptr);
+    let name = ps.get_slice(ps.ptr, ptr);
+    ps.ptr = ptr;
 
     Ok(ast::Identifier { name })
 }
@@ -359,7 +351,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     if b != b'\n' {
                         break;
                     }
-                } else if b == b'.' || b == b'}' || b == b'*' || b == b'[' {
+                } else if !ps.is_byte_pattern_continuation(b) {
                     ps.ptr = slice_start;
                     break;
                 }
@@ -736,7 +728,7 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let slice = ps.get_slice(start, ps.ptr - 1);
             Ok(ast::InlineExpression::StringLiteral { raw: slice })
         }
-        Some(b'0'...b'9') => {
+        Some(b) if ps.is_byte_digit(*b) => {
             let num = get_number_literal(ps)?;
             Ok(ast::InlineExpression::NumberLiteral { value: num })
         }
@@ -765,7 +757,7 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::VariableReference { id })
         }
-        Some(b'a'...b'z') | Some(b'A'...b'Z') => {
+        Some(b) if ps.is_byte_alphabetic(*b) => {
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::MessageReference { id })
         }

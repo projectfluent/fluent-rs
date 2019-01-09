@@ -59,7 +59,7 @@ impl<'p> ParserStream<'p> {
     pub fn skip_blank(&mut self) {
         loop {
             match self.source.get(self.ptr) {
-                Some(b' ') | Some(b'\n') => self.ptr += 1,
+                Some(b) if [b' ', b'\n'].contains(b) => self.ptr += 1,
                 _ => break,
             }
         }
@@ -67,30 +67,21 @@ impl<'p> ParserStream<'p> {
 
     pub fn skip_blank_inline(&mut self) -> usize {
         let start = self.ptr;
-        loop {
-            match self.source.get(self.ptr) {
-                Some(b' ') => self.ptr += 1,
-                _ => break,
-            }
+        while let Some(b' ') = self.source.get(self.ptr) {
+            self.ptr += 1;
         }
         self.ptr - start
     }
 
     pub fn skip_to_next_entry_start(&mut self) {
-        while self.ptr < self.length {
-            if (self.ptr == 0 || self.is_byte_at(b'\n', self.ptr - 1))
-                && (self.is_identifier_start()
-                    || self.is_current_byte(b'-')
-                    || self.is_current_byte(b'#'))
-            {
+        while let Some(b) = self.source.get(self.ptr) {
+            let new_line = self.ptr == 0 || self.source.get(self.ptr - 1) == Some(&b'\n');
+
+            if new_line && (self.is_byte_alphabetic(*b) || [b'-', b'#'].contains(b)) {
                 break;
             }
 
             self.ptr += 1;
-
-            while self.ptr < self.length && !self.is_byte_at(b'\n', self.ptr - 1) {
-                self.ptr += 1;
-            }
         }
     }
 
@@ -138,7 +129,7 @@ impl<'p> ParserStream<'p> {
         let start = self.ptr;
         for _ in 0..length {
             match self.source.get(self.ptr) {
-                Some(b'0'...b'9') | Some(b'a'...b'f') | Some(b'A'...b'F') => self.ptr += 1,
+                Some(b) if b.is_ascii_hexdigit() => self.ptr += 1,
                 _ => break,
             }
         }
@@ -155,28 +146,43 @@ impl<'p> ParserStream<'p> {
 
     pub fn is_char_pattern_continuation(&self) -> bool {
         match self.source.get(self.ptr) {
-            Some(b) if b == &b'}' || b == &b'.' || b == &b'[' || b == &b'*' => false,
-            _ => true,
+            Some(b) => self.is_byte_pattern_continuation(*b),
+            _ => false,
         }
     }
 
     pub fn is_identifier_start(&self) -> bool {
         match self.source.get(self.ptr) {
-            Some(b) if (b >= &b'a' && b <= &b'z') || (b >= &b'A' && b <= &b'Z') => true,
+            Some(b) if self.is_byte_alphabetic(*b) => true,
             _ => false,
         }
     }
 
+    pub fn is_byte_alphabetic(&self, b: u8) -> bool {
+        (b >= b'a' && b <= b'z') || (b >= b'A' && b <= b'Z')
+    }
+
+    pub fn is_byte_digit(&self, b: u8) -> bool {
+        b >= b'0' && b <= b'9'
+    }
+
+    pub fn is_byte_pattern_continuation(&self, b: u8) -> bool {
+        ![b'}', b'.', b'[', b'*'].contains(&b)
+    }
+
     pub fn is_number_start(&self) -> bool {
         match self.source.get(self.ptr) {
-            Some(b) if (b == &b'-') || (b >= &b'0' && b <= &b'9') => true,
+            Some(b) if (b == &b'-') || self.is_byte_digit(*b) => true,
             _ => false,
         }
     }
 
     pub fn is_eol(&self) -> bool {
-        self.is_current_byte(b'\n')
-            || self.is_current_byte(b'\r') && self.is_byte_at(b'\n', self.ptr + 1)
+        match self.source.get(self.ptr) {
+            Some(b'\n') => true,
+            Some(b'\r') if self.is_byte_at(b'\n', self.ptr + 1) => true,
+            _ => false,
+        }
     }
 
     pub fn get_slice(&self, start: usize, end: usize) -> &'p str {
@@ -187,7 +193,7 @@ impl<'p> ParserStream<'p> {
         let start = self.ptr;
         loop {
             match self.source.get(self.ptr) {
-                Some(b) if b >= &b'0' && b <= &b'9' => self.ptr += 1,
+                Some(b) if self.is_byte_digit(*b) => self.ptr += 1,
                 _ => break,
             }
         }
