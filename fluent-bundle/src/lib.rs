@@ -37,12 +37,8 @@
 
 #[macro_use]
 extern crate rental;
-extern crate failure;
 #[macro_use]
 extern crate failure_derive;
-extern crate fluent_locale;
-extern crate fluent_syntax;
-extern crate intl_pluralrules;
 
 pub mod bundle;
 pub mod entry;

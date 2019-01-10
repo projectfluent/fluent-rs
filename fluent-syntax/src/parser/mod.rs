@@ -89,13 +89,10 @@ fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast:
     ps.skip_blank_block();
 
     let ptr = ps.ptr;
-    let attributes = match get_attributes(ps) {
-        Ok(attrs) => attrs,
-        Err(_err) => {
-            ps.ptr = ptr;
-            vec![]
-        }
-    };
+    let attributes = get_attributes(ps).unwrap_or_else(|_| {
+        ps.ptr = ptr;
+        vec![]
+    });
 
     if pattern.is_none() && attributes.is_empty() {
         return error!(
@@ -126,13 +123,10 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
     ps.skip_blank_block();
 
     let ptr = ps.ptr;
-    let attributes = match get_attributes(ps) {
-        Ok(attrs) => attrs,
-        Err(_err) => {
-            ps.ptr = ptr;
-            vec![]
-        }
-    };
+    let attributes = get_attributes(ps).unwrap_or_else(|_| {
+        ps.ptr = ptr;
+        vec![]
+    });
 
     if let Some(value) = value {
         Ok(ast::Term {
@@ -191,7 +185,6 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Attribute<'p
                 break;
             }
         }
-        ps.skip_eol();
     }
     Ok(attributes)
 }
@@ -210,33 +203,26 @@ fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
 }
 
 fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
-    let start_pos = ps.ptr;
+    let mut ptr = ps.ptr;
 
-    while ps.ptr < ps.length {
-        let b = ps.source[ps.ptr];
-        if start_pos == ps.ptr {
-            if ps.is_identifier_start() {
-                ps.ptr += 1;
-            } else {
-                return error!(
-                    ErrorKind::ExpectedCharRange {
-                        range: "a-zA-Z".to_string()
-                    },
-                    ps.ptr
-                );
-            }
-        } else if (b >= b'a' && b <= b'z')
-            || (b >= b'A' && b <= b'Z')
-            || (b >= b'0' && b <= b'9')
-            || b == b'_'
-            || b == b'-'
-        {
-            ps.ptr += 1;
+    while let Some(b) = ps.source.get(ptr) {
+        if ps.is_byte_alphabetic(*b) {
+            ptr += 1;
+        } else if ptr == ps.ptr {
+            return error!(
+                ErrorKind::ExpectedCharRange {
+                    range: "a-zA-Z".to_string()
+                },
+                ptr
+            );
+        } else if ps.is_byte_digit(*b) || [b'_', b'-'].contains(&b) {
+            ptr += 1;
         } else {
             break;
         }
     }
-    let name = ps.get_slice(start_pos, ps.ptr);
+    let name = ps.get_slice(ps.ptr, ptr);
+    ps.ptr = ptr;
 
     Ok(ast::Identifier { name })
 }
@@ -281,7 +267,7 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
 
         let key = get_variant_key(ps)?;
 
-        let value = get_pattern(ps)?.map(ast::Value::Pattern);
+        let value = get_pattern(ps)?;
 
         if let Some(value) = value {
             variants.push(ast::Variant {
@@ -332,7 +318,7 @@ enum TextElementType {
 fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>> {
     let mut elements = vec![];
     let mut last_non_blank = None;
-    let mut common_indent = 10;
+    let mut common_indent = None;
 
     ps.skip_blank_inline();
 
@@ -344,9 +330,9 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     };
 
     while ps.ptr < ps.length {
-        if ps.source[ps.ptr] == b'{' {
+        if ps.is_current_byte(b'{') {
             if text_element_role == TextElementPosition::LineStart {
-                common_indent = 0;
+                common_indent = Some(0);
             }
             let exp = get_placeable(ps)?;
             last_non_blank = Some(elements.len());
@@ -362,10 +348,10 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                 }
                 let b = ps.source[ps.ptr];
                 if indent == 0 {
-                    if b != b'\n' && b != b'\r' {
+                    if b != b'\n' {
                         break;
                     }
-                } else if b == b'.' || b == b'}' || b == b'*' || b == b'[' {
+                } else if !ps.is_byte_pattern_continuation(b) {
                     ps.ptr = slice_start;
                     break;
                 }
@@ -374,9 +360,14 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             if start != end {
                 if text_element_role == TextElementPosition::LineStart
                     && text_element_type == TextElementType::NonBlank
-                    && indent < common_indent
                 {
-                    common_indent = indent;
+                    if let Some(common) = common_indent {
+                        if indent < common {
+                            common_indent = Some(indent);
+                        }
+                    } else {
+                        common_indent = Some(indent);
+                    }
                 }
                 if text_element_role != TextElementPosition::LineStart
                     || text_element_type == TextElementType::NonBlank
@@ -404,22 +395,19 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     }
 
     if let Some(last_non_blank) = last_non_blank {
-        let mut collected_elems = 0;
-        let elements = elements.into_iter().filter(|_| {
-            if collected_elems > last_non_blank {
-                return false;
-            }
-            collected_elems += 1;
-            true
-        });
-
         let elements = elements
+            .into_iter()
+            .take(last_non_blank + 1)
             .enumerate()
             .filter_map(|(i, elem)| match elem {
                 PatternElementPointers::Placeable(exp) => Some(ast::PatternElement::Placeable(exp)),
                 PatternElementPointers::TextElement(start, end, indent, role) => {
                     let start = if role == TextElementPosition::LineStart {
-                        start + cmp::min(indent, common_indent)
+                        if let Some(common_indent) = common_indent {
+                            start + cmp::min(indent, common_indent)
+                        } else {
+                            start + indent
+                        }
                     } else {
                         start
                     };
@@ -448,24 +436,26 @@ fn get_text_slice<'p>(
     let mut text_element_type = TextElementType::Blank;
 
     while ps.ptr < ps.length {
-        if ps.source[ps.ptr] == b'\n' {
-            ps.ptr += 1;
-            return Ok((
-                start_pos,
-                ps.ptr,
-                text_element_type,
-                TextElementTermination::LineFeed,
-            ));
-        } else if ps.source[ps.ptr] == b'\r' && ps.is_byte_at(b'\n', ps.ptr + 1) {
-            ps.ptr += 1;
-            return Ok((
-                start_pos,
-                ps.ptr - 1,
-                text_element_type,
-                TextElementTermination::CarriageReturn,
-            ));
-        }
         match ps.source[ps.ptr] {
+            b' ' => ps.ptr += 1,
+            b'\n' => {
+                ps.ptr += 1;
+                return Ok((
+                    start_pos,
+                    ps.ptr,
+                    text_element_type,
+                    TextElementTermination::LineFeed,
+                ));
+            }
+            b'\r' if ps.is_byte_at(b'\n', ps.ptr + 1) => {
+                ps.ptr += 1;
+                return Ok((
+                    start_pos,
+                    ps.ptr - 1,
+                    text_element_type,
+                    TextElementTermination::CarriageReturn,
+                ));
+            }
             b'{' => {
                 return Ok((
                     start_pos,
@@ -479,17 +469,15 @@ fn get_text_slice<'p>(
             }
             b'\\' => {
                 text_element_type = TextElementType::NonBlank;
-                ps.ptr += 1;
-                match ps.source[ps.ptr] {
-                    b'\\' => ps.ptr += 1,
-                    b'u' => {
+                match ps.source.get(ps.ptr) {
+                    Some(b'\\') => ps.ptr += 1,
+                    Some(b'u') => {
                         ps.ptr += 1;
                         ps.skip_unicode_escape_sequence(4)?;
                     }
                     _ => {}
                 }
             }
-            b' ' => ps.ptr += 1,
             _ => {
                 text_element_type = TextElementType::NonBlank;
                 ps.ptr += 1
@@ -530,12 +518,10 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
         ps.skip_eol();
     }
 
-    let comment = if level == Some(3) {
-        ast::Comment::ResourceComment { content }
-    } else if level == Some(2) {
-        ast::Comment::GroupComment { content }
-    } else {
-        ast::Comment::Comment { content }
+    let comment = match level {
+        Some(3) => ast::Comment::ResourceComment { content },
+        Some(2) => ast::Comment::GroupComment { content },
+        _ => ast::Comment::Comment { content },
     };
     Ok(comment)
 }
@@ -557,7 +543,7 @@ fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
         ps.ptr += 1;
     }
 
-    Ok(str::from_utf8(&ps.source[start_pos..ps.ptr]).unwrap())
+    Ok(ps.get_slice(start_pos, ps.ptr))
 }
 
 fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
@@ -714,15 +700,15 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let start = ps.ptr;
             while ps.ptr < ps.length {
                 match ps.source[ps.ptr] {
-                    b'\\' => match ps.source[ps.ptr + 1] {
-                        b'\\' => ps.ptr += 2,
-                        b'{' => ps.ptr += 2,
-                        b'"' => ps.ptr += 2,
-                        b'u' => {
+                    b'\\' => match ps.source.get(ps.ptr + 1) {
+                        Some(b'\\') => ps.ptr += 2,
+                        Some(b'{') => ps.ptr += 2,
+                        Some(b'"') => ps.ptr += 2,
+                        Some(b'u') => {
                             ps.ptr += 2;
                             ps.skip_unicode_escape_sequence(4)?;
                         }
-                        b'U' => {
+                        Some(b'U') => {
                             ps.ptr += 2;
                             ps.skip_unicode_escape_sequence(6)?;
                         }
@@ -742,7 +728,7 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let slice = ps.get_slice(start, ps.ptr - 1);
             Ok(ast::InlineExpression::StringLiteral { raw: slice })
         }
-        Some(b'0'...b'9') => {
+        Some(b) if ps.is_byte_digit(*b) => {
             let num = get_number_literal(ps)?;
             Ok(ast::InlineExpression::NumberLiteral { value: num })
         }
@@ -750,8 +736,8 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             ps.ptr += 1; // -
             if ps.is_identifier_start() {
                 let id = get_identifier(ps)?;
-                match ps.source[ps.ptr] {
-                    b'[' => {
+                match ps.source.get(ps.ptr) {
+                    Some(b'[') => {
                         let key = get_variant_key(ps)?;
                         Ok(ast::InlineExpression::VariantExpression {
                             reference: Box::new(ast::InlineExpression::TermReference { id }),
@@ -771,7 +757,7 @@ fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::VariableReference { id })
         }
-        Some(b'a'...b'z') | Some(b'A'...b'Z') => {
+        Some(b) if ps.is_byte_alphabetic(*b) => {
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::MessageReference { id })
         }
@@ -796,8 +782,7 @@ fn get_call_args<'p>(
     ps.skip_blank();
 
     while ps.ptr < ps.length {
-        let b = ps.source[ps.ptr];
-        if b == b')' {
+        if ps.is_current_byte(b')') {
             break;
         }
 
@@ -848,12 +833,9 @@ fn get_call_args<'p>(
 fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     let start = ps.ptr;
     ps.take_if(b'-');
-    while ps.source[ps.ptr] >= b'0' && ps.source[ps.ptr] <= b'9' {
-        ps.ptr += 1;
-    }
-    ps.take_if(b'.');
-    while ps.source[ps.ptr] >= b'0' && ps.source[ps.ptr] <= b'9' {
-        ps.ptr += 1;
+    ps.skip_digits()?;
+    if ps.take_if(b'.') {
+        ps.skip_digits()?;
     }
 
     Ok(ps.get_slice(start, ps.ptr))

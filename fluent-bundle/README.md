@@ -22,8 +22,6 @@ Usage
 -----
 
 ```rust
-extern crate fluent;
-
 use fluent_bundle::FluentBundle;
 
 fn main() {
