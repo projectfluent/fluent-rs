@@ -53,11 +53,12 @@ pub struct Message {
 /// Next, call [`add_resource`] one or more times, supplying translations in the FTL syntax. The
 /// `FluentBundle` instance is now ready to be used for localization.
 ///
-/// To format a translation, call `get_message` to retrieve a `fluent_bundle::bundle::Message` structure
-/// and then `format` it within the bundle.
+/// To format a translation, call [`format`] with the path of a message or attribute in order to
+/// retrieve the translated string. Alternately, [`format_message`] provides a convenient way of
+/// formatting all attributes of a message at once.
 ///
-/// The result is an [`Option<T>`] wrapping a `(String, Vec<FluentError>)`. On success, the string
-/// is a formatted value that should be displayed in the UI.  It is
+/// The result of `format` is an [`Option<T>`] wrapping a `(String, Vec<FluentError>)`. On success,
+/// the string is a formatted value that should be displayed in the UI. It is
 /// recommended to treat the result as opaque from the perspective of the program and use it only
 /// to display localized messages. Do not examine it or alter in any way before displaying.  This
 /// is a general good practice as far as all internationalization operations are concerned.
@@ -74,6 +75,7 @@ pub struct Message {
 /// [`FluentBundle::new`]: ./struct.FluentBundle.html#method.new
 /// [`fluent::bundle::Message`]: ./struct.FluentBundle.html#method.new
 /// [`format`]: ./struct.FluentBundle.html#method.format
+/// [`format_message`]: ./struct.FluentBundle.html#method.format_message
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
 #[allow(dead_code)]
@@ -294,16 +296,17 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// # Errors
     ///
-    /// If no message is found at `path`, then `format` returns `None`.
+    /// For some cases where `format` can't find a message it will return `None`.
     /// 
-    /// In all other cases, `format` returns a string even if it
-    /// encountered errors. `format` uses two fallback techniques to
-    /// create the fallback string. If there are bad references in the
-    /// message, then they will be substituted with `'___'`. If there
-    /// are more extensive errors, then `format` will fall back to using
-    /// `path` itself as the formatted string. Sometimes, but not always,
-    /// these partial failures will emit extra error information in the
-    /// second term of the return tuple.
+    /// In all other cases `format` returns a string even if it
+    /// encountered errors. Generally, during partial errors `format` will
+    /// use `'___'` to replace parts of the formatted message that it could
+    /// not successfuly build. For more fundamental errors `format` will return
+    /// the path itself as the translation.
+    /// 
+    /// The second term of the tuple will contain any extra error information
+    /// gathered during formatting. A caller may safely ignore the extra errors
+    /// if the fallback formatting policies are acceptable.
     /// 
     /// ```
     /// use fluent_bundle::bundle::FluentBundle;
@@ -370,7 +373,9 @@ impl<'bundle> FluentBundle<'bundle> {
     }
 
     /// Formats both the message value and attributes identified by `message_id`
-    /// using `args` to provide variables.
+    /// using `args` to provide variables. This is useful for cases where a UI
+    /// element requires multiple related text fields, such as a button that has
+    /// both display text and assistive text.
     ///
     /// # Examples
     ///
@@ -395,17 +400,17 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// # Errors
     ///
-    /// If no message is found at `message_id`, then `format_message`
-    /// returns `None`.
+    /// For some cases where `format_message` can't find a message it will return `None`.
     /// 
-    /// In all other cases, `format_message` returns a `Message` even if it
-    /// encountered errors. `format_message` uses two fallback techniques to
-    /// create the fallback string. If there are bad references in the
-    /// message, then they will be substituted with `'___'`. If there
-    /// are more extensive errors, then `format_message` will fall back to using
-    /// `path` itself as the formatted string. Sometimes, but not always,
-    /// these partial failures will emit extra error information in the
-    /// second term of the return tuple.
+    /// In all other cases `format_message` returns a message even if it
+    /// encountered errors. Generally, during partial errors `format_message` will
+    /// use `'___'` to replace parts of the formatted message that it could
+    /// not successfuly build. For more fundamental errors `format_message` will return
+    /// the path itself as the translation.
+    /// 
+    /// The second term of the tuple will contain any extra error information
+    /// gathered during formatting. A caller may safely ignore the extra errors
+    /// if the fallback formatting policies are acceptable.
     pub fn format_message(
         &self,
         message_id: &str,
