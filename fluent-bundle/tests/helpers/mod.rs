@@ -15,10 +15,7 @@ pub fn assert_format_no_errors(result: Option<(String, Vec<FluentError>)>, expec
 }
 
 #[allow(dead_code)]
-pub fn assert_format_message_no_errors(
-    result: Option<(Message, Vec<FluentError>)>,
-    expected: Message,
-) {
+pub fn assert_compound_no_errors(result: Option<(Message, Vec<FluentError>)>, expected: Message) {
     assert_eq!(result, Some((expected, vec![])));
 }
 

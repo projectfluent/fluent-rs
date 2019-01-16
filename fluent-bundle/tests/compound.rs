@@ -1,8 +1,7 @@
 mod helpers;
 
 use self::helpers::{
-    assert_format_message_no_errors, assert_get_bundle_no_errors,
-    assert_get_resource_from_str_no_errors,
+    assert_compound_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
 };
 use fluent_bundle::bundle::Message;
 use std::collections::HashMap;
@@ -22,8 +21,8 @@ foo = Foo
     attrs.insert("attr".to_string(), "Attribute".to_string());
     attrs.insert("attr2".to_string(), "Attribute 2".to_string());
 
-    assert_format_message_no_errors(
-        bundle.format_message("foo", None),
+    assert_compound_no_errors(
+        bundle.compound("foo", None),
         Message {
             value: Some("Foo".to_string()),
             attributes: attrs,

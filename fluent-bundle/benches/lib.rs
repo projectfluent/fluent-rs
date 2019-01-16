@@ -73,7 +73,7 @@ fn bench_menubar_format(b: &mut Bencher) {
             // widgets may only expect attributes and they shouldn't be forced to display a value.
             // Here however it doesn't matter because we know for certain that the message for `id`
             // exists.
-            bundle.format_message(id, None);
+            bundle.compound(id, None);
         }
     });
 }

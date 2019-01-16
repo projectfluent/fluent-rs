@@ -54,7 +54,7 @@ pub struct Message {
 /// `FluentBundle` instance is now ready to be used for localization.
 ///
 /// To format a translation, call [`format`] with the path of a message or attribute in order to
-/// retrieve the translated string. Alternately, [`format_message`] provides a convenient way of
+/// retrieve the translated string. Alternately, [`compound`] provides a convenient way of
 /// formatting all attributes of a message at once.
 ///
 /// The result of `format` is an [`Option<T>`] wrapping a `(String, Vec<FluentError>)`. On success,
@@ -75,7 +75,7 @@ pub struct Message {
 /// [`FluentBundle::new`]: ./struct.FluentBundle.html#method.new
 /// [`fluent::bundle::Message`]: ./struct.FluentBundle.html#method.new
 /// [`format`]: ./struct.FluentBundle.html#method.format
-/// [`format_message`]: ./struct.FluentBundle.html#method.format_message
+/// [`compound`]: ./struct.FluentBundle.html#method.compound
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
 pub struct FluentBundle<'bundle> {
@@ -130,7 +130,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     /// bundle.add_resource(&resource);
     /// assert_eq!(true, bundle.has_message("hello"));
-    /// 
+    ///
     /// ```
     pub fn has_message(&self, id: &str) -> bool {
         self.entries.get_message(id).is_some()
@@ -296,26 +296,26 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Errors
     ///
     /// For some cases where `format` can't find a message it will return `None`.
-    /// 
+    ///
     /// In all other cases `format` returns a string even if it
     /// encountered errors. Generally, during partial errors `format` will
     /// use `'___'` to replace parts of the formatted message that it could
     /// not successfuly build. For more fundamental errors `format` will return
     /// the path itself as the translation.
-    /// 
+    ///
     /// The second term of the tuple will contain any extra error information
     /// gathered during formatting. A caller may safely ignore the extra errors
     /// if the fallback formatting policies are acceptable.
-    /// 
+    ///
     /// ```
     /// use fluent_bundle::bundle::FluentBundle;
     /// use fluent_bundle::resource::FluentResource;
-    /// 
+    ///
     /// // Create a message with bad cyclic reference
     /// let mut res = FluentResource::try_new("foo = a { foo } b".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     /// bundle.add_resource(&res);
-    /// 
+    ///
     /// // The result falls back to "___"
     /// let value = bundle.format("foo", None);
     /// assert_eq!(value, Some(("___".to_string(), vec![])));
@@ -391,26 +391,26 @@ impl<'bundle> FluentBundle<'bundle> {
     ///     .title = Type your login email".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     /// bundle.add_resource(&res);
-    /// 
-    /// let (message, _) = bundle.format_message("login-input", None).unwrap();
+    ///
+    /// let (message, _) = bundle.compound("login-input", None).unwrap();
     /// assert_eq!(message.value, Some("Predefined value".to_string()));
     /// assert_eq!(message.attributes.get("title"), Some(&"Type your login email".to_string()));
     /// ```
     ///
     /// # Errors
     ///
-    /// For some cases where `format_message` can't find a message it will return `None`.
-    /// 
-    /// In all other cases `format_message` returns a message even if it
-    /// encountered errors. Generally, during partial errors `format_message` will
+    /// For some cases where `compound` can't find a message it will return `None`.
+    ///
+    /// In all other cases `compound` returns a message even if it
+    /// encountered errors. Generally, during partial errors `compound` will
     /// use `'___'` to replace parts of the formatted message that it could
-    /// not successfuly build. For more fundamental errors `format_message` will return
+    /// not successfuly build. For more fundamental errors `compound` will return
     /// the path itself as the translation.
-    /// 
+    ///
     /// The second term of the tuple will contain any extra error information
     /// gathered during formatting. A caller may safely ignore the extra errors
     /// if the fallback formatting policies are acceptable.
-    pub fn format_message(
+    pub fn compound(
         &self,
         message_id: &str,
         args: Option<&HashMap<&str, FluentValue>>,
