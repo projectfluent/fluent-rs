@@ -62,7 +62,7 @@ pub trait ResolveValue {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError>;
 }
 
-impl<'resolver> ResolveValue for ast::Message<'resolver> {
+impl<'source> ResolveValue for ast::Message<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || {
             self.value
@@ -73,19 +73,19 @@ impl<'resolver> ResolveValue for ast::Message<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::Term<'resolver> {
+impl<'source> ResolveValue for ast::Term<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
-impl<'resolver> ResolveValue for ast::Attribute<'resolver> {
+impl<'source> ResolveValue for ast::Attribute<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         env.track(&self.id.name, || self.value.to_value(env))
     }
 }
 
-impl<'resolver> ResolveValue for ast::Value<'resolver> {
+impl<'source> ResolveValue for ast::Value<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::Value::Pattern(p) => p.to_value(env),
@@ -97,7 +97,7 @@ impl<'resolver> ResolveValue for ast::Value<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::Pattern<'resolver> {
+impl<'source> ResolveValue for ast::Pattern<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         let mut string = String::with_capacity(128);
         for elem in &self.elements {
@@ -119,7 +119,7 @@ impl<'resolver> ResolveValue for ast::Pattern<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::PatternElement<'resolver> {
+impl<'source> ResolveValue for ast::PatternElement<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::PatternElement::TextElement(s) => Ok(FluentValue::from(*s)),
@@ -128,7 +128,7 @@ impl<'resolver> ResolveValue for ast::PatternElement<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::VariantKey<'resolver> {
+impl<'source> ResolveValue for ast::VariantKey<'source> {
     fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
@@ -139,7 +139,7 @@ impl<'resolver> ResolveValue for ast::VariantKey<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::Expression<'resolver> {
+impl<'source> ResolveValue for ast::Expression<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::Expression::InlineExpression(exp) => exp.to_value(env),
@@ -172,7 +172,7 @@ impl<'resolver> ResolveValue for ast::Expression<'resolver> {
     }
 }
 
-impl<'resolver> ResolveValue for ast::InlineExpression<'resolver> {
+impl<'source> ResolveValue for ast::InlineExpression<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::InlineExpression::StringLiteral { raw } => {
@@ -289,9 +289,9 @@ impl<'resolver> ResolveValue for ast::InlineExpression<'resolver> {
     }
 }
 
-fn select_default<'resolver>(
-    variants: &'resolver [ast::Variant<'resolver>],
-) -> Option<&ast::Variant<'resolver>> {
+fn select_default<'source>(
+    variants: &'source [ast::Variant<'source>],
+) -> Option<&ast::Variant<'source>> {
     for variant in variants {
         if variant.default {
             return Some(variant);
