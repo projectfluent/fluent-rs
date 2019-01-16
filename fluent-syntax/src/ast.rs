@@ -63,7 +63,7 @@ pub struct Identifier<'ast> {
 #[derive(Debug, PartialEq)]
 pub struct Variant<'ast> {
     pub key: VariantKey<'ast>,
-    pub value: Value<'ast>,
+    pub value: Pattern<'ast>,
     pub default: bool,
 }
 
@@ -110,6 +110,9 @@ pub enum InlineExpression<'ast> {
     TermReference {
         id: Identifier<'ast>,
     },
+    // This node is standalone in EBNF, but it
+    // is more convinient for us to store it a
+    // variant of the InlineExpression in Rust.
     FunctionReference {
         id: Identifier<'ast>,
     },

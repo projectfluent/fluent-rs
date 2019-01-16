@@ -78,7 +78,6 @@ pub struct Message {
 /// [`format_message`]: ./struct.FluentBundle.html#method.format_message
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
-#[allow(dead_code)]
 pub struct FluentBundle<'bundle> {
     pub locales: Vec<String>,
     pub entries: HashMap<String, Entry<'bundle>>,
