@@ -2,7 +2,7 @@
 name = "fluent-cli"
 description = """
 A collection of command line interface programs
-used for Fluent Localization System.
+for Fluent Localization System.
 """
 version = "0.0.1"
 edition = "2018"
