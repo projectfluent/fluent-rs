@@ -28,8 +28,8 @@ fn main() {
         .version("1.0")
         .about("Parses FTL file into an AST")
         .args_from_usage(
-            "-s, --silence 'disable output'
-             <INPUT> 'Sets the input file to use'",
+            "-s, --silent 'Disables error reporting'
+             <FILE> 'FTL file to parse'",
         )
         .get_matches();
 
@@ -39,14 +39,15 @@ fn main() {
 
     let res = parse(&source);
 
-    if matches.is_present("silence") {
-        return;
-    };
-
     match res {
         Ok(res) => print_entries_resource(&res),
         Err((res, errors)) => {
             print_entries_resource(&res);
+
+            if matches.is_present("silence") {
+                return;
+            };
+
             println!("==============================\n");
             if errors.len() == 1 {
                 println!("Parser encountered one error:");

@@ -192,11 +192,11 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
                 ref positional,
                 ref named,
             } => {
-                let mut resolved_unnamed_args = Vec::new();
+                let mut resolved_positional_args = Vec::new();
                 let mut resolved_named_args = HashMap::new();
 
                 for expression in positional {
-                    resolved_unnamed_args.push(expression.to_value(env).ok());
+                    resolved_positional_args.push(expression.to_value(env).ok());
                 }
 
                 for arg in named {
@@ -212,7 +212,7 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
                 };
 
                 func.ok_or(ResolverError::None).and_then(|func| {
-                    func(resolved_unnamed_args.as_slice(), &resolved_named_args)
+                    func(resolved_positional_args.as_slice(), &resolved_named_args)
                         .ok_or(ResolverError::None)
                 })
             }

@@ -88,11 +88,7 @@ fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast:
 
     ps.skip_blank_block();
 
-    let ptr = ps.ptr;
-    let attributes = get_attributes(ps).unwrap_or_else(|_| {
-        ps.ptr = ptr;
-        vec![]
-    });
+    let attributes = get_attributes(ps);
 
     if pattern.is_none() && attributes.is_empty() {
         return error!(
@@ -122,11 +118,7 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
 
     ps.skip_blank_block();
 
-    let ptr = ps.ptr;
-    let attributes = get_attributes(ps).unwrap_or_else(|_| {
-        ps.ptr = ptr;
-        vec![]
-    });
+    let attributes = get_attributes(ps);
 
     if let Some(value) = value {
         Ok(ast::Term {
@@ -167,7 +159,7 @@ fn get_value<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Value<'p>>> {
     Ok(pattern.map(ast::Value::Pattern))
 }
 
-fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Attribute<'p>>> {
+fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
     let mut attributes = vec![];
 
     loop {
@@ -186,7 +178,7 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Attribute<'p
             }
         }
     }
-    Ok(attributes)
+    attributes
 }
 
 fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
@@ -205,22 +197,28 @@ fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
 fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
     let mut ptr = ps.ptr;
 
-    while let Some(b) = ps.source.get(ptr) {
-        if ps.is_byte_alphabetic(*b) {
+    match ps.source.get(ptr) {
+        Some(b) if ps.is_byte_alphabetic(*b) => {
             ptr += 1;
-        } else if ptr == ps.ptr {
+        }
+        _ => {
             return error!(
                 ErrorKind::ExpectedCharRange {
                     range: "a-zA-Z".to_string()
                 },
                 ptr
             );
-        } else if ps.is_byte_digit(*b) || [b'_', b'-'].contains(&b) {
+        }
+    }
+
+    while let Some(b) = ps.source.get(ptr) {
+        if ps.is_byte_alphabetic(*b) || ps.is_byte_digit(*b) || [b'_', b'-'].contains(b) {
             ptr += 1;
         } else {
             break;
         }
     }
+
     let name = ps.get_slice(ps.ptr, ptr);
     ps.ptr = ptr;
 
@@ -228,7 +226,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
 }
 
 fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>> {
-    if !ps.take_if(b'[') {
+    if !ps.take_byte_if(b'[') {
         return error!(ErrorKind::ExpectedToken('['), ps.ptr);
     }
     ps.skip_blank();
@@ -255,7 +253,7 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
     let mut has_default = false;
 
     while ps.is_current_byte(b'*') || ps.is_current_byte(b'[') {
-        let default = ps.take_if(b'*');
+        let default = ps.take_byte_if(b'*');
 
         if default {
             if has_default {
@@ -288,6 +286,10 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
     }
 }
 
+// This enum tracks the reason for which
+// a text slice ended.
+// It is used by the pattern to set the
+// proper state for the next line.
 #[derive(Debug, PartialEq)]
 enum TextElementTermination {
     LineFeed,
@@ -296,12 +298,9 @@ enum TextElementTermination {
     EOF,
 }
 
-#[derive(Debug)]
-enum PatternElementPointers<'a> {
-    Placeable(ast::Expression<'a>),
-    TextElement(usize, usize, usize, TextElementPosition),
-}
-
+// This enum tracks the placement of the text
+// element in the pattern, which is needed for
+// dedentation logic.
 #[derive(Debug, PartialEq)]
 enum TextElementPosition {
     InitialLineStart,
@@ -309,6 +308,24 @@ enum TextElementPosition {
     Continuation,
 }
 
+// This enum allows us to mark pointers in the
+// source which will later become text elements
+// but without slicing them out of the source string.
+// This makes the indentation adjustments cheaper
+// since they'll happen on the pointers, rather than
+// extracted slices.
+#[derive(Debug)]
+enum PatternElementPlaceholders<'a> {
+    Placeable(ast::Expression<'a>),
+    // (start, end, indent, position)
+    TextElement(usize, usize, usize, TextElementPosition),
+}
+
+// This enum tracks whether the text element
+// is blank or not.
+// This is important to identify text elements
+// which should not be taken into account
+// when calculating common indent.
 #[derive(Debug, PartialEq)]
 enum TextElementType {
     Blank,
@@ -336,7 +353,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             }
             let exp = get_placeable(ps)?;
             last_non_blank = Some(elements.len());
-            elements.push(PatternElementPointers::Placeable(exp));
+            elements.push(PatternElementPlaceholders::Placeable(exp));
             text_element_role = TextElementPosition::Continuation;
         } else {
             let slice_start = ps.ptr;
@@ -376,7 +393,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     if text_element_type == TextElementType::NonBlank {
                         last_non_blank = Some(elements.len());
                     }
-                    elements.push(PatternElementPointers::TextElement(
+                    elements.push(PatternElementPlaceholders::TextElement(
                         slice_start,
                         end,
                         indent,
@@ -400,8 +417,10 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             .take(last_non_blank + 1)
             .enumerate()
             .filter_map(|(i, elem)| match elem {
-                PatternElementPointers::Placeable(exp) => Some(ast::PatternElement::Placeable(exp)),
-                PatternElementPointers::TextElement(start, end, indent, role) => {
+                PatternElementPlaceholders::Placeable(exp) => {
+                    Some(ast::PatternElement::Placeable(exp))
+                }
+                PatternElementPlaceholders::TextElement(start, end, indent, role) => {
                     let start = if role == TextElementPosition::LineStart {
                         if let Some(common_indent) = common_indent {
                             start + cmp::min(indent, common_indent)
@@ -529,7 +548,7 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
 fn get_comment_level<'p>(ps: &mut ParserStream<'p>) -> usize {
     let mut chars = 0;
 
-    while ps.take_if(b'#') {
+    while ps.take_byte_if(b'#') {
         chars += 1;
     }
 
@@ -615,7 +634,7 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     };
 
     if !is_valid {
-        //XXX: Generalize error type
+        //XXX: Give more specific error type
         return error!(ErrorKind::MessageReferenceAsSelector, ps.ptr);
     }
 
@@ -652,18 +671,18 @@ fn get_call_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpre
             _ => false,
         };
 
-        if is_valid {
-            if let ast::InlineExpression::MessageReference { id } = callee {
-                callee = ast::InlineExpression::FunctionReference { id };
-            }
-            let (positional, named) = get_call_args(ps)?;
-            ast::InlineExpression::CallExpression {
-                callee: Box::new(callee),
-                positional,
-                named,
-            }
-        } else {
+        if !is_valid {
             return error!(ErrorKind::ForbiddenCallee, ps.ptr);
+        }
+
+        if let ast::InlineExpression::MessageReference { id } = callee {
+            callee = ast::InlineExpression::FunctionReference { id };
+        }
+        let (positional, named) = get_call_args(ps)?;
+        ast::InlineExpression::CallExpression {
+            callee: Box::new(callee),
+            positional,
+            named,
         }
     } else {
         callee
@@ -673,7 +692,7 @@ fn get_call_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpre
 }
 
 fn get_attribute_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
-    let reference = get_literal(ps)?;
+    let reference = get_simple_expression(ps)?;
 
     match reference {
         ast::InlineExpression::MessageReference { .. }
@@ -693,7 +712,7 @@ fn get_attribute_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Inline
     }
 }
 
-fn get_literal<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
     match ps.source.get(ps.ptr) {
         Some(b'"') => {
             ps.ptr += 1; // "
@@ -822,7 +841,7 @@ fn get_call_args<'p>(
         }
 
         ps.skip_blank();
-        ps.take_if(b',');
+        ps.take_byte_if(b',');
         ps.skip_blank();
     }
 
@@ -832,9 +851,9 @@ fn get_call_args<'p>(
 
 fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     let start = ps.ptr;
-    ps.take_if(b'-');
+    ps.take_byte_if(b'-');
     ps.skip_digits()?;
-    if ps.take_if(b'.') {
+    if ps.take_byte_if(b'.') {
         ps.skip_digits()?;
     }
 

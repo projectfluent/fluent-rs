@@ -33,7 +33,7 @@ impl<'p> ParserStream<'p> {
         Ok(())
     }
 
-    pub fn take_if(&mut self, b: u8) -> bool {
+    pub fn take_byte_if(&mut self, b: u8) -> bool {
         if self.is_current_byte(b) {
             self.ptr += 1;
             true
