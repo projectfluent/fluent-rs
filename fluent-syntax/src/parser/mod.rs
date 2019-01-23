@@ -290,10 +290,15 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
 // a text slice ended.
 // It is used by the pattern to set the
 // proper state for the next line.
+//
+// CRLF variant is specific because we want
+// to skip it in text elements production.
+// For example `a\r\nb` will produce
+// (`a`, `\n` and `b`) TextElements.
 #[derive(Debug, PartialEq)]
 enum TextElementTermination {
     LineFeed,
-    CarriageReturn,
+    CRLF,
     PlaceableStart,
     EOF,
 }
@@ -404,7 +409,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
 
             text_element_role = match termination_reason {
                 TextElementTermination::LineFeed => TextElementPosition::LineStart,
-                TextElementTermination::CarriageReturn => TextElementPosition::Continuation,
+                TextElementTermination::CRLF => TextElementPosition::Continuation,
                 TextElementTermination::PlaceableStart => TextElementPosition::Continuation,
                 TextElementTermination::EOF => TextElementPosition::Continuation,
             };
@@ -472,7 +477,7 @@ fn get_text_slice<'p>(
                     start_pos,
                     ps.ptr - 1,
                     text_element_type,
-                    TextElementTermination::CarriageReturn,
+                    TextElementTermination::CRLF,
                 ));
             }
             b'{' => {
