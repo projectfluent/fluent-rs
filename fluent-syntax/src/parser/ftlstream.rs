@@ -134,10 +134,13 @@ impl<'p> ParserStream<'p> {
             }
         }
         if self.ptr - start != length {
+            let end = if self.ptr >= self.length {
+                self.ptr
+            } else {
+                self.ptr + 1
+            };
             return error!(
-                ErrorKind::InvalidUnicodeEscapeSequence(
-                    self.get_slice(start, self.ptr + 1).to_owned()
-                ),
+                ErrorKind::InvalidUnicodeEscapeSequence(self.get_slice(start, end).to_owned()),
                 self.ptr
             );
         }
