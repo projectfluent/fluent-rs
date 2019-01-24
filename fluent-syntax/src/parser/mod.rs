@@ -286,15 +286,12 @@ fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> 
     }
 }
 
-// This enum tracks the reason for which
-// a text slice ended.
-// It is used by the pattern to set the
-// proper state for the next line.
+// This enum tracks the reason for which a text slice ended.
+// It is used by the pattern to set the proper state for the next line.
 //
-// CRLF variant is specific because we want
-// to skip it in text elements production.
-// For example `a\r\nb` will produce
-// (`a`, `\n` and `b`) TextElements.
+// CRLF variant is specific because we want to skip the CR but keep the LF in text elements
+// production.
+// For example `a\r\n b` will produce (`a`, `\n` and ` b`) TextElements.
 #[derive(Debug, PartialEq)]
 enum TextElementTermination {
     LineFeed,
@@ -303,8 +300,7 @@ enum TextElementTermination {
     EOF,
 }
 
-// This enum tracks the placement of the text
-// element in the pattern, which is needed for
+// This enum tracks the placement of the text element in the pattern, which is needed for
 // dedentation logic.
 #[derive(Debug, PartialEq)]
 enum TextElementPosition {
@@ -313,12 +309,9 @@ enum TextElementPosition {
     Continuation,
 }
 
-// This enum allows us to mark pointers in the
-// source which will later become text elements
-// but without slicing them out of the source string.
-// This makes the indentation adjustments cheaper
-// since they'll happen on the pointers, rather than
-// extracted slices.
+// This enum allows us to mark pointers in the source which will later become text elements
+// but without slicing them out of the source string. This makes the indentation adjustments
+// cheaper since they'll happen on the pointers, rather than extracted slices.
 #[derive(Debug)]
 enum PatternElementPlaceholders<'a> {
     Placeable(ast::Expression<'a>),
@@ -326,10 +319,8 @@ enum PatternElementPlaceholders<'a> {
     TextElement(usize, usize, usize, TextElementPosition),
 }
 
-// This enum tracks whether the text element
-// is blank or not.
-// This is important to identify text elements
-// which should not be taken into account
+// This enum tracks whether the text element is blank or not.
+// This is important to identify text elements which should not be taken into account
 // when calculating common indent.
 #[derive(Debug, PartialEq)]
 enum TextElementType {

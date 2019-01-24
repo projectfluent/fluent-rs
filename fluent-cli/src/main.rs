@@ -44,7 +44,7 @@ fn main() {
         Err((res, errors)) => {
             print_entries_resource(&res);
 
-            if matches.is_present("silence") {
+            if matches.is_present("silent") {
                 return;
             };
 
