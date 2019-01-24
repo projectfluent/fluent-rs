@@ -1,9 +1,10 @@
 [package]
-name = "fluent-syntax"
+name = "fluent-cli"
 description = """
-Parser/Serializer tools for Fluent Syntax. 
+A collection of command line interface programs
+for Fluent Localization System.
 """
-version = "0.1.1"
+version = "0.0.1"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -16,9 +17,7 @@ readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
-[dev-dependencies]
-serde = "^1.0"
-serde_derive = "^1.0"
-serde_json = "^1.0"
-glob = "^0.2"
-assert-json-diff = "^0.2.1"
+[dependencies]
+annotate-snippets = {version = "^0.5", features = ["color"]}
+clap = "^2.32"
+fluent-syntax = { path = "../fluent-syntax" }
