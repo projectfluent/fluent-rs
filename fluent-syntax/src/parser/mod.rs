@@ -198,7 +198,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
     let mut ptr = ps.ptr;
 
     match ps.source.get(ptr) {
-        Some(b) if ps.is_byte_alphabetic(*b) => {
+        Some(b) if b.is_ascii_alphabetic() => {
             ptr += 1;
         }
         _ => {
@@ -212,7 +212,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
     }
 
     while let Some(b) = ps.source.get(ptr) {
-        if ps.is_byte_alphabetic(*b) || ps.is_byte_digit(*b) || [b'_', b'-'].contains(b) {
+        if b.is_ascii_alphabetic() || b.is_ascii_digit() || [b'_', b'-'].contains(b) {
             ptr += 1;
         } else {
             break;
@@ -743,7 +743,7 @@ fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             let slice = ps.get_slice(start, ps.ptr - 1);
             Ok(ast::InlineExpression::StringLiteral { raw: slice })
         }
-        Some(b) if ps.is_byte_digit(*b) => {
+        Some(b) if b.is_ascii_digit() => {
             let num = get_number_literal(ps)?;
             Ok(ast::InlineExpression::NumberLiteral { value: num })
         }
@@ -772,7 +772,7 @@ fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::VariableReference { id })
         }
-        Some(b) if ps.is_byte_alphabetic(*b) => {
+        Some(b) if b.is_ascii_alphabetic() => {
             let id = get_identifier(ps)?;
             Ok(ast::InlineExpression::MessageReference { id })
         }

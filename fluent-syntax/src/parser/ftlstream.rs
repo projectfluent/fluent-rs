@@ -77,7 +77,7 @@ impl<'p> ParserStream<'p> {
         while let Some(b) = self.source.get(self.ptr) {
             let new_line = self.ptr == 0 || self.source.get(self.ptr - 1) == Some(&b'\n');
 
-            if new_line && (self.is_byte_alphabetic(*b) || [b'-', b'#'].contains(b)) {
+            if new_line && (b.is_ascii_alphabetic() || [b'-', b'#'].contains(b)) {
                 break;
             }
 
@@ -156,17 +156,9 @@ impl<'p> ParserStream<'p> {
 
     pub fn is_identifier_start(&self) -> bool {
         match self.source.get(self.ptr) {
-            Some(b) if self.is_byte_alphabetic(*b) => true,
+            Some(b) if b.is_ascii_alphabetic() => true,
             _ => false,
         }
-    }
-
-    pub fn is_byte_alphabetic(&self, b: u8) -> bool {
-        (b >= b'a' && b <= b'z') || (b >= b'A' && b <= b'Z')
-    }
-
-    pub fn is_byte_digit(&self, b: u8) -> bool {
-        b >= b'0' && b <= b'9'
     }
 
     pub fn is_byte_pattern_continuation(&self, b: u8) -> bool {
@@ -175,7 +167,7 @@ impl<'p> ParserStream<'p> {
 
     pub fn is_number_start(&self) -> bool {
         match self.source.get(self.ptr) {
-            Some(b) if (b == &b'-') || self.is_byte_digit(*b) => true,
+            Some(b) if (b == &b'-') || b.is_ascii_digit() => true,
             _ => false,
         }
     }
@@ -196,7 +188,7 @@ impl<'p> ParserStream<'p> {
         let start = self.ptr;
         loop {
             match self.source.get(self.ptr) {
-                Some(b) if self.is_byte_digit(*b) => self.ptr += 1,
+                Some(b) if b.is_ascii_digit() => self.ptr += 1,
                 _ => break,
             }
         }
