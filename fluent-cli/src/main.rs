@@ -33,7 +33,7 @@ fn main() {
         )
         .get_matches();
 
-    let input = matches.value_of("INPUT").unwrap();
+    let input = matches.value_of("FILE").unwrap();
 
     let source = read_file(&input).expect("Read file failed");
 
