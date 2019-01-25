@@ -2,5 +2,6 @@
 members = [
     "fluent-syntax",
     "fluent-bundle",
-    "fluent-cli"
+    "fluent-cli",
+    "fluent-resmgr"
 ]
