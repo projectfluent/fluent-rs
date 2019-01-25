@@ -428,9 +428,6 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     };
                     let slice = ps.get_slice(start, end);
                     if last_non_blank == i {
-                        if slice == "\n" {
-                            return None;
-                        }
                         Some(ast::PatternElement::TextElement(slice.trim_end()))
                     } else {
                         Some(ast::PatternElement::TextElement(slice))
