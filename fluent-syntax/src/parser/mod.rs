@@ -479,17 +479,6 @@ fn get_text_slice<'p>(
             b'}' => {
                 return error!(ErrorKind::Generic, ps.ptr);
             }
-            b'\\' => {
-                text_element_type = TextElementType::NonBlank;
-                match ps.source.get(ps.ptr) {
-                    Some(b'\\') => ps.ptr += 1,
-                    Some(b'u') => {
-                        ps.ptr += 1;
-                        ps.skip_unicode_escape_sequence(4)?;
-                    }
-                    _ => {}
-                }
-            }
             _ => {
                 text_element_type = TextElementType::NonBlank;
                 ps.ptr += 1
