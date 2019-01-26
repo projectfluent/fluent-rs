@@ -1,6 +1,5 @@
-mod helper;
-
 use fluent_syntax::ast;
+use fluent_syntax::unicode::unescape_unicode;
 use serde::ser::SerializeMap;
 use serde::ser::SerializeSeq;
 use serde::{Serialize, Serializer};
@@ -360,7 +359,11 @@ where
     let mut map = serializer.serialize_map(Some(3))?;
     map.serialize_entry("type", "StringLiteral")?;
     map.serialize_entry("raw", raw)?;
-    map.serialize_entry("value", &helper::unescape_unicode(&raw))?;
+    if let Some(unescaped_value) = unescape_unicode(&raw) {
+        map.serialize_entry("value", &unescaped_value)?;
+    } else {
+        map.serialize_entry("value", &raw)?;
+    }
     map.end()
 }
 

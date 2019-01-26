@@ -15,6 +15,7 @@ use super::bundle::FluentBundle;
 use super::entry::GetEntry;
 use super::types::FluentValue;
 use fluent_syntax::ast;
+use fluent_syntax::unicode::unescape_unicode;
 
 #[derive(Debug, PartialEq)]
 pub enum ResolverError {
@@ -176,8 +177,11 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::InlineExpression::StringLiteral { raw } => {
-                // XXX: We need to decode the raw into unicode here.
-                Ok(FluentValue::from(*raw))
+                if let Some(unescaped_value) = unescape_unicode(raw) {
+                    Ok(FluentValue::from(unescaped_value))
+                } else {
+                    Ok(FluentValue::from(*raw))
+                }
             }
             ast::InlineExpression::NumberLiteral { value } => {
                 Ok(FluentValue::as_number(*value).unwrap())
