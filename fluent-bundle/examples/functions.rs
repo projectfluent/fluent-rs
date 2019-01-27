@@ -35,10 +35,8 @@ fn main() {
     // Test for a function that accepts named arguments
     bundle
         .add_function("BASE_OWNERSHIP", |_args, named_args| {
-            let ownership = named_args.get("ownership").unwrap();
-
-            return match ownership {
-                &FluentValue::String(ref string) => {
+            return match named_args.get("ownership") {
+                Some(&FluentValue::String(ref string)) => {
                     Some(format!("All your base belong to {}", string).into())
                 }
                 _ => None,
