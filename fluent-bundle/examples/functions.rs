@@ -56,15 +56,18 @@ fn main() {
         .add_resource(&res3)
         .expect("Failed to add FTL resources to the bundle.");
 
-    let (value, _) = bundle.format("hello-world", None)
+    let (value, _) = bundle
+        .format("hello-world", None)
         .expect("Failed to format a message.");
     assert_eq!(&value, "Hey there! I'm a function!");
 
-    let (value, _) = bundle.format("meaning-of-life", None)
+    let (value, _) = bundle
+        .format("meaning-of-life", None)
         .expect("Failed to format a message.");
     assert_eq!(&value, "The answer to life, the universe, and everything");
 
-    let (value, _) = bundle.format("all-your-base", None)
+    let (value, _) = bundle
+        .format("all-your-base", None)
         .expect("Failed to format a message.");
     assert_eq!(&value, "All your base belong to us");
 }

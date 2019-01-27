@@ -118,13 +118,13 @@ fn main() {
             path = path
         );
         let source = read_file(&full_path).expect("Failed to read file.");
-        let resource = FluentResource::try_new(source)
-            .expect("Could not parse an FTL string.");
+        let resource = FluentResource::try_new(source).expect("Could not parse an FTL string.");
         resources.push(resource);
     }
 
     for res in &resources {
-        bundle.add_resource(res)
+        bundle
+            .add_resource(res)
             .expect("Failed to add FTL resources to the bundle.");
     }
 
@@ -140,8 +140,8 @@ fn main() {
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    let (value, _) = bundle.format("response-msg", Some(&args))
-
+                    let (value, _) = bundle
+                        .format("response-msg", Some(&args))
                         .expect("Failed to format a message.");
                     println!("{}", value);
                 }
@@ -149,16 +149,16 @@ fn main() {
                     let mut args = HashMap::new();
                     args.insert("input", FluentValue::from(input.to_string()));
                     args.insert("reason", FluentValue::from(err.to_string()));
-                    let (value, _) = bundle.format("input-parse-error-msg", Some(&args))
+                    let (value, _) = bundle
+                        .format("input-parse-error-msg", Some(&args))
                         .expect("Failed to format a message.");
-                    println!(
-                        "{}",
-                        value);
+                    println!("{}", value);
                 }
             }
         }
         None => {
-            let (value, _) = bundle.format("missing-arg-error", None)
+            let (value, _) = bundle
+                .format("missing-arg-error", None)
                 .expect("Failed to format a message.");
             println!("{}", value);
         }
