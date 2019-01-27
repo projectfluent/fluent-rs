@@ -31,15 +31,20 @@ pub struct Message {
 /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 /// use std::collections::HashMap;
 ///
-/// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
+/// let ftl_string = String::from("intro = Welcome, { $name }.");
+/// let resource = FluentResource::try_new(ftl_string)
+///     .expect("Could not parse an FTL string.");
+///
 /// let mut bundle = FluentBundle::new(&["en-US"]);
-/// bundle.add_resource(&resource);
+/// bundle.add_resource(&resource)
+///     .expect("Failed to add FTL resources to the bundle.");
 ///
 /// let mut args = HashMap::new();
 /// args.insert("name", FluentValue::from("Rustacean"));
 ///
-/// let value = bundle.format("intro", Some(&args));
-/// assert_eq!(value, Some(("Welcome, Rustacean.".to_string(), vec![])));
+/// let (value, _) = bundle.format("intro", Some(&args))
+///     .expect("Failed to format a message.");
+/// assert_eq!(&value, "Welcome, Rustacean.");
 ///
 /// ```
 ///
@@ -108,7 +113,8 @@ impl<'bundle> FluentBundle<'bundle> {
         )[0]
         .to_owned();
 
-        let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL).unwrap();
+        let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL)
+            .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
             entries: HashMap::new(),
@@ -123,9 +129,12 @@ impl<'bundle> FluentBundle<'bundle> {
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
-    /// let resource = FluentResource::try_new("hello = Hi!".to_string()).unwrap();
+    /// let ftl_string = String::from("hello = Hi!");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Failed to parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
     ///
     /// ```
@@ -145,17 +154,21 @@ impl<'bundle> FluentBundle<'bundle> {
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     ///
-    /// let resource = FluentResource::try_new("length = { STRLEN(\"12345\") }".to_string()).unwrap();
+    /// let ftl_string = String::from("length = { STRLEN(\"12345\") }");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
     ///     [Some(FluentValue::String(str))] => Some(FluentValue::Number(str.len().to_string())),
     ///     _ => None,
-    /// }).unwrap();
+    /// }).expect("Failed to add a function to the bundle.");
     ///
-    /// let (value, _) = bundle.format("length", None).unwrap();
+    /// let (value, _) = bundle.format("length", None)
+    ///     .expect("Failed to format a message.");
     /// assert_eq!(&value, "5");
     /// ```
     ///
@@ -187,12 +200,15 @@ impl<'bundle> FluentBundle<'bundle> {
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
-    /// let resource = FluentResource::try_new("
+    /// let ftl_string = String::from("
     /// hello = Hi!
     /// goodbye = Bye!
-    /// ".to_string()).unwrap();
+    /// ");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
     /// ```
     ///
@@ -255,15 +271,19 @@ impl<'bundle> FluentBundle<'bundle> {
     /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     /// use std::collections::HashMap;
     ///
-    /// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
+    /// let ftl_string = String::from("intro = Welcome, { $name }.");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let mut args = HashMap::new();
     /// args.insert("name", FluentValue::from("Rustacean"));
     ///
-    /// let value = bundle.format("intro", Some(&args));
-    /// assert_eq!(value, Some(("Welcome, Rustacean.".to_string(), vec![])));
+    /// let (value, _) = bundle.format("intro", Some(&args))
+    ///     .expect("Failed to format a message.");
+    /// assert_eq!(&value, "Welcome, Rustacean.");
     ///
     /// ```
     ///
@@ -272,16 +292,20 @@ impl<'bundle> FluentBundle<'bundle> {
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
-    /// let resource = FluentResource::try_new("
+    /// let ftl_string = String::from("
     /// hello =
     ///     .title = Hi!
     ///     .tooltip = This says 'Hi!'
-    /// ".to_string()).unwrap();
+    /// ");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     ///
-    /// let value = bundle.format("hello.title", None);
-    /// assert_eq!(value, Some(("Hi!".to_string(), vec![])));
+    /// let (value, _) = bundle.format("hello.title", None)
+    ///     .expect("Failed to format a message.");
+    /// assert_eq!(&value, "Hi!");
     /// ```
     ///
     /// # Errors
@@ -302,13 +326,17 @@ impl<'bundle> FluentBundle<'bundle> {
     /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
     /// // Create a message with bad cyclic reference
-    /// let mut res = FluentResource::try_new("foo = a { foo } b".to_string()).unwrap();
+    /// let ftl_string = String::from("foo = a { foo } b");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&res);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// // The result falls back to "___"
-    /// let value = bundle.format("foo", None);
-    /// assert_eq!(value, Some(("___".to_string(), vec![])));
+    /// let (value, _) = bundle.format("foo", None)
+    ///     .expect("Failed to format a message.");
+    /// assert_eq!(&value, "___");
     /// ```
     pub fn format(
         &self,
@@ -372,15 +400,20 @@ impl<'bundle> FluentBundle<'bundle> {
     /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     /// use std::collections::HashMap;
     ///
-    /// let mut res = FluentResource::try_new("
+    /// let ftl_string = String::from("
     /// login-input = Predefined value
     ///     .placeholder = example@email.com
     ///     .aria-label = Login input value
-    ///     .title = Type your login email".to_string()).unwrap();
+    ///     .title = Type your login email
+    /// ");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&res);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
     ///
-    /// let (message, _) = bundle.compound("login-input", None).unwrap();
+    /// let (message, _) = bundle.compound("login-input", None)
+    ///     .expect("Failed to format a message.");
     /// assert_eq!(message.value, Some("Predefined value".to_string()));
     /// assert_eq!(message.attributes.get("title"), Some(&"Type your login email".to_string()));
     /// ```

@@ -19,7 +19,7 @@ pub fn assert_compound_no_errors(result: Option<(Message, Vec<FluentError>)>, ex
 }
 
 pub fn assert_get_resource_from_str_no_errors(s: &str) -> FluentResource {
-    FluentResource::try_new(s.to_owned()).unwrap()
+    FluentResource::try_new(s.to_owned()).expect("Failed to parse an FTL resource.")
 }
 
 pub fn assert_get_bundle_no_errors<'a>(

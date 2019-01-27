@@ -3,13 +3,12 @@ use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 fn main() {
     // We define the resources here so that they outlive
     // the bundle.
-    let res1 = FluentResource::try_new("hello-world = Hey there! { HELLO() }".to_owned()).unwrap();
-    let res2 =
-        FluentResource::try_new("meaning-of-life = { MEANING_OF_LIFE(42) }".to_owned()).unwrap();
-    let res3 = FluentResource::try_new(
-        "all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }".to_owned(),
-    )
-    .unwrap();
+    let ftl_string1 = String::from("hello-world = Hey there! { HELLO() }");
+    let ftl_string2 = String::from("meaning-of-life = { MEANING_OF_LIFE(42) }");
+    let ftl_string3 = String::from("all-your-base = { BASE_OWNERSHIP(hello, ownership: \"us\") }");
+    let res1 = FluentResource::try_new(ftl_string1).expect("Could not parse an FTL string.");
+    let res2 = FluentResource::try_new(ftl_string2).expect("Could not parse an FTL string.");
+    let res3 = FluentResource::try_new(ftl_string3).expect("Could not parse an FTL string.");
 
     let mut bundle = FluentBundle::new(&["en-US"]);
 
@@ -18,7 +17,7 @@ fn main() {
         .add_function("HELLO", |_args, _named_args| {
             return Some("I'm a function!".into());
         })
-        .unwrap();
+        .expect("Failed to add a function to the bundle.");
 
     // Test for a function that accepts unnamed positional arguments
     bundle
@@ -31,7 +30,7 @@ fn main() {
 
             None
         })
-        .unwrap();
+        .expect("Failed to add a function to the bundle.");
 
     // Test for a function that accepts named arguments
     bundle
@@ -45,27 +44,27 @@ fn main() {
                 _ => None,
             };
         })
-        .unwrap();
+        .expect("Failed to add a function to the bundle.");
 
-    bundle.add_resource(&res1).unwrap();
-    bundle.add_resource(&res2).unwrap();
-    bundle.add_resource(&res3).unwrap();
+    bundle
+        .add_resource(&res1)
+        .expect("Failed to add FTL resources to the bundle.");
+    bundle
+        .add_resource(&res2)
+        .expect("Failed to add FTL resources to the bundle.");
+    bundle
+        .add_resource(&res3)
+        .expect("Failed to add FTL resources to the bundle.");
 
-    let value = bundle.format("hello-world", None);
-    assert_eq!(
-        value,
-        Some(("Hey there! I'm a function!".to_string(), vec![]))
-    );
+    let (value, _) = bundle.format("hello-world", None)
+        .expect("Failed to format a message.");
+    assert_eq!(&value, "Hey there! I'm a function!");
 
-    let value = bundle.format("meaning-of-life", None);
-    assert_eq!(
-        value,
-        Some((
-            "The answer to life, the universe, and everything".to_string(),
-            vec![]
-        ))
-    );
+    let (value, _) = bundle.format("meaning-of-life", None)
+        .expect("Failed to format a message.");
+    assert_eq!(&value, "The answer to life, the universe, and everything");
 
-    let (value, _) = bundle.format("all-your-base", None).unwrap();
+    let (value, _) = bundle.format("all-your-base", None)
+        .expect("Failed to format a message.");
     assert_eq!(&value, "All your base belong to us");
 }

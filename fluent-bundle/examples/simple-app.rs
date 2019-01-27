@@ -117,13 +117,15 @@ fn main() {
             locale = locales[0],
             path = path
         );
-        let source = read_file(&full_path).unwrap();
-        let resource = FluentResource::try_new(source).unwrap();
+        let source = read_file(&full_path).expect("Failed to read file.");
+        let resource = FluentResource::try_new(source)
+            .expect("Could not parse an FTL string.");
         resources.push(resource);
     }
 
     for res in &resources {
-        bundle.add_resource(res).unwrap();
+        bundle.add_resource(res)
+            .expect("Failed to add FTL resources to the bundle.");
     }
 
     // 7. Check if the input is provided.
@@ -138,24 +140,27 @@ fn main() {
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    println!("{}", bundle.format("response-msg", Some(&args)).unwrap().0);
+                    let (value, _) = bundle.format("response-msg", Some(&args))
+
+                        .expect("Failed to format a message.");
+                    println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
                     args.insert("input", FluentValue::from(input.to_string()));
                     args.insert("reason", FluentValue::from(err.to_string()));
+                    let (value, _) = bundle.format("input-parse-error-msg", Some(&args))
+                        .expect("Failed to format a message.");
                     println!(
                         "{}",
-                        bundle
-                            .format("input-parse-error-msg", Some(&args))
-                            .unwrap()
-                            .0
-                    );
+                        value);
                 }
             }
         }
         None => {
-            println!("{}", bundle.format("missing-arg-error", None).unwrap().0);
+            let (value, _) = bundle.format("missing-arg-error", None)
+                .expect("Failed to format a message.");
+            println!("{}", value);
         }
     }
 }
