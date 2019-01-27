@@ -6,8 +6,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use fluent_bundle::bundle::FluentBundle;
-use fluent_bundle::resource::FluentResource;
+use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_syntax::ast;
 
 fn read_file(path: &str) -> Result<String, io::Error> {

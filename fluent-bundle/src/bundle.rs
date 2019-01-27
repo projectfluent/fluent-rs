@@ -28,9 +28,7 @@ pub struct Message {
 /// # Examples
 ///
 /// ```
-/// use fluent_bundle::bundle::FluentBundle;
-/// use fluent_bundle::resource::FluentResource;
-/// use fluent_bundle::types::FluentValue;
+/// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 /// use std::collections::HashMap;
 ///
 /// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
@@ -92,7 +90,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
+    /// use fluent_bundle::FluentBundle;
     ///
     /// let mut bundle = FluentBundle::new(&["en-US"]);
     /// ```
@@ -123,8 +121,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
     /// let resource = FluentResource::try_new("hello = Hi!".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
@@ -146,9 +143,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
-    /// use fluent_bundle::types::FluentValue;
+    /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     ///
     /// let resource = FluentResource::try_new("length = { STRLEN(\"12345\") }".to_string()).unwrap();
     /// let mut bundle = FluentBundle::new(&["en-US"]);
@@ -190,8 +185,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
     /// let resource = FluentResource::try_new("
     /// hello = Hi!
@@ -258,9 +252,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
-    /// use fluent_bundle::types::FluentValue;
+    /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     /// use std::collections::HashMap;
     ///
     /// let resource = FluentResource::try_new("intro = Welcome, { $name }.".to_string()).unwrap();
@@ -278,8 +270,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// An example with attributes and no args:
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
     /// let resource = FluentResource::try_new("
     /// hello =
@@ -308,8 +299,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// if the fallback formatting policies are acceptable.
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
+    /// use fluent_bundle::{FluentBundle, FluentResource};
     ///
     /// // Create a message with bad cyclic reference
     /// let mut res = FluentResource::try_new("foo = a { foo } b".to_string()).unwrap();
@@ -379,9 +369,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// # Examples
     ///
     /// ```
-    /// use fluent_bundle::bundle::FluentBundle;
-    /// use fluent_bundle::resource::FluentResource;
-    /// use fluent_bundle::types::FluentValue;
+    /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
     /// use std::collections::HashMap;
     ///
     /// let mut res = FluentResource::try_new("

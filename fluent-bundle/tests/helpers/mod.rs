@@ -1,7 +1,6 @@
-use fluent_bundle::bundle::FluentBundle;
 use fluent_bundle::bundle::FluentError;
 use fluent_bundle::bundle::Message;
-use fluent_bundle::resource::FluentResource;
+use fluent_bundle::{FluentBundle, FluentResource};
 
 #[allow(dead_code)]
 pub fn assert_format_none(result: Option<(String, Vec<FluentError>)>) {

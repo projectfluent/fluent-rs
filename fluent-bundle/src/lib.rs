@@ -11,9 +11,7 @@
 //! # Example
 //!
 //! ```
-//! use fluent_bundle::bundle::FluentBundle;
-//! use fluent_bundle::types::FluentValue;
-//! use fluent_bundle::resource::FluentResource;
+//! use fluent_bundle::{FluentBundle, FluentValue, FluentResource};
 //! use std::collections::HashMap;
 //!
 //! let res = FluentResource::try_new("
@@ -46,3 +44,7 @@ pub mod errors;
 pub mod resolve;
 pub mod resource;
 pub mod types;
+
+pub use bundle::FluentBundle;
+pub use resource::FluentResource;
+pub use types::FluentValue;

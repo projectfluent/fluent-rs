@@ -1,4 +1,4 @@
-use fluent_bundle::bundle::FluentBundle;
+use fluent_bundle::FluentBundle;
 
 #[test]
 fn bundle_new_from_str() {

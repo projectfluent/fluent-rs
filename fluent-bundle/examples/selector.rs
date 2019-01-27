@@ -1,6 +1,4 @@
-use fluent_bundle::bundle::FluentBundle;
-use fluent_bundle::resource::FluentResource;
-use fluent_bundle::types::FluentValue;
+use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use std::collections::HashMap;
 
 fn main() {

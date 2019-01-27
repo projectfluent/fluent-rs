@@ -1,5 +1,4 @@
-use fluent_bundle::bundle::FluentBundle;
-use fluent_bundle::resource::FluentResource;
+use fluent_bundle::{FluentBundle, FluentResource};
 
 fn main() {
     let res = FluentResource::try_new("hello-world = Hello, world!".to_owned()).unwrap();

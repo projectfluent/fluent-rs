@@ -1,6 +1,4 @@
-use fluent_bundle::bundle::FluentBundle;
-use fluent_bundle::resource::FluentResource;
-use fluent_bundle::types::FluentValue;
+use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 
 fn main() {
     // We define the resources here so that they outlive
