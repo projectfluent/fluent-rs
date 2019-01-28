@@ -14,23 +14,33 @@
 //! use fluent_bundle::{FluentBundle, FluentValue, FluentResource};
 //! use std::collections::HashMap;
 //!
-//! let res = FluentResource::try_new("
+//! let ftl_string = String::from("
 //! hello-world = Hello, world!
 //! intro = Welcome, { $name }.
-//! ".to_owned()).expect("Failed to parse FTL.");
+//! ");
+//! let res = FluentResource::try_new(ftl_string)
+//!     .expect("Could not parse an FTL string.");
 //!
 //! let mut bundle = FluentBundle::new(&["en-US"]);
 //!
-//! bundle.add_resource(&res).expect("Failed to add FluentResource to Bundle.");
+//! bundle
+//!     .add_resource(&res)
+//!     .expect("Failed to add FTL resources to the bundle.");
 //!
-//! let value = bundle.format("hello-world", None);
-//! assert_eq!(value, Some(("Hello, world!".to_string(), vec![])));
+//! let (value, _) = bundle
+//!     .format("hello-world", None);
+//!     .expect("Failed to format a message.");
+//!
+//! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = HashMap::new();
 //! args.insert("name", FluentValue::from("John"));
 //!
-//! let value = bundle.format("intro", Some(&args));
-//! assert_eq!(value, Some(("Welcome, John.".to_string(), vec![])));
+//! let (value, _) = bundle
+//!     .format("intro", Some(&args));
+//!     .expect("Failed to format a message.");
+//!
+//! assert_eq!(value, "Welcome, John.");
 //! ```
 
 #[macro_use]
