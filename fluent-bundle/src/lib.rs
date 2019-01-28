@@ -28,7 +28,7 @@
 //!     .expect("Failed to add FTL resources to the bundle.");
 //!
 //! let (value, _) = bundle
-//!     .format("hello-world", None);
+//!     .format("hello-world", None)
 //!     .expect("Failed to format a message.");
 //!
 //! assert_eq!(&value, "Hello, world!");
@@ -37,7 +37,7 @@
 //! args.insert("name", FluentValue::from("John"));
 //!
 //! let (value, _) = bundle
-//!     .format("intro", Some(&args));
+//!     .format("intro", Some(&args))
 //!     .expect("Failed to format a message.");
 //!
 //! assert_eq!(value, "Welcome, John.");
