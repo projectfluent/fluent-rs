@@ -412,10 +412,8 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
             .into_iter()
             .take(last_non_blank + 1)
             .enumerate()
-            .filter_map(|(i, elem)| match elem {
-                PatternElementPlaceholders::Placeable(exp) => {
-                    Some(ast::PatternElement::Placeable(exp))
-                }
+            .map(|(i, elem)| match elem {
+                PatternElementPlaceholders::Placeable(exp) => ast::PatternElement::Placeable(exp),
                 PatternElementPlaceholders::TextElement(start, end, indent, role) => {
                     let start = if role == TextElementPosition::LineStart {
                         if let Some(common_indent) = common_indent {
@@ -428,9 +426,9 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     };
                     let slice = ps.get_slice(start, end);
                     if last_non_blank == i {
-                        Some(ast::PatternElement::TextElement(slice.trim_end()))
+                        ast::PatternElement::TextElement(slice.trim_end())
                     } else {
-                        Some(ast::PatternElement::TextElement(slice))
+                        ast::PatternElement::TextElement(slice)
                     }
                 }
             })
