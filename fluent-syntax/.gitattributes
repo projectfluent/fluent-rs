@@ -1,0 +1,2 @@
+tests/fixtures/crlf.ftl eol=crlf
+tests/fixtures/cr.ftl eol=cr
