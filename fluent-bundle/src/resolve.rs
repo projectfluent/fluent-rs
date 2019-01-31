@@ -19,6 +19,7 @@ use fluent_syntax::ast;
 #[derive(Debug, PartialEq)]
 pub enum ResolverError {
     None,
+    Value,
     Cyclic,
 }
 
@@ -133,7 +134,7 @@ impl<'source> ResolveValue for ast::VariantKey<'source> {
         match self {
             ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
             ast::VariantKey::NumberLiteral { value } => {
-                FluentValue::as_number(value).map_err(|_| ResolverError::None)
+                FluentValue::as_number(value).map_err(|_| ResolverError::Value)
             }
         }
     }
@@ -154,9 +155,12 @@ impl<'source> ResolveValue for ast::Expression<'source> {
                                 }
                             }
                             ast::VariantKey::NumberLiteral { value } => {
-                                let key = FluentValue::as_number(value).unwrap();
-                                if key.matches(env.bundle, selector) {
-                                    return variant.value.to_value(env);
+                                if let Ok(key) = FluentValue::as_number(value) {
+                                    if key.matches(env.bundle, selector) {
+                                        return variant.value.to_value(env);
+                                    }
+                                } else {
+                                    return Err(ResolverError::Value);
                                 }
                             }
                         }
@@ -180,7 +184,7 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
                 Ok(FluentValue::from(*raw))
             }
             ast::InlineExpression::NumberLiteral { value } => {
-                Ok(FluentValue::as_number(*value).unwrap())
+                FluentValue::as_number(*value).map_err(|_| ResolverError::None)
             }
             ast::InlineExpression::VariableReference { id } => env
                 .args
