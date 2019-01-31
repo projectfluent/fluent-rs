@@ -176,7 +176,7 @@ impl<'bundle> FluentBundle<'bundle> {
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'bundle
-            + Fn(&[Option<FluentValue>], &HashMap<String, Option<FluentValue>>) -> Option<FluentValue>
+            + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>
             + Sync
             + Send,
     {

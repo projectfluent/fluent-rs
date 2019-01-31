@@ -36,7 +36,7 @@ fn main() {
     bundle
         .add_function("BASE_OWNERSHIP", |_args, named_args| {
             return match named_args.get("ownership") {
-                Some(&Some(FluentValue::String(ref string))) => {
+                Some(FluentValue::String(ref string)) => {
                     Some(format!("All your base belong to {}", string).into())
                 }
                 _ => None,

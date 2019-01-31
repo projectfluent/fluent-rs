@@ -6,7 +6,7 @@ use fluent_syntax::ast;
 
 type FluentFunction<'bundle> = Box<
     'bundle
-        + Fn(&[Option<FluentValue>], &HashMap<String, Option<FluentValue>>) -> Option<FluentValue>
+        + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>
         + Send
         + Sync,
 >;
