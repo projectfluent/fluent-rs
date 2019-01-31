@@ -205,7 +205,7 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
 
                 for arg in named {
                     resolved_named_args
-                        .insert(arg.name.name.to_string(), arg.value.to_value(env).unwrap());
+                        .insert(arg.name.name.to_string(), arg.value.to_value(env).ok());
                 }
 
                 let func = match **callee {
