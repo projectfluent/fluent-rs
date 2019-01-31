@@ -177,11 +177,7 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::InlineExpression::StringLiteral { raw } => {
-                if let Some(unescaped_value) = unescape_unicode(raw) {
-                    Ok(FluentValue::from(unescaped_value))
-                } else {
-                    Ok(FluentValue::from(*raw))
-                }
+                Ok(FluentValue::from(unescape_unicode(raw).into_owned()))
             }
             ast::InlineExpression::NumberLiteral { value } => {
                 Ok(FluentValue::as_number(*value).unwrap())

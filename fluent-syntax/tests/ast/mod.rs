@@ -359,11 +359,7 @@ where
     let mut map = serializer.serialize_map(Some(3))?;
     map.serialize_entry("type", "StringLiteral")?;
     map.serialize_entry("raw", raw)?;
-    if let Some(unescaped_value) = unescape_unicode(&raw) {
-        map.serialize_entry("value", &unescaped_value)?;
-    } else {
-        map.serialize_entry("value", &raw)?;
-    }
+    map.serialize_entry("value", &unescape_unicode(&raw))?;
     map.end()
 }
 
