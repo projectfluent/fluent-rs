@@ -20,6 +20,7 @@ use fluent_syntax::unicode::unescape_unicode;
 #[derive(Debug, PartialEq)]
 pub enum ResolverError {
     None,
+    Value,
     Cyclic,
 }
 
@@ -134,7 +135,7 @@ impl<'source> ResolveValue for ast::VariantKey<'source> {
         match self {
             ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
             ast::VariantKey::NumberLiteral { value } => {
-                FluentValue::as_number(value).map_err(|_| ResolverError::None)
+                FluentValue::as_number(value).map_err(|_| ResolverError::Value)
             }
         }
     }
@@ -155,9 +156,12 @@ impl<'source> ResolveValue for ast::Expression<'source> {
                                 }
                             }
                             ast::VariantKey::NumberLiteral { value } => {
-                                let key = FluentValue::as_number(value).unwrap();
-                                if key.matches(env.bundle, selector) {
-                                    return variant.value.to_value(env);
+                                if let Ok(key) = FluentValue::as_number(value) {
+                                    if key.matches(env.bundle, selector) {
+                                        return variant.value.to_value(env);
+                                    }
+                                } else {
+                                    return Err(ResolverError::Value);
                                 }
                             }
                         }
@@ -180,7 +184,7 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
                 Ok(FluentValue::from(unescape_unicode(raw).into_owned()))
             }
             ast::InlineExpression::NumberLiteral { value } => {
-                Ok(FluentValue::as_number(*value).unwrap())
+                FluentValue::as_number(*value).map_err(|_| ResolverError::None)
             }
             ast::InlineExpression::VariableReference { id } => env
                 .args
@@ -200,8 +204,10 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
                 }
 
                 for arg in named {
-                    resolved_named_args
-                        .insert(arg.name.name.to_string(), arg.value.to_value(env).unwrap());
+                    if let Ok(arg_value) = arg.value.to_value(env) {
+                        resolved_named_args
+                            .insert(arg.name.name.to_string(), arg_value);
+                    }
                 }
 
                 let func = match **callee {
