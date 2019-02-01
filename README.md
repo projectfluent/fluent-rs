@@ -4,7 +4,7 @@
 
 The crates perform the following functions:
 
-## fluent [![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
+## fluent-bundle [![crates.io](http://meritbadge.herokuapp.com/fluent_bundle)](https://crates.io/crates/fluent_bundle)
 
 Implementation of the Fluent Localization System providing localization capabilities for any Rust project.
 
