@@ -1,0 +1,21 @@
+[package]
+name = "fluent"
+description = """
+A localization system designed to unleash the entire expressive power of
+natural language translations.
+"""
+version = "0.5.0"
+edition = "2018"
+authors = [
+    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Staś Małolepszy <stas@mozilla.com>"
+]
+homepage = "http://www.projectfluent.org"
+license = "Apache-2.0/MIT"
+repository = "https://github.com/projectfluent/fluent-rs"
+readme = "README.md"
+keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
+categories = ["localization", "internationalization"]
+
+[dependencies]
+fluent-bundle = "^0.5"
