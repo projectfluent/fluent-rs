@@ -4,7 +4,7 @@ description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.4.3"
+version = "0.5.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -19,12 +19,12 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-locale = "^0.4.1"
-fluent-syntax = { path = "../fluent-syntax" }
+fluent-syntax = "^0.8"
 failure = "^0.1"
 failure_derive = "^0.1"
 intl_pluralrules = "^1.0"
 rental = "^0.5.2"
-criterion = "0.2"
+criterion = "^0.2"
 
 [[bench]]
 name = "resolver"

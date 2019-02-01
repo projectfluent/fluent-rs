@@ -4,6 +4,12 @@
 
   - …
 
+## fluent-bundle 0.5.0 (January 31, 2019)
+
+  - Update to fluent-syntax 0.8
+  - Add unicode escaping
+  - Align with zero-copy parser
+
 ## fluent 0.4.3 (October 13, 2018)
 
   - Support Sync+Send in Entry (#70)
