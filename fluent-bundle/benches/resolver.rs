@@ -39,7 +39,7 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
 }
 
 fn resolver_bench(c: &mut Criterion) {
-    let tests = &["simple", "menubar"];
+    let tests = &["simple", "menubar", "unescape"];
     let ftl_strings = get_strings(tests);
 
     c.bench_function_over_inputs(
