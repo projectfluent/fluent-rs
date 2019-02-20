@@ -131,8 +131,8 @@ pub struct VariantDef<'ast> {
 pub struct TermDef<'ast> {
     #[serde(with = "IdentifierDef")]
     pub id: ast::Identifier<'ast>,
-    #[serde(with = "ValueDef")]
-    pub value: ast::Value<'ast>,
+    #[serde(with = "PatternDef")]
+    pub value: ast::Pattern<'ast>,
     #[serde(serialize_with = "serialize_attribute_vec")]
     pub attributes: Vec<ast::Attribute<'ast>>,
     #[serde(serialize_with = "serialize_comment_option")]
@@ -177,18 +177,6 @@ where
     #[derive(Serialize)]
     struct Helper<'ast>(#[serde(with = "CommentDef")] &'ast ast::Comment<'ast>);
     v.as_ref().map(Helper).serialize(serializer)
-}
-
-#[derive(Serialize)]
-#[serde(remote = "ast::Value")]
-#[serde(tag = "type")]
-pub enum ValueDef<'ast> {
-    #[serde(with = "PatternDef")]
-    Pattern(ast::Pattern<'ast>),
-    VariantList {
-        #[serde(serialize_with = "serialize_variants")]
-        variants: Vec<ast::Variant<'ast>>,
-    },
 }
 
 #[derive(Serialize)]
@@ -268,8 +256,13 @@ where
 #[serde(remote = "ast::VariantKey")]
 #[serde(tag = "type")]
 pub enum VariantKeyDef<'ast> {
-    Identifier { name: &'ast str },
-    NumberLiteral { value: &'ast str },
+    Identifier {
+        name: &'ast str,
+    },
+    #[serde(serialize_with = "serialize_number_literal")]
+    NumberLiteral {
+        raw: &'ast str,
+    },
 }
 
 #[derive(Serialize)]
@@ -302,47 +295,30 @@ where
 #[serde(tag = "type")]
 pub enum InlineExpressionDef<'ast> {
     #[serde(serialize_with = "serialize_string_literal")]
-    StringLiteral {
-        raw: &'ast str,
-    },
-    NumberLiteral {
-        value: &'ast str,
-    },
-    VariableReference {
+    StringLiteral { raw: &'ast str },
+    #[serde(serialize_with = "serialize_number_literal")]
+    NumberLiteral { raw: &'ast str },
+    FunctionReference {
         #[serde(with = "IdentifierDef")]
         id: ast::Identifier<'ast>,
-    },
-    CallExpression {
-        #[serde(with = "InlineExpressionDef")]
-        callee: ast::InlineExpression<'ast>,
-        #[serde(serialize_with = "serialize_inline_expressions")]
-        positional: Vec<ast::InlineExpression<'ast>>,
-        #[serde(serialize_with = "serialize_named_arguments")]
-        named: Vec<ast::NamedArgument<'ast>>,
-    },
-    AttributeExpression {
-        #[serde(with = "InlineExpressionDef")]
-        #[serde(rename = "ref")]
-        reference: ast::InlineExpression<'ast>,
-        #[serde(with = "IdentifierDef")]
-        name: ast::Identifier<'ast>,
-    },
-    VariantExpression {
-        #[serde(with = "InlineExpressionDef")]
-        #[serde(rename = "ref")]
-        reference: ast::InlineExpression<'ast>,
-        #[serde(with = "VariantKeyDef")]
-        key: ast::VariantKey<'ast>,
+        #[serde(serialize_with = "serialize_call_arguments_option")]
+        arguments: Option<ast::CallArguments<'ast>>,
     },
     MessageReference {
         #[serde(with = "IdentifierDef")]
         id: ast::Identifier<'ast>,
+        #[serde(serialize_with = "serialize_identifier_option")]
+        attribute: Option<ast::Identifier<'ast>>,
     },
     TermReference {
         #[serde(with = "IdentifierDef")]
         id: ast::Identifier<'ast>,
+        #[serde(serialize_with = "serialize_identifier_option")]
+        attribute: Option<ast::Identifier<'ast>>,
+        #[serde(serialize_with = "serialize_call_arguments_option")]
+        arguments: Option<ast::CallArguments<'ast>>,
     },
-    FunctionReference {
+    VariableReference {
         #[serde(with = "IdentifierDef")]
         id: ast::Identifier<'ast>,
     },
@@ -350,6 +326,30 @@ pub enum InlineExpressionDef<'ast> {
         #[serde(with = "ExpressionDef")]
         expression: ast::Expression<'ast>,
     },
+}
+
+fn serialize_call_arguments_option<'se, S>(
+    v: &Option<ast::CallArguments<'se>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "CallArgumentsDef")] &'ast ast::CallArguments<'ast>);
+    v.as_ref().map(Helper).serialize(serializer)
+}
+
+fn serialize_identifier_option<'se, S>(
+    v: &Option<ast::Identifier<'se>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "IdentifierDef")] &'ast ast::Identifier<'ast>);
+    v.as_ref().map(Helper).serialize(serializer)
 }
 
 fn serialize_string_literal<'se, S>(raw: &'se str, serializer: S) -> Result<S::Ok, S::Error>
@@ -363,6 +363,32 @@ where
     map.end()
 }
 
+fn serialize_number_literal<'se, S>(raw: &'se str, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    let mut map = serializer.serialize_map(Some(3))?;
+    map.serialize_entry("type", "NumberLiteral")?;
+    //map.serialize_entry("raw", raw)?;
+
+    if let Some(dot_pos) = raw.find('.') {
+        let precision = raw.len() - dot_pos - 1;
+        if raw[dot_pos + 1..].chars().all(|c| c == '0') {
+            let value: isize = raw[..dot_pos].parse().expect(raw);
+            map.serialize_entry("value", &value)?;
+        } else {
+            let value: f32 = raw.parse().expect(raw);
+            map.serialize_entry("value", &value)?;
+        }
+        map.serialize_entry("precision", &precision)?;
+    } else {
+        let value: isize = raw.parse().expect(raw);
+        map.serialize_entry("value", &value)?;
+        map.serialize_entry("precision", &0)?;
+    }
+    map.end()
+}
+
 #[derive(Serialize)]
 #[serde(remote = "ast::Attribute")]
 #[serde(tag = "type")]
@@ -372,6 +398,17 @@ pub struct AttributeDef<'ast> {
     pub id: ast::Identifier<'ast>,
     #[serde(with = "PatternDef")]
     pub value: ast::Pattern<'ast>,
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::CallArguments")]
+#[serde(tag = "type")]
+#[serde(rename = "CallArguments")]
+pub struct CallArgumentsDef<'ast> {
+    #[serde(serialize_with = "serialize_inline_expressions")]
+    pub positional: Vec<ast::InlineExpression<'ast>>,
+    #[serde(serialize_with = "serialize_named_arguments")]
+    pub named: Vec<ast::NamedArgument<'ast>>,
 }
 
 #[derive(Serialize)]

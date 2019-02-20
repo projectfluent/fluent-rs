@@ -114,7 +114,7 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
     ps.expect_byte(b'=')?;
     ps.skip_blank_inline();
 
-    let value = get_value(ps)?;
+    let value = get_pattern(ps)?;
 
     ps.skip_blank_block();
 
@@ -135,28 +135,6 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
             entry_start, ps.ptr
         )
     }
-}
-
-fn get_value<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Value<'p>>> {
-    if ps.skip_to_value_start().is_none() {
-        return Ok(None);
-    }
-
-    if ps.is_current_byte(b'{') {
-        let start = ps.ptr;
-        ps.ptr += 1;
-        ps.skip_blank();
-        if ps.is_current_byte(b'*') || ps.is_current_byte(b'[') {
-            let variants = get_variants(ps)?;
-            ps.expect_byte(b'}')?;
-            return Ok(Some(ast::Value::VariantList { variants }));
-        }
-        ps.ptr = start;
-    }
-
-    let pattern = get_pattern(ps)?;
-
-    Ok(pattern.map(ast::Value::Pattern))
 }
 
 fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
@@ -225,6 +203,15 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
     Ok(ast::Identifier { name })
 }
 
+fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Identifier<'p>>> {
+    if !ps.take_byte_if(b'.') {
+        Ok(None)
+    } else {
+        let ident = get_identifier(ps)?;
+        Ok(Some(ident))
+    }
+}
+
 fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>> {
     if !ps.take_byte_if(b'[') {
         return error!(ErrorKind::ExpectedToken('['), ps.ptr);
@@ -233,7 +220,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
 
     let key = if ps.is_number_start() {
         ast::VariantKey::NumberLiteral {
-            value: get_number_literal(ps)?,
+            raw: get_number_literal(ps)?,
         }
     } else {
         ast::VariantKey::Identifier {
@@ -475,7 +462,7 @@ fn get_text_slice<'p>(
                 ));
             }
             b'}' => {
-                return error!(ErrorKind::Generic, ps.ptr);
+                return error!(ErrorKind::UnbalancedClosingBrace, ps.ptr);
             }
             _ => {
                 text_element_type = TextElementType::NonBlank;
@@ -553,25 +540,10 @@ fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
     ps.expect_byte(b'}')?;
 
     let invalid_expression_found = match &exp {
-        ast::Expression::InlineExpression(ast::InlineExpression::AttributeExpression {
-            ref reference,
+        ast::Expression::InlineExpression(ast::InlineExpression::TermReference {
+            ref attribute,
             ..
-        }) => {
-            if let ast::InlineExpression::TermReference { .. } = **reference {
-                true
-            } else {
-                false
-            }
-        }
-        ast::Expression::InlineExpression(ast::InlineExpression::CallExpression {
-            callee, ..
-        }) => {
-            if let ast::InlineExpression::AttributeExpression { .. } = **callee {
-                true
-            } else {
-                false
-            }
-        }
+        }) => attribute.is_some(),
         _ => false,
     };
     if invalid_expression_found {
@@ -582,41 +554,34 @@ fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
 }
 
 fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
-    let exp = get_call_expression(ps)?;
+    let exp = get_inline_expression(ps)?;
 
     ps.skip_blank();
 
     if !ps.is_current_byte(b'-') || !ps.is_byte_at(b'>', ps.ptr + 1) {
+        if let ast::InlineExpression::TermReference { ref attribute, .. } = exp {
+            if attribute.is_some() {
+                return error!(ErrorKind::TermAttributeAsPlaceable, ps.ptr);
+            }
+        }
         return Ok(ast::Expression::InlineExpression(exp));
     }
 
-    let is_valid = match exp {
-        ast::InlineExpression::StringLiteral { .. } => true,
-        ast::InlineExpression::NumberLiteral { .. } => true,
-        ast::InlineExpression::VariableReference { .. } => true,
-        ast::InlineExpression::AttributeExpression { ref reference, .. } => {
-            if let ast::InlineExpression::TermReference { .. } = **reference {
-                true
+    match exp {
+        ast::InlineExpression::MessageReference { ref attribute, .. } => {
+            if attribute.is_none() {
+                return error!(ErrorKind::MessageReferenceAsSelector, ps.ptr);
             } else {
-                false
+                return error!(ErrorKind::MessageAttributeAsSelector, ps.ptr);
             }
         }
-        ast::InlineExpression::CallExpression { ref callee, .. } => {
-            if let ast::InlineExpression::FunctionReference { .. } = **callee {
-                true
-            } else if let ast::InlineExpression::AttributeExpression { .. } = **callee {
-                true
-            } else {
-                false
+        ast::InlineExpression::TermReference { ref attribute, .. } => {
+            if attribute.is_none() {
+                return error!(ErrorKind::TermReferenceAsSelector, ps.ptr);
             }
         }
-        _ => false,
+        _ => {}
     };
-
-    if !is_valid {
-        //XXX: Give more specific error type
-        return error!(ErrorKind::MessageReferenceAsSelector, ps.ptr);
-    }
 
     ps.ptr += 2; // ->
 
@@ -632,67 +597,7 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     })
 }
 
-fn get_call_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
-    let mut callee = get_attribute_expression(ps)?;
-
-    let expr = if ps.is_current_byte(b'(') {
-        let is_valid = match callee {
-            ast::InlineExpression::AttributeExpression { ref reference, .. } => {
-                if let ast::InlineExpression::TermReference { .. } = **reference {
-                    true
-                } else {
-                    false
-                }
-            }
-            ast::InlineExpression::TermReference { .. } => true,
-            ast::InlineExpression::MessageReference { ref id, .. } => {
-                id.name.find(|c: char| c.is_ascii_lowercase()).is_none()
-            }
-            _ => false,
-        };
-
-        if !is_valid {
-            return error!(ErrorKind::ForbiddenCallee, ps.ptr);
-        }
-
-        if let ast::InlineExpression::MessageReference { id } = callee {
-            callee = ast::InlineExpression::FunctionReference { id };
-        }
-        let (positional, named) = get_call_args(ps)?;
-        ast::InlineExpression::CallExpression {
-            callee: Box::new(callee),
-            positional,
-            named,
-        }
-    } else {
-        callee
-    };
-
-    Ok(expr)
-}
-
-fn get_attribute_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
-    let reference = get_simple_expression(ps)?;
-
-    match reference {
-        ast::InlineExpression::MessageReference { .. }
-        | ast::InlineExpression::TermReference { .. } => {
-            if ps.is_current_byte(b'.') {
-                ps.ptr += 1; // .
-                let attr = get_identifier(ps)?;
-                Ok(ast::InlineExpression::AttributeExpression {
-                    reference: Box::new(reference),
-                    name: attr,
-                })
-            } else {
-                Ok(reference)
-            }
-        }
-        _ => Ok(reference),
-    }
-}
-
-fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
     match ps.source.get(ps.ptr) {
         Some(b'"') => {
             ps.ptr += 1; // "
@@ -729,26 +634,23 @@ fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
         }
         Some(b) if b.is_ascii_digit() => {
             let num = get_number_literal(ps)?;
-            Ok(ast::InlineExpression::NumberLiteral { value: num })
+            Ok(ast::InlineExpression::NumberLiteral { raw: num })
         }
         Some(b'-') => {
             ps.ptr += 1; // -
             if ps.is_identifier_start() {
                 let id = get_identifier(ps)?;
-                match ps.source.get(ps.ptr) {
-                    Some(b'[') => {
-                        let key = get_variant_key(ps)?;
-                        Ok(ast::InlineExpression::VariantExpression {
-                            reference: Box::new(ast::InlineExpression::TermReference { id }),
-                            key,
-                        })
-                    }
-                    _ => Ok(ast::InlineExpression::TermReference { id }),
-                }
+                let attribute = get_attribute_accessor(ps)?;
+                let arguments = get_call_arguments(ps)?;
+                Ok(ast::InlineExpression::TermReference {
+                    id,
+                    attribute,
+                    arguments,
+                })
             } else {
                 ps.ptr -= 1;
                 let num = get_number_literal(ps)?;
-                Ok(ast::InlineExpression::NumberLiteral { value: num })
+                Ok(ast::InlineExpression::NumberLiteral { raw: num })
             }
         }
         Some(b'$') => {
@@ -758,7 +660,17 @@ fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
         }
         Some(b) if b.is_ascii_alphabetic() => {
             let id = get_identifier(ps)?;
-            Ok(ast::InlineExpression::MessageReference { id })
+            let arguments = get_call_arguments(ps)?;
+            if arguments.is_some() {
+                if !id.name.bytes().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == b'_' || c == b'-') {
+                    return error!(ErrorKind::ForbiddenCallee, ps.ptr);
+                }
+
+                Ok(ast::InlineExpression::FunctionReference { id, arguments })
+            } else {
+                let attribute = get_attribute_accessor(ps)?;
+                Ok(ast::InlineExpression::MessageReference { id, attribute })
+            }
         }
         Some(b'{') => {
             let exp = get_placeable(ps)?;
@@ -766,18 +678,19 @@ fn get_simple_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
                 expression: Box::new(exp),
             })
         }
-        _ => error!(ErrorKind::MissingLiteral, ps.ptr),
+        _ => error!(ErrorKind::ExpectedInlineExpression, ps.ptr),
     }
 }
 
-fn get_call_args<'p>(
-    ps: &mut ParserStream<'p>,
-) -> Result<(Vec<ast::InlineExpression<'p>>, Vec<ast::NamedArgument<'p>>)> {
+fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallArguments<'p>>> {
+    if !ps.take_byte_if(b'(') {
+        return Ok(None);
+    }
+
     let mut positional = vec![];
     let mut named = vec![];
     let mut argument_names = vec![];
 
-    ps.expect_byte(b'(')?;
     ps.skip_blank();
 
     while ps.ptr < ps.length {
@@ -785,10 +698,13 @@ fn get_call_args<'p>(
             break;
         }
 
-        let expr = get_call_expression(ps)?;
+        let expr = get_inline_expression(ps)?;
 
         match expr {
-            ast::InlineExpression::MessageReference { ref id } => {
+            ast::InlineExpression::MessageReference {
+                ref id,
+                attribute: None,
+            } => {
                 ps.skip_blank();
                 if ps.is_current_byte(b':') {
                     if argument_names.contains(&id.name.to_owned()) {
@@ -799,7 +715,7 @@ fn get_call_args<'p>(
                     }
                     ps.ptr += 1;
                     ps.skip_blank();
-                    let val = get_call_expression(ps)?;
+                    let val = get_inline_expression(ps)?;
                     argument_names.push(id.name.to_owned());
                     named.push(ast::NamedArgument {
                         name: ast::Identifier { name: id.name },
@@ -826,7 +742,8 @@ fn get_call_args<'p>(
     }
 
     ps.expect_byte(b')')?;
-    Ok((positional, named))
+
+    Ok(Some(ast::CallArguments { positional, named }))
 }
 
 fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {

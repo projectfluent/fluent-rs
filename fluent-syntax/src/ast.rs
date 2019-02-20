@@ -27,15 +27,9 @@ pub struct Message<'ast> {
 #[derive(Debug, PartialEq)]
 pub struct Term<'ast> {
     pub id: Identifier<'ast>,
-    pub value: Value<'ast>,
+    pub value: Pattern<'ast>,
     pub attributes: Vec<Attribute<'ast>>,
     pub comment: Option<Comment<'ast>>,
-}
-
-#[derive(Debug, PartialEq)]
-pub enum Value<'ast> {
-    Pattern(Pattern<'ast>),
-    VariantList { variants: Vec<Variant<'ast>> },
 }
 
 #[derive(Debug, PartialEq)]
@@ -70,7 +64,7 @@ pub struct Variant<'ast> {
 #[derive(Debug, PartialEq)]
 pub enum VariantKey<'ast> {
     Identifier { name: &'ast str },
-    NumberLiteral { value: &'ast str },
+    NumberLiteral { raw: &'ast str },
 }
 
 #[derive(Debug, PartialEq)]
@@ -86,39 +80,33 @@ pub enum InlineExpression<'ast> {
         raw: &'ast str,
     },
     NumberLiteral {
-        value: &'ast str,
+        raw: &'ast str,
     },
-    VariableReference {
+    FunctionReference {
         id: Identifier<'ast>,
-    },
-    CallExpression {
-        callee: Box<InlineExpression<'ast>>,
-        positional: Vec<InlineExpression<'ast>>,
-        named: Vec<NamedArgument<'ast>>,
-    },
-    AttributeExpression {
-        reference: Box<InlineExpression<'ast>>,
-        name: Identifier<'ast>,
-    },
-    VariantExpression {
-        reference: Box<InlineExpression<'ast>>,
-        key: VariantKey<'ast>,
+        arguments: Option<CallArguments<'ast>>,
     },
     MessageReference {
         id: Identifier<'ast>,
+        attribute: Option<Identifier<'ast>>,
     },
     TermReference {
         id: Identifier<'ast>,
+        attribute: Option<Identifier<'ast>>,
+        arguments: Option<CallArguments<'ast>>,
     },
-    // This node is standalone in EBNF, but it
-    // is more convinient for us to store it a
-    // variant of the InlineExpression in Rust.
-    FunctionReference {
+    VariableReference {
         id: Identifier<'ast>,
     },
     Placeable {
         expression: Box<Expression<'ast>>,
     },
+}
+
+#[derive(Debug, PartialEq)]
+pub struct CallArguments<'ast> {
+    pub positional: Vec<InlineExpression<'ast>>,
+    pub named: Vec<NamedArgument<'ast>>,
 }
 
 #[derive(Debug, PartialEq)]
