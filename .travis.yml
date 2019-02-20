@@ -11,13 +11,17 @@ rust:
   - beta
   - stable
 
+before_cache: |
+  if [[ "$TRAVIS_RUST_VERSION" == nightly ]]; then
+    RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin -f
+  fi
+
 script:
 - cargo clean
 - cargo build
 - cargo test
 
-before_cache: |
+after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == nightly ]]; then
-    RUSTFLAGS="--cfg procmacro2_semver_exempt" cargo install cargo-tarpaulin
-    cargo +nightly tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
   fi
