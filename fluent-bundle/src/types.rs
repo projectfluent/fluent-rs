@@ -29,7 +29,7 @@ pub enum FluentValue {
 }
 
 impl FluentValue {
-    pub fn as_number<S: ToString>(v: S) -> Result<Self, ParseFloatError> {
+    pub fn into_number<S: ToString>(v: S) -> Result<Self, ParseFloatError> {
         f64::from_str(&v.to_string()).map(|_| FluentValue::Number(v.to_string()))
     }
 

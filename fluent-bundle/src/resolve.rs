@@ -35,6 +35,17 @@ pub struct Env<'env> {
 }
 
 impl<'env> Env<'env> {
+    pub fn new(
+        bundle: &'env FluentBundle,
+        args: Option<&'env HashMap<&'env str, FluentValue>>,
+    ) -> Self {
+        Env {
+            bundle,
+            args,
+            travelled: RefCell::new(Vec::new()),
+        }
+    }
+
     fn track<F>(&self, identifier: &str, action: F) -> Result<FluentValue, ResolverError>
     where
         F: FnMut() -> Result<FluentValue, ResolverError>,
@@ -87,18 +98,6 @@ impl<'source> ResolveValue for ast::Attribute<'source> {
     }
 }
 
-impl<'source> ResolveValue for ast::Value<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        match self {
-            ast::Value::Pattern(p) => p.to_value(env),
-            ast::Value::VariantList { variants } => select_default(variants)
-                .ok_or(ResolverError::None)?
-                .value
-                .to_value(env),
-        }
-    }
-}
-
 impl<'source> ResolveValue for ast::Pattern<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         let mut string = String::with_capacity(128);
@@ -134,8 +133,8 @@ impl<'source> ResolveValue for ast::VariantKey<'source> {
     fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
-            ast::VariantKey::NumberLiteral { value } => {
-                FluentValue::as_number(value).map_err(|_| ResolverError::Value)
+            ast::VariantKey::NumberLiteral { raw } => {
+                FluentValue::into_number(raw).map_err(|_| ResolverError::Value)
             }
         }
     }
@@ -155,8 +154,8 @@ impl<'source> ResolveValue for ast::Expression<'source> {
                                     return variant.value.to_value(env);
                                 }
                             }
-                            ast::VariantKey::NumberLiteral { value } => {
-                                if let Ok(key) = FluentValue::as_number(value) {
+                            ast::VariantKey::NumberLiteral { raw } => {
+                                if let Ok(key) = FluentValue::into_number(raw) {
                                     if key.matches(env.bundle, selector) {
                                         return variant.value.to_value(env);
                                     }
@@ -183,109 +182,66 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
             ast::InlineExpression::StringLiteral { raw } => {
                 Ok(FluentValue::from(unescape_unicode(raw).into_owned()))
             }
-            ast::InlineExpression::NumberLiteral { value } => {
-                FluentValue::as_number(*value).map_err(|_| ResolverError::None)
+            ast::InlineExpression::NumberLiteral { raw } => {
+                FluentValue::into_number(*raw).map_err(|_| ResolverError::None)
             }
-            ast::InlineExpression::VariableReference { id } => env
-                .args
-                .and_then(|args| args.get(&id.name))
-                .cloned()
-                .ok_or(ResolverError::None),
-            ast::InlineExpression::CallExpression {
-                ref callee,
-                ref positional,
-                ref named,
-            } => {
-                let mut resolved_positional_args = Vec::new();
-                let mut resolved_named_args = HashMap::new();
+            ast::InlineExpression::FunctionReference { id, arguments } => {
+                let (resolved_positional_args, resolved_named_args) = get_arguments(env, arguments);
 
-                for expression in positional {
-                    resolved_positional_args.push(expression.to_value(env).ok());
-                }
-
-                for arg in named {
-                    if let Ok(arg_value) = arg.value.to_value(env) {
-                        resolved_named_args.insert(arg.name.name.to_string(), arg_value);
-                    }
-                }
-
-                let func = match **callee {
-                    ast::InlineExpression::FunctionReference { ref id } => {
-                        env.bundle.entries.get_function(id.name)
-                    }
-                    _ => panic!(),
-                };
+                let func = env.bundle.entries.get_function(id.name);
 
                 func.ok_or(ResolverError::None).and_then(|func| {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
                         .ok_or(ResolverError::None)
                 })
             }
-            ast::InlineExpression::AttributeExpression { reference, name } => {
-                let attributes: &Vec<ast::Attribute> = match reference.as_ref() {
-                    ast::InlineExpression::MessageReference { ref id } => env
-                        .bundle
-                        .entries
-                        .get_message(&id.name)
-                        .ok_or(ResolverError::None)?
-                        .attributes
-                        .as_ref(),
-                    ast::InlineExpression::TermReference { ref id } => env
-                        .bundle
-                        .entries
-                        .get_term(&id.name)
-                        .ok_or(ResolverError::None)?
-                        .attributes
-                        .as_ref(),
-                    _ => unimplemented!(),
-                };
-                for attribute in attributes {
-                    if attribute.id.name == name.name {
-                        return attribute.to_value(env);
-                    }
-                }
-                Err(ResolverError::None)
-            }
-            ast::InlineExpression::VariantExpression { reference, key } => {
-                if let ast::InlineExpression::TermReference { ref id } = reference.as_ref() {
-                    let term = env
-                        .bundle
-                        .entries
-                        .get_term(&id.name)
-                        .ok_or(ResolverError::None)?;
-
-                    match term.value {
-                        ast::Value::VariantList { ref variants } => {
-                            for variant in variants {
-                                if variant.key == *key {
-                                    return variant.value.to_value(env);
-                                }
-                            }
-
-                            select_default(variants)
-                                .ok_or(ResolverError::None)?
-                                .value
-                                .to_value(env)
+            ast::InlineExpression::MessageReference { id, attribute } => {
+                let msg = env
+                    .bundle
+                    .entries
+                    .get_message(&id.name)
+                    .ok_or(ResolverError::None)?;
+                if let Some(attribute) = attribute {
+                    for attr in msg.attributes.iter() {
+                        if attr.id.name == attribute.name {
+                            return attr.to_value(env);
                         }
-                        ast::Value::Pattern(ref p) => p.to_value(env),
                     }
+                    Err(ResolverError::None)
                 } else {
-                    unimplemented!()
+                    msg.to_value(env)
                 }
             }
-            ast::InlineExpression::FunctionReference { .. } => panic!(),
-            ast::InlineExpression::MessageReference { ref id } => env
-                .bundle
-                .entries
-                .get_message(&id.name)
-                .ok_or(ResolverError::None)?
-                .to_value(env),
-            ast::InlineExpression::TermReference { ref id } => env
-                .bundle
-                .entries
-                .get_term(&id.name)
-                .ok_or(ResolverError::None)?
-                .to_value(env),
+            ast::InlineExpression::TermReference {
+                id,
+                attribute,
+                arguments,
+            } => {
+                let term = env
+                    .bundle
+                    .entries
+                    .get_term(&id.name)
+                    .ok_or(ResolverError::None)?;
+
+                let (.., resolved_named_args) = get_arguments(env, arguments);
+                let env = Env::new(env.bundle, Some(&resolved_named_args));
+
+                if let Some(attribute) = attribute {
+                    for attr in term.attributes.iter() {
+                        if attr.id.name == attribute.name {
+                            return attr.to_value(&env);
+                        }
+                    }
+                    Err(ResolverError::None)
+                } else {
+                    term.to_value(&env)
+                }
+            }
+            ast::InlineExpression::VariableReference { id } => env
+                .args
+                .and_then(|args| args.get(&id.name))
+                .cloned()
+                .ok_or(ResolverError::None),
             ast::InlineExpression::Placeable { ref expression } => {
                 let exp = expression.as_ref();
                 exp.to_value(env)
@@ -304,4 +260,26 @@ fn select_default<'source>(
     }
 
     None
+}
+
+fn get_arguments<'env>(
+    env: &Env,
+    arguments: &'env Option<ast::CallArguments>,
+) -> (Vec<Option<FluentValue>>, HashMap<&'env str, FluentValue>) {
+    let mut resolved_positional_args = Vec::new();
+    let mut resolved_named_args = HashMap::new();
+
+    if let Some(ast::CallArguments { named, positional }) = arguments {
+        for expression in positional {
+            resolved_positional_args.push(expression.to_value(env).ok());
+        }
+
+        for arg in named {
+            if let Ok(arg_value) = arg.value.to_value(env) {
+                resolved_named_args.insert(arg.name.name, arg_value);
+            }
+        }
+    }
+
+    (resolved_positional_args, resolved_named_args)
 }
