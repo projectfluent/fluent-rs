@@ -99,32 +99,6 @@ impl<'p> ParserStream<'p> {
         }
     }
 
-    pub fn skip_to_value_start(&mut self) -> Option<bool> {
-        self.skip_blank_inline();
-
-        if !self.is_eol() {
-            return Some(true);
-        }
-
-        self.skip_blank_block();
-
-        let inline = self.skip_blank_inline();
-
-        if self.is_current_byte(b'{') {
-            return Some(true);
-        }
-
-        if inline == 0 {
-            return None;
-        }
-
-        if !self.is_char_pattern_continuation() {
-            return None;
-        }
-        self.ptr -= inline;
-        Some(false)
-    }
-
     pub fn skip_unicode_escape_sequence(&mut self, length: usize) -> Result<()> {
         let start = self.ptr;
         for _ in 0..length {
@@ -145,13 +119,6 @@ impl<'p> ParserStream<'p> {
             );
         }
         Ok(())
-    }
-
-    pub fn is_char_pattern_continuation(&self) -> bool {
-        match self.source.get(self.ptr) {
-            Some(b) => self.is_byte_pattern_continuation(*b),
-            _ => false,
-        }
     }
 
     pub fn is_identifier_start(&self) -> bool {

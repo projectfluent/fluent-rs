@@ -8,7 +8,7 @@ fn encode_unicode(s: &str) -> char {
         .unwrap_or('�')
 }
 
-pub fn unescape_unicode<'u>(input: &'u str) -> Cow<'u, str> {
+pub fn unescape_unicode(input: &str) -> Cow<str> {
     let bytes = input.as_bytes();
     let mut result = Cow::from(input);
 
