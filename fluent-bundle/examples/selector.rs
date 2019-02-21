@@ -4,7 +4,7 @@ use std::collections::HashMap;
 fn main() {
     let ftl_string = String::from(
         "
-hello-world = Hello {
+hello-world = Hello { $missing ->
        *[one] World
         [two] Moon
     }

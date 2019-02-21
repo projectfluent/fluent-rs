@@ -7,25 +7,25 @@ use self::helpers::{
 #[test]
 fn variant_expression() {
     let res = assert_get_resource_from_str_no_errors(
-        "
+        r#"
 -foo = Foo
 -bar =
-    {
+    { $gender ->
        *[nominative] Bar
         [genitive] Bar's
     }
 baz = { -bar }
 
 use-foo = { -foo }
-use-foo-missing = { -foo[missing] }
+use-foo-missing = { -foo(gender: "missing") }
 
 use-bar = { -bar }
-use-bar-nominative = { -bar[nominative] }
-use-bar-genitive = { -bar[genitive] }
-use-bar-missing = { -bar[missing] }
+use-bar-nominative = { -bar(gender: "nominative") }
+use-bar-genitive = { -bar(gender: "genitive") }
+use-bar-missing = { -bar(gender: "missing") }
 
-missing-missing = { -missing[missing] }
-    ",
+missing-missing = { -missing(gender: "missing") }
+    "#,
     );
     let bundle = assert_get_bundle_no_errors(&res, None);
 

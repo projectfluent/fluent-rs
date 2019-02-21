@@ -4,7 +4,6 @@
 //! internationalization formatters, functions, environmental variables and are expected to be used
 //! together.
 
-use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::entry::{Entry, GetEntry};
@@ -104,7 +103,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// This will panic if no formatters can be found for the locales.
     pub fn new<'a, S: ToString>(locales: &'a [S]) -> FluentBundle<'bundle> {
-        let locales = locales.iter().map(|s| s.to_string()).collect::<Vec<_>>();
+        let locales = locales.iter().map(std::string::ToString::to_string).collect::<Vec<_>>();
         let pr_locale = negotiate_languages(
             &locales,
             IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
@@ -176,7 +175,7 @@ impl<'bundle> FluentBundle<'bundle> {
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'bundle
-            + Fn(&[Option<FluentValue>], &HashMap<String, FluentValue>) -> Option<FluentValue>
+            + Fn(&[Option<FluentValue>], &HashMap<&str, FluentValue>) -> Option<FluentValue>
             + Sync
             + Send,
     {
@@ -343,11 +342,7 @@ impl<'bundle> FluentBundle<'bundle> {
         path: &str,
         args: Option<&HashMap<&str, FluentValue>>,
     ) -> Option<(String, Vec<FluentError>)> {
-        let env = Env {
-            bundle: self,
-            args,
-            travelled: RefCell::new(Vec::new()),
-        };
+        let env = Env::new(self, args);
 
         let mut errors = vec![];
 
@@ -438,11 +433,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ) -> Option<(Message, Vec<FluentError>)> {
         let mut errors = vec![];
 
-        let env = Env {
-            bundle: self,
-            args,
-            travelled: RefCell::new(Vec::new()),
-        };
+        let env = Env::new(self, args);
         let message = self.entries.get_message(message_id)?;
 
         let value = match message.to_value(&env) {
