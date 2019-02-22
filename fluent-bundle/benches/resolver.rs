@@ -59,7 +59,7 @@ fn resolver_bench(c: &mut Criterion) {
                 },
                 |bundle| {
                     for id in &ids {
-                        bundle.format(id, None);
+                        bundle.compound(id, None);
                     }
                 },
             )
