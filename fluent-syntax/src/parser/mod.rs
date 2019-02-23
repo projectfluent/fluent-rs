@@ -662,7 +662,11 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             let id = get_identifier(ps)?;
             let arguments = get_call_arguments(ps)?;
             if arguments.is_some() {
-                if !id.name.bytes().all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == b'_' || c == b'-') {
+                if !id
+                    .name
+                    .bytes()
+                    .all(|c| c.is_ascii_uppercase() || c.is_ascii_digit() || c == b'_' || c == b'-')
+                {
                     return error!(ErrorKind::ForbiddenCallee, ps.ptr);
                 }
 

@@ -49,15 +49,12 @@ fn resolver_bench(c: &mut Criterion) {
             let res =
                 FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
             let ids = get_ids(&res);
-            b.iter_with_setup(
+            let mut bundle = FluentBundle::new(&["x-testing"]);
+            bundle
+                .add_resource(&res)
+                .expect("Couldn't add FluentResource to the FluentBundle");
+            b.iter(
                 || {
-                    let mut bundle = FluentBundle::new(&["x-testing"]);
-                    bundle
-                        .add_resource(&res)
-                        .expect("Couldn't add FluentResource to the FluentBundle");
-                    bundle
-                },
-                |bundle| {
                     for id in &ids {
                         bundle.compound(id, None);
                     }
