@@ -53,13 +53,11 @@ fn resolver_bench(c: &mut Criterion) {
             bundle
                 .add_resource(&res)
                 .expect("Couldn't add FluentResource to the FluentBundle");
-            b.iter(
-                || {
-                    for id in &ids {
-                        bundle.compound(id, None);
-                    }
-                },
-            )
+            b.iter(|| {
+                for id in &ids {
+                    bundle.compound(id, None);
+                }
+            })
         },
         tests,
     );

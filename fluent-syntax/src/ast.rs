@@ -64,7 +64,7 @@ pub struct Variant<'ast> {
 #[derive(Debug, PartialEq)]
 pub enum VariantKey<'ast> {
     Identifier { name: &'ast str },
-    NumberLiteral { raw: &'ast str },
+    NumberLiteral { value: &'ast str },
 }
 
 #[derive(Debug, PartialEq)]
@@ -80,7 +80,7 @@ pub enum InlineExpression<'ast> {
         raw: &'ast str,
     },
     NumberLiteral {
-        raw: &'ast str,
+        value: &'ast str,
     },
     FunctionReference {
         id: Identifier<'ast>,

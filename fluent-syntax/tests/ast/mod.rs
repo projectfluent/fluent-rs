@@ -256,13 +256,8 @@ where
 #[serde(remote = "ast::VariantKey")]
 #[serde(tag = "type")]
 pub enum VariantKeyDef<'ast> {
-    Identifier {
-        name: &'ast str,
-    },
-    #[serde(serialize_with = "serialize_number_literal")]
-    NumberLiteral {
-        raw: &'ast str,
-    },
+    Identifier { name: &'ast str },
+    NumberLiteral { value: &'ast str },
 }
 
 #[derive(Serialize)]
@@ -295,9 +290,12 @@ where
 #[serde(tag = "type")]
 pub enum InlineExpressionDef<'ast> {
     #[serde(serialize_with = "serialize_string_literal")]
-    StringLiteral { raw: &'ast str },
-    #[serde(serialize_with = "serialize_number_literal")]
-    NumberLiteral { raw: &'ast str },
+    StringLiteral {
+        raw: &'ast str,
+    },
+    NumberLiteral {
+        value: &'ast str,
+    },
     FunctionReference {
         #[serde(with = "IdentifierDef")]
         id: ast::Identifier<'ast>,
@@ -360,32 +358,6 @@ where
     map.serialize_entry("type", "StringLiteral")?;
     map.serialize_entry("raw", raw)?;
     map.serialize_entry("value", &unescape_unicode(&raw))?;
-    map.end()
-}
-
-fn serialize_number_literal<'se, S>(raw: &'se str, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut map = serializer.serialize_map(Some(3))?;
-    map.serialize_entry("type", "NumberLiteral")?;
-    //map.serialize_entry("raw", raw)?;
-
-    if let Some(dot_pos) = raw.find('.') {
-        let precision = raw.len() - dot_pos - 1;
-        if raw[dot_pos + 1..].chars().all(|c| c == '0') {
-            let value: isize = raw[..dot_pos].parse().expect(raw);
-            map.serialize_entry("value", &value)?;
-        } else {
-            let value: f32 = raw.parse().expect(raw);
-            map.serialize_entry("value", &value)?;
-        }
-        map.serialize_entry("precision", &precision)?;
-    } else {
-        let value: isize = raw.parse().expect(raw);
-        map.serialize_entry("value", &value)?;
-        map.serialize_entry("precision", &0)?;
-    }
     map.end()
 }
 

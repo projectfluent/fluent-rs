@@ -220,7 +220,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
 
     let key = if ps.is_number_start() {
         ast::VariantKey::NumberLiteral {
-            raw: get_number_literal(ps)?,
+            value: get_number_literal(ps)?,
         }
     } else {
         ast::VariantKey::Identifier {
@@ -634,7 +634,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
         }
         Some(b) if b.is_ascii_digit() => {
             let num = get_number_literal(ps)?;
-            Ok(ast::InlineExpression::NumberLiteral { raw: num })
+            Ok(ast::InlineExpression::NumberLiteral { value: num })
         }
         Some(b'-') => {
             ps.ptr += 1; // -
@@ -650,7 +650,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             } else {
                 ps.ptr -= 1;
                 let num = get_number_literal(ps)?;
-                Ok(ast::InlineExpression::NumberLiteral { raw: num })
+                Ok(ast::InlineExpression::NumberLiteral { value: num })
             }
         }
         Some(b'$') => {

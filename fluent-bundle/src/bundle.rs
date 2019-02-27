@@ -103,7 +103,10 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// This will panic if no formatters can be found for the locales.
     pub fn new<'a, S: ToString>(locales: &'a [S]) -> FluentBundle<'bundle> {
-        let locales = locales.iter().map(std::string::ToString::to_string).collect::<Vec<_>>();
+        let locales = locales
+            .iter()
+            .map(std::string::ToString::to_string)
+            .collect::<Vec<_>>();
         let pr_locale = negotiate_languages(
             &locales,
             IntlPluralRules::get_locales(PluralRuleType::CARDINAL),

@@ -133,8 +133,8 @@ impl<'source> ResolveValue for ast::VariantKey<'source> {
     fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
             ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
-            ast::VariantKey::NumberLiteral { raw } => {
-                FluentValue::into_number(raw).map_err(|_| ResolverError::Value)
+            ast::VariantKey::NumberLiteral { value } => {
+                FluentValue::into_number(value).map_err(|_| ResolverError::Value)
             }
         }
     }
@@ -154,8 +154,8 @@ impl<'source> ResolveValue for ast::Expression<'source> {
                                     return variant.value.to_value(env);
                                 }
                             }
-                            ast::VariantKey::NumberLiteral { raw } => {
-                                if let Ok(key) = FluentValue::into_number(raw) {
+                            ast::VariantKey::NumberLiteral { value } => {
+                                if let Ok(key) = FluentValue::into_number(value) {
                                     if key.matches(env.bundle, selector) {
                                         return variant.value.to_value(env);
                                     }
@@ -182,8 +182,8 @@ impl<'source> ResolveValue for ast::InlineExpression<'source> {
             ast::InlineExpression::StringLiteral { raw } => {
                 Ok(FluentValue::from(unescape_unicode(raw).into_owned()))
             }
-            ast::InlineExpression::NumberLiteral { raw } => {
-                FluentValue::into_number(*raw).map_err(|_| ResolverError::None)
+            ast::InlineExpression::NumberLiteral { value } => {
+                FluentValue::into_number(*value).map_err(|_| ResolverError::None)
             }
             ast::InlineExpression::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) = get_arguments(env, arguments);
