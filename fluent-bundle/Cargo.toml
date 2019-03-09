@@ -17,6 +17,9 @@ readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
+[dev-dependencies]
+criterion = "^0.2"
+
 [dependencies]
 fluent-locale = "^0.4.1"
 fluent-syntax = { path = "../fluent-syntax/" }
@@ -24,7 +27,6 @@ failure = "^0.1"
 failure_derive = "^0.1"
 intl_pluralrules = "^1.0"
 rental = "^0.5.2"
-criterion = "^0.2"
 
 [[bench]]
 name = "resolver"
