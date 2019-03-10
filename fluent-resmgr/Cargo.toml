@@ -1,5 +1,5 @@
 [package]
-name = "fluent"
+name = "fluent-resmgr"
 description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
@@ -19,5 +19,6 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle = { path = "../fluent-bundle" }
+fluent = { path = "../fluent" }
 fluent-locale = "^0.4.1"
 elsa = "^0.1.3"

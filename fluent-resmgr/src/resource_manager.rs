@@ -1,8 +1,9 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
-use std::fs::File;
+use std::fs;
 use std::io;
-use std::io::prelude::*;
+
+
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -40,4 +41,7 @@ impl ResourceManager {
         }
         bundle
     }
+
+    //pub fn get_bundles(&mut self, locales: Vec<&str>, paths: Vec<&str>) -> FluentBundleIterator {
+    //}
 }
