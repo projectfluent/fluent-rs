@@ -6,7 +6,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -38,8 +38,41 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
+fn get_args(name: &str) -> Option<HashMap<&'static str, FluentValue>> {
+    match name {
+        "preferences" => {
+            let mut prefs_args = HashMap::new();
+            prefs_args.insert("name", FluentValue::from("John"));
+            prefs_args.insert("tabCount", FluentValue::from(5));
+            prefs_args.insert("count", FluentValue::from(3));
+            prefs_args.insert("version", FluentValue::from("65.0"));
+            prefs_args.insert("path", FluentValue::from("/tmp"));
+            prefs_args.insert("num", FluentValue::from(4));
+            prefs_args.insert("email", FluentValue::from("john@doe.com"));
+            prefs_args.insert("value", FluentValue::from(4.5));
+            prefs_args.insert("unit", FluentValue::from("mb"));
+            prefs_args.insert("service-name", FluentValue::from("Mozilla Disk"));
+            Some(prefs_args)
+        }
+        _ => None,
+    }
+}
+
+fn add_functions(name: &'static str, bundle: &mut FluentBundle) {
+    match name {
+        "preferences" => {
+            bundle
+                .add_function("PLATFORM", |_args, _named_args| {
+                    return Some("linux".into());
+                })
+                .expect("Failed to add a function to the bundle.");
+        }
+        _ => {}
+    }
+}
+
 fn resolver_bench(c: &mut Criterion) {
-    let tests = &["simple", "menubar", "unescape"];
+    let tests = &["simple", "preferences", "menubar", "unescape"];
     let ftl_strings = get_strings(tests);
 
     c.bench_function_over_inputs(
@@ -53,9 +86,16 @@ fn resolver_bench(c: &mut Criterion) {
             bundle
                 .add_resource(&res)
                 .expect("Couldn't add FluentResource to the FluentBundle");
+            add_functions(name, &mut bundle);
+            let args = get_args(name);
+
             b.iter(|| {
                 for id in &ids {
-                    bundle.compound(id, None);
+                    let (_msg, errors) = bundle.compound(id, args.as_ref()).expect("Message found");
+                    if !errors.is_empty() {
+                        println!("{:#?}", errors);
+                    }
+                    assert!(errors.len() == 0);
                 }
             })
         },

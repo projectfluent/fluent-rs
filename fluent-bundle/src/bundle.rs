@@ -439,13 +439,16 @@ impl<'bundle> FluentBundle<'bundle> {
         let env = Env::new(self, args);
         let message = self.entries.get_message(message_id)?;
 
-        let value = match message.to_value(&env) {
-            Ok(value) => Some(value.format(self)),
-            Err(err) => {
-                errors.push(FluentError::ResolverError(err));
-                None
-            }
-        };
+        let value = message
+            .value
+            .as_ref()
+            .and_then(|value| match value.to_value(&env) {
+                Ok(value) => Some(value.format(self)),
+                Err(err) => {
+                    errors.push(FluentError::ResolverError(err));
+                    None
+                }
+            });
 
         let mut attributes = HashMap::new();
 

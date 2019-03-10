@@ -26,7 +26,7 @@ fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, String> {
 }
 
 fn parser_bench(c: &mut Criterion) {
-    let tests = &["simple", "menubar"];
+    let tests = &["simple", "preferences", "menubar"];
     let ftl_strings = get_strings(tests);
 
     c.bench_function_over_inputs(
