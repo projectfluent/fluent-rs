@@ -1065,7 +1065,8 @@ save-files-to-cloud-storage =
 
 ## browser/branding/official/locales/en-US/brand.ftl
 
--brand-short-name      = Firefox
+-brand-short-name = Firefox
+-vendor-short-name = Mozilla
 
 ## browser/locales/en-US/browser/branding/sync-brand.ftl
 
