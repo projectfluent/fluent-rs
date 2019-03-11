@@ -179,8 +179,8 @@ impl<'source> ResolveValue for ast::Expression<'source> {
 impl<'source> ResolveValue for ast::InlineExpression<'source> {
     fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
         match self {
-            ast::InlineExpression::StringLiteral { raw } => {
-                Ok(FluentValue::from(unescape_unicode(raw).into_owned()))
+            ast::InlineExpression::StringLiteral { value } => {
+                Ok(FluentValue::from(unescape_unicode(value).into_owned()))
             }
             ast::InlineExpression::NumberLiteral { value } => {
                 FluentValue::into_number(*value).map_err(|_| ResolverError::None)
