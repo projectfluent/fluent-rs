@@ -77,7 +77,7 @@ pub enum Comment<'ast> {
 #[derive(Debug, PartialEq)]
 pub enum InlineExpression<'ast> {
     StringLiteral {
-        raw: &'ast str,
+        value: &'ast str,
     },
     NumberLiteral {
         value: &'ast str,

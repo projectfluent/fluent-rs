@@ -630,7 +630,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
 
             ps.expect_byte(b'"')?;
             let slice = ps.get_slice(start, ps.ptr - 1);
-            Ok(ast::InlineExpression::StringLiteral { raw: slice })
+            Ok(ast::InlineExpression::StringLiteral { value: slice })
         }
         Some(b) if b.is_ascii_digit() => {
             let num = get_number_literal(ps)?;

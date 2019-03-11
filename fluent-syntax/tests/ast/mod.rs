@@ -1,5 +1,4 @@
 use fluent_syntax::ast;
-use fluent_syntax::unicode::unescape_unicode;
 use serde::ser::SerializeMap;
 use serde::ser::SerializeSeq;
 use serde::{Serialize, Serializer};
@@ -289,9 +288,8 @@ where
 #[serde(remote = "ast::InlineExpression")]
 #[serde(tag = "type")]
 pub enum InlineExpressionDef<'ast> {
-    #[serde(serialize_with = "serialize_string_literal")]
     StringLiteral {
-        raw: &'ast str,
+        value: &'ast str,
     },
     NumberLiteral {
         value: &'ast str,
@@ -348,17 +346,6 @@ where
     #[derive(Serialize)]
     struct Helper<'ast>(#[serde(with = "IdentifierDef")] &'ast ast::Identifier<'ast>);
     v.as_ref().map(Helper).serialize(serializer)
-}
-
-fn serialize_string_literal<'se, S>(raw: &'se str, serializer: S) -> Result<S::Ok, S::Error>
-where
-    S: Serializer,
-{
-    let mut map = serializer.serialize_map(Some(3))?;
-    map.serialize_entry("type", "StringLiteral")?;
-    map.serialize_entry("raw", raw)?;
-    map.serialize_entry("value", &unescape_unicode(&raw))?;
-    map.end()
 }
 
 #[derive(Serialize)]
