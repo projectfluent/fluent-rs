@@ -1,7 +1,10 @@
 mod helpers;
+use fluent_bundle::errors::FluentError;
+use fluent_bundle::resolve::ResolverError;
 
 use self::helpers::{
-    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+    assert_format, assert_format_no_errors, assert_get_bundle_no_errors,
+    assert_get_resource_from_str_no_errors,
 };
 
 #[test]
@@ -48,7 +51,11 @@ baz = { bar } Baz
 fn message_reference_missing() {
     let res = assert_get_resource_from_str_no_errors("bar = { foo } Bar");
     let bundle = assert_get_bundle_no_errors(&res, None);
-    assert_format_no_errors(bundle.format("bar", None), "___ Bar");
+    assert_format(
+        bundle.format("bar", None),
+        "foo Bar",
+        vec![FluentError::ResolverError(ResolverError::None)],
+    );
 }
 
 #[test]
@@ -62,8 +69,11 @@ bar = { foo } Bar
         );
         let bundle = assert_get_bundle_no_errors(&res, None);
 
-        assert_format_no_errors(bundle.format("foo", None), "Foo ___");
-        assert_format_no_errors(bundle.format("bar", None), "___ Bar");
+        assert_format(
+            bundle.format("foo", None),
+            "Foo foo Bar",
+            vec![FluentError::ResolverError(ResolverError::Cyclic)],
+        );
     }
 
     {
@@ -75,8 +85,16 @@ bar = { foo }
         );
         let bundle = assert_get_bundle_no_errors(&res, None);
 
-        assert_format_no_errors(bundle.format("foo", None), "___");
-        assert_format_no_errors(bundle.format("bar", None), "___");
+        assert_format(
+            bundle.format("foo", None),
+            "foo",
+            vec![FluentError::ResolverError(ResolverError::Cyclic)],
+        );
+        assert_format(
+            bundle.format("bar", None),
+            "bar",
+            vec![FluentError::ResolverError(ResolverError::Cyclic)],
+        );
     }
 }
 

@@ -1,21 +1,42 @@
+use std::borrow::Cow;
+
 use fluent_bundle::bundle::FluentError;
 use fluent_bundle::bundle::Message;
 use fluent_bundle::{FluentBundle, FluentResource};
 
 #[allow(dead_code)]
-pub fn assert_format_none(result: Option<(String, Vec<FluentError>)>) {
+pub fn assert_format_none(result: Option<(Cow<str>, Vec<FluentError>)>) {
     assert!(result.is_none());
 }
 
 #[allow(dead_code)]
-pub fn assert_format_no_errors(result: Option<(String, Vec<FluentError>)>, expected: &str) {
+pub fn assert_format_no_errors(result: Option<(Cow<str>, Vec<FluentError>)>, expected: &str) {
     assert!(result.is_some());
-    assert_eq!(result, Some((expected.to_string(), vec![])));
+    assert_eq!(result, Some((expected.into(), vec![])));
+}
+
+#[allow(dead_code)]
+pub fn assert_format(
+    result: Option<(Cow<str>, Vec<FluentError>)>,
+    expected: &str,
+    errors: Vec<FluentError>,
+) {
+    assert!(result.is_some());
+    assert_eq!(result, Some((expected.into(), errors)));
 }
 
 #[allow(dead_code)]
 pub fn assert_compound_no_errors(result: Option<(Message, Vec<FluentError>)>, expected: Message) {
     assert_eq!(result, Some((expected, vec![])));
+}
+
+#[allow(dead_code)]
+pub fn assert_compound(
+    result: Option<(Message, Vec<FluentError>)>,
+    expected: Message,
+    errors: Vec<FluentError>,
+) {
+    assert_eq!(result, Some((expected, errors)));
 }
 
 pub fn assert_get_resource_from_str_no_errors(s: &str) -> FluentResource {

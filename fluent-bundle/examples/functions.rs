@@ -15,7 +15,7 @@ fn main() {
     // Test for a simple function that returns a string
     bundle
         .add_function("HELLO", |_args, _named_args| {
-            return Some("I'm a function!".into());
+            return "I'm a function!".into();
         })
         .expect("Failed to add a function to the bundle.");
 
@@ -23,12 +23,12 @@ fn main() {
     bundle
         .add_function("MEANING_OF_LIFE", |args, _named_args| {
             if let Some(arg0) = args.get(0) {
-                if *arg0 == Some(FluentValue::Number(String::from("42"))) {
-                    return Some("The answer to life, the universe, and everything".into());
+                if *arg0 == FluentValue::Number("42".into()) {
+                    return "The answer to life, the universe, and everything".into();
                 }
             }
 
-            None
+            FluentValue::None(None)
         })
         .expect("Failed to add a function to the bundle.");
 
@@ -37,9 +37,9 @@ fn main() {
         .add_function("BASE_OWNERSHIP", |_args, named_args| {
             return match named_args.get("ownership") {
                 Some(FluentValue::String(ref string)) => {
-                    Some(format!("All your base belong to {}", string).into())
+                    format!("All your base belong to {}", string).into()
                 }
-                _ => None,
+                _ => FluentValue::None(None),
             };
         })
         .expect("Failed to add a function to the bundle.");

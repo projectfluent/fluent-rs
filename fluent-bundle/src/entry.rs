@@ -1,12 +1,12 @@
 //! `Entry` is used to store Messages, Terms and Functions in `FluentBundle` instances.
 use std::collections::hash_map::HashMap;
 
-use super::types::FluentValue;
+use super::types::*;
 use fluent_syntax::ast;
 
 type FluentFunction<'bundle> = Box<
     'bundle
-        + Fn(&[Option<FluentValue>], &HashMap<&str, FluentValue>) -> Option<FluentValue>
+        + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
         + Send
         + Sync,
 >;

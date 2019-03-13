@@ -1,7 +1,10 @@
 mod helpers;
+use fluent_bundle::errors::FluentError;
+use fluent_bundle::resolve::ResolverError;
 
 use self::helpers::{
-    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+    assert_format, assert_format_no_errors, assert_get_bundle_no_errors,
+    assert_get_resource_from_str_no_errors,
 };
 
 #[test]
@@ -28,11 +31,60 @@ missing-missing = { missing.missing }
 
     assert_format_no_errors(bundle.format("use-foo-attr", None), "Foo Attr");
 
-    assert_format_no_errors(bundle.format("use-bar", None), "___");
+    assert_format(
+        bundle.format("use-bar", None),
+        "bar",
+        vec![FluentError::ResolverError(ResolverError::None)],
+    );
 
     assert_format_no_errors(bundle.format("use-bar-attr", None), "Bar Attr");
 
-    assert_format_no_errors(bundle.format("missing-attr", None), "___");
+    assert_format(
+        bundle.format("missing-attr", None),
+        "foo.missing",
+        vec![FluentError::ResolverError(ResolverError::None)],
+    );
 
-    assert_format_no_errors(bundle.format("missing-missing", None), "___");
+    assert_format(
+        bundle.format("missing-missing", None),
+        "missing.missing",
+        vec![FluentError::ResolverError(ResolverError::None)],
+    );
+}
+
+#[test]
+fn attribute_reference_cyclic() {
+    {
+        let res = assert_get_resource_from_str_no_errors(
+            "
+foo =
+  .label = Foo { foo.label2 }
+  .label2 = { foo.label3 } Baz
+  .label3 = { foo.label } Bar
+        ",
+        );
+        let bundle = assert_get_bundle_no_errors(&res, None);
+
+        assert_format(
+            bundle.format("foo.label", None),
+            "Foo foo.label Bar Baz",
+            vec![FluentError::ResolverError(ResolverError::Cyclic)],
+        );
+    }
+
+    {
+        let res = assert_get_resource_from_str_no_errors(
+            "
+foo =
+  .label = Foo { bar.label }
+bar =
+  .label = Bar { baz.label }
+baz =
+  .label = Baz
+",
+        );
+        let bundle = assert_get_bundle_no_errors(&res, None);
+
+        assert_format_no_errors(bundle.format("foo.label", None), "Foo Bar Baz");
+    }
 }

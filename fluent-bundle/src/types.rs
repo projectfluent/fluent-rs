@@ -11,41 +11,39 @@
 //! [`resolve`]: ../resolve
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
-use std::f32;
-use std::num::ParseFloatError;
+use std::borrow::Cow;
 use std::str::FromStr;
 
 use intl_pluralrules::PluralCategory;
 
-use super::bundle::FluentBundle;
+use super::resolve::Env;
 
-/// Value types which can be formatted to a String.
-#[derive(Clone, Debug, PartialEq)]
-pub enum FluentValue {
-    /// Fluent String type.
-    String(String),
-    /// Fluent Number type.
-    Number(String),
+#[derive(Debug, PartialEq)]
+pub enum FluentValueError {
+    ParseError,
 }
 
-impl FluentValue {
-    pub fn into_number<S: ToString>(v: S) -> Result<Self, ParseFloatError> {
-        f64::from_str(&v.to_string()).map(|_| FluentValue::Number(v.to_string()))
-    }
+#[derive(Debug, PartialEq, Clone)]
+pub enum FluentValue<'v> {
+    String(Cow<'v, str>),
+    Number(Cow<'v, str>),
+    None(Option<Cow<'v, str>>),
+}
 
-    pub fn format(&self, _bundle: &FluentBundle) -> String {
-        match self {
-            FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => n.clone(),
+impl<'v> FluentValue<'v> {
+    pub fn into_number<S: ToString>(v: S) -> Self {
+        match f64::from_str(&v.to_string()) {
+            Ok(_) => FluentValue::Number(v.to_string().into()),
+            Err(_) => FluentValue::String(v.to_string().into()),
         }
     }
 
-    pub fn matches(&self, bundle: &FluentBundle, other: &FluentValue) -> bool {
+    pub fn matches(&self, other: &FluentValue, env: &Env) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                let cat = match a.as_str() {
+                let cat = match a.as_ref() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,
                     "two" => PluralCategory::TWO,
@@ -54,35 +52,48 @@ impl FluentValue {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
-
-                let pr = &bundle.plural_rules;
-                pr.select(b.as_str()) == Ok(cat)
+                let pr = &env.bundle.plural_rules;
+                pr.select(b.as_ref()) == Ok(cat)
             }
-            (&FluentValue::Number(..), &FluentValue::String(..)) => false,
+            _ => false,
+        }
+    }
+
+    pub fn to_string(&self) -> Cow<'v, str> {
+        match self {
+            FluentValue::String(s) => s.clone(),
+            FluentValue::Number(n) => n.clone(),
+            FluentValue::None(fallback) => {
+                if let Some(fallback) = fallback {
+                    fallback.clone()
+                } else {
+                    String::from("???").into()
+                }
+            }
         }
     }
 }
 
-impl From<String> for FluentValue {
+impl<'v> From<String> for FluentValue<'v> {
     fn from(s: String) -> Self {
-        FluentValue::String(s)
+        FluentValue::String(s.into())
     }
 }
 
-impl<'a> From<&'a str> for FluentValue {
-    fn from(s: &'a str) -> Self {
-        FluentValue::String(String::from(s))
+impl<'v> From<&'v str> for FluentValue<'v> {
+    fn from(s: &'v str) -> Self {
+        FluentValue::String(s.into())
     }
 }
 
-impl From<f32> for FluentValue {
-    fn from(n: f32) -> Self {
-        FluentValue::Number(n.to_string())
+impl<'v> From<f64> for FluentValue<'v> {
+    fn from(n: f64) -> Self {
+        FluentValue::Number(n.to_string().into())
     }
 }
 
-impl From<isize> for FluentValue {
+impl<'v> From<isize> for FluentValue<'v> {
     fn from(n: isize) -> Self {
-        FluentValue::Number(n.to_string())
+        FluentValue::Number(n.to_string().into())
     }
 }

@@ -147,7 +147,7 @@ fn main() {
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
-                    args.insert("input", FluentValue::from(input.to_string()));
+                    args.insert("input", FluentValue::from(input.as_str()));
                     args.insert("reason", FluentValue::from(err.to_string()));
                     let (value, _) = bundle
                         .format("input-parse-error-msg", Some(&args))

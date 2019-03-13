@@ -63,7 +63,7 @@ fn add_functions(name: &'static str, bundle: &mut FluentBundle) {
         "preferences" => {
             bundle
                 .add_function("PLATFORM", |_args, _named_args| {
-                    return Some("linux".into());
+                    return "linux".into();
                 })
                 .expect("Failed to add a function to the bundle.");
         }
@@ -92,10 +92,7 @@ fn resolver_bench(c: &mut Criterion) {
             b.iter(|| {
                 for id in &ids {
                     let (_msg, errors) = bundle.compound(id, args.as_ref()).expect("Message found");
-                    if !errors.is_empty() {
-                        println!("{:#?}", errors);
-                    }
-                    assert!(errors.len() == 0);
+                    assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }
             })
         },
