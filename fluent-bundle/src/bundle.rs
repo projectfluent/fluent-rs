@@ -9,8 +9,9 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::entry::{Entry, GetEntry};
 pub use super::errors::FluentError;
-use super::resolve::{Env, ResolveValueForEntry};
+use super::resolve::{resolve_value_for_entry, Env};
 use super::resource::FluentResource;
+use super::types::DisplayableNode;
 use super::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
@@ -358,16 +359,25 @@ impl<'bundle> FluentBundle<'bundle> {
                 .attributes
                 .iter()
                 .find(|attr| attr.id.name == attr_name)?;
-            attr.value
-                .resolve_for_entry(attr.id.name, Some(message.id.name), &mut env)
-                .to_string()
+            resolve_value_for_entry(
+                &attr.value,
+                DisplayableNode::new(message.id.name, Some(attr.id.name)),
+                &mut env,
+            )
+            .to_string()
         } else {
             let message_id = path;
             let message = self.entries.get_message(message_id)?;
             message
                 .value
-                .as_ref()?
-                .resolve_for_entry(message.id.name, None, &mut env)
+                .as_ref()
+                .map(|value| {
+                    resolve_value_for_entry(
+                        value,
+                        DisplayableNode::new(message.id.name, None),
+                        &mut env,
+                    )
+                })?
                 .to_string()
         };
 
@@ -430,17 +440,18 @@ impl<'bundle> FluentBundle<'bundle> {
         let message = self.entries.get_message(message_id)?;
 
         let value = message.value.as_ref().map(|value| {
-            value
-                .resolve_for_entry(message.id.name, None, &mut env)
+            resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)
                 .to_string()
         });
 
         let mut attributes = HashMap::new();
 
         for attr in message.attributes.iter() {
-            let val = attr
-                .value
-                .resolve_for_entry(attr.id.name, Some(message.id.name), &mut env);
+            let val = resolve_value_for_entry(
+                &attr.value,
+                DisplayableNode::new(message.id.name, Some(attr.id.name)),
+                &mut env,
+            );
             attributes.insert(attr.id.name, val.to_string());
         }
 

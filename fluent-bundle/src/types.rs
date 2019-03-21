@@ -17,6 +17,87 @@ use std::str::FromStr;
 use intl_pluralrules::PluralCategory;
 
 use super::resolve::Env;
+use fluent_syntax::ast;
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum DisplayableNodeType {
+    Message,
+    Term,
+    Argument,
+    Function,
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct DisplayableNode<'v> {
+    pub node_type: DisplayableNodeType,
+    pub id: &'v str,
+    pub attribute: Option<&'v str>,
+}
+
+impl<'v> DisplayableNode<'v> {
+    pub fn display(&self) -> String {
+        let mut id = match self.node_type {
+            DisplayableNodeType::Message => String::from(""),
+            DisplayableNodeType::Term => String::from("-"),
+            DisplayableNodeType::Argument => String::from("$"),
+            DisplayableNodeType::Function => String::from(""),
+        };
+        id.push_str(self.id);
+        if let Some(attr) = self.attribute {
+            id.push_str(".");
+            id.push_str(attr);
+        }
+        id
+    }
+
+    pub fn new(id: &'v str, attribute: Option<&'v str>) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Message,
+            id,
+            attribute,
+        }
+    }
+}
+
+impl<'v> From<&ast::Message<'v>> for DisplayableNode<'v> {
+    fn from(msg: &ast::Message<'v>) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Message,
+            id: msg.id.name,
+            attribute: None,
+        }
+    }
+}
+
+impl<'v> From<&ast::Term<'v>> for DisplayableNode<'v> {
+    fn from(term: &ast::Term<'v>) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Term,
+            id: term.id.name,
+            attribute: None,
+        }
+    }
+}
+
+impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
+    fn from(expr: &ast::InlineExpression<'v>) -> Self {
+        match expr {
+            ast::InlineExpression::MessageReference { id, ref attribute } => DisplayableNode {
+                node_type: DisplayableNodeType::Message,
+                id: id.name,
+                attribute: attribute.as_ref().map(|attr| attr.name),
+            },
+            ast::InlineExpression::TermReference {
+                id, ref attribute, ..
+            } => DisplayableNode {
+                node_type: DisplayableNodeType::Term,
+                id: id.name,
+                attribute: attribute.as_ref().map(|attr| attr.name),
+            },
+            _ => unimplemented!(),
+        }
+    }
+}
 
 #[derive(Debug, PartialEq)]
 pub enum FluentValueError {
@@ -28,6 +109,7 @@ pub enum FluentValue<'v> {
     String(Cow<'v, str>),
     Number(Cow<'v, str>),
     None(Option<Cow<'v, str>>),
+    Error(DisplayableNode<'v>),
 }
 
 impl<'v> FluentValue<'v> {
@@ -70,6 +152,7 @@ impl<'v> FluentValue<'v> {
                     String::from("???").into()
                 }
             }
+            FluentValue::Error(d) => d.display().into(),
         }
     }
 }

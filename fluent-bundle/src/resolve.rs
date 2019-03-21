@@ -14,6 +14,7 @@ use std::hash::{Hash, Hasher};
 use super::bundle::FluentBundle;
 use super::entry::GetEntry;
 use super::types::FluentValue;
+use super::types::DisplayableNode;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
@@ -52,30 +53,20 @@ impl<'env> Env<'env> {
         }
     }
 
-    pub fn track<F>(
-        &mut self,
-        node_id: &'env str,
-        entry_id: Option<&'env str>,
-        mut action: F,
-    ) -> FluentValue<'env>
+    pub fn track<F>(&mut self, entry: DisplayableNode<'env>, mut action: F) -> FluentValue<'env>
     where
         F: FnMut(&mut Env<'env>) -> FluentValue<'env>,
     {
         let mut hasher = DefaultHasher::new();
-        node_id.hash(&mut hasher);
-        if let Some(entry_id) = entry_id {
-            entry_id.hash(&mut hasher);
+        entry.id.hash(&mut hasher);
+        if let Some(attr) = entry.attribute {
+            attr.hash(&mut hasher);
         }
         let hash = hasher.finish();
 
         if self.travelled.borrow().contains(&hash) {
             self.errors.push(ResolverError::Cyclic);
-            let label = if let Some(entry_id) = entry_id {
-                format!("{}.{}", entry_id, node_id).into()
-            } else {
-                node_id.into()
-            };
-            FluentValue::None(Some(label))
+            FluentValue::Error(entry)
         } else {
             self.travelled.borrow_mut().push(hash);
             let result = action(self);
@@ -90,22 +81,13 @@ pub trait ResolveValue<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source>;
 }
 
-pub trait ResolveValueForEntry<'source> {
-    fn resolve_for_entry(
-        &self,
-        name: &'source str,
-        entry_id: Option<&'source str>,
-        env: &mut Env<'source>,
-    ) -> FluentValue<'source>;
-}
-
 impl<'source> ResolveValue<'source> for ast::Message<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
         if let Some(value) = &self.value {
-            env.track(&self.id.name, None, |env| value.resolve(env))
+            resolve_value_for_entry(value, self.into(), env)
         } else {
             env.errors.push(ResolverError::None);
-            FluentValue::None(Some(self.id.name.into()))
+            FluentValue::Error(self.into())
         }
     }
 }
@@ -113,52 +95,45 @@ impl<'source> ResolveValue<'source> for ast::Message<'source> {
 fn maybe_resolve_attribute<'source>(
     env: &mut Env<'source>,
     attributes: &[ast::Attribute<'source>],
-    entry_name: &'source str,
+    entry: DisplayableNode<'source>,
     name: &str,
 ) -> Option<FluentValue<'source>> {
     attributes
         .iter()
         .find(|attr| attr.id.name == name)
-        .map(|attr| {
-            env.track(attr.id.name, Some(entry_name), |env| {
-                attr.value.resolve(env)
-            })
-        })
+        .map(|attr| env.track(entry, |env| attr.value.resolve(env)))
 }
 
 impl<'source> ResolveValue<'source> for ast::Term<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
-        env.track(&self.id.name, None, |env| self.value.resolve(env))
+        resolve_value_for_entry(&self.value, self.into(), env)
     }
 }
 
-impl<'source> ResolveValueForEntry<'source> for ast::Pattern<'source> {
-    fn resolve_for_entry(
-        &self,
-        name: &'source str,
-        entry_id: Option<&'source str>,
-        env: &mut Env<'source>,
-    ) -> FluentValue<'source> {
-        if self.elements.len() == 1 {
-            if let ast::PatternElement::TextElement(s) = self.elements[0] {
-                return FluentValue::String(s.into());
-            }
+pub fn resolve_value_for_entry<'source>(
+    value: &ast::Pattern<'source>,
+    entry: DisplayableNode<'source>,
+    env: &mut Env<'source>,
+) -> FluentValue<'source> {
+    if value.elements.len() == 1 {
+        if let ast::PatternElement::TextElement(s) = value.elements[0] {
+            return FluentValue::String(s.into());
         }
-
-        let mut string = String::new();
-        for elem in &self.elements {
-            match elem {
-                ast::PatternElement::TextElement(s) => {
-                    string.push_str(&s);
-                }
-                ast::PatternElement::Placeable(p) => {
-                    let result = env.track(&name, entry_id, |env| p.resolve(env));
-                    string.push_str(&result.to_string());
-                }
-            }
-        }
-        FluentValue::String(string.into())
     }
+
+    let mut string = String::new();
+    for elem in &value.elements {
+        match elem {
+            ast::PatternElement::TextElement(s) => {
+                string.push_str(&s);
+            }
+            ast::PatternElement::Placeable(p) => {
+                let result = env.track(entry.clone(), |env| p.resolve(env));
+                string.push_str(&result.to_string());
+            }
+        }
+    }
+    FluentValue::String(string.into())
 }
 
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
@@ -227,28 +202,6 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
     }
 }
 
-fn format_reference_error<'source>(expr: &ast::InlineExpression<'source>) -> FluentValue<'source> {
-    let (prefix, id, attribute) = match expr {
-        ast::InlineExpression::MessageReference { id, attribute } => (None, id.name, attribute),
-        ast::InlineExpression::TermReference { id, attribute, .. } => {
-            (Some("-"), id.name, attribute)
-        }
-        _ => unimplemented!(),
-    };
-
-    if let Some(attribute) = attribute {
-        if let Some(prefix) = prefix {
-            FluentValue::None(Some(format!("{}{}.{}", prefix, id, attribute.name).into()))
-        } else {
-            FluentValue::None(Some(format!("{}.{}", id, attribute.name).into()))
-        }
-    } else if let Some(prefix) = prefix {
-        FluentValue::None(Some(format!("{}{}", prefix, id).into()))
-    } else {
-        FluentValue::None(Some(id.into()))
-    }
-}
-
 impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
     fn resolve(&self, mut env: &mut Env<'source>) -> FluentValue<'source> {
         match self {
@@ -260,17 +213,22 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
-                        maybe_resolve_attribute(env, &msg.attributes, msg.id.name, attr.name)
+                        maybe_resolve_attribute(env, &msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| {
                                 env.errors.push(ResolverError::None);
-                                format_reference_error(&self)
+                                FluentValue::Error(self.into())
                             })
                     } else {
-                        msg.resolve(env)
+                        if let Some(value) = msg.value.as_ref() {
+                            env.track(self.into(), |env| value.resolve(env))
+                        } else {
+                            env.errors.push(ResolverError::None);
+                            FluentValue::Error(self.into())
+                        }
                     }
                 } else {
                     env.errors.push(ResolverError::None);
-                    format_reference_error(&self)
+                    FluentValue::Error(self.into())
                 }
             }
             ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
@@ -287,17 +245,17 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 let value = if let Some(term) = term {
                     if let Some(attr) = attribute {
-                        maybe_resolve_attribute(env, &term.attributes, term.id.name, attr.name)
+                        maybe_resolve_attribute(env, &term.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| {
                                 env.errors.push(ResolverError::None);
-                                format_reference_error(&self)
+                                FluentValue::Error(self.into())
                             })
                     } else {
                         term.resolve(&mut env)
                     }
                 } else {
                     env.errors.push(ResolverError::None);
-                    format_reference_error(&self)
+                    FluentValue::Error(self.into())
                 };
                 env.local_args = None;
                 value
