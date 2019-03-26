@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-syntax 0.9.0 (March 26, 2019)
+  - Update to Fluent Syntax 0.9
+  - Unify benchmark testsuite with fluent.js
+
 ## fluent-syntax 0.8.0 (January 31, 2019)
   - Update to Fluent Syntax 0.8
   - Switch to zero-copy parser
