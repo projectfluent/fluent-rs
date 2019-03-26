@@ -4,6 +4,11 @@
 
   - …
 
+## fluent-bundle 0.6.0 (March 26, 2019)
+
+  - Update to fluent-syntax 0.9
+  - Unify benchmark testsuite with fluent.js
+
 ## fluent-bundle 0.5.0 (January 31, 2019)
 
   - Update to fluent-syntax 0.8
