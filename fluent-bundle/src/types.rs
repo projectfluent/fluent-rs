@@ -119,11 +119,6 @@ impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
     }
 }
 
-#[derive(Debug, PartialEq)]
-pub enum FluentValueError {
-    ParseError,
-}
-
 #[derive(Debug, PartialEq, Clone)]
 pub enum FluentValue<'v> {
     String(Cow<'v, str>),

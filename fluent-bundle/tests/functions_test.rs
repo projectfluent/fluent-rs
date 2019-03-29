@@ -5,7 +5,7 @@ use fluent_bundle::FluentValue;
 use std::collections::HashMap;
 
 use self::helpers::{
-    assert_format, assert_format_no_errors, assert_format_none, assert_get_bundle_no_errors,
+    assert_format, assert_format_no_errors, assert_get_bundle_no_errors,
     assert_get_resource_from_str_no_errors,
 };
 

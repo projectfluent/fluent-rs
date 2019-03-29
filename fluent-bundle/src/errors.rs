@@ -1,5 +1,4 @@
 use super::resolve::ResolverError;
-use super::types::FluentValueError;
 use fluent_syntax::parser::ParserError;
 
 #[derive(Debug, Fail, PartialEq)]
@@ -10,8 +9,6 @@ pub enum FluentError {
     ParserError(ParserError),
     #[fail(display = "Resolver error")]
     ResolverError(ResolverError),
-    #[fail(display = "FluentValue error")]
-    FluentValueError(FluentValueError),
 }
 
 impl From<ParserError> for FluentError {
@@ -23,11 +20,5 @@ impl From<ParserError> for FluentError {
 impl From<ResolverError> for FluentError {
     fn from(error: ResolverError) -> Self {
         FluentError::ResolverError(error)
-    }
-}
-
-impl From<FluentValueError> for FluentError {
-    fn from(error: FluentValueError) -> Self {
-        FluentError::FluentValueError(error)
     }
 }
