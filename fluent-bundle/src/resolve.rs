@@ -20,7 +20,6 @@ use fluent_syntax::unicode::unescape_unicode;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
-    None,
     Reference(String),
     MissingDefault,
     Value,
@@ -82,17 +81,6 @@ impl<'env> Env<'env> {
 pub trait ResolveValue<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source>;
 }
-
-//impl<'source> ResolveValue<'source> for ast::Message<'source> {
-//fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
-//if let Some(value) = &self.value {
-//resolve_value_for_entry(value, self.into(), env)
-//} else {
-//env.errors.push(ResolverError::None);
-//FluentValue::Error(self.into())
-//}
-//}
-//}
 
 fn maybe_resolve_attribute<'source>(
     env: &mut Env<'source>,
@@ -226,12 +214,10 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                     if let Some(attr) = attribute {
                         maybe_resolve_attribute(env, &msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(env, self.into()))
+                } else if let Some(value) = msg.value.as_ref() {
+                        env.track(self.into(), |env| value.resolve(env))
                     } else {
-                        if let Some(value) = msg.value.as_ref() {
-                            env.track(self.into(), |env| value.resolve(env))
-                        } else {
-                            generate_ref_error(env, self.into())
-                        }
+                        generate_ref_error(env, self.into())
                     }
                 } else {
                     generate_ref_error(env, self.into())
