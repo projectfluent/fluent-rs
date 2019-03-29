@@ -13,8 +13,8 @@ use std::hash::{Hash, Hasher};
 
 use super::bundle::FluentBundle;
 use super::entry::GetEntry;
-use super::types::FluentValue;
 use super::types::DisplayableNode;
+use super::types::FluentValue;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
@@ -272,16 +272,16 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 }
             }
             ast::InlineExpression::VariableReference { id } => {
-                if let Some(args) = &env.local_args {
-                    match args.get(&id.name) {
-                        Some(arg) => arg.clone(),
-                        None => FluentValue::None(Some(format!("${}", id.name).into())),
-                    }
+                let arg = if let Some(args) = &env.local_args {
+                    args.get(&id.name)
                 } else {
-                    match env.args.and_then(|args| args.get(&id.name)) {
-                        Some(arg) => arg.clone(),
-                        None => FluentValue::None(Some(format!("${}", id.name).into())),
-                    }
+                    env.args.and_then(|args| args.get(&id.name))
+                };
+                if let Some(arg) = arg {
+                    arg.clone()
+                } else {
+                    env.errors.push(ResolverError::None);
+                    FluentValue::Error(self.into())
                 }
             }
             ast::InlineExpression::Placeable { expression } => expression.resolve(env),

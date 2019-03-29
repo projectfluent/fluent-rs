@@ -3,7 +3,7 @@ use fluent_bundle::errors::FluentError;
 use fluent_bundle::resolve::ResolverError;
 
 use self::helpers::{
-    assert_format, assert_format_no_errors, assert_get_bundle_no_errors,
+    assert_format, assert_format_no_errors, assert_format_none, assert_get_bundle_no_errors,
     assert_get_resource_from_str_no_errors,
 };
 
@@ -11,40 +11,41 @@ use self::helpers::{
 fn formatting_values() {
     let res = assert_get_resource_from_str_no_errors(
         "
-key1 = Value
--term1 = Value
-  .attr = Value
-key2 = Value { -term1 }
-key3 = Value { -term1.attr ->
-    [Value] Foo
-   *[other] Faa
+key1 = Value 1
+key2 = { $sel ->
+    [a] A2
+   *[b] B2
 }
-key4 = Value { 4 }
-
-key5 = Value { 4 ->
-    [4] Foo
-   *[other] Faa
+key3 = Value { 3 }
+key4 = { $sel ->
+    [a] A{ 4 }
+   *[b] B{ 4 }
 }
-key6 = Value { key11000 }
-key7 = Value { -key11000 }
+key5 =
+    .a = A5
+    .b = B5
     ",
     );
     let bundle = assert_get_bundle_no_errors(&res, None);
 
-    assert_format_no_errors(bundle.format("key1", None), "Value");
+    assert_format_no_errors(bundle.format("key1", None), "Value 1");
 
-    assert_format_no_errors(bundle.format("key2", None), "Value Value");
-    assert_format_no_errors(bundle.format("key3", None), "Value Foo");
-    assert_format_no_errors(bundle.format("key4", None), "Value 4");
-    assert_format_no_errors(bundle.format("key5", None), "Value Foo");
     assert_format(
-        bundle.format("key6", None),
-        "Value key11000",
+        bundle.format("key2", None),
+        "B2",
         vec![FluentError::ResolverError(ResolverError::None)],
     );
+
+    assert_format_no_errors(bundle.format("key3", None), "Value 3");
+
     assert_format(
-        bundle.format("key7", None),
-        "Value -key11000",
+        bundle.format("key4", None),
+        "B4",
         vec![FluentError::ResolverError(ResolverError::None)],
     );
+
+    assert_format_none(bundle.format("key5", None));
+
+    assert_format_no_errors(bundle.format("key5.a", None), "A5");
+    assert_format_no_errors(bundle.format("key5.b", None), "B5");
 }

@@ -23,7 +23,7 @@ use fluent_syntax::ast;
 pub enum DisplayableNodeType {
     Message,
     Term,
-    Argument,
+    Variable,
     Function,
 }
 
@@ -39,7 +39,7 @@ impl<'v> DisplayableNode<'v> {
         let mut id = match self.node_type {
             DisplayableNodeType::Message => String::from(""),
             DisplayableNodeType::Term => String::from("-"),
-            DisplayableNodeType::Argument => String::from("$"),
+            DisplayableNodeType::Variable => String::from("$"),
             DisplayableNodeType::Function => String::from(""),
         };
         id.push_str(self.id);
@@ -93,6 +93,11 @@ impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
                 node_type: DisplayableNodeType::Term,
                 id: id.name,
                 attribute: attribute.as_ref().map(|attr| attr.name),
+            },
+            ast::InlineExpression::VariableReference { id } => DisplayableNode {
+                node_type: DisplayableNodeType::Variable,
+                id: id.name,
+                attribute: None,
             },
             _ => unimplemented!(),
         }
