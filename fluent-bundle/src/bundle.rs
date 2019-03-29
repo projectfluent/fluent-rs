@@ -9,7 +9,7 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::entry::{Entry, GetEntry};
 pub use super::errors::FluentError;
-use super::resolve::{resolve_value_for_entry, Env};
+use super::resolve::{resolve_value_for_entry, Scope};
 use super::resource::FluentResource;
 use super::types::DisplayableNode;
 use super::types::FluentValue;
@@ -347,7 +347,7 @@ impl<'bundle> FluentBundle<'bundle> {
         path: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
     ) -> Option<(Cow<'bundle, str>, Vec<FluentError>)> {
-        let mut env = Env::new(self, args);
+        let mut env = Scope::new(self, args);
 
         let mut errors = vec![];
 
@@ -435,7 +435,7 @@ impl<'bundle> FluentBundle<'bundle> {
         message_id: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
     ) -> Option<(Message<'bundle>, Vec<FluentError>)> {
-        let mut env = Env::new(self, args);
+        let mut env = Scope::new(self, args);
         let mut errors = vec![];
         let message = self.entries.get_message(message_id)?;
 

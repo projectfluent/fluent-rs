@@ -16,7 +16,7 @@ use std::str::FromStr;
 
 use intl_pluralrules::PluralCategory;
 
-use super::resolve::Env;
+use super::resolve::Scope;
 use fluent_syntax::ast;
 
 #[derive(Debug, PartialEq, Clone)]
@@ -136,7 +136,7 @@ impl<'v> FluentValue<'v> {
         }
     }
 
-    pub fn matches(&self, other: &FluentValue, env: &Env) -> bool {
+    pub fn matches(&self, other: &FluentValue, env: &Scope) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
