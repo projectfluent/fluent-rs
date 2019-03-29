@@ -36,18 +36,17 @@ pub struct DisplayableNode<'v> {
 
 impl<'v> DisplayableNode<'v> {
     pub fn display(&self) -> String {
-        let mut id = match self.node_type {
-            DisplayableNodeType::Message => String::from(""),
-            DisplayableNodeType::Term => String::from("-"),
-            DisplayableNodeType::Variable => String::from("$"),
-            DisplayableNodeType::Function => String::from(""),
-        };
-        id.push_str(self.id);
+        let mut id = self.id.to_owned();
         if let Some(attr) = self.attribute {
             id.push_str(".");
             id.push_str(attr);
         }
-        id
+        match self.node_type {
+            DisplayableNodeType::Message => id,
+            DisplayableNodeType::Term => format!("-{}", id),
+            DisplayableNodeType::Variable => format!("${}", id),
+            DisplayableNodeType::Function => format!("{}()", id),
+        }
     }
 
     pub fn get_error(&self) -> String {
@@ -107,6 +106,11 @@ impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
             },
             ast::InlineExpression::VariableReference { id } => DisplayableNode {
                 node_type: DisplayableNodeType::Variable,
+                id: id.name,
+                attribute: None,
+            },
+            ast::InlineExpression::FunctionReference { id, .. } => DisplayableNode {
+                node_type: DisplayableNodeType::Function,
                 id: id.name,
                 attribute: None,
             },

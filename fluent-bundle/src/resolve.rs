@@ -22,6 +22,7 @@ use fluent_syntax::unicode::unescape_unicode;
 pub enum ResolverError {
     Reference(String),
     MissingDefault,
+    Argument(String),
     Value,
     Cyclic,
 }
