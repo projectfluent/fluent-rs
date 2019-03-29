@@ -114,9 +114,10 @@ pub fn resolve_value_for_entry<'source>(
     env: &mut Env<'source>,
 ) -> FluentValue<'source> {
     if value.elements.len() == 1 {
-        if let ast::PatternElement::TextElement(s) = value.elements[0] {
-            return FluentValue::String(s.into());
-        }
+        return match value.elements[0] {
+            ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
+            ast::PatternElement::Placeable(ref p) => env.track(entry.clone(), |env| p.resolve(env)),
+        };
     }
 
     let mut string = String::new();
@@ -137,9 +138,10 @@ pub fn resolve_value_for_entry<'source>(
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
         if self.elements.len() == 1 {
-            if let ast::PatternElement::TextElement(s) = self.elements[0] {
-                return FluentValue::String(s.into());
-            }
+            return match self.elements[0] {
+                ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
+                ast::PatternElement::Placeable(ref p) => p.resolve(env),
+            };
         }
 
         let mut string = String::new();
@@ -214,7 +216,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                     if let Some(attr) = attribute {
                         maybe_resolve_attribute(env, &msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(env, self.into()))
-                } else if let Some(value) = msg.value.as_ref() {
+                    } else if let Some(value) = msg.value.as_ref() {
                         env.track(self.into(), |env| value.resolve(env))
                     } else {
                         generate_ref_error(env, self.into())
