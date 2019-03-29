@@ -124,7 +124,7 @@ pub enum FluentValueError {
 pub enum FluentValue<'v> {
     String(Cow<'v, str>),
     Number(Cow<'v, str>),
-    None(Option<Cow<'v, str>>),
+    None(),
     Error(DisplayableNode<'v>),
 }
 
@@ -161,14 +161,8 @@ impl<'v> FluentValue<'v> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
-            FluentValue::None(fallback) => {
-                if let Some(fallback) = fallback {
-                    fallback.clone()
-                } else {
-                    String::from("???").into()
-                }
-            }
             FluentValue::Error(d) => d.display().into(),
+            FluentValue::None() => String::from("???").into(),
         }
     }
 }

@@ -34,7 +34,9 @@ missing-missing = { missing.missing }
     assert_format(
         bundle.format("use-bar", None),
         "bar",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown message: bar".into(),
+        ))],
     );
 
     assert_format_no_errors(bundle.format("use-bar-attr", None), "Bar Attr");
@@ -42,13 +44,17 @@ missing-missing = { missing.missing }
     assert_format(
         bundle.format("missing-attr", None),
         "foo.missing",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown message: foo.missing".into(),
+        ))],
     );
 
     assert_format(
         bundle.format("missing-missing", None),
         "missing.missing",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown message: missing.missing".into(),
+        ))],
     );
 }
 

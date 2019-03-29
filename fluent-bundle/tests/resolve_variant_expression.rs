@@ -49,6 +49,8 @@ missing-missing = { -missing(gender: "missing") }
     assert_format(
         bundle.format("missing-missing", None),
         "-missing",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown term: -missing".into(),
+        ))],
     );
 }

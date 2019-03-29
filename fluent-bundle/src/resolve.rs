@@ -22,6 +22,7 @@ use fluent_syntax::unicode::unescape_unicode;
 pub enum ResolverError {
     None,
     Reference(String),
+    MissingDefault,
     Value,
     Cyclic,
 }
@@ -82,16 +83,16 @@ pub trait ResolveValue<'source> {
     fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source>;
 }
 
-impl<'source> ResolveValue<'source> for ast::Message<'source> {
-    fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
-        if let Some(value) = &self.value {
-            resolve_value_for_entry(value, self.into(), env)
-        } else {
-            env.errors.push(ResolverError::None);
-            FluentValue::Error(self.into())
-        }
-    }
-}
+//impl<'source> ResolveValue<'source> for ast::Message<'source> {
+//fn resolve(&self, env: &mut Env<'source>) -> FluentValue<'source> {
+//if let Some(value) = &self.value {
+//resolve_value_for_entry(value, self.into(), env)
+//} else {
+//env.errors.push(ResolverError::None);
+//FluentValue::Error(self.into())
+//}
+//}
+//}
 
 fn maybe_resolve_attribute<'source>(
     env: &mut Env<'source>,
@@ -103,6 +104,14 @@ fn maybe_resolve_attribute<'source>(
         .iter()
         .find(|attr| attr.id.name == name)
         .map(|attr| env.track(entry, |env| attr.value.resolve(env)))
+}
+
+fn generate_ref_error<'source>(
+    env: &mut Env<'source>,
+    node: DisplayableNode<'source>,
+) -> FluentValue<'source> {
+    env.errors.push(ResolverError::Reference(node.get_error()));
+    FluentValue::Error(node)
 }
 
 impl<'source> ResolveValue<'source> for ast::Term<'source> {
@@ -197,7 +206,8 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
                         return variant.value.resolve(env);
                     }
                 }
-                FluentValue::None(None)
+                env.errors.push(ResolverError::MissingDefault);
+                FluentValue::None()
             }
         }
     }
@@ -215,21 +225,16 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
                         maybe_resolve_attribute(env, &msg.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| {
-                                env.errors.push(ResolverError::None);
-                                FluentValue::Error(self.into())
-                            })
+                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
                     } else {
                         if let Some(value) = msg.value.as_ref() {
                             env.track(self.into(), |env| value.resolve(env))
                         } else {
-                            env.errors.push(ResolverError::None);
-                            FluentValue::Error(self.into())
+                            generate_ref_error(env, self.into())
                         }
                     }
                 } else {
-                    env.errors.push(ResolverError::None);
-                    FluentValue::Error(self.into())
+                    generate_ref_error(env, self.into())
                 }
             }
             ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
@@ -247,16 +252,12 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 let value = if let Some(term) = term {
                     if let Some(attr) = attribute {
                         maybe_resolve_attribute(env, &term.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| {
-                                env.errors.push(ResolverError::None);
-                                FluentValue::Error(self.into())
-                            })
+                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
                     } else {
                         term.resolve(&mut env)
                     }
                 } else {
-                    env.errors.push(ResolverError::None);
-                    FluentValue::Error(self.into())
+                    generate_ref_error(env, self.into())
                 };
                 env.local_args = None;
                 value
@@ -269,7 +270,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
                 } else {
-                    FluentValue::None(None)
+                    generate_ref_error(env, self.into())
                 }
             }
             ast::InlineExpression::VariableReference { id } => {

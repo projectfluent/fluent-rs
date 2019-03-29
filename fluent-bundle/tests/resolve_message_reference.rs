@@ -54,7 +54,9 @@ fn message_reference_missing() {
     assert_format(
         bundle.format("bar", None),
         "foo Bar",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown message: foo".into(),
+        ))],
     );
 }
 

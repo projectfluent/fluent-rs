@@ -28,7 +28,7 @@ fn main() {
                 }
             }
 
-            FluentValue::None(None)
+            FluentValue::None()
         })
         .expect("Failed to add a function to the bundle.");
 
@@ -39,7 +39,7 @@ fn main() {
                 Some(FluentValue::String(ref string)) => {
                     format!("All your base belong to {}", string).into()
                 }
-                _ => FluentValue::None(None),
+                _ => FluentValue::None(),
             };
         })
         .expect("Failed to add a function to the bundle.");
