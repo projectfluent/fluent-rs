@@ -21,6 +21,7 @@ use fluent_syntax::unicode::unescape_unicode;
 #[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
     None,
+    Reference(String),
     Value,
     Cyclic,
 }
@@ -280,8 +281,12 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 if let Some(arg) = arg {
                     arg.clone()
                 } else {
-                    env.errors.push(ResolverError::None);
-                    FluentValue::Error(self.into())
+                    let displayable_node: DisplayableNode = self.into();
+                    if env.local_args.is_none() {
+                        env.errors
+                            .push(ResolverError::Reference(displayable_node.get_error()));
+                    }
+                    FluentValue::Error(displayable_node)
                 }
             }
             ast::InlineExpression::Placeable { expression } => expression.resolve(env),

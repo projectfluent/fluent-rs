@@ -1,9 +1,12 @@
 mod helpers;
+use fluent_bundle::errors::FluentError;
+use fluent_bundle::resolve::ResolverError;
 
 use std::collections::HashMap;
 
 use self::helpers::{
-    assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+    assert_format, assert_format_no_errors, assert_get_bundle_no_errors,
+    assert_get_resource_from_str_no_errors,
 };
 use fluent_bundle::types::FluentValue;
 
@@ -169,19 +172,37 @@ baz-unknown =
 
     assert_format_no_errors(bundle.format("foo-miss", Some(&args)), "Foo");
 
-    assert_format_no_errors(bundle.format("foo-unknown", Some(&args)), "Foo");
+    assert_format(
+        bundle.format("foo-unknown", Some(&args)),
+        "Foo",
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown variable: $unknown".into(),
+        ))],
+    );
 
     assert_format_no_errors(bundle.format("bar-hit", Some(&args)), "Bar 3");
 
     assert_format_no_errors(bundle.format("bar-miss", Some(&args)), "Bar 1");
 
-    assert_format_no_errors(bundle.format("bar-unknown", Some(&args)), "Bar 1");
+    assert_format(
+        bundle.format("bar-unknown", Some(&args)),
+        "Bar 1",
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown variable: $unknown".into(),
+        ))],
+    );
 
     assert_format_no_errors(bundle.format("baz-hit", Some(&args)), "Baz E");
 
     assert_format_no_errors(bundle.format("baz-miss", Some(&args)), "Baz 1");
 
-    assert_format_no_errors(bundle.format("baz-unknown", Some(&args)), "Baz 1");
+    assert_format(
+        bundle.format("baz-unknown", Some(&args)),
+        "Baz 1",
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown variable: $unknown".into(),
+        ))],
+    );
 }
 
 #[test]

@@ -50,6 +50,17 @@ impl<'v> DisplayableNode<'v> {
         id
     }
 
+    pub fn get_error(&self) -> String {
+        let mut id = match self.node_type {
+            DisplayableNodeType::Message => String::from("Unknown message: "),
+            DisplayableNodeType::Term => String::from("Unknown term: "),
+            DisplayableNodeType::Variable => String::from("Unknown variable: "),
+            DisplayableNodeType::Function => String::from("Unknown function: "),
+        };
+        id.push_str(&self.display());
+        id
+    }
+
     pub fn new(id: &'v str, attribute: Option<&'v str>) -> Self {
         DisplayableNode {
             node_type: DisplayableNodeType::Message,

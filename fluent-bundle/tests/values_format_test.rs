@@ -33,7 +33,9 @@ key5 =
     assert_format(
         bundle.format("key2", None),
         "B2",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown variable: $sel".into(),
+        ))],
     );
 
     assert_format_no_errors(bundle.format("key3", None), "Value 3");
@@ -41,7 +43,9 @@ key5 =
     assert_format(
         bundle.format("key4", None),
         "B4",
-        vec![FluentError::ResolverError(ResolverError::None)],
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown variable: $sel".into(),
+        ))],
     );
 
     assert_format_none(bundle.format("key5", None));
