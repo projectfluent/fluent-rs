@@ -1,18 +1,31 @@
 use elsa::FrozenMap;
+use fluent::{Fbi, FluentBundleIterator};
 use fluent::{FluentBundle, FluentResource};
-use fluent::{FluentBundleIterator, Fbi};
 use std::fs;
 use std::io;
 
 pub struct BundleIterator<'l> {
-    test: &'l str
+    res_mgr: &'l ResourceManager,
+    locales: Vec<String>,
+    paths: Vec<String>,
+    used: bool,
 }
 
 impl<'l> Iterator for BundleIterator<'l> {
     type Item = FluentBundle<'l>;
 
     fn next(&mut self) -> Option<FluentBundle<'l>> {
-        None
+        if self.used {
+            return None;
+        }
+
+        let mut bundle = FluentBundle::new(&self.locales);
+        for path in &self.paths {
+            let res = self.res_mgr.get_resource(&path);
+            bundle.add_resource(res).unwrap();
+        }
+        self.used = true;
+        Some(bundle)
     }
 }
 
@@ -55,9 +68,12 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(&mut self, locales: Vec<&str>, paths: Vec<&str>) -> Fbi {
+    pub fn get_bundles<'l>(&mut self, locales: Vec<String>, paths: Vec<String>) -> Fbi {
         Box::new(BundleIterator {
-            test: "foo"
+            res_mgr: self,
+            locales,
+            paths,
+            used: false,
         })
     }
 }
