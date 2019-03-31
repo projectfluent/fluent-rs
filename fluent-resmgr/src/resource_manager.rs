@@ -68,7 +68,7 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(&mut self, locales: Vec<String>, paths: Vec<String>) -> Fbi {
+    pub fn get_bundles<'l>(&'l self, locales: Vec<String>, paths: Vec<String>) -> Fbi<'l> {
         Box::new(BundleIterator {
             res_mgr: self,
             locales,
