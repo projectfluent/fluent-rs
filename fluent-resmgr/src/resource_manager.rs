@@ -1,5 +1,4 @@
 use elsa::FrozenMap;
-use fluent::{Fbi, FluentBundleIterator};
 use fluent::{FluentBundle, FluentResource};
 use std::fs;
 use std::io;
@@ -29,7 +28,6 @@ impl<'l> Iterator for BundleIterator<'l> {
     }
 }
 
-impl<'l> FluentBundleIterator<'l> for BundleIterator<'l> {}
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -68,12 +66,12 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(&'l self, locales: Vec<String>, paths: Vec<String>) -> Fbi<'l> {
-        Box::new(BundleIterator {
+    pub fn get_bundles<'l>(&'l self, locales: Vec<String>, paths: Vec<String>) -> BundleIterator<'l> {
+        BundleIterator {
             res_mgr: self,
             locales,
             paths,
             used: false,
-        })
+        }
     }
 }
