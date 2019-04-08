@@ -72,13 +72,14 @@ fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
         .collect::<Vec<String>>());
 }
 
-static L10N_RESOURCES: &[&str] = &["simple.ftl", "errors.ftl"];
 
 fn main() {
+    let resources = vec!["simple.ftl".into(), "errors.ftl".into()];
+
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
 
-    let mgr = ResourceManager::new();
+    let mgr = ResourceManager::new("./examples/resources/{locale}/{res_id}".into());
 
     // 2. If the argument length is more than 1,
     //    take the second argument as a comma-separated
@@ -92,21 +93,8 @@ fn main() {
     // 3. Negotiate it against the avialable ones
     let locales = get_app_locales(&requested).expect("Failed to retrieve available locales");
 
-    // 4. Create a new Fluent FluentBundle using the
-    //    resolved locales.
-    let paths = L10N_RESOURCES
-        .iter()
-        .map(|path| {
-            format!(
-                "./examples/resources/{locale}/{path}",
-                locale = locales[0],
-                path = path
-            )
-        })
-        .collect();
-
     // 5. Get a bundle for given paths and locales.
-    let bundle = mgr.get_bundle(&locales, &paths);
+    let bundle = mgr.get_bundle(locales, resources);
 
     // 6. Check if the input is provided.
     match args.get(1) {

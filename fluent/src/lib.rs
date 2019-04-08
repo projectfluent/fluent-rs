@@ -45,9 +45,6 @@ impl<'l> Localization<'l> {
     }
 
     pub fn format_value(&mut self, id: &str, args: Option<&HashMap<&str, FluentValue>>) -> String {
-        //let bundles = self.bundles.get_or_insert_with(|| {
-        //(self.generate_bundles)(&self.resource_ids)
-        //});
         for bundle in &self.bundles {
             if bundle.has_message(id) {
                 let res = bundle.format(id, args).unwrap();
