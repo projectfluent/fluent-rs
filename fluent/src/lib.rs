@@ -24,18 +24,17 @@ pub struct Localization<'l> {
 }
 
 impl<'l> Localization<'l> {
-    pub fn new<F, S: Into<String>, I>(resource_ids: Vec<S>, mut generate_bundles: F) -> Self
+    pub fn new<F, I>(resource_ids: Vec<String>, mut generate_bundles: F) -> Self
     where
         F: FnMut(&[String]) -> I + 'l,
-        I: Iterator<Item = FluentBundle<'l>> + 'l,
+        I: Iterator<Item = FluentBundle<'l>> + 'l
     {
-        let res_ids: Vec<String> = resource_ids.into_iter().map(|res| res.into()).collect();
         let mut generate2 = move |x: &[String]| FluentBundleIterator {
             iter: Box::new(generate_bundles(x)),
         };
-        let bundles = Reiterate::new(generate2(&res_ids));
+        let bundles = Reiterate::new(generate2(&resource_ids));
         Localization {
-            resource_ids: res_ids,
+            resource_ids,
             bundles: bundles,
             generate_bundles: Box::new(generate2),
         }
