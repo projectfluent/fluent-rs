@@ -19,3 +19,4 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle = "^0.6"
+reiterate = "0.1.2"

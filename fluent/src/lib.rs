@@ -4,22 +4,22 @@ pub use fluent_bundle::FluentBundle;
 pub use fluent_bundle::FluentResource;
 pub use fluent_bundle::FluentValue;
 
-// pub trait FluentBundleIterator<'l>: > {}
+use reiterate::Reiterate;
 
 struct FluentBundleIterator<'l> {
     iter: Box<Iterator<Item = FluentBundle<'l>> + 'l>,
 }
 
-impl<'a, 'l> Iterator for &'a mut FluentBundleIterator<'l> {
-    type Item = FluentBundle<'l>;
+impl<'l> Iterator for FluentBundleIterator<'l> {
+    type Item = Box<FluentBundle<'l>>;
     fn next(&mut self) -> Option<Self::Item> {
-        self.iter.next()
+        self.iter.next().map(Box::new)
     }
 }
 
 pub struct Localization<'l> {
     pub resource_ids: Vec<String>,
-    bundles: FluentBundleIterator<'l>,
+    bundles: Reiterate<FluentBundleIterator<'l>>,
     generate_bundles: Box<FnMut(&[String]) -> FluentBundleIterator<'l> + 'l>,
 }
 
@@ -33,7 +33,7 @@ impl<'l> Localization<'l> {
         let mut generate2 = move |x: &[String]| FluentBundleIterator {
             iter: Box::new(generate_bundles(x)),
         };
-        let bundles = generate2(&res_ids);
+        let bundles = Reiterate::new(generate2(&res_ids));
         Localization {
             resource_ids: res_ids,
             bundles: bundles,
@@ -42,14 +42,14 @@ impl<'l> Localization<'l> {
     }
 
     pub fn on_change(&mut self) {
-        self.bundles = (self.generate_bundles)(&self.resource_ids);
+        self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
     }
 
     pub fn format_value(&mut self, id: &str, args: Option<&HashMap<&str, FluentValue>>) -> String {
         //let bundles = self.bundles.get_or_insert_with(|| {
         //(self.generate_bundles)(&self.resource_ids)
         //});
-        for bundle in &mut self.bundles {
+        for bundle in &self.bundles {
             if bundle.has_message(id) {
                 let res = bundle.format(id, args).unwrap();
                 return res.0;
