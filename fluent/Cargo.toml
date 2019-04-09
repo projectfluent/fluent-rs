@@ -19,4 +19,7 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle = "^0.6"
-reiterate = "0.1.2"
+reiterate = "^0.1.2"
+
+[dev-dependencies]
+elsa = "^1.0.1"
