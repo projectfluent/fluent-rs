@@ -4,21 +4,23 @@
 //! internationalization formatters, functions, environmental variables and are expected to be used
 //! together.
 
+use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
 use super::entry::{Entry, GetEntry};
 pub use super::errors::FluentError;
-use super::resolve::{Env, ResolveValue};
+use super::resolve::{resolve_value_for_entry, Scope};
 use super::resource::FluentResource;
+use super::types::DisplayableNode;
 use super::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
 
 #[derive(Debug, PartialEq)]
-pub struct Message {
-    pub value: Option<String>,
-    pub attributes: HashMap<String, String>,
+pub struct Message<'m> {
+    pub value: Option<Cow<'m, str>>,
+    pub attributes: HashMap<&'m str, Cow<'m, str>>,
 }
 
 /// A collection of localization messages for a single locale, which are meant
@@ -165,8 +167,8 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
-    ///     [Some(FluentValue::String(str))] => Some(FluentValue::Number(str.len().to_string())),
-    ///     _ => None,
+    ///     [FluentValue::String(str)] => FluentValue::Number(str.len().to_string().into()),
+    ///     _ => FluentValue::None(),
     /// }).expect("Failed to add a function to the bundle.");
     ///
     /// let (value, _) = bundle.format("length", None)
@@ -178,7 +180,7 @@ impl<'bundle> FluentBundle<'bundle> {
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: 'bundle
-            + Fn(&[Option<FluentValue>], &HashMap<&str, FluentValue>) -> Option<FluentValue>
+            + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
             + Sync
             + Send,
     {
@@ -316,7 +318,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// In all other cases `format` returns a string even if it
     /// encountered errors. Generally, during partial errors `format` will
-    /// use `'___'` to replace parts of the formatted message that it could
+    /// use ids to replace parts of the formatted message that it could
     /// not successfuly build. For more fundamental errors `format` will return
     /// the path itself as the translation.
     ///
@@ -335,56 +337,55 @@ impl<'bundle> FluentBundle<'bundle> {
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
-    /// // The result falls back to "___"
+    /// // The result falls back to "a foo b"
     /// let (value, _) = bundle.format("foo", None)
     ///     .expect("Failed to format a message.");
-    /// assert_eq!(&value, "___");
+    /// assert_eq!(&value, "a foo b");
     /// ```
     pub fn format(
-        &self,
+        &'bundle self,
         path: &str,
-        args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<(String, Vec<FluentError>)> {
-        let env = Env::new(self, args);
+        args: Option<&'bundle HashMap<&str, FluentValue>>,
+    ) -> Option<(Cow<'bundle, str>, Vec<FluentError>)> {
+        let mut env = Scope::new(self, args);
 
         let mut errors = vec![];
 
-        if let Some(ptr_pos) = path.find('.') {
+        let string = if let Some(ptr_pos) = path.find('.') {
             let message_id = &path[..ptr_pos];
             let message = self.entries.get_message(message_id)?;
             let attr_name = &path[(ptr_pos + 1)..];
-            for attribute in message.attributes.iter() {
-                if attribute.id.name == attr_name {
-                    match attribute.to_value(&env) {
-                        Ok(val) => {
-                            return Some((val.format(self), errors));
-                        }
-                        Err(err) => {
-                            errors.push(FluentError::ResolverError(err));
-                            // XXX: In the future we'll want to get the partial
-                            // value out of resolver and return it here.
-                            // We also expect to get a Vec or errors out of resolver.
-                            return Some((path.to_string(), errors));
-                        }
-                    }
-                }
-            }
+            let attr = message
+                .attributes
+                .iter()
+                .find(|attr| attr.id.name == attr_name)?;
+            resolve_value_for_entry(
+                &attr.value,
+                DisplayableNode::new(message.id.name, Some(attr.id.name)),
+                &mut env,
+            )
+            .to_string()
         } else {
             let message_id = path;
             let message = self.entries.get_message(message_id)?;
-            match message.to_value(&env) {
-                Ok(val) => {
-                    let s = val.format(self);
-                    return Some((s, errors));
-                }
-                Err(err) => {
-                    errors.push(FluentError::ResolverError(err));
-                    return Some((message_id.to_string(), errors));
-                }
-            }
+            message
+                .value
+                .as_ref()
+                .map(|value| {
+                    resolve_value_for_entry(
+                        value,
+                        DisplayableNode::new(message.id.name, None),
+                        &mut env,
+                    )
+                })?
+                .to_string()
+        };
+
+        for err in env.errors {
+            errors.push(err.into());
         }
 
-        None
+        Some((string, errors))
     }
 
     /// Formats both the message value and attributes identified by `message_id`
@@ -412,8 +413,8 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// let (message, _) = bundle.compound("login-input", None)
     ///     .expect("Failed to format a message.");
-    /// assert_eq!(message.value, Some("Predefined value".to_string()));
-    /// assert_eq!(message.attributes.get("title"), Some(&"Type your login email".to_string()));
+    /// assert_eq!(message.value, Some("Predefined value".into()));
+    /// assert_eq!(message.attributes.get("title"), Some(&"Type your login email".into()));
     /// ```
     ///
     /// # Errors
@@ -422,7 +423,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// In all other cases `compound` returns a message even if it
     /// encountered errors. Generally, during partial errors `compound` will
-    /// use `'___'` to replace parts of the formatted message that it could
+    /// use ids to replace parts of the formatted message that it could
     /// not successfuly build. For more fundamental errors `compound` will return
     /// the path itself as the translation.
     ///
@@ -430,38 +431,32 @@ impl<'bundle> FluentBundle<'bundle> {
     /// gathered during formatting. A caller may safely ignore the extra errors
     /// if the fallback formatting policies are acceptable.
     pub fn compound(
-        &self,
+        &'bundle self,
         message_id: &str,
-        args: Option<&HashMap<&str, FluentValue>>,
-    ) -> Option<(Message, Vec<FluentError>)> {
+        args: Option<&'bundle HashMap<&str, FluentValue>>,
+    ) -> Option<(Message<'bundle>, Vec<FluentError>)> {
+        let mut env = Scope::new(self, args);
         let mut errors = vec![];
-
-        let env = Env::new(self, args);
         let message = self.entries.get_message(message_id)?;
 
-        let value = message
-            .value
-            .as_ref()
-            .and_then(|value| match value.to_value(&env) {
-                Ok(value) => Some(value.format(self)),
-                Err(err) => {
-                    errors.push(FluentError::ResolverError(err));
-                    None
-                }
-            });
+        let value = message.value.as_ref().map(|value| {
+            resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)
+                .to_string()
+        });
 
         let mut attributes = HashMap::new();
 
         for attr in message.attributes.iter() {
-            match attr.to_value(&env) {
-                Ok(value) => {
-                    let val = value.format(self);
-                    attributes.insert(attr.id.name.to_owned(), val);
-                }
-                Err(err) => {
-                    errors.push(FluentError::ResolverError(err));
-                }
-            }
+            let val = resolve_value_for_entry(
+                &attr.value,
+                DisplayableNode::new(message.id.name, Some(attr.id.name)),
+                &mut env,
+            );
+            attributes.insert(attr.id.name, val.to_string());
+        }
+
+        for err in env.errors {
+            errors.push(err.into());
         }
 
         Some((Message { value, attributes }, errors))

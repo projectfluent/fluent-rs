@@ -33,7 +33,7 @@ unread-emails =
     }
 
     let mut args = HashMap::new();
-    args.insert("emailCount", FluentValue::into_number("1.0").unwrap());
+    args.insert("emailCount", FluentValue::into_number("1.0"));
 
     match bundle.format("unread-emails", Some(&args)) {
         Some((value, _)) => println!("{}", value),

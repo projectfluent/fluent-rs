@@ -11,41 +11,126 @@
 //! [`resolve`]: ../resolve
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
-use std::f32;
-use std::num::ParseFloatError;
+use std::borrow::Cow;
 use std::str::FromStr;
 
 use intl_pluralrules::PluralCategory;
 
-use super::bundle::FluentBundle;
+use super::resolve::Scope;
+use fluent_syntax::ast;
 
-/// Value types which can be formatted to a String.
-#[derive(Clone, Debug, PartialEq)]
-pub enum FluentValue {
-    /// Fluent String type.
-    String(String),
-    /// Fluent Number type.
-    Number(String),
+#[derive(Debug, PartialEq, Clone)]
+pub enum DisplayableNodeType {
+    Message,
+    Term,
+    Variable,
+    Function,
 }
 
-impl FluentValue {
-    pub fn into_number<S: ToString>(v: S) -> Result<Self, ParseFloatError> {
-        f64::from_str(&v.to_string()).map(|_| FluentValue::Number(v.to_string()))
-    }
+#[derive(Debug, PartialEq, Clone)]
+pub struct DisplayableNode<'source> {
+    pub node_type: DisplayableNodeType,
+    pub id: &'source str,
+    pub attribute: Option<&'source str>,
+}
 
-    pub fn format(&self, _bundle: &FluentBundle) -> String {
-        match self {
-            FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => n.clone(),
+impl<'source> DisplayableNode<'source> {
+    pub fn display(&self) -> String {
+        let mut id = self.id.to_owned();
+        if let Some(attr) = self.attribute {
+            id.push_str(".");
+            id.push_str(attr);
+        }
+        match self.node_type {
+            DisplayableNodeType::Message => id,
+            DisplayableNodeType::Term => format!("-{}", id),
+            DisplayableNodeType::Variable => format!("${}", id),
+            DisplayableNodeType::Function => format!("{}()", id),
         }
     }
 
-    pub fn matches(&self, bundle: &FluentBundle, other: &FluentValue) -> bool {
+    pub fn get_error(&self) -> String {
+        let mut id = match self.node_type {
+            DisplayableNodeType::Message => String::from("Unknown message: "),
+            DisplayableNodeType::Term => String::from("Unknown term: "),
+            DisplayableNodeType::Variable => String::from("Unknown variable: "),
+            DisplayableNodeType::Function => String::from("Unknown function: "),
+        };
+        id.push_str(&self.display());
+        id
+    }
+
+    pub fn new(id: &'source str, attribute: Option<&'source str>) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Message,
+            id,
+            attribute,
+        }
+    }
+}
+
+impl<'source> From<&ast::Term<'source>> for DisplayableNode<'source> {
+    fn from(term: &ast::Term<'source>) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Term,
+            id: term.id.name,
+            attribute: None,
+        }
+    }
+}
+
+impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
+    fn from(expr: &ast::InlineExpression<'source>) -> Self {
+        match expr {
+            ast::InlineExpression::MessageReference { id, ref attribute } => DisplayableNode {
+                node_type: DisplayableNodeType::Message,
+                id: id.name,
+                attribute: attribute.as_ref().map(|attr| attr.name),
+            },
+            ast::InlineExpression::TermReference {
+                id, ref attribute, ..
+            } => DisplayableNode {
+                node_type: DisplayableNodeType::Term,
+                id: id.name,
+                attribute: attribute.as_ref().map(|attr| attr.name),
+            },
+            ast::InlineExpression::VariableReference { id } => DisplayableNode {
+                node_type: DisplayableNodeType::Variable,
+                id: id.name,
+                attribute: None,
+            },
+            ast::InlineExpression::FunctionReference { id, .. } => DisplayableNode {
+                node_type: DisplayableNodeType::Function,
+                id: id.name,
+                attribute: None,
+            },
+            _ => unimplemented!(),
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub enum FluentValue<'source> {
+    String(Cow<'source, str>),
+    Number(Cow<'source, str>),
+    None(),
+    Error(DisplayableNode<'source>),
+}
+
+impl<'source> FluentValue<'source> {
+    pub fn into_number<S: ToString>(v: S) -> Self {
+        match f64::from_str(&v.to_string()) {
+            Ok(_) => FluentValue::Number(v.to_string().into()),
+            Err(_) => FluentValue::String(v.to_string().into()),
+        }
+    }
+
+    pub fn matches(&self, other: &FluentValue, env: &Scope) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
             (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
-                let cat = match a.as_str() {
+                let cat = match a.as_ref() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,
                     "two" => PluralCategory::TWO,
@@ -54,35 +139,43 @@ impl FluentValue {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
-
-                let pr = &bundle.plural_rules;
-                pr.select(b.as_str()) == Ok(cat)
+                let pr = &env.bundle.plural_rules;
+                pr.select(b.as_ref()) == Ok(cat)
             }
-            (&FluentValue::Number(..), &FluentValue::String(..)) => false,
+            _ => false,
+        }
+    }
+
+    pub fn to_string(&self) -> Cow<'source, str> {
+        match self {
+            FluentValue::String(s) => s.clone(),
+            FluentValue::Number(n) => n.clone(),
+            FluentValue::Error(d) => d.display().into(),
+            FluentValue::None() => String::from("???").into(),
         }
     }
 }
 
-impl From<String> for FluentValue {
+impl<'source> From<String> for FluentValue<'source> {
     fn from(s: String) -> Self {
-        FluentValue::String(s)
+        FluentValue::String(s.into())
     }
 }
 
-impl<'a> From<&'a str> for FluentValue {
-    fn from(s: &'a str) -> Self {
-        FluentValue::String(String::from(s))
+impl<'source> From<&'source str> for FluentValue<'source> {
+    fn from(s: &'source str) -> Self {
+        FluentValue::String(s.into())
     }
 }
 
-impl From<f32> for FluentValue {
-    fn from(n: f32) -> Self {
-        FluentValue::Number(n.to_string())
+impl<'source> From<f64> for FluentValue<'source> {
+    fn from(n: f64) -> Self {
+        FluentValue::Number(n.to_string().into())
     }
 }
 
-impl From<isize> for FluentValue {
+impl<'source> From<isize> for FluentValue<'source> {
     fn from(n: isize) -> Self {
-        FluentValue::Number(n.to_string())
+        FluentValue::Number(n.to_string().into())
     }
 }

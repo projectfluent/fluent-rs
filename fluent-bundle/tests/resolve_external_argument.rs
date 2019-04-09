@@ -30,7 +30,7 @@ unread-emails-dec = You have { $emailsCountDec } unread emails.
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(5));
-    args.insert("emailsCountDec", FluentValue::into_number("5.0").unwrap());
+    args.insert("emailsCountDec", FluentValue::into_number("5.0"));
 
     assert_format_no_errors(
         bundle.format("unread-emails", Some(&args)),

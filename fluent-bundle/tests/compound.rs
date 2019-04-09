@@ -1,7 +1,10 @@
 mod helpers;
+use fluent_bundle::errors::FluentError;
+use fluent_bundle::resolve::ResolverError;
 
 use self::helpers::{
-    assert_compound_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
+    assert_compound, assert_compound_no_errors, assert_get_bundle_no_errors,
+    assert_get_resource_from_str_no_errors,
 };
 use fluent_bundle::bundle::Message;
 use std::collections::HashMap;
@@ -18,14 +21,36 @@ foo = Foo
     let bundle = assert_get_bundle_no_errors(&res, Some("en"));
 
     let mut attrs = HashMap::new();
-    attrs.insert("attr".to_string(), "Attribute".to_string());
-    attrs.insert("attr2".to_string(), "Attribute 2".to_string());
+    attrs.insert("attr".into(), "Attribute".into());
+    attrs.insert("attr2".into(), "Attribute 2".into());
 
     assert_compound_no_errors(
         bundle.compound("foo", None),
         Message {
-            value: Some("Foo".to_string()),
+            value: Some("Foo".into()),
             attributes: attrs,
         },
     );
+}
+
+#[test]
+fn message_reference_cyclic() {
+    {
+        let res = assert_get_resource_from_str_no_errors(
+            "
+foo = Foo { bar }
+bar = { foo } Bar
+        ",
+        );
+        let bundle = assert_get_bundle_no_errors(&res, None);
+
+        assert_compound(
+            bundle.compound("foo", None),
+            Message {
+                value: Some("Foo foo Bar".into()),
+                attributes: HashMap::new(),
+            },
+            vec![FluentError::ResolverError(ResolverError::Cyclic)],
+        );
+    }
 }

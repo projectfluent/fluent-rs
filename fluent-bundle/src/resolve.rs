@@ -13,271 +13,299 @@ use std::hash::{Hash, Hasher};
 
 use super::bundle::FluentBundle;
 use super::entry::GetEntry;
+use super::types::DisplayableNode;
 use super::types::FluentValue;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
-    None,
+    Reference(String),
+    MissingDefault,
+    Argument(String),
     Value,
     Cyclic,
 }
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Env<'env> {
+pub struct Scope<'bundle> {
     /// The current `FluentBundle` instance.
-    pub bundle: &'env FluentBundle<'env>,
+    pub bundle: &'bundle FluentBundle<'bundle>,
     /// The current arguments passed by the developer.
-    pub args: Option<&'env HashMap<&'env str, FluentValue>>,
+    pub args: Option<&'bundle HashMap<&'bundle str, FluentValue<'bundle>>>,
+    /// Local args
+    pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
     pub travelled: RefCell<Vec<u64>>,
+    /// Track errors accumulated during resolving.
+    pub errors: Vec<ResolverError>,
 }
 
-impl<'env> Env<'env> {
+impl<'bundle> Scope<'bundle> {
     pub fn new(
-        bundle: &'env FluentBundle,
-        args: Option<&'env HashMap<&'env str, FluentValue>>,
+        bundle: &'bundle FluentBundle<'bundle>,
+        args: Option<&'bundle HashMap<&str, FluentValue>>,
     ) -> Self {
-        Env {
+        Scope {
             bundle,
             args,
+            local_args: None,
             travelled: RefCell::new(Vec::new()),
+            errors: vec![],
         }
     }
 
-    fn track<F>(&self, identifier: &str, action: F) -> Result<FluentValue, ResolverError>
+    pub fn track<F>(
+        &mut self,
+        entry: DisplayableNode<'bundle>,
+        mut action: F,
+    ) -> FluentValue<'bundle>
     where
-        F: FnMut() -> Result<FluentValue, ResolverError>,
+        F: FnMut(&mut Scope<'bundle>) -> FluentValue<'bundle>,
     {
         let mut hasher = DefaultHasher::new();
-        identifier.hash(&mut hasher);
+        (entry.id, entry.attribute).hash(&mut hasher);
+        entry.id.hash(&mut hasher);
+        if let Some(attr) = entry.attribute {
+            attr.hash(&mut hasher);
+        }
         let hash = hasher.finish();
 
         if self.travelled.borrow().contains(&hash) {
-            Err(ResolverError::Cyclic)
+            self.errors.push(ResolverError::Cyclic);
+            FluentValue::Error(entry)
         } else {
             self.travelled.borrow_mut().push(hash);
-            self.scope(action)
+            let result = action(self);
+            self.travelled.borrow_mut().pop();
+            result
         }
     }
 
-    fn scope<T, F: FnMut() -> T>(&self, mut action: F) -> T {
-        let level = self.travelled.borrow().len();
-        let output = action();
-        self.travelled.borrow_mut().truncate(level);
-        output
+    fn maybe_resolve_attribute(
+        &mut self,
+        attributes: &[ast::Attribute<'bundle>],
+        entry: DisplayableNode<'bundle>,
+        name: &str,
+    ) -> Option<FluentValue<'bundle>> {
+        attributes
+            .iter()
+            .find(|attr| attr.id.name == name)
+            .map(|attr| self.track(entry, |env| attr.value.resolve(env)))
     }
 }
 
-/// Converts an AST node to a `FluentValue`.
-pub trait ResolveValue {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError>;
+// Converts an AST node to a `FluentValue`.
+pub trait ResolveValue<'source> {
+    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source>;
 }
 
-impl<'source> ResolveValue for ast::Message<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        env.track(&self.id.name, || {
-            self.value
-                .as_ref()
-                .ok_or(ResolverError::None)?
-                .to_value(env)
-        })
+fn generate_ref_error<'source>(
+    env: &mut Scope<'source>,
+    node: DisplayableNode<'source>,
+) -> FluentValue<'source> {
+    env.errors.push(ResolverError::Reference(node.get_error()));
+    FluentValue::Error(node)
+}
+
+impl<'source> ResolveValue<'source> for ast::Term<'source> {
+    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
+        resolve_value_for_entry(&self.value, self.into(), env)
     }
 }
 
-impl<'source> ResolveValue for ast::Term<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        env.track(&self.id.name, || self.value.to_value(env))
+pub fn resolve_value_for_entry<'source>(
+    value: &ast::Pattern<'source>,
+    entry: DisplayableNode<'source>,
+    env: &mut Scope<'source>,
+) -> FluentValue<'source> {
+    if value.elements.len() == 1 {
+        return match value.elements[0] {
+            ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
+            ast::PatternElement::Placeable(ref p) => env.track(entry.clone(), |env| p.resolve(env)),
+        };
     }
+
+    let mut string = String::new();
+    for elem in &value.elements {
+        match elem {
+            ast::PatternElement::TextElement(s) => {
+                string.push_str(&s);
+            }
+            ast::PatternElement::Placeable(p) => {
+                let result = env.track(entry.clone(), |env| p.resolve(env));
+                string.push_str(&result.to_string());
+            }
+        }
+    }
+    FluentValue::String(string.into())
 }
 
-impl<'source> ResolveValue for ast::Attribute<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        env.track(&self.id.name, || self.value.to_value(env))
-    }
-}
+impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
+    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
+        if self.elements.len() == 1 {
+            return match self.elements[0] {
+                ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
+                ast::PatternElement::Placeable(ref p) => p.resolve(env),
+            };
+        }
 
-impl<'source> ResolveValue for ast::Pattern<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        let mut string = String::with_capacity(128);
+        let mut string = String::new();
         for elem in &self.elements {
-            let result: Result<String, ()> = env.scope(|| match elem.to_value(env) {
-                Err(ResolverError::Cyclic) => Err(()),
-                Err(_) => Ok("___".into()),
-                Ok(elem) => Ok(elem.format(env.bundle)),
-            });
-
-            match result {
-                Err(()) => return Ok("___".into()),
-                Ok(value) => {
-                    string.push_str(&value);
+            match elem {
+                ast::PatternElement::TextElement(s) => {
+                    string.push_str(&s);
+                }
+                ast::PatternElement::Placeable(p) => {
+                    let result = p.resolve(env).to_string();
+                    string.push_str(&result);
                 }
             }
         }
-        string.shrink_to_fit();
-        Ok(FluentValue::from(string))
+        FluentValue::String(string.into())
     }
 }
 
-impl<'source> ResolveValue for ast::PatternElement<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
+impl<'source> ResolveValue<'source> for ast::Expression<'source> {
+    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
         match self {
-            ast::PatternElement::TextElement(s) => Ok(FluentValue::from(*s)),
-            ast::PatternElement::Placeable(p) => p.to_value(env),
-        }
-    }
-}
-
-impl<'source> ResolveValue for ast::VariantKey<'source> {
-    fn to_value(&self, _env: &Env) -> Result<FluentValue, ResolverError> {
-        match self {
-            ast::VariantKey::Identifier { name } => Ok(FluentValue::from(*name)),
-            ast::VariantKey::NumberLiteral { value } => {
-                FluentValue::into_number(value).map_err(|_| ResolverError::Value)
-            }
-        }
-    }
-}
-
-impl<'source> ResolveValue for ast::Expression<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
-        match self {
-            ast::Expression::InlineExpression(exp) => exp.to_value(env),
-            ast::Expression::SelectExpression { selector, variants } => {
-                if let Ok(ref selector) = selector.to_value(env) {
-                    for variant in variants {
-                        match variant.key {
-                            ast::VariantKey::Identifier { name } => {
-                                let key = FluentValue::from(name);
-                                if key.matches(env.bundle, selector) {
-                                    return variant.value.to_value(env);
-                                }
-                            }
-                            ast::VariantKey::NumberLiteral { value } => {
-                                if let Ok(key) = FluentValue::into_number(value) {
-                                    if key.matches(env.bundle, selector) {
-                                        return variant.value.to_value(env);
+            ast::Expression::InlineExpression(exp) => exp.resolve(env),
+            ast::Expression::SelectExpression {
+                selector,
+                ref variants,
+            } => {
+                let selector = selector.resolve(env);
+                match selector {
+                    FluentValue::String(_) | FluentValue::Number(_) => {
+                        for variant in variants {
+                            match variant.key {
+                                ast::VariantKey::Identifier { name } => {
+                                    let key = FluentValue::String(name.into());
+                                    if key.matches(&selector, &env) {
+                                        return variant.value.resolve(env);
                                     }
-                                } else {
-                                    return Err(ResolverError::Value);
+                                }
+                                ast::VariantKey::NumberLiteral { value } => {
+                                    let key = FluentValue::into_number(value);
+                                    if key.matches(&selector, &env) {
+                                        return variant.value.resolve(env);
+                                    }
                                 }
                             }
                         }
                     }
+                    _ => {}
                 }
 
-                select_default(variants)
-                    .ok_or(ResolverError::None)?
-                    .value
-                    .to_value(env)
+                for variant in variants {
+                    if variant.default {
+                        return variant.value.resolve(env);
+                    }
+                }
+                env.errors.push(ResolverError::MissingDefault);
+                FluentValue::None()
             }
         }
     }
 }
 
-impl<'source> ResolveValue for ast::InlineExpression<'source> {
-    fn to_value(&self, env: &Env) -> Result<FluentValue, ResolverError> {
+impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
+    fn resolve(&self, mut env: &mut Scope<'source>) -> FluentValue<'source> {
         match self {
             ast::InlineExpression::StringLiteral { value } => {
-                Ok(FluentValue::from(unescape_unicode(value).into_owned()))
+                FluentValue::String(unescape_unicode(value))
             }
-            ast::InlineExpression::NumberLiteral { value } => {
-                FluentValue::into_number(*value).map_err(|_| ResolverError::None)
+            ast::InlineExpression::MessageReference { id, attribute } => {
+                let msg = env.bundle.entries.get_message(&id.name);
+
+                if let Some(msg) = msg {
+                    if let Some(attr) = attribute {
+                        env.maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
+                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
+                    } else if let Some(value) = msg.value.as_ref() {
+                        env.track(self.into(), |env| value.resolve(env))
+                    } else {
+                        generate_ref_error(env, self.into())
+                    }
+                } else {
+                    generate_ref_error(env, self.into())
+                }
+            }
+            ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
+            ast::InlineExpression::TermReference {
+                id,
+                attribute,
+                arguments,
+            } => {
+                let term = env.bundle.entries.get_term(&id.name);
+
+                let (_, resolved_named_args) = get_arguments(env, arguments);
+
+                env.local_args = Some(resolved_named_args);
+
+                let value = if let Some(term) = term {
+                    if let Some(attr) = attribute {
+                        env.maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
+                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
+                    } else {
+                        term.resolve(&mut env)
+                    }
+                } else {
+                    generate_ref_error(env, self.into())
+                };
+                env.local_args = None;
+                value
             }
             ast::InlineExpression::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) = get_arguments(env, arguments);
 
                 let func = env.bundle.entries.get_function(id.name);
 
-                func.ok_or(ResolverError::None).and_then(|func| {
+                if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
-                        .ok_or(ResolverError::None)
-                })
-            }
-            ast::InlineExpression::MessageReference { id, attribute } => {
-                let msg = env
-                    .bundle
-                    .entries
-                    .get_message(&id.name)
-                    .ok_or(ResolverError::None)?;
-                if let Some(attribute) = attribute {
-                    for attr in msg.attributes.iter() {
-                        if attr.id.name == attribute.name {
-                            return attr.to_value(env);
-                        }
-                    }
-                    Err(ResolverError::None)
                 } else {
-                    msg.to_value(env)
+                    generate_ref_error(env, self.into())
                 }
             }
-            ast::InlineExpression::TermReference {
-                id,
-                attribute,
-                arguments,
-            } => {
-                let term = env
-                    .bundle
-                    .entries
-                    .get_term(&id.name)
-                    .ok_or(ResolverError::None)?;
-
-                let (.., resolved_named_args) = get_arguments(env, arguments);
-                let env = Env::new(env.bundle, Some(&resolved_named_args));
-
-                if let Some(attribute) = attribute {
-                    for attr in term.attributes.iter() {
-                        if attr.id.name == attribute.name {
-                            return attr.to_value(&env);
-                        }
-                    }
-                    Err(ResolverError::None)
+            ast::InlineExpression::VariableReference { id } => {
+                let arg = if let Some(args) = &env.local_args {
+                    args.get(&id.name)
                 } else {
-                    term.to_value(&env)
+                    env.args.and_then(|args| args.get(&id.name))
+                };
+                if let Some(arg) = arg {
+                    arg.clone()
+                } else {
+                    let displayable_node: DisplayableNode = self.into();
+                    if env.local_args.is_none() {
+                        env.errors
+                            .push(ResolverError::Reference(displayable_node.get_error()));
+                    }
+                    FluentValue::Error(displayable_node)
                 }
             }
-            ast::InlineExpression::VariableReference { id } => env
-                .args
-                .and_then(|args| args.get(&id.name))
-                .cloned()
-                .ok_or(ResolverError::None),
-            ast::InlineExpression::Placeable { ref expression } => {
-                let exp = expression.as_ref();
-                exp.to_value(env)
-            }
+            ast::InlineExpression::Placeable { expression } => expression.resolve(env),
         }
     }
 }
 
-fn select_default<'source>(
-    variants: &'source [ast::Variant<'source>],
-) -> Option<&ast::Variant<'source>> {
-    for variant in variants {
-        if variant.default {
-            return Some(variant);
-        }
-    }
-
-    None
-}
-
-fn get_arguments<'env>(
-    env: &Env,
-    arguments: &'env Option<ast::CallArguments>,
-) -> (Vec<Option<FluentValue>>, HashMap<&'env str, FluentValue>) {
+fn get_arguments<'bundle>(
+    env: &mut Scope<'bundle>,
+    arguments: &Option<ast::CallArguments<'bundle>>,
+) -> (
+    Vec<FluentValue<'bundle>>,
+    HashMap<&'bundle str, FluentValue<'bundle>>,
+) {
     let mut resolved_positional_args = Vec::new();
     let mut resolved_named_args = HashMap::new();
 
     if let Some(ast::CallArguments { named, positional }) = arguments {
         for expression in positional {
-            resolved_positional_args.push(expression.to_value(env).ok());
+            resolved_positional_args.push(expression.resolve(env));
         }
 
         for arg in named {
-            if let Ok(arg_value) = arg.value.to_value(env) {
-                resolved_named_args.insert(arg.name.name, arg_value);
-            }
+            resolved_named_args.insert(arg.name.name, arg.value.resolve(env));
         }
     }
 

@@ -28,7 +28,7 @@ unread-emails-dec =
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
-    args.insert("emailsCountDec", FluentValue::into_number("1.0").unwrap());
+    args.insert("emailsCountDec", FluentValue::into_number("1.0"));
 
     assert_format_no_errors(
         bundle.format("unread-emails", Some(&args)),
@@ -64,7 +64,7 @@ unread-emails-dec =
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
-    args.insert("emailsCountDec", FluentValue::into_number("1.0").unwrap());
+    args.insert("emailsCountDec", FluentValue::into_number("1.0"));
 
     assert_format_no_errors(
         bundle.format("unread-emails", Some(&args)),
