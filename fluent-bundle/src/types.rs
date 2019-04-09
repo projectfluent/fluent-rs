@@ -28,13 +28,13 @@ pub enum DisplayableNodeType {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub struct DisplayableNode<'v> {
+pub struct DisplayableNode<'source> {
     pub node_type: DisplayableNodeType,
-    pub id: &'v str,
-    pub attribute: Option<&'v str>,
+    pub id: &'source str,
+    pub attribute: Option<&'source str>,
 }
 
-impl<'v> DisplayableNode<'v> {
+impl<'source> DisplayableNode<'source> {
     pub fn display(&self) -> String {
         let mut id = self.id.to_owned();
         if let Some(attr) = self.attribute {
@@ -60,7 +60,7 @@ impl<'v> DisplayableNode<'v> {
         id
     }
 
-    pub fn new(id: &'v str, attribute: Option<&'v str>) -> Self {
+    pub fn new(id: &'source str, attribute: Option<&'source str>) -> Self {
         DisplayableNode {
             node_type: DisplayableNodeType::Message,
             id,
@@ -69,18 +69,8 @@ impl<'v> DisplayableNode<'v> {
     }
 }
 
-impl<'v> From<&ast::Message<'v>> for DisplayableNode<'v> {
-    fn from(msg: &ast::Message<'v>) -> Self {
-        DisplayableNode {
-            node_type: DisplayableNodeType::Message,
-            id: msg.id.name,
-            attribute: None,
-        }
-    }
-}
-
-impl<'v> From<&ast::Term<'v>> for DisplayableNode<'v> {
-    fn from(term: &ast::Term<'v>) -> Self {
+impl<'source> From<&ast::Term<'source>> for DisplayableNode<'source> {
+    fn from(term: &ast::Term<'source>) -> Self {
         DisplayableNode {
             node_type: DisplayableNodeType::Term,
             id: term.id.name,
@@ -89,8 +79,8 @@ impl<'v> From<&ast::Term<'v>> for DisplayableNode<'v> {
     }
 }
 
-impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
-    fn from(expr: &ast::InlineExpression<'v>) -> Self {
+impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
+    fn from(expr: &ast::InlineExpression<'source>) -> Self {
         match expr {
             ast::InlineExpression::MessageReference { id, ref attribute } => DisplayableNode {
                 node_type: DisplayableNodeType::Message,
@@ -120,14 +110,14 @@ impl<'v> From<&ast::InlineExpression<'v>> for DisplayableNode<'v> {
 }
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum FluentValue<'v> {
-    String(Cow<'v, str>),
-    Number(Cow<'v, str>),
+pub enum FluentValue<'source> {
+    String(Cow<'source, str>),
+    Number(Cow<'source, str>),
     None(),
-    Error(DisplayableNode<'v>),
+    Error(DisplayableNode<'source>),
 }
 
-impl<'v> FluentValue<'v> {
+impl<'source> FluentValue<'source> {
     pub fn into_number<S: ToString>(v: S) -> Self {
         match f64::from_str(&v.to_string()) {
             Ok(_) => FluentValue::Number(v.to_string().into()),
@@ -156,7 +146,7 @@ impl<'v> FluentValue<'v> {
         }
     }
 
-    pub fn to_string(&self) -> Cow<'v, str> {
+    pub fn to_string(&self) -> Cow<'source, str> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
@@ -166,25 +156,25 @@ impl<'v> FluentValue<'v> {
     }
 }
 
-impl<'v> From<String> for FluentValue<'v> {
+impl<'source> From<String> for FluentValue<'source> {
     fn from(s: String) -> Self {
         FluentValue::String(s.into())
     }
 }
 
-impl<'v> From<&'v str> for FluentValue<'v> {
-    fn from(s: &'v str) -> Self {
+impl<'source> From<&'source str> for FluentValue<'source> {
+    fn from(s: &'source str) -> Self {
         FluentValue::String(s.into())
     }
 }
 
-impl<'v> From<f64> for FluentValue<'v> {
+impl<'source> From<f64> for FluentValue<'source> {
     fn from(n: f64) -> Self {
         FluentValue::Number(n.to_string().into())
     }
 }
 
-impl<'v> From<isize> for FluentValue<'v> {
+impl<'source> From<isize> for FluentValue<'source> {
     fn from(n: isize) -> Self {
         FluentValue::Number(n.to_string().into())
     }

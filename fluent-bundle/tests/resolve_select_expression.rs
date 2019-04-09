@@ -242,3 +242,25 @@ use-foo =
 
     assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 }
+
+#[test]
+fn select_selector_error() {
+    let res = assert_get_resource_from_str_no_errors(
+        "
+use-foo =
+    { -foo.attr ->
+        [FooAttr] Foo
+       *[other] Other
+    }
+    ",
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
+
+    assert_format(
+        bundle.format("use-foo", None),
+        "Other",
+        vec![FluentError::ResolverError(ResolverError::Reference(
+            "Unknown term: -foo.attr".into(),
+        ))],
+    );
+}

@@ -28,23 +28,23 @@ pub enum ResolverError {
 }
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Scope<'scope> {
+pub struct Scope<'bundle> {
     /// The current `FluentBundle` instance.
-    pub bundle: &'scope FluentBundle<'scope>,
+    pub bundle: &'bundle FluentBundle<'bundle>,
     /// The current arguments passed by the developer.
-    pub args: Option<&'scope HashMap<&'scope str, FluentValue<'scope>>>,
+    pub args: Option<&'bundle HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Local args
-    pub local_args: Option<HashMap<&'scope str, FluentValue<'scope>>>,
+    pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
     pub travelled: RefCell<Vec<u64>>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
 }
 
-impl<'scope> Scope<'scope> {
+impl<'bundle> Scope<'bundle> {
     pub fn new(
-        bundle: &'scope FluentBundle<'scope>,
-        args: Option<&'scope HashMap<&str, FluentValue>>,
+        bundle: &'bundle FluentBundle<'bundle>,
+        args: Option<&'bundle HashMap<&str, FluentValue>>,
     ) -> Self {
         Scope {
             bundle,
@@ -55,11 +55,16 @@ impl<'scope> Scope<'scope> {
         }
     }
 
-    pub fn track<F>(&mut self, entry: DisplayableNode<'scope>, mut action: F) -> FluentValue<'scope>
+    pub fn track<F>(
+        &mut self,
+        entry: DisplayableNode<'bundle>,
+        mut action: F,
+    ) -> FluentValue<'bundle>
     where
-        F: FnMut(&mut Scope<'scope>) -> FluentValue<'scope>,
+        F: FnMut(&mut Scope<'bundle>) -> FluentValue<'bundle>,
     {
         let mut hasher = DefaultHasher::new();
+        (entry.id, entry.attribute).hash(&mut hasher);
         entry.id.hash(&mut hasher);
         if let Some(attr) = entry.attribute {
             attr.hash(&mut hasher);
@@ -76,23 +81,23 @@ impl<'scope> Scope<'scope> {
             result
         }
     }
+
+    fn maybe_resolve_attribute(
+        &mut self,
+        attributes: &[ast::Attribute<'bundle>],
+        entry: DisplayableNode<'bundle>,
+        name: &str,
+    ) -> Option<FluentValue<'bundle>> {
+        attributes
+            .iter()
+            .find(|attr| attr.id.name == name)
+            .map(|attr| self.track(entry, |env| attr.value.resolve(env)))
+    }
 }
 
 // Converts an AST node to a `FluentValue`.
 pub trait ResolveValue<'source> {
     fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source>;
-}
-
-fn maybe_resolve_attribute<'source>(
-    env: &mut Scope<'source>,
-    attributes: &[ast::Attribute<'source>],
-    entry: DisplayableNode<'source>,
-    name: &str,
-) -> Option<FluentValue<'source>> {
-    attributes
-        .iter()
-        .find(|attr| attr.id.name == name)
-        .map(|attr| env.track(entry, |env| attr.value.resolve(env)))
 }
 
 fn generate_ref_error<'source>(
@@ -215,7 +220,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
-                        maybe_resolve_attribute(env, &msg.attributes, self.into(), attr.name)
+                        env.maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(env, self.into()))
                     } else if let Some(value) = msg.value.as_ref() {
                         env.track(self.into(), |env| value.resolve(env))
@@ -240,7 +245,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 let value = if let Some(term) = term {
                     if let Some(attr) = attribute {
-                        maybe_resolve_attribute(env, &term.attributes, self.into(), attr.name)
+                        env.maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(env, self.into()))
                     } else {
                         term.resolve(&mut env)
@@ -284,12 +289,12 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
     }
 }
 
-fn get_arguments<'scope>(
-    env: &mut Scope<'scope>,
-    arguments: &Option<ast::CallArguments<'scope>>,
+fn get_arguments<'bundle>(
+    env: &mut Scope<'bundle>,
+    arguments: &Option<ast::CallArguments<'bundle>>,
 ) -> (
-    Vec<FluentValue<'scope>>,
-    HashMap<&'scope str, FluentValue<'scope>>,
+    Vec<FluentValue<'bundle>>,
+    HashMap<&'bundle str, FluentValue<'bundle>>,
 ) {
     let mut resolved_positional_args = Vec::new();
     let mut resolved_named_args = HashMap::new();
