@@ -5,7 +5,6 @@ use elsa::FrozenMap;
 
 use std::io;
 use std::fs;
-use std::collections::HashMap;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -13,27 +12,29 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 
 #[test]
 fn localization_test() {
-    let mut resources: FrozenMap<String, Box<FluentResource>> = FrozenMap::new();
+    let resources: FrozenMap<String, Box<FluentResource>> = FrozenMap::new();
 
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+    let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
     let generate_messages = |res_ids: &[String]| {
-        let resources = &mut resources;
-        let locales = vec!["en-US"];
+        let locales = vec!["pl", "en-US"];
 
         let mut bundles = vec![];
 
         for locale in locales {
             let mut bundle = FluentBundle::new(&[locale]);
+            let res_path = res_path_scheme.replace("{locale}", locale);
             for res_id in res_ids {
-                let res = if let Some(res) = resources.get(res_id) {
+                let path = res_path.replace("{res_id}", res_id);
+                let res = if let Some(res) = resources.get(&path) {
                     res
                 } else {
-                    let source = read_file(res_id).unwrap();
+                    let source = read_file(&path).unwrap();
                     let res = FluentResource::try_new(source).unwrap();
-                    resources.insert(res_id.to_string(), Box::new(res))
+                    resources.insert(path, Box::new(res))
                 };
-                bundle.add_resource(&res);
+                bundle.add_resource(&res).unwrap();
             }
             bundles.push(bundle);
         }
@@ -44,5 +45,11 @@ fn localization_test() {
     let mut loc = Localization::new(resource_ids, generate_messages);
 
     let value = loc.format_value("hello-world", None);
-    assert_eq!(value, "hello-world");
+    assert_eq!(value, "Hello World [pl]");
+
+    let value = loc.format_value("missing-message", None);
+    assert_eq!(value, "missing-message");
+
+    let value = loc.format_value("hello-world-3", None);
+    assert_eq!(value, "Hello World 3 [en]");
 }

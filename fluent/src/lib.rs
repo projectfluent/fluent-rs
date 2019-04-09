@@ -48,7 +48,7 @@ impl<'loc> Localization<'loc> {
         for bundle in &self.bundles {
             if bundle.has_message(id) {
                 let res = bundle.format(id, args).unwrap();
-                return res.0;
+                return res.0.to_string();
             }
         }
         return id.into();
