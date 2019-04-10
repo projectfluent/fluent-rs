@@ -72,7 +72,6 @@ fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
         .collect::<Vec<String>>());
 }
 
-
 fn main() {
     let resources = vec!["simple.ftl".into(), "errors.ftl".into()];
 

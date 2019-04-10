@@ -29,7 +29,6 @@ impl<'l> Iterator for BundleIterator<'l> {
     }
 }
 
-
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
 }
@@ -48,7 +47,10 @@ impl ResourceManager {
     }
 
     fn get_resource(&self, res_id: &str, locale: &str) -> &FluentResource {
-        let path = self.path_scheme.replace("{locale}", locale).replace("{res_id}", res_id);
+        let path = self
+            .path_scheme
+            .replace("{locale}", locale)
+            .replace("{res_id}", res_id);
         if let Some(res) = self.resources.get(&path) {
             res
         } else {
@@ -70,7 +72,11 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(&'l self, locales: Vec<String>, resource_ids: Vec<String>) -> BundleIterator<'l> {
+    pub fn get_bundles<'l>(
+        &'l self,
+        locales: Vec<String>,
+        resource_ids: Vec<String>,
+    ) -> BundleIterator<'l> {
         BundleIterator {
             res_mgr: self,
             locales,
