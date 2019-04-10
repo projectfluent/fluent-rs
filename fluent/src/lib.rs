@@ -27,7 +27,7 @@ impl<'loc> Localization<'loc> {
     pub fn new<F, I>(resource_ids: Vec<String>, mut generate_bundles: F) -> Self
     where
         F: FnMut(&[String]) -> I + 'loc,
-        I: Iterator<Item = FluentBundle<'loc>> + 'loc
+        I: Iterator<Item = FluentBundle<'loc>> + 'loc,
     {
         let mut generate2 = move |x: &[String]| FluentBundleIterator {
             iter: Box::new(generate_bundles(x)),
