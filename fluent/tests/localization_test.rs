@@ -3,6 +3,7 @@ use fluent::Localization;
 use fluent_bundle::resource::FluentResource;
 use fluent_bundle::FluentBundle;
 
+use std::cell::RefCell;
 use std::fs;
 use std::io;
 
@@ -61,12 +62,12 @@ fn localization_on_change() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
-    let mut available_locales = vec![String::from("en-US")];
+    let available_locales = RefCell::new(vec![String::from("en-US")]);
 
     let generate_messages = |res_ids: &[String]| {
         let mut bundles = vec![];
 
-        for locale in available_locales.iter() {
+        for locale in available_locales.borrow().iter() {
             let mut bundle = FluentBundle::new(&[locale]);
             let res_path = res_path_scheme.replace("{locale}", locale);
             for res_id in res_ids {
@@ -91,10 +92,10 @@ fn localization_on_change() {
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [en]");
 
-    //available_locales.insert(0, String::from("pl"));
+    available_locales.borrow_mut().insert(0, String::from("pl"));
 
-    //loc.on_change();
+    loc.on_change();
 
-    //let value = loc.format_value("hello-world", None);
-    //assert_eq!(value, "Hello World [pl]");
+    let value = loc.format_value("hello-world", None);
+    assert_eq!(value, "Hello World [pl]");
 }
