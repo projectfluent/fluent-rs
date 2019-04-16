@@ -1,7 +1,7 @@
 use elsa::FrozenMap;
-use fluent::Localization;
 use fluent_bundle::resource::FluentResource;
 use fluent_bundle::FluentBundle;
+use fluent_fallback::Localization;
 
 use std::cell::RefCell;
 use std::fs;
