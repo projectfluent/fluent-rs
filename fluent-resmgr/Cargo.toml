@@ -1,10 +1,9 @@
 [package]
 name = "fluent-resmgr"
 description = """
-A localization system designed to unleash the entire expressive power of
-natural language translations.
+Resource manager for Fluent localization resources.
 """
-version = "0.4.3"
+version = "0.1.0"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
@@ -20,4 +19,5 @@ categories = ["localization", "internationalization"]
 [dependencies]
 fluent = { path = "../fluent" }
 fluent-locale = "^0.4.1"
+fluent-fallback = { path = "../fluent-fallback" }
 elsa = "^1.0.1"

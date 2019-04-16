@@ -1,4 +1,4 @@
-use fluent::Localization;
+use fluent_fallback::Localization;
 use fluent_resmgr::resource_manager::ResourceManager;
 
 #[test]
