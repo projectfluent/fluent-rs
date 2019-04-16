@@ -4,10 +4,26 @@
 
 The crates perform the following functions:
 
-## fluent-bundle [![crates.io](http://meritbadge.herokuapp.com/fluent_bundle)](https://crates.io/crates/fluent_bundle)
-
-Implementation of the Fluent Localization System providing localization capabilities for any Rust project.
-
 ## fluent-syntax [![crates.io](http://meritbadge.herokuapp.com/fluent_syntax)](https://crates.io/crates/fluent_syntax)
 
-Fluent Syntax parser/serializer API.
+Low level Fluent Syntax AST and parser API.
+
+## fluent-bundle [![crates.io](http://meritbadge.herokuapp.com/fluent_bundle)](https://crates.io/crates/fluent_bundle)
+
+Implementation of the low-level Fluent Localization System providing localization capabilities for any Rust project.
+
+## fluent-fallback [![crates.io](http://meritbadge.herokuapp.com/fluent_fallback)](https://crates.io/crates/fluent_fallback)
+
+Implementation of the high-level Fluent Localization System providing localization capabilities for any Rust project.
+
+## fluent-resmgr [![crates.io](http://meritbadge.herokuapp.com/fluent_resmgr)](https://crates.io/crates/fluent_resmgr)
+
+Resource Manager for localization resources.
+
+## fluent-cli [![crates.io](http://meritbadge.herokuapp.com/fluent_cli)](https://crates.io/crates/fluent_cli)
+
+Collection of command line tools for Fluent.
+
+## fluent [![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
+
+Umbrella crate combining crates that are ready to be used in production.
