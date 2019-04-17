@@ -34,7 +34,7 @@ impl<'loc> Localization<'loc> {
         let bundles = Reiterate::new(generate2(&resource_ids));
         Localization {
             resource_ids,
-            bundles: bundles,
+            bundles,
             generate_bundles: Box::new(generate2),
         }
     }
@@ -50,6 +50,6 @@ impl<'loc> Localization<'loc> {
                 return res.0.to_string();
             }
         }
-        return id.into();
+        id.into()
     }
 }
