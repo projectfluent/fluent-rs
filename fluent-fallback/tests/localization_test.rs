@@ -6,6 +6,7 @@ use fluent_fallback::Localization;
 use std::cell::RefCell;
 use std::fs;
 use std::io;
+use std::iter::from_fn;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -17,30 +18,30 @@ fn localization_format() {
 
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
+    let locales = vec!["pl", "en-US"];
 
     let generate_messages = |res_ids: &[String]| {
-        let locales = vec!["pl", "en-US"];
+        let mut locales = locales.iter();
+        let res_mgr = &resources;
+        let res_ids = res_ids.to_vec();
 
-        let mut bundles = vec![];
+        from_fn(move || {
+            locales.next().map(|locale| {
+                let mut bundle = FluentBundle::new(&[locale]);
+                let res_path = res_path_scheme.replace("{locale}", locale);
 
-        for locale in locales {
-            let mut bundle = FluentBundle::new(&[locale]);
-            let res_path = res_path_scheme.replace("{locale}", locale);
-            for res_id in res_ids {
-                let path = res_path.replace("{res_id}", res_id);
-                let res = if let Some(res) = resources.get(&path) {
-                    res
-                } else {
-                    let source = read_file(&path).unwrap();
-                    let res = FluentResource::try_new(source).unwrap();
-                    resources.insert(path, Box::new(res))
-                };
-                bundle.add_resource(&res).unwrap();
-            }
-            bundles.push(bundle);
-        }
-
-        return bundles.into_iter();
+                for res_id in &res_ids {
+                    let path = res_path.replace("{res_id}", res_id);
+                    let res = res_mgr.get(&path).unwrap_or_else(|| {
+                        let source = read_file(&path).unwrap();
+                        let res = FluentResource::try_new(source).unwrap();
+                        res_mgr.insert(path, Box::new(res))
+                    });
+                    bundle.add_resource(res).unwrap();
+                }
+                bundle
+            })
+        })
     };
 
     let mut loc = Localization::new(resource_ids, generate_messages);

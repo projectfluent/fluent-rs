@@ -2,32 +2,7 @@ use elsa::FrozenMap;
 use fluent::{FluentBundle, FluentResource};
 use std::fs;
 use std::io;
-
-pub struct BundleIterator<'l> {
-    res_mgr: &'l ResourceManager,
-    locales: Vec<String>,
-    locales_ptr: usize,
-    resource_ids: Vec<String>,
-}
-
-impl<'l> Iterator for BundleIterator<'l> {
-    type Item = FluentBundle<'l>;
-
-    fn next(&mut self) -> Option<FluentBundle<'l>> {
-        if self.locales_ptr >= self.locales.len() {
-            return None;
-        }
-        let locale = &self.locales[self.locales_ptr];
-
-        let mut bundle = FluentBundle::new(&[locale]);
-        for res_id in &self.resource_ids {
-            let res = self.res_mgr.get_resource(&res_id, locale);
-            bundle.add_resource(res).unwrap();
-        }
-        self.locales_ptr += 1;
-        Some(bundle)
-    }
-}
+use std::iter::from_fn;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -76,12 +51,20 @@ impl ResourceManager {
         &'l self,
         locales: Vec<String>,
         resource_ids: Vec<String>,
-    ) -> BundleIterator<'l> {
-        BundleIterator {
-            res_mgr: self,
-            locales,
-            locales_ptr: 0,
-            resource_ids,
-        }
+    ) -> impl Iterator<Item = FluentBundle<'l>> {
+        let res_mgr = self;
+        let mut ptr = 0;
+
+        from_fn(move || {
+            locales.get(ptr).map(|locale| {
+                ptr += 1;
+                let mut bundle = FluentBundle::new(&[locale]);
+                for res_id in &resource_ids {
+                    let res = res_mgr.get_resource(&res_id, locale);
+                    bundle.add_resource(res).unwrap();
+                }
+                bundle
+            })
+        })
     }
 }

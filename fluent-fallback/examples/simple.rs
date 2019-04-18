@@ -27,6 +27,7 @@ use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
+use std::iter::from_fn;
 use std::str::FromStr;
 
 /// We need a generic file read helper function to
@@ -112,26 +113,27 @@ fn main() {
     //    the iterator over FluentBundle instances.
     let res_path_scheme = "./examples/resources/{locale}/{res_id}";
     let generate_messages = |res_ids: &[String]| {
-        let mut bundles = vec![];
+        let mut locales = locales.iter();
+        let res_mgr = &resources;
+        let res_ids = res_ids.to_vec();
 
-        for locale in locales.clone() {
-            let mut bundle = FluentBundle::new(&[&locale]);
-            let res_path = res_path_scheme.replace("{locale}", &locale);
-            for res_id in res_ids {
-                let path = res_path.replace("{res_id}", res_id);
-                let res = if let Some(res) = resources.get(&path) {
-                    res
-                } else {
-                    let source = read_file(&path).unwrap();
-                    let res = FluentResource::try_new(source).unwrap();
-                    resources.insert(path, Box::new(res))
-                };
-                bundle.add_resource(&res).unwrap();
-            }
-            bundles.push(bundle);
-        }
+        from_fn(move || {
+            locales.next().map(|locale| {
+                let mut bundle = FluentBundle::new(&[locale]);
+                let res_path = res_path_scheme.replace("{locale}", locale);
 
-        return bundles.into_iter();
+                for res_id in &res_ids {
+                    let path = res_path.replace("{res_id}", res_id);
+                    let res = res_mgr.get(&path).unwrap_or_else(|| {
+                        let source = read_file(&path).unwrap();
+                        let res = FluentResource::try_new(source).unwrap();
+                        res_mgr.insert(path, Box::new(res))
+                    });
+                    bundle.add_resource(res).unwrap();
+                }
+                bundle
+            })
+        })
     };
 
     // 6. Create a new Localization instance which will be used to maintain the localization
