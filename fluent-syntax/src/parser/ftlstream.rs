@@ -148,7 +148,7 @@ impl<'p> ParserStream<'p> {
     }
 
     pub fn get_slice(&self, start: usize, end: usize) -> &'p str {
-        str::from_utf8(&self.source[start..end]).expect("Slicing the source failed")
+        unsafe { str::from_utf8_unchecked(&self.source[start..end]) }
     }
 
     pub fn skip_digits(&mut self) -> Result<()> {
