@@ -6,7 +6,7 @@ use fluent_fallback::Localization;
 use std::cell::RefCell;
 use std::fs;
 use std::io;
-use std::iter::from_fn;
+use std::iter;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -25,7 +25,7 @@ fn localization_format() {
         let res_mgr = &resources;
         let res_ids = res_ids.to_vec();
 
-        from_fn(move || {
+        iter::from_fn(move || {
             locales.next().map(|locale| {
                 let mut bundle = FluentBundle::new(&[locale]);
                 let res_path = res_path_scheme.replace("{locale}", locale);

@@ -2,7 +2,7 @@ use elsa::FrozenMap;
 use fluent::{FluentBundle, FluentResource};
 use std::fs;
 use std::io;
-use std::iter::from_fn;
+use std::iter;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -55,7 +55,7 @@ impl ResourceManager {
         let res_mgr = self;
         let mut ptr = 0;
 
-        from_fn(move || {
+        iter::from_fn(move || {
             locales.get(ptr).map(|locale| {
                 ptr += 1;
                 let mut bundle = FluentBundle::new(&[locale]);

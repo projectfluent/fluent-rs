@@ -27,7 +27,7 @@ use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
-use std::iter::from_fn;
+use std::iter;
 use std::str::FromStr;
 
 /// We need a generic file read helper function to
@@ -117,7 +117,7 @@ fn main() {
         let res_mgr = &resources;
         let res_ids = res_ids.to_vec();
 
-        from_fn(move || {
+        iter::from_fn(move || {
             locales.next().map(|locale| {
                 let mut bundle = FluentBundle::new(&[locale]);
                 let res_path = res_path_scheme.replace("{locale}", locale);
