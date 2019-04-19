@@ -3,6 +3,7 @@ use serde::ser::SerializeMap;
 use serde::ser::SerializeSeq;
 use serde::{Serialize, Serializer};
 use serde_derive::Serialize;
+use std::borrow::Cow;
 use std::error::Error;
 
 pub fn serialize<'s>(res: &'s ast::Resource) -> Result<String, Box<Error>> {
@@ -110,7 +111,7 @@ pub struct MessageDef<'ast> {
 #[serde(tag = "type")]
 #[serde(rename = "Identifier")]
 pub struct IdentifierDef<'ast> {
-    pub name: &'ast str,
+    pub name: Cow<'ast, str>,
 }
 
 #[derive(Serialize)]
@@ -205,7 +206,9 @@ where
             }
             _ => {
                 if !buffer.is_empty() {
-                    seq.serialize_element(&Helper(&ast::PatternElement::TextElement(&buffer)))?;
+                    seq.serialize_element(&Helper(&ast::PatternElement::TextElement(
+                        buffer.into(),
+                    )))?;
                     buffer = String::new();
                 }
 
@@ -214,7 +217,7 @@ where
         }
     }
     if !buffer.is_empty() {
-        seq.serialize_element(&Helper(&ast::PatternElement::TextElement(&buffer)))?;
+        seq.serialize_element(&Helper(&ast::PatternElement::TextElement(buffer.into())))?;
     }
     seq.end()
 }
@@ -224,7 +227,7 @@ where
 #[serde(untagged)]
 pub enum PatternElementDef<'ast> {
     #[serde(serialize_with = "serialize_text_element")]
-    TextElement(&'ast str),
+    TextElement(Cow<'ast, str>),
     #[serde(serialize_with = "serialize_placeable")]
     Placeable(ast::Expression<'ast>),
 }
@@ -265,19 +268,22 @@ pub enum VariantKeyDef<'ast> {
 pub enum CommentDef<'ast> {
     Comment {
         #[serde(serialize_with = "serialize_comment_content")]
-        content: Vec<&'ast str>,
+        content: Vec<Cow<'ast, str>>,
     },
     GroupComment {
         #[serde(serialize_with = "serialize_comment_content")]
-        content: Vec<&'ast str>,
+        content: Vec<Cow<'ast, str>>,
     },
     ResourceComment {
         #[serde(serialize_with = "serialize_comment_content")]
-        content: Vec<&'ast str>,
+        content: Vec<Cow<'ast, str>>,
     },
 }
 
-fn serialize_comment_content<'se, S>(v: &Vec<&'se str>, serializer: S) -> Result<S::Ok, S::Error>
+fn serialize_comment_content<'se, S>(
+    v: &Vec<Cow<'se, str>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
 where
     S: Serializer,
 {
