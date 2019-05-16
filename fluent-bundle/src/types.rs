@@ -162,20 +162,57 @@ impl<'source> From<String> for FluentValue<'source> {
     }
 }
 
+impl<'source> From<&'source String> for FluentValue<'source> {
+    fn from(s: &'source String) -> Self {
+        FluentValue::String((&s[..]).into())
+    }
+}
+
 impl<'source> From<&'source str> for FluentValue<'source> {
     fn from(s: &'source str) -> Self {
         FluentValue::String(s.into())
     }
 }
 
-impl<'source> From<f64> for FluentValue<'source> {
-    fn from(n: f64) -> Self {
-        FluentValue::Number(n.to_string().into())
-    }
+macro_rules! from_num {
+    ($num:ty) => {
+        impl<'source> From<$num> for FluentValue<'source> {
+            fn from(n: $num) -> Self {
+                FluentValue::Number(n.to_string().into())
+            }
+        }
+        impl<'source> From<&'source $num> for FluentValue<'source> {
+            fn from(n: &'source $num) -> Self {
+                FluentValue::Number(n.to_string().into())
+            }
+        }
+    };
 }
+from_num!(i8);
+from_num!(i16);
+from_num!(i32);
+from_num!(i64);
+from_num!(i128);
+from_num!(isize);
+from_num!(u8);
+from_num!(u16);
+from_num!(u32);
+from_num!(u64);
+from_num!(u128);
+from_num!(usize);
+from_num!(f32);
+from_num!(f64);
 
-impl<'source> From<isize> for FluentValue<'source> {
-    fn from(n: isize) -> Self {
-        FluentValue::Number(n.to_string().into())
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn value_from_copy_ref() {
+        let x = 1i16;
+        let y = &x;
+        let z: FluentValue = y.into();
+        assert_eq!(z, FluentValue::Number("1".into()));
     }
+
 }
