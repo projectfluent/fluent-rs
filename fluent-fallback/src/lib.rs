@@ -6,7 +6,7 @@ use fluent_bundle::FluentValue;
 use reiterate::Reiterate;
 
 struct FluentBundleIterator<'loc> {
-    iter: Box<Iterator<Item = FluentBundle<'loc>> + 'loc>,
+    iter: Box<dyn Iterator<Item = FluentBundle<'loc>> + 'loc>,
 }
 
 impl<'loc> Iterator for FluentBundleIterator<'loc> {
@@ -19,7 +19,7 @@ impl<'loc> Iterator for FluentBundleIterator<'loc> {
 pub struct Localization<'loc> {
     pub resource_ids: Vec<String>,
     bundles: Reiterate<FluentBundleIterator<'loc>>,
-    generate_bundles: Box<FnMut(&[String]) -> FluentBundleIterator<'loc> + 'loc>,
+    generate_bundles: Box<dyn FnMut(&[String]) -> FluentBundleIterator<'loc> + 'loc>,
 }
 
 impl<'loc> Localization<'loc> {
