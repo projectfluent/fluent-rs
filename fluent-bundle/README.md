@@ -25,7 +25,7 @@ Usage
 use fluent_bundle::{FluentBundle, FluentResource};
 
 fn main() {
-    let ftl_string = "hello-world = Hello, world!");
+    let ftl_string = "hello-world = Hello, world!".to_owned();
     let res = FluentResource::try_new(ftl_string)
         .expect("Could not parse an FTL string.");
 
