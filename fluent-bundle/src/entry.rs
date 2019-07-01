@@ -4,7 +4,7 @@ use std::collections::hash_map::HashMap;
 use super::types::*;
 use fluent_syntax::ast;
 
-type FluentFunction<'bundle> = Box<
+type FluentFunction<'bundle> = Box<dyn
     'bundle
         + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
         + Send

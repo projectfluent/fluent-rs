@@ -5,13 +5,13 @@ use serde::{Serialize, Serializer};
 use serde_derive::Serialize;
 use std::error::Error;
 
-pub fn serialize<'s>(res: &'s ast::Resource) -> Result<String, Box<Error>> {
+pub fn serialize<'s>(res: &'s ast::Resource) -> Result<String, Box<dyn Error>> {
     #[derive(Serialize)]
     struct Helper<'ast>(#[serde(with = "ResourceDef")] &'ast ast::Resource<'ast>);
     Ok(serde_json::to_string(&Helper(res)).unwrap())
 }
 
-pub fn _serialize_to_pretty_json<'s>(res: &'s ast::Resource) -> Result<String, Box<Error>> {
+pub fn _serialize_to_pretty_json<'s>(res: &'s ast::Resource) -> Result<String, Box<dyn Error>> {
     #[derive(Serialize)]
     struct Helper<'ast>(#[serde(with = "ResourceDef")] &'ast ast::Resource<'ast>);
 
