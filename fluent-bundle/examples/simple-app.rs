@@ -91,9 +91,6 @@ fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
 
-    // 2. Allocate resources.
-    let mut resources: Vec<FluentResource> = vec![];
-
     // 3. If the argument length is more than 1,
     //    take the second argument as a comma-separated
     //    list of requested locales.
@@ -119,12 +116,8 @@ fn main() {
         );
         let source = read_file(&full_path).expect("Failed to read file.");
         let resource = FluentResource::try_new(source).expect("Could not parse an FTL string.");
-        resources.push(resource);
-    }
-
-    for res in &resources {
         bundle
-            .add_resource(res)
+            .add_resource(resource)
             .expect("Failed to add FTL resources to the bundle.");
     }
 

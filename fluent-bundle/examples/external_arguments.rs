@@ -16,7 +16,7 @@ unread-emails =
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
     let mut bundle = FluentBundle::new(&["en"]);
     bundle
-        .add_resource(&res)
+        .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
 
     let mut args = HashMap::new();

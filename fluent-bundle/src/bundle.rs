@@ -4,18 +4,21 @@
 //! internationalization formatters, functions, environmental variables and are expected to be used
 //! together.
 
+use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
-use super::entry::{Entry, GetEntry};
-pub use super::errors::FluentError;
-use super::resolve::{resolve_value_for_entry, Scope};
-use super::resource::FluentResource;
-use super::types::DisplayableNode;
-use super::types::FluentValue;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
+
+use crate::entry::Entry;
+use crate::entry::GetEntry;
+use crate::errors::FluentError;
+use crate::resolve::{resolve_value_for_entry, Scope};
+use crate::resource::FluentResource;
+use crate::types::DisplayableNode;
+use crate::types::FluentValue;
 
 #[derive(Debug, PartialEq)]
 pub struct Message<'m> {
@@ -82,13 +85,14 @@ pub struct Message<'m> {
 /// [`compound`]: ./struct.FluentBundle.html#method.compound
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
-pub struct FluentBundle<'bundle> {
+pub struct FluentBundle<'bundle, R> {
     pub locales: Vec<String>,
-    pub entries: HashMap<String, Entry<'bundle>>,
-    pub plural_rules: IntlPluralRules,
+    pub(crate) resources: Vec<R>,
+    pub(crate) entries: HashMap<String, Entry<'bundle>>,
+    pub(crate) plural_rules: IntlPluralRules,
 }
 
-impl<'bundle> FluentBundle<'bundle> {
+impl<'bundle, R> FluentBundle<'bundle, R> {
     /// Constructs a FluentBundle. `locales` is the fallback chain of locales
     /// to use for formatters like date and time. `locales` does not influence
     /// message selection.
@@ -97,14 +101,15 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// ```
     /// use fluent_bundle::FluentBundle;
+    /// use fluent_bundle::FluentResource;
     ///
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(&["en-US"]);
     /// ```
     ///
     /// # Errors
     ///
     /// This will panic if no formatters can be found for the locales.
-    pub fn new<'a, S: ToString>(locales: &'a [S]) -> FluentBundle<'bundle> {
+    pub fn new<S: ToString>(locales: &[S]) -> Self {
         let locales = locales
             .iter()
             .map(std::string::ToString::to_string)
@@ -121,8 +126,95 @@ impl<'bundle> FluentBundle<'bundle> {
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
+            resources: vec![],
             entries: HashMap::new(),
             plural_rules: pr,
+        }
+    }
+
+    /// Adds a resource to the bundle, returning an empty [`Result<T>`] on success.
+    ///
+    /// The method can take any type that can be borrowed to FluentResource:
+    ///   - FluentResource
+    ///   - &FluentResource
+    ///   - Rc<FluentResource>
+    ///   - Arc<FluentResurce>
+    ///
+    /// This allows the user to introduce custom resource management and share
+    /// resources between instances of `FluentBundle`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_bundle::{FluentBundle, FluentResource};
+    ///
+    /// let ftl_string = String::from("
+    /// hello = Hi!
+    /// goodbye = Bye!
+    /// ");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
+    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// bundle.add_resource(resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    /// assert_eq!(true, bundle.has_message("hello"));
+    /// ```
+    ///
+    /// # Whitespace
+    ///
+    /// Message ids must have no leading whitespace. Message values that span
+    /// multiple lines must have leading whitespace on all but the first line. These
+    /// are standard FTL syntax rules that may prove a bit troublesome in source
+    /// code formatting. The [`indoc!`] crate can help with stripping extra indentation
+    /// if you wish to indent your entire message.
+    ///
+    /// [FTL syntax]: https://projectfluent.org/fluent/guide/
+    /// [`indoc!`]: https://github.com/dtolnay/indoc
+    /// [`Result<T>`]: https://doc.rust-lang.org/std/result/enum.Result.html
+    pub fn add_resource(&mut self, r: R) -> Result<(), Vec<FluentError>>
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+
+        let res = r.borrow();
+        let res_pos = self.resources.len();
+
+        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
+            let id = match entry {
+                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
+                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
+                _ => continue,
+            };
+
+            let (entry, kind) = match entry {
+                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
+                    (Entry::Message([res_pos, entry_pos]), "message")
+                }
+                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
+                    (Entry::Term([res_pos, entry_pos]), "term")
+                }
+                _ => continue,
+            };
+
+            match self.entries.entry(id.to_string()) {
+                HashEntry::Vacant(empty) => {
+                    empty.insert(entry);
+                }
+                HashEntry::Occupied(_) => {
+                    errors.push(FluentError::Overriding {
+                        kind,
+                        id: id.to_string(),
+                    });
+                }
+            }
+        }
+        self.resources.push(r);
+
+        if errors.is_empty() {
+            Ok(())
+        } else {
+            Err(errors)
         }
     }
 
@@ -142,8 +234,11 @@ impl<'bundle> FluentBundle<'bundle> {
     /// assert_eq!(true, bundle.has_message("hello"));
     ///
     /// ```
-    pub fn has_message(&self, id: &str) -> bool {
-        self.entries.get_message(id).is_some()
+    pub fn has_message(&self, id: &str) -> bool
+    where
+        R: Borrow<FluentResource>,
+    {
+        self.get_message(id).is_some()
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
@@ -177,10 +272,9 @@ impl<'bundle> FluentBundle<'bundle> {
     /// ```
     ///
     /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
-    pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
+    pub fn add_function<F: 'bundle>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
-        F: 'bundle
-            + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
+        F: for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
             + Sync
             + Send,
     {
@@ -193,75 +287,6 @@ impl<'bundle> FluentBundle<'bundle> {
                 kind: "function",
                 id: id.to_owned(),
             }),
-        }
-    }
-
-    /// Adds the message or messages, in [FTL syntax], to the bundle, returning an
-    /// empty [`Result<T>`] on success.
-    ///
-    /// # Examples
-    ///
-    /// ```
-    /// use fluent_bundle::{FluentBundle, FluentResource};
-    ///
-    /// let ftl_string = String::from("
-    /// hello = Hi!
-    /// goodbye = Bye!
-    /// ");
-    /// let resource = FluentResource::try_new(ftl_string)
-    ///     .expect("Could not parse an FTL string.");
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
-    ///     .expect("Failed to add FTL resources to the bundle.");
-    /// assert_eq!(true, bundle.has_message("hello"));
-    /// ```
-    ///
-    /// # Whitespace
-    ///
-    /// Message ids must have no leading whitespace. Message values that span
-    /// multiple lines must have leading whitespace on all but the first line. These
-    /// are standard FTL syntax rules that may prove a bit troublesome in source
-    /// code formatting. The [`indoc!`] crate can help with stripping extra indentation
-    /// if you wish to indent your entire message.
-    ///
-    /// [FTL syntax]: https://projectfluent.org/fluent/guide/
-    /// [`indoc!`]: https://github.com/dtolnay/indoc
-    /// [`Result<T>`]: https://doc.rust-lang.org/std/result/enum.Result.html
-    pub fn add_resource(&mut self, res: &'bundle FluentResource) -> Result<(), Vec<FluentError>> {
-        let mut errors = vec![];
-
-        for entry in &res.ast().body {
-            let id = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
-                _ => continue,
-            };
-
-            let (entry, kind) = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(message)) => {
-                    (Entry::Message(message), "message")
-                }
-                ast::ResourceEntry::Entry(ast::Entry::Term(term)) => (Entry::Term(term), "term"),
-                _ => continue,
-            };
-
-            match self.entries.entry(id.to_string()) {
-                HashEntry::Vacant(empty) => {
-                    empty.insert(entry);
-                }
-                HashEntry::Occupied(_) => {
-                    errors.push(FluentError::Overriding {
-                        kind,
-                        id: id.to_string(),
-                    });
-                }
-            }
-        }
-
-        if errors.is_empty() {
-            Ok(())
-        } else {
-            Err(errors)
         }
     }
 
@@ -279,7 +304,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let mut args = HashMap::new();
@@ -304,7 +329,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let (value, _) = bundle.format("hello.title", None)
@@ -334,7 +359,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// // The result falls back to "a foo b"
@@ -346,14 +371,17 @@ impl<'bundle> FluentBundle<'bundle> {
         &'bundle self,
         path: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
-    ) -> Option<(Cow<'bundle, str>, Vec<FluentError>)> {
+    ) -> Option<(Cow<'bundle, str>, Vec<FluentError>)>
+    where
+        R: Borrow<FluentResource>,
+    {
         let mut env = Scope::new(self, args);
 
         let mut errors = vec![];
 
         let string = if let Some(ptr_pos) = path.find('.') {
             let message_id = &path[..ptr_pos];
-            let message = self.entries.get_message(message_id)?;
+            let message = self.get_message(message_id)?;
             let attr_name = &path[(ptr_pos + 1)..];
             let attr = message
                 .attributes
@@ -367,7 +395,7 @@ impl<'bundle> FluentBundle<'bundle> {
             .to_string()
         } else {
             let message_id = path;
-            let message = self.entries.get_message(message_id)?;
+            let message = self.get_message(message_id)?;
             message
                 .value
                 .as_ref()
@@ -408,7 +436,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let (message, _) = bundle.compound("login-input", None)
@@ -434,10 +462,13 @@ impl<'bundle> FluentBundle<'bundle> {
         &'bundle self,
         message_id: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
-    ) -> Option<(Message<'bundle>, Vec<FluentError>)> {
+    ) -> Option<(Message<'bundle>, Vec<FluentError>)>
+    where
+        R: Borrow<FluentResource>,
+    {
         let mut env = Scope::new(self, args);
         let mut errors = vec![];
-        let message = self.entries.get_message(message_id)?;
+        let message = self.get_message(message_id)?;
 
         let value = message.value.as_ref().map(|value| {
             resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)

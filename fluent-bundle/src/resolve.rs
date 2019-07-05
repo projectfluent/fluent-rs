@@ -6,17 +6,20 @@
 //! [`FluentValues`]: ../types/enum.FluentValue.html
 //! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
 
+use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
-use super::bundle::FluentBundle;
-use super::entry::GetEntry;
-use super::types::DisplayableNode;
-use super::types::FluentValue;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
+
+use crate::bundle::FluentBundle;
+use crate::entry::GetEntry;
+use crate::resource::FluentResource;
+use crate::types::DisplayableNode;
+use crate::types::FluentValue;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
@@ -28,9 +31,9 @@ pub enum ResolverError {
 }
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Scope<'bundle> {
+pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// The current `FluentBundle` instance.
-    pub bundle: &'bundle FluentBundle<'bundle>,
+    pub bundle: &'bundle FluentBundle<'bundle, R>,
     /// The current arguments passed by the developer.
     pub args: Option<&'bundle HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Local args
@@ -41,9 +44,9 @@ pub struct Scope<'bundle> {
     pub errors: Vec<ResolverError>,
 }
 
-impl<'bundle> Scope<'bundle> {
+impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
     pub fn new(
-        bundle: &'bundle FluentBundle<'bundle>,
+        bundle: &'bundle FluentBundle<R>,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
     ) -> Self {
         Scope {
@@ -61,7 +64,7 @@ impl<'bundle> Scope<'bundle> {
         mut action: F,
     ) -> FluentValue<'bundle>
     where
-        F: FnMut(&mut Scope<'bundle>) -> FluentValue<'bundle>,
+        F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
     {
         let mut hasher = DefaultHasher::new();
         (entry.id, entry.attribute).hash(&mut hasher);
@@ -95,30 +98,14 @@ impl<'bundle> Scope<'bundle> {
     }
 }
 
-// Converts an AST node to a `FluentValue`.
-pub trait ResolveValue<'source> {
-    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source>;
-}
-
-fn generate_ref_error<'source>(
-    env: &mut Scope<'source>,
-    node: DisplayableNode<'source>,
-) -> FluentValue<'source> {
-    env.errors.push(ResolverError::Reference(node.get_error()));
-    FluentValue::Error(node)
-}
-
-impl<'source> ResolveValue<'source> for ast::Term<'source> {
-    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
-        resolve_value_for_entry(&self.value, self.into(), env)
-    }
-}
-
-pub fn resolve_value_for_entry<'source>(
+pub fn resolve_value_for_entry<'source, R>(
     value: &ast::Pattern<'source>,
     entry: DisplayableNode<'source>,
-    env: &mut Scope<'source>,
-) -> FluentValue<'source> {
+    env: &mut Scope<'source, R>,
+) -> FluentValue<'source>
+where
+    R: Borrow<FluentResource>,
+{
     if value.elements.len() == 1 {
         return match value.elements[0] {
             ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
@@ -141,8 +128,38 @@ pub fn resolve_value_for_entry<'source>(
     FluentValue::String(string.into())
 }
 
+fn generate_ref_error<'source, R>(
+    env: &mut Scope<'source, R>,
+    node: DisplayableNode<'source>,
+) -> FluentValue<'source>
+where
+    R: Borrow<FluentResource>,
+{
+    env.errors.push(ResolverError::Reference(node.get_error()));
+    FluentValue::Error(node)
+}
+
+// Converts an AST node to a `FluentValue`.
+pub trait ResolveValue<'source> {
+    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    where
+        R: Borrow<FluentResource>;
+}
+
+impl<'source> ResolveValue<'source> for ast::Term<'source> {
+    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    where
+        R: Borrow<FluentResource>,
+    {
+        resolve_value_for_entry(&self.value, self.into(), env)
+    }
+}
+
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
-    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
+    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    where
+        R: Borrow<FluentResource>,
+    {
         if self.elements.len() == 1 {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
@@ -167,7 +184,10 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::Expression<'source> {
-    fn resolve(&self, env: &mut Scope<'source>) -> FluentValue<'source> {
+    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    where
+        R: Borrow<FluentResource>,
+    {
         match self {
             ast::Expression::InlineExpression(exp) => exp.resolve(env),
             ast::Expression::SelectExpression {
@@ -210,13 +230,16 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
-    fn resolve(&self, mut env: &mut Scope<'source>) -> FluentValue<'source> {
+    fn resolve<R>(&self, mut env: &mut Scope<'source, R>) -> FluentValue<'source>
+    where
+        R: Borrow<FluentResource>,
+    {
         match self {
             ast::InlineExpression::StringLiteral { value } => {
                 FluentValue::String(unescape_unicode(value))
             }
             ast::InlineExpression::MessageReference { id, attribute } => {
-                let msg = env.bundle.entries.get_message(&id.name);
+                let msg = env.bundle.get_message(&id.name);
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
@@ -237,7 +260,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 attribute,
                 arguments,
             } => {
-                let term = env.bundle.entries.get_term(&id.name);
+                let term = env.bundle.get_term(&id.name);
 
                 let (_, resolved_named_args) = get_arguments(env, arguments);
 
@@ -259,7 +282,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
             ast::InlineExpression::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) = get_arguments(env, arguments);
 
-                let func = env.bundle.entries.get_function(id.name);
+                let func = env.bundle.get_function(id.name);
 
                 if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
@@ -289,13 +312,16 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
     }
 }
 
-fn get_arguments<'bundle>(
-    env: &mut Scope<'bundle>,
+fn get_arguments<'bundle, R>(
+    env: &mut Scope<'bundle, R>,
     arguments: &Option<ast::CallArguments<'bundle>>,
 ) -> (
     Vec<FluentValue<'bundle>>,
     HashMap<&'bundle str, FluentValue<'bundle>>,
-) {
+)
+where
+    R: Borrow<FluentResource>,
+{
     let mut resolved_positional_args = Vec::new();
     let mut resolved_named_args = HashMap::new();
 

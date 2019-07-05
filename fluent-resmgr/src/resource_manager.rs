@@ -38,7 +38,11 @@ impl ResourceManager {
         }
     }
 
-    pub fn get_bundle(&self, locales: Vec<String>, resource_ids: Vec<String>) -> FluentBundle {
+    pub fn get_bundle(
+        &self,
+        locales: Vec<String>,
+        resource_ids: Vec<String>,
+    ) -> FluentBundle<&FluentResource> {
         let mut bundle = FluentBundle::new(&locales);
         for res_id in &resource_ids {
             let res = self.get_resource(res_id, &locales[0]);
@@ -51,7 +55,7 @@ impl ResourceManager {
         &'l self,
         locales: Vec<String>,
         resource_ids: Vec<String>,
-    ) -> impl Iterator<Item = FluentBundle<'l>> {
+    ) -> impl Iterator<Item = FluentBundle<'l, &FluentResource>> {
         let res_mgr = self;
         let mut ptr = 0;
 
