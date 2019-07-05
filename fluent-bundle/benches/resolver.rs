@@ -5,6 +5,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::rc::Rc;
 
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
@@ -84,7 +85,7 @@ fn resolver_bench(c: &mut Criterion) {
             let ids = get_ids(&res);
             let mut bundle = FluentBundle::new(&["x-testing"]);
             bundle
-                .add_resource(&res)
+                .add_resource_rc(Rc::new(res))
                 .expect("Couldn't add FluentResource to the FluentBundle");
             add_functions(name, &mut bundle);
             let args = get_args(name);

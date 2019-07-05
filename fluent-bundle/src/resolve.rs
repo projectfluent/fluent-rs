@@ -12,7 +12,7 @@ use std::collections::HashMap;
 use std::hash::{Hash, Hasher};
 
 use super::bundle::FluentBundle;
-use super::entry::GetEntry;
+use super::entry::{GetEntry, GetEntry2};
 use super::types::DisplayableNode;
 use super::types::FluentValue;
 use fluent_syntax::ast;
@@ -216,7 +216,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 FluentValue::String(unescape_unicode(value))
             }
             ast::InlineExpression::MessageReference { id, attribute } => {
-                let msg = env.bundle.entries.get_message(&id.name);
+                let msg = env.bundle.resources.get_message(&id.name);
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
@@ -237,7 +237,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 attribute,
                 arguments,
             } => {
-                let term = env.bundle.entries.get_term(&id.name);
+                let term = env.bundle.resources.get_term(&id.name);
 
                 let (_, resolved_named_args) = get_arguments(env, arguments);
 

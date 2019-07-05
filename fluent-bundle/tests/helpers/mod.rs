@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::rc::Rc;
 
 use fluent_bundle::bundle::FluentError;
 use fluent_bundle::bundle::Message;
@@ -43,6 +44,10 @@ pub fn assert_get_resource_from_str_no_errors(s: &str) -> FluentResource {
     FluentResource::try_new(s.to_owned()).expect("Failed to parse an FTL resource.")
 }
 
+pub fn assert_get_resource_from_str_no_errors_rc(s: &str) -> Rc<FluentResource> {
+    Rc::new(FluentResource::try_new(s.to_owned()).expect("Failed to parse an FTL resource."))
+}
+
 pub fn assert_get_bundle_no_errors<'a>(
     res: &'a FluentResource,
     locale: Option<&str>,
@@ -50,6 +55,18 @@ pub fn assert_get_bundle_no_errors<'a>(
     let mut bundle = FluentBundle::new(&[locale.unwrap_or("x-testing")]);
     bundle
         .add_resource(res)
+        .expect("Failed to add FluentResource to FluentBundle.");
+    bundle
+}
+
+pub fn assert_get_bundle_no_errors_rc<'a>(
+    res: Rc<FluentResource>,
+    locale: Option<&str>,
+) -> FluentBundle<'a> {
+    println!("Asserting with rc");
+    let mut bundle = FluentBundle::new(&[locale.unwrap_or("x-testing")]);
+    bundle
+        .add_resource_rc(res)
         .expect("Failed to add FluentResource to FluentBundle.");
     bundle
 }

@@ -5,6 +5,8 @@ use fluent_bundle::resolve::ResolverError;
 use self::helpers::{
     assert_compound, assert_compound_no_errors, assert_get_bundle_no_errors,
     assert_get_resource_from_str_no_errors,
+    assert_get_resource_from_str_no_errors_rc,
+    assert_get_bundle_no_errors_rc,
 };
 use fluent_bundle::bundle::Message;
 use std::collections::HashMap;
@@ -36,13 +38,13 @@ foo = Foo
 #[test]
 fn message_reference_cyclic() {
     {
-        let res = assert_get_resource_from_str_no_errors(
+        let res = assert_get_resource_from_str_no_errors_rc(
             "
 foo = Foo { bar }
 bar = { foo } Bar
         ",
         );
-        let bundle = assert_get_bundle_no_errors(&res, None);
+        let bundle = assert_get_bundle_no_errors_rc(res, None);
 
         assert_compound(
             bundle.compound("foo", None),

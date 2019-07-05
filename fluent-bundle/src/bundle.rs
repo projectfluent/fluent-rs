@@ -5,9 +5,10 @@
 //! together.
 
 use std::borrow::Cow;
+use std::rc::Rc;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
-use super::entry::{Entry, GetEntry};
+use super::entry::{Entry, GetEntry2};
 pub use super::errors::FluentError;
 use super::resolve::{resolve_value_for_entry, Scope};
 use super::resource::FluentResource;
@@ -84,6 +85,7 @@ pub struct Message<'m> {
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
 pub struct FluentBundle<'bundle> {
     pub locales: Vec<String>,
+    pub resources: Vec<Rc<FluentResource>>,
     pub entries: HashMap<String, Entry<'bundle>>,
     pub plural_rules: IntlPluralRules,
 }
@@ -121,6 +123,7 @@ impl<'bundle> FluentBundle<'bundle> {
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
+            resources: vec![],
             entries: HashMap::new(),
             plural_rules: pr,
         }
@@ -143,7 +146,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ///
     /// ```
     pub fn has_message(&self, id: &str) -> bool {
-        self.entries.get_message(id).is_some()
+        self.resources.get_message(id).is_some()
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
@@ -265,6 +268,11 @@ impl<'bundle> FluentBundle<'bundle> {
         }
     }
 
+    pub fn add_resource_rc(&mut self, res: Rc<FluentResource>) -> Result<(), Vec<FluentError>> {
+        self.resources.push(res);
+        return Ok(());
+    }
+
     /// Formats the message value identified by `path` using `args` to
     /// provide variables. `path` is either a message id ("hello"), or
     /// message id plus attribute ("hello.tooltip").
@@ -353,7 +361,7 @@ impl<'bundle> FluentBundle<'bundle> {
 
         let string = if let Some(ptr_pos) = path.find('.') {
             let message_id = &path[..ptr_pos];
-            let message = self.entries.get_message(message_id)?;
+            let message = self.resources.get_message(message_id)?;
             let attr_name = &path[(ptr_pos + 1)..];
             let attr = message
                 .attributes
@@ -367,7 +375,7 @@ impl<'bundle> FluentBundle<'bundle> {
             .to_string()
         } else {
             let message_id = path;
-            let message = self.entries.get_message(message_id)?;
+            let message = self.resources.get_message(message_id)?;
             message
                 .value
                 .as_ref()
@@ -437,7 +445,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ) -> Option<(Message<'bundle>, Vec<FluentError>)> {
         let mut env = Scope::new(self, args);
         let mut errors = vec![];
-        let message = self.entries.get_message(message_id)?;
+        let message = self.resources.get_message(message_id)?;
 
         let value = message.value.as_ref().map(|value| {
             resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)

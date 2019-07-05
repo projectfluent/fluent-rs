@@ -2,6 +2,8 @@
 use std::collections::hash_map::HashMap;
 
 use super::types::*;
+use super::FluentResource;
+use std::rc::Rc;
 use fluent_syntax::ast;
 
 type FluentFunction<'bundle> = Box<dyn
@@ -43,5 +45,43 @@ impl<'bundle> GetEntry<'bundle> for HashMap<String, Entry<'bundle>> {
             Entry::Function(function) => Some(function),
             _ => None,
         })
+    }
+}
+
+pub trait GetEntry2 {
+    fn get_message(&self, id: &str) -> Option<&ast::Message>;
+    fn get_term(&self, id: &str) -> Option<&ast::Term>;
+}
+
+impl GetEntry2 for Vec<Rc<FluentResource>> {
+    fn get_message(&self, id: &str) -> Option<&ast::Message> {
+        for res in self {
+            for entry in &res.ast().body {
+                let (msg, entry_id) = match entry {
+                    ast::ResourceEntry::Entry(ast::Entry::Message(msg @ ast::Message { .. })) => (msg, msg.id.name),
+                    _ => continue,
+                };
+                if id == entry_id {
+                    return Some(msg);
+                }
+            }
+        }
+        return None;
+    }
+
+    fn get_term(&self, id: &str) -> Option<&ast::Term> {
+        for res in self {
+            for entry in &res.ast().body {
+                let (term, entry_id) = match entry {
+                    ast::ResourceEntry::Entry(ast::Entry::Term(term @ ast::Term { .. })) => (term, term.id.name),
+                    _ => continue,
+                };
+
+                if id == entry_id {
+                    return Some(term);
+                }
+            }
+        }
+        return None;
     }
 }
