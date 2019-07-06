@@ -27,7 +27,7 @@ bar =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo's");
 
@@ -58,7 +58,7 @@ baz =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
@@ -93,7 +93,7 @@ baz =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
+    let bundle = assert_get_bundle_no_errors(res, Some("en"));
 
     assert_format_no_errors(bundle.format("foo", None), "Foo 3");
 
@@ -161,7 +161,7 @@ baz-unknown =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("str", FluentValue::from("qux"));
@@ -219,7 +219,7 @@ use-bar =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("use-bar", None), "Bar");
 }
@@ -238,7 +238,7 @@ use-foo =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 }
@@ -254,7 +254,7 @@ use-foo =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format(
         bundle.format("use-foo", None),

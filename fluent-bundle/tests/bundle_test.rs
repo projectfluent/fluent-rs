@@ -17,12 +17,12 @@ foo = Foo
 -bar = Bar
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
-    assert!(bundle.entries.get_message("foo").is_some());
-    assert!(bundle.entries.get_term("foo").is_none());
-    assert!(bundle.entries.get_message("bar").is_none());
-    assert!(bundle.entries.get_term("bar").is_some());
+    assert!(bundle.get_message("foo").is_some());
+    assert!(bundle.get_term("foo").is_none());
+    assert!(bundle.get_message("bar").is_none());
+    assert!(bundle.get_term("bar").is_some());
 }
 
 #[test]
@@ -37,9 +37,9 @@ key = Foo
 key = Bar
     ",
     );
-    let mut bundle = assert_get_bundle_no_errors(&res, None);
+    let mut bundle = assert_get_bundle_no_errors(res, None);
     assert_eq!(
-        bundle.add_resource(&res2),
+        bundle.add_resource(res2),
         Err(vec![FluentError::Overriding {
             kind: "message".into(),
             id: "key".into()
@@ -59,7 +59,7 @@ bar =
 -term = Term
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_eq!(bundle.has_message("foo"), true);
     assert_eq!(bundle.has_message("-term"), false);

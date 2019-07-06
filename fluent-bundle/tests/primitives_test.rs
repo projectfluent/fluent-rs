@@ -15,7 +15,7 @@ select  = { 1 ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("one", None), "1");
 
@@ -48,7 +48,7 @@ selector-attr    = { -baz.attr ->
 }
     "#,
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo");
 
@@ -88,7 +88,7 @@ selector-attr = { -bazTerm.attr ->
 }
     "#,
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("bar", None), "FooBar");
 

@@ -10,7 +10,7 @@ use fluent_bundle::types::FluentValue;
 #[test]
 fn external_argument_string() {
     let res = assert_get_resource_from_str_no_errors("hello-world = Hello { $name }");
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("name", FluentValue::from("John"));
@@ -26,7 +26,7 @@ unread-emails = You have { $emailsCount } unread emails.
 unread-emails-dec = You have { $emailsCountDec } unread emails.
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(5));
@@ -51,7 +51,7 @@ greetings = Hello, { $userName }
 click-on = Click on the `{ greetings }` label.
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("userName", FluentValue::from("Mary"));

@@ -26,6 +26,7 @@ use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use std::str::FromStr;
+use std::sync::Arc;
 
 /// We need a generic file read helper function to
 /// read the localization resource file.
@@ -92,7 +93,7 @@ fn main() {
     let args: Vec<String> = env::args().collect();
 
     // 2. Allocate resources.
-    let mut resources: Vec<FluentResource> = vec![];
+    let mut resources: Vec<Arc<FluentResource>> = vec![];
 
     // 3. If the argument length is more than 1,
     //    take the second argument as a comma-separated
@@ -119,10 +120,10 @@ fn main() {
         );
         let source = read_file(&full_path).expect("Failed to read file.");
         let resource = FluentResource::try_new(source).expect("Could not parse an FTL string.");
-        resources.push(resource);
+        resources.push(Arc::new(resource));
     }
 
-    for res in &resources {
+    for res in resources {
         bundle
             .add_resource(res)
             .expect("Failed to add FTL resources to the bundle.");

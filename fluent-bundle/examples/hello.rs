@@ -5,7 +5,7 @@ fn main() {
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
     let mut bundle = FluentBundle::new(&["en-US"]);
     bundle
-        .add_resource(&res)
+        .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
     let (value, _) = bundle
         .format("hello-world", None)

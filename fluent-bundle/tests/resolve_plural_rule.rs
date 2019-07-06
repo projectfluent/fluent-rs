@@ -24,7 +24,7 @@ unread-emails-dec =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
+    let bundle = assert_get_bundle_no_errors(res, Some("en"));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));
@@ -60,7 +60,7 @@ unread-emails-dec =
     }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, Some("en"));
+    let bundle = assert_get_bundle_no_errors(res, Some("en"));
 
     let mut args = HashMap::new();
     args.insert("emailsCount", FluentValue::from(1));

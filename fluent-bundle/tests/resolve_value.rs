@@ -11,7 +11,7 @@ fn format_message() {
 foo = Foo
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("foo", None), "Foo");
 }
@@ -24,7 +24,7 @@ foo = Foo
     .attr = Foo Attr
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("foo.attr", None), "Foo Attr");
 }

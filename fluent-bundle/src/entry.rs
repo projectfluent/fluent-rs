@@ -1,87 +1,43 @@
 //! `Entry` is used to store Messages, Terms and Functions in `FluentBundle` instances.
-use std::collections::hash_map::HashMap;
 
-use super::types::*;
-use super::FluentResource;
-use std::rc::Rc;
+use super::FluentBundle;
+use super::bundle::FluentFunction;
 use fluent_syntax::ast;
 
-type FluentFunction<'bundle> = Box<dyn
-    'bundle
-        + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
-        + Send
-        + Sync,
->;
-
-pub enum Entry<'bundle> {
-    Message(&'bundle ast::Message<'bundle>),
-    Term(&'bundle ast::Term<'bundle>),
-    Function(FluentFunction<'bundle>),
-}
-
-pub trait GetEntry<'bundle> {
-    fn get_term(&self, id: &str) -> Option<&ast::Term>;
-    fn get_message(&self, id: &str) -> Option<&ast::Message>;
-    fn get_function(&self, id: &str) -> Option<&FluentFunction<'bundle>>;
-}
-
-impl<'bundle> GetEntry<'bundle> for HashMap<String, Entry<'bundle>> {
-    fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        self.get(id).and_then(|entry| match *entry {
-            Entry::Term(term) => Some(term),
-            _ => None,
-        })
-    }
-
-    fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        self.get(id).and_then(|entry| match *entry {
-            Entry::Message(message) => Some(message),
-            _ => None,
-        })
-    }
-
-    fn get_function(&self, id: &str) -> Option<&FluentFunction<'bundle>> {
-        self.get(id).and_then(|entry| match entry {
-            Entry::Function(function) => Some(function),
-            _ => None,
-        })
-    }
-}
-
-pub trait GetEntry2 {
+pub trait GetEntry {
     fn get_message(&self, id: &str) -> Option<&ast::Message>;
     fn get_term(&self, id: &str) -> Option<&ast::Term>;
+    fn get_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
-impl GetEntry2 for Vec<Rc<FluentResource>> {
+impl<'bundle> GetEntry for FluentBundle<'bundle> {
     fn get_message(&self, id: &str) -> Option<&ast::Message> {
-        for res in self {
-            for entry in &res.ast().body {
-                let (msg, entry_id) = match entry {
-                    ast::ResourceEntry::Entry(ast::Entry::Message(msg @ ast::Message { .. })) => (msg, msg.id.name),
-                    _ => continue,
-                };
-                if id == entry_id {
-                    return Some(msg);
-                }
+        if let Some(pos) = self.entries.get(id) {
+            let res = self.resources.get(pos[0]).unwrap();
+            if let Some(ast::ResourceEntry::Entry(ast::Entry::Message(ref msg))) = res.ast().body.get(pos[1]) {
+                return Some(msg);
+            } else {
+                return None;
             }
+        } else {
+            return None;
         }
-        return None;
     }
 
     fn get_term(&self, id: &str) -> Option<&ast::Term> {
-        for res in self {
-            for entry in &res.ast().body {
-                let (term, entry_id) = match entry {
-                    ast::ResourceEntry::Entry(ast::Entry::Term(term @ ast::Term { .. })) => (term, term.id.name),
-                    _ => continue,
-                };
-
-                if id == entry_id {
-                    return Some(term);
-                }
+        if let Some(pos) = self.entries.get(id) {
+            let res = self.resources.get(pos[0]).unwrap();
+            if let Some(ast::ResourceEntry::Entry(ast::Entry::Term(ref term))) = res.ast().body.get(pos[1]) {
+                return Some(term);
+            } else {
+                return None;
             }
+        } else {
+            return None;
         }
-        return None;
+    }
+
+    fn get_function(&self, id: &str) -> Option<&FluentFunction> {
+        self.functions.get(id)
     }
 }

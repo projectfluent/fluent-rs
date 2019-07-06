@@ -14,9 +14,9 @@ fn functions_missing() {
     let res = assert_get_resource_from_str_no_errors(
         r#"
 foo = { MISSING("Foo") }
-                                                     "#,
+"#,
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format(
         bundle.format("foo", None),
@@ -42,7 +42,7 @@ pass-variable      = { IDENTITY($var) }
 pass-function-call = { IDENTITY(IDENTITY(1)) }
     "#,
     );
-    let mut bundle = assert_get_bundle_no_errors(&res, None);
+    let mut bundle = assert_get_bundle_no_errors(res, None);
     bundle
         .add_function("IDENTITY", |args, _named_args| {
             if let Some(arg) = args.get(0) {

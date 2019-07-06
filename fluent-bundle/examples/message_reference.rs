@@ -12,7 +12,7 @@ bazbar = { baz } Bar
 
     let mut bundle = FluentBundle::new(&["x-testing"]);
     bundle
-        .add_resource(&res)
+        .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
 
     match bundle.format("foobar", None) {

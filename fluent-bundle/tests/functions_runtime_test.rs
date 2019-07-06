@@ -11,9 +11,9 @@ fn functions_runtime_passing_into_the_constructor() {
         r#"
 foo = { CONCAT("Foo", "Bar") }
 bar = { SUM(1, 2) }
-                                                     "#,
+"#,
     );
-    let mut bundle = assert_get_bundle_no_errors(&res, None);
+    let mut bundle = assert_get_bundle_no_errors(res, None);
     bundle
         .add_function("CONCAT", |args, _named_args| {
             let mut result = String::new();

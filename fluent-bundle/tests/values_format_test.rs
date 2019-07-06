@@ -26,7 +26,7 @@ key5 =
     .b = B5
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("key1", None), "Value 1");
 

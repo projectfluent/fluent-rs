@@ -25,7 +25,7 @@ missing-attr = { foo.missing }
 missing-missing = { missing.missing }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("use-foo", None), "Foo");
 
@@ -69,7 +69,7 @@ foo =
   .label3 = { foo.label } Bar
         ",
         );
-        let bundle = assert_get_bundle_no_errors(&res, None);
+        let bundle = assert_get_bundle_no_errors(res, None);
 
         assert_format(
             bundle.format("foo.label", None),
@@ -89,7 +89,7 @@ baz =
   .label = Baz
 ",
         );
-        let bundle = assert_get_bundle_no_errors(&res, None);
+        let bundle = assert_get_bundle_no_errors(res, None);
 
         assert_format_no_errors(bundle.format("foo.label", None), "Foo Bar Baz");
     }

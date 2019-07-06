@@ -20,7 +20,7 @@ select = {$none ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format(
         bundle.format("select", None),
@@ -41,7 +41,7 @@ select = {$selector ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("selector", FluentValue::from("a"));
@@ -62,7 +62,7 @@ select = {$selector ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("selector", FluentValue::from(0));
@@ -83,7 +83,7 @@ select = {$selector ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("selector", FluentValue::from(1));
@@ -101,7 +101,7 @@ select = {$selector ->
 }
     ",
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     let mut args = HashMap::new();
     args.insert("selector", FluentValue::from(2));

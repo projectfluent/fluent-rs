@@ -5,10 +5,10 @@
 //! together.
 
 use std::borrow::Cow;
-use std::rc::Rc;
+use std::sync::Arc;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 
-use super::entry::{Entry, GetEntry2};
+use super::entry::GetEntry;
 pub use super::errors::FluentError;
 use super::resolve::{resolve_value_for_entry, Scope};
 use super::resource::FluentResource;
@@ -24,6 +24,13 @@ pub struct Message<'m> {
     pub attributes: HashMap<&'m str, Cow<'m, str>>,
 }
 
+pub type FluentFunction<'bundle> = Box<
+    'bundle
+        + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
+        + Send
+        + Sync,
+>;
+
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
 ///
@@ -38,7 +45,7 @@ pub struct Message<'m> {
 ///     .expect("Could not parse an FTL string.");
 ///
 /// let mut bundle = FluentBundle::new(&["en-US"]);
-/// bundle.add_resource(&resource)
+/// bundle.add_resource(resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
 /// let mut args = HashMap::new();
@@ -85,8 +92,9 @@ pub struct Message<'m> {
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
 pub struct FluentBundle<'bundle> {
     pub locales: Vec<String>,
-    pub resources: Vec<Rc<FluentResource>>,
-    pub entries: HashMap<String, Entry<'bundle>>,
+    pub resources: Vec<Arc<FluentResource>>,
+    pub entries: HashMap<String, [usize; 2]>,
+    pub functions: HashMap<String, FluentFunction<'bundle>>,
     pub plural_rules: IntlPluralRules,
 }
 
@@ -125,6 +133,7 @@ impl<'bundle> FluentBundle<'bundle> {
             locales,
             resources: vec![],
             entries: HashMap::new(),
+            functions: HashMap::new(),
             plural_rules: pr,
         }
     }
@@ -140,13 +149,13 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Failed to parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
     ///
     /// ```
     pub fn has_message(&self, id: &str) -> bool {
-        self.resources.get_message(id).is_some()
+        self.get_message(id).is_some()
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
@@ -165,7 +174,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// // Register a fn that maps from string to string length
@@ -187,9 +196,9 @@ impl<'bundle> FluentBundle<'bundle> {
             + Sync
             + Send,
     {
-        match self.entries.entry(id.to_owned()) {
+        match self.functions.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {
-                entry.insert(Entry::Function(Box::new(func)));
+                entry.insert(Box::new(func));
                 Ok(())
             }
             HashEntry::Occupied(_) => Err(FluentError::Overriding {
@@ -214,7 +223,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
     /// ```
@@ -230,27 +239,30 @@ impl<'bundle> FluentBundle<'bundle> {
     /// [FTL syntax]: https://projectfluent.org/fluent/guide/
     /// [`indoc!`]: https://github.com/dtolnay/indoc
     /// [`Result<T>`]: https://doc.rust-lang.org/std/result/enum.Result.html
-    pub fn add_resource(&mut self, res: &'bundle FluentResource) -> Result<(), Vec<FluentError>> {
+    pub fn add_resource<R: Into<Arc<FluentResource>>>(&mut self, res: R) -> Result<(), Vec<FluentError>> {
         let mut errors = vec![];
 
-        for entry in &res.ast().body {
+        let res = res.into();
+        let res_pos = self.resources.len();
+
+        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
             let id = match entry {
                 ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
                 | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
                 _ => continue,
             };
 
-            let (entry, kind) = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(message)) => {
-                    (Entry::Message(message), "message")
+            let kind = match entry {
+                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
+                    "message"
                 }
-                ast::ResourceEntry::Entry(ast::Entry::Term(term)) => (Entry::Term(term), "term"),
+                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => "term",
                 _ => continue,
             };
 
             match self.entries.entry(id.to_string()) {
                 HashEntry::Vacant(empty) => {
-                    empty.insert(entry);
+                    empty.insert([res_pos, entry_pos]);
                 }
                 HashEntry::Occupied(_) => {
                     errors.push(FluentError::Overriding {
@@ -261,16 +273,13 @@ impl<'bundle> FluentBundle<'bundle> {
             }
         }
 
+        self.resources.push(res);
+
         if errors.is_empty() {
             Ok(())
         } else {
             Err(errors)
         }
-    }
-
-    pub fn add_resource_rc(&mut self, res: Rc<FluentResource>) -> Result<(), Vec<FluentError>> {
-        self.resources.push(res);
-        return Ok(());
     }
 
     /// Formats the message value identified by `path` using `args` to
@@ -287,7 +296,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let mut args = HashMap::new();
@@ -312,7 +321,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let (value, _) = bundle.format("hello.title", None)
@@ -342,7 +351,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// // The result falls back to "a foo b"
@@ -361,7 +370,7 @@ impl<'bundle> FluentBundle<'bundle> {
 
         let string = if let Some(ptr_pos) = path.find('.') {
             let message_id = &path[..ptr_pos];
-            let message = self.resources.get_message(message_id)?;
+            let message = self.get_message(message_id)?;
             let attr_name = &path[(ptr_pos + 1)..];
             let attr = message
                 .attributes
@@ -375,7 +384,7 @@ impl<'bundle> FluentBundle<'bundle> {
             .to_string()
         } else {
             let message_id = path;
-            let message = self.resources.get_message(message_id)?;
+            let message = self.get_message(message_id)?;
             message
                 .value
                 .as_ref()
@@ -416,7 +425,7 @@ impl<'bundle> FluentBundle<'bundle> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let mut bundle = FluentBundle::new(&["en-US"]);
-    /// bundle.add_resource(&resource)
+    /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
     /// let (message, _) = bundle.compound("login-input", None)
@@ -445,7 +454,7 @@ impl<'bundle> FluentBundle<'bundle> {
     ) -> Option<(Message<'bundle>, Vec<FluentError>)> {
         let mut env = Scope::new(self, args);
         let mut errors = vec![];
-        let message = self.resources.get_message(message_id)?;
+        let message = self.get_message(message_id)?;
 
         let value = message.value.as_ref().map(|value| {
             resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)

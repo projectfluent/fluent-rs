@@ -30,7 +30,7 @@ use-bar-missing = { -bar(gender: "missing") }
 missing-missing = { -missing(gender: "missing") }
     "#,
     );
-    let bundle = assert_get_bundle_no_errors(&res, None);
+    let bundle = assert_get_bundle_no_errors(res, None);
 
     assert_format_no_errors(bundle.format("baz", None), "Bar");
 
