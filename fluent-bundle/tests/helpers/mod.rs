@@ -49,6 +49,7 @@ pub fn assert_get_bundle_no_errors<'a, R: Borrow<FluentResource>>(
     locale: Option<&str>,
 ) -> FluentBundle<R> {
     let mut bundle = FluentBundle::new(&[locale.unwrap_or("x-testing")]);
+    bundle.set_use_isolating(false);
     bundle
         .add_resource(res)
         .expect("Failed to add FluentResource to FluentBundle.");

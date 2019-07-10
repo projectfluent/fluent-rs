@@ -40,7 +40,7 @@
 //!     .format("intro", Some(&args))
 //!     .expect("Failed to format a message.");
 //!
-//! assert_eq!(value, "Welcome, John.");
+//! assert_eq!(value, "Welcome, \u{2068}John\u{2069}.");
 //! ```
 
 #[macro_use]

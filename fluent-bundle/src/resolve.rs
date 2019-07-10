@@ -10,6 +10,7 @@ use std::borrow::Borrow;
 use std::cell::RefCell;
 use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
+use std::fmt::Write;
 use std::hash::{Hash, Hasher};
 
 use fluent_syntax::ast;
@@ -105,9 +106,7 @@ where
     if value.elements.len() == 1 {
         return match value.elements[0] {
             ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-            ast::PatternElement::Placeable(ref p) => {
-                scope.track(entry, |scope| p.resolve(scope))
-            }
+            ast::PatternElement::Placeable(ref p) => scope.track(entry, |scope| p.resolve(scope)),
         };
     }
 
@@ -119,7 +118,24 @@ where
             }
             ast::PatternElement::Placeable(p) => {
                 let result = scope.track(entry, |scope| p.resolve(scope));
-                string.push_str(&result.to_string());
+                let needs_isolation = scope.bundle.use_isolating
+                    && match p {
+                        ast::Expression::InlineExpression(
+                            ast::InlineExpression::MessageReference { .. },
+                        )
+                        | ast::Expression::InlineExpression(
+                            ast::InlineExpression::TermReference { .. },
+                        )
+                        | ast::Expression::InlineExpression(
+                            ast::InlineExpression::StringLiteral { .. },
+                        ) => false,
+                        _ => true,
+                    };
+                if needs_isolation {
+                    write!(string, "\u{2068}{}\u{2069}", result).expect("Writing succeeded");
+                } else {
+                    write!(string, "{}", result).expect("Writing succeeded");
+                };
             }
         }
     }
@@ -175,7 +191,24 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                 }
                 ast::PatternElement::Placeable(p) => {
                     let result = p.resolve(scope).to_string();
-                    string.push_str(&result);
+                    let needs_isolation = scope.bundle.use_isolating
+                        && match p {
+                            ast::Expression::InlineExpression(
+                                ast::InlineExpression::MessageReference { .. },
+                            )
+                            | ast::Expression::InlineExpression(
+                                ast::InlineExpression::TermReference { .. },
+                            )
+                            | ast::Expression::InlineExpression(
+                                ast::InlineExpression::StringLiteral { .. },
+                            ) => false,
+                            _ => true,
+                        };
+                    if needs_isolation {
+                        write!(string, "\u{2068}{}\u{2069}", result).expect("Writing succeeded");
+                    } else {
+                        write!(string, "{}", result).expect("Writing succeeded");
+                    };
                 }
             }
         }
