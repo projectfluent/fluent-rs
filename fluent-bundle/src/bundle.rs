@@ -475,7 +475,14 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
                 .to_string()
         });
 
-        let mut attributes = HashMap::new();
+        // Setting capacity helps performance for cases with attributes,
+        // but is slower than `::new` for cases without.
+        // Maybe one day this will be fixed but for now let's use the trick.
+        let mut attributes = if message.attributes.is_empty() {
+            HashMap::new()
+        } else {
+            HashMap::with_capacity(message.attributes.len())
+        };
 
         for attr in message.attributes.iter() {
             let val = resolve_value_for_entry(
