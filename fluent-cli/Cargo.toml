@@ -18,6 +18,6 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-annotate-snippets = {version = "^0.5", features = ["color"]}
+annotate-snippets = {version = "^0.6", features = ["color"]}
 clap = "^2.32"
 fluent-syntax = { path = "../fluent-syntax" }
