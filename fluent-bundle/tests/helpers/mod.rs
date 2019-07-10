@@ -1,7 +1,8 @@
+use std::borrow::Borrow;
 use std::borrow::Cow;
 
-use fluent_bundle::bundle::FluentError;
 use fluent_bundle::bundle::Message;
+use fluent_bundle::errors::FluentError;
 use fluent_bundle::{FluentBundle, FluentResource};
 
 #[allow(dead_code)]
@@ -43,10 +44,10 @@ pub fn assert_get_resource_from_str_no_errors(s: &str) -> FluentResource {
     FluentResource::try_new(s.to_owned()).expect("Failed to parse an FTL resource.")
 }
 
-pub fn assert_get_bundle_no_errors<'a>(
-    res: &'a FluentResource,
+pub fn assert_get_bundle_no_errors<'a, R: Borrow<FluentResource>>(
+    res: R,
     locale: Option<&str>,
-) -> FluentBundle<'a> {
+) -> FluentBundle<R> {
     let mut bundle = FluentBundle::new(&[locale.unwrap_or("x-testing")]);
     bundle
         .add_resource(res)

@@ -45,13 +45,13 @@ fn main() {
         .expect("Failed to add a function to the bundle.");
 
     bundle
-        .add_resource(&res1)
+        .add_resource(res1)
         .expect("Failed to add FTL resources to the bundle.");
     bundle
-        .add_resource(&res2)
+        .add_resource(res2)
         .expect("Failed to add FTL resources to the bundle.");
     bundle
-        .add_resource(&res3)
+        .add_resource(res3)
         .expect("Failed to add FTL resources to the bundle.");
 
     let (value, _) = bundle

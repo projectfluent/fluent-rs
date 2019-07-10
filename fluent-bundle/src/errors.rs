@@ -1,4 +1,4 @@
-use super::resolve::ResolverError;
+use crate::resolve::ResolverError;
 use fluent_syntax::parser::ParserError;
 
 #[derive(Debug, Fail, PartialEq)]

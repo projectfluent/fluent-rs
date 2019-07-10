@@ -58,7 +58,7 @@ fn get_args(name: &str) -> Option<HashMap<&'static str, FluentValue>> {
     }
 }
 
-fn add_functions(name: &'static str, bundle: &mut FluentBundle) {
+fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     match name {
         "preferences" => {
             bundle
@@ -84,7 +84,7 @@ fn resolver_bench(c: &mut Criterion) {
             let ids = get_ids(&res);
             let mut bundle = FluentBundle::new(&["x-testing"]);
             bundle
-                .add_resource(&res)
+                .add_resource(res)
                 .expect("Couldn't add FluentResource to the FluentBundle");
             add_functions(name, &mut bundle);
             let args = get_args(name);

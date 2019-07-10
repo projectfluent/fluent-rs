@@ -26,7 +26,7 @@ fluent-syntax = "^0.9"
 failure = "^0.1"
 failure_derive = "^0.1"
 intl_pluralrules = "^1.0"
-rental = "^0.5.3"
+rental = "^0.5.4"
 
 [[bench]]
 name = "resolver"

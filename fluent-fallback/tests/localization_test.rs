@@ -80,7 +80,7 @@ fn localization_on_change() {
                     let res = FluentResource::try_new(source).unwrap();
                     resources.insert(path, Box::new(res))
                 };
-                bundle.add_resource(&res).unwrap();
+                bundle.add_resource(res).unwrap();
             }
             bundles.push(bundle);
         }

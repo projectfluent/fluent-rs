@@ -11,13 +11,15 @@
 //! [`resolve`]: ../resolve
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
+use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::str::FromStr;
 
+use fluent_syntax::ast;
 use intl_pluralrules::PluralCategory;
 
-use super::resolve::Scope;
-use fluent_syntax::ast;
+use crate::resolve::Scope;
+use crate::resource::FluentResource;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum DisplayableNodeType {
@@ -125,7 +127,7 @@ impl<'source> FluentValue<'source> {
         }
     }
 
-    pub fn matches(&self, other: &FluentValue, env: &Scope) -> bool {
+    pub fn matches<R: Borrow<FluentResource>>(&self, other: &FluentValue, env: &Scope<R>) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
