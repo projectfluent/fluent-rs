@@ -57,7 +57,7 @@ fn main() {
     let (value, _) = bundle
         .format("hello-world", None)
         .expect("Failed to format a message.");
-    assert_eq!(&value, "Hey there! I'm a function!");
+    assert_eq!(&value, "Hey there! \u{2068}I'm a function!\u{2069}");
 
     let (value, _) = bundle
         .format("meaning-of-life", None)

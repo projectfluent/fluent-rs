@@ -47,7 +47,7 @@ pub struct Message<'m> {
 ///
 /// let (value, _) = bundle.format("intro", Some(&args))
 ///     .expect("Failed to format a message.");
-/// assert_eq!(&value, "Welcome, Rustacean.");
+/// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
 ///
 /// ```
 ///
@@ -89,6 +89,7 @@ pub struct FluentBundle<'bundle, R> {
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry<'bundle>>,
     pub(crate) plural_rules: IntlPluralRules,
+    pub(crate) use_isolating: bool,
 }
 
 impl<'bundle, R> FluentBundle<'bundle, R> {
@@ -128,6 +129,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
             resources: vec![],
             entries: HashMap::new(),
             plural_rules: pr,
+            use_isolating: true,
         }
     }
 
@@ -215,6 +217,10 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
         } else {
             Err(errors)
         }
+    }
+
+    pub fn set_use_isolating(&mut self, value: bool) {
+        self.use_isolating = value;
     }
 
     /// Returns true if this bundle contains a message with the given id.
@@ -311,7 +317,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     ///
     /// let (value, _) = bundle.format("intro", Some(&args))
     ///     .expect("Failed to format a message.");
-    /// assert_eq!(&value, "Welcome, Rustacean.");
+    /// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
     ///
     /// ```
     ///

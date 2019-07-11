@@ -1,5 +1,7 @@
 mod helpers;
 
+use std::collections::HashMap;
+
 use self::helpers::{
     assert_format_no_errors, assert_get_bundle_no_errors, assert_get_resource_from_str_no_errors,
 };
@@ -65,4 +67,33 @@ bar =
     assert_eq!(bundle.has_message("-term"), false);
     assert_eq!(bundle.has_message("missing"), false);
     assert_eq!(bundle.has_message("-missing"), false);
+}
+
+#[test]
+fn bundle_use_isolating() {
+    let res = assert_get_resource_from_str_no_errors(
+        "
+foo = Foo
+bar = Foo { $name } bar
+    ",
+    );
+    let mut bundle = assert_get_bundle_no_errors(&res, None);
+
+    // By default `assert_get_bundle_no_errors` sets isolating to false.
+    bundle.set_use_isolating(true);
+
+    assert_format_no_errors(bundle.format("foo", None), "Foo");
+    let mut args = HashMap::new();
+    args.insert("name", "John".into());
+    assert_format_no_errors(
+        bundle.format("bar", Some(&args)),
+        "Foo \u{2068}John\u{2069} bar",
+    );
+
+    bundle.set_use_isolating(false);
+
+    assert_format_no_errors(bundle.format("foo", None), "Foo");
+    let mut args = HashMap::new();
+    args.insert("name", "John".into());
+    assert_format_no_errors(bundle.format("bar", Some(&args)), "Foo John bar");
 }
