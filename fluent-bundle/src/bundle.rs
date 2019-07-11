@@ -17,7 +17,6 @@ use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::resolve::{resolve_value_for_entry, Scope};
 use crate::resource::FluentResource;
-use crate::types::DisplayableNode;
 use crate::types::FluentValue;
 
 #[derive(Debug, PartialEq)]
@@ -387,25 +386,14 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
                 .attributes
                 .iter()
                 .find(|attr| attr.id.name == attr_name)?;
-            resolve_value_for_entry(
-                &attr.value,
-                DisplayableNode::new(message.id.name, Some(attr.id.name)),
-                &mut scope,
-            )
-            .to_string()
+            resolve_value_for_entry(&attr.value, (message, attr).into(), &mut scope).to_string()
         } else {
             let message_id = path;
             let message = self.get_message(message_id)?;
             message
                 .value
                 .as_ref()
-                .map(|value| {
-                    resolve_value_for_entry(
-                        value,
-                        DisplayableNode::new(message.id.name, None),
-                        &mut scope,
-                    )
-                })?
+                .map(|value| resolve_value_for_entry(value, message.into(), &mut scope))?
                 .to_string()
         };
 
@@ -470,10 +458,10 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
         let mut errors = vec![];
         let message = self.get_message(message_id)?;
 
-        let value = message.value.as_ref().map(|value| {
-            resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut scope)
-                .to_string()
-        });
+        let value = message
+            .value
+            .as_ref()
+            .map(|value| resolve_value_for_entry(value, message.into(), &mut scope).to_string());
 
         // Setting capacity helps performance for cases with attributes,
         // but is slower than `::new` for cases without.
@@ -485,11 +473,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
         };
 
         for attr in message.attributes.iter() {
-            let val = resolve_value_for_entry(
-                &attr.value,
-                DisplayableNode::new(message.id.name, Some(attr.id.name)),
-                &mut scope,
-            );
+            let val = resolve_value_for_entry(&attr.value, (message, attr).into(), &mut scope);
             attributes.insert(attr.id.name, val.to_string());
         }
 

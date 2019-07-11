@@ -67,11 +67,7 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
         F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
     {
         let mut hasher = DefaultHasher::new();
-        (entry.id, entry.attribute).hash(&mut hasher);
-        entry.id.hash(&mut hasher);
-        if let Some(attr) = entry.attribute {
-            attr.hash(&mut hasher);
-        }
+        entry.hash(&mut hasher);
         let hash = hasher.finish();
 
         if self.travelled.borrow().contains(&hash) {
@@ -109,7 +105,9 @@ where
     if value.elements.len() == 1 {
         return match value.elements[0] {
             ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-            ast::PatternElement::Placeable(ref p) => scope.track(entry.clone(), |scope| p.resolve(scope)),
+            ast::PatternElement::Placeable(ref p) => {
+                scope.track(entry.clone(), |scope| p.resolve(scope))
+            }
         };
     }
 
@@ -135,7 +133,9 @@ fn generate_ref_error<'source, R>(
 where
     R: Borrow<FluentResource>,
 {
-    scope.errors.push(ResolverError::Reference(node.get_error()));
+    scope
+        .errors
+        .push(ResolverError::Reference(node.get_error()));
     FluentValue::Error(node)
 }
 
@@ -243,7 +243,8 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
-                        scope.maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
+                        scope
+                            .maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else if let Some(value) = msg.value.as_ref() {
                         scope.track(self.into(), |scope| value.resolve(scope))
@@ -268,7 +269,8 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
                 let value = if let Some(term) = term {
                     if let Some(attr) = attribute {
-                        scope.maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
+                        scope
+                            .maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else {
                         term.resolve(&mut scope)
@@ -280,7 +282,8 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 value
             }
             ast::InlineExpression::FunctionReference { id, arguments } => {
-                let (resolved_positional_args, resolved_named_args) = get_arguments(scope, arguments);
+                let (resolved_positional_args, resolved_named_args) =
+                    get_arguments(scope, arguments);
 
                 let func = scope.bundle.get_function(id.name);
 
@@ -301,7 +304,8 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 } else {
                     let displayable_node: DisplayableNode = self.into();
                     if scope.local_args.is_none() {
-                        scope.errors
+                        scope
+                            .errors
                             .push(ResolverError::Reference(displayable_node.get_error()));
                     }
                     FluentValue::Error(displayable_node)

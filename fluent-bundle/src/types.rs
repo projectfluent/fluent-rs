@@ -11,8 +11,8 @@
 //! [`resolve`]: ../resolve
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
-use std::borrow::Borrow;
-use std::borrow::Cow;
+use std::borrow::{Borrow, Cow};
+use std::fmt;
 use std::str::FromStr;
 
 use fluent_syntax::ast;
@@ -21,7 +21,7 @@ use intl_pluralrules::PluralCategory;
 use crate::resolve::Scope;
 use crate::resource::FluentResource;
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Hash)]
 pub enum DisplayableNodeType {
     Message,
     Term,
@@ -29,44 +29,57 @@ pub enum DisplayableNodeType {
     Function,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Copy, Clone, Hash)]
 pub struct DisplayableNode<'source> {
-    pub node_type: DisplayableNodeType,
-    pub id: &'source str,
-    pub attribute: Option<&'source str>,
+    node_type: DisplayableNodeType,
+    id: &'source str,
+    attribute: Option<&'source str>,
 }
 
 impl<'source> DisplayableNode<'source> {
-    pub fn display(&self) -> String {
-        let mut id = self.id.to_owned();
-        if let Some(attr) = self.attribute {
-            id.push_str(".");
-            id.push_str(attr);
-        }
-        match self.node_type {
-            DisplayableNodeType::Message => id,
-            DisplayableNodeType::Term => format!("-{}", id),
-            DisplayableNodeType::Variable => format!("${}", id),
-            DisplayableNodeType::Function => format!("{}()", id),
-        }
-    }
-
     pub fn get_error(&self) -> String {
-        let mut id = match self.node_type {
-            DisplayableNodeType::Message => String::from("Unknown message: "),
-            DisplayableNodeType::Term => String::from("Unknown term: "),
-            DisplayableNodeType::Variable => String::from("Unknown variable: "),
-            DisplayableNodeType::Function => String::from("Unknown function: "),
-        };
-        id.push_str(&self.display());
-        id
+        match self.node_type {
+            DisplayableNodeType::Message => format!("Unknown message: {}", self),
+            DisplayableNodeType::Term => format!("Unknown term: {}", self),
+            DisplayableNodeType::Variable => format!("Unknown variable: {}", self),
+            DisplayableNodeType::Function => format!("Unknown function: {}", self),
+        }
     }
+}
 
-    pub fn new(id: &'source str, attribute: Option<&'source str>) -> Self {
+impl<'source> fmt::Display for DisplayableNode<'source> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self.node_type {
+            DisplayableNodeType::Message => write!(f, "{}", self.id)?,
+            DisplayableNodeType::Term => write!(f, "-{}", self.id)?,
+            DisplayableNodeType::Variable => write!(f, "${}", self.id)?,
+            DisplayableNodeType::Function => write!(f, "{}()", self.id)?,
+        };
+        if let Some(attr) = self.attribute {
+            write!(f, ".{}", attr)?;
+        }
+        Ok(())
+    }
+}
+
+impl<'source> From<&ast::Message<'source>> for DisplayableNode<'source> {
+    fn from(msg: &ast::Message<'source>) -> Self {
         DisplayableNode {
             node_type: DisplayableNodeType::Message,
-            id,
-            attribute,
+            id: msg.id.name,
+            attribute: None,
+        }
+    }
+}
+
+impl<'source> From<(&ast::Message<'source>, &ast::Attribute<'source>)>
+    for DisplayableNode<'source>
+{
+    fn from(input: (&ast::Message<'source>, &ast::Attribute<'source>)) -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Message,
+            id: input.0.id.name,
+            attribute: Some(input.1.id.name),
         }
     }
 }
@@ -121,13 +134,18 @@ pub enum FluentValue<'source> {
 
 impl<'source> FluentValue<'source> {
     pub fn into_number<S: ToString>(v: S) -> Self {
-        match f64::from_str(&v.to_string()) {
-            Ok(_) => FluentValue::Number(v.to_string().into()),
-            Err(_) => FluentValue::String(v.to_string().into()),
+        let s = v.to_string();
+        match f64::from_str(&s) {
+            Ok(_) => FluentValue::Number(s.into()),
+            Err(_) => FluentValue::String(s.into()),
         }
     }
 
-    pub fn matches<R: Borrow<FluentResource>>(&self, other: &FluentValue, scope: &Scope<R>) -> bool {
+    pub fn matches<R: Borrow<FluentResource>>(
+        &self,
+        other: &FluentValue,
+        scope: &Scope<R>,
+    ) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
@@ -152,8 +170,19 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
-            FluentValue::Error(d) => d.display().into(),
-            FluentValue::None() => String::from("???").into(),
+            FluentValue::Error(d) => d.to_string().into(),
+            FluentValue::None() => "???".into(),
+        }
+    }
+}
+
+impl<'source> fmt::Display for FluentValue<'source> {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        match self {
+            FluentValue::String(s) => write!(f, "{}", s),
+            FluentValue::Number(n) => write!(f, "{}", n),
+            FluentValue::Error(d) => write!(f, "{}", d),
+            FluentValue::None() => write!(f, "???"),
         }
     }
 }
@@ -161,12 +190,6 @@ impl<'source> FluentValue<'source> {
 impl<'source> From<String> for FluentValue<'source> {
     fn from(s: String) -> Self {
         FluentValue::String(s.into())
-    }
-}
-
-impl<'source> From<&'source String> for FluentValue<'source> {
-    fn from(s: &'source String) -> Self {
-        FluentValue::String((&s[..]).into())
     }
 }
 
