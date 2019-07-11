@@ -127,7 +127,7 @@ impl<'source> FluentValue<'source> {
         }
     }
 
-    pub fn matches<R: Borrow<FluentResource>>(&self, other: &FluentValue, env: &Scope<R>) -> bool {
+    pub fn matches<R: Borrow<FluentResource>>(&self, other: &FluentValue, scope: &Scope<R>) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
             (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
@@ -141,7 +141,7 @@ impl<'source> FluentValue<'source> {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
-                let pr = &env.bundle.plural_rules;
+                let pr = &scope.bundle.plural_rules;
                 pr.select(b.as_ref()) == Ok(cat)
             }
             _ => false,

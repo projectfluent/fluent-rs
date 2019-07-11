@@ -94,14 +94,14 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
         attributes
             .iter()
             .find(|attr| attr.id.name == name)
-            .map(|attr| self.track(entry, |env| attr.value.resolve(env)))
+            .map(|attr| self.track(entry, |scope| attr.value.resolve(scope)))
     }
 }
 
 pub fn resolve_value_for_entry<'source, R>(
     value: &ast::Pattern<'source>,
     entry: DisplayableNode<'source>,
-    env: &mut Scope<'source, R>,
+    scope: &mut Scope<'source, R>,
 ) -> FluentValue<'source>
 where
     R: Borrow<FluentResource>,
@@ -109,7 +109,7 @@ where
     if value.elements.len() == 1 {
         return match value.elements[0] {
             ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-            ast::PatternElement::Placeable(ref p) => env.track(entry.clone(), |env| p.resolve(env)),
+            ast::PatternElement::Placeable(ref p) => scope.track(entry.clone(), |scope| p.resolve(scope)),
         };
     }
 
@@ -120,7 +120,7 @@ where
                 string.push_str(&s);
             }
             ast::PatternElement::Placeable(p) => {
-                let result = env.track(entry.clone(), |env| p.resolve(env));
+                let result = scope.track(entry.clone(), |scope| p.resolve(scope));
                 string.push_str(&result.to_string());
             }
         }
@@ -129,41 +129,41 @@ where
 }
 
 fn generate_ref_error<'source, R>(
-    env: &mut Scope<'source, R>,
+    scope: &mut Scope<'source, R>,
     node: DisplayableNode<'source>,
 ) -> FluentValue<'source>
 where
     R: Borrow<FluentResource>,
 {
-    env.errors.push(ResolverError::Reference(node.get_error()));
+    scope.errors.push(ResolverError::Reference(node.get_error()));
     FluentValue::Error(node)
 }
 
 // Converts an AST node to a `FluentValue`.
 pub trait ResolveValue<'source> {
-    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>;
 }
 
 impl<'source> ResolveValue<'source> for ast::Term<'source> {
-    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
-        resolve_value_for_entry(&self.value, self.into(), env)
+        resolve_value_for_entry(&self.value, self.into(), scope)
     }
 }
 
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
-    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
         if self.elements.len() == 1 {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-                ast::PatternElement::Placeable(ref p) => p.resolve(env),
+                ast::PatternElement::Placeable(ref p) => p.resolve(scope),
             };
         }
 
@@ -174,7 +174,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     string.push_str(&s);
                 }
                 ast::PatternElement::Placeable(p) => {
-                    let result = p.resolve(env).to_string();
+                    let result = p.resolve(scope).to_string();
                     string.push_str(&result);
                 }
             }
@@ -184,31 +184,31 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::Expression<'source> {
-    fn resolve<R>(&self, env: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
         match self {
-            ast::Expression::InlineExpression(exp) => exp.resolve(env),
+            ast::Expression::InlineExpression(exp) => exp.resolve(scope),
             ast::Expression::SelectExpression {
                 selector,
                 ref variants,
             } => {
-                let selector = selector.resolve(env);
+                let selector = selector.resolve(scope);
                 match selector {
                     FluentValue::String(_) | FluentValue::Number(_) => {
                         for variant in variants {
                             match variant.key {
                                 ast::VariantKey::Identifier { name } => {
                                     let key = FluentValue::String(name.into());
-                                    if key.matches(&selector, &env) {
-                                        return variant.value.resolve(env);
+                                    if key.matches(&selector, &scope) {
+                                        return variant.value.resolve(scope);
                                     }
                                 }
                                 ast::VariantKey::NumberLiteral { value } => {
                                     let key = FluentValue::into_number(value);
-                                    if key.matches(&selector, &env) {
-                                        return variant.value.resolve(env);
+                                    if key.matches(&selector, &scope) {
+                                        return variant.value.resolve(scope);
                                     }
                                 }
                             }
@@ -219,10 +219,10 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
 
                 for variant in variants {
                     if variant.default {
-                        return variant.value.resolve(env);
+                        return variant.value.resolve(scope);
                     }
                 }
-                env.errors.push(ResolverError::MissingDefault);
+                scope.errors.push(ResolverError::MissingDefault);
                 FluentValue::None()
             }
         }
@@ -230,7 +230,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
-    fn resolve<R>(&self, mut env: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&self, mut scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -239,19 +239,19 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 FluentValue::String(unescape_unicode(value))
             }
             ast::InlineExpression::MessageReference { id, attribute } => {
-                let msg = env.bundle.get_message(&id.name);
+                let msg = scope.bundle.get_message(&id.name);
 
                 if let Some(msg) = msg {
                     if let Some(attr) = attribute {
-                        env.maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
+                        scope.maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
+                            .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else if let Some(value) = msg.value.as_ref() {
-                        env.track(self.into(), |env| value.resolve(env))
+                        scope.track(self.into(), |scope| value.resolve(scope))
                     } else {
-                        generate_ref_error(env, self.into())
+                        generate_ref_error(scope, self.into())
                     }
                 } else {
-                    generate_ref_error(env, self.into())
+                    generate_ref_error(scope, self.into())
                 }
             }
             ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
@@ -260,60 +260,60 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 attribute,
                 arguments,
             } => {
-                let term = env.bundle.get_term(&id.name);
+                let term = scope.bundle.get_term(&id.name);
 
-                let (_, resolved_named_args) = get_arguments(env, arguments);
+                let (_, resolved_named_args) = get_arguments(scope, arguments);
 
-                env.local_args = Some(resolved_named_args);
+                scope.local_args = Some(resolved_named_args);
 
                 let value = if let Some(term) = term {
                     if let Some(attr) = attribute {
-                        env.maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| generate_ref_error(env, self.into()))
+                        scope.maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
+                            .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else {
-                        term.resolve(&mut env)
+                        term.resolve(&mut scope)
                     }
                 } else {
-                    generate_ref_error(env, self.into())
+                    generate_ref_error(scope, self.into())
                 };
-                env.local_args = None;
+                scope.local_args = None;
                 value
             }
             ast::InlineExpression::FunctionReference { id, arguments } => {
-                let (resolved_positional_args, resolved_named_args) = get_arguments(env, arguments);
+                let (resolved_positional_args, resolved_named_args) = get_arguments(scope, arguments);
 
-                let func = env.bundle.get_function(id.name);
+                let func = scope.bundle.get_function(id.name);
 
                 if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
                 } else {
-                    generate_ref_error(env, self.into())
+                    generate_ref_error(scope, self.into())
                 }
             }
             ast::InlineExpression::VariableReference { id } => {
-                let arg = if let Some(args) = &env.local_args {
+                let arg = if let Some(args) = &scope.local_args {
                     args.get(&id.name)
                 } else {
-                    env.args.and_then(|args| args.get(&id.name))
+                    scope.args.and_then(|args| args.get(&id.name))
                 };
                 if let Some(arg) = arg {
                     arg.clone()
                 } else {
                     let displayable_node: DisplayableNode = self.into();
-                    if env.local_args.is_none() {
-                        env.errors
+                    if scope.local_args.is_none() {
+                        scope.errors
                             .push(ResolverError::Reference(displayable_node.get_error()));
                     }
                     FluentValue::Error(displayable_node)
                 }
             }
-            ast::InlineExpression::Placeable { expression } => expression.resolve(env),
+            ast::InlineExpression::Placeable { expression } => expression.resolve(scope),
         }
     }
 }
 
 fn get_arguments<'bundle, R>(
-    env: &mut Scope<'bundle, R>,
+    scope: &mut Scope<'bundle, R>,
     arguments: &Option<ast::CallArguments<'bundle>>,
 ) -> (
     Vec<FluentValue<'bundle>>,
@@ -327,11 +327,11 @@ where
 
     if let Some(ast::CallArguments { named, positional }) = arguments {
         for expression in positional {
-            resolved_positional_args.push(expression.resolve(env));
+            resolved_positional_args.push(expression.resolve(scope));
         }
 
         for arg in named {
-            resolved_named_args.insert(arg.name.name, arg.value.resolve(env));
+            resolved_named_args.insert(arg.name.name, arg.value.resolve(scope));
         }
     }
 

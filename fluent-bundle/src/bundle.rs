@@ -1,7 +1,7 @@
 //! `FluentBundle` is a collection of localization messages in Fluent.
 //!
 //! It stores a list of messages in a single locale which can reference one another, use the same
-//! internationalization formatters, functions, environmental variables and are expected to be used
+//! internationalization formatters, functions, scopeironmental variables and are expected to be used
 //! together.
 
 use std::borrow::Borrow;
@@ -375,7 +375,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut env = Scope::new(self, args);
+        let mut scope = Scope::new(self, args);
 
         let mut errors = vec![];
 
@@ -390,7 +390,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
             resolve_value_for_entry(
                 &attr.value,
                 DisplayableNode::new(message.id.name, Some(attr.id.name)),
-                &mut env,
+                &mut scope,
             )
             .to_string()
         } else {
@@ -403,13 +403,13 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
                     resolve_value_for_entry(
                         value,
                         DisplayableNode::new(message.id.name, None),
-                        &mut env,
+                        &mut scope,
                     )
                 })?
                 .to_string()
         };
 
-        for err in env.errors {
+        for err in scope.errors {
             errors.push(err.into());
         }
 
@@ -466,12 +466,12 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut env = Scope::new(self, args);
+        let mut scope = Scope::new(self, args);
         let mut errors = vec![];
         let message = self.get_message(message_id)?;
 
         let value = message.value.as_ref().map(|value| {
-            resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut env)
+            resolve_value_for_entry(value, DisplayableNode::new(message.id.name, None), &mut scope)
                 .to_string()
         });
 
@@ -488,12 +488,12 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
             let val = resolve_value_for_entry(
                 &attr.value,
                 DisplayableNode::new(message.id.name, Some(attr.id.name)),
-                &mut env,
+                &mut scope,
             );
             attributes.insert(attr.id.name, val.to_string());
         }
 
-        for err in env.errors {
+        for err in scope.errors {
             errors.push(err.into());
         }
 
