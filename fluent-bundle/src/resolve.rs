@@ -106,7 +106,7 @@ where
         return match value.elements[0] {
             ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
             ast::PatternElement::Placeable(ref p) => {
-                scope.track(entry.clone(), |scope| p.resolve(scope))
+                scope.track(entry, |scope| p.resolve(scope))
             }
         };
     }
@@ -118,7 +118,7 @@ where
                 string.push_str(&s);
             }
             ast::PatternElement::Placeable(p) => {
-                let result = scope.track(entry.clone(), |scope| p.resolve(scope));
+                let result = scope.track(entry, |scope| p.resolve(scope));
                 string.push_str(&result.to_string());
             }
         }

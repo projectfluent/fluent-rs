@@ -9,7 +9,7 @@ use crate::bundle::FluentBundle;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-pub type FluentFunction<'bundle> = Box<
+pub type FluentFunction<'bundle> = Box<dyn
     'bundle
         + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
         + Send
