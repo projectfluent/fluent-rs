@@ -7,13 +7,11 @@
 //! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
 
 use std::borrow::Borrow;
-use std::cell::RefCell;
-use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
-use std::hash::{Hash, Hasher};
 
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
+use trashmap::TrashSet;
 
 use crate::bundle::FluentBundle;
 use crate::entry::GetEntry;
@@ -39,7 +37,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// Local args
     pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
-    pub travelled: RefCell<Vec<u64>>,
+    pub travelled: TrashSet<DisplayableNode<'bundle>>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
 }
@@ -53,7 +51,7 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
             bundle,
             args,
             local_args: None,
-            travelled: RefCell::new(Vec::new()),
+            travelled: Default::default(),
             errors: vec![],
         }
     }
@@ -66,17 +64,14 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
     where
         F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
     {
-        let mut hasher = DefaultHasher::new();
-        entry.hash(&mut hasher);
-        let hash = hasher.finish();
+        let (id, empty) = self.travelled.insert_check(&entry);
 
-        if self.travelled.borrow().contains(&hash) {
+        if !empty {
             self.errors.push(ResolverError::Cyclic);
             FluentValue::Error(entry)
         } else {
-            self.travelled.borrow_mut().push(hash);
             let result = action(self);
-            self.travelled.borrow_mut().pop();
+            self.travelled.remove(id);
             result
         }
     }
