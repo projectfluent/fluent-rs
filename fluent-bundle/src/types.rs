@@ -21,7 +21,7 @@ use intl_pluralrules::PluralCategory;
 use crate::resolve::Scope;
 use crate::resource::FluentResource;
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone, Hash)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum DisplayableNodeType {
     Message,
     Term,
@@ -29,7 +29,7 @@ pub enum DisplayableNodeType {
     Function,
 }
 
-#[derive(Debug, PartialEq, Eq, Copy, Clone, Hash)]
+#[derive(Debug, PartialEq, Clone)]
 pub struct DisplayableNode<'source> {
     node_type: DisplayableNodeType,
     id: &'source str,
@@ -38,11 +38,15 @@ pub struct DisplayableNode<'source> {
 
 impl<'source> DisplayableNode<'source> {
     pub fn get_error(&self) -> String {
-        match self.node_type {
-            DisplayableNodeType::Message => format!("Unknown message: {}", self),
-            DisplayableNodeType::Term => format!("Unknown term: {}", self),
-            DisplayableNodeType::Variable => format!("Unknown variable: {}", self),
-            DisplayableNodeType::Function => format!("Unknown function: {}", self),
+        if self.attribute.is_some() {
+            format!("Unknown attribute: {}", self)
+        } else {
+            match self.node_type {
+                DisplayableNodeType::Message => format!("Unknown message: {}", self),
+                DisplayableNodeType::Term => format!("Unknown term: {}", self),
+                DisplayableNodeType::Variable => format!("Unknown variable: {}", self),
+                DisplayableNodeType::Function => format!("Unknown function: {}", self),
+            }
         }
     }
 }
@@ -62,37 +66,15 @@ impl<'source> fmt::Display for DisplayableNode<'source> {
     }
 }
 
-impl<'source> From<&ast::Message<'source>> for DisplayableNode<'source> {
-    fn from(msg: &ast::Message<'source>) -> Self {
-        DisplayableNode {
-            node_type: DisplayableNodeType::Message,
-            id: msg.id.name,
-            attribute: None,
-        }
-    }
-}
-
-impl<'source> From<&ast::Term<'source>> for DisplayableNode<'source> {
-    fn from(term: &ast::Term<'source>) -> Self {
-        DisplayableNode {
-            node_type: DisplayableNodeType::Term,
-            id: term.id.name,
-            attribute: None,
-        }
-    }
-}
-
 impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
     fn from(expr: &ast::InlineExpression<'source>) -> Self {
         match expr {
-            ast::InlineExpression::MessageReference { id, ref attribute } => DisplayableNode {
+            ast::InlineExpression::MessageReference { id, attribute } => DisplayableNode {
                 node_type: DisplayableNodeType::Message,
                 id: id.name,
                 attribute: attribute.as_ref().map(|attr| attr.name),
             },
-            ast::InlineExpression::TermReference {
-                id, ref attribute, ..
-            } => DisplayableNode {
+            ast::InlineExpression::TermReference { id, attribute, .. } => DisplayableNode {
                 node_type: DisplayableNodeType::Term,
                 id: id.name,
                 attribute: attribute.as_ref().map(|attr| attr.name),
@@ -116,8 +98,8 @@ impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source>
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
     Number(Cow<'source, str>),
-    None(),
     Error(DisplayableNode<'source>),
+    None,
 }
 
 impl<'source> FluentValue<'source> {
@@ -158,8 +140,8 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
-            FluentValue::Error(d) => d.to_string().into(),
-            FluentValue::None() => "???".into(),
+            FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
+            FluentValue::None => "???".into(),
         }
     }
 }
@@ -169,8 +151,8 @@ impl<'source> fmt::Display for FluentValue<'source> {
         match self {
             FluentValue::String(s) => f.write_str(s),
             FluentValue::Number(n) => f.write_str(n),
-            FluentValue::Error(d) => write!(f, "{}", d),
-            FluentValue::None() => f.write_str("???"),
+            FluentValue::Error(d) => write!(f, "{{{}}}", d),
+            FluentValue::None => f.write_str("???"),
         }
     }
 }

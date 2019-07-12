@@ -27,6 +27,9 @@ fn resmgr_get_bundle() {
 
     let bundle = res_mgr.get_bundle(vec!["en-US".into()], vec!["test.ftl".into()]);
 
-    let (value, _) = bundle.format("hello-world", None).unwrap();
+    let mut errors = vec![];
+    let msg = bundle.get_message("hello-world").expect("Message exists");
+    let pattern = msg.value.expect("Message has a value");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Hello World");
 }

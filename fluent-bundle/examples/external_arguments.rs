@@ -20,23 +20,30 @@ unread-emails =
         .expect("Failed to add FTL resources to the bundle.");
 
     let mut args = HashMap::new();
-    args.insert("name", FluentValue::from("John"));
+    args.insert("name".to_string(), FluentValue::from("John"));
 
-    match bundle.format("hello-world", Some(&args)) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle
+        .get_message("hello-world")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    println!("{}", value);
 
-    match bundle.format("ref", Some(&args)) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle.get_message("ref").expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    println!("{}", value);
 
     let mut args = HashMap::new();
-    args.insert("emailCount", FluentValue::into_number("1.0"));
+    args.insert("emailCount".to_string(), FluentValue::into_number("1.0"));
 
-    match bundle.format("unread-emails", Some(&args)) {
-        Some((value, _)) => println!("{}", value),
-        None => println!("None"),
-    }
+    let msg = bundle
+        .get_message("unread-emails")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    println!("{}", value);
 }

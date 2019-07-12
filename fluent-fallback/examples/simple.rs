@@ -152,16 +152,16 @@ fn main() {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = HashMap::new();
-                    args.insert("input", FluentValue::from(i));
-                    args.insert("value", FluentValue::from(collatz(i)));
+                    args.insert("input".to_string(), FluentValue::from(i));
+                    args.insert("value".to_string(), FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
                     let value = loc.format_value("response-msg", Some(&args));
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
-                    args.insert("input", FluentValue::from(input.as_str()));
-                    args.insert("reason", FluentValue::from(err.to_string()));
+                    args.insert("input".to_string(), FluentValue::from(input.as_str()));
+                    args.insert("reason".to_string(), FluentValue::from(err.to_string()));
                     let value = loc.format_value("input-parse-error-msg", Some(&args));
                     println!("{}", value);
                 }

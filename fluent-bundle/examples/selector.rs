@@ -21,16 +21,22 @@ hello-world2 = Hello { $name ->
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
 
-    match bundle.format("hello-world", None) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle
+        .get_message("hello-world")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    println!("{}", value);
 
     let mut args = HashMap::new();
-    args.insert("name", FluentValue::from("moon"));
+    args.insert("name".to_string(), FluentValue::from("moon"));
 
-    match bundle.format("hello-world2", Some(&args)) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle
+        .get_message("hello-world2")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    println!("{}", value);
 }
