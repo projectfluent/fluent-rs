@@ -27,6 +27,7 @@ failure = "^0.1"
 failure_derive = "^0.1"
 intl_pluralrules = "^1.0"
 rental = "^0.5.4"
+smallvec = "0.6.10"
 
 [[bench]]
 name = "resolver"
