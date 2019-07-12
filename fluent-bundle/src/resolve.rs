@@ -40,7 +40,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// Local args
     pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
-    pub travelled: RefCell<Vec<u64>>,
+    pub travelled: RefCell<smallvec::SmallVec<[u64; 2]>>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
 }
@@ -54,7 +54,7 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
             bundle,
             args,
             local_args: None,
-            travelled: RefCell::new(Vec::new()),
+            travelled: RefCell::new(smallvec::SmallVec::new()),
             errors: vec![],
         }
     }
