@@ -8,11 +8,11 @@ use fluent_bundle::FluentValue;
 use reiterate::Reiterate;
 
 struct FluentBundleIterator<'loc, R> {
-    iter: Box<dyn Iterator<Item = FluentBundle<'loc, R>> + 'loc>,
+    iter: Box<dyn Iterator<Item = FluentBundle<R>> + 'loc>,
 }
 
 impl<'loc, R> Iterator for FluentBundleIterator<'loc, R> {
-    type Item = Box<FluentBundle<'loc, R>>;
+    type Item = Box<FluentBundle<R>>;
     fn next(&mut self) -> Option<Self::Item> {
         self.iter.next().map(Box::new)
     }
@@ -28,7 +28,7 @@ impl<'loc, R> Localization<'loc, R> {
     pub fn new<F, I>(resource_ids: Vec<String>, mut generate_bundles: F) -> Self
     where
         F: FnMut(&[String]) -> I + 'loc,
-        I: Iterator<Item = FluentBundle<'loc, R>> + 'loc,
+        I: Iterator<Item = FluentBundle<R>> + 'loc,
     {
         let mut generate2 = move |x: &[String]| FluentBundleIterator {
             iter: Box::new(generate_bundles(x)),

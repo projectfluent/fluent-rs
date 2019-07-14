@@ -34,7 +34,7 @@ pub enum ResolverError {
 /// State for a single `ResolveValue::to_value` call.
 pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// The current `FluentBundle` instance.
-    pub bundle: &'bundle FluentBundle<'bundle, R>,
+    pub bundle: &'bundle FluentBundle<R>,
     /// The current arguments passed by the developer.
     pub args: Option<&'bundle HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Local args

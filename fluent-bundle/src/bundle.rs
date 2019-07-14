@@ -84,15 +84,15 @@ pub struct Message<'m> {
 /// [`compound`]: ./struct.FluentBundle.html#method.compound
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Option<T>`]: http://doc.rust-lang.org/std/option/enum.Option.html
-pub struct FluentBundle<'bundle, R> {
+pub struct FluentBundle<R> {
     pub locales: Vec<String>,
     pub(crate) resources: Vec<R>,
-    pub(crate) entries: HashMap<String, Entry<'bundle>>,
+    pub(crate) entries: HashMap<String, Entry>,
     pub(crate) plural_rules: IntlPluralRules,
     pub(crate) use_isolating: bool,
 }
 
-impl<'bundle, R> FluentBundle<'bundle, R> {
+impl<R> FluentBundle<R> {
     /// Constructs a FluentBundle. `locales` is the fallback chain of locales
     /// to use for formatters like date and time. `locales` does not influence
     /// message selection.
@@ -277,7 +277,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     /// ```
     ///
     /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
-    pub fn add_function<F: 'bundle>(&mut self, id: &str, func: F) -> Result<(), FluentError>
+    pub fn add_function<F: 'static>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
             + Sync
@@ -372,7 +372,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     ///     .expect("Failed to format a message.");
     /// assert_eq!(&value, "a foo b");
     /// ```
-    pub fn format(
+    pub fn format<'bundle>(
         &'bundle self,
         path: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,
@@ -452,7 +452,7 @@ impl<'bundle, R> FluentBundle<'bundle, R> {
     /// The second term of the tuple will contain any extra error information
     /// gathered during formatting. A caller may safely ignore the extra errors
     /// if the fallback formatting policies are acceptable.
-    pub fn compound(
+    pub fn compound<'bundle>(
         &'bundle self,
         message_id: &str,
         args: Option<&'bundle HashMap<&str, FluentValue>>,

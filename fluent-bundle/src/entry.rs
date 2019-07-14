@@ -9,17 +9,16 @@ use crate::bundle::FluentBundle;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-pub type FluentFunction<'bundle> = Box<
-    dyn 'bundle
-        + for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
+pub type FluentFunction = Box<
+    dyn for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
         + Send
         + Sync,
 >;
 
-pub enum Entry<'bundle> {
+pub enum Entry {
     Message([usize; 2]),
     Term([usize; 2]),
-    Function(FluentFunction<'bundle>),
+    Function(FluentFunction),
 }
 
 pub trait GetEntry {
@@ -28,7 +27,7 @@ pub trait GetEntry {
     fn get_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
-impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<'_, R> {
+impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
     fn get_message(&self, id: &str) -> Option<&ast::Message> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Message(pos) => {

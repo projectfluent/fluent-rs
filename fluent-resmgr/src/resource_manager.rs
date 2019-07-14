@@ -55,7 +55,7 @@ impl ResourceManager {
         &'l self,
         locales: Vec<String>,
         resource_ids: Vec<String>,
-    ) -> impl Iterator<Item = FluentBundle<'l, &FluentResource>> {
+    ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {
         let res_mgr = self;
         let mut ptr = 0;
 
