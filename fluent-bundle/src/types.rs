@@ -72,18 +72,6 @@ impl<'source> From<&ast::Message<'source>> for DisplayableNode<'source> {
     }
 }
 
-impl<'source> From<(&ast::Message<'source>, &ast::Attribute<'source>)>
-    for DisplayableNode<'source>
-{
-    fn from(input: (&ast::Message<'source>, &ast::Attribute<'source>)) -> Self {
-        DisplayableNode {
-            node_type: DisplayableNodeType::Message,
-            id: input.0.id.name,
-            attribute: Some(input.1.id.name),
-        }
-    }
-}
-
 impl<'source> From<&ast::Term<'source>> for DisplayableNode<'source> {
     fn from(term: &ast::Term<'source>) -> Self {
         DisplayableNode {
@@ -179,10 +167,10 @@ impl<'source> FluentValue<'source> {
 impl<'source> fmt::Display for FluentValue<'source> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
-            FluentValue::String(s) => write!(f, "{}", s),
-            FluentValue::Number(n) => write!(f, "{}", n),
+            FluentValue::String(s) => f.write_str(s),
+            FluentValue::Number(n) => f.write_str(n),
             FluentValue::Error(d) => write!(f, "{}", d),
-            FluentValue::None() => write!(f, "???"),
+            FluentValue::None() => f.write_str("???"),
         }
     }
 }

@@ -72,10 +72,11 @@ bar =
 #[test]
 fn bundle_use_isolating() {
     let res = assert_get_resource_from_str_no_errors(
-        "
+        r#"
+-brand-name = Fluent
 foo = Foo
-bar = Foo { $name } bar
-    ",
+bar = Foo { $name } bar { -brand-name } baz { "Literal" }
+    "#,
     );
     let mut bundle = assert_get_bundle_no_errors(&res, None);
 
@@ -87,7 +88,7 @@ bar = Foo { $name } bar
     args.insert("name", "John".into());
     assert_format_no_errors(
         bundle.format("bar", Some(&args)),
-        "Foo \u{2068}John\u{2069} bar",
+        "Foo \u{2068}John\u{2069} bar Fluent baz Literal",
     );
 
     bundle.set_use_isolating(false);
@@ -95,5 +96,8 @@ bar = Foo { $name } bar
     assert_format_no_errors(bundle.format("foo", None), "Foo");
     let mut args = HashMap::new();
     args.insert("name", "John".into());
-    assert_format_no_errors(bundle.format("bar", Some(&args)), "Foo John bar");
+    assert_format_no_errors(
+        bundle.format("bar", Some(&args)),
+        "Foo John bar Fluent baz Literal",
+    );
 }

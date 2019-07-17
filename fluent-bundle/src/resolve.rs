@@ -157,9 +157,6 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     string.push_str(&s);
                 }
                 ast::PatternElement::Placeable(p) => {
-                    let result = scope
-                        .maybe_track(self, None, |scope| p.resolve(scope))
-                        .to_string();
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {
                             ast::Expression::InlineExpression(
@@ -174,10 +171,13 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                             _ => true,
                         };
                     if needs_isolation {
-                        write!(string, "\u{2068}{}\u{2069}", result).expect("Writing succeeded");
-                    } else {
-                        write!(string, "{}", result).expect("Writing succeeded");
-                    };
+                        string.write_char('\u{2068}').expect("Writing succeeded");
+                    }
+                    let result = scope.maybe_track(self, None, |scope| p.resolve(scope));
+                    write!(string, "{}", result).expect("Writing succeeded");
+                    if needs_isolation {
+                        string.write_char('\u{2069}').expect("Writing succeeded");
+                    }
                 }
             }
         }

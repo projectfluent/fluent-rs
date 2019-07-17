@@ -100,3 +100,15 @@ selector-attr = { -bazTerm.attr ->
 
     assert_format_no_errors(bundle.format("selector-attr", None), "FooBarBaz");
 }
+
+#[test]
+fn primitives_placeable() {
+    let res = assert_get_resource_from_str_no_errors(
+        r#"
+key = { { "Literal" } }
+    "#,
+    );
+    let bundle = assert_get_bundle_no_errors(&res, None);
+
+    assert_format_no_errors(bundle.format("key", None), "Literal");
+}
