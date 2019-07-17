@@ -8,10 +8,8 @@
 
 use std::borrow::Borrow;
 use std::cell::RefCell;
-use std::collections::hash_map::DefaultHasher;
 use std::collections::HashMap;
 use std::fmt::Write;
-use std::hash::{Hash, Hasher};
 
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
@@ -40,7 +38,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// Local args
     pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
-    pub travelled: RefCell<smallvec::SmallVec<[u64; 2]>>,
+    pub travelled: RefCell<smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
 }
@@ -59,23 +57,46 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
         }
     }
 
-    pub fn track<F>(
+    // This method allows us to lazily add Pattern on the stack,
+    // only if the Pattern::resolve has been called on an empty stack.
+    //
+    // This is the case when pattern is called from Bundle and it
+    // allows us to fast-path simple resolutions, and only use the stack
+    // for placeables.
+    pub fn maybe_track<F>(
         &mut self,
-        entry: DisplayableNode<'bundle>,
+        pattern: &'bundle ast::Pattern,
+        entry: Option<DisplayableNode<'bundle>>,
         mut action: F,
     ) -> FluentValue<'bundle>
     where
         F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
     {
-        let mut hasher = DefaultHasher::new();
-        entry.hash(&mut hasher);
-        let hash = hasher.finish();
-
-        if self.travelled.borrow().contains(&hash) {
-            self.errors.push(ResolverError::Cyclic);
-            FluentValue::Error(entry)
+        if self.travelled.borrow().is_empty() {
+            self.track(pattern, entry, action)
         } else {
-            self.travelled.borrow_mut().push(hash);
+            action(self)
+        }
+    }
+
+    pub fn track<F>(
+        &mut self,
+        pattern: &'bundle ast::Pattern,
+        entry: Option<DisplayableNode<'bundle>>,
+        mut action: F,
+    ) -> FluentValue<'bundle>
+    where
+        F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
+    {
+        if self.travelled.borrow().contains(&pattern) {
+            self.errors.push(ResolverError::Cyclic);
+            if let Some(entry) = entry {
+                FluentValue::Error(entry)
+            } else {
+                FluentValue::None()
+            }
+        } else {
+            self.travelled.borrow_mut().push(pattern);
             let result = action(self);
             self.travelled.borrow_mut().pop();
             result
@@ -84,62 +105,15 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
 
     fn maybe_resolve_attribute(
         &mut self,
-        attributes: &[ast::Attribute<'bundle>],
+        attributes: &'bundle [ast::Attribute<'bundle>],
         entry: DisplayableNode<'bundle>,
         name: &str,
     ) -> Option<FluentValue<'bundle>> {
         attributes
             .iter()
             .find(|attr| attr.id.name == name)
-            .map(|attr| self.track(entry, |scope| attr.value.resolve(scope)))
+            .map(|attr| self.track(&attr.value, Some(entry), |scope| attr.value.resolve(scope)))
     }
-}
-
-pub fn resolve_value_for_entry<'source, R>(
-    value: &ast::Pattern<'source>,
-    entry: DisplayableNode<'source>,
-    scope: &mut Scope<'source, R>,
-) -> FluentValue<'source>
-where
-    R: Borrow<FluentResource>,
-{
-    if value.elements.len() == 1 {
-        return match value.elements[0] {
-            ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-            ast::PatternElement::Placeable(ref p) => scope.track(entry, |scope| p.resolve(scope)),
-        };
-    }
-
-    let mut string = String::new();
-    for elem in &value.elements {
-        match elem {
-            ast::PatternElement::TextElement(s) => {
-                string.push_str(&s);
-            }
-            ast::PatternElement::Placeable(p) => {
-                let result = scope.track(entry, |scope| p.resolve(scope));
-                let needs_isolation = scope.bundle.use_isolating
-                    && match p {
-                        ast::Expression::InlineExpression(
-                            ast::InlineExpression::MessageReference { .. },
-                        )
-                        | ast::Expression::InlineExpression(
-                            ast::InlineExpression::TermReference { .. },
-                        )
-                        | ast::Expression::InlineExpression(
-                            ast::InlineExpression::StringLiteral { .. },
-                        ) => false,
-                        _ => true,
-                    };
-                if needs_isolation {
-                    write!(string, "\u{2068}{}\u{2069}", result).expect("Writing succeeded");
-                } else {
-                    write!(string, "{}", result).expect("Writing succeeded");
-                };
-            }
-        }
-    }
-    FluentValue::String(string.into())
 }
 
 fn generate_ref_error<'source, R>(
@@ -157,29 +131,22 @@ where
 
 // Converts an AST node to a `FluentValue`.
 pub trait ResolveValue<'source> {
-    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>;
 }
 
-impl<'source> ResolveValue<'source> for ast::Term<'source> {
-    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
-    where
-        R: Borrow<FluentResource>,
-    {
-        resolve_value_for_entry(&self.value, self.into(), scope)
-    }
-}
-
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
-    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
         if self.elements.len() == 1 {
             return match self.elements[0] {
-                ast::PatternElement::TextElement(s) => FluentValue::String(s.into()),
-                ast::PatternElement::Placeable(ref p) => p.resolve(scope),
+                ast::PatternElement::TextElement(s) => s.into(),
+                ast::PatternElement::Placeable(ref p) => {
+                    scope.maybe_track(self, None, |scope| p.resolve(scope))
+                }
             };
         }
 
@@ -190,7 +157,9 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     string.push_str(&s);
                 }
                 ast::PatternElement::Placeable(p) => {
-                    let result = p.resolve(scope).to_string();
+                    let result = scope
+                        .maybe_track(self, None, |scope| p.resolve(scope))
+                        .to_string();
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {
                             ast::Expression::InlineExpression(
@@ -217,7 +186,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::Expression<'source> {
-    fn resolve<R>(&self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -263,7 +232,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
-    fn resolve<R>(&self, mut scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R>(&'source self, mut scope: &mut Scope<'source, R>) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -280,7 +249,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                             .maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else if let Some(value) = msg.value.as_ref() {
-                        scope.track(self.into(), |scope| value.resolve(scope))
+                        scope.track(value, Some(msg.into()), |scope| value.resolve(scope))
                     } else {
                         generate_ref_error(scope, self.into())
                     }
@@ -306,7 +275,9 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                             .maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
                             .unwrap_or_else(|| generate_ref_error(scope, self.into()))
                     } else {
-                        term.resolve(&mut scope)
+                        scope.track(&term.value, Some(term.into()), |scope| {
+                            term.value.resolve(scope)
+                        })
                     }
                 } else {
                     generate_ref_error(scope, self.into())
@@ -351,7 +322,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
 fn get_arguments<'bundle, R>(
     scope: &mut Scope<'bundle, R>,
-    arguments: &Option<ast::CallArguments<'bundle>>,
+    arguments: &'bundle Option<ast::CallArguments<'bundle>>,
 ) -> (
     Vec<FluentValue<'bundle>>,
     HashMap<&'bundle str, FluentValue<'bundle>>,
