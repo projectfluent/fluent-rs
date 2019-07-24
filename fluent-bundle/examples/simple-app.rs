@@ -6,14 +6,14 @@
 //! the application can be made localizable
 //! via Fluent.
 //!
-//! To try the app launch `cargo run --example simple NUM (LOCALES)`
+//! To try the app launch `cargo run --example simple-app NUM (LOCALES)`
 //!
 //! NUM is a number to be calculated, and LOCALES is an optional
 //! parameter with a comma-separated list of locales requested by the user.
 //!
 //! Example:
 //!   
-//!   caron run --example simple 123 de,pl
+//!   cargo run --example simple-app 123 de,pl
 //!
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
@@ -48,7 +48,7 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 fn get_available_locales() -> Result<Vec<String>, io::Error> {
     let mut locales = vec![];
 
-    let res_dir = fs::read_dir("./examples/resources/")?;
+    let res_dir = fs::read_dir("./fluent-bundle/examples/resources/")?;
     for entry in res_dir {
         if let Ok(entry) = entry {
             let path = entry.path();
@@ -82,7 +82,7 @@ fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
     return Ok(resolved_locales
         .into_iter()
         .map(|s| String::from(s))
-        .collect::<Vec<String>>());
+        .collect());
 }
 
 static L10N_RESOURCES: &[&str] = &["simple.ftl"];
@@ -100,7 +100,7 @@ fn main() {
         .get(2)
         .map_or(vec!["en-US"], |arg| arg.split(",").collect());
 
-    // 4. Negotiate it against the avialable ones
+    // 4. Negotiate it against the available ones
     let locales = get_app_locales(&requested).expect("Failed to retrieve available locales");
 
     // 5. Create a new Fluent FluentBundle using the
@@ -110,7 +110,7 @@ fn main() {
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
         let full_path = format!(
-            "./examples/resources/{locale}/{path}",
+            "./fluent-bundle/examples/resources/{locale}/{path}",
             locale = locales[0],
             path = path
         );
@@ -147,7 +147,7 @@ fn main() {
                     args.insert("reason".to_string(), FluentValue::from(err.to_string()));
                     let mut errors = vec![];
                     let msg = bundle
-                        .get_message("input-parse-error-msg")
+                        .get_message("input-parse-error")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value.expect("Message has no value.");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
