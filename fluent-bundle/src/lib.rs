@@ -27,18 +27,20 @@
 //!     .add_resource(res)
 //!     .expect("Failed to add FTL resources to the bundle.");
 //!
-//! let (value, _) = bundle
-//!     .format("hello-world", None)
-//!     .expect("Failed to format a message.");
+//! let msg = bundle.get_message("hello-world").expect("Message doesn't exist.");
+//! let mut errors = vec![];
+//! let pattern = msg.value.expect("Message has no value.");
+//! let value = bundle.format_pattern(&pattern, None, &mut errors);
 //!
 //! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = HashMap::new();
-//! args.insert("name", FluentValue::from("John"));
+//! args.insert("name".to_string(), FluentValue::from("John"));
 //!
-//! let (value, _) = bundle
-//!     .format("intro", Some(&args))
-//!     .expect("Failed to format a message.");
+//! let msg = bundle.get_message("intro").expect("Message doesn't exist.");
+//! let mut errors = vec![];
+//! let pattern = msg.value.expect("Message has no value.");
+//! let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 //!
 //! assert_eq!(value, "Welcome, \u{2068}John\u{2069}.");
 //! ```

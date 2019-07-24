@@ -2,7 +2,6 @@ use fluent_syntax::ast;
 use serde::ser::SerializeMap;
 use serde::ser::SerializeSeq;
 use serde::{Serialize, Serializer};
-use serde_derive::Serialize;
 use std::error::Error;
 
 pub fn serialize<'s>(res: &'s ast::Resource) -> Result<String, Box<dyn Error>> {

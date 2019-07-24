@@ -7,7 +7,6 @@
 //! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
 
 use std::borrow::Borrow;
-use std::cell::RefCell;
 use std::collections::HashMap;
 use std::fmt::Write;
 
@@ -24,8 +23,6 @@ use crate::types::FluentValue;
 pub enum ResolverError {
     Reference(String),
     MissingDefault,
-    Argument(String),
-    Value,
     Cyclic,
 }
 
@@ -34,11 +31,11 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// The current `FluentBundle` instance.
     pub bundle: &'bundle FluentBundle<R>,
     /// The current arguments passed by the developer.
-    pub args: Option<&'bundle HashMap<&'bundle str, FluentValue<'bundle>>>,
+    args: Option<&'bundle HashMap<String, FluentValue<'bundle>>>,
     /// Local args
-    pub local_args: Option<HashMap<&'bundle str, FluentValue<'bundle>>>,
+    local_args: Option<HashMap<String, FluentValue<'bundle>>>,
     /// Tracks hashes to prevent infinite recursion.
-    pub travelled: RefCell<smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>>,
+    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
 }
@@ -46,13 +43,13 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
 impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
     pub fn new(
         bundle: &'bundle FluentBundle<R>,
-        args: Option<&'bundle HashMap<&str, FluentValue>>,
+        args: Option<&'bundle HashMap<String, FluentValue>>,
     ) -> Self {
         Scope {
             bundle,
             args,
             local_args: None,
-            travelled: RefCell::new(smallvec::SmallVec::new()),
+            travelled: Default::default(),
             errors: vec![],
         }
     }
@@ -63,56 +60,31 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
     // This is the case when pattern is called from Bundle and it
     // allows us to fast-path simple resolutions, and only use the stack
     // for placeables.
-    pub fn maybe_track<F>(
+    pub fn maybe_track(
         &mut self,
         pattern: &'bundle ast::Pattern,
-        entry: Option<DisplayableNode<'bundle>>,
-        mut action: F,
-    ) -> FluentValue<'bundle>
-    where
-        F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
-    {
-        if self.travelled.borrow().is_empty() {
-            self.track(pattern, entry, action)
-        } else {
-            action(self)
+        placeable: &'bundle ast::Expression,
+    ) -> FluentValue<'bundle> {
+        if self.travelled.is_empty() {
+            self.travelled.push(pattern);
         }
+        placeable.resolve(self)
     }
 
-    pub fn track<F>(
+    pub fn track(
         &mut self,
         pattern: &'bundle ast::Pattern,
-        entry: Option<DisplayableNode<'bundle>>,
-        mut action: F,
-    ) -> FluentValue<'bundle>
-    where
-        F: FnMut(&mut Scope<'bundle, R>) -> FluentValue<'bundle>,
-    {
-        if self.travelled.borrow().contains(&pattern) {
+        entry: DisplayableNode<'bundle>,
+    ) -> FluentValue<'bundle> {
+        if self.travelled.contains(&pattern) {
             self.errors.push(ResolverError::Cyclic);
-            if let Some(entry) = entry {
-                FluentValue::Error(entry)
-            } else {
-                FluentValue::None()
-            }
+            FluentValue::Error(entry)
         } else {
-            self.travelled.borrow_mut().push(pattern);
-            let result = action(self);
-            self.travelled.borrow_mut().pop();
+            self.travelled.push(pattern);
+            let result = pattern.resolve(self);
+            self.travelled.pop();
             result
         }
-    }
-
-    fn maybe_resolve_attribute(
-        &mut self,
-        attributes: &'bundle [ast::Attribute<'bundle>],
-        entry: DisplayableNode<'bundle>,
-        name: &str,
-    ) -> Option<FluentValue<'bundle>> {
-        attributes
-            .iter()
-            .find(|attr| attr.id.name == name)
-            .map(|attr| self.track(&attr.value, Some(entry), |scope| attr.value.resolve(scope)))
     }
 }
 
@@ -144,18 +116,14 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
         if self.elements.len() == 1 {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => s.into(),
-                ast::PatternElement::Placeable(ref p) => {
-                    scope.maybe_track(self, None, |scope| p.resolve(scope))
-                }
+                ast::PatternElement::Placeable(ref p) => scope.maybe_track(self, p),
             };
         }
 
         let mut string = String::new();
         for elem in &self.elements {
             match elem {
-                ast::PatternElement::TextElement(s) => {
-                    string.push_str(&s);
-                }
+                ast::PatternElement::TextElement(s) => string.push_str(&s),
                 ast::PatternElement::Placeable(p) => {
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {
@@ -171,12 +139,12 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                             _ => true,
                         };
                     if needs_isolation {
-                        string.write_char('\u{2068}').expect("Writing succeeded");
+                        string.write_char('\u{2068}').expect("Writing failed");
                     }
-                    let result = scope.maybe_track(self, None, |scope| p.resolve(scope));
-                    write!(string, "{}", result).expect("Writing succeeded");
+                    let result = scope.maybe_track(self, p);
+                    write!(string, "{}", result).expect("Writing failed");
                     if needs_isolation {
-                        string.write_char('\u{2069}').expect("Writing succeeded");
+                        string.write_char('\u{2069}').expect("Writing failed");
                     }
                 }
             }
@@ -192,27 +160,21 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
     {
         match self {
             ast::Expression::InlineExpression(exp) => exp.resolve(scope),
-            ast::Expression::SelectExpression {
-                selector,
-                ref variants,
-            } => {
+            ast::Expression::SelectExpression { selector, variants } => {
                 let selector = selector.resolve(scope);
                 match selector {
                     FluentValue::String(_) | FluentValue::Number(_) => {
                         for variant in variants {
-                            match variant.key {
+                            let key = match variant.key {
                                 ast::VariantKey::Identifier { name } => {
-                                    let key = FluentValue::String(name.into());
-                                    if key.matches(&selector, &scope) {
-                                        return variant.value.resolve(scope);
-                                    }
+                                    FluentValue::String(name.into())
                                 }
                                 ast::VariantKey::NumberLiteral { value } => {
-                                    let key = FluentValue::into_number(value);
-                                    if key.matches(&selector, &scope) {
-                                        return variant.value.resolve(scope);
-                                    }
+                                    FluentValue::into_number(value)
                                 }
+                            };
+                            if key.matches(&selector, &scope) {
+                                return variant.value.resolve(scope);
                             }
                         }
                     }
@@ -225,7 +187,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
                     }
                 }
                 scope.errors.push(ResolverError::MissingDefault);
-                FluentValue::None()
+                FluentValue::None
             }
         }
     }
@@ -240,48 +202,47 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
             ast::InlineExpression::StringLiteral { value } => {
                 FluentValue::String(unescape_unicode(value))
             }
-            ast::InlineExpression::MessageReference { id, attribute } => {
-                let msg = scope.bundle.get_message(&id.name);
-
-                if let Some(msg) = msg {
+            ast::InlineExpression::MessageReference { id, attribute } => scope
+                .bundle
+                .get_entry_message(&id.name)
+                .and_then(|msg| {
                     if let Some(attr) = attribute {
-                        scope
-                            .maybe_resolve_attribute(&msg.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| generate_ref_error(scope, self.into()))
-                    } else if let Some(value) = msg.value.as_ref() {
-                        scope.track(value, Some(msg.into()), |scope| value.resolve(scope))
+                        msg.attributes
+                            .iter()
+                            .find(|a| a.id.name == attr.name)
+                            .map(|attr| scope.track(&attr.value, self.into()))
                     } else {
-                        generate_ref_error(scope, self.into())
+                        msg.value
+                            .as_ref()
+                            .map(|value| scope.track(value, self.into()))
                     }
-                } else {
-                    generate_ref_error(scope, self.into())
-                }
-            }
+                })
+                .unwrap_or_else(|| generate_ref_error(scope, self.into())),
             ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
             ast::InlineExpression::TermReference {
                 id,
                 attribute,
                 arguments,
             } => {
-                let term = scope.bundle.get_term(&id.name);
-
                 let (_, resolved_named_args) = get_arguments(scope, arguments);
 
                 scope.local_args = Some(resolved_named_args);
 
-                let value = if let Some(term) = term {
-                    if let Some(attr) = attribute {
-                        scope
-                            .maybe_resolve_attribute(&term.attributes, self.into(), attr.name)
-                            .unwrap_or_else(|| generate_ref_error(scope, self.into()))
-                    } else {
-                        scope.track(&term.value, Some(term.into()), |scope| {
-                            term.value.resolve(scope)
-                        })
-                    }
-                } else {
-                    generate_ref_error(scope, self.into())
-                };
+                let value = scope
+                    .bundle
+                    .get_entry_term(&id.name)
+                    .and_then(|term| {
+                        if let Some(attr) = attribute {
+                            term.attributes
+                                .iter()
+                                .find(|a| a.id.name == attr.name)
+                                .map(|attr| scope.track(&attr.value, self.into()))
+                        } else {
+                            Some(scope.track(&term.value, self.into()))
+                        }
+                    })
+                    .unwrap_or_else(|| generate_ref_error(scope, self.into()));
+
                 scope.local_args = None;
                 value
             }
@@ -289,7 +250,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 let (resolved_positional_args, resolved_named_args) =
                     get_arguments(scope, arguments);
 
-                let func = scope.bundle.get_function(id.name);
+                let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
@@ -298,21 +259,18 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 }
             }
             ast::InlineExpression::VariableReference { id } => {
-                let arg = if let Some(args) = &scope.local_args {
-                    args.get(&id.name)
-                } else {
-                    scope.args.and_then(|args| args.get(&id.name))
-                };
-                if let Some(arg) = arg {
+                let args = scope.local_args.as_ref().or(scope.args);
+
+                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
                     arg.clone()
                 } else {
-                    let displayable_node: DisplayableNode = self.into();
+                    let entry: DisplayableNode = self.into();
                     if scope.local_args.is_none() {
                         scope
                             .errors
-                            .push(ResolverError::Reference(displayable_node.get_error()));
+                            .push(ResolverError::Reference(entry.get_error()));
                     }
-                    FluentValue::Error(displayable_node)
+                    FluentValue::Error(entry)
                 }
             }
             ast::InlineExpression::Placeable { expression } => expression.resolve(scope),
@@ -325,7 +283,7 @@ fn get_arguments<'bundle, R>(
     arguments: &'bundle Option<ast::CallArguments<'bundle>>,
 ) -> (
     Vec<FluentValue<'bundle>>,
-    HashMap<&'bundle str, FluentValue<'bundle>>,
+    HashMap<String, FluentValue<'bundle>>,
 )
 where
     R: Borrow<FluentResource>,
@@ -339,7 +297,7 @@ where
         }
 
         for arg in named {
-            resolved_named_args.insert(arg.name.name, arg.value.resolve(scope));
+            resolved_named_args.insert(arg.name.name.to_string(), arg.value.resolve(scope));
         }
     }
 

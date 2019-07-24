@@ -130,29 +130,38 @@ fn main() {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = HashMap::new();
-                    args.insert("input", FluentValue::from(i));
-                    args.insert("value", FluentValue::from(collatz(i)));
+                    args.insert("input".to_string(), FluentValue::from(i));
+                    args.insert("value".to_string(), FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    let (value, _) = bundle
-                        .format("response-msg", Some(&args))
-                        .expect("Failed to format a message.");
+                    let mut errors = vec![];
+                    let msg = bundle
+                        .get_message("response-msg")
+                        .expect("Message doesn't exist.");
+                    let pattern = msg.value.expect("Message has no value.");
+                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = HashMap::new();
-                    args.insert("input", FluentValue::from(input.as_str()));
-                    args.insert("reason", FluentValue::from(err.to_string()));
-                    let (value, _) = bundle
-                        .format("input-parse-error-msg", Some(&args))
-                        .expect("Failed to format a message.");
+                    args.insert("input".to_string(), FluentValue::from(input.as_str()));
+                    args.insert("reason".to_string(), FluentValue::from(err.to_string()));
+                    let mut errors = vec![];
+                    let msg = bundle
+                        .get_message("input-parse-error-msg")
+                        .expect("Message doesn't exist.");
+                    let pattern = msg.value.expect("Message has no value.");
+                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
             }
         }
         None => {
-            let (value, _) = bundle
-                .format("missing-arg-error", None)
-                .expect("Failed to format a message.");
+            let mut errors = vec![];
+            let msg = bundle
+                .get_message("missing-arg-error")
+                .expect("Message doesn't exist.");
+            let pattern = msg.value.expect("Message has no value.");
+            let value = bundle.format_pattern(&pattern, None, &mut errors);
             println!("{}", value);
         }
     }

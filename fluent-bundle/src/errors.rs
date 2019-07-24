@@ -16,3 +16,9 @@ impl From<ResolverError> for FluentError {
         FluentError::ResolverError(error)
     }
 }
+
+impl From<ParserError> for FluentError {
+    fn from(error: ParserError) -> Self {
+        FluentError::ParserError(error)
+    }
+}

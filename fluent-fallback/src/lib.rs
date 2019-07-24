@@ -45,14 +45,16 @@ impl<'loc, R> Localization<'loc, R> {
         self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
     }
 
-    pub fn format_value(&mut self, id: &str, args: Option<&HashMap<&str, FluentValue>>) -> String
+    pub fn format_value(&mut self, id: &str, args: Option<&HashMap<String, FluentValue>>) -> String
     where
         R: Borrow<FluentResource>,
     {
         for bundle in &self.bundles {
-            if bundle.has_message(id) {
-                let res = bundle.format(id, args).unwrap();
-                return res.0.to_string();
+            if let Some(msg) = bundle.get_message(id) {
+                if let Some(pattern) = msg.value {
+                    let mut errors = vec![];
+                    return bundle.format_pattern(pattern, args, &mut errors).to_string();
+                }
             }
         }
         id.into()

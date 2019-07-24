@@ -28,7 +28,7 @@ fn main() {
                 }
             }
 
-            FluentValue::None()
+            FluentValue::None
         })
         .expect("Failed to add a function to the bundle.");
 
@@ -39,7 +39,7 @@ fn main() {
                 Some(FluentValue::String(ref string)) => {
                     format!("All your base belong to {}", string).into()
                 }
-                _ => FluentValue::None(),
+                _ => FluentValue::None,
             };
         })
         .expect("Failed to add a function to the bundle.");
@@ -54,18 +54,27 @@ fn main() {
         .add_resource(res3)
         .expect("Failed to add FTL resources to the bundle.");
 
-    let (value, _) = bundle
-        .format("hello-world", None)
-        .expect("Failed to format a message.");
+    let msg = bundle
+        .get_message("hello-world")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "Hey there! \u{2068}I'm a function!\u{2069}");
 
-    let (value, _) = bundle
-        .format("meaning-of-life", None)
-        .expect("Failed to format a message.");
+    let msg = bundle
+        .get_message("meaning-of-life")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "The answer to life, the universe, and everything");
 
-    let (value, _) = bundle
-        .format("all-your-base", None)
-        .expect("Failed to format a message.");
+    let msg = bundle
+        .get_message("all-your-base")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "All your base belong to us");
 }

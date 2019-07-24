@@ -38,20 +38,23 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
-fn get_args(name: &str) -> Option<HashMap<&'static str, FluentValue>> {
+fn get_args(name: &str) -> Option<HashMap<String, FluentValue>> {
     match name {
         "preferences" => {
             let mut prefs_args = HashMap::new();
-            prefs_args.insert("name", FluentValue::from("John"));
-            prefs_args.insert("tabCount", FluentValue::from(5));
-            prefs_args.insert("count", FluentValue::from(3));
-            prefs_args.insert("version", FluentValue::from("65.0"));
-            prefs_args.insert("path", FluentValue::from("/tmp"));
-            prefs_args.insert("num", FluentValue::from(4));
-            prefs_args.insert("email", FluentValue::from("john@doe.com"));
-            prefs_args.insert("value", FluentValue::from(4.5));
-            prefs_args.insert("unit", FluentValue::from("mb"));
-            prefs_args.insert("service-name", FluentValue::from("Mozilla Disk"));
+            prefs_args.insert("name".to_string(), FluentValue::from("John"));
+            prefs_args.insert("tabCount".to_string(), FluentValue::from(5));
+            prefs_args.insert("count".to_string(), FluentValue::from(3));
+            prefs_args.insert("version".to_string(), FluentValue::from("65.0"));
+            prefs_args.insert("path".to_string(), FluentValue::from("/tmp"));
+            prefs_args.insert("num".to_string(), FluentValue::from(4));
+            prefs_args.insert("email".to_string(), FluentValue::from("john@doe.com"));
+            prefs_args.insert("value".to_string(), FluentValue::from(4.5));
+            prefs_args.insert("unit".to_string(), FluentValue::from("mb"));
+            prefs_args.insert(
+                "service-name".to_string(),
+                FluentValue::from("Mozilla Disk"),
+            );
             Some(prefs_args)
         }
         _ => None,
@@ -91,7 +94,14 @@ fn resolver_bench(c: &mut Criterion) {
 
             b.iter(|| {
                 for id in &ids {
-                    let (_msg, errors) = bundle.compound(id, args.as_ref()).expect("Message found");
+                    let msg = bundle.get_message(id).expect("Message found");
+                    let mut errors = vec![];
+                    if let Some(value) = msg.value {
+                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                    }
+                    for (_, value) in msg.attributes {
+                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                    }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }
             })

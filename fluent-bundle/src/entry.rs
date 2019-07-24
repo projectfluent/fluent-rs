@@ -10,7 +10,7 @@ use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
 pub type FluentFunction = Box<
-    dyn for<'a> Fn(&[FluentValue<'a>], &HashMap<&str, FluentValue<'a>>) -> FluentValue<'a>
+    dyn for<'a> Fn(&[FluentValue<'a>], &HashMap<String, FluentValue<'a>>) -> FluentValue<'a>
         + Send
         + Sync,
 >;
@@ -22,13 +22,13 @@ pub enum Entry {
 }
 
 pub trait GetEntry {
-    fn get_message(&self, id: &str) -> Option<&ast::Message>;
-    fn get_term(&self, id: &str) -> Option<&ast::Term>;
-    fn get_function(&self, id: &str) -> Option<&FluentFunction>;
+    fn get_entry_message(&self, id: &str) -> Option<&ast::Message>;
+    fn get_entry_term(&self, id: &str) -> Option<&ast::Term>;
+    fn get_entry_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
 impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
-    fn get_message(&self, id: &str) -> Option<&ast::Message> {
+    fn get_entry_message(&self, id: &str) -> Option<&ast::Message> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Message(pos) => {
                 let res = self.resources.get(pos[0])?.borrow();
@@ -44,7 +44,7 @@ impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
         })
     }
 
-    fn get_term(&self, id: &str) -> Option<&ast::Term> {
+    fn get_entry_term(&self, id: &str) -> Option<&ast::Term> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Term(pos) => {
                 let res = self.resources.get(pos[0])?.borrow();
@@ -60,7 +60,7 @@ impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
         })
     }
 
-    fn get_function(&self, id: &str) -> Option<&FluentFunction> {
+    fn get_entry_function(&self, id: &str) -> Option<&FluentFunction> {
         self.entries.get(id).and_then(|entry| match entry {
             Entry::Function(function) => Some(function),
             _ => None,

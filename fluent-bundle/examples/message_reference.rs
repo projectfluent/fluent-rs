@@ -15,13 +15,19 @@ bazbar = { baz } Bar
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
 
-    match bundle.format("foobar", None) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle
+        .get_message("foobar")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    println!("{}", value);
 
-    match bundle.format("bazbar", None) {
-        Some((value, _)) => println!("{}", value),
-        _ => println!("None"),
-    }
+    let msg = bundle
+        .get_message("bazbar")
+        .expect("Message doesn't exist.");
+    let mut errors = vec![];
+    let pattern = msg.value.expect("Message has no value.");
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    println!("{}", value);
 }
