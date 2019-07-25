@@ -348,19 +348,19 @@ impl<R> FluentBundle<R> {
         &'bundle self,
         pattern: &'bundle ast::Pattern,
         args: Option<&'bundle FluentArgs>,
-        errors: &mut Vec<FluentError>,
-    ) -> Cow<'bundle, str>
+    ) -> (Cow<'bundle, str>, Vec<FluentError>)
     where
         R: Borrow<FluentResource>,
     {
         let mut scope = Scope::new(self, args);
         let result = pattern.resolve(&mut scope).to_string();
 
-        for err in scope.errors {
-            errors.push(err.into());
-        }
-
-        result
+        let errors = if scope.errors.is_empty() {
+            vec![]
+        } else {
+            scope.errors.into_iter().map(|e| e.into()).collect()
+        };
+        (result, errors)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See

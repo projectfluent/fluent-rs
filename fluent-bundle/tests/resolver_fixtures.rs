@@ -242,7 +242,6 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
         } else {
             panic!();
         };
-        let mut errors = vec![];
 
         if let Some(expected_missing) = assert.missing {
             let missing = if let Some(ref attr) = assert.attribute {
@@ -292,7 +291,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                         })
                         .collect()
                 });
-                let value = bundle.format_pattern(&val, args.as_ref(), &mut errors);
+                let (value, errors) = bundle.format_pattern(&val, args.as_ref());
                 assert_eq!(
                     &value,
                     expected_value,

@@ -23,9 +23,8 @@ hello-world2 = Hello { $name ->
     let msg = bundle
         .get_message("hello-world")
         .expect("Message doesn't exist.");
-    let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    let (value, _) = bundle.format_pattern(&pattern, None);
     println!("{}", value);
 
     let mut args = FluentArgs::new();
@@ -34,8 +33,7 @@ hello-world2 = Hello { $name ->
     let msg = bundle
         .get_message("hello-world2")
         .expect("Message doesn't exist.");
-    let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    let (value, _) = bundle.format_pattern(&pattern, Some(&args));
     println!("{}", value);
 }

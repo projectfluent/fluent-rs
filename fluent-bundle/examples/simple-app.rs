@@ -133,35 +133,32 @@ fn main() {
                     args.insert("input", FluentValue::from(i));
                     args.insert("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    let mut errors = vec![];
                     let msg = bundle
                         .get_message("response-msg")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value.expect("Message has no value.");
-                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+                    let (value, _) = bundle.format_pattern(&pattern, Some(&args));
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
                     args.insert("input", FluentValue::from(input.as_str()));
                     args.insert("reason", FluentValue::from(err.to_string()));
-                    let mut errors = vec![];
                     let msg = bundle
                         .get_message("input-parse-error")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value.expect("Message has no value.");
-                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+                    let (value, _) = bundle.format_pattern(&pattern, Some(&args));
                     println!("{}", value);
                 }
             }
         }
         None => {
-            let mut errors = vec![];
             let msg = bundle
                 .get_message("missing-arg-error")
                 .expect("Message doesn't exist.");
             let pattern = msg.value.expect("Message has no value.");
-            let value = bundle.format_pattern(&pattern, None, &mut errors);
+            let (value, _) = bundle.format_pattern(&pattern, None);
             println!("{}", value);
         }
     }
