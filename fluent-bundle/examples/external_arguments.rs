@@ -1,5 +1,7 @@
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use std::collections::HashMap;
+use std::convert::TryFrom;
+use unic_langid::LanguageIdentifier;
 
 fn main() {
     let ftl_string = String::from(
@@ -14,7 +16,8 @@ unread-emails =
     ",
     );
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
-    let mut bundle = FluentBundle::new(&["en"]);
+    let langid_en = LanguageIdentifier::try_from("en").expect("Parsing failed.");
+    let mut bundle = FluentBundle::new(&[langid_en]);
     bundle
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");

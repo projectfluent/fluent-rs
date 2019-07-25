@@ -7,10 +7,13 @@
 use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
+use std::convert::TryFrom;
+use std::default::Default;
 
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
+use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
 use crate::entry::GetEntry;
@@ -33,12 +36,15 @@ pub struct Message<'m> {
 /// ```
 /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 /// use std::collections::HashMap;
+/// use std::convert::TryFrom;
+/// use unic_langid::LanguageIdentifier;
 ///
 /// let ftl_string = String::from("intro = Welcome, { $name }.");
 /// let resource = FluentResource::try_new(ftl_string)
 ///     .expect("Could not parse an FTL string.");
 ///
-/// let mut bundle = FluentBundle::new(&["en-US"]);
+/// let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+/// let mut bundle = FluentBundle::new(&[langid_en]);
 /// bundle.add_resource(&resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
@@ -86,7 +92,7 @@ pub struct Message<'m> {
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Cow<str>`]: http://doc.rust-lang.org/std/borrow/enum.Cow.html
 pub struct FluentBundle<R> {
-    pub locales: Vec<String>,
+    pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry>,
     pub(crate) plural_rules: IntlPluralRules,
@@ -103,27 +109,33 @@ impl<R> FluentBundle<R> {
     /// ```
     /// use fluent_bundle::FluentBundle;
     /// use fluent_bundle::FluentResource;
+    /// use std::convert::TryFrom;
+    /// use unic_langid::LanguageIdentifier;
     ///
-    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(&["en-US"]);
+    /// let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_en]);
     /// ```
     ///
     /// # Errors
     ///
     /// This will panic if no formatters can be found for the locales.
-    pub fn new<S: ToString>(locales: &[S]) -> Self {
+    pub fn new<'a, L: 'a + Into<LanguageIdentifier> + PartialEq + Clone>(
+        locales: impl IntoIterator<Item = &'a L>,
+    ) -> Self {
         let locales = locales
-            .iter()
-            .map(std::string::ToString::to_string)
+            .into_iter()
+            .map(|s| s.clone().into())
             .collect::<Vec<_>>();
+        let default_langid = LanguageIdentifier::try_from("en").expect("Parsing failed.");
         let pr_locale = negotiate_languages(
             &locales,
-            IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
-            Some("en"),
-            &NegotiationStrategy::Lookup,
+            &IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
+            Some(&default_langid),
+            NegotiationStrategy::Lookup,
         )[0]
-        .to_owned();
+        .clone();
 
-        let pr = IntlPluralRules::create(&pr_locale, PluralRuleType::CARDINAL)
+        let pr = IntlPluralRules::create(pr_locale, PluralRuleType::CARDINAL)
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
@@ -149,6 +161,8 @@ impl<R> FluentBundle<R> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use std::convert::TryFrom;
+    /// use unic_langid::LanguageIdentifier;
     ///
     /// let ftl_string = String::from("
     /// hello = Hi!
@@ -156,7 +170,8 @@ impl<R> FluentBundle<R> {
     /// ");
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
     /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -230,11 +245,14 @@ impl<R> FluentBundle<R> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use std::convert::TryFrom;
+    /// use unic_langid::LanguageIdentifier;
     ///
     /// let ftl_string = String::from("hello = Hi!");
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Failed to parse an FTL string.");
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -262,7 +280,7 @@ impl<R> FluentBundle<R> {
         for attr in message.attributes.iter() {
             attributes.insert(attr.id.name, &attr.value);
         }
-        return Some(Message { value, attributes });
+        Some(Message { value, attributes })
     }
 
     pub fn format_pattern<'bundle>(
@@ -295,11 +313,14 @@ impl<R> FluentBundle<R> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
+    /// use std::convert::TryFrom;
+    /// use unic_langid::LanguageIdentifier;
     ///
     /// let ftl_string = String::from("length = { STRLEN(\"12345\") }");
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
-    /// let mut bundle = FluentBundle::new(&["en-US"]);
+    /// let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
@@ -332,6 +353,23 @@ impl<R> FluentBundle<R> {
                 kind: "function",
                 id: id.to_owned(),
             }),
+        }
+    }
+}
+
+impl<R> Default for FluentBundle<R> {
+    fn default() -> Self {
+        let pr_langid = LanguageIdentifier::try_from("en").expect("Parsing failed.");
+        let langid = LanguageIdentifier::new();
+
+        let pr = IntlPluralRules::create(pr_langid, PluralRuleType::CARDINAL)
+            .expect("Failed to initialize PluralRules.");
+        FluentBundle {
+            plural_rules: pr,
+            locales: vec![langid],
+            resources: vec![],
+            entries: Default::default(),
+            use_isolating: false,
         }
     }
 }

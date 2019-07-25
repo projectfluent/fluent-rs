@@ -1,6 +1,7 @@
 mod helpers;
 
 use std::collections::HashMap;
+use std::convert::TryFrom;
 use std::fs;
 use std::iter;
 use std::path::Path;
@@ -11,6 +12,7 @@ use fluent_bundle::resolve::ResolverError;
 use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
+use unic_langid::LanguageIdentifier;
 
 type FluentBundle = FluentBundleGeneric<FluentResource>;
 
@@ -86,12 +88,17 @@ fn create_bundle(
 ) -> FluentBundle {
     let mut errors = vec![];
 
-    let locales = b
+    let locales: Vec<LanguageIdentifier> = b
         .and_then(|b| b.locales.as_ref())
         .or_else(|| {
             defaults
                 .as_ref()
                 .and_then(|defaults| defaults.bundle.locales.as_ref())
+        })
+        .map(|locs| {
+            locs.into_iter()
+                .map(|s| LanguageIdentifier::try_from(s).expect("Parsing failed."))
+                .collect()
         })
         .expect("Failed to calculate locales.");
     let mut bundle = FluentBundle::new(&locales);

@@ -16,7 +16,7 @@ hello-world2 = Hello { $name ->
     ",
     );
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
-    let mut bundle = FluentBundle::new(&["x-testing"]);
+    let mut bundle = FluentBundle::default();
     bundle
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");

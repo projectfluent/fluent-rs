@@ -13,6 +13,8 @@
 //! ```
 //! use fluent_bundle::{FluentBundle, FluentValue, FluentResource};
 //! use std::collections::HashMap;
+//! use std::convert::TryFrom;
+//! use unic_langid::LanguageIdentifier;
 //!
 //! let ftl_string = String::from("
 //! hello-world = Hello, world!
@@ -21,7 +23,8 @@
 //! let res = FluentResource::try_new(ftl_string)
 //!     .expect("Could not parse an FTL string.");
 //!
-//! let mut bundle = FluentBundle::new(&["en-US"]);
+//! let langid_en = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+//! let mut bundle = FluentBundle::new(&[langid_en]);
 //!
 //! bundle
 //!     .add_resource(res)

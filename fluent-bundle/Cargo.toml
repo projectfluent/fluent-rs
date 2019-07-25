@@ -18,13 +18,14 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-locale = "^0.4.1"
+fluent-locale = "^0.6.0"
 fluent-syntax = "^0.9"
 failure = "^0.1"
 failure_derive = "^0.1"
-intl_pluralrules = "^1.0"
+intl_pluralrules = "^1.1.0"
 rental = "^0.5.4"
-smallvec = "0.6.10"
+smallvec = "^0.6.10"
+unic-langid = "^0.3.0"
 
 [dev-dependencies]
 criterion = "^0.2"

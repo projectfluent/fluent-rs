@@ -20,12 +20,14 @@
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
+use std::convert::TryFrom;
 use std::env;
 use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use std::str::FromStr;
+use unic_langid::LanguageIdentifier;
 
 /// We need a generic file read helper function to
 /// read the localization resource file.
@@ -45,7 +47,7 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 ///
 /// It is expected that every directory inside it
 /// has a name that is a valid BCP47 language tag.
-fn get_available_locales() -> Result<Vec<String>, io::Error> {
+fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
     let mut locales = vec![];
 
     let res_dir = fs::read_dir("./fluent-bundle/examples/resources/")?;
@@ -55,34 +57,14 @@ fn get_available_locales() -> Result<Vec<String>, io::Error> {
             if path.is_dir() {
                 if let Some(name) = path.file_name() {
                     if let Some(name) = name.to_str() {
-                        locales.push(String::from(name));
+                        let langid = LanguageIdentifier::try_from(name).expect("Parsing failed.");
+                        locales.push(langid);
                     }
                 }
             }
         }
     }
     return Ok(locales);
-}
-
-/// This function negotiates the locales between available
-/// and requested by the user.
-///
-/// It uses `fluent-locale` library but one could
-/// use any other that will resolve the list of
-/// available locales based on the list of
-/// requested locales.
-fn get_app_locales(requested: &[&str]) -> Result<Vec<String>, io::Error> {
-    let available = get_available_locales()?;
-    let resolved_locales = negotiate_languages(
-        requested,
-        &available,
-        Some("en-US"),
-        &NegotiationStrategy::Filtering,
-    );
-    return Ok(resolved_locales
-        .into_iter()
-        .map(|s| String::from(s))
-        .collect());
 }
 
 static L10N_RESOURCES: &[&str] = &["simple.ftl"];
@@ -94,24 +76,34 @@ fn main() {
     // 3. If the argument length is more than 1,
     //    take the second argument as a comma-separated
     //    list of requested locales.
-    //
-    //    Otherwise, take ["en-US"] as the default.
-    let requested = args
-        .get(2)
-        .map_or(vec!["en-US"], |arg| arg.split(",").collect());
+    let requested = args.get(2).map_or(vec![], |arg| {
+        arg.split(",")
+            .map(|s| LanguageIdentifier::try_from(s).expect("Parsing locale failed."))
+            .collect()
+    });
 
     // 4. Negotiate it against the available ones
-    let locales = get_app_locales(&requested).expect("Failed to retrieve available locales");
+    let default_locale = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    let available = get_available_locales().expect("Retrieving available locales failed.");
+    let resolved_locales = negotiate_languages(
+        &requested,
+        &available,
+        Some(&default_locale),
+        NegotiationStrategy::Filtering,
+    );
+    let current_locale = resolved_locales
+        .get(0)
+        .expect("At least one locale should match.");
 
     // 5. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut bundle = FluentBundle::new(&locales);
+    let mut bundle = FluentBundle::new(resolved_locales.clone());
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
         let full_path = format!(
             "./fluent-bundle/examples/resources/{locale}/{path}",
-            locale = locales[0],
+            locale = current_locale,
             path = path
         );
         let source = read_file(&full_path).expect("Failed to read file.");

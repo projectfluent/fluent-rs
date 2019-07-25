@@ -53,7 +53,9 @@ impl<'loc, R> Localization<'loc, R> {
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
                     let mut errors = vec![];
-                    return bundle.format_pattern(pattern, args, &mut errors).to_string();
+                    return bundle
+                        .format_pattern(pattern, args, &mut errors)
+                        .to_string();
                 }
             }
         }

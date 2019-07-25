@@ -2,8 +2,10 @@ use elsa::FrozenMap;
 use fluent_bundle::resource::FluentResource;
 use fluent_bundle::FluentBundle;
 use fluent_fallback::Localization;
+use unic_langid::LanguageIdentifier;
 
 use std::cell::RefCell;
+use std::convert::TryFrom;
 use std::fs;
 use std::io;
 use std::iter;
@@ -18,7 +20,10 @@ fn localization_format() {
 
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
-    let locales = vec!["pl", "en-US"];
+    let locales = vec![
+        LanguageIdentifier::try_from("pl").expect("Parsing failed."),
+        LanguageIdentifier::try_from("en-US").expect("Parsing failed."),
+    ];
 
     let generate_messages = |res_ids: &[String]| {
         let mut locales = locales.iter();
@@ -27,8 +32,8 @@ fn localization_format() {
 
         iter::from_fn(move || {
             locales.next().map(|locale| {
-                let mut bundle = FluentBundle::new(&[locale]);
-                let res_path = res_path_scheme.replace("{locale}", locale);
+                let mut bundle = FluentBundle::new(vec![locale]);
+                let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
 
                 for res_id in &res_ids {
                     let path = res_path.replace("{res_id}", res_id);
@@ -63,14 +68,16 @@ fn localization_on_change() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
-    let available_locales = RefCell::new(vec![String::from("en-US")]);
+    let available_locales = RefCell::new(vec![
+        LanguageIdentifier::try_from("en-US").expect("Parsing failed.")
+    ]);
 
     let generate_messages = |res_ids: &[String]| {
         let mut bundles = vec![];
 
         for locale in available_locales.borrow().iter() {
-            let mut bundle = FluentBundle::new(&[locale]);
-            let res_path = res_path_scheme.replace("{locale}", locale);
+            let mut bundle = FluentBundle::new(vec![locale]);
+            let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
             for res_id in res_ids {
                 let path = res_path.replace("{res_id}", res_id);
                 let res = if let Some(res) = resources.get(&path) {
@@ -93,7 +100,10 @@ fn localization_on_change() {
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [en]");
 
-    available_locales.borrow_mut().insert(0, String::from("pl"));
+    available_locales.borrow_mut().insert(
+        0,
+        LanguageIdentifier::try_from("pl").expect("Parsing failed."),
+    );
 
     loc.on_change();
 
