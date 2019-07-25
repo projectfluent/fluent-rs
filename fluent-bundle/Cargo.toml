@@ -22,7 +22,7 @@ fluent-locale = "^0.6.0"
 fluent-syntax = "^0.9"
 failure = "^0.1"
 failure_derive = "^0.1"
-intl_pluralrules = "^1.1.0"
+intl_pluralrules = { git = "https://github.com/unclenachoduh/pluralrules", rev = "1c18edd5c5e1e380815f587bf57b3c81e394fee7" }
 rental = "^0.5.4"
 smallvec = "^0.6.10"
 unic-langid = "^0.3.0"
