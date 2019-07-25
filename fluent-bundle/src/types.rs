@@ -111,10 +111,10 @@ impl<'source> FluentValue<'source> {
         }
     }
 
-    pub fn matches<R: Borrow<FluentResource>>(
+    pub fn matches<R: Borrow<FluentResource>, W: std::fmt::Write>(
         &self,
         other: &FluentValue,
-        scope: &Scope<R>,
+        scope: &Scope<R, W>,
     ) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,

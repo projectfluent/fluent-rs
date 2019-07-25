@@ -89,15 +89,23 @@ fn resolver_bench(c: &mut Criterion) {
             add_functions(name, &mut bundle);
             let args = get_args(name);
 
+            let mut s = String::new();
+
             b.iter(|| {
                 for id in &ids {
                     let msg = bundle.get_message(id).expect("Message found");
                     let mut errors = vec![];
                     if let Some(value) = msg.value {
-                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                        s.clear();
+                        bundle
+                            .format_pattern_writer(&mut s, value, args.as_ref(), &mut errors)
+                            .unwrap();
                     }
                     for (_, value) in msg.attributes {
-                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                        s.clear();
+                        bundle
+                            .format_pattern_writer(&mut s, value, args.as_ref(), &mut errors)
+                            .unwrap();
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }

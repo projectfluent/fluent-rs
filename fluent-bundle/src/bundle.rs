@@ -8,6 +8,7 @@ use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
+use std::fmt::Write;
 
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
@@ -353,14 +354,30 @@ impl<R> FluentBundle<R> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).to_string();
+        let mut result = String::new();
+        self.format_pattern_writer(&mut result, pattern, args, errors)
+            .unwrap();
+        Cow::from(result)
+    }
+
+    pub fn format_pattern_writer<'bundle, W: Write>(
+        &'bundle self,
+        writer: &mut W,
+        pattern: &'bundle ast::Pattern,
+        args: Option<&'bundle FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> Result<(), std::fmt::Error>
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut scope = Scope::new(self, args, writer);
+        pattern.fmt(&mut scope)?;
 
         for err in scope.errors {
             errors.push(err.into());
         }
 
-        result
+        Ok(())
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
