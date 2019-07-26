@@ -20,7 +20,6 @@
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use std::collections::HashMap;
-use std::convert::TryFrom;
 use std::env;
 use std::fs;
 use std::fs::File;
@@ -57,7 +56,7 @@ fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
             if path.is_dir() {
                 if let Some(name) = path.file_name() {
                     if let Some(name) = name.to_str() {
-                        let langid = LanguageIdentifier::try_from(name).expect("Parsing failed.");
+                        let langid: LanguageIdentifier = name.parse().expect("Parsing failed.");
                         locales.push(langid);
                     }
                 }
@@ -78,12 +77,12 @@ fn main() {
     //    list of requested locales.
     let requested = args.get(2).map_or(vec![], |arg| {
         arg.split(",")
-            .map(|s| LanguageIdentifier::try_from(s).expect("Parsing locale failed."))
+            .map(|s| -> LanguageIdentifier { s.parse().expect("Parsing locale failed.") })
             .collect()
     });
 
     // 4. Negotiate it against the available ones
-    let default_locale = LanguageIdentifier::try_from("en-US").expect("Parsing failed.");
+    let default_locale: LanguageIdentifier = "en-US".parse().expect("Parsing failed.");
     let available = get_available_locales().expect("Retrieving available locales failed.");
     let resolved_locales = negotiate_languages(
         &requested,

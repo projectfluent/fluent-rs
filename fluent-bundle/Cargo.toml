@@ -18,20 +18,20 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-locale = "^0.6.0"
-fluent-syntax = "^0.9"
-failure = "^0.1"
-failure_derive = "^0.1"
-intl_pluralrules = { git = "https://github.com/unclenachoduh/pluralrules", rev = "1c18edd5c5e1e380815f587bf57b3c81e394fee7" }
-rental = "^0.5.4"
-smallvec = "^0.6.10"
-unic-langid = "^0.3.0"
+fluent-locale = { path = "../../fluent-locale-rs" }
+fluent-syntax = "0.9"
+failure = "0.1"
+failure_derive = "0.1"
+intl_pluralrules = { git = "https://github.com/zbraniecki/pluralrules", branch = "master" }
+rental = "0.5.4"
+smallvec = "0.6.10"
+unic-langid = { git = "https://github.com/zbraniecki/unic-locale", branch = "master" }
 
 [dev-dependencies]
-criterion = "^0.2"
-serde = { version = "^1.0", features = ["derive"] }
-serde_yaml = "^0.8"
-rand = "^0.7.0"
+criterion = "0.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_yaml = "0.8"
+rand = "0.7.0"
 
 [[bench]]
 name = "resolver"

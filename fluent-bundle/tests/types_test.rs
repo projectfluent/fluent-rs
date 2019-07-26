@@ -2,7 +2,6 @@ use fluent_bundle::resolve::Scope;
 use fluent_bundle::types::FluentValue;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
-use std::convert::TryFrom;
 use unic_langid::LanguageIdentifier;
 
 #[test]
@@ -15,7 +14,7 @@ fn fluent_value_number() {
 fn fluent_value_matches() {
     // We'll use `ars` locale since it happens to have all
     // plural rules categories.
-    let langid_ars = LanguageIdentifier::try_from("ars").expect("Parsing failed.");
+    let langid_ars: LanguageIdentifier = "ars".parse().expect("Parsing failed.");
     let bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_ars]);
     let scope = Scope::new(&bundle, None);
 

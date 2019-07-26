@@ -23,7 +23,6 @@ Usage
 
 ```rust
 use fluent_bundle::{FluentBundle, FluentResource};
-use std::convert::TryFrom;
 use unic_langid::LanguageIdentifier;
 
 fn main() {
@@ -31,7 +30,7 @@ fn main() {
     let res = FluentResource::try_new(ftl_string)
         .expect("Could not parse an FTL string.");
 
-    let langid_en = LanguageIdentifier::try_from("en").expect("Parsing failed.");
+    let langid_en = "en".parse().expect("Parsing failed.");
     let mut bundle = FluentBundle::new(&[langid_en]);
 
     bundle.add_resource(&res)

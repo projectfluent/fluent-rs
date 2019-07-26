@@ -5,7 +5,6 @@ use fluent_fallback::Localization;
 use unic_langid::LanguageIdentifier;
 
 use std::cell::RefCell;
-use std::convert::TryFrom;
 use std::fs;
 use std::io;
 use std::iter;
@@ -20,9 +19,9 @@ fn localization_format() {
 
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
-    let locales = vec![
-        LanguageIdentifier::try_from("pl").expect("Parsing failed."),
-        LanguageIdentifier::try_from("en-US").expect("Parsing failed."),
+    let locales: Vec<LanguageIdentifier> = vec![
+        "pl".parse().expect("Parsing failed."),
+        "en-US".parse().expect("Parsing failed."),
     ];
 
     let generate_messages = |res_ids: &[String]| {
@@ -68,9 +67,8 @@ fn localization_on_change() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
-    let available_locales = RefCell::new(vec![
-        LanguageIdentifier::try_from("en-US").expect("Parsing failed.")
-    ]);
+    let available_locales: RefCell<Vec<LanguageIdentifier>> =
+        RefCell::new(vec!["en-US".parse().expect("Parsing failed.")]);
 
     let generate_messages = |res_ids: &[String]| {
         let mut bundles = vec![];
@@ -100,10 +98,9 @@ fn localization_on_change() {
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [en]");
 
-    available_locales.borrow_mut().insert(
-        0,
-        LanguageIdentifier::try_from("pl").expect("Parsing failed."),
-    );
+    available_locales
+        .borrow_mut()
+        .insert(0, "pl".parse().expect("Parsing failed."));
 
     loc.on_change();
 

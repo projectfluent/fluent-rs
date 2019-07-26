@@ -1,7 +1,6 @@
 mod helpers;
 
 use std::collections::HashMap;
-use std::convert::TryFrom;
 use std::fs;
 use std::iter;
 use std::path::Path;
@@ -97,7 +96,7 @@ fn create_bundle(
         })
         .map(|locs| {
             locs.into_iter()
-                .map(|s| LanguageIdentifier::try_from(s).expect("Parsing failed."))
+                .map(|s| s.parse().expect("Parsing failed."))
                 .collect()
         })
         .expect("Failed to calculate locales.");
