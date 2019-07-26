@@ -22,7 +22,7 @@ use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
 #[derive(Debug, PartialEq)]
-pub struct Message<'m> {
+pub struct FluentMessage<'m> {
     pub value: Option<&'m ast::Pattern<'m>>,
     pub attributes: HashMap<&'m str, &'m ast::Pattern<'m>>,
 }
@@ -65,7 +65,7 @@ pub struct Message<'m> {
 /// Next, call [`add_resource`] one or more times, supplying translations in the FTL syntax. The
 /// `FluentBundle` instance is now ready to be used for localization.
 ///
-/// To format a translation, call [`get_message`] to retrieve a [`Message`],
+/// To format a translation, call [`get_message`] to retrieve a [`FluentMessage`],
 /// and then call [`format_pattern`] on the message value or attribute in order to
 /// retrieve the translated string.
 ///
@@ -84,7 +84,7 @@ pub struct Message<'m> {
 ///
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`FluentBundle::new`]: ./struct.FluentBundle.html#method.new
-/// [`Message`]: ./struct.Message.html
+/// [`FluentMessage`]: ./struct.FluentMessage.html
 /// [`get_message`]: ./struct.FluentBundle.html#method.get_message
 /// [`format_pattern`]: ./struct.FluentBundle.html#method.format_pattern
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
@@ -260,7 +260,7 @@ impl<R> FluentBundle<R> {
         self.get_entry_message(id).is_some()
     }
 
-    pub fn get_message(&self, id: &str) -> Option<Message>
+    pub fn get_message(&self, id: &str) -> Option<FluentMessage>
     where
         R: Borrow<FluentResource>,
     {
@@ -275,7 +275,7 @@ impl<R> FluentBundle<R> {
         for attr in message.attributes.iter() {
             attributes.insert(attr.id.name, &attr.value);
         }
-        Some(Message { value, attributes })
+        Some(FluentMessage { value, attributes })
     }
 
     pub fn format_pattern<'bundle>(
