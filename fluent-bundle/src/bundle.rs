@@ -12,8 +12,8 @@ use std::default::Default;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
-use unic_langid::LanguageIdentifier;
 use unic_langid::langid;
+use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
 use crate::entry::GetEntry;

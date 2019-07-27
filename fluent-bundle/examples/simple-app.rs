@@ -25,6 +25,7 @@ use std::fs;
 use std::fs::File;
 use std::io;
 use std::io::prelude::*;
+use std::path::Path;
 use std::str::FromStr;
 use unic_langid::{langid, LanguageIdentifier};
 
@@ -33,7 +34,7 @@ use unic_langid::{langid, LanguageIdentifier};
 ///
 /// The resource files are stored in
 /// `./examples/resources/{locale}` directory.
-fn read_file(path: &str) -> Result<String, io::Error> {
+fn read_file(path: &Path) -> Result<String, io::Error> {
     let mut f = File::open(path)?;
     let mut s = String::new();
     f.read_to_string(&mut s)?;
@@ -49,14 +50,17 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
     let mut locales = vec![];
 
-    let res_dir = fs::read_dir("./fluent-bundle/examples/resources/")?;
+    let mut dir = env::current_dir()?;
+    dir.push("examples");
+    dir.push("resources");
+    let res_dir = fs::read_dir(dir)?;
     for entry in res_dir {
         if let Ok(entry) = entry {
             let path = entry.path();
             if path.is_dir() {
                 if let Some(name) = path.file_name() {
                     if let Some(name) = name.to_str() {
-                        let langid: LanguageIdentifier = name.parse().expect("Parsing failed.");
+                        let langid = name.parse().expect("Parsing failed.");
                         locales.push(langid);
                     }
                 }
@@ -100,11 +104,11 @@ fn main() {
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
-        let full_path = format!(
-            "./fluent-bundle/examples/resources/{locale}/{path}",
-            locale = current_locale,
-            path = path
-        );
+        let mut full_path = env::current_dir().expect("Failed to retireve current dir.");
+        full_path.push("examples");
+        full_path.push("resources");
+        full_path.push(current_locale.to_string());
+        full_path.push(path);
         let source = read_file(&full_path).expect("Failed to read file.");
         let resource = FluentResource::try_new(source).expect("Could not parse an FTL string.");
         bundle
