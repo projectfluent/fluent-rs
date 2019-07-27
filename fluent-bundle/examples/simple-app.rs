@@ -51,6 +51,9 @@ fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
     let mut locales = vec![];
 
     let mut dir = env::current_dir()?;
+    if dir.to_string_lossy().ends_with("fluent-rs") {
+        dir.push("fluent-bundle");
+    }
     dir.push("examples");
     dir.push("resources");
     let res_dir = fs::read_dir(dir)?;
@@ -105,6 +108,9 @@ fn main() {
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
         let mut full_path = env::current_dir().expect("Failed to retireve current dir.");
+        if full_path.to_string_lossy().ends_with("fluent-rs") {
+            full_path.push("fluent-bundle");
+        }
         full_path.push("examples");
         full_path.push("resources");
         full_path.push(current_locale.to_string());
