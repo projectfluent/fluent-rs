@@ -23,14 +23,14 @@ Usage
 
 ```rust
 use fluent_bundle::{FluentBundle, FluentResource};
-use unic_langid::LanguageIdentifier;
+use unic_langid::langid;
 
 fn main() {
     let ftl_string = "hello-world = Hello, world!".to_owned();
     let res = FluentResource::try_new(ftl_string)
         .expect("Could not parse an FTL string.");
 
-    let langid_en = "en".parse().expect("Parsing failed.");
+    let langid_en = langid!("en");
     let mut bundle = FluentBundle::new(&[langid_en]);
 
     bundle.add_resource(&res)

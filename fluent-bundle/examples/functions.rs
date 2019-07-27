@@ -1,5 +1,5 @@
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-use unic_langid::LanguageIdentifier;
+use unic_langid::langid;
 
 fn main() {
     // We define the resources here so that they outlive
@@ -11,7 +11,7 @@ fn main() {
     let res2 = FluentResource::try_new(ftl_string2).expect("Could not parse an FTL string.");
     let res3 = FluentResource::try_new(ftl_string3).expect("Could not parse an FTL string.");
 
-    let langid_en_us: LanguageIdentifier = "en-US".parse().expect("Parsing failed.");
+    let langid_en_us = langid!("en-US");
     let mut bundle = FluentBundle::new(&[langid_en_us]);
 
     // Test for a simple function that returns a string

@@ -2,7 +2,7 @@ use fluent_bundle::resolve::Scope;
 use fluent_bundle::types::FluentValue;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
-use unic_langid::LanguageIdentifier;
+use unic_langid::langid;
 
 #[test]
 fn fluent_value_number() {
@@ -14,7 +14,7 @@ fn fluent_value_number() {
 fn fluent_value_matches() {
     // We'll use `ars` locale since it happens to have all
     // plural rules categories.
-    let langid_ars: LanguageIdentifier = "ars".parse().expect("Parsing failed.");
+    let langid_ars  = langid!("ars");
     let bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_ars]);
     let scope = Scope::new(&bundle, None);
 

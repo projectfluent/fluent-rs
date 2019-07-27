@@ -26,7 +26,7 @@ use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use std::str::FromStr;
-use unic_langid::LanguageIdentifier;
+use unic_langid::{langid, LanguageIdentifier};
 
 /// We need a generic file read helper function to
 /// read the localization resource file.
@@ -82,7 +82,7 @@ fn main() {
     });
 
     // 4. Negotiate it against the available ones
-    let default_locale: LanguageIdentifier = "en-US".parse().expect("Parsing failed.");
+    let default_locale = langid!("en-US");
     let available = get_available_locales().expect("Retrieving available locales failed.");
     let resolved_locales = negotiate_languages(
         &requested,
