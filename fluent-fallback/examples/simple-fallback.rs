@@ -18,10 +18,9 @@
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
 use elsa::FrozenMap;
-use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_fallback::Localization;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
-use std::collections::HashMap;
 use std::env;
 use std::fs;
 use std::fs::File;
@@ -139,17 +138,17 @@ fn main() {
                 Ok(i) => {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
-                    let mut args = HashMap::new();
-                    args.insert("input".to_string(), FluentValue::from(i));
-                    args.insert("value".to_string(), FluentValue::from(collatz(i)));
+                    let mut args = FluentArgs::new();
+                    args.insert("input", FluentValue::from(i));
+                    args.insert("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
                     let value = loc.format_value("response-msg", Some(&args));
                     println!("{}", value);
                 }
                 Err(err) => {
-                    let mut args = HashMap::new();
-                    args.insert("input".to_string(), FluentValue::from(input.as_str()));
-                    args.insert("reason".to_string(), FluentValue::from(err.to_string()));
+                    let mut args = FluentArgs::new();
+                    args.insert("input", FluentValue::from(input.as_str()));
+                    args.insert("reason", FluentValue::from(err.to_string()));
                     let value = loc.format_value("input-parse-error-msg", Some(&args));
                     println!("{}", value);
                 }

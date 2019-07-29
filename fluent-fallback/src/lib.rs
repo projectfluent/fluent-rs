@@ -1,9 +1,7 @@
 use std::borrow::Borrow;
-use std::collections::HashMap;
 
-use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
-use fluent_bundle::FluentValue;
+use fluent_bundle::{FluentArgs, FluentBundle};
 
 use reiterate::Reiterate;
 
@@ -45,7 +43,7 @@ impl<'loc, R> Localization<'loc, R> {
         self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
     }
 
-    pub fn format_value(&mut self, id: &str, args: Option<&HashMap<String, FluentValue>>) -> String
+    pub fn format_value(&mut self, id: &str, args: Option<&FluentArgs>) -> String
     where
         R: Borrow<FluentResource>,
     {

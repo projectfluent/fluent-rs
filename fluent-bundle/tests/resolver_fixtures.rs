@@ -6,6 +6,7 @@ use std::iter;
 use std::path::Path;
 use std::str::FromStr;
 
+use fluent_bundle::bundle::FluentArgs;
 use fluent_bundle::errors::FluentError;
 use fluent_bundle::resolve::ResolverError;
 use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
@@ -264,14 +265,14 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     ))
                 };
 
-                let args: Option<HashMap<String, FluentValue>> = assert.args.as_ref().map(|args| {
+                let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
                     args.iter()
                         .map(|(k, v)| {
                             let val = match f64::from_str(v) {
                                 Ok(_) => FluentValue::Number(v.into()),
                                 Err(_) => FluentValue::String(v.into()),
                             };
-                            (k.to_string(), val)
+                            (k.as_str(), val)
                         })
                         .collect()
                 });
