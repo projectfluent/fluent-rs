@@ -111,7 +111,13 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
     {
         if self.elements.len() == 1 {
             return match self.elements[0] {
-                ast::PatternElement::TextElement(s) => s.into(),
+                ast::PatternElement::TextElement(s) => {
+                    if let Some(ref transform) = scope.bundle.transform {
+                        transform(s).into()
+                    } else {
+                        s.into()
+                    }
+                },
                 ast::PatternElement::Placeable(ref p) => scope.maybe_track(self, p),
             };
         }
@@ -119,7 +125,13 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
         let mut string = String::new();
         for elem in &self.elements {
             match elem {
-                ast::PatternElement::TextElement(s) => string.push_str(&s),
+                ast::PatternElement::TextElement(s) => {
+                    if let Some(ref transform) = scope.bundle.transform {
+                        string.push_str(transform(s).as_str())
+                    } else {
+                        string.push_str(&s)
+                    }
+                },
                 ast::PatternElement::Placeable(p) => {
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {
