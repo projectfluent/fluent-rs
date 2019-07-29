@@ -25,8 +25,7 @@ failure_derive = "0.1"
 intl_pluralrules = "2.0"
 rental = "0.5.4"
 smallvec = "0.6.10"
-unic-langid = { version = "0.4", features = ["macros"] }
-unic-langid-impl = "0.4"
+unic-langid = { version = "0.4.1", features = ["macros"] }
 
 [dev-dependencies]
 criterion = "0.2"
