@@ -1,5 +1,4 @@
-use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-use std::collections::HashMap;
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use unic_langid::langid;
 
 fn main() {
@@ -21,8 +20,8 @@ unread-emails =
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
 
-    let mut args = HashMap::new();
-    args.insert("name".to_string(), FluentValue::from("John"));
+    let mut args = FluentArgs::new();
+    args.insert("name", FluentValue::from("John"));
 
     let msg = bundle
         .get_message("hello-world")
@@ -38,8 +37,8 @@ unread-emails =
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
     println!("{}", value);
 
-    let mut args = HashMap::new();
-    args.insert("emailCount".to_string(), FluentValue::into_number("1.0"));
+    let mut args = FluentArgs::new();
+    args.insert("emailCount", FluentValue::into_number("1.0"));
 
     let msg = bundle
         .get_message("unread-emails")

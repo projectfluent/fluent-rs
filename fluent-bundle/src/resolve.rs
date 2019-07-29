@@ -7,13 +7,12 @@
 //! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
 
 use std::borrow::Borrow;
-use std::collections::HashMap;
 use std::fmt::Write;
 
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
-use crate::bundle::FluentBundle;
+use crate::bundle::{FluentArgs, FluentBundle};
 use crate::entry::GetEntry;
 use crate::resource::FluentResource;
 use crate::types::DisplayableNode;
@@ -31,9 +30,9 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     /// The current `FluentBundle` instance.
     pub bundle: &'bundle FluentBundle<R>,
     /// The current arguments passed by the developer.
-    args: Option<&'bundle HashMap<String, FluentValue<'bundle>>>,
+    args: Option<&'bundle FluentArgs<'bundle>>,
     /// Local args
-    local_args: Option<HashMap<String, FluentValue<'bundle>>>,
+    local_args: Option<FluentArgs<'bundle>>,
     /// Tracks hashes to prevent infinite recursion.
     travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
     /// Track errors accumulated during resolving.
@@ -41,10 +40,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
 }
 
 impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
-    pub fn new(
-        bundle: &'bundle FluentBundle<R>,
-        args: Option<&'bundle HashMap<String, FluentValue>>,
-    ) -> Self {
+    pub fn new(bundle: &'bundle FluentBundle<R>, args: Option<&'bundle FluentArgs>) -> Self {
         Scope {
             bundle,
             args,
@@ -281,15 +277,12 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 fn get_arguments<'bundle, R>(
     scope: &mut Scope<'bundle, R>,
     arguments: &'bundle Option<ast::CallArguments<'bundle>>,
-) -> (
-    Vec<FluentValue<'bundle>>,
-    HashMap<String, FluentValue<'bundle>>,
-)
+) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
 where
     R: Borrow<FluentResource>,
 {
     let mut resolved_positional_args = Vec::new();
-    let mut resolved_named_args = HashMap::new();
+    let mut resolved_named_args = FluentArgs::new();
 
     if let Some(ast::CallArguments { named, positional }) = arguments {
         for expression in positional {
@@ -297,7 +290,7 @@ where
         }
 
         for arg in named {
-            resolved_named_args.insert(arg.name.name.to_string(), arg.value.resolve(scope));
+            resolved_named_args.insert(arg.name.name, arg.value.resolve(scope));
         }
     }
 

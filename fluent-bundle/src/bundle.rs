@@ -28,6 +28,8 @@ pub struct FluentMessage<'m> {
     pub attributes: HashMap<&'m str, &'m ast::Pattern<'m>>,
 }
 
+pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
+
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
 ///
@@ -48,7 +50,7 @@ pub struct FluentMessage<'m> {
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
 /// let mut args = HashMap::new();
-/// args.insert("name".to_string(), FluentValue::from("Rustacean"));
+/// args.insert("name", FluentValue::from("Rustacean"));
 ///
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];
@@ -282,7 +284,7 @@ impl<R> FluentBundle<R> {
     pub fn format_pattern<'bundle>(
         &'bundle self,
         pattern: &'bundle ast::Pattern,
-        args: Option<&'bundle HashMap<String, FluentValue>>,
+        args: Option<&'bundle FluentArgs>,
         errors: &mut Vec<FluentError>,
     ) -> Cow<'bundle, str>
     where
@@ -335,9 +337,7 @@ impl<R> FluentBundle<R> {
     /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
     pub fn add_function<F: 'static>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
-        F: for<'a> Fn(&[FluentValue<'a>], &HashMap<String, FluentValue<'a>>) -> FluentValue<'a>
-            + Sync
-            + Send,
+        F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send,
     {
         match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {

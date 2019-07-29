@@ -17,10 +17,9 @@
 //!
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
-use fluent_bundle::FluentValue;
+use fluent_bundle::{FluentArgs, FluentValue};
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_resmgr::resource_manager::ResourceManager;
-use std::collections::HashMap;
 use std::env;
 use std::fs;
 use std::io;
@@ -94,9 +93,9 @@ fn main() {
                 Ok(i) => {
                     // 6.2. Construct a map of arguments
                     //      to format the message.
-                    let mut args = HashMap::new();
-                    args.insert("input".to_string(), FluentValue::from(i));
-                    args.insert("value".to_string(), FluentValue::from(collatz(i)));
+                    let mut args = FluentArgs::new();
+                    args.insert("input", FluentValue::from(i));
+                    args.insert("value", FluentValue::from(collatz(i)));
                     // 6.3. Format the message.
                     let mut errors = vec![];
                     let msg = bundle.get_message("response-msg").expect("Message exists");
@@ -105,9 +104,9 @@ fn main() {
                     println!("{}", value);
                 }
                 Err(err) => {
-                    let mut args = HashMap::new();
-                    args.insert("input".to_string(), FluentValue::from(input.to_string()));
-                    args.insert("reason".to_string(), FluentValue::from(err.to_string()));
+                    let mut args = FluentArgs::new();
+                    args.insert("input", FluentValue::from(input.to_string()));
+                    args.insert("reason", FluentValue::from(err.to_string()));
                     let mut errors = vec![];
                     let msg = bundle
                         .get_message("input-parse-error-msg")

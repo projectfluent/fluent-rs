@@ -11,8 +11,7 @@
 //! # Example
 //!
 //! ```
-//! use fluent_bundle::{FluentBundle, FluentValue, FluentResource};
-//! use std::collections::HashMap;
+//! use fluent_bundle::{FluentBundle, FluentValue, FluentResource, FluentArgs};
 //! use unic_langid::langid;
 //!
 //! let ftl_string = String::from("
@@ -36,8 +35,8 @@
 //!
 //! assert_eq!(&value, "Hello, world!");
 //!
-//! let mut args = HashMap::new();
-//! args.insert("name".to_string(), FluentValue::from("John"));
+//! let mut args = FluentArgs::new();
+//! args.insert("name", FluentValue::from("John"));
 //!
 //! let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 //! let mut errors = vec![];
@@ -59,6 +58,6 @@ pub mod resolve;
 pub mod resource;
 pub mod types;
 
-pub use bundle::FluentBundle;
+pub use bundle::{FluentArgs, FluentBundle, FluentMessage};
 pub use resource::FluentResource;
 pub use types::FluentValue;

@@ -1,19 +1,15 @@
 //! `Entry` is used to store Messages, Terms and Functions in `FluentBundle` instances.
 
 use std::borrow::Borrow;
-use std::collections::HashMap;
 
 use fluent_syntax::ast;
 
-use crate::bundle::FluentBundle;
+use crate::bundle::{FluentArgs, FluentBundle};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-pub type FluentFunction = Box<
-    dyn for<'a> Fn(&[FluentValue<'a>], &HashMap<String, FluentValue<'a>>) -> FluentValue<'a>
-        + Send
-        + Sync,
->;
+pub type FluentFunction =
+    Box<dyn for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Send + Sync>;
 
 pub enum Entry {
     Message([usize; 2]),

@@ -1,5 +1,4 @@
-use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-use std::collections::HashMap;
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 
 fn main() {
     let ftl_string = String::from(
@@ -29,8 +28,8 @@ hello-world2 = Hello { $name ->
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     println!("{}", value);
 
-    let mut args = HashMap::new();
-    args.insert("name".to_string(), FluentValue::from("moon"));
+    let mut args = FluentArgs::new();
+    args.insert("name", FluentValue::from("moon"));
 
     let msg = bundle
         .get_message("hello-world2")
