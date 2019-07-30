@@ -9,7 +9,7 @@ suites:
             source: |-
               one     = { 1 }
               select  = { 1 ->
-                *[0] Zero
+                 *[0] Zero
                   [1] One
               }
         tests:
@@ -34,7 +34,7 @@ suites:
               placeable-literal = { "Foo" } Bar
               placeable-message = { foo } Bar
               selector-literal = { "Foo" ->
-                *[Foo] Member 1
+                 *[Foo] Member 1
               }
               bar =
                   .attr = Bar Attribute
@@ -42,7 +42,7 @@ suites:
               -baz = Baz
                   .attr = BazAttribute
               selector-attr    = { -baz.attr ->
-                *[BazAttribute] Member 3
+                 *[BazAttribute] Member 3
               }
         tests:
           -
@@ -105,7 +105,7 @@ suites:
               #      illegally uses message attribute as selector.
               selector-attr = { -bazTerm.attr ->
                   [FooBarBazAttribute] FooBarBaz
-                *[other] Other
+                 *[other] Other
               }
         tests:
           -
@@ -139,3 +139,16 @@ suites:
               -
                 id: selector-attr
                 value: FooBarBaz
+      -
+        name: (Rust) Placeable
+        resources:
+          -
+            source: |-
+              foo = { { "Foo" } }
+        tests:
+          -
+            name: Placeable in placable work
+            asserts:
+              -
+                id: foo
+                value: Foo

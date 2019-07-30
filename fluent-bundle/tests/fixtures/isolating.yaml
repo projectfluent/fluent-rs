@@ -70,3 +70,31 @@ suites:
           -
             id: foo
             value: "Amaya"
+  -
+    name: (Rust) Skip isolation of string literals and terms
+    resources:
+      -
+        source: |-
+          rs-bar = Foo { $foo } { "Bar" } baz
+          -rs-term = My Term
+          rs-baz = Foo { $foo } { -rs-term } baz
+    bundles:
+      -
+        useIsolating: true
+    tests:
+      -
+        name: skip isolation of string literals
+        asserts:
+          -
+            id: rs-bar
+            args:
+              foo: Test
+            value: "Foo \u2068Test\u2069 Bar baz"
+      -
+        name: skip isolation of term references
+        asserts:
+          -
+            id: rs-baz
+            args:
+              foo: Test
+            value: "Foo \u2068Test\u2069 My Term baz"

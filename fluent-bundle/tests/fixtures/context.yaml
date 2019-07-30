@@ -139,3 +139,57 @@ suites:
               -
                 id: -baz
                 missing: true
+      -
+        name: (Rust) Entries
+        resources:
+          -
+            source: |-
+              -foo = Bar
+              baz = { foo }
+              qux = { -bar }
+              fn = { FN() }
+        tests:
+          -
+            name: Entry mismatch doesn't leak
+            asserts:
+              -
+                id: baz
+                value: "{foo}"
+                errors:
+                  -
+                    type: Reference
+                    desc: "Unknown message: foo"
+          -
+            name: Missing term
+            asserts:
+              -
+                id: qux
+                value: "{-bar}"
+                errors:
+                  -
+                    type: Reference
+                    desc: "Unknown term: -bar"
+          -
+            name: Missing function
+            asserts:
+              -
+                id: fn
+                value: "{FN()}"
+                errors:
+                  -
+                    type: Reference
+                    desc: "Unknown function: FN()"
+      -
+        name: (Rust) FluentBundle construction
+        resources:
+          -
+            source: |-
+              foo = Foo
+        bundles:
+          -
+            functions:
+              - SUM
+              - SUM
+            errors:
+              -
+                type: Overriding
