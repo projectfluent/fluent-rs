@@ -113,7 +113,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        transform(s).into()
+                        FluentValue::String(transform(s))
                     } else {
                         s.into()
                     }
@@ -127,7 +127,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
             match elem {
                 ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        string.push_str(transform(s).as_str())
+                        string.push_str(&transform(s))
                     } else {
                         string.push_str(&s)
                     }

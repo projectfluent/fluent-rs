@@ -98,7 +98,7 @@ pub struct FluentBundle<R> {
     pub(crate) entries: HashMap<String, Entry>,
     pub(crate) plural_rules: IntlPluralRules,
     pub(crate) use_isolating: bool,
-    pub(crate) transform: Option<Box<dyn Fn(&str) -> String + Send + Sync>>,
+    pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
 }
 
 impl<R> FluentBundle<R> {
@@ -242,7 +242,7 @@ impl<R> FluentBundle<R> {
 
     pub fn set_transform<F>(&mut self, func: Option<F>)
     where
-        F: 'static + Fn(&str) -> String + Send + Sync
+        F: 'static + Fn(&str) -> Cow<str> + Send + Sync
     {
         if let Some(f) = func {
             self.transform = Some(Box::new(f));

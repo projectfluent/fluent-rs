@@ -5,5 +5,6 @@ members = [
     "fluent-cli",
     "fluent-fallback",
     "fluent-resmgr",
+    "fluent-pseudo",
     "fluent"
 ]

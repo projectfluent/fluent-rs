@@ -5,6 +5,7 @@ use std::fs;
 use std::iter;
 use std::path::Path;
 use std::str::FromStr;
+use std::borrow::Cow;
 
 use fluent_bundle::bundle::FluentArgs;
 use fluent_bundle::errors::FluentError;
@@ -14,9 +15,15 @@ use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use unic_langid::LanguageIdentifier;
 
+use helpers::*;
+
 type FluentBundle = FluentBundleGeneric<FluentResource>;
 
-use helpers::*;
+
+
+fn transform_example(s: &str) -> Cow<str> {
+    s.replace("a", "A").into()
+}
 
 #[derive(Clone)]
 struct ScopeLevel {
@@ -117,9 +124,7 @@ fn create_bundle(
     });
     if let Some(transform) = transform {
         match transform.as_str() {
-            "example" => bundle.set_transform(Some(|s: &str| {
-                s.replace("a", "A")
-            })),
+            "example" => bundle.set_transform(Some(transform_example)),
             _ => unimplemented!()
         }
     }
