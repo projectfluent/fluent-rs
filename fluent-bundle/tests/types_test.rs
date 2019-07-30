@@ -1,5 +1,5 @@
 use fluent_bundle::resolve::Scope;
-use fluent_bundle::types::FluentValue;
+use fluent_bundle::FluentValue;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use unic_langid::langid;

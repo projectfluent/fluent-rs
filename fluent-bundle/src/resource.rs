@@ -13,6 +13,7 @@ rental! {
     }
 }
 
+/// A resource containing a list of localization messages.
 #[derive(Debug)]
 pub struct FluentResource(rentals::FluentResource);
 

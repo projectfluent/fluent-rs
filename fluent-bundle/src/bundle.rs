@@ -22,12 +22,17 @@ use crate::resolve::{ResolveValue, Scope};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
+/// A single localization unit composed of an identifier,
+/// value, and attributes.
 #[derive(Debug, PartialEq)]
 pub struct FluentMessage<'m> {
     pub value: Option<&'m ast::Pattern<'m>>,
     pub attributes: HashMap<&'m str, &'m ast::Pattern<'m>>,
 }
 
+/// A map of arguments passed from the code to
+/// the localization to be used for message
+/// formatting.
 pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 
 /// A collection of localization messages for a single locale, which are meant
@@ -46,6 +51,7 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 ///
 /// let langid_en = langid!("en-US");
 /// let mut bundle = FluentBundle::new(&[langid_en]);
+///
 /// bundle.add_resource(&resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
@@ -62,36 +68,62 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 ///
 /// # `FluentBundle` Life Cycle
 ///
+/// ## Create a bundle
+///
 /// To create a bundle, call [`FluentBundle::new`] with a locale list that represents the best
 /// possible fallback chain for a given locale. The simplest case is a one-locale list.
 ///
-/// Next, call [`add_resource`] one or more times, supplying translations in the FTL syntax. The
-/// `FluentBundle` instance is now ready to be used for localization.
+/// Fluent uses [`LanguageIdentifier`] which can be created using `langid!` macro.
+///
+/// ## Add Resources
+///
+/// Next, call [`add_resource`] one or more times, supplying translations in the FTL syntax.
+///
+/// Since [`FluentBundle`] is generic over anything that can borrow a [`FluentResource`],
+/// one can use [`FluentBundle`] to own its resources, store references to them,
+/// or even [`Rc<FluentResource>`] or [`Arc<FluentResource>`].
+///
+/// The [`FluentBundle`] instance is now ready to be used for localization.
+///
+/// ## Format
 ///
 /// To format a translation, call [`get_message`] to retrieve a [`FluentMessage`],
 /// and then call [`format_pattern`] on the message value or attribute in order to
 /// retrieve the translated string.
 ///
-/// The result of `format_pattern` is an [`Cow<str>`]. It is
+/// The result of [`format_pattern`] is an [`Cow<str>`]. It is
 /// recommended to treat the result as opaque from the perspective of the program and use it only
 /// to display localized messages. Do not examine it or alter in any way before displaying.  This
 /// is a general good practice as far as all internationalization operations are concerned.
 ///
+/// If errors were encountered during formatting, they will be
+/// accumulated in the [`Vec<FluentError>`] passed as the third argument.
+///
+/// While they are not fatal, they usually indicate problems with the translation,
+/// and should be logged or reported in a way that allows the developer to notice
+/// and fix them.
+///
 ///
 /// # Locale Fallback Chain
 ///
-/// `FluentBundle` stores messages in a single locale, but keeps a locale fallback chain for the
+/// [`FluentBundle`] stores messages in a single locale, but keeps a locale fallback chain for the
 /// purpose of language negotiation with i18n formatters. For instance, if date and time formatting
-/// are not available in the first locale, `FluentBundle` will use its `locales` fallback chain
+/// are not available in the first locale, [`FluentBundle`] will use its `locales` fallback chain
 /// to negotiate a sensible fallback for date and time formatting.
 ///
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`FluentBundle::new`]: ./struct.FluentBundle.html#method.new
 /// [`FluentMessage`]: ./struct.FluentMessage.html
+/// [`FluentBundle`]: ./struct.FluentBundle.html
+/// [`FluentResource`]: ./struct.FluentResource.html
 /// [`get_message`]: ./struct.FluentBundle.html#method.get_message
 /// [`format_pattern`]: ./struct.FluentBundle.html#method.format_pattern
 /// [`add_resource`]: ./struct.FluentBundle.html#method.add_resource
 /// [`Cow<str>`]: http://doc.rust-lang.org/std/borrow/enum.Cow.html
+/// [`Rc<FluentResource>`]: https://doc.rust-lang.org/std/rc/struct.Rc.html
+/// [`Arc<FluentResource>`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
+/// [`LanguageIdentifier`]: https://crates.io/crates/unic-langid
+/// [`Vec<FluentError>`]: ./enum.FluentError.html
 pub struct FluentBundle<R> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
@@ -236,10 +268,28 @@ impl<R> FluentBundle<R> {
         }
     }
 
+    /// When formatting patterns, `FluentBundle` inserts
+    /// Unicode Directionality Isolation Marks to indicate
+    /// that the direction of a placeable may differ from
+    /// the surrounding message.
+    ///
+    /// This is important for cases such as when a
+    /// right-to-left user name is presented in the
+    /// left-to-right message.
+    ///
+    /// In some cases, such as testing, the user may want
+    /// to disable the isolating.
     pub fn set_use_isolating(&mut self, value: bool) {
         self.use_isolating = value;
     }
 
+    /// This method allows to specify a function that will
+    /// be called on all textual fragments of the pattern
+    /// during formatting.
+    ///
+    /// This is currently primarly used for pseudolocalization,
+    /// and `fluent-pseudo` crate provides a function
+    /// that can be passed here.
     pub fn set_transform<F>(&mut self, func: Option<F>)
     where
         F: Fn(&str) -> Cow<str> + Send + Sync + 'static,

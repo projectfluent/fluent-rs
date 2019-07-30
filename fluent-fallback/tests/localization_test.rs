@@ -1,5 +1,5 @@
 use elsa::FrozenMap;
-use fluent_bundle::resource::FluentResource;
+use fluent_bundle::FluentResource;
 use fluent_bundle::FluentBundle;
 use fluent_fallback::Localization;
 use unic_langid::LanguageIdentifier;
