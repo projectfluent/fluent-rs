@@ -1,5 +1,6 @@
 mod helpers;
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fs;
 use std::iter;
@@ -14,9 +15,13 @@ use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use unic_langid::LanguageIdentifier;
 
+use helpers::*;
+
 type FluentBundle = FluentBundleGeneric<FluentResource>;
 
-use helpers::*;
+fn transform_example(s: &str) -> Cow<str> {
+    s.replace("a", "A").into()
+}
 
 #[derive(Clone)]
 struct ScopeLevel {
@@ -109,6 +114,17 @@ fn create_bundle(
     });
     if let Some(use_isolating) = use_isolating {
         bundle.set_use_isolating(use_isolating);
+    }
+    let transform = b.and_then(|b| b.transform.as_ref()).or_else(|| {
+        defaults
+            .as_ref()
+            .and_then(|defaults| defaults.bundle.transform.as_ref())
+    });
+    if let Some(transform) = transform {
+        match transform.as_str() {
+            "example" => bundle.set_transform(Some(transform_example)),
+            _ => unimplemented!(),
+        }
     }
     if let Some(&TestBundle {
         functions: Some(ref fns),

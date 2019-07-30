@@ -1,10 +1,8 @@
 [package]
-name = "fluent"
+name = "fluent-pseudo"
 description = """
-A localization system designed to unleash the entire expressive power of
-natural language translations.
 """
-version = "0.6.0"
+version = "0.1.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -18,5 +16,4 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-bundle = { path = "../fluent-bundle" }
-fluent-pseudo = { path = "../fluent-pseudo" }
+regex = "1.2"

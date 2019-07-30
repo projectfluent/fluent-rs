@@ -98,6 +98,7 @@ pub struct FluentBundle<R> {
     pub(crate) entries: HashMap<String, Entry>,
     pub(crate) plural_rules: IntlPluralRules,
     pub(crate) use_isolating: bool,
+    pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
 }
 
 impl<R> FluentBundle<R> {
@@ -143,6 +144,7 @@ impl<R> FluentBundle<R> {
             entries: HashMap::new(),
             plural_rules: pr,
             use_isolating: true,
+            transform: None,
         }
     }
 
@@ -236,6 +238,17 @@ impl<R> FluentBundle<R> {
 
     pub fn set_use_isolating(&mut self, value: bool) {
         self.use_isolating = value;
+    }
+
+    pub fn set_transform<F>(&mut self, func: Option<F>)
+    where
+        F: Fn(&str) -> Cow<str> + Send + Sync + 'static,
+    {
+        if let Some(f) = func {
+            self.transform = Some(Box::new(f));
+        } else {
+            self.transform = None;
+        }
     }
 
     /// Returns true if this bundle contains a message with the given id.
@@ -335,9 +348,9 @@ impl<R> FluentBundle<R> {
     /// ```
     ///
     /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
-    pub fn add_function<F: 'static>(&mut self, id: &str, func: F) -> Result<(), FluentError>
+    pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
-        F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send,
+        F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send + 'static,
     {
         match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {
@@ -365,6 +378,7 @@ impl<R> Default for FluentBundle<R> {
             resources: vec![],
             entries: Default::default(),
             use_isolating: false,
+            transform: None,
         }
     }
 }

@@ -97,6 +97,7 @@ pub struct TestBundle {
     #[serde(rename = "useIsolating")]
     pub use_isolating: Option<bool>,
     pub functions: Option<Vec<String>>,
+    pub transform: Option<String>,
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub errors: Vec<TestError>,
 }
@@ -182,6 +183,7 @@ pub struct TestFixture {
 pub struct BundleDefaults {
     #[serde(rename = "useIsolating")]
     pub use_isolating: Option<bool>,
+    pub transform: Option<String>,
     pub locales: Option<Vec<String>>,
 }
 
