@@ -20,4 +20,4 @@ categories = ["localization", "internationalization"]
 [dependencies]
 annotate-snippets = {version = "0.6", features = ["color"]}
 clap = "2.33"
-fluent-syntax = { path = "../fluent-syntax" }
+fluent-syntax = "0.9"
