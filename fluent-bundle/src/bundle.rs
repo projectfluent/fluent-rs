@@ -242,7 +242,7 @@ impl<R> FluentBundle<R> {
 
     pub fn set_transform<F>(&mut self, func: Option<F>)
     where
-        F: 'static + Fn(&str) -> Cow<str> + Send + Sync
+        F: Fn(&str) -> Cow<str> + Send + Sync + 'static,
     {
         if let Some(f) = func {
             self.transform = Some(Box::new(f));
@@ -350,7 +350,7 @@ impl<R> FluentBundle<R> {
     /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
-        F: 'static + for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send,
+        F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send + 'static,
     {
         match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {

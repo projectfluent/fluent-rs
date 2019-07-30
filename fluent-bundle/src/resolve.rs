@@ -117,7 +117,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     } else {
                         s.into()
                     }
-                },
+                }
                 ast::PatternElement::Placeable(ref p) => scope.maybe_track(self, p),
             };
         }
@@ -131,7 +131,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     } else {
                         string.push_str(&s)
                     }
-                },
+                }
                 ast::PatternElement::Placeable(p) => {
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {

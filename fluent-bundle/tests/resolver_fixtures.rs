@@ -1,11 +1,11 @@
 mod helpers;
 
+use std::borrow::Cow;
 use std::collections::HashMap;
 use std::fs;
 use std::iter;
 use std::path::Path;
 use std::str::FromStr;
-use std::borrow::Cow;
 
 use fluent_bundle::bundle::FluentArgs;
 use fluent_bundle::errors::FluentError;
@@ -18,8 +18,6 @@ use unic_langid::LanguageIdentifier;
 use helpers::*;
 
 type FluentBundle = FluentBundleGeneric<FluentResource>;
-
-
 
 fn transform_example(s: &str) -> Cow<str> {
     s.replace("a", "A").into()
@@ -125,7 +123,7 @@ fn create_bundle(
     if let Some(transform) = transform {
         match transform.as_str() {
             "example" => bundle.set_transform(Some(transform_example)),
-            _ => unimplemented!()
+            _ => unimplemented!(),
         }
     }
     if let Some(&TestBundle {

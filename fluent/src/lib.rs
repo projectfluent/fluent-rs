@@ -1,4 +1,4 @@
-pub use fluent_bundle::{FluentBundle, FluentResource, FluentValue, FluentArgs, FluentMessage};
+pub use fluent_bundle::{FluentArgs, FluentBundle, FluentMessage, FluentResource, FluentValue};
 
 #[macro_export]
 macro_rules! fluent_args {
