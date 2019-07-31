@@ -91,7 +91,7 @@ pub mod resolve;
 mod resource;
 pub mod types;
 
-pub use resource::FluentResource;
-pub use bundle::{FluentBundle, FluentMessage, FluentArgs};
-pub use types::FluentValue;
+pub use bundle::{FluentArgs, FluentBundle, FluentMessage};
 pub use errors::FluentError;
+pub use resource::FluentResource;
+pub use types::FluentValue;

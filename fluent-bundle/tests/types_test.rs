@@ -1,7 +1,7 @@
 use fluent_bundle::resolve::Scope;
-use fluent_bundle::FluentValue;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
+use fluent_bundle::FluentValue;
 use unic_langid::langid;
 
 #[test]

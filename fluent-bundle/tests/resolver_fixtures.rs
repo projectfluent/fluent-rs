@@ -7,9 +7,9 @@ use std::iter;
 use std::path::Path;
 use std::str::FromStr;
 
+use fluent_bundle::resolve::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
-use fluent_bundle::resolve::ResolverError;
 use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};

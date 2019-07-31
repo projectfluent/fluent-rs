@@ -2,11 +2,11 @@ use std::io;
 
 use fluent_bundle::{FluentBundle, FluentResource};
 
-use serde::{Serialize};
+use serde::Serialize;
 
 #[derive(Serialize)]
 struct Output {
-    value: String
+    value: String,
 }
 
 fn resolve(s: String) -> String {
@@ -14,12 +14,14 @@ fn resolve(s: String) -> String {
     let res = FluentResource::try_new(s).expect("Failed to parse input");
     bundle.add_resource(res).expect("Failed to add resource");
 
-    let msg = bundle.get_message("test").expect("Failed to retrieve a test message");
+    let msg = bundle
+        .get_message("test")
+        .expect("Failed to retrieve a test message");
 
     let mut errors = vec![];
     let value = bundle.format_pattern(msg.value.expect("Message has no value"), None, &mut errors);
     let output = Output {
-        value: value.into()
+        value: value.into(),
     };
     return serde_json::to_string(&output).expect("Serializing JSON failed.");
 }
