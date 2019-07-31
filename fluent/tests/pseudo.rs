@@ -1,5 +1,10 @@
 use fluent::{FluentBundle, FluentResource};
 use fluent_pseudo::transform;
+use std::borrow::Cow;
+
+fn transform_wrapper(s: &str) -> Cow<str> {
+    transform(s, false, true)
+}
 
 #[test]
 fn test_pseudo() {
@@ -16,13 +21,13 @@ fn test_pseudo() {
         assert_eq!(val, "Hello World");
     }
 
-    bundle.set_transform(Some(transform));
+    bundle.set_transform(Some(transform_wrapper));
 
     {
         let msg = bundle.get_message("key").unwrap();
         let mut errors = vec![];
         let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
 
-        assert_eq!(val, "Ħḗŀŀǿ Ẇǿřŀḓ");
+        assert_eq!(val, "Ħḗḗŀŀǿǿ Ẇǿǿřŀḓ");
     }
 }
