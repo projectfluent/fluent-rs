@@ -4,9 +4,10 @@ use fluent_bundle::{FluentBundle, FluentResource};
 
 use serde::Serialize;
 
-#[derive(Serialize)]
+#[derive(Default, Serialize)]
 struct Output {
     value: String,
+    errors: Vec<bool>
 }
 
 fn resolve(s: String) -> String {
@@ -19,9 +20,10 @@ fn resolve(s: String) -> String {
         .expect("Failed to retrieve a test message");
 
     let mut errors = vec![];
-    let value = bundle.format_pattern(msg.value.expect("Message has no value"), None, &mut errors);
+    let value = bundle.format_pattern(msg.value.expect("Message has no value"), None, &mut errors).into();
     let output = Output {
-        value: value.into(),
+        value,
+        ..Default::default()
     };
     return serde_json::to_string(&output).expect("Serializing JSON failed.");
 }
@@ -44,6 +46,6 @@ mod tests {
     #[test]
     fn it_works() {
         let x = resolve("test = Value".into());
-        assert_eq!(x, r#"{"value":"Value"}"#);
+        assert_eq!(x, r#"{"value":"Value","errors":[]}"#);
     }
 }
