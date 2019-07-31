@@ -1,4 +1,5 @@
 use std::io;
+use std::io::prelude::*;
 
 use fluent_bundle::{FluentBundle, FluentResource};
 
@@ -30,13 +31,13 @@ fn resolve(s: String) -> String {
 
 fn main() {
     let mut input = String::new();
-    match io::stdin().read_line(&mut input) {
-        Ok(_) => {
-            let result = resolve(input);
-            println!("{}", result);
-        }
-        Err(error) => println!("error: {}", error),
+    let stdin = io::stdin();
+    for line in stdin.lock().lines() {
+        input.push_str(&line.unwrap());
+        input.push_str("\n");
     }
+    let result = resolve(input);
+    println!("{}", result);
 }
 
 #[cfg(test)]
