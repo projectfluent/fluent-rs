@@ -10,7 +10,6 @@ struct Output {
 }
 
 fn resolve(s: String) -> String {
-    println!("{:#?}", s);
     let mut bundle = FluentBundle::default();
     let res = FluentResource::try_new(s).expect("Failed to parse input");
     bundle.add_resource(res).expect("Failed to add resource");
