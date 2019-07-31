@@ -20,7 +20,40 @@ static FLIPPED_CAPS_MAP: &[char] = &[
     'Ԁ', 'Ò', 'ᴚ', 'S', '⊥', '∩', 'Ʌ', 'M', 'X', '⅄', 'Z',
 ];
 
+pub fn transform_dom(s: &str) -> Cow<str> {
+    // XML entities (&#x202a;) and XML tags.
+    let re_excluded = Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap();
+
+    let mut result = Cow::from(s);
+
+    let mut pos = 0;
+    let mut diff = 0;
+
+    for cap in re_excluded.captures_iter(s) {
+        let capture = cap.get(0).unwrap();
+
+        let sub_len = capture.start() - pos;
+        let range = pos..capture.start();
+        let result_range = pos + diff..capture.start() + diff;
+        let sub = &s[range.clone()];
+        let transform_sub = transform(&sub, false, true);
+        diff += transform_sub.len() - sub_len;
+        result
+            .to_mut()
+            .replace_range(result_range.clone(), &transform_sub);
+        pos = capture.end();
+    }
+    let range = pos..s.len();
+    let result_range = pos + diff..result.len();
+    let transform_sub = transform(&s[range.clone()], false, true);
+    result
+        .to_mut()
+        .replace_range(result_range.clone(), &transform_sub);
+    result
+}
+
 pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
+    // XXX: avoid recreating it on each call.
     let re_az = Regex::new(r"[a-zA-Z]").unwrap();
 
     let (small_map, caps_map) = if flipped {
@@ -54,7 +87,7 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
 
 #[cfg(test)]
 mod tests {
-    use super::transform;
+    use super::*;
 
     #[test]
     fn it_works() {
@@ -66,5 +99,17 @@ mod tests {
 
         let x = transform("Hello World", true, false);
         assert_eq!(x, "Hǝʅʅo Moɹʅp");
+    }
+
+    #[test]
+    fn dom_test() {
+        let x = transform_dom("Hello <a>World</a>");
+        assert_eq!(x, "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a>");
+
+        let x = transform_dom("Hello <a>World</a> in <b>my</b> House.");
+        assert_eq!(
+            x,
+            "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a> īƞ <b>ḿẏ</b> Ħǿǿŭŭşḗḗ."
+        );
     }
 }
