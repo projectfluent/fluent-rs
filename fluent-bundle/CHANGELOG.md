@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-bundle 0.7.1 (August 1, 2019)
+
+  - Fix FluentBundle::default to use isolating by default.
+
 ## fluent-bundle 0.7.0 (August 1, 2019)
 
   - Turn FluentBundle to be a generic over Borrow<FluentResource> (#114)
