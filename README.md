@@ -4,6 +4,10 @@
 
 The crates perform the following functions:
 
+## fluent [![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
+
+Umbrella crate combining crates that are ready to be used in production.
+
 ## fluent-syntax [![crates.io](http://meritbadge.herokuapp.com/fluent_syntax)](https://crates.io/crates/fluent_syntax)
 
 Low level Fluent Syntax AST and parser API.
@@ -23,7 +27,3 @@ Resource Manager for localization resources.
 ## fluent-cli [![crates.io](http://meritbadge.herokuapp.com/fluent_cli)](https://crates.io/crates/fluent_cli)
 
 Collection of command line tools for Fluent.
-
-## fluent [![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
-
-Umbrella crate combining crates that are ready to be used in production.
