@@ -19,4 +19,4 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle = "0.7"
-fluent-pseudo = { path = "../fluent-pseudo", optional = true }
+fluent-pseudo = { version = "0.0.1", optional = true }
