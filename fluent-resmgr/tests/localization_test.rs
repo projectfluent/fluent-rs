@@ -1,18 +1,13 @@
 use fluent_fallback::Localization;
 use fluent_resmgr::resource_manager::ResourceManager;
+use unic_langid::langid;
 
 #[test]
 fn localization_format_value() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
     let generate_messages = |res_ids: &[String]| {
-        res_mgr.get_bundles(
-            vec![
-                "en-US".parse().expect("Parsing failed."),
-                "pl".parse().expect("Parsing failed."),
-            ],
-            res_ids.to_vec(),
-        )
+        res_mgr.get_bundles(vec![langid!("en-US"), langid!("pl")], res_ids.to_vec())
     };
 
     let mut loc = Localization::new(vec!["test.ftl".into()], generate_messages);
@@ -31,10 +26,7 @@ fn localization_format_value() {
 fn resmgr_get_bundle() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
-    let bundle = res_mgr.get_bundle(
-        vec!["en-US".parse().expect("Parsing failed.")],
-        vec!["test.ftl".into()],
-    );
+    let bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()]);
 
     let mut errors = vec![];
     let msg = bundle.get_message("hello-world").expect("Message exists");
