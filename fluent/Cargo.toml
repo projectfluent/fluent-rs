@@ -19,4 +19,5 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle = "0.7"
+unic-langid = { version = "0.4", features = ["macros"] }
 fluent-pseudo = { version = "0.0.1", optional = true }

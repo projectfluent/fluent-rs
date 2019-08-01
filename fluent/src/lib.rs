@@ -89,8 +89,8 @@ pub use fluent_bundle::*;
 /// use fluent::fluent_args;
 ///
 /// let mut args = fluent_args![
-///     "name": "John",
-///     "emailCount": 5,
+///     "name" => "John",
+///     "emailCount" => 5
 /// ];
 ///
 /// ```
