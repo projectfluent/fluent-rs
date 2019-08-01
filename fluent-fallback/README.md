@@ -55,7 +55,7 @@ Local Development
 
     cargo build
     cargo test
-    cargo run --example simple
+    cargo run --example simple-fallback
 
 When submitting a PR please use  [`cargo fmt`][] (nightly).
 
