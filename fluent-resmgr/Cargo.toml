@@ -3,7 +3,7 @@ name = "fluent-resmgr"
 description = """
 Resource manager for Fluent localization resources.
 """
-version = "0.1.0"
+version = "0.0.1"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
@@ -20,5 +20,5 @@ categories = ["localization", "internationalization"]
 fluent-bundle = "0.7"
 fluent-locale = "0.7"
 unic-langid = "0.4.1"
-fluent-fallback = { path = "../fluent-fallback" }
+fluent-fallback = "0.0.1"
 elsa = "1.3.2"
