@@ -36,8 +36,12 @@ fn main() {
     bundle.add_resource(&res)
         .expect("Failed to add FTL resources to the bundle.");
 
-    let (value, errors) = bundle.format("hello-world", None)
-        .expect("Failed to format a message.");
+    let msg = bundle.get_message("hello-world")
+        .expect("Failed to retrieve a message.");
+    let val = msg.value.expect("Message has no value.");
+
+    let mut errors = vec![];
+    let value = bundle.format_pattern(val, None, &mut errors);
 
     assert_eq!(&value, "Hello, world!");
 }
@@ -60,7 +64,7 @@ Local Development
     cargo build
     cargo test
     cargo bench
-    cargo run --example hello
+    cargo run --example simple-app
 
 When submitting a PR please use  [`cargo fmt`][] (nightly).
 
