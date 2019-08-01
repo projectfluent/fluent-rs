@@ -4,6 +4,18 @@
 
   - …
 
+## fluent-bundle 0.7.0 (August 1, 2019)
+
+  - Turn FluentBundle to be a generic over Borrow<FluentResource> (#114)
+  - Update FluentBundle to the latest API (0.14) (#120)
+  - Switch to unic_langid for Language Identifier Management
+  - Refactor FluentArgs (#130)
+  - Add transform to FluentBundle to enable pseudolocalization (#131)
+  - Refactor resolver errors to provide better fallbacking and return errors out of formatting (#93)
+  - Enable FSI/PDI direction isolation (#116)
+  - Add more convenience From impls for FluentValue (#108)
+  - Fix `bare_trait_objects` warnings (#110)
+
 ## fluent-bundle 0.6.0 (March 26, 2019)
 
   - Update to fluent-syntax 0.9
