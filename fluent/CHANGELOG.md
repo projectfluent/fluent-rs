@@ -4,6 +4,11 @@
 
   - …
 
+## fluent 0.7.0 (August 1, 2019)
+
+  - Update to fluent-bundle 0.7.1
+  - Optionally bundle fluent-pseudo 0.0.1
+
 ## fluent 0.6.0 (March 26, 2019)
 
   - Update to fluent-bundle 0.6.0
