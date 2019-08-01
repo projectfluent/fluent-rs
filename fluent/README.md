@@ -51,12 +51,21 @@ fn main() {
 Status
 ------
 
-The implementation is in its early stages and supports only some of the Project
-Fluent's spec.  Consult the [list of milestones][] for more information about
+The implementation is in pre-1.0 mode and supports Fluent Syntax 1.0, and
+Fluent API 0.14..  Consult the [list of milestones][] for more information about
 release planning and scope.
 
-[list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
+`FluentBundle`, which is the main struct at the moment, is intended to remain
+a low level API.
+There is a number of higher level APIs like [fluent-resmgr][] and
+[fluent-fallback][] intended to wrap around it and provide better ergonomics
+for bindings and direct usage.
+Those higher level APIs are not mature yet enough to be included in this package,
+but will get added once they are.
 
+[list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
+[fluent-resmgr]: https://crates.io/crates/fluent-resmgr
+[fluent-fallback]: https://crates.io/crates/fluent-fallback
 
 Local Development
 -----------------
@@ -64,7 +73,7 @@ Local Development
     cargo build
     cargo test
     cargo bench
-    cargo run --example hello
+    cargo run --example simple-app
 
 When submitting a PR please use  [`cargo fmt`][] (nightly).
 
