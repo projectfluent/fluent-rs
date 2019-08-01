@@ -2,7 +2,7 @@ use elsa::FrozenMap;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use fluent_fallback::Localization;
-use unic_langid::LanguageIdentifier;
+use unic_langid::langid;
 
 use std::cell::RefCell;
 use std::fs;
@@ -19,10 +19,7 @@ fn localization_format() {
 
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
-    let locales: Vec<LanguageIdentifier> = vec![
-        "pl".parse().expect("Parsing failed."),
-        "en-US".parse().expect("Parsing failed."),
-    ];
+    let locales = vec![langid!("pl"), langid!("en-US")];
 
     let generate_messages = |res_ids: &[String]| {
         let mut locales = locales.iter();
@@ -67,8 +64,7 @@ fn localization_on_change() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
-    let available_locales: RefCell<Vec<LanguageIdentifier>> =
-        RefCell::new(vec!["en-US".parse().expect("Parsing failed.")]);
+    let available_locales = RefCell::new(vec![langid!("en-US")]);
 
     let generate_messages = |res_ids: &[String]| {
         let mut bundles = vec![];
