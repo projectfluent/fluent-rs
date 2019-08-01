@@ -94,9 +94,7 @@ fn localization_on_change() {
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [en]");
 
-    available_locales
-        .borrow_mut()
-        .insert(0, langid!("pl"));
+    available_locales.borrow_mut().insert(0, langid!("pl"));
 
     loc.on_change();
 
