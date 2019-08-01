@@ -6,14 +6,14 @@
 //! the application can be made localizable
 //! via Fluent.
 //!
-//! To try the app launch `cargo run --example simple NUM (LOCALES)`
+//! To try the app launch `cargo run --example simple-fallback NUM (LOCALES)`
 //!
 //! NUM is a number to be calculated, and LOCALES is an optional
 //! parameter with a comma-separated list of locales requested by the user.
 //!
 //! Example:
 //!   
-//!   caron run --example simple 123 de,pl
+//!   cargo run --example simple-fallback 123 de,pl
 //!
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
