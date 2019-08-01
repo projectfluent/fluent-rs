@@ -96,7 +96,7 @@ fn localization_on_change() {
 
     available_locales
         .borrow_mut()
-        .insert(0, "pl".parse().expect("Parsing failed."));
+        .insert(0, langid!("pl"));
 
     loc.on_change();
 
