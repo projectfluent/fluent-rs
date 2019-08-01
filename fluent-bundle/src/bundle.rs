@@ -427,7 +427,7 @@ impl<R> Default for FluentBundle<R> {
             locales: vec![langid],
             resources: vec![],
             entries: Default::default(),
-            use_isolating: false,
+            use_isolating: true,
             transform: None,
         }
     }
