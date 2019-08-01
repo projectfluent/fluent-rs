@@ -1,4 +1,5 @@
 use std::borrow::Borrow;
+use std::borrow::Cow;
 
 use fluent_bundle::FluentResource;
 use fluent_bundle::{FluentArgs, FluentBundle};
@@ -43,7 +44,7 @@ impl<'loc, R> Localization<'loc, R> {
         self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
     }
 
-    pub fn format_value(&mut self, id: &str, args: Option<&FluentArgs>) -> String
+    pub fn format_value<'l>(&'l mut self, id: &'l str, args: Option<&'l FluentArgs>) -> Cow<'l, str>
     where
         R: Borrow<FluentResource>,
     {
@@ -51,9 +52,7 @@ impl<'loc, R> Localization<'loc, R> {
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
                     let mut errors = vec![];
-                    return bundle
-                        .format_pattern(pattern, args, &mut errors)
-                        .to_string();
+                    return bundle.format_pattern(pattern, args, &mut errors);
                 }
             }
         }

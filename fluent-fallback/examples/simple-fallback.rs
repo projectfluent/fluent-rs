@@ -51,7 +51,13 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
     let mut locales = vec![];
 
-    let res_dir = fs::read_dir("./fluent-fallback/examples/resources/")?;
+    let mut dir = env::current_dir()?;
+    if dir.to_string_lossy().ends_with("fluent-rs") {
+        dir.push("fluent-fallback");
+    }
+    dir.push("examples");
+    dir.push("resources");
+    let res_dir = fs::read_dir(dir)?;
     for entry in res_dir {
         if let Ok(entry) = entry {
             let path = entry.path();
@@ -98,7 +104,16 @@ fn main() {
 
     // 5. Construct a callback that will be used by the Localization instance to rebuild
     //    the iterator over FluentBundle instances.
-    let res_path_scheme = "./fluent-fallback/examples/resources/{locale}/{res_id}";
+    // let res_path_scheme = "./examples/resources/{locale}/{res_id}";
+    let mut res_path_scheme = env::current_dir().expect("Failed to retireve current dir.");
+    if res_path_scheme.to_string_lossy().ends_with("fluent-rs") {
+        res_path_scheme.push("fluent-bundle");
+    }
+    res_path_scheme.push("examples");
+    res_path_scheme.push("resources");
+    res_path_scheme.push("{locale}");
+    res_path_scheme.push("{res_id}");
+    let res_path_scheme = res_path_scheme.to_str().unwrap();
     let generate_messages = |res_ids: &[String]| {
         let mut locales = resolved_locales.iter();
         let res_mgr = &resources;
@@ -114,7 +129,7 @@ fn main() {
                     let res = res_mgr.get(&path).unwrap_or_else(|| {
                         let source = read_file(&path).unwrap();
                         let res = FluentResource::try_new(source).unwrap();
-                        res_mgr.insert(path, Box::new(res))
+                        res_mgr.insert(path.to_string(), Box::new(res))
                     });
                     bundle.add_resource(res).unwrap();
                 }
