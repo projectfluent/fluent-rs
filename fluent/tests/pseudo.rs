@@ -1,13 +1,14 @@
-use fluent::{FluentBundle, FluentResource};
-use fluent_pseudo::transform;
-use std::borrow::Cow;
-
-fn transform_wrapper(s: &str) -> Cow<str> {
-    transform(s, false, true)
-}
-
+#[cfg(feature = "fluent-pseudo")]
 #[test]
 fn test_pseudo() {
+    use fluent::{FluentBundle, FluentResource};
+    use fluent_pseudo::transform;
+    use std::borrow::Cow;
+
+    fn transform_wrapper(s: &str) -> Cow<str> {
+        transform(s, false, true)
+    }
+
     let mut bundle = FluentBundle::default();
 
     let res = FluentResource::try_new(String::from("key = Hello World")).unwrap();

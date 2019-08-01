@@ -18,5 +18,5 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-bundle = { path = "../fluent-bundle" }
-fluent-pseudo = { path = "../fluent-pseudo" }
+fluent-bundle = "0.7"
+fluent-pseudo = { path = "../fluent-pseudo", optional = true }

@@ -17,7 +17,7 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-bundle = { path = "../fluent-bundle" }
+fluent-bundle = "0.7"
 fluent-locale = "0.7"
 unic-langid = "0.4.1"
 fluent-fallback = { path = "../fluent-fallback" }
