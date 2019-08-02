@@ -98,7 +98,7 @@ pub use fluent_bundle::*;
 macro_rules! fluent_args {
     ( $($key:expr => $value:expr),* ) => {
         {
-            let mut args: ::fluent_bundle::FluentArgs = ::fluent_bundle::FluentArgs::new();
+            let mut args: $crate::FluentArgs = $crate::FluentArgs::new();
             $(
                 args.insert($key, $value.into());
             )*
