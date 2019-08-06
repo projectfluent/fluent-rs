@@ -18,6 +18,8 @@ use crate::resource::FluentResource;
 use crate::types::DisplayableNode;
 use crate::types::FluentValue;
 
+const MAX_PLACEABLE_LENGTH: usize = 2500;
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
     Reference(String),
@@ -37,6 +39,8 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
+    /// Makes the resolver bail.
+    pub dirty: bool,
 }
 
 impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
@@ -47,6 +51,7 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
             local_args: None,
             travelled: Default::default(),
             errors: vec![],
+            dirty: false,
         }
     }
 
@@ -64,7 +69,11 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
         if self.travelled.is_empty() {
             self.travelled.push(pattern);
         }
-        placeable.resolve(self)
+        let result = placeable.resolve(self);
+        if self.dirty {
+            return FluentValue::Error(placeable.into());
+        }
+        result
     }
 
     pub fn track(
@@ -109,6 +118,9 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
     where
         R: Borrow<FluentResource>,
     {
+        if scope.dirty {
+            return FluentValue::None;
+        }
         if self.elements.len() == 1 {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => {
@@ -149,8 +161,16 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     if needs_isolation {
                         string.write_char('\u{2068}').expect("Writing failed");
                     }
+
                     let result = scope.maybe_track(self, p);
                     write!(string, "{}", result).expect("Writing failed");
+
+                    if string.len() > MAX_PLACEABLE_LENGTH {
+                        scope.dirty = true;
+                        scope.errors.push(ResolverError::Cyclic);
+                        return FluentValue::None;
+                    }
+
                     if needs_isolation {
                         string.write_char('\u{2069}').expect("Writing failed");
                     }

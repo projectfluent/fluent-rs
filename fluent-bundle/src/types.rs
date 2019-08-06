@@ -12,6 +12,7 @@
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
 use std::borrow::{Borrow, Cow};
+use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
 
@@ -22,18 +23,27 @@ use crate::resolve::Scope;
 use crate::resource::FluentResource;
 
 #[derive(Debug, PartialEq, Clone)]
-pub enum DisplayableNodeType {
-    Message,
-    Term,
-    Variable,
-    Function,
+pub enum DisplayableNodeType<'source> {
+    Message(&'source str),
+    Term(&'source str),
+    Variable(&'source str),
+    Function(&'source str),
+    Expression,
 }
 
 #[derive(Debug, PartialEq, Clone)]
 pub struct DisplayableNode<'source> {
-    node_type: DisplayableNodeType,
-    id: &'source str,
+    node_type: DisplayableNodeType<'source>,
     attribute: Option<&'source str>,
+}
+
+impl<'source> Default for DisplayableNode<'source> {
+    fn default() -> Self {
+        DisplayableNode {
+            node_type: DisplayableNodeType::Expression,
+            attribute: None,
+        }
+    }
 }
 
 impl<'source> DisplayableNode<'source> {
@@ -42,10 +52,11 @@ impl<'source> DisplayableNode<'source> {
             format!("Unknown attribute: {}", self)
         } else {
             match self.node_type {
-                DisplayableNodeType::Message => format!("Unknown message: {}", self),
-                DisplayableNodeType::Term => format!("Unknown term: {}", self),
-                DisplayableNodeType::Variable => format!("Unknown variable: {}", self),
-                DisplayableNodeType::Function => format!("Unknown function: {}", self),
+                DisplayableNodeType::Message(..) => format!("Unknown message: {}", self),
+                DisplayableNodeType::Term(..) => format!("Unknown term: {}", self),
+                DisplayableNodeType::Variable(..) => format!("Unknown variable: {}", self),
+                DisplayableNodeType::Function(..) => format!("Unknown function: {}", self),
+                DisplayableNodeType::Expression => "Failed to resolve an expression.".to_string(),
             }
         }
     }
@@ -54,10 +65,11 @@ impl<'source> DisplayableNode<'source> {
 impl<'source> fmt::Display for DisplayableNode<'source> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self.node_type {
-            DisplayableNodeType::Message => write!(f, "{}", self.id)?,
-            DisplayableNodeType::Term => write!(f, "-{}", self.id)?,
-            DisplayableNodeType::Variable => write!(f, "${}", self.id)?,
-            DisplayableNodeType::Function => write!(f, "{}()", self.id)?,
+            DisplayableNodeType::Message(id) => write!(f, "{}", id)?,
+            DisplayableNodeType::Term(id) => write!(f, "-{}", id)?,
+            DisplayableNodeType::Variable(id) => write!(f, "${}", id)?,
+            DisplayableNodeType::Function(id) => write!(f, "{}()", id)?,
+            DisplayableNodeType::Expression => f.write_str("???")?,
         };
         if let Some(attr) = self.attribute {
             write!(f, ".{}", attr)?;
@@ -66,30 +78,35 @@ impl<'source> fmt::Display for DisplayableNode<'source> {
     }
 }
 
+impl<'source> From<&ast::Expression<'source>> for DisplayableNode<'source> {
+    fn from(expr: &ast::Expression<'source>) -> Self {
+        match expr {
+            ast::Expression::InlineExpression(e) => e.into(),
+            ast::Expression::SelectExpression { .. } => DisplayableNode::default(),
+        }
+    }
+}
+
 impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
     fn from(expr: &ast::InlineExpression<'source>) -> Self {
         match expr {
             ast::InlineExpression::MessageReference { id, attribute } => DisplayableNode {
-                node_type: DisplayableNodeType::Message,
-                id: id.name,
+                node_type: DisplayableNodeType::Message(id.name),
                 attribute: attribute.as_ref().map(|attr| attr.name),
             },
             ast::InlineExpression::TermReference { id, attribute, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Term,
-                id: id.name,
+                node_type: DisplayableNodeType::Term(id.name),
                 attribute: attribute.as_ref().map(|attr| attr.name),
             },
             ast::InlineExpression::VariableReference { id } => DisplayableNode {
-                node_type: DisplayableNodeType::Variable,
-                id: id.name,
+                node_type: DisplayableNodeType::Variable(id.name),
                 attribute: None,
             },
             ast::InlineExpression::FunctionReference { id, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Function,
-                id: id.name,
+                node_type: DisplayableNodeType::Function(id.name),
                 attribute: None,
             },
-            _ => unimplemented!(),
+            _ => DisplayableNode::default(),
         }
     }
 }
