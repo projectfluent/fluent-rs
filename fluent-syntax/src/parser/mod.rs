@@ -580,7 +580,13 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
                 return error!(ErrorKind::TermReferenceAsSelector, ps.ptr);
             }
         }
-        _ => {}
+        ast::InlineExpression::StringLiteral { .. }
+        | ast::InlineExpression::NumberLiteral { .. }
+        | ast::InlineExpression::VariableReference { .. }
+        | ast::InlineExpression::FunctionReference { .. } => {}
+        _ => {
+            return error!(ErrorKind::ExpectedSimpleExpressionAsSelector, ps.ptr);
+        }
     };
 
     ps.ptr += 2; // ->

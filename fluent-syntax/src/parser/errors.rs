@@ -51,4 +51,5 @@ pub enum ErrorKind {
     InvalidUnicodeEscapeSequence(String),
     UnbalancedClosingBrace,
     ExpectedInlineExpression,
+    ExpectedSimpleExpressionAsSelector,
 }
