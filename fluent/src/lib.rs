@@ -76,7 +76,7 @@
 //! [`FluentBundle`]: ./struct.FluentBundle.html
 //! [`FluentResource`]: ./struct.FluentResource.html
 //! [`FluentMessage`]: ./struct.FluentMessage.html
-//! [`FluentArgs`]: ./struct.FluentArgs.html
+//! [`FluentArgs`]: ./type.FluentArgs.html
 //! [`FluentValue`]: ./struct.FluentValue.html
 
 pub use fluent_bundle::*;
