@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.7.1 (August 16, 2019)
+
+  - Fix fluent_args to work with crate's FluentBundle
+
 ## fluent 0.7.0 (August 1, 2019)
 
   - Update to fluent-bundle 0.7.1
