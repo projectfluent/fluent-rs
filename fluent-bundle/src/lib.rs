@@ -76,7 +76,7 @@
 //! [`FluentBundle`]: ./bundle/struct.FluentBundle.html
 //! [`FluentResource`]: ./bundle/struct.FluentResource.html
 //! [`FluentMessage`]: ./bundle/struct.FluentMessage.html
-//! [`FluentArgs`]: ./bundle/struct.FluentArgs.html
+//! [`FluentArgs`]: ./bundle/type.FluentArgs.html
 //! [`FluentValue`]: ./bundle/struct.FluentValue.html
 
 #[macro_use]
