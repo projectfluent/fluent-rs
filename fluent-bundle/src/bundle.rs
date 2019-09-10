@@ -12,7 +12,6 @@ use std::default::Default;
 use fluent_locale::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_pluralrules::{IntlPluralRules, PluralRuleType};
-use unic_langid::langid;
 use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
@@ -159,7 +158,7 @@ impl<R> FluentBundle<R> {
             .into_iter()
             .map(|s| s.clone().into())
             .collect::<Vec<_>>();
-        let default_langid = langid!("en");
+        let default_langid = "en".parse().expect("Failed to parse `en` langid.");
         let pr_locale = negotiate_languages(
             &locales,
             &IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
@@ -417,7 +416,7 @@ impl<R> FluentBundle<R> {
 
 impl<R> Default for FluentBundle<R> {
     fn default() -> Self {
-        let pr_langid = langid!("en");
+        let pr_langid: LanguageIdentifier = "en".parse().expect("Failed to parse `en` langid.");
         let langid = LanguageIdentifier::default();
 
         let pr = IntlPluralRules::create(pr_langid, PluralRuleType::CARDINAL)
