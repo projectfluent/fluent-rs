@@ -12,7 +12,7 @@ fn main() {
     let res3 = FluentResource::try_new(ftl_string3).expect("Could not parse an FTL string.");
 
     let langid_en_us = langid!("en-US");
-    let mut bundle = FluentBundle::new(&[langid_en_us]);
+    let mut bundle = FluentBundle::new(vec![langid_en_us]);
 
     // Test for a simple function that returns a string
     bundle

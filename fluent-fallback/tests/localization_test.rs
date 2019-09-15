@@ -28,7 +28,7 @@ fn localization_format() {
 
         iter::from_fn(move || {
             locales.next().map(|locale| {
-                let mut bundle = FluentBundle::new(vec![locale]);
+                let mut bundle = FluentBundle::new(vec![locale.to_owned()]);
                 let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
 
                 for res_id in &res_ids {
@@ -70,7 +70,7 @@ fn localization_on_change() {
         let mut bundles = vec![];
 
         for locale in available_locales.borrow().iter() {
-            let mut bundle = FluentBundle::new(vec![locale]);
+            let mut bundle = FluentBundle::new(vec![locale.to_owned()]);
             let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
             for res_id in res_ids {
                 let path = res_path.replace("{res_id}", res_id);

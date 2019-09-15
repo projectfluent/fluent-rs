@@ -121,7 +121,7 @@ fn main() {
 
         iter::from_fn(move || {
             locales.next().map(|locale| {
-                let mut bundle = FluentBundle::new(vec![locale.clone()]);
+                let mut bundle = FluentBundle::new(vec![locale.to_owned().to_owned()]);
                 let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
 
                 for res_id in &res_ids {

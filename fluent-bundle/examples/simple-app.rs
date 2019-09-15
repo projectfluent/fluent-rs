@@ -102,7 +102,7 @@ fn main() {
 
     // 5. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut bundle = FluentBundle::new(resolved_locales.clone());
+    let mut bundle = FluentBundle::new(resolved_locales.iter().map(|l| l.to_owned().to_owned()).collect());
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {

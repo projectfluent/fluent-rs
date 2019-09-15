@@ -49,7 +49,7 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 ///     .expect("Could not parse an FTL string.");
 ///
 /// let langid_en = langid!("en-US");
-/// let mut bundle = FluentBundle::new(&[langid_en]);
+/// let mut bundle = FluentBundle::new(vec![langid_en]);
 ///
 /// bundle.add_resource(&resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
@@ -145,29 +145,25 @@ impl<R> FluentBundle<R> {
     /// use unic_langid::langid;
     ///
     /// let langid_en = langid!("en-US");
-    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_en]);
+    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_en]);
     /// ```
     ///
     /// # Errors
     ///
     /// This will panic if no formatters can be found for the locales.
-    pub fn new<'a, L: 'a + Into<LanguageIdentifier> + PartialEq + Clone>(
-        locales: impl IntoIterator<Item = &'a L>,
+    pub fn new<'a>(
+        locales: Vec<LanguageIdentifier>,
     ) -> Self {
-        let locales = locales
-            .into_iter()
-            .map(|s| s.clone().into())
-            .collect::<Vec<_>>();
         let default_langid = "en".parse().expect("Failed to parse `en` langid.");
+        let pr_locales = IntlPluralRules::get_locales(PluralRuleType::CARDINAL);
         let pr_locale = negotiate_languages(
             &locales,
-            &IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
+            &pr_locales,
             Some(&default_langid),
             NegotiationStrategy::Lookup,
-        )[0]
-        .clone();
+        );
 
-        let pr = IntlPluralRules::create(pr_locale, PluralRuleType::CARDINAL)
+        let pr = IntlPluralRules::create(pr_locale[0].clone(), PluralRuleType::CARDINAL)
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
@@ -203,7 +199,7 @@ impl<R> FluentBundle<R> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -312,7 +308,7 @@ impl<R> FluentBundle<R> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Failed to parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -379,7 +375,7 @@ impl<R> FluentBundle<R> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///

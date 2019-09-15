@@ -44,9 +44,10 @@ impl ResourceManager {
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
     ) -> FluentBundle<&FluentResource> {
-        let mut bundle = FluentBundle::new(&locales);
+        let primary_locale = locales.get(0).expect("Should have at least one locale.").to_string();
+        let mut bundle = FluentBundle::new(locales);
         for res_id in &resource_ids {
-            let res = self.get_resource(res_id, &locales[0].to_string());
+            let res = self.get_resource(res_id, &primary_locale);
             bundle.add_resource(res).unwrap();
         }
         bundle
@@ -63,7 +64,7 @@ impl ResourceManager {
         iter::from_fn(move || {
             locales.get(ptr).map(|locale| {
                 ptr += 1;
-                let mut bundle = FluentBundle::new(vec![locale]);
+                let mut bundle = FluentBundle::new(vec![locale.to_owned()]);
                 for res_id in &resource_ids {
                     let res = res_mgr.get_resource(&res_id, &locale.to_string());
                     bundle.add_resource(res).unwrap();

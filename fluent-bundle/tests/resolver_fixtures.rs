@@ -106,7 +106,7 @@ fn create_bundle(
                 .collect()
         })
         .expect("Failed to calculate locales.");
-    let mut bundle = FluentBundle::new(&locales);
+    let mut bundle = FluentBundle::new(locales);
     let use_isolating = b.and_then(|b| b.use_isolating).or_else(|| {
         defaults
             .as_ref()
