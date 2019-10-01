@@ -4,6 +4,12 @@
 
   - …
 
+## fluent-bundle 0.7.2 (October 1, 2019)
+
+  - Update `unic-langid` to 0.5.
+  - Update `fluent-locale` to 0.9.
+  - Stop using macros to cut on compilation time and dependencies.
+
 ## fluent-bundle 0.7.1 (August 1, 2019)
 
   - Fix FluentBundle::default to use isolating by default.
