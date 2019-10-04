@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.8.0 (October 3, 2019)
+
+  - Update `fluent-bundle` to 0.8.0.
+
 ## fluent 0.7.2 (October 1, 2019)
 
   - Update `fluent-bundle` to 0.7.2.
