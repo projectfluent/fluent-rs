@@ -4,7 +4,7 @@ description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.7.2"
+version = "0.8.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -18,21 +18,21 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-locale = "0.9"
+fluent-locale = "0.10"
 fluent-syntax = "0.9"
 failure = "0.1"
 failure_derive = "0.1"
-intl_pluralrules = "3.0"
+intl_pluralrules = "4.0"
 rental = "0.5.4"
 smallvec = "0.6.10"
-unic-langid = "0.5"
+unic-langid = "0.6"
 
 [dev-dependencies]
 criterion = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8"
 rand = "0.7.0"
-unic-langid = { version = "0.5", features = ["macros"] }
+unic-langid = { version = "0.6", features = ["macros"] }
 
 [[bench]]
 name = "resolver"
