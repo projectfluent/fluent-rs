@@ -23,7 +23,7 @@ fluent-syntax = "0.9"
 failure = "0.1"
 failure_derive = "0.1"
 intl_pluralrules = "5.0"
-rental = "0.5.5"
+rental = "0.5"
 smallvec = "1.0"
 unic-langid = "0.7"
 
