@@ -29,9 +29,9 @@ impl FluentResource {
         });
 
         if let Some(errors) = errors {
-            return Err((Self(res), errors));
+            Err((Self(res), errors))
         } else {
-            return Ok(Self(res));
+            Ok(Self(res))
         }
     }
 

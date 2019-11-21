@@ -31,9 +31,9 @@ impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
                 if let Some(ast::ResourceEntry::Entry(ast::Entry::Message(ref msg))) =
                     res.ast().body.get(pos[1])
                 {
-                    return Some(msg);
+                    Some(msg)
                 } else {
-                    return None;
+                    None
                 }
             }
             _ => None,
@@ -47,9 +47,9 @@ impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
                 if let Some(ast::ResourceEntry::Entry(ast::Entry::Term(ref msg))) =
                     res.ast().body.get(pos[1])
                 {
-                    return Some(msg);
+                    Some(msg)
                 } else {
-                    return None;
+                    None
                 }
             }
             _ => None,

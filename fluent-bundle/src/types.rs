@@ -226,5 +226,4 @@ mod tests {
         let z: FluentValue = y.into();
         assert_eq!(z, FluentValue::Number("1".into()));
     }
-
 }

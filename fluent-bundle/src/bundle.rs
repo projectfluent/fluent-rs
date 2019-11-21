@@ -9,9 +9,9 @@ use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
 
-use fluent_locale::{negotiate_languages, NegotiationStrategy};
+use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
-use intl_pluralrules::{IntlPluralRules, PluralRuleType};
+use intl_pluralrules::{PluralRuleType, PluralRules};
 use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
@@ -127,7 +127,7 @@ pub struct FluentBundle<R> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry>,
-    pub(crate) plural_rules: IntlPluralRules,
+    pub(crate) plural_rules: PluralRules,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
 }
@@ -161,13 +161,13 @@ impl<R> FluentBundle<R> {
         let default_langid = "en".parse().expect("Failed to parse `en` langid.");
         let pr_locale = negotiate_languages(
             &locales,
-            &IntlPluralRules::get_locales(PluralRuleType::CARDINAL),
+            &PluralRules::get_locales(PluralRuleType::CARDINAL),
             Some(&default_langid),
             NegotiationStrategy::Lookup,
         )[0]
         .clone();
 
-        let pr = IntlPluralRules::create(pr_locale, PluralRuleType::CARDINAL)
+        let pr = PluralRules::create(pr_locale, PluralRuleType::CARDINAL)
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             locales,
@@ -419,7 +419,7 @@ impl<R> Default for FluentBundle<R> {
         let pr_langid: LanguageIdentifier = "en".parse().expect("Failed to parse `en` langid.");
         let langid = LanguageIdentifier::default();
 
-        let pr = IntlPluralRules::create(pr_langid, PluralRuleType::CARDINAL)
+        let pr = PluralRules::create(pr_langid, PluralRuleType::CARDINAL)
             .expect("Failed to initialize PluralRules.");
         FluentBundle {
             plural_rules: pr,
