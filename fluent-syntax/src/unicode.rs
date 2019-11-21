@@ -1,11 +1,13 @@
 use std::borrow::Cow;
 use std::char;
 
+const UNKNOWN_CHAR: char = '�';
+
 fn encode_unicode(s: &str) -> char {
     u32::from_str_radix(s, 16)
         .ok()
         .and_then(char::from_u32)
-        .unwrap_or('�')
+        .unwrap_or(UNKNOWN_CHAR)
 }
 
 pub fn unescape_unicode(input: &str) -> Cow<str> {
@@ -39,9 +41,9 @@ pub fn unescape_unicode(input: &str) -> Cow<str> {
                 input
                     .get(start..(start + len))
                     .map(|slice| encode_unicode(slice))
-                    .unwrap_or('�')
+                    .unwrap_or(UNKNOWN_CHAR)
             }
-            _ => '�',
+            _ => UNKNOWN_CHAR,
         };
         result.to_mut().push(new_char);
         ptr += 1;
