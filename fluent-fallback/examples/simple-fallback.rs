@@ -20,7 +20,7 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_fallback::Localization;
-use fluent_locale::{negotiate_languages, NegotiationStrategy};
+use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use std::env;
 use std::fs;
 use std::fs::File;

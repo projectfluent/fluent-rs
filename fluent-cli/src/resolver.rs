@@ -8,7 +8,7 @@ use serde::Serialize;
 #[derive(Default, Serialize)]
 struct Output {
     value: String,
-    errors: Vec<bool>
+    errors: Vec<bool>,
 }
 
 fn resolve(s: String) -> String {
@@ -21,7 +21,9 @@ fn resolve(s: String) -> String {
         .expect("Failed to retrieve a test message");
 
     let mut errors = vec![];
-    let value = bundle.format_pattern(msg.value.expect("Message has no value"), None, &mut errors).into();
+    let value = bundle
+        .format_pattern(msg.value.expect("Message has no value"), None, &mut errors)
+        .into();
     let output = Output {
         value,
         ..Default::default()

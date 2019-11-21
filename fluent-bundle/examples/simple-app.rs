@@ -18,7 +18,7 @@
 //! If the second argument is omitted, `en-US` locale is used as the
 //! default one.
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
-use fluent_locale::{negotiate_languages, NegotiationStrategy};
+use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use std::env;
 use std::fs;
 use std::fs::File;
