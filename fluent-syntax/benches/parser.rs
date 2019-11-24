@@ -8,6 +8,7 @@ use std::io::Read;
 
 use fluent_syntax::parser::parse;
 use fluent_syntax::unicode::unescape_unicode;
+use fluent_syntax::parser2::Parser;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;
@@ -39,6 +40,21 @@ fn parser_bench(c: &mut Criterion) {
     );
 }
 
+fn parser2_bench(c: &mut Criterion) {
+    let input = include_str!("./simple.ftl");
+    c.bench_function("parser2_bench", |b| {
+        b.iter(|| {
+            let parser = Parser::new(input.as_bytes());
+            let ast = parser.parse();
+        })
+    });
+    c.bench_function("parser2_bench_ref", |b| {
+        b.iter(|| {
+            let ast = parse(input).unwrap();
+        })
+    });
+}
+
 fn unicode_unescape_bench(c: &mut Criterion) {
     let strings = &[
         "foo",
@@ -66,5 +82,5 @@ fn unicode_unescape_bench(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, parser_bench, unicode_unescape_bench);
+criterion_group!(benches, parser_bench, parser2_bench, unicode_unescape_bench);
 criterion_main!(benches);
