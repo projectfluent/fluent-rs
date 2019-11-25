@@ -7,8 +7,8 @@ use std::io;
 use std::io::Read;
 
 use fluent_syntax::parser::parse;
-use fluent_syntax::unicode::unescape_unicode;
 use fluent_syntax::parser2::Parser;
+use fluent_syntax::unicode::unescape_unicode;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;

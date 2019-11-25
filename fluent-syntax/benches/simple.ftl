@@ -1,3 +1,5 @@
+# Artificial testcase with 100 simple Fluent Messages
+
 key0 = Value 0
 key1 = Value 1
 key2 = Value 2

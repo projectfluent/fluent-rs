@@ -13,6 +13,7 @@ pub enum ResourceEntry {
 #[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
+    Comment(Comment),
 }
 
 #[derive(Debug, PartialEq)]
@@ -24,4 +25,17 @@ pub struct Message {
 #[derive(Debug, PartialEq)]
 pub struct Identifier {
     pub name: Range<usize>,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum CommentType {
+    Regular,
+    Group,
+    Resource,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Comment {
+    pub comment_type: CommentType,
+    pub content: Box<[Range<usize>]>,
 }
