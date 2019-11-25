@@ -19,8 +19,23 @@ pub enum Entry {
 #[derive(Debug, PartialEq)]
 pub struct Message {
     pub id: Identifier,
-    pub value: Option<Range<usize>>,
+    pub value: Option<Pattern>,
+    pub attributes: Box<[Attribute]>,
+    pub comment: Option<Comment>,
 }
+
+#[derive(Debug, PartialEq)]
+pub struct Pattern {
+    pub elements: Box<[PatternElement]>,
+}
+
+#[derive(Debug, PartialEq)]
+pub enum PatternElement {
+    TextElement(Range<usize>),
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Attribute {}
 
 #[derive(Debug, PartialEq)]
 pub struct Identifier {

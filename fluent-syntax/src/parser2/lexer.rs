@@ -5,7 +5,8 @@ pub enum Token {
     Identifier(Range<usize>),
     EqSign,
     CommentSign,
-    Text(Range<usize>),
+    Eol,
+    Text(usize, Range<usize>),
 }
 
 #[derive(Debug, PartialEq)]
@@ -45,47 +46,16 @@ impl<'l> Lexer<'l> {
         Token::Identifier(start..self.ptr)
     }
 
-    fn get_text(&mut self) -> Token {
-        let start = self.ptr;
-        self.ptr += 1;
-        self.state = LexerState::Resource;
-        let mut new_line = false;
+    fn tokenize_resource(&mut self) -> Option<Token> {
         while let Some(cc) = self.source.get(self.ptr) {
-            if *cc == b'\n' {
-                new_line = true;
-                break;
-            }
-            self.ptr += 1;
-        }
-
-        if new_line {
-            self.ptr += 1;
-            Token::Text(start..self.ptr - 1)
-        } else {
-            Token::Text(start..self.ptr)
-        }
-    }
-}
-
-impl<'l> Iterator for Lexer<'l> {
-    type Item = Token;
-
-    fn next(&mut self) -> Option<Self::Item> {
-        while let Some(cc) = self.source.get(self.ptr) {
-            if *cc != b' ' && *cc != b'\n' {
+            if *cc != b' ' {
                 break;
             }
             self.ptr += 1;
         }
 
         match self.source.get(self.ptr) {
-            Some(cc) if cc.is_ascii_alphabetic() => {
-                if self.state == LexerState::Resource {
-                    Some(self.get_ident())
-                } else {
-                    Some(self.get_text())
-                }
-            }
+            Some(cc) if cc.is_ascii_alphabetic() => Some(self.get_ident()),
             Some(b'=') => {
                 self.state = LexerState::Text;
                 self.ptr += 1;
@@ -96,8 +66,57 @@ impl<'l> Iterator for Lexer<'l> {
                 self.ptr += 1;
                 Some(Token::CommentSign)
             }
+            Some(b'\n') => {
+                self.ptr += 1;
+                Some(Token::Eol)
+            }
             None => None,
-            _ => panic!(),
+            _ => {
+                println!("{:#?}", self.source[self.ptr]);
+                panic!()
+            }
+        }
+    }
+
+    fn tokenize_text(&mut self) -> Option<Token> {
+        let indent_start = self.ptr;
+
+        while let Some(cc) = self.source.get(self.ptr) {
+            if *cc != b' ' {
+                break;
+            }
+            self.ptr += 1;
+        }
+
+        let start = self.ptr;
+        let mut new_line = false;
+        while let Some(cc) = self.source.get(self.ptr) {
+            if *cc == b'\n' {
+                new_line = true;
+                break;
+            }
+            self.ptr += 1;
+        }
+        self.state = LexerState::Resource;
+
+        let indent = start - indent_start;
+
+        if new_line {
+            self.ptr += 1;
+            Some(Token::Text(indent, start..self.ptr - 1))
+        } else {
+            Some(Token::Text(indent, start..self.ptr))
+        }
+    }
+}
+
+impl<'l> Iterator for Lexer<'l> {
+    type Item = Token;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        match self.state {
+            LexerState::Resource => self.tokenize_resource(),
+            LexerState::Text => self.tokenize_text(),
         }
     }
 }

@@ -8,6 +8,7 @@ use std::io;
 use std::io::prelude::*;
 
 use fluent_syntax::parser::parse;
+use fluent_syntax::parser2::Parser;
 
 fn compare_jsons(value: &str, reference: &str) {
     let a: Value = serde_json::from_str(value).unwrap();
@@ -30,7 +31,7 @@ fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
 
 #[test]
 fn parse_fixtures_compare() {
-    for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
+    for entry in glob("./tests/fixtures/any_char.ftl").expect("Failed to read glob pattern") {
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
 
@@ -39,12 +40,12 @@ fn parse_fixtures_compare() {
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        let target_ast = match parse(&ftl_file) {
-            Ok(res) => res,
-            Err((res, _errors)) => res,
-        };
+        ast::set_source(ftl_file.clone());
+        let parser = Parser::new(ftl_file.as_bytes());
+        let target_ast = parser.parse();
 
         let target_json = ast::serialize(&target_ast).unwrap();
+        println!("{:#?}", target_json);
 
         compare_jsons(&target_json, &reference_file);
     }
