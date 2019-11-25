@@ -164,7 +164,7 @@ where
         map.serialize_entry("content", &result)?;
         map.end()
     } else {
-        panic!()
+        serializer.serialize_none()
     }
 }
 

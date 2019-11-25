@@ -55,23 +55,39 @@ impl<'p> Parser<'p> {
 
         self.lexer.next(); // EqSign
 
+        let pattern = self.get_pattern();
+
+        let mut attributes = vec![];
+        while let Some(Token::Dot) = self.lexer.peek() {
+            self.lexer.next(); // Dot
+            attributes.push(self.get_attribute());
+        }
+        ast::Message {
+            id,
+            value: pattern,
+            attributes: attributes.into_boxed_slice(),
+            comment,
+        }
+    }
+
+    fn get_pattern(&mut self) -> Option<ast::Pattern> {
         match self.lexer.next() {
             Some(Token::Text(_, r)) => {
-                let attributes = Box::new([]);
-
                 let te = ast::PatternElement::TextElement(r);
-                let pattern = ast::Pattern {
+                Some(ast::Pattern {
                     elements: Box::new([te]),
-                };
-                ast::Message {
-                    id,
-                    value: Some(pattern),
-                    attributes,
-                    comment,
-                }
+                })
             }
+            Some(Token::Eol) => None,
             _ => panic!(),
         }
+    }
+
+    fn get_attribute(&mut self) -> ast::Attribute {
+        self.lexer.next();
+        self.lexer.next();
+        self.lexer.next();
+        ast::Attribute {}
     }
 
     fn get_comment(&mut self) -> ast::Comment {

@@ -6,6 +6,7 @@ pub enum Token {
     EqSign,
     CommentSign,
     Eol,
+    Dot,
     Text(usize, Range<usize>),
 }
 
@@ -38,7 +39,7 @@ impl<'l> Lexer<'l> {
         let start = self.ptr;
         self.ptr += 1;
         while let Some(cc) = self.source.get(self.ptr) {
-            if !cc.is_ascii_alphanumeric() && *cc != b'-' {
+            if !cc.is_ascii_alphanumeric() && *cc != b'-' && *cc != b'_' {
                 break;
             }
             self.ptr += 1;
@@ -69,6 +70,10 @@ impl<'l> Lexer<'l> {
             Some(b'\n') => {
                 self.ptr += 1;
                 Some(Token::Eol)
+            }
+            Some(b'.') => {
+                self.ptr += 1;
+                Some(Token::Dot)
             }
             None => None,
             _ => {
