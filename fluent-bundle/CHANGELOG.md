@@ -4,6 +4,11 @@
 
   - …
 
+## fluent-bundle 0.9.0 (November 26, 2019)
+  - Update `unic-langid` to 0.7.
+  - Update `fluent-langneg` to 0.11.
+  - Update `intl_pluralrules` to 5.0.
+
 ## fluent-bundle 0.8.0 (October 3, 2019)
 
   - Update `unic-langid` to 0.6.
