@@ -3,7 +3,7 @@ name = "fluent-pseudo"
 description = """
 Pseudolocalization transformation API for use with Project Fluent API.
 """
-version = "0.0.1"
+version = "0.1.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -17,4 +17,4 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-regex = "1.2"
+regex = "1.3"
