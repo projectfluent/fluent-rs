@@ -4,6 +4,11 @@
 
   - …
 
+## fluent 0.9.0 (November 26, 2019)
+  - Update `fluent-bundle` to 0.9.0.
+  - Update `fluent-pseudo` to 0.1.0.
+  - Update `unic-langid` to 0.7.0.
+
 ## fluent 0.8.0 (October 3, 2019)
 
   - Update `fluent-bundle` to 0.8.0.
