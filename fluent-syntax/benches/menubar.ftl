@@ -312,7 +312,6 @@ view-tabs-broadcaster =
 -brand-full-name       = Mozilla Firefox
 -vendor-short-name     = Mozilla
 
-trademark-info        = 
-    Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
+trademark-info        = Firefox and the Firefox logos are trademarks of the Mozilla Foundation.
 
 -sync-brand-short-name = Sync

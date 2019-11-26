@@ -41,18 +41,30 @@ fn parser_bench(c: &mut Criterion) {
 }
 
 fn parser2_bench(c: &mut Criterion) {
-    let input = include_str!("./simple.ftl");
-    c.bench_function("parser2_bench", |b| {
-        b.iter(|| {
-            let parser = Parser::new(input.as_bytes());
-            let ast = parser.parse();
-        })
-    });
-    c.bench_function("parser2_bench_ref", |b| {
-        b.iter(|| {
-            let ast = parse(input).unwrap();
-        })
-    });
+    let tests = &["simple", "menubar"];
+    let ftl_strings = get_strings(tests);
+
+    c.bench_function_over_inputs(
+        "parser2_bench",
+        move |b, &name| {
+            let source = &ftl_strings[name];
+            b.iter(|| {
+                let parser = Parser::new(source.as_bytes());
+                let ast = parser.parse();
+            });
+        },
+        tests,
+    );
+
+    let ftl_strings = get_strings(tests);
+    c.bench_function_over_inputs(
+        "parser2_bench_ref",
+        move |b, &name| {
+            let source = &ftl_strings[name];
+            b.iter(|| parse(source).expect("Parsing of the FTL failed."))
+        },
+        tests,
+    );
 }
 
 fn unicode_unescape_bench(c: &mut Criterion) {

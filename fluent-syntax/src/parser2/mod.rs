@@ -12,8 +12,6 @@ mod tests {
     #[test]
     fn parser2_test() {
         let input = include_str!("../../benches/simple.ftl");
-        // let input = r#"key0 = Value 0
-        // key1 = Value 1"#;
         let parser = Parser::new(input.as_bytes());
         let ast = parser.parse();
 
@@ -47,5 +45,28 @@ mod tests {
         let value = &input[value.start..value.end];
         assert_eq!(id, "key1");
         assert_eq!(value, "Value 1");
+    }
+
+    #[test]
+    fn parser2_test2() {
+        let input = include_str!("../../benches/menubar.ftl");
+        let parser = Parser::new(input.as_bytes());
+        let ast = parser.parse();
+
+        assert_eq!(ast.body.len(), 101);
+        let (id, value) = match &ast.body[1] {
+            ast::ResourceEntry::Entry(ast::Entry::Message(msg)) => {
+                let pe = &msg.value.as_ref().unwrap().elements[0];
+                let text = match pe {
+                    ast::PatternElement::TextElement(r) => r,
+                };
+                (&msg.id.name, text)
+            }
+            _ => panic!(),
+        };
+        let id = &input[id.start..id.end];
+        let value = &input[value.start..value.end];
+        assert_eq!(id, "key0");
+        assert_eq!(value, "Value 0");
     }
 }

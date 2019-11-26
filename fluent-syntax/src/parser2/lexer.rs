@@ -7,6 +7,7 @@ pub enum Token {
     CommentSign,
     Eol,
     Dot,
+    MinusSign,
     Text(usize, Range<usize>),
 }
 
@@ -74,6 +75,10 @@ impl<'l> Lexer<'l> {
             Some(b'.') => {
                 self.ptr += 1;
                 Some(Token::Dot)
+            }
+            Some(b'-') => {
+                self.ptr += 1;
+                Some(Token::MinusSign)
             }
             None => None,
             _ => {

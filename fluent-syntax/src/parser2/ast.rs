@@ -13,6 +13,7 @@ pub enum ResourceEntry {
 #[derive(Debug, PartialEq)]
 pub enum Entry {
     Message(Message),
+    Term(Term),
     Comment(Comment),
 }
 
@@ -20,6 +21,14 @@ pub enum Entry {
 pub struct Message {
     pub id: Identifier,
     pub value: Option<Pattern>,
+    pub attributes: Box<[Attribute]>,
+    pub comment: Option<Comment>,
+}
+
+#[derive(Debug, PartialEq)]
+pub struct Term {
+    pub id: Identifier,
+    pub value: Pattern,
     pub attributes: Box<[Attribute]>,
     pub comment: Option<Comment>,
 }

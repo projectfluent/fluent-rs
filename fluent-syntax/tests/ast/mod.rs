@@ -51,6 +51,8 @@ where
     enum EntryHelper<'s> {
         #[serde(with = "MessageDef")]
         Message(&'s ast::Message),
+        #[serde(with = "TermDef")]
+        Term(&'s ast::Term),
         Comment {
             content: String,
         },
@@ -67,6 +69,7 @@ where
         let entry = match *e {
             ast::ResourceEntry::Entry(ref entry) => match entry {
                 ast::Entry::Message(ref msg) => EntryHelper::Message(msg),
+                ast::Entry::Term(ref term) => EntryHelper::Term(term),
                 ast::Entry::Comment(ref comment) => match comment.comment_type {
                     ast::CommentType::Regular => EntryHelper::Comment {
                         content: "Foo".to_string(),
@@ -93,6 +96,8 @@ pub enum ResourceEntryDef {
 pub enum EntryDef {
     #[serde(with = "MessageDef")]
     Message(ast::Message),
+    #[serde(with = "TermDef")]
+    Term(ast::Term),
     #[serde(with = "CommentDef")]
     Comment(ast::Comment),
 }
@@ -104,6 +109,19 @@ pub struct MessageDef {
     pub id: ast::Identifier,
     #[serde(serialize_with = "serialize_pattern_option")]
     pub value: Option<ast::Pattern>,
+    #[serde(serialize_with = "serialize_attribute_list")]
+    pub attributes: Box<[ast::Attribute]>,
+    #[serde(serialize_with = "serialize_comment_option")]
+    pub comment: Option<ast::Comment>,
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::Term")]
+pub struct TermDef {
+    #[serde(with = "IdentifierDef")]
+    pub id: ast::Identifier,
+    #[serde(with = "PatternDef")]
+    pub value: ast::Pattern,
     #[serde(serialize_with = "serialize_attribute_list")]
     pub attributes: Box<[ast::Attribute]>,
     #[serde(serialize_with = "serialize_comment_option")]
