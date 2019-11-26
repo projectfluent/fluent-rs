@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-syntax 0.9.1 (November 26, 2019)
+  - Dependency updates.
+  - Better test coverage.
+
 ## fluent-syntax 0.9.0 (March 26, 2019)
   - Update to Fluent Syntax 0.9
   - Unify benchmark testsuite with fluent.js
