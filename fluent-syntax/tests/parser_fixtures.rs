@@ -31,7 +31,7 @@ fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
 
 #[test]
 fn parse_fixtures_compare() {
-    for entry in glob("./tests/fixtures/messages.ftl").expect("Failed to read glob pattern") {
+    for entry in glob("./tests/fixtures/any_char.ftl").expect("Failed to read glob pattern") {
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
 

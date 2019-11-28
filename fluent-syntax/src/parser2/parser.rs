@@ -44,12 +44,17 @@ impl<'p> Parser<'p> {
                         return Some(ast::Entry::Comment(comment));
                     }
                 }
-                Token::CommentSign => {
-                    let comment = self.get_comment();
+                c @ Token::CommentSign
+                | c @ Token::GroupCommentSign
+                | c @ Token::ResourceCommentSign => {
+                    let comment = self.get_comment(&c);
                     last_comment = Some(comment);
                 }
                 _ => panic!(),
             }
+        }
+        if let Some(comment) = last_comment.take() {
+            return Some(ast::Entry::Comment(comment));
         }
         None
     }
@@ -63,7 +68,6 @@ impl<'p> Parser<'p> {
 
         let mut attributes = vec![];
         while let Some(Token::Dot) = self.lexer.peek() {
-            self.lexer.next(); // Dot
             attributes.push(self.get_attribute());
         }
         ast::Message {
@@ -83,7 +87,6 @@ impl<'p> Parser<'p> {
 
         let mut attributes = vec![];
         while let Some(Token::Dot) = self.lexer.peek() {
-            self.lexer.next(); // Dot
             attributes.push(self.get_attribute());
         }
         ast::Term {
@@ -95,30 +98,54 @@ impl<'p> Parser<'p> {
     }
 
     fn maybe_get_pattern(&mut self) -> Option<ast::Pattern> {
-        match self.lexer.next() {
-            Some(Token::Text(_, r)) => {
-                let te = ast::PatternElement::TextElement(r);
-                Some(ast::Pattern {
-                    elements: Box::new([te]),
-                })
+        let mut pe = vec![];
+        loop {
+            match self.lexer.next() {
+                Some(Token::Text(_, r)) => {
+                    let te = ast::PatternElement::TextElement(r);
+                    pe.push(te);
+                }
+                Some(Token::Eol) => {}
+                Some(Token::Eot) => {
+                    break;
+                }
+                None => {
+                    break;
+                }
+                b => {
+                    println!("{:#?}", b);
+                    panic!();
+                }
             }
-            Some(Token::Eol) => None,
-            b @ _ => {
-                println!("{:#?}", b);
-                panic!()
-            }
+        }
+        if pe.is_empty() {
+            None
+        } else {
+            Some(ast::Pattern {
+                elements: pe.into_boxed_slice(),
+            })
         }
     }
 
     fn get_pattern(&mut self) -> ast::Pattern {
-        match self.lexer.next() {
-            Some(Token::Text(_, r)) => {
-                let te = ast::PatternElement::TextElement(r);
-                ast::Pattern {
-                    elements: Box::new([te]),
+        let mut pe = vec![];
+        loop {
+            match self.lexer.next() {
+                Some(Token::Text(_, r)) => {
+                    let te = ast::PatternElement::TextElement(r);
+                    pe.push(te);
                 }
+                Some(Token::Eot) => {
+                    break;
+                }
+                None => {
+                    break;
+                }
+                _ => panic!(),
             }
-            _ => panic!(),
+        }
+        ast::Pattern {
+            elements: pe.into_boxed_slice(),
         }
     }
 
@@ -130,25 +157,46 @@ impl<'p> Parser<'p> {
     }
 
     fn get_attribute(&mut self) -> ast::Attribute {
-        self.lexer.next();
-        self.lexer.next();
-        self.lexer.next();
-        ast::Attribute {}
+        self.lexer.next(); // Dot
+        let id = self.get_identifier();
+        self.lexer.next(); // EqSign
+        let value = self.get_pattern();
+        ast::Attribute { id, value }
     }
 
-    fn get_comment(&mut self) -> ast::Comment {
+    fn get_comment(&mut self, token: &Token) -> ast::Comment {
+        let mut pe = vec![];
+        let comment_type = match token {
+            Token::CommentSign => ast::CommentType::Regular,
+            Token::GroupCommentSign => ast::CommentType::Group,
+            Token::ResourceCommentSign => ast::CommentType::Resource,
+            _ => panic!(),
+        };
         match self.lexer.next() {
             Some(Token::Text(indent, mut r)) => {
                 if indent > 0 {
                     r.start -= indent - 1;
                 }
-                let content = Box::new([r]);
-                ast::Comment {
-                    comment_type: ast::CommentType::Regular,
-                    content,
-                }
+                pe.push(r);
             }
             _ => panic!(),
+        }
+        while let Some(Token::CommentSign) = self.lexer.peek() {
+            self.lexer.next();
+            match self.lexer.next() {
+                Some(Token::Text(indent, mut r)) => {
+                    if indent > 0 {
+                        r.start -= indent - 1;
+                    }
+                    pe.push(r);
+                }
+                _ => panic!(),
+            }
+        }
+        let content = pe.into_boxed_slice();
+        ast::Comment {
+            comment_type,
+            content,
         }
     }
 }

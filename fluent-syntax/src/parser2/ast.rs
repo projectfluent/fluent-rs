@@ -44,7 +44,10 @@ pub enum PatternElement {
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Attribute {}
+pub struct Attribute {
+    pub id: Identifier,
+    pub value: Pattern,
+}
 
 #[derive(Debug, PartialEq)]
 pub struct Identifier {

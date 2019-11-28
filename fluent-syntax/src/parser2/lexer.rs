@@ -5,7 +5,10 @@ pub enum Token {
     Identifier(Range<usize>),
     EqSign,
     CommentSign,
+    GroupCommentSign,
+    ResourceCommentSign,
     Eol,
+    Eot, // End Of Text
     Dot,
     MinusSign,
     Text(usize, Range<usize>),
@@ -15,6 +18,7 @@ pub enum Token {
 pub enum LexerState {
     Resource,
     Text,
+    TextLine,
 }
 
 #[derive(Debug)]
@@ -64,9 +68,18 @@ impl<'l> Lexer<'l> {
                 Some(Token::EqSign)
             }
             Some(b'#') => {
-                self.state = LexerState::Text;
+                let start = self.ptr;
                 self.ptr += 1;
-                Some(Token::CommentSign)
+                while let Some(b'#') = self.source.get(self.ptr) {
+                    self.ptr += 1;
+                }
+                self.state = LexerState::TextLine;
+                match self.ptr - start {
+                    1 => Some(Token::CommentSign),
+                    2 => Some(Token::GroupCommentSign),
+                    3 => Some(Token::ResourceCommentSign),
+                    _ => panic!(),
+                }
             }
             Some(b'\n') => {
                 self.ptr += 1;
@@ -88,6 +101,30 @@ impl<'l> Lexer<'l> {
         }
     }
 
+    fn tokenize_text_line(&mut self) -> Option<Token> {
+        let indent_start = self.ptr;
+
+        while let Some(cc) = self.source.get(self.ptr) {
+            if *cc != b' ' {
+                break;
+            }
+            self.ptr += 1;
+        }
+
+        let start = self.ptr;
+        let indent = start - indent_start;
+
+        while let Some(cc) = self.source.get(self.ptr) {
+            if *cc == b'\n' {
+                self.ptr += 1;
+                break;
+            }
+            self.ptr += 1;
+        }
+        self.state = LexerState::Resource;
+        Some(Token::Text(indent, start..self.ptr - 1))
+    }
+
     fn tokenize_text(&mut self) -> Option<Token> {
         let indent_start = self.ptr;
 
@@ -99,23 +136,57 @@ impl<'l> Lexer<'l> {
         }
 
         let start = self.ptr;
-        let mut new_line = false;
+        let indent = start - indent_start;
+
+        // if indent == 0 {
+        //     self.state = LexerState::Resource;
+        //     return Some(Token::Eot);
+        // }
+
         while let Some(cc) = self.source.get(self.ptr) {
-            if *cc == b'\n' {
-                new_line = true;
+            match cc {
+                b'\n' if start == self.ptr => {
+                    self.ptr += 1;
+                    if self.try_if_line_is_text() {
+                        return Some(Token::Eol);
+                    } else {
+                        self.state = LexerState::Resource;
+                        return Some(Token::Eot);
+                    }
+                }
+                b'\n' => {
+                    return Some(Token::Text(indent, start..self.ptr));
+                }
+                _ => {}
+            }
+            self.ptr += 1;
+        }
+        None
+    }
+
+    fn try_if_line_is_text(&mut self) -> bool {
+        let indent_start = self.ptr;
+
+        while let Some(cc) = self.source.get(self.ptr) {
+            if *cc != b' ' {
                 break;
             }
             self.ptr += 1;
         }
-        self.state = LexerState::Resource;
 
+        let start = self.ptr;
         let indent = start - indent_start;
 
-        if new_line {
-            self.ptr += 1;
-            Some(Token::Text(indent, start..self.ptr - 1))
-        } else {
-            Some(Token::Text(indent, start..self.ptr))
+        if indent == 0 {
+            return false;
+        }
+
+        match self.source.get(self.ptr) {
+            Some(b'.') => {
+                self.ptr -= 1;
+                false
+            }
+            _ => true,
         }
     }
 }
@@ -127,6 +198,7 @@ impl<'l> Iterator for Lexer<'l> {
         match self.state {
             LexerState::Resource => self.tokenize_resource(),
             LexerState::Text => self.tokenize_text(),
+            LexerState::TextLine => self.tokenize_text_line(),
         }
     }
 }

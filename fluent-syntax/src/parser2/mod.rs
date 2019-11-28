@@ -53,20 +53,6 @@ mod tests {
         let parser = Parser::new(input.as_bytes());
         let ast = parser.parse();
 
-        assert_eq!(ast.body.len(), 101);
-        let (id, value) = match &ast.body[1] {
-            ast::ResourceEntry::Entry(ast::Entry::Message(msg)) => {
-                let pe = &msg.value.as_ref().unwrap().elements[0];
-                let text = match pe {
-                    ast::PatternElement::TextElement(r) => r,
-                };
-                (&msg.id.name, text)
-            }
-            _ => panic!(),
-        };
-        let id = &input[id.start..id.end];
-        let value = &input[value.start..value.end];
-        assert_eq!(id, "key0");
-        assert_eq!(value, "Value 0");
+        assert_eq!(ast.body.len(), 115);
     }
 }
