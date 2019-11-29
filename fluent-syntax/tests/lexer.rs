@@ -1,4 +1,4 @@
-use fluent_syntax::parser2::lexer;
+use fluent_syntax::parser::lexer;
 
 #[test]
 fn lex_simple() {

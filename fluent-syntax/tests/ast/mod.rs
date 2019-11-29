@@ -1,4 +1,4 @@
-use fluent_syntax::parser2::ast;
+use fluent_syntax::ast;
 use serde::ser::SerializeMap;
 use serde::ser::SerializeSeq;
 use serde::{Serialize, Serializer};

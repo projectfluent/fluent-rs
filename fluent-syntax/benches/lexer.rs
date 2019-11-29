@@ -6,7 +6,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use fluent_syntax::parser2::lexer::Lexer;
+use fluent_syntax::parser::lexer::Lexer;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;

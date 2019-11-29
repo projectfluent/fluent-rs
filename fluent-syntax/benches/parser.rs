@@ -6,8 +6,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use fluent_syntax::parser::parse;
-use fluent_syntax::parser2::Parser;
+use fluent_syntax::parser::Parser;
 use fluent_syntax::unicode::unescape_unicode;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -27,41 +26,17 @@ fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, String> {
 }
 
 fn parser_bench(c: &mut Criterion) {
-    let tests = &["simple", "preferences", "menubar"];
-    let ftl_strings = get_strings(tests);
-
-    c.bench_function_over_inputs(
-        "parse",
-        move |b, &&name| {
-            let source = &ftl_strings[name];
-            b.iter(|| parse(source).expect("Parsing of the FTL failed."))
-        },
-        tests,
-    );
-}
-
-fn parser2_bench(c: &mut Criterion) {
     let tests = &["simple", "menubar"];
     let ftl_strings = get_strings(tests);
 
     c.bench_function_over_inputs(
-        "parser2_bench",
+        "parser_bench",
         move |b, &name| {
             let source = &ftl_strings[name];
             b.iter(|| {
                 let parser = Parser::new(source.as_bytes());
                 let ast = parser.parse();
             });
-        },
-        tests,
-    );
-
-    let ftl_strings = get_strings(tests);
-    c.bench_function_over_inputs(
-        "parser2_bench_ref",
-        move |b, &name| {
-            let source = &ftl_strings[name];
-            b.iter(|| parse(source).expect("Parsing of the FTL failed."))
         },
         tests,
     );
@@ -94,5 +69,5 @@ fn unicode_unescape_bench(c: &mut Criterion) {
     });
 }
 
-criterion_group!(benches, parser_bench, parser2_bench, unicode_unescape_bench);
+criterion_group!(benches, parser_bench, unicode_unescape_bench);
 criterion_main!(benches);
