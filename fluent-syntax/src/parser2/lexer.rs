@@ -138,11 +138,6 @@ impl<'l> Lexer<'l> {
         let start = self.ptr;
         let indent = start - indent_start;
 
-        // if indent == 0 {
-        //     self.state = LexerState::Resource;
-        //     return Some(Token::Eot);
-        // }
-
         while let Some(cc) = self.source.get(self.ptr) {
             match cc {
                 b'\n' if start == self.ptr => {

@@ -26,3 +26,11 @@ criterion = "0.3"
 [[bench]]
 name = "parser"
 harness = false
+
+[[bench]]
+name = "lexer"
+harness = false
+
+[[bin]]
+name = "lexer"
+path = "src/bin/lexer.rs"
