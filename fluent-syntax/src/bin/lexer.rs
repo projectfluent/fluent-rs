@@ -8,6 +8,6 @@ fn main() {
     let tokens: Vec<lexer::Token> = lexer.collect();
 
     let mut result = String::new();
-    write!(result, "{:#?}", tokens);
+    write!(result, "{:#?}", tokens).unwrap();
     println!("{}", result);
 }

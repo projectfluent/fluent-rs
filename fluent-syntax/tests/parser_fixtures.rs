@@ -39,8 +39,7 @@ fn parse_fixtures_compare() {
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        ast::set_source(ftl_file.clone());
-        let parser = Parser::new(ftl_file.as_bytes());
+        let parser = Parser::new(&ftl_file);
         let target_ast = parser.parse();
 
         let target_json = ast::serialize(&target_ast).unwrap();
@@ -60,8 +59,7 @@ fn parse_fixtures() {
 
         let string = read_file(path, false).expect("Failed to read");
 
-        ast::set_source(string.clone());
-        let parser = Parser::new(string.as_bytes());
-        let target_ast = parser.parse();
+        let parser = Parser::new(&string);
+        let _ = parser.parse();
     }
 }

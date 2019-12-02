@@ -24,7 +24,6 @@ fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, String> {
     return ftl_strings;
 }
 
-
 fn lexer_bench(c: &mut Criterion) {
     let tests = &["simple", "menubar"];
     let ftl_strings = get_strings(tests);
@@ -41,7 +40,6 @@ fn lexer_bench(c: &mut Criterion) {
         tests,
     );
 }
-
 
 criterion_group!(benches, lexer_bench);
 criterion_main!(benches);

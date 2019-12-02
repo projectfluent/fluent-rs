@@ -34,7 +34,7 @@ fn parser_bench(c: &mut Criterion) {
         move |b, &name| {
             let source = &ftl_strings[name];
             b.iter(|| {
-                let parser = Parser::new(source.as_bytes());
+                let parser = Parser::new(source);
                 let ast = parser.parse();
             });
         },

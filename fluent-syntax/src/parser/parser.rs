@@ -5,29 +5,30 @@ use std::iter::Peekable;
 use std::ops::Range;
 
 pub struct Parser<'p> {
+    source: &'p str,
     lexer: Peekable<Lexer<'p>>,
-    resource: Vec<ast::ResourceEntry>,
 }
 
 impl<'p> Parser<'p> {
-    pub fn new(source: &'p [u8]) -> Self {
+    pub fn new(source: &'p str) -> Self {
         Parser {
-            lexer: Lexer::new(source).peekable(),
-            resource: vec![],
+            lexer: Lexer::new(source.as_bytes()).peekable(),
+            source,
         }
     }
 
-    pub fn parse(mut self) -> ast::Resource {
+    pub fn parse(mut self) -> ast::Resource<'p> {
+        let mut resource = vec![];
         while let Some(entry) = self.get_entry() {
-            self.resource.push(ast::ResourceEntry::Entry(entry));
+            resource.push(ast::ResourceEntry::Entry(entry));
         }
 
         ast::Resource {
-            body: self.resource.into_boxed_slice(),
+            body: resource.into_boxed_slice(),
         }
     }
 
-    fn get_entry(&mut self) -> Option<ast::Entry> {
+    fn get_entry(&mut self) -> Option<ast::Entry<'p>> {
         let mut last_comment = None;
         while let Some(token) = self.lexer.next() {
             match token {
@@ -59,8 +60,14 @@ impl<'p> Parser<'p> {
         None
     }
 
-    fn get_message(&mut self, id: Range<usize>, comment: Option<ast::Comment>) -> ast::Message {
-        let id = ast::Identifier { name: id };
+    fn get_message(
+        &mut self,
+        id: Range<usize>,
+        comment: Option<ast::Comment<'p>>,
+    ) -> ast::Message<'p> {
+        let id = ast::Identifier {
+            name: &self.source[id],
+        };
 
         self.lexer.next(); // EqSign
 
@@ -78,7 +85,7 @@ impl<'p> Parser<'p> {
         }
     }
 
-    fn get_term(&mut self, comment: Option<ast::Comment>) -> ast::Term {
+    fn get_term(&mut self, comment: Option<ast::Comment<'p>>) -> ast::Term<'p> {
         let id = self.get_identifier();
 
         self.lexer.next(); // EqSign
@@ -97,12 +104,12 @@ impl<'p> Parser<'p> {
         }
     }
 
-    fn maybe_get_pattern(&mut self) -> Option<ast::Pattern> {
+    fn maybe_get_pattern(&mut self) -> Option<ast::Pattern<'p>> {
         let mut pe = vec![];
         loop {
             match self.lexer.next() {
                 Some(Token::Text(_, r)) => {
-                    let te = ast::PatternElement::TextElement(r);
+                    let te = ast::PatternElement::TextElement(&self.source[r]);
                     pe.push(te);
                 }
                 Some(Token::Eol) => {}
@@ -127,12 +134,12 @@ impl<'p> Parser<'p> {
         }
     }
 
-    fn get_pattern(&mut self) -> ast::Pattern {
+    fn get_pattern(&mut self) -> ast::Pattern<'p> {
         let mut pe = vec![];
         loop {
             match self.lexer.next() {
                 Some(Token::Text(_, r)) => {
-                    let te = ast::PatternElement::TextElement(r);
+                    let te = ast::PatternElement::TextElement(&self.source[r]);
                     pe.push(te);
                 }
                 Some(Token::Eot) => {
@@ -149,14 +156,16 @@ impl<'p> Parser<'p> {
         }
     }
 
-    fn get_identifier(&mut self) -> ast::Identifier {
+    fn get_identifier(&mut self) -> ast::Identifier<'p> {
         match self.lexer.next() {
-            Some(Token::Identifier(r)) => ast::Identifier { name: r },
+            Some(Token::Identifier(r)) => ast::Identifier {
+                name: &self.source[r],
+            },
             _ => panic!(),
         }
     }
 
-    fn get_attribute(&mut self) -> ast::Attribute {
+    fn get_attribute(&mut self) -> ast::Attribute<'p> {
         self.lexer.next(); // Dot
         let id = self.get_identifier();
         self.lexer.next(); // EqSign
@@ -164,7 +173,7 @@ impl<'p> Parser<'p> {
         ast::Attribute { id, value }
     }
 
-    fn get_comment(&mut self, token: &Token) -> ast::Comment {
+    fn get_comment(&mut self, token: &Token) -> ast::Comment<'p> {
         let mut pe = vec![];
         let comment_type = match token {
             Token::CommentSign => ast::CommentType::Regular,
@@ -177,7 +186,7 @@ impl<'p> Parser<'p> {
                 if indent > 0 {
                     r.start -= indent - 1;
                 }
-                pe.push(r);
+                pe.push(&self.source[r]);
             }
             _ => panic!(),
         }
@@ -188,7 +197,7 @@ impl<'p> Parser<'p> {
                     if indent > 0 {
                         r.start -= indent - 1;
                     }
-                    pe.push(r);
+                    pe.push(&self.source[r]);
                 }
                 _ => panic!(),
             }

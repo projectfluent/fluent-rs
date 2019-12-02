@@ -1,8 +1,8 @@
 pub mod lexer;
 mod parser;
 
-pub use parser::Parser;
 use crate::ast;
+pub use parser::Parser;
 
 #[cfg(test)]
 mod tests {
@@ -12,7 +12,7 @@ mod tests {
     #[test]
     fn parser2_test() {
         let input = include_str!("../../benches/simple.ftl");
-        let parser = Parser::new(input.as_bytes());
+        let parser = Parser::new(input);
         let ast = parser.parse();
 
         assert_eq!(ast.body.len(), 101);
@@ -26,10 +26,8 @@ mod tests {
             }
             _ => panic!(),
         };
-        let id = &input[id.start..id.end];
-        let value = &input[value.start..value.end];
-        assert_eq!(id, "key0");
-        assert_eq!(value, "Value 0");
+        assert_eq!(id, &"key0");
+        assert_eq!(value, &"Value 0");
 
         let (id, value) = match &ast.body[2] {
             ast::ResourceEntry::Entry(ast::Entry::Message(msg)) => {
@@ -41,16 +39,14 @@ mod tests {
             }
             _ => panic!(),
         };
-        let id = &input[id.start..id.end];
-        let value = &input[value.start..value.end];
-        assert_eq!(id, "key1");
-        assert_eq!(value, "Value 1");
+        assert_eq!(id, &"key1");
+        assert_eq!(value, &"Value 1");
     }
 
     #[test]
     fn parser2_test2() {
         let input = include_str!("../../benches/menubar.ftl");
-        let parser = Parser::new(input.as_bytes());
+        let parser = Parser::new(input);
         let ast = parser.parse();
 
         assert_eq!(ast.body.len(), 115);
