@@ -18,46 +18,44 @@ impl<'p> Parser<'p> {
     }
 
     pub fn parse(mut self) -> ast::Resource<'p> {
-        let mut resource = vec![];
-        while let Some(entry) = self.get_entry() {
-            resource.push(ast::ResourceEntry::Entry(entry));
-        }
+        let mut body = vec![];
 
-        ast::Resource {
-            body: resource.into_boxed_slice(),
-        }
-    }
-
-    fn get_entry(&mut self) -> Option<ast::Entry<'p>> {
         let mut last_comment = None;
+
         while let Some(token) = self.lexer.next() {
             match token {
                 Token::Identifier(r) => {
                     let msg = self.get_message(r, last_comment.take());
-                    return Some(ast::Entry::Message(msg));
+                    body.push(ast::ResourceEntry::Entry(ast::Entry::Message(msg)));
                 }
                 Token::MinusSign => {
                     let term = self.get_term(last_comment.take());
-                    return Some(ast::Entry::Term(term));
+                    body.push(ast::ResourceEntry::Entry(ast::Entry::Term(term)));
                 }
-                Token::Eol => {
+                Token::Eol(_) => {
                     if let Some(comment) = last_comment.take() {
-                        return Some(ast::Entry::Comment(comment));
+                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
                     }
                 }
                 c @ Token::CommentSign
                 | c @ Token::GroupCommentSign
                 | c @ Token::ResourceCommentSign => {
                     let comment = self.get_comment(&c);
-                    last_comment = Some(comment);
+                    if let Some(comment) = last_comment.replace(comment) {
+                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                    }
                 }
                 _ => panic!(),
             }
         }
+
         if let Some(comment) = last_comment.take() {
-            return Some(ast::Entry::Comment(comment));
+            body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
         }
-        None
+
+        ast::Resource {
+            body: body.into_boxed_slice(),
+        }
     }
 
     fn get_message(
@@ -112,7 +110,12 @@ impl<'p> Parser<'p> {
                     let te = ast::PatternElement::TextElement(&self.source[r]);
                     pe.push(te);
                 }
-                Some(Token::Eol) => {}
+                Some(Token::Eol(i)) => {
+                    if !pe.is_empty() {
+                        let te = ast::PatternElement::TextElement(&self.source[i..i + 1]);
+                        pe.push(te);
+                    }
+                }
                 Some(Token::Eot) => {
                     break;
                 }
@@ -142,10 +145,13 @@ impl<'p> Parser<'p> {
                     let te = ast::PatternElement::TextElement(&self.source[r]);
                     pe.push(te);
                 }
-                Some(Token::Eot) => {
-                    break;
+                Some(Token::Eol(i)) => {
+                    if !pe.is_empty() {
+                        let te = ast::PatternElement::TextElement(&self.source[i..i + 1]);
+                        pe.push(te);
+                    }
                 }
-                None => {
+                Some(Token::Eot) | None => {
                     break;
                 }
                 _ => panic!(),
@@ -175,7 +181,8 @@ impl<'p> Parser<'p> {
 
     fn get_comment(&mut self, token: &Token) -> ast::Comment<'p> {
         let mut pe = vec![];
-        let comment_type = match token {
+        let comment_type_token = token;
+        let comment_type = match comment_type_token {
             Token::CommentSign => ast::CommentType::Regular,
             Token::GroupCommentSign => ast::CommentType::Group,
             Token::ResourceCommentSign => ast::CommentType::Resource,
@@ -190,7 +197,10 @@ impl<'p> Parser<'p> {
             }
             _ => panic!(),
         }
-        while let Some(Token::CommentSign) = self.lexer.peek() {
+        while let Some(token) = self.lexer.peek() {
+            if token != comment_type_token {
+                break;
+            }
             self.lexer.next();
             match self.lexer.next() {
                 Some(Token::Text(indent, mut r)) => {

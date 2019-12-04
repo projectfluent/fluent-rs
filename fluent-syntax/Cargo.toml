@@ -34,3 +34,7 @@ harness = false
 [[bin]]
 name = "lexer"
 path = "src/bin/lexer.rs"
+
+[[bin]]
+name = "parser"
+path = "src/bin/parser.rs"

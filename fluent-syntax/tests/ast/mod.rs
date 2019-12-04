@@ -61,17 +61,14 @@ where
             ast::ResourceEntry::Entry(ref entry) => match entry {
                 ast::Entry::Message(ref msg) => EntryHelper::Message(msg),
                 ast::Entry::Term(ref term) => EntryHelper::Term(term),
-                ast::Entry::Comment(ref comment) => match comment.comment_type {
-                    ast::CommentType::Regular => EntryHelper::Comment {
-                        content: "Foo".to_string(),
-                    },
-                    ast::CommentType::Group => EntryHelper::GroupComment {
-                        content: "Foo".to_string(),
-                    },
-                    ast::CommentType::Resource => EntryHelper::ResourceComment {
-                        content: "Foo".to_string(),
-                    },
-                },
+                ast::Entry::Comment(ref comment) => {
+                    let content = comment.content.join("\n");
+                    match comment.comment_type {
+                        ast::CommentType::Regular => EntryHelper::Comment { content },
+                        ast::CommentType::Group => EntryHelper::GroupComment { content },
+                        ast::CommentType::Resource => EntryHelper::ResourceComment { content },
+                    }
+                }
             },
         };
         seq.serialize_element(&entry)?;
@@ -132,15 +129,11 @@ where
     S: Serializer,
 {
     if let Some(comment) = v {
-        let mut result = String::new();
-
-        for elem in comment.content.iter() {
-            result.push_str(&elem);
-        }
+        let content = comment.content.join("\n");
 
         let mut map = serializer.serialize_map(Some(2))?;
         map.serialize_entry("type", "Comment")?;
-        map.serialize_entry("content", &result)?;
+        map.serialize_entry("content", &content)?;
         map.end()
     } else {
         serializer.serialize_none()
@@ -166,9 +159,18 @@ where
     #[derive(Serialize)]
     struct Helper<'s>(#[serde(with = "PatternElementDef")] &'s ast::PatternElement<'s>);
     let mut seq = serializer.serialize_seq(Some(v.len()))?;
+    let mut buffer = String::new();
     for e in v.iter() {
-        seq.serialize_element(&Helper(e))?;
+        match e {
+            ast::PatternElement::TextElement(s) => {
+                buffer.push_str(s);
+            }
+        }
     }
+    if !buffer.is_empty() {
+        seq.serialize_element(&Helper(&ast::PatternElement::TextElement(&buffer)))?;
+    }
+
     seq.end()
 }
 

@@ -9,6 +9,16 @@ use std::io::prelude::*;
 
 use fluent_syntax::parser::Parser;
 
+const WHITELIST: &[&str] = &[
+    "tests/fixtures/any_char.ftl",
+    "tests/fixtures/comments.ftl",
+    "tests/fixtures/cr.ftl",
+    "tests/fixtures/eof_comment.ftl",
+    "tests/fixtures/eof_empty.ftl",
+    "tests/fixtures/eof_id.ftl",
+    "tests/fixtures/whitespace_in_value.ftl",
+];
+
 fn compare_jsons(value: &str, reference: &str) {
     let a: Value = serde_json::from_str(value).unwrap();
 
@@ -30,9 +40,12 @@ fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
 
 #[test]
 fn parse_fixtures_compare() {
-    for entry in glob("./tests/fixtures/any_char.ftl").expect("Failed to read glob pattern") {
+    for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
+        if !WHITELIST.contains(&path) {
+            continue;
+        }
 
         let reference_path = path.replace(".ftl", ".json");
         let reference_file = read_file(&reference_path, true).unwrap();
@@ -43,7 +56,6 @@ fn parse_fixtures_compare() {
         let target_ast = parser.parse();
 
         let target_json = ast::serialize(&target_ast).unwrap();
-        println!("{:#?}", target_json);
 
         compare_jsons(&target_json, &reference_file);
     }

@@ -33,8 +33,8 @@ fn lexer_bench(c: &mut Criterion) {
         move |b, &name| {
             let source = &ftl_strings[name];
             b.iter(|| {
-                let parser = Lexer::new(source.as_bytes());
-                let ast: Vec<_> = parser.collect();
+                let lexer = Lexer::new(source.as_bytes());
+                let _: Vec<_> = lexer.collect();
             });
         },
         tests,

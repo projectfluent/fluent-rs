@@ -1,10 +1,12 @@
 [
     CommentSign,
     Text(
-        1,
+        0,
         2..53,
     ),
-    Eol,
+    Eol(
+        54,
+    ),
     Identifier(
         55..59,
     ),

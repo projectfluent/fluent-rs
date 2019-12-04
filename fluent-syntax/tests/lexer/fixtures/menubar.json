@@ -1,32 +1,38 @@
 [
     CommentSign,
     Text(
-        1,
+        0,
         2..69,
     ),
     CommentSign,
     Text(
-        1,
+        0,
         72..139,
     ),
     CommentSign,
     Text(
-        1,
+        0,
         142..198,
     ),
-    Eol,
+    Eol(
+        199,
+    ),
     GroupCommentSign,
     Text(
-        1,
+        0,
         203..244,
     ),
-    Eol,
+    Eol(
+        245,
+    ),
     GroupCommentSign,
     Text(
-        1,
+        0,
         249..258,
     ),
-    Eol,
+    Eol(
+        259,
+    ),
     Identifier(
         260..269,
     ),
@@ -152,15 +158,14 @@
         561..562,
     ),
     Eot,
-    Eol,
     CommentSign,
     Text(
-        1,
+        0,
         566..643,
     ),
     CommentSign,
     Text(
-        1,
+        0,
         646..704,
     ),
     Identifier(
@@ -428,13 +433,14 @@
         1356..1357,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         1362..1371,
     ),
-    Eol,
+    Eol(
+        1372,
+    ),
     Identifier(
         1373..1382,
     ),
@@ -735,13 +741,14 @@
         2054..2055,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         2060..2069,
     ),
-    Eol,
+    Eol(
+        2070,
+    ),
     Identifier(
         2071..2080,
     ),
@@ -1112,15 +1119,14 @@
         3000..3001,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         3006..3026,
     ),
     GroupCommentSign,
     Text(
-        1,
+        0,
         3030..3094,
     ),
     CommentSign,
@@ -1253,13 +1259,14 @@
         3457..3458,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         3463..3475,
     ),
-    Eol,
+    Eol(
+        3476,
+    ),
     Identifier(
         3477..3489,
     ),
@@ -1390,13 +1397,14 @@
         3891..3914,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         3919..3933,
     ),
-    Eol,
+    Eol(
+        3934,
+    ),
     Identifier(
         3935..3949,
     ),
@@ -1497,13 +1505,14 @@
         4238..4254,
     ),
     Eot,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         4259..4269,
     ),
-    Eol,
+    Eol(
+        4270,
+    ),
     Identifier(
         4271..4281,
     ),
@@ -2154,13 +2163,14 @@
         6130..6159,
     ),
     Eot,
-    Eol,
     CommentSign,
     Text(
-        1,
+        0,
         6163..6204,
     ),
-    Eol,
+    Eol(
+        6205,
+    ),
     Identifier(
         6206..6220,
     ),
@@ -2186,14 +2196,14 @@
         6283..6284,
     ),
     Eot,
-    Eol,
-    Eol,
     GroupCommentSign,
     Text(
-        1,
+        0,
         6290..6303,
     ),
-    Eol,
+    Eol(
+        6304,
+    ),
     Identifier(
         6305..6331,
     ),
@@ -2239,7 +2249,6 @@
         6427..6428,
     ),
     Eot,
-    Eol,
     Identifier(
         6430..6454,
     ),
@@ -2285,14 +2294,14 @@
         6547..6558,
     ),
     Eot,
-    Eol,
-    Eol,
     CommentSign,
     Text(
-        1,
+        0,
         6563..6612,
     ),
-    Eol,
+    Eol(
+        6613,
+    ),
     MinusSign,
     Identifier(
         6615..6633,
@@ -2333,7 +2342,6 @@
         6746..6753,
     ),
     Eot,
-    Eol,
     Identifier(
         6755..6769,
     ),
@@ -2343,7 +2351,6 @@
         6779..6850,
     ),
     Eot,
-    Eol,
     MinusSign,
     Identifier(
         6853..6874,
