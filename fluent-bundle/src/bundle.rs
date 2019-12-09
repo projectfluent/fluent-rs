@@ -181,6 +181,10 @@ impl<R> FluentBundle<R> {
 
     /// Adds a resource to the bundle, returning an empty [`Result<T>`] on success.
     ///
+    /// If any entry in the resource uses the same identifier as an already
+    /// existing key in the bundle, the new entry will be ignored and a
+    /// `FluentError::Overriding` will be added to the result.
+    ///
     /// The method can take any type that can be borrowed to FluentResource:
     ///   - FluentResource
     ///   - &FluentResource
@@ -265,6 +269,94 @@ impl<R> FluentBundle<R> {
         } else {
             Err(errors)
         }
+    }
+
+    /// Adds a resource to the bundle, returning an empty [`Result<T>`] on success.
+    ///
+    /// If any entry in the resource uses the same identifier as an already
+    /// existing key in the bundle, the entry will override the previous one.
+    ///
+    /// The method can take any type that can be borrowed as FluentResource:
+    ///   - FluentResource
+    ///   - &FluentResource
+    ///   - Rc<FluentResource>
+    ///   - Arc<FluentResurce>
+    ///
+    /// This allows the user to introduce custom resource management and share
+    /// resources between instances of `FluentBundle`.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use unic_langid::langid;
+    ///
+    /// let ftl_string = String::from("
+    /// hello = Hi!
+    /// goodbye = Bye!
+    /// ");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
+    ///
+    /// let ftl_string = String::from("
+    /// hello = Another Hi!
+    /// ");
+    /// let resource2 = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
+    ///
+    /// let langid_en = langid!("en-US");
+    ///
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// bundle.add_resource(resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    ///
+    /// bundle.add_resource_overriding(resource2);
+    ///
+    /// let mut errors = vec![];
+    /// let msg = bundle.get_message("hello")
+    ///     .expect("Failed to retrieve the message");
+    /// let value = msg.value.expect("Failed to retrieve the value of the message");
+    /// assert_eq!(bundle.format_pattern(value, None, &mut errors), "Another Hi!");
+    /// ```
+    ///
+    /// # Whitespace
+    ///
+    /// Message ids must have no leading whitespace. Message values that span
+    /// multiple lines must have leading whitespace on all but the first line. These
+    /// are standard FTL syntax rules that may prove a bit troublesome in source
+    /// code formatting. The [`indoc!`] crate can help with stripping extra indentation
+    /// if you wish to indent your entire message.
+    ///
+    /// [FTL syntax]: https://projectfluent.org/fluent/guide/
+    /// [`indoc!`]: https://github.com/dtolnay/indoc
+    /// [`Result<T>`]: https://doc.rust-lang.org/std/result/enum.Result.html
+    pub fn add_resource_overriding(&mut self, r: R)
+    where
+        R: Borrow<FluentResource>,
+    {
+        let res = r.borrow();
+        let res_pos = self.resources.len();
+
+        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
+            let id = match entry {
+                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
+                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
+                _ => continue,
+            };
+
+            let entry = match entry {
+                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
+                    Entry::Message([res_pos, entry_pos])
+                }
+                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
+                    Entry::Term([res_pos, entry_pos])
+                }
+                _ => continue,
+            };
+
+            self.entries.insert(id.to_string(), entry);
+        }
+        self.resources.push(r);
     }
 
     /// When formatting patterns, `FluentBundle` inserts
