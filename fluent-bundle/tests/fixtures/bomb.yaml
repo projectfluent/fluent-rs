@@ -27,4 +27,4 @@ suites:
                 value: "{lol9}"
                 errors:
                   -
-                    type: Cyclic
+                    type: TooManyPlaceables

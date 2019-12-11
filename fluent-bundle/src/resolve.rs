@@ -18,13 +18,14 @@ use crate::resource::FluentResource;
 use crate::types::DisplayableNode;
 use crate::types::FluentValue;
 
-const MAX_PLACEABLE_LENGTH: usize = 2500;
+const MAX_PLACEABLES: u8 = 100;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum ResolverError {
     Reference(String),
     MissingDefault,
     Cyclic,
+    TooManyPlaceables
 }
 
 /// State for a single `ResolveValue::to_value` call.
@@ -35,6 +36,9 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     args: Option<&'bundle FluentArgs<'bundle>>,
     /// Local args
     local_args: Option<FluentArgs<'bundle>>,
+    /// The running count of resolved placeables. Used to detect the Billion
+    /// Laughs and Quadratic Blowup attacks.
+    placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
     travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
     /// Track errors accumulated during resolving.
@@ -49,6 +53,7 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
             bundle,
             args,
             local_args: None,
+            placeables: 0,
             travelled: Default::default(),
             errors: vec![],
             dirty: false,
@@ -121,6 +126,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
         if scope.dirty {
             return FluentValue::None;
         }
+
         if self.elements.len() == 1 {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => {
@@ -136,6 +142,10 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 
         let mut string = String::new();
         for elem in &self.elements {
+            if scope.dirty {
+                return FluentValue::None;
+            }
+
             match elem {
                 ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
@@ -145,6 +155,13 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     }
                 }
                 ast::PatternElement::Placeable(p) => {
+                    scope.placeables += 1;
+                    if scope.placeables > MAX_PLACEABLES {
+                        scope.dirty = true;
+                        scope.errors.push(ResolverError::TooManyPlaceables);
+                        return FluentValue::None;
+                    }
+
                     let needs_isolation = scope.bundle.use_isolating
                         && match p {
                             ast::Expression::InlineExpression(
@@ -164,12 +181,6 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 
                     let result = scope.maybe_track(self, p);
                     write!(string, "{}", result).expect("Writing failed");
-
-                    if string.len() > MAX_PLACEABLE_LENGTH {
-                        scope.dirty = true;
-                        scope.errors.push(ResolverError::Cyclic);
-                        return FluentValue::None;
-                    }
 
                     if needs_isolation {
                         string.write_char('\u{2069}').expect("Writing failed");
