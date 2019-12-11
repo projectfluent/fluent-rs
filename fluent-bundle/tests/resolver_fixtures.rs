@@ -320,6 +320,9 @@ fn test_errors(errors: &[FluentError], reference: Option<&[TestError]>) {
                 ResolverError::Cyclic => {
                     assert_eq!(reference.error_type, "Cyclic");
                 }
+                ResolverError::TooManyPlaceables => {
+                    assert_eq!(reference.error_type, "TooManyPlaceables");
+                }
                 _ => unimplemented!(),
             },
             FluentError::ParserError(_) => {
