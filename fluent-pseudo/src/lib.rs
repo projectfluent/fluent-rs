@@ -3,24 +3,29 @@ use regex::Regex;
 use std::borrow::Cow;
 
 static TRANSFORM_SMALL_MAP: &[char] = &[
-    'ȧ', 'ƀ', 'ƈ', 'ḓ', 'ḗ', 'ƒ', 'ɠ', 'ħ', 'ī', 'ĵ', 'ķ', 'ŀ', 'ḿ', 'ƞ', 'ǿ',
-    'ƥ', 'ɋ', 'ř', 'ş', 'ŧ', 'ŭ', 'ṽ', 'ẇ', 'ẋ', 'ẏ', 'ẑ',
+    'ȧ', 'ƀ', 'ƈ', 'ḓ', 'ḗ', 'ƒ', 'ɠ', 'ħ', 'ī', 'ĵ', 'ķ', 'ŀ', 'ḿ', 'ƞ', 'ǿ', 'ƥ', 'ɋ', 'ř', 'ş',
+    'ŧ', 'ŭ', 'ṽ', 'ẇ', 'ẋ', 'ẏ', 'ẑ',
 ];
 static TRANSFORM_CAPS_MAP: &[char] = &[
-    'Ȧ', 'Ɓ', 'Ƈ', 'Ḓ', 'Ḗ', 'Ƒ', 'Ɠ', 'Ħ', 'Ī', 'Ĵ', 'Ķ', 'Ŀ', 'Ḿ', 'Ƞ', 'Ǿ',
-    'Ƥ', 'Ɋ', 'Ř', 'Ş', 'Ŧ', 'Ŭ', 'Ṽ', 'Ẇ', 'Ẋ', 'Ẏ', 'Ẑ',
+    'Ȧ', 'Ɓ', 'Ƈ', 'Ḓ', 'Ḗ', 'Ƒ', 'Ɠ', 'Ħ', 'Ī', 'Ĵ', 'Ķ', 'Ŀ', 'Ḿ', 'Ƞ', 'Ǿ', 'Ƥ', 'Ɋ', 'Ř', 'Ş',
+    'Ŧ', 'Ŭ', 'Ṽ', 'Ẇ', 'Ẋ', 'Ẏ', 'Ẑ',
 ];
 
 static FLIPPED_SMALL_MAP: &[char] = &[
-    'ɐ', 'q', 'ɔ', 'p', 'ǝ', 'ɟ', 'ƃ', 'ɥ', 'ı', 'ɾ', 'ʞ', 'ʅ', 'ɯ', 'u', 'o', 'd', 'b',
-    'ɹ', 's', 'ʇ', 'n', 'ʌ', 'ʍ', 'x', 'ʎ', 'z',
+    'ɐ', 'q', 'ɔ', 'p', 'ǝ', 'ɟ', 'ƃ', 'ɥ', 'ı', 'ɾ', 'ʞ', 'ʅ', 'ɯ', 'u', 'o', 'd', 'b', 'ɹ', 's',
+    'ʇ', 'n', 'ʌ', 'ʍ', 'x', 'ʎ', 'z',
 ];
 static FLIPPED_CAPS_MAP: &[char] = &[
-    '∀', 'Ԑ', 'Ↄ', 'ᗡ', 'Ǝ', 'Ⅎ', '⅁', 'H', 'I', 'ſ', 'Ӽ', '⅂', 'W', 'N', 'O',
-    'Ԁ', 'Ò', 'ᴚ', 'S', '⊥', '∩', 'Ʌ', 'M', 'X', '⅄', 'Z',
+    '∀', 'Ԑ', 'Ↄ', 'ᗡ', 'Ǝ', 'Ⅎ', '⅁', 'H', 'I', 'ſ', 'Ӽ', '⅂', 'W', 'N', 'O', 'Ԁ', 'Ò', 'ᴚ', 'S',
+    '⊥', '∩', 'Ʌ', 'M', 'X', '⅄', 'Z',
 ];
 
-pub fn transform_dom(s: &str) -> Cow<str> {
+pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
+    // Exclude access-keys and other single-char messages
+    if s.len() == 1 {
+        return s.into();
+    }
+
     // XML entities (&#x202a;) and XML tags.
     let re_excluded = Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap();
 
@@ -45,7 +50,7 @@ pub fn transform_dom(s: &str) -> Cow<str> {
     }
     let range = pos..s.len();
     let result_range = pos + diff..result.len();
-    let transform_sub = transform(&s[range.clone()], false, true);
+    let transform_sub = transform(&s[range.clone()], flipped, elongate);
     result
         .to_mut()
         .replace_range(result_range.clone(), &transform_sub);
@@ -99,17 +104,21 @@ mod tests {
 
         let x = transform("Hello World", true, false);
         assert_eq!(x, "Hǝʅʅo Moɹʅp");
+
+        let x = transform("f", false, true);
+        assert_eq!(x, "ƒ");
     }
 
     #[test]
     fn dom_test() {
-        let x = transform_dom("Hello <a>World</a>");
+        let x = transform_dom("Hello <a>World</a>", false, true);
         assert_eq!(x, "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a>");
 
-        let x = transform_dom("Hello <a>World</a> in <b>my</b> House.");
-        assert_eq!(
-            x,
-            "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a> īƞ <b>ḿẏ</b> Ħǿǿŭŭşḗḗ."
-        );
+        let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true);
+        assert_eq!(x, "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a> īƞ <b>ḿẏ</b> Ħǿǿŭŭşḗḗ.");
+
+        // Don't touch single character values.
+        let x = transform_dom("f", false, true);
+        assert_eq!(x, "f");
     }
 }
