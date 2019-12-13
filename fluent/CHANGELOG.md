@@ -4,6 +4,9 @@
 
   - …
 
+## fluent 0.9.1 (December 13, 2019)
+  - Update `fluent-pseudo` to 0.2.0.
+
 ## fluent 0.9.0 (November 26, 2019)
   - Update `fluent-bundle` to 0.9.0.
   - Update `fluent-pseudo` to 0.1.0.
