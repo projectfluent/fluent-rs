@@ -1,0 +1,11 @@
+[package]
+name = "intl-memoizer"
+version = "0.1.0"
+authors = ["Zibi Braniecki <zibi@braniecki.net>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+typemap = "0.3"
+unic-langid = "0.7"
