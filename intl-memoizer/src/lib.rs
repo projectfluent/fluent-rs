@@ -12,17 +12,19 @@ pub trait Memoizable {
 struct MemoizeKey<T>(T);
 
 impl<T: Memoizable + 'static> Key for MemoizeKey<T> {
-    type Value = HashMap<(LanguageIdentifier, T::Args), Rc<T>>;
+    type Value = HashMap<(LanguageIdentifier, T::Args), (Rc<T>, LanguageIdentifier)>;
 }
 
 pub struct IntlMemoizer {
     map: TypeMap,
+    langs: HashMap<LanguageIdentifier, usize>,
 }
 
 impl IntlMemoizer {
     pub fn new() -> Self {
         Self {
             map: TypeMap::new(),
+            langs: HashMap::new(),
         }
     }
 
@@ -35,12 +37,40 @@ impl IntlMemoizer {
             .entry::<MemoizeKey<T>>()
             .or_insert_with(|| HashMap::new());
         // not using entry to avoid unnecessary cloning
-        if let Some(val) = cache.get(&(lang.clone(), args.clone())) {
+        if let Some((val, _)) = cache.get(&(lang.clone(), args.clone())) {
             val.clone()
         } else {
             let val = Rc::new(T::construct(lang.clone(), args.clone()));
-            cache.insert((lang, args), val.clone());
+            cache.insert((lang.clone(), args), (val.clone(), lang));
             val
+        }
+    }
+
+    pub fn bump_rc(&mut self, lang: LanguageIdentifier) {
+        let counter = self.langs.entry(lang).or_insert_with(|| 0);
+        *counter += 1;
+    }
+
+    fn remove_lang(&mut self, lang: &LanguageIdentifier) {
+        // Walk over all types of `self.map` and iterate
+        // over their values and if `val.1` == lang, remove it.
+    }
+
+    pub fn drop_rc(&mut self, lang: &LanguageIdentifier) -> Result<(), &'static str> {
+        let counter = self.langs.get_mut(&lang);
+        if let Some(counter) = counter {
+            if counter < &mut 1 {
+                Err("Counter too low")
+            } else {
+                *counter -= 1;
+                if counter == &mut 0 {
+                    self.remove_lang(&lang);
+                    self.langs.remove(&lang);
+                }
+                Ok(())
+            }
+        } else {
+            Err("No counter for this lang")
         }
     }
 }
