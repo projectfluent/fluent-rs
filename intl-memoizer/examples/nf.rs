@@ -16,16 +16,14 @@ impl NumberFormat {
 }
 
 impl Memoizable for NumberFormat {
-    type Args = (LanguageIdentifier,);
-    fn construct(args: Self::Args) -> Self {
-        Self::new(args.0)
+    type Args = ();
+    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Self {
+        Self::new(lang)
     }
 }
 
 fn main() {
     let mut memoizer = IntlMemoizer::new();
 
-    let nf = memoizer.get::<NumberFormat>(("en-CA".parse().unwrap(),));
-
-    let nf = memoizer.get::<NumberFormat>(("en-DE".parse().unwrap(),));
+    let nf = memoizer.get::<NumberFormat>("en-US".parse().unwrap(), ());
 }
