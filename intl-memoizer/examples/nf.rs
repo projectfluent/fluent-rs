@@ -14,11 +14,12 @@ struct NumberFormat {
 
 impl NumberFormat {
     pub fn new(lang: LanguageIdentifier, options: NumberFormatOptions) -> Self {
+        println!("New NumberFormat!");
         Self { lang, options }
     }
 
     pub fn format(&self, input: isize) -> String {
-        format!("{}", input)
+        format!("{}: {}", self.lang, input)
     }
 }
 
@@ -33,16 +34,51 @@ fn main() {
     let mut memoizer = IntlMemoizer::new();
 
     let lang: LanguageIdentifier = "en-US".parse().unwrap();
+    {
+        // Create an en-US memoizer
+        let lang_memoizer = memoizer.get_for_lang(lang.clone());
+        {
+            let mut lang_memoizer2 = lang_memoizer.borrow_mut();
 
-    memoizer.bump_rc(lang.clone());
+            let options = NumberFormatOptions {
+                minimum_fraction_digits: 3,
+                maximum_fraction_digits: 5,
+            };
+            let nf = lang_memoizer2.get::<NumberFormat>((options,));
 
-    let options = NumberFormatOptions {
-        minimum_fraction_digits: 3,
-        maximum_fraction_digits: 5,
-    };
-    let nf = memoizer.get::<NumberFormat>(lang.clone(), (options,));
+            assert_eq!(&nf.format(2), "en-US: 2");
+        }
 
-    assert_eq!(&nf.format(2), "2");
+        // Reuse the same en-US memoizer
+        let lang_memoizer3 = memoizer.get_for_lang(lang.clone());
+        {
+            let mut lang_memoizer4 = lang_memoizer3.borrow_mut();
 
-    memoizer.drop_rc(&lang).unwrap();
+            let options2 = NumberFormatOptions {
+                minimum_fraction_digits: 3,
+                maximum_fraction_digits: 5,
+            };
+            let nf2 = lang_memoizer4.get::<NumberFormat>((options2,));
+
+            assert_eq!(&nf2.format(2), "en-US: 2");
+        }
+
+        // Memoizer gets dropped
+    }
+
+    {
+        // Here, we will construct a new lang memoizer
+        let lang_memoizer = memoizer.get_for_lang(lang.clone());
+        {
+            let mut lang_memoizer2 = lang_memoizer.borrow_mut();
+
+            let options = NumberFormatOptions {
+                minimum_fraction_digits: 3,
+                maximum_fraction_digits: 5,
+            };
+            let nf = lang_memoizer2.get::<NumberFormat>((options,));
+
+            assert_eq!(&nf.format(2), "en-US: 2");
+        }
+    }
 }

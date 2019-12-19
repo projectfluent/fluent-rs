@@ -1,6 +1,8 @@
+use std::cell::RefCell;
+use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::hash::Hash;
-use std::rc::Rc;
+use std::rc::{Rc, Weak};
 use typemap::{Key, TypeMap};
 use unic_langid::LanguageIdentifier;
 
@@ -12,65 +14,66 @@ pub trait Memoizable {
 struct MemoizeKey<T>(T);
 
 impl<T: Memoizable + 'static> Key for MemoizeKey<T> {
-    type Value = HashMap<(LanguageIdentifier, T::Args), (Rc<T>, LanguageIdentifier)>;
+    type Value = HashMap<T::Args, T>;
 }
 
-pub struct IntlMemoizer {
+pub struct IntlLangMemoizer {
+    lang: LanguageIdentifier,
     map: TypeMap,
-    langs: HashMap<LanguageIdentifier, usize>,
 }
 
-impl IntlMemoizer {
-    pub fn new() -> Self {
+impl IntlLangMemoizer {
+    pub fn new(lang: LanguageIdentifier) -> Self {
         Self {
+            lang,
             map: TypeMap::new(),
-            langs: HashMap::new(),
         }
     }
 
-    pub fn get<T: Memoizable + 'static>(&mut self, lang: LanguageIdentifier, args: T::Args) -> Rc<T>
+    pub fn get<T: Memoizable + 'static>(&mut self, args: T::Args) -> &T
     where
         T::Args: Eq,
     {
+        let lang = self.lang.clone();
         let cache = self
             .map
             .entry::<MemoizeKey<T>>()
             .or_insert_with(|| HashMap::new());
         // not using entry to avoid unnecessary cloning
-        if let Some((val, _)) = cache.get(&(lang.clone(), args.clone())) {
-            val.clone()
-        } else {
-            let val = Rc::new(T::construct(lang.clone(), args.clone()));
-            cache.insert((lang.clone(), args), (val.clone(), lang));
-            val
+        let val = cache
+            .entry(args.clone())
+            .or_insert_with(|| T::construct(lang, args.clone()));
+        val
+    }
+}
+
+pub struct IntlMemoizer {
+    map: HashMap<LanguageIdentifier, Weak<RefCell<IntlLangMemoizer>>>,
+}
+
+impl IntlMemoizer {
+    pub fn new() -> Self {
+        Self {
+            map: HashMap::new(),
         }
     }
 
-    pub fn bump_rc(&mut self, lang: LanguageIdentifier) {
-        let counter = self.langs.entry(lang).or_insert_with(|| 0);
-        *counter += 1;
-    }
-
-    fn remove_lang(&mut self, lang: &LanguageIdentifier) {
-        // Walk over all types of `self.map` and iterate
-        // over their values and if `val.1` == lang, remove it.
-    }
-
-    pub fn drop_rc(&mut self, lang: &LanguageIdentifier) -> Result<(), &'static str> {
-        let counter = self.langs.get_mut(&lang);
-        if let Some(counter) = counter {
-            if counter < &mut 1 {
-                Err("Counter too low")
-            } else {
-                *counter -= 1;
-                if counter == &mut 0 {
-                    self.remove_lang(&lang);
-                    self.langs.remove(&lang);
-                }
-                Ok(())
+    pub fn get_for_lang(&mut self, lang: LanguageIdentifier) -> Rc<RefCell<IntlLangMemoizer>> {
+        match self.map.entry(lang.clone()) {
+            Entry::Vacant(empty) => {
+                let entry = Rc::new(RefCell::new(IntlLangMemoizer::new(lang.clone())));
+                empty.insert(Rc::downgrade(&entry));
+                entry
             }
-        } else {
-            Err("No counter for this lang")
+            Entry::Occupied(mut entry) => {
+                if let Some(entry) = entry.get().upgrade() {
+                    entry
+                } else {
+                    let e = Rc::new(RefCell::new(IntlLangMemoizer::new(lang.clone())));
+                    entry.insert(Rc::downgrade(&e));
+                    e
+                }
+            }
         }
     }
 }
@@ -109,10 +112,13 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let mut memoizer = IntlMemoizer::new();
+        let lang: LanguageIdentifier = "en-US".parse().unwrap();
 
-        let cb =
-            memoizer.get::<PluralRules>("en-US".parse().unwrap(), (PluralRulesType::Cardinal,));
+        let mut memoizer = IntlMemoizer::new();
+        let mut en_us_memoizer = memoizer.get_for_lang(lang.clone());
+        let mut en_us_memoizer_borrow = en_us_memoizer.borrow_mut();
+
+        let cb = en_us_memoizer_borrow.get::<PluralRules>((PluralRulesType::Cardinal,));
         assert_eq!(cb.select(), "Selected for en-US and Cardinal");
     }
 }
