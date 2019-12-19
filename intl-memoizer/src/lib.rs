@@ -115,7 +115,7 @@ mod tests {
         let lang: LanguageIdentifier = "en-US".parse().unwrap();
 
         let mut memoizer = IntlMemoizer::new();
-        let mut en_us_memoizer = memoizer.get_for_lang(lang.clone());
+        let en_us_memoizer = memoizer.get_for_lang(lang.clone());
         let mut en_us_memoizer_borrow = en_us_memoizer.borrow_mut();
 
         let cb = en_us_memoizer_borrow.get::<PluralRules>((PluralRulesType::Cardinal,));

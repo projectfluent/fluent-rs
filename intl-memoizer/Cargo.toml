@@ -1,10 +1,21 @@
 [package]
 name = "intl-memoizer"
 version = "0.1.0"
-authors = ["Zibi Braniecki <zibi@braniecki.net>"]
+authors = [
+    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Manish Goregaokar <manishsmail@gmail.com>"
+]
+description = """
+A memoizer specifically tailored for storing lazy-initialized
+intl formatters.
+"""
 edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+homepage = "http://www.projectfluent.org"
+license = "Apache-2.0/MIT"
+repository = "https://github.com/projectfluent/fluent-rs"
+readme = "README.md"
+keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
+categories = ["localization", "internationalization"]
 
 [dependencies]
 typemap = "0.3"
