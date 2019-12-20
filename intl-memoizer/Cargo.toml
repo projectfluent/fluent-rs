@@ -20,3 +20,6 @@ categories = ["localization", "internationalization"]
 [dependencies]
 typemap = "0.3"
 unic-langid = "0.7"
+
+[dev-dependencies]
+intl_pluralrules = "5.0.2"

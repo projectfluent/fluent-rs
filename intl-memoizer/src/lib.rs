@@ -81,30 +81,18 @@ impl IntlMemoizer {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use intl_pluralrules::{PluralRules as IntlPluralRules, PluralRuleType, PluralCategory};
 
-    #[derive(PartialEq, Eq, Hash, Copy, Clone, Debug)]
-    enum PluralRulesType {
-        Cardinal,
-        Ordinal,
-    }
-
-    struct PluralRules {
-        lang: LanguageIdentifier,
-        pr_type: PluralRulesType,
-    }
+    struct PluralRules(pub IntlPluralRules);
 
     impl PluralRules {
-        pub fn new(lang: LanguageIdentifier, pr_type: PluralRulesType) -> Self {
-            Self { lang, pr_type }
-        }
-
-        pub fn select(&self) -> String {
-            format!("Selected for {} and {:#?}", self.lang, self.pr_type)
+        pub fn new(lang: LanguageIdentifier, pr_type: PluralRuleType) -> Self {
+            Self(IntlPluralRules::create(lang, pr_type).unwrap())
         }
     }
 
     impl Memoizable for PluralRules {
-        type Args = (PluralRulesType,);
+        type Args = (PluralRuleType,);
         fn construct(lang: LanguageIdentifier, args: Self::Args) -> Self {
             Self::new(lang, args.0)
         }
@@ -112,13 +100,13 @@ mod tests {
 
     #[test]
     fn it_works() {
-        let lang: LanguageIdentifier = "en-US".parse().unwrap();
+        let lang: LanguageIdentifier = "en".parse().unwrap();
 
         let mut memoizer = IntlMemoizer::new();
-        let en_us_memoizer = memoizer.get_for_lang(lang.clone());
-        let mut en_us_memoizer_borrow = en_us_memoizer.borrow_mut();
+        let en_memoizer = memoizer.get_for_lang(lang.clone());
+        let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
-        let cb = en_us_memoizer_borrow.get::<PluralRules>((PluralRulesType::Cardinal,));
-        assert_eq!(cb.select(), "Selected for en-US and Cardinal");
+        let cb = en_memoizer_borrow.get::<PluralRules>((PluralRuleType::CARDINAL,));
+        assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
     }
 }
