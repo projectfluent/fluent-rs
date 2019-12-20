@@ -19,14 +19,14 @@ impl Memoizable for PluralRules {
 }
 
 fn main() {
-    let mut memoizer = IntlMemoizer::new();
+    let mut memoizer = IntlMemoizer::default();
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
     let lang_memoizer = memoizer.get_for_lang(lang.clone());
     let mut lang_memoizer_borrow = lang_memoizer.borrow_mut();
 
     let pr = lang_memoizer_borrow
-        .get::<PluralRules>((PluralRuleType::CARDINAL,))
+        .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
         .unwrap();
 
     assert_eq!(pr.0.select(5), Ok(PluralCategory::OTHER));

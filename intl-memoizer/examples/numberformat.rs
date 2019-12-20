@@ -31,7 +31,7 @@ impl Memoizable for NumberFormat {
 }
 
 fn main() {
-    let mut memoizer = IntlMemoizer::new();
+    let mut memoizer = IntlMemoizer::default();
 
     let lang: LanguageIdentifier = "en-US".parse().unwrap();
     {
@@ -44,7 +44,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf = lang_memoizer2.get::<NumberFormat>((options,)).unwrap();
+            let nf = lang_memoizer2.try_get::<NumberFormat>((options,)).unwrap();
 
             assert_eq!(&nf.format(2), "en-US: 2");
         }
@@ -58,7 +58,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf2 = lang_memoizer4.get::<NumberFormat>((options2,)).unwrap();
+            let nf2 = lang_memoizer4.try_get::<NumberFormat>((options2,)).unwrap();
 
             assert_eq!(&nf2.format(2), "en-US: 2");
         }
@@ -76,7 +76,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf = lang_memoizer2.get::<NumberFormat>((options,)).unwrap();
+            let nf = lang_memoizer2.try_get::<NumberFormat>((options,)).unwrap();
 
             assert_eq!(&nf.format(2), "en-US: 2");
         }

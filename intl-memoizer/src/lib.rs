@@ -33,20 +33,19 @@ impl IntlLangMemoizer {
         }
     }
 
-    pub fn get<T: Memoizable + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
+    pub fn try_get<T: Memoizable + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
     where
         T::Args: Eq,
     {
-        let lang = self.lang.clone();
         let cache = self
             .map
             .entry::<MemoizeKey<T>>()
-            .or_insert_with(|| HashMap::new());
+            .or_insert_with(HashMap::new);
 
         let e = match cache.entry(args.clone()) {
             Entry::Occupied(entry) => entry.into_mut(),
             Entry::Vacant(entry) => {
-                let val = T::construct(lang, args.clone())?;
+                let val = T::construct(self.lang.clone(), args)?;
                 entry.insert(val)
             }
         };
@@ -54,21 +53,16 @@ impl IntlLangMemoizer {
     }
 }
 
+#[derive(Default)]
 pub struct IntlMemoizer {
     map: HashMap<LanguageIdentifier, Weak<RefCell<IntlLangMemoizer>>>,
 }
 
 impl IntlMemoizer {
-    pub fn new() -> Self {
-        Self {
-            map: HashMap::new(),
-        }
-    }
-
     pub fn get_for_lang(&mut self, lang: LanguageIdentifier) -> Rc<RefCell<IntlLangMemoizer>> {
         match self.map.entry(lang.clone()) {
             Entry::Vacant(empty) => {
-                let entry = Rc::new(RefCell::new(IntlLangMemoizer::new(lang.clone())));
+                let entry = Rc::new(RefCell::new(IntlLangMemoizer::new(lang)));
                 empty.insert(Rc::downgrade(&entry));
                 entry
             }
@@ -76,7 +70,7 @@ impl IntlMemoizer {
                 if let Some(entry) = entry.get().upgrade() {
                     entry
                 } else {
-                    let e = Rc::new(RefCell::new(IntlLangMemoizer::new(lang.clone())));
+                    let e = Rc::new(RefCell::new(IntlLangMemoizer::new(lang)));
                     entry.insert(Rc::downgrade(&e));
                     e
                 }
@@ -113,12 +107,12 @@ mod tests {
     fn it_works() {
         let lang: LanguageIdentifier = "en".parse().unwrap();
 
-        let mut memoizer = IntlMemoizer::new();
-        let en_memoizer = memoizer.get_for_lang(lang.clone());
+        let mut memoizer = IntlMemoizer::default();
+        let en_memoizer = memoizer.get_for_lang(lang);
         let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
         let cb = en_memoizer_borrow
-            .get::<PluralRules>((PluralRuleType::CARDINAL,))
+            .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
             .unwrap();
         assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
     }
