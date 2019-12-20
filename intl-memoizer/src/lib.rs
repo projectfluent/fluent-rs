@@ -8,7 +8,10 @@ use unic_langid::LanguageIdentifier;
 
 pub trait Memoizable {
     type Args: 'static + Eq + Hash + Clone;
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Self;
+    type Error;
+    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error>
+    where
+        Self: std::marker::Sized;
 }
 
 struct MemoizeKey<T>(T);
@@ -30,7 +33,7 @@ impl IntlLangMemoizer {
         }
     }
 
-    pub fn get<T: Memoizable + 'static>(&mut self, args: T::Args) -> &T
+    pub fn get<T: Memoizable + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
     where
         T::Args: Eq,
     {
@@ -39,11 +42,15 @@ impl IntlLangMemoizer {
             .map
             .entry::<MemoizeKey<T>>()
             .or_insert_with(|| HashMap::new());
-        // not using entry to avoid unnecessary cloning
-        let val = cache
-            .entry(args.clone())
-            .or_insert_with(|| T::construct(lang, args.clone()));
-        val
+
+        let e = match cache.entry(args.clone()) {
+            Entry::Occupied(entry) => entry.into_mut(),
+            Entry::Vacant(entry) => {
+                let val = T::construct(lang, args.clone())?;
+                entry.insert(val)
+            }
+        };
+        Ok(e)
     }
 }
 
@@ -81,19 +88,23 @@ impl IntlMemoizer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use intl_pluralrules::{PluralRules as IntlPluralRules, PluralRuleType, PluralCategory};
+    use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
 
     struct PluralRules(pub IntlPluralRules);
 
     impl PluralRules {
-        pub fn new(lang: LanguageIdentifier, pr_type: PluralRuleType) -> Self {
-            Self(IntlPluralRules::create(lang, pr_type).unwrap())
+        pub fn new(
+            lang: LanguageIdentifier,
+            pr_type: PluralRuleType,
+        ) -> Result<Self, &'static str> {
+            Ok(Self(IntlPluralRules::create(lang, pr_type)?))
         }
     }
 
     impl Memoizable for PluralRules {
         type Args = (PluralRuleType,);
-        fn construct(lang: LanguageIdentifier, args: Self::Args) -> Self {
+        type Error = &'static str;
+        fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
             Self::new(lang, args.0)
         }
     }
@@ -106,7 +117,9 @@ mod tests {
         let en_memoizer = memoizer.get_for_lang(lang.clone());
         let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
-        let cb = en_memoizer_borrow.get::<PluralRules>((PluralRuleType::CARDINAL,));
+        let cb = en_memoizer_borrow
+            .get::<PluralRules>((PluralRuleType::CARDINAL,))
+            .unwrap();
         assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
     }
 }

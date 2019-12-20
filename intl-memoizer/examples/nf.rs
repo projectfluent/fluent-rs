@@ -13,9 +13,8 @@ struct NumberFormat {
 }
 
 impl NumberFormat {
-    pub fn new(lang: LanguageIdentifier, options: NumberFormatOptions) -> Self {
-        println!("New NumberFormat!");
-        Self { lang, options }
+    pub fn new(lang: LanguageIdentifier, options: NumberFormatOptions) -> Result<Self, ()> {
+        Ok(Self { lang, options })
     }
 
     pub fn format(&self, input: isize) -> String {
@@ -25,7 +24,8 @@ impl NumberFormat {
 
 impl Memoizable for NumberFormat {
     type Args = (NumberFormatOptions,);
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Self {
+    type Error = ();
+    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
         Self::new(lang, args.0)
     }
 }
@@ -44,7 +44,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf = lang_memoizer2.get::<NumberFormat>((options,));
+            let nf = lang_memoizer2.get::<NumberFormat>((options,)).unwrap();
 
             assert_eq!(&nf.format(2), "en-US: 2");
         }
@@ -58,7 +58,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf2 = lang_memoizer4.get::<NumberFormat>((options2,));
+            let nf2 = lang_memoizer4.get::<NumberFormat>((options2,)).unwrap();
 
             assert_eq!(&nf2.format(2), "en-US: 2");
         }
@@ -76,7 +76,7 @@ fn main() {
                 minimum_fraction_digits: 3,
                 maximum_fraction_digits: 5,
             };
-            let nf = lang_memoizer2.get::<NumberFormat>((options,));
+            let nf = lang_memoizer2.get::<NumberFormat>((options,)).unwrap();
 
             assert_eq!(&nf.format(2), "en-US: 2");
         }
