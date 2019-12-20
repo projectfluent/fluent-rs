@@ -83,6 +83,7 @@ impl IntlMemoizer {
 mod tests {
     use super::*;
     use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
+    use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
     struct PluralRules(pub IntlPluralRules);
 
@@ -91,7 +92,16 @@ mod tests {
             lang: LanguageIdentifier,
             pr_type: PluralRuleType,
         ) -> Result<Self, &'static str> {
-            Ok(Self(IntlPluralRules::create(lang, pr_type)?))
+            let default_lang: LanguageIdentifier = "en".parse().unwrap();
+            let pr_lang = negotiate_languages(
+                &[lang],
+                &IntlPluralRules::get_locales(pr_type),
+                Some(&default_lang),
+                NegotiationStrategy::Lookup,
+            )[0]
+            .clone();
+
+            Ok(Self(IntlPluralRules::create(pr_lang, pr_type)?))
         }
     }
 
