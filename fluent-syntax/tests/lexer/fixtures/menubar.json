@@ -1598,9 +1598,15 @@
         4445..4450,
     ),
     EqSign,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        4467..4488,
+    ),
+    CloseCurlyBraces,
     Text(
-        1,
-        4453..4493,
+        0,
+        4490..4493,
     ),
     Eot,
     Dot,
@@ -1648,9 +1654,15 @@
         4600..4605,
     ),
     EqSign,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        4624..4645,
+    ),
+    CloseCurlyBraces,
     Text(
-        1,
-        4608..4650,
+        0,
+        4647..4650,
     ),
     Eot,
     Dot,
@@ -1828,10 +1840,12 @@
         5108..5113,
     ),
     EqSign,
-    Text(
-        1,
-        5116..5144,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        5124..5142,
     ),
+    CloseCurlyBraces,
     Eot,
     Identifier(
         5145..5168,
@@ -1928,9 +1942,15 @@
         5399..5404,
     ),
     EqSign,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        5410..5428,
+    ),
+    CloseCurlyBraces,
     Text(
         1,
-        5407..5435,
+        5431..5435,
     ),
     Eot,
     Dot,
@@ -1953,9 +1973,15 @@
         5478..5483,
     ),
     EqSign,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        5489..5507,
+    ),
+    CloseCurlyBraces,
     Text(
         1,
-        5486..5514,
+        5510..5514,
     ),
     Eot,
     Dot,
@@ -2158,10 +2184,12 @@
         6122..6127,
     ),
     EqSign,
-    Text(
-        1,
-        6130..6159,
+    OpenCurlyBraces,
+    MinusSign,
+    Identifier(
+        6139..6157,
     ),
+    CloseCurlyBraces,
     Eot,
     CommentSign,
     Text(

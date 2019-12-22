@@ -15,7 +15,12 @@ const WHITELIST: &[&str] = &[
     "tests/fixtures/cr.ftl",
     "tests/fixtures/eof_comment.ftl",
     "tests/fixtures/eof_empty.ftl",
+    "tests/fixtures/eof_id_equals.ftl",
     "tests/fixtures/eof_id.ftl",
+    "tests/fixtures/eof_junk.ftl",
+    "tests/fixtures/eof_value.ftl",
+    "tests/fixtures/literal_expressions.ftl",
+    "tests/fixtures/messages.ftl",
     "tests/fixtures/whitespace_in_value.ftl",
 ];
 

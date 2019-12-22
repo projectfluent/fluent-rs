@@ -12,14 +12,22 @@ pub enum Token {
     Dot,
     MinusSign,
     Text(usize, Range<usize>),
+    Junk(Range<usize>),
+    OpenCurlyBraces,
+    CloseCurlyBraces,
+    DoubleQuote,
+    Number(Range<usize>),
 }
 
 #[derive(Debug, PartialEq)]
 pub enum LexerState {
     Resource,
-    Message, // Or Term
+    Message,
+    // Term,
     Pattern,
     Comment,
+    Expression,
+    StringLiteral,
 }
 
 #[derive(Debug, PartialEq)]
@@ -27,15 +35,24 @@ pub enum NextLine {
     TextContinuation,
     Attribute,
     NewEntry,
-    End,
 }
+
+#[derive(Debug, PartialEq)]
+pub enum LexerError {
+    Unknown,
+}
+
+type LexerResult = Result<Token, LexerError>;
+type LexerOptionResult = Result<Option<Token>, LexerError>;
 
 pub struct Lexer<'l> {
     pub state: LexerState,
     pub source: &'l [u8],
     pub length: usize,
     pub ptr: usize,
+    pub entry_start: usize,
     pub buffer: Option<Token>,
+    pub peek: Option<Token>,
 }
 
 impl<'l> Lexer<'l> {
@@ -46,15 +63,17 @@ impl<'l> Lexer<'l> {
             source,
             length,
             ptr: 0,
+            entry_start: 0,
             buffer: None,
+            peek: None,
         }
     }
 
     fn get_ident(&mut self) -> Token {
         let start = self.ptr;
         self.ptr += 1;
-        while let Some(cc) = self.source.get(self.ptr) {
-            if !cc.is_ascii_alphanumeric() && *cc != b'-' && *cc != b'_' {
+        while let Some(b) = self.source.get(self.ptr) {
+            if !b.is_ascii_alphanumeric() && *b != b'-' && *b != b'_' {
                 break;
             }
             self.ptr += 1;
@@ -62,11 +81,16 @@ impl<'l> Lexer<'l> {
         Token::Identifier(start..self.ptr)
     }
 
-    fn tokenize_resource(&mut self, cc: u8) -> Token {
-        match cc {
+    fn tokenize_resource(&mut self, b: u8) -> LexerResult {
+        match b {
+            b if b.is_ascii_alphabetic() => {
+                self.entry_start = self.ptr;
+                self.state = LexerState::Message;
+                Ok(self.get_ident())
+            }
             b'-' => {
                 self.ptr += 1;
-                Token::MinusSign
+                Ok(Token::MinusSign)
             }
             b'#' => {
                 let start = self.ptr;
@@ -75,34 +99,29 @@ impl<'l> Lexer<'l> {
                     self.ptr += 1;
                 }
                 self.state = LexerState::Comment;
-                match self.ptr - start {
-                    1 => return Token::CommentSign,
-                    2 => return Token::GroupCommentSign,
-                    3 => return Token::ResourceCommentSign,
+                Ok(match self.ptr - start {
+                    1 => Token::CommentSign,
+                    2 => Token::GroupCommentSign,
+                    3 => Token::ResourceCommentSign,
                     _ => panic!(),
-                }
+                })
             }
             b'\n' => {
                 self.ptr += 1;
-                return Token::Eol(self.ptr - 1);
+                self.entry_start = self.ptr;
+                Ok(Token::Eol(self.ptr - 1))
             }
-            b if b.is_ascii_alphabetic() => {
-                self.state = LexerState::Message;
-                self.get_ident()
-            }
-            _ => {
-                panic!();
-            }
+            _ => Err(LexerError::Unknown),
         }
     }
 
-    fn tokenize_message(&mut self, cc: u8) -> Option<Token> {
-        if cc == b' ' {
+    fn tokenize_message(&mut self, b: u8) -> LexerResult {
+        if b == b' ' {
             self.ptr += 1;
         }
 
-        while let Some(cc) = self.source.get(self.ptr) {
-            if *cc == b' ' {
+        while let Some(b) = self.source.get(self.ptr) {
+            if *b == b' ' {
                 self.ptr += 1;
                 continue;
             }
@@ -111,34 +130,34 @@ impl<'l> Lexer<'l> {
                 Some(b'=') => {
                     self.state = LexerState::Pattern;
                     self.ptr += 1;
-                    return Some(Token::EqSign);
+                    return Ok(Token::EqSign);
                 }
                 Some(b'a'..=b'z') => {
-                    return Some(self.get_ident());
+                    return Ok(self.get_ident());
                 }
-                None => return None,
+                None => return Err(LexerError::Unknown),
                 _ => {
                     // println!("{:#}", self.source[self.ptr]);
-                    panic!()
+                    return Err(LexerError::Unknown);
                 }
             }
         }
-        None
+        return Err(LexerError::Unknown);
     }
 
-    fn tokenize_pattern(&mut self, cc: u8) -> Option<Token> {
+    fn tokenize_pattern(&mut self, b: u8) -> LexerOptionResult {
         let indent_start = self.ptr;
         let mut in_indent = true;
         let mut start = self.ptr;
         let mut indent = 0;
 
-        if cc == b' ' {
+        if b == b' ' {
             self.ptr += 1;
         }
 
-        while let Some(cc) = self.source.get(self.ptr) {
+        while let Some(b) = self.source.get(self.ptr) {
             if in_indent {
-                if *cc == b' ' {
+                if *b == b' ' {
                     self.ptr += 1;
                     continue;
                 } else {
@@ -147,41 +166,49 @@ impl<'l> Lexer<'l> {
                     in_indent = false;
                 }
             }
-            match cc {
+            match b {
+                b'{' => {
+                    self.state = LexerState::Expression;
+                    return Ok(Some(Token::OpenCurlyBraces));
+                }
                 b'\n' if start == self.ptr => {
                     self.ptr += 1;
                     match self.check_next_line() {
-                        NextLine::TextContinuation => return Some(Token::Eol(self.ptr - 1)),
+                        NextLine::TextContinuation => return Ok(Some(Token::Eol(self.ptr - 1))),
                         NextLine::Attribute => {
                             self.state = LexerState::Message;
                             self.buffer = Some(Token::Dot);
                             self.ptr += 1;
-                            return Some(Token::Eot);
+                            return Ok(Some(Token::Eot));
                         }
-                        NextLine::NewEntry | NextLine::End => {
+                        NextLine::NewEntry => {
                             self.state = LexerState::Resource;
-                            return Some(Token::Eot);
+                            return Ok(Some(Token::Eot));
                         }
                     }
                 }
                 b'\n' => {
-                    return Some(Token::Text(indent, start..self.ptr));
+                    return Ok(Some(Token::Text(indent, start..self.ptr)));
                 }
                 _ => {}
             }
             self.ptr += 1;
         }
-        None
+        if start < self.ptr {
+            Ok(Some(Token::Text(indent, start..self.ptr)))
+        } else {
+            Ok(None)
+        }
     }
 
-    fn tokenize_comment(&mut self, cc: u8) -> Option<Token> {
-        if cc != b' ' {
-            if cc != b'\n' {
+    fn tokenize_comment(&mut self, b: u8) -> LexerResult {
+        if b != b' ' {
+            if b != b'\n' {
                 panic!();
             }
             self.state = LexerState::Resource;
             self.ptr += 1;
-            return Some(Token::Text(0, self.ptr - 1..self.ptr - 1));
+            return Ok(Token::Text(0, self.ptr - 1..self.ptr - 1));
         }
 
         self.ptr += 1;
@@ -190,24 +217,97 @@ impl<'l> Lexer<'l> {
 
         let mut end_vector = 0;
 
-        while let Some(cc) = self.source.get(self.ptr) {
+        while let Some(b) = self.source.get(self.ptr) {
             self.ptr += 1;
-            if *cc == b'\n' {
+            if *b == b'\n' {
                 end_vector = 1;
                 break;
             }
         }
         self.state = LexerState::Resource;
-        Some(Token::Text(0, start..(self.ptr - end_vector)))
+        Ok(Token::Text(0, start..(self.ptr - end_vector)))
+    }
+
+    fn tokenize_expression(&mut self, b: u8) -> LexerResult {
+        let mut b = b;
+        loop {
+            match b {
+                b'}' => {
+                    self.ptr += 1;
+                    break;
+                }
+                b'"' => {
+                    self.ptr += 1;
+                    self.state = LexerState::StringLiteral;
+                    return Ok(Token::DoubleQuote);
+                }
+                b'-' => {
+                    self.ptr += 1;
+                    return Ok(Token::MinusSign);
+                }
+                b'.' => {
+                    self.ptr += 1;
+                    return Ok(Token::Dot);
+                }
+                b'a'..=b'z' => {
+                    return Ok(self.get_ident());
+                }
+                b if b.is_ascii_digit() => {
+                    let start = self.ptr;
+                    self.ptr += 1;
+                    while let Some(b) = self.source.get(self.ptr) {
+                        if !b.is_ascii_digit() {
+                            break;
+                        }
+                        self.ptr += 1;
+                    }
+                    return Ok(Token::Number(start..self.ptr));
+                }
+                _ => {}
+            }
+
+            self.ptr += 1;
+            if let Some(b2) = self.source.get(self.ptr) {
+                b = *b2;
+            } else {
+                //XXX: Error
+                break;
+            }
+        }
+        self.state = LexerState::Pattern;
+        Ok(Token::CloseCurlyBraces)
+    }
+
+    fn tokenize_string_literal(&mut self, b: u8) -> LexerResult {
+        let start = self.ptr;
+        let mut b = b;
+        loop {
+            match b {
+                b'"' => {
+                    self.ptr += 1;
+                    self.state = LexerState::Expression;
+                    self.buffer = Some(Token::DoubleQuote);
+                    return Ok(Token::Text(0, start..self.ptr - 1));
+                }
+                _ => {}
+            }
+
+            self.ptr += 1;
+            if let Some(b2) = self.source.get(self.ptr) {
+                b = *b2;
+            } else {
+                panic!();
+            }
+        }
     }
 
     fn check_next_line(&mut self) -> NextLine {
         let search_start = self.ptr;
         let mut indent_start = self.ptr;
 
-        while let Some(cc) = self.source.get(self.ptr) {
-            if *cc != b' ' {
-                if *cc == b'\n' {
+        while let Some(b) = self.source.get(self.ptr) {
+            if *b != b' ' {
+                if *b == b'\n' {
                     self.ptr += 1;
                     indent_start = self.ptr;
                 } else {
@@ -233,35 +333,94 @@ impl<'l> Lexer<'l> {
             }
         }
     }
+
+    fn get_token(&mut self) -> LexerOptionResult {
+        loop {
+            if self.buffer.is_some() {
+                return Ok(self.buffer.take());
+            }
+            if self.peek.is_some() {
+                return Ok(self.peek.take());
+            }
+            if let Some(b) = self.source.get(self.ptr) {
+                let token = match self.state {
+                    LexerState::Resource => self.tokenize_resource(*b),
+                    LexerState::Message => self.tokenize_message(*b),
+                    LexerState::Pattern => {
+                        if let Ok(Some(token)) = self.tokenize_pattern(*b) {
+                            Ok(token)
+                        } else {
+                            continue;
+                        }
+                    }
+                    LexerState::Expression => self.tokenize_expression(*b),
+                    LexerState::Comment => self.tokenize_comment(*b),
+                    LexerState::StringLiteral => self.tokenize_string_literal(*b),
+                };
+                match token {
+                    Ok(token) => return Ok(Some(token)),
+                    Err(err) => return Err(err),
+                }
+            } else {
+                return Ok(None);
+            }
+        }
+    }
+
+    fn collect_junk_range(&mut self) -> Range<usize> {
+        while let Some(b) = self.source.get(self.ptr) {
+            if b == &b'\n' {
+                self.ptr += 1;
+                if let Some(b) = self.source.get(self.ptr) {
+                    if b.is_ascii_alphabetic() || b == &b'#' || b == &b'-' {
+                        break;
+                    }
+                }
+            }
+            self.ptr += 1;
+        }
+        self.entry_start..self.ptr
+    }
+
+    pub fn peek(&mut self) -> Option<&Token> {
+        if let Some(ref token) = self.peek {
+            Some(token)
+        } else {
+            let token = self.next();
+            if let Some(token) = token {
+                self.peek = Some(token);
+                self.peek.as_ref()
+            } else {
+                None
+            }
+        }
+    }
+
+    #[inline]
+    fn next(&mut self) -> Option<Token> {
+        if let Ok(token) = self.get_token() {
+            token
+        } else {
+            let junk_range = self.collect_junk_range();
+            self.state = LexerState::Resource;
+            Some(Token::Junk(junk_range))
+        }
+    }
+
+    pub fn get_junk(&mut self) -> Range<usize> {
+        self.buffer = None;
+        //XXX: Reset ptr to next, not peek
+        self.peek = None;
+        let junk_range = self.collect_junk_range();
+        self.state = LexerState::Resource;
+        junk_range
+    }
 }
 
 impl<'l> Iterator for Lexer<'l> {
     type Item = Token;
 
-    // fn next(&mut self) -> Option<Self::Item> {
-    //     if self.buffer.is_some() {
-    //         return dbg!(self.buffer.take());
-    //     }
-    //     self.source.get(self.ptr).and_then(|cc| {
-    //         let result = match self.state {
-    //             LexerState::Resource => Some(self.tokenize_resource(*cc)),
-    //             LexerState::Message => self.tokenize_message(*cc),
-    //             LexerState::Pattern => self.tokenize_pattern(*cc),
-    //             LexerState::Comment => self.tokenize_comment(*cc),
-    //         };
-    //         dbg!(result)
-    //     })
-    // }
-
     fn next(&mut self) -> Option<Self::Item> {
-        if self.buffer.is_some() {
-            return self.buffer.take();
-        }
-        self.source.get(self.ptr).and_then(|cc| match self.state {
-            LexerState::Resource => Some(self.tokenize_resource(*cc)),
-            LexerState::Message => self.tokenize_message(*cc),
-            LexerState::Pattern => self.tokenize_pattern(*cc),
-            LexerState::Comment => self.tokenize_comment(*cc),
-        })
+        self.next()
     }
 }

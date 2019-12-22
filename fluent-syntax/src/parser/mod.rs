@@ -21,6 +21,7 @@ mod tests {
                 let pe = &msg.value.as_ref().unwrap().elements[0];
                 let text = match pe {
                     ast::PatternElement::TextElement(r) => r,
+                    _ => panic!(),
                 };
                 (&msg.id.name, text)
             }
@@ -34,6 +35,7 @@ mod tests {
                 let pe = &msg.value.as_ref().unwrap().elements[0];
                 let text = match pe {
                     ast::PatternElement::TextElement(r) => r,
+                    _ => panic!(),
                 };
                 (&msg.id.name, text)
             }
@@ -45,9 +47,9 @@ mod tests {
 
     #[test]
     fn parser2_test2() {
-        let input = include_str!("../../benches/menubar.ftl");
-        let parser = Parser::new(input);
-        let ast = parser.parse();
+        // let input = include_str!("../../benches/menubar.ftl");
+        // let parser = Parser::new(input);
+        // let ast = parser.parse();
 
         // assert_eq!(ast.body.len(), 116);
     }

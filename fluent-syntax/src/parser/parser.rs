@@ -1,18 +1,17 @@
 use super::ast;
 use super::lexer::Lexer;
 use super::lexer::Token;
-use std::iter::Peekable;
 use std::ops::Range;
 
 pub struct Parser<'p> {
     source: &'p str,
-    lexer: Peekable<Lexer<'p>>,
+    lexer: Lexer<'p>,
 }
 
 impl<'p> Parser<'p> {
     pub fn new(source: &'p str) -> Self {
         Parser {
-            lexer: Lexer::new(source.as_bytes()).peekable(),
+            lexer: Lexer::new(source.as_bytes()),
             source,
         }
     }
@@ -25,8 +24,8 @@ impl<'p> Parser<'p> {
         while let Some(token) = self.lexer.next() {
             match token {
                 Token::Identifier(r) => {
-                    let msg = self.get_message(r, last_comment.take());
-                    body.push(ast::ResourceEntry::Entry(ast::Entry::Message(msg)));
+                    let entry = self.get_message(r, last_comment.take());
+                    body.push(entry);
                 }
                 Token::MinusSign => {
                     let term = self.get_term(last_comment.take());
@@ -45,6 +44,12 @@ impl<'p> Parser<'p> {
                         body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
                     }
                 }
+                Token::Junk(r) => {
+                    if let Some(comment) = last_comment.take() {
+                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                    }
+                    body.push(ast::ResourceEntry::Junk(&self.source[r]));
+                }
                 _ => panic!(),
             }
         }
@@ -62,12 +67,22 @@ impl<'p> Parser<'p> {
         &mut self,
         id: Range<usize>,
         comment: Option<ast::Comment<'p>>,
-    ) -> ast::Message<'p> {
+    ) -> ast::ResourceEntry<'p> {
         let id = ast::Identifier {
             name: &self.source[id],
         };
 
-        self.lexer.next(); // EqSign
+        match self.lexer.next() {
+            Some(Token::EqSign) => {}
+            Some(Token::Junk(r)) => {
+                return ast::ResourceEntry::Junk(&self.source[r]);
+            }
+            None => {
+                let junk = self.lexer.get_junk();
+                return ast::ResourceEntry::Junk(&self.source[junk]);
+            }
+            _ => panic!(),
+        };
 
         let pattern = self.maybe_get_pattern();
 
@@ -75,12 +90,18 @@ impl<'p> Parser<'p> {
         while let Some(Token::Dot) = self.lexer.peek() {
             attributes.push(self.get_attribute());
         }
-        ast::Message {
+
+        if pattern.is_none() && attributes.is_empty() {
+            let junk = self.lexer.get_junk();
+            return ast::ResourceEntry::Junk(&self.source[junk]);
+        }
+
+        ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message {
             id,
             value: pattern,
             attributes: attributes.into_boxed_slice(),
             comment,
-        }
+        }))
     }
 
     fn get_term(&mut self, comment: Option<ast::Comment<'p>>) -> ast::Term<'p> {
@@ -116,17 +137,15 @@ impl<'p> Parser<'p> {
                         pe.push(te);
                     }
                 }
-                Some(Token::Eot) => {
+                Some(Token::OpenCurlyBraces) => {
+                    let expr = self.get_expression();
+                    pe.push(ast::PatternElement::Placeable(expr));
+                }
+                Some(Token::Eot) | None => {
                     break;
                 }
-                None => {
-                    break;
-                }
-                b => {
-                    println!("{:#?}", b);
-                    panic!();
-                }
-            }
+                _ => panic!(),
+            };
         }
         if pe.is_empty() {
             None
@@ -150,6 +169,10 @@ impl<'p> Parser<'p> {
                         let te = ast::PatternElement::TextElement(&self.source[i..i + 1]);
                         pe.push(te);
                     }
+                }
+                Some(Token::OpenCurlyBraces) => {
+                    let expr = self.get_expression();
+                    pe.push(ast::PatternElement::Placeable(expr));
                 }
                 Some(Token::Eot) | None => {
                     break;
@@ -217,5 +240,72 @@ impl<'p> Parser<'p> {
             comment_type,
             content,
         }
+    }
+
+    fn get_expression(&mut self) -> ast::Expression<'p> {
+        let inline_expr = self.get_inline_expression();
+        self.lexer.next(); // CloseCurlyBraces
+        ast::Expression::InlineExpression(inline_expr)
+    }
+
+    fn get_inline_expression(&mut self) -> ast::InlineExpression<'p> {
+        match self.lexer.next() {
+            Some(Token::DoubleQuote) => match self.lexer.next() {
+                Some(Token::Text(_, r)) => {
+                    let value = &self.source[r];
+                    self.lexer.next(); // DoubleQuote
+                    ast::InlineExpression::StringLiteral { value }
+                }
+                _ => panic!(),
+            },
+            Some(Token::Number(r)) => {
+                let range = self.get_number(r, false);
+                let value = &self.source[range];
+                ast::InlineExpression::NumberLiteral { value }
+            }
+            Some(Token::MinusSign) => {
+                match self.lexer.next() {
+                    Some(Token::Identifier(r)) => {
+                        let id = ast::Identifier {
+                            name: &self.source[r],
+                        };
+                        ast::InlineExpression::TermReference {
+                            id,
+                            attribute: None,
+                            arguments: None,
+                        }
+                    }
+                    Some(Token::Number(r)) => {
+                        let range = self.get_number(r, true);
+                        let value = &self.source[range];
+                        ast::InlineExpression::NumberLiteral { value }
+                    }
+                    _ => panic!(),
+                }
+                // Some(Token::MinusSign) => {
+                //     let ident = self.get_identifier();
+                //     break;
+                // }
+            }
+            _ => panic!(),
+        }
+    }
+
+    fn get_number(&mut self, decimal: Range<usize>, minus: bool) -> Range<usize> {
+        let mut result = decimal;
+        if minus {
+            result.start -= 1;
+        }
+        if let Some(Token::Dot) = self.lexer.peek() {
+            self.lexer.next();
+            match self.lexer.next() {
+                Some(Token::Number(r)) => {
+                    result.end = r.end;
+                }
+                _ => panic!(),
+            }
+        }
+
+        return result;
     }
 }

@@ -40,6 +40,10 @@ where
     #[derive(Serialize)]
     #[serde(tag = "type")]
     enum EntryHelper<'s> {
+        Junk {
+            annotations: Vec<&'s str>,
+            content: &'s str,
+        },
         #[serde(with = "MessageDef")]
         Message(&'s ast::Message<'s>),
         #[serde(with = "TermDef")]
@@ -69,6 +73,10 @@ where
                         ast::CommentType::Resource => EntryHelper::ResourceComment { content },
                     }
                 }
+            },
+            ast::ResourceEntry::Junk(ref junk) => EntryHelper::Junk {
+                content: junk,
+                annotations: vec![],
             },
         };
         seq.serialize_element(&entry)?;
@@ -162,8 +170,16 @@ where
     let mut buffer = String::new();
     for e in v.iter() {
         match e {
-            ast::PatternElement::TextElement(s) => {
-                buffer.push_str(s);
+            ast::PatternElement::TextElement(e) => {
+                buffer.push_str(e);
+            }
+            _ => {
+                if !buffer.is_empty() {
+                    seq.serialize_element(&Helper(&ast::PatternElement::TextElement(&buffer)))?;
+                    buffer = String::new();
+                }
+
+                seq.serialize_element(&Helper(e))?;
             }
         }
     }
@@ -180,6 +196,8 @@ where
 pub enum PatternElementDef<'s> {
     #[serde(serialize_with = "serialize_text_element")]
     TextElement(&'s str),
+    #[serde(serialize_with = "serialize_placeable")]
+    Placeable(ast::Expression<'s>),
 }
 
 fn serialize_text_element<'s, S>(s: &'s str, serializer: S) -> Result<S::Ok, S::Error>
@@ -189,6 +207,18 @@ where
     let mut map = serializer.serialize_map(Some(2))?;
     map.serialize_entry("type", "TextElement")?;
     map.serialize_entry("value", s)?;
+    map.end()
+}
+
+fn serialize_placeable<'s, S>(exp: &ast::Expression<'s>, serializer: S) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "ExpressionDef")] &'ast ast::Expression<'ast>);
+    let mut map = serializer.serialize_map(Some(2))?;
+    map.serialize_entry("type", "Placeable")?;
+    map.serialize_entry("expression", &Helper(exp))?;
     map.end()
 }
 
@@ -204,4 +234,116 @@ pub struct AttributeDef {}
 #[serde(rename = "Identifier")]
 pub struct IdentifierDef<'s> {
     pub name: &'s str,
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::Expression")]
+#[serde(tag = "type")]
+pub enum ExpressionDef<'ast> {
+    #[serde(with = "InlineExpressionDef")]
+    InlineExpression(ast::InlineExpression<'ast>),
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::InlineExpression")]
+#[serde(tag = "type")]
+pub enum InlineExpressionDef<'s> {
+    StringLiteral {
+        value: &'s str,
+    },
+    NumberLiteral {
+        value: &'s str,
+    },
+    MessageReference {
+        #[serde(with = "IdentifierDef")]
+        id: ast::Identifier<'s>,
+        #[serde(serialize_with = "serialize_identifier_option")]
+        attribute: Option<ast::Identifier<'s>>,
+    },
+    TermReference {
+        #[serde(with = "IdentifierDef")]
+        id: ast::Identifier<'s>,
+        #[serde(serialize_with = "serialize_identifier_option")]
+        attribute: Option<ast::Identifier<'s>>,
+        #[serde(serialize_with = "serialize_call_arguments_option")]
+        arguments: Option<ast::CallArguments<'s>>,
+    },
+}
+
+fn serialize_call_arguments_option<'se, S>(
+    v: &Option<ast::CallArguments<'se>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "CallArgumentsDef")] &'ast ast::CallArguments<'ast>);
+    v.as_ref().map(Helper).serialize(serializer)
+}
+
+fn serialize_identifier_option<'se, S>(
+    v: &Option<ast::Identifier<'se>>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "IdentifierDef")] &'ast ast::Identifier<'ast>);
+    v.as_ref().map(Helper).serialize(serializer)
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::CallArguments")]
+#[serde(tag = "type")]
+#[serde(rename = "CallArguments")]
+pub struct CallArgumentsDef<'ast> {
+    #[serde(serialize_with = "serialize_inline_expressions")]
+    pub positional: Box<[ast::InlineExpression<'ast>]>,
+    #[serde(serialize_with = "serialize_named_arguments")]
+    pub named: Box<[ast::NamedArgument<'ast>]>,
+}
+
+#[derive(Serialize)]
+#[serde(remote = "ast::NamedArgument")]
+#[serde(tag = "type")]
+#[serde(rename = "NamedArgument")]
+pub struct NamedArgumentDef<'ast> {
+    #[serde(with = "IdentifierDef")]
+    pub name: ast::Identifier<'ast>,
+    #[serde(with = "InlineExpressionDef")]
+    pub value: ast::InlineExpression<'ast>,
+}
+
+fn serialize_inline_expressions<'se, S>(
+    v: &Box<[ast::InlineExpression<'se>]>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "InlineExpressionDef")] &'ast ast::InlineExpression<'ast>);
+    let mut seq = serializer.serialize_seq(Some(v.len()))?;
+    for e in v.iter() {
+        seq.serialize_element(&Helper(e))?;
+    }
+    seq.end()
+}
+
+fn serialize_named_arguments<'se, S>(
+    v: &Box<[ast::NamedArgument<'se>]>,
+    serializer: S,
+) -> Result<S::Ok, S::Error>
+where
+    S: Serializer,
+{
+    #[derive(Serialize)]
+    struct Helper<'ast>(#[serde(with = "NamedArgumentDef")] &'ast ast::NamedArgument<'ast>);
+    let mut seq = serializer.serialize_seq(Some(v.len()))?;
+    for e in v.iter() {
+        seq.serialize_element(&Helper(e))?;
+    }
+    seq.end()
 }
