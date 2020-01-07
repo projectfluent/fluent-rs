@@ -1,4 +1,5 @@
 use fluent_bundle::resolve::Scope;
+use fluent_bundle::types::FluentType;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use fluent_bundle::FluentValue;
@@ -73,4 +74,43 @@ fn fluent_value_from() {
 
     assert_eq!(value_f64, FluentValue::Number("23.5".into()));
     assert_eq!(value_isize, FluentValue::Number("-23".into()));
+}
+
+#[test]
+fn fluent_custom_type() {
+    #[derive(Debug, PartialEq)]
+    struct DateTime {
+        epoch: usize,
+    };
+
+    impl DateTime {
+        pub fn new(epoch: usize) -> Self {
+            Self { epoch }
+        }
+    }
+
+    impl FluentType for DateTime {
+        fn duplicate(&self) -> Box<dyn FluentType> {
+            Box::new(DateTime { epoch: self.epoch })
+        }
+        fn as_string(&self) -> std::borrow::Cow<'static, str> {
+            format!("{}", self.epoch).into()
+        }
+    }
+
+    impl std::fmt::Display for DateTime {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{}", self.epoch)
+        }
+    }
+
+    let dt = FluentValue::Custom(Box::new(DateTime::new(10)));
+    let dt2 = FluentValue::Custom(Box::new(DateTime::new(10)));
+    let dt3 = FluentValue::Custom(Box::new(DateTime::new(15)));
+
+    let sv = FluentValue::String("foo".into());
+
+    assert_eq!(dt == dt2, true);
+    assert_eq!(dt == dt3, false);
+    assert_eq!(dt == sv, false);
 }

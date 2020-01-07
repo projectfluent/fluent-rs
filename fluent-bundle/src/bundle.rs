@@ -445,7 +445,7 @@ impl<R> FluentBundle<R> {
         R: Borrow<FluentResource>,
     {
         let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).to_string();
+        let result = pattern.resolve(&mut scope).as_string();
 
         for err in scope.errors {
             errors.push(err.into());
