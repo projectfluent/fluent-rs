@@ -1,0 +1,15 @@
+[
+    ResourceCommentSign,
+    Text(
+        0,
+        4..65,
+    ),
+    Eol(
+        66,
+    ),
+    CommentSign,
+    Text(
+        0,
+        69..75,
+    ),
+]

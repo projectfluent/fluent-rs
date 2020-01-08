@@ -1,0 +1,7 @@
+[
+    ResourceCommentSign,
+    Text(
+        0,
+        4..166,
+    ),
+]

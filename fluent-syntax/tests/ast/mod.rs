@@ -226,7 +226,12 @@ where
 #[serde(remote = "ast::Attribute")]
 #[serde(tag = "type")]
 #[serde(rename = "Attribute")]
-pub struct AttributeDef {}
+pub struct AttributeDef<'s> {
+    #[serde(with = "IdentifierDef")]
+    pub id: ast::Identifier<'s>,
+    #[serde(with = "PatternDef")]
+    pub value: ast::Pattern<'s>,
+}
 
 #[derive(Serialize)]
 #[serde(remote = "ast::Identifier")]

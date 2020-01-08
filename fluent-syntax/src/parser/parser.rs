@@ -24,8 +24,7 @@ impl<'p> Parser<'p> {
         while let Some(token) = self.lexer.next() {
             match token {
                 Token::Identifier(r) => {
-                    let entry = self.get_message(r, last_comment.take());
-                    body.push(entry);
+                    self.add_message(r, &mut body, last_comment.take());
                 }
                 Token::MinusSign => {
                     let term = self.get_term(last_comment.take());
@@ -63,11 +62,12 @@ impl<'p> Parser<'p> {
         }
     }
 
-    fn get_message(
+    fn add_message(
         &mut self,
         id: Range<usize>,
+        body: &mut Vec<ast::ResourceEntry<'p>>,
         comment: Option<ast::Comment<'p>>,
-    ) -> ast::ResourceEntry<'p> {
+    ) {
         let id = ast::Identifier {
             name: &self.source[id],
         };
@@ -75,11 +75,19 @@ impl<'p> Parser<'p> {
         match self.lexer.next() {
             Some(Token::EqSign) => {}
             Some(Token::Junk(r)) => {
-                return ast::ResourceEntry::Junk(&self.source[r]);
+                if let Some(comment) = comment {
+                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                }
+                body.push(ast::ResourceEntry::Junk(&self.source[r]));
+                return;
             }
             None => {
+                if let Some(comment) = comment {
+                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                }
                 let junk = self.lexer.get_junk();
-                return ast::ResourceEntry::Junk(&self.source[junk]);
+                body.push(ast::ResourceEntry::Junk(&self.source[junk]));
+                return;
             }
             _ => panic!(),
         };
@@ -92,16 +100,22 @@ impl<'p> Parser<'p> {
         }
 
         if pattern.is_none() && attributes.is_empty() {
+            if let Some(comment) = comment {
+                body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+            }
             let junk = self.lexer.get_junk();
-            return ast::ResourceEntry::Junk(&self.source[junk]);
+            body.push(ast::ResourceEntry::Junk(&self.source[junk]));
+            return;
         }
 
-        ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message {
-            id,
-            value: pattern,
-            attributes: attributes.into_boxed_slice(),
-            comment,
-        }))
+        body.push(ast::ResourceEntry::Entry(ast::Entry::Message(
+            ast::Message {
+                id,
+                value: pattern,
+                attributes: attributes.into_boxed_slice(),
+                comment,
+            },
+        )));
     }
 
     fn get_term(&mut self, comment: Option<ast::Comment<'p>>) -> ast::Term<'p> {

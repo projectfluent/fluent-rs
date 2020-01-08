@@ -53,6 +53,8 @@ pub struct Lexer<'l> {
     pub entry_start: usize,
     pub buffer: Option<Token>,
     pub peek: Option<Token>,
+    pub next_ptr: usize,
+    pub done: bool,
 }
 
 impl<'l> Lexer<'l> {
@@ -66,6 +68,8 @@ impl<'l> Lexer<'l> {
             entry_start: 0,
             buffer: None,
             peek: None,
+            next_ptr: 0,
+            done: false,
         }
     }
 
@@ -108,10 +112,12 @@ impl<'l> Lexer<'l> {
             }
             b'\n' => {
                 self.ptr += 1;
-                self.entry_start = self.ptr;
                 Ok(Token::Eol(self.ptr - 1))
             }
-            _ => Err(LexerError::Unknown),
+            _ => {
+                self.entry_start = self.ptr;
+                Err(LexerError::Unknown)
+            }
         }
     }
 
@@ -207,6 +213,7 @@ impl<'l> Lexer<'l> {
                 panic!();
             }
             self.state = LexerState::Resource;
+            self.entry_start = self.ptr;
             self.ptr += 1;
             return Ok(Token::Text(0, self.ptr - 1..self.ptr - 1));
         }
@@ -225,6 +232,7 @@ impl<'l> Lexer<'l> {
             }
         }
         self.state = LexerState::Resource;
+        self.entry_start = self.ptr;
         Ok(Token::Text(0, start..(self.ptr - end_vector)))
     }
 
@@ -322,6 +330,7 @@ impl<'l> Lexer<'l> {
         let indent = start - indent_start;
 
         if indent == 0 {
+            self.ptr -= 1;
             return NextLine::NewEntry;
         }
 
@@ -336,6 +345,9 @@ impl<'l> Lexer<'l> {
 
     fn get_token(&mut self) -> LexerOptionResult {
         loop {
+            if self.done {
+                return Ok(None);
+            }
             if self.buffer.is_some() {
                 return Ok(self.buffer.take());
             }
@@ -362,23 +374,28 @@ impl<'l> Lexer<'l> {
                     Err(err) => return Err(err),
                 }
             } else {
+                self.done = true;
                 return Ok(None);
             }
         }
     }
 
     fn collect_junk_range(&mut self) -> Range<usize> {
+        if self.done {
+            return self.entry_start..self.source.len();
+        }
         while let Some(b) = self.source.get(self.ptr) {
+            self.ptr += 1;
             if b == &b'\n' {
-                self.ptr += 1;
                 if let Some(b) = self.source.get(self.ptr) {
                     if b.is_ascii_alphabetic() || b == &b'#' || b == &b'-' {
-                        break;
+                        self.next_ptr = self.ptr;
+                        return self.entry_start..self.ptr;
                     }
                 }
             }
-            self.ptr += 1;
         }
+        self.next_ptr = self.ptr;
         self.entry_start..self.ptr
     }
 
@@ -386,6 +403,7 @@ impl<'l> Lexer<'l> {
         if let Some(ref token) = self.peek {
             Some(token)
         } else {
+            self.next_ptr = self.ptr;
             let token = self.next();
             if let Some(token) = token {
                 self.peek = Some(token);
@@ -409,7 +427,7 @@ impl<'l> Lexer<'l> {
 
     pub fn get_junk(&mut self) -> Range<usize> {
         self.buffer = None;
-        //XXX: Reset ptr to next, not peek
+        self.ptr = self.next_ptr;
         self.peek = None;
         let junk_range = self.collect_junk_range();
         self.state = LexerState::Resource;
