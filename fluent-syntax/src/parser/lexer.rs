@@ -48,7 +48,6 @@ type LexerOptionResult = Result<Option<Token>, LexerError>;
 pub struct Lexer<'l> {
     pub state: LexerState,
     pub source: &'l [u8],
-    pub length: usize,
     pub ptr: usize,
     pub entry_start: usize,
     pub buffer: Option<Token>,
@@ -59,11 +58,9 @@ pub struct Lexer<'l> {
 
 impl<'l> Lexer<'l> {
     pub fn new(source: &'l [u8]) -> Self {
-        let length = source.len();
         Lexer {
             state: LexerState::Resource,
             source,
-            length,
             ptr: 0,
             entry_start: 0,
             buffer: None,
@@ -151,7 +148,7 @@ impl<'l> Lexer<'l> {
         return Err(LexerError::Unknown);
     }
 
-    fn tokenize_pattern(&mut self, b: u8) -> LexerOptionResult {
+    fn tokenize_pattern(&mut self, b: u8) -> LexerResult {
         let indent_start = self.ptr;
         let mut in_indent = true;
         let mut start = self.ptr;
@@ -175,36 +172,32 @@ impl<'l> Lexer<'l> {
             match b {
                 b'{' => {
                     self.state = LexerState::Expression;
-                    return Ok(Some(Token::OpenCurlyBraces));
+                    return Ok(Token::OpenCurlyBraces);
                 }
                 b'\n' if start == self.ptr => {
                     self.ptr += 1;
                     match self.check_next_line() {
-                        NextLine::TextContinuation => return Ok(Some(Token::Eol(self.ptr - 1))),
+                        NextLine::TextContinuation => return Ok(Token::Eol(self.ptr - 1)),
                         NextLine::Attribute => {
                             self.state = LexerState::Message;
                             self.buffer = Some(Token::Dot);
                             self.ptr += 1;
-                            return Ok(Some(Token::Eot));
+                            return Ok(Token::Eot);
                         }
                         NextLine::NewEntry => {
                             self.state = LexerState::Resource;
-                            return Ok(Some(Token::Eot));
+                            return Ok(Token::Eot);
                         }
                     }
                 }
                 b'\n' => {
-                    return Ok(Some(Token::Text(indent, start..self.ptr)));
+                    return Ok(Token::Text(indent, start..self.ptr));
                 }
                 _ => {}
             }
             self.ptr += 1;
         }
-        if start < self.ptr {
-            Ok(Some(Token::Text(indent, start..self.ptr)))
-        } else {
-            Ok(None)
-        }
+        Ok(Token::Text(indent, start..self.ptr))
     }
 
     fn tokenize_comment(&mut self, b: u8) -> LexerResult {
@@ -344,39 +337,29 @@ impl<'l> Lexer<'l> {
     }
 
     fn get_token(&mut self) -> LexerOptionResult {
-        loop {
-            if self.done {
-                return Ok(None);
+        if self.done {
+            return Ok(None);
+        }
+        if self.buffer.is_some() {
+            Ok(self.buffer.take())
+        } else if self.peek.is_some() {
+            Ok(self.peek.take())
+        } else if let Some(b) = self.source.get(self.ptr) {
+            let token = match self.state {
+                LexerState::Resource => self.tokenize_resource(*b),
+                LexerState::Message => self.tokenize_message(*b),
+                LexerState::Pattern => self.tokenize_pattern(*b),
+                LexerState::Expression => self.tokenize_expression(*b),
+                LexerState::Comment => self.tokenize_comment(*b),
+                LexerState::StringLiteral => self.tokenize_string_literal(*b),
+            };
+            match token {
+                Ok(token) => Ok(Some(token)),
+                Err(err) => Err(err)
             }
-            if self.buffer.is_some() {
-                return Ok(self.buffer.take());
-            }
-            if self.peek.is_some() {
-                return Ok(self.peek.take());
-            }
-            if let Some(b) = self.source.get(self.ptr) {
-                let token = match self.state {
-                    LexerState::Resource => self.tokenize_resource(*b),
-                    LexerState::Message => self.tokenize_message(*b),
-                    LexerState::Pattern => {
-                        if let Ok(Some(token)) = self.tokenize_pattern(*b) {
-                            Ok(token)
-                        } else {
-                            continue;
-                        }
-                    }
-                    LexerState::Expression => self.tokenize_expression(*b),
-                    LexerState::Comment => self.tokenize_comment(*b),
-                    LexerState::StringLiteral => self.tokenize_string_literal(*b),
-                };
-                match token {
-                    Ok(token) => return Ok(Some(token)),
-                    Err(err) => return Err(err),
-                }
-            } else {
-                self.done = true;
-                return Ok(None);
-            }
+        } else {
+            self.done = true;
+            Ok(None)
         }
     }
 
@@ -404,25 +387,18 @@ impl<'l> Lexer<'l> {
             Some(token)
         } else {
             self.next_ptr = self.ptr;
-            let token = self.next();
-            if let Some(token) = token {
-                self.peek = Some(token);
-                self.peek.as_ref()
-            } else {
-                None
-            }
+            self.peek = self.next();
+            self.peek.as_ref()
         }
     }
 
     #[inline]
     fn next(&mut self) -> Option<Token> {
-        if let Ok(token) = self.get_token() {
-            token
-        } else {
+        self.get_token().unwrap_or_else(|_| {
             let junk_range = self.collect_junk_range();
             self.state = LexerState::Resource;
             Some(Token::Junk(junk_range))
-        }
+        })
     }
 
     pub fn get_junk(&mut self) -> Range<usize> {
@@ -438,6 +414,7 @@ impl<'l> Lexer<'l> {
 impl<'l> Iterator for Lexer<'l> {
     type Item = Token;
 
+    #[inline]
     fn next(&mut self) -> Option<Self::Item> {
         self.next()
     }
