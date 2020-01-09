@@ -11,6 +11,7 @@
 //! [`resolve`]: ../resolve
 //! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 
+use std::any::Any;
 use std::borrow::{Borrow, Cow};
 use std::default::Default;
 use std::fmt;
@@ -111,12 +112,67 @@ impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source>
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+pub trait FluentType: fmt::Debug + fmt::Display + AnyEq + 'static {
+    fn duplicate(&self) -> Box<dyn FluentType>;
+    fn as_string(&self) -> Cow<'static, str>;
+}
+
+impl PartialEq for dyn FluentType {
+    fn eq(&self, other: &Self) -> bool {
+        self.equals(other.as_any())
+    }
+}
+
+pub trait AnyEq: Any + 'static {
+    fn equals(&self, other: &dyn Any) -> bool;
+    fn as_any(&self) -> &dyn Any;
+}
+
+impl<T: Any + PartialEq> AnyEq for T {
+    fn equals(&self, other: &dyn Any) -> bool {
+        if let Some(that) = other.downcast_ref::<Self>() {
+            self == that
+        } else {
+            false
+        }
+    }
+    fn as_any(&self) -> &dyn Any {
+        self
+    }
+}
+
+#[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
     Number(Cow<'source, str>),
+    Custom(Box<dyn FluentType>),
     Error(DisplayableNode<'source>),
     None,
+}
+
+impl<'s> PartialEq for FluentValue<'s> {
+    fn eq(&self, other: &Self) -> bool {
+        match (self, other) {
+            (FluentValue::String(s), FluentValue::String(s2)) => s == s2,
+            (FluentValue::Number(s), FluentValue::Number(s2)) => s == s2,
+            (FluentValue::Custom(s), FluentValue::Custom(s2)) => s == s2,
+            _ => false,
+        }
+    }
+}
+
+impl<'s> Clone for FluentValue<'s> {
+    fn clone(&self) -> Self {
+        match self {
+            FluentValue::String(s) => FluentValue::String(s.clone()),
+            FluentValue::Number(s) => FluentValue::Number(s.clone()),
+            FluentValue::Custom(s) => {
+                let new_value: Box<dyn FluentType> = s.duplicate();
+                FluentValue::Custom(new_value)
+            }
+            _ => panic!(),
+        }
+    }
 }
 
 impl<'source> FluentValue<'source> {
@@ -153,11 +209,12 @@ impl<'source> FluentValue<'source> {
         }
     }
 
-    pub fn to_string(&self) -> Cow<'source, str> {
+    pub fn as_string(&self) -> Cow<'source, str> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.clone(),
             FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
+            FluentValue::Custom(s) => s.as_string(),
             FluentValue::None => "???".into(),
         }
     }
@@ -169,6 +226,7 @@ impl<'source> fmt::Display for FluentValue<'source> {
             FluentValue::String(s) => f.write_str(s),
             FluentValue::Number(n) => f.write_str(n),
             FluentValue::Error(d) => write!(f, "{{{}}}", d),
+            FluentValue::Custom(s) => s.fmt(f),
             FluentValue::None => f.write_str("???"),
         }
     }

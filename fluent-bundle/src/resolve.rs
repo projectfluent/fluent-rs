@@ -25,7 +25,7 @@ pub enum ResolverError {
     Reference(String),
     MissingDefault,
     Cyclic,
-    TooManyPlaceables
+    TooManyPlaceables,
 }
 
 /// State for a single `ResolveValue::to_value` call.
