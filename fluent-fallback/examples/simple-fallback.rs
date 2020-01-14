@@ -140,7 +140,7 @@ fn main() {
 
     // 6. Create a new Localization instance which will be used to maintain the localization
     //    context for this UI.
-    let mut loc = Localization::new(
+    let loc = Localization::new(
         L10N_RESOURCES.iter().map(|s| s.to_string()).collect(),
         generate_messages,
     );

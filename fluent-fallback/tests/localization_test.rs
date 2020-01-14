@@ -45,7 +45,7 @@ fn localization_format() {
         })
     };
 
-    let mut loc = Localization::new(resource_ids, generate_messages);
+    let loc = Localization::new(resource_ids, generate_messages);
 
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [pl]");

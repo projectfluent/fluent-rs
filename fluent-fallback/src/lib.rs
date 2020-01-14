@@ -44,7 +44,7 @@ impl<'loc, R> Localization<'loc, R> {
         self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
     }
 
-    pub fn format_value<'l>(&'l mut self, id: &'l str, args: Option<&'l FluentArgs>) -> Cow<'l, str>
+    pub fn format_value<'l>(&'l self, id: &'l str, args: Option<&'l FluentArgs>) -> Cow<'l, str>
     where
         R: Borrow<FluentResource>,
     {
