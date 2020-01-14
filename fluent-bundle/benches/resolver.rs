@@ -8,6 +8,7 @@ use std::io::Read;
 
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
+use unic_langid::langid;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;
@@ -82,7 +83,8 @@ fn resolver_bench(c: &mut Criterion) {
             let res =
                 FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
             let ids = get_ids(&res);
-            let mut bundle = FluentBundle::default();
+            let lids = &[langid!("en")];
+            let mut bundle = FluentBundle::new(lids);
             bundle
                 .add_resource(res)
                 .expect("Couldn't add FluentResource to the FluentBundle");

@@ -6,12 +6,12 @@
 
 use std::borrow::Borrow;
 use std::borrow::Cow;
+use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
 
-use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
-use intl_pluralrules::{PluralRuleType, PluralRules};
+use intl_memoizer::IntlLangMemoizer;
 use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
@@ -127,7 +127,7 @@ pub struct FluentBundle<R> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry>,
-    pub(crate) plural_rules: PluralRules,
+    pub(crate) intls: RefCell<IntlLangMemoizer>,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
 }
@@ -158,22 +158,15 @@ impl<R> FluentBundle<R> {
             .into_iter()
             .map(|s| s.clone().into())
             .collect::<Vec<_>>();
-        let default_langid = "en".parse().expect("Failed to parse `en` langid.");
-        let pr_locale = negotiate_languages(
-            &locales,
-            &PluralRules::get_locales(PluralRuleType::CARDINAL),
-            Some(&default_langid),
-            NegotiationStrategy::Lookup,
-        )[0]
-        .clone();
-
-        let pr = PluralRules::create(pr_locale, PluralRuleType::CARDINAL)
-            .expect("Failed to initialize PluralRules.");
+        let lang = locales
+            .get(0)
+            .expect("Expect at least one language")
+            .clone();
         FluentBundle {
             locales,
             resources: vec![],
             entries: HashMap::new(),
-            plural_rules: pr,
+            intls: RefCell::new(IntlLangMemoizer::new(lang)),
             use_isolating: true,
             transform: None,
         }
@@ -508,17 +501,13 @@ impl<R> FluentBundle<R> {
 
 impl<R> Default for FluentBundle<R> {
     fn default() -> Self {
-        let pr_langid: LanguageIdentifier = "en".parse().expect("Failed to parse `en` langid.");
         let langid = LanguageIdentifier::default();
-
-        let pr = PluralRules::create(pr_langid, PluralRuleType::CARDINAL)
-            .expect("Failed to initialize PluralRules.");
         FluentBundle {
-            plural_rules: pr,
-            locales: vec![langid],
+            locales: vec![langid.clone()],
             resources: vec![],
             entries: Default::default(),
             use_isolating: true,
+            intls: RefCell::new(IntlLangMemoizer::new(langid)),
             transform: None,
         }
     }

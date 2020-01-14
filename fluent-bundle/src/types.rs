@@ -17,11 +17,32 @@ use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
 
+use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
-use intl_pluralrules::PluralCategory;
+use intl_memoizer::Memoizable;
+use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
+use unic_langid::LanguageIdentifier;
 
 use crate::resolve::Scope;
 use crate::resource::FluentResource;
+
+struct PluralRules(pub IntlPluralRules);
+
+impl Memoizable for PluralRules {
+    type Args = (PluralRuleType,);
+    type Error = &'static str;
+    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+        let default_lang: LanguageIdentifier = "en".parse().unwrap();
+        let pr_lang = negotiate_languages(
+            &[lang],
+            &IntlPluralRules::get_locales(args.0),
+            Some(&default_lang),
+            NegotiationStrategy::Lookup,
+        )[0]
+        .clone();
+        Ok(Self(IntlPluralRules::create(pr_lang, args.0)?))
+    }
+}
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum DisplayableNodeType<'source> {
@@ -202,8 +223,11 @@ impl<'source> FluentValue<'source> {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
-                let pr = &scope.bundle.plural_rules;
-                pr.select(b.as_ref()) == Ok(cat)
+                let mut intls_borrow = scope.bundle.intls.borrow_mut();
+                let pr = intls_borrow
+                    .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+                    .expect("Failed to retrieve plural rules");
+                pr.0.select(b.as_ref()) == Ok(cat)
             }
             _ => false,
         }
