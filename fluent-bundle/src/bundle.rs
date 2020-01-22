@@ -130,6 +130,7 @@ pub struct FluentBundle<R> {
     pub(crate) intls: RefCell<IntlLangMemoizer>,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
+    pub(crate) formatter: Option<Box<dyn Fn(&FluentValue) -> Option<String> + Send + Sync>>,
 }
 
 impl<R> FluentBundle<R> {
@@ -169,6 +170,7 @@ impl<R> FluentBundle<R> {
             intls: RefCell::new(IntlLangMemoizer::new(lang)),
             use_isolating: true,
             transform: None,
+            formatter: None,
         }
     }
 
@@ -385,6 +387,17 @@ impl<R> FluentBundle<R> {
         }
     }
 
+    pub fn set_formatter<F>(&mut self, func: Option<F>)
+    where
+        F: Fn(&FluentValue) -> Option<String> + Send + Sync + 'static,
+    {
+        if let Some(f) = func {
+            self.formatter = Some(Box::new(f));
+        } else {
+            self.formatter = None;
+        }
+    }
+
     /// Returns true if this bundle contains a message with the given id.
     ///
     /// # Examples
@@ -438,7 +451,7 @@ impl<R> FluentBundle<R> {
         R: Borrow<FluentResource>,
     {
         let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).as_string();
+        let result = pattern.resolve(&mut scope).as_string(Some(&scope));
 
         for err in scope.errors {
             errors.push(err.into());
@@ -470,7 +483,7 @@ impl<R> FluentBundle<R> {
     ///
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
-    ///     [FluentValue::String(str)] => FluentValue::Number(str.len().to_string().into()),
+    ///     [FluentValue::String(str)] => FluentValue::Number(str.len() as f64, None),
     ///     _ => FluentValue::None,
     /// }).expect("Failed to add a function to the bundle.");
     ///
@@ -509,6 +522,7 @@ impl<R> Default for FluentBundle<R> {
             use_isolating: true,
             intls: RefCell::new(IntlLangMemoizer::new(langid)),
             transform: None,
+            formatter: None,
         }
     }
 }

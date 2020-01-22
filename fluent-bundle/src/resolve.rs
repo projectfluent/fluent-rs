@@ -180,7 +180,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     }
 
                     let result = scope.maybe_track(self, p);
-                    write!(string, "{}", result).expect("Writing failed");
+                    write!(string, "{}", result.as_string(Some(scope))).expect("Writing failed");
 
                     if needs_isolation {
                         string.write_char('\u{2069}').expect("Writing failed");
@@ -202,7 +202,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
             ast::Expression::SelectExpression { selector, variants } => {
                 let selector = selector.resolve(scope);
                 match selector {
-                    FluentValue::String(_) | FluentValue::Number(_) => {
+                    FluentValue::String(_) | FluentValue::Number(_, _) => {
                         for variant in variants {
                             let key = match variant.key {
                                 ast::VariantKey::Identifier { name } => {

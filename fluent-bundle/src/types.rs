@@ -165,7 +165,7 @@ impl<T: Any + PartialEq> AnyEq for T {
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
-    Number(Cow<'source, str>),
+    Number(f64, Option<usize>),
     Custom(Box<dyn FluentType>),
     Error(DisplayableNode<'source>),
     None,
@@ -175,7 +175,7 @@ impl<'s> PartialEq for FluentValue<'s> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (FluentValue::String(s), FluentValue::String(s2)) => s == s2,
-            (FluentValue::Number(s), FluentValue::Number(s2)) => s == s2,
+            (FluentValue::Number(s, _), FluentValue::Number(s2, _)) => s == s2,
             (FluentValue::Custom(s), FluentValue::Custom(s2)) => s == s2,
             _ => false,
         }
@@ -186,7 +186,7 @@ impl<'s> Clone for FluentValue<'s> {
     fn clone(&self) -> Self {
         match self {
             FluentValue::String(s) => FluentValue::String(s.clone()),
-            FluentValue::Number(s) => FluentValue::Number(s.clone()),
+            FluentValue::Number(s, o) => FluentValue::Number(s.clone(), o.clone()),
             FluentValue::Custom(s) => {
                 let new_value: Box<dyn FluentType> = s.duplicate();
                 FluentValue::Custom(new_value)
@@ -200,7 +200,14 @@ impl<'source> FluentValue<'source> {
     pub fn into_number<S: ToString>(v: S) -> Self {
         let s = v.to_string();
         match f64::from_str(&s) {
-            Ok(_) => FluentValue::Number(s.into()),
+            Ok(n) => {
+                if let Some(pos) = s.find('.') {
+                    let frac = s.len() - pos - 1;
+                    FluentValue::Number(n, Some(frac))
+                } else {
+                    FluentValue::Number(n, None)
+                }
+            }
             Err(_) => FluentValue::String(s.into()),
         }
     }
@@ -212,8 +219,10 @@ impl<'source> FluentValue<'source> {
     ) -> bool {
         match (self, other) {
             (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
-            (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
-            (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
+            (&FluentValue::Number(ref a, ref o1), &FluentValue::Number(ref b, ref o2)) => {
+                a == b && o1 == o2
+            }
+            (&FluentValue::String(ref a), num @ &FluentValue::Number(..)) => {
                 let cat = match a.as_ref() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,
@@ -227,31 +236,32 @@ impl<'source> FluentValue<'source> {
                 let pr = intls_borrow
                     .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
                     .expect("Failed to retrieve plural rules");
-                pr.0.select(b.as_ref()) == Ok(cat)
+                let formatted_number = num.as_string(Some(&scope));
+                pr.0.select(formatted_number.to_string()) == Ok(cat)
             }
             _ => false,
         }
     }
 
-    pub fn as_string(&self) -> Cow<'source, str> {
+    pub fn as_string<R: Borrow<FluentResource>>(
+        &self,
+        scope: Option<&Scope<R>>,
+    ) -> Cow<'source, str> {
+        if let Some(ref scope) = scope {
+            if let Some(ref fmt) = scope.bundle.formatter {
+                if let Some(val) = fmt(self) {
+                    return val.into();
+                }
+            }
+        }
         match self {
             FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => n.clone(),
+            FluentValue::Number(n, _) => {
+                return n.to_string().into();
+            }
             FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
             FluentValue::Custom(s) => s.as_string(),
             FluentValue::None => "???".into(),
-        }
-    }
-}
-
-impl<'source> fmt::Display for FluentValue<'source> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            FluentValue::String(s) => f.write_str(s),
-            FluentValue::Number(n) => f.write_str(n),
-            FluentValue::Error(d) => write!(f, "{{{}}}", d),
-            FluentValue::Custom(s) => s.fmt(f),
-            FluentValue::None => f.write_str("???"),
         }
     }
 }
@@ -272,12 +282,12 @@ macro_rules! from_num {
     ($num:ty) => {
         impl<'source> From<$num> for FluentValue<'source> {
             fn from(n: $num) -> Self {
-                FluentValue::Number(n.to_string().into())
+                FluentValue::into_number(n)
             }
         }
         impl<'source> From<&'source $num> for FluentValue<'source> {
             fn from(n: &'source $num) -> Self {
-                FluentValue::Number(n.to_string().into())
+                FluentValue::into_number(n)
             }
         }
     };
@@ -306,6 +316,6 @@ mod tests {
         let x = 1i16;
         let y = &x;
         let z: FluentValue = y.into();
-        assert_eq!(z, FluentValue::Number("1".into()));
+        assert_eq!(z, FluentValue::into_number("1"));
     }
 }
