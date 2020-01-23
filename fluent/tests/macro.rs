@@ -15,7 +15,7 @@ fn test_fluent_args() {
     );
     assert_eq!(
         args.get("emailCount"),
-        Some(&FluentValue::Number(Cow::Borrowed("5")))
+        Some(&FluentValue::into_number(5))
     );
     assert_eq!(
         args.get("customValue"),
