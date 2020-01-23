@@ -13,13 +13,14 @@
 
 use std::any::Any;
 use std::borrow::{Borrow, Cow};
+use std::cell::RefCell;
 use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
 
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
-use intl_memoizer::Memoizable;
+use intl_memoizer::{IntlLangMemoizer, Memoizable};
 use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
 use unic_langid::LanguageIdentifier;
 
@@ -135,7 +136,7 @@ impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source>
 
 pub trait FluentType: fmt::Debug + fmt::Display + AnyEq + 'static {
     fn duplicate(&self) -> Box<dyn FluentType>;
-    fn as_string(&self) -> Cow<'static, str>;
+    fn as_string(&self, intls: &RefCell<IntlLangMemoizer>) -> Cow<'static, str>;
 }
 
 impl PartialEq for dyn FluentType {
@@ -289,12 +290,12 @@ impl<'source> FluentValue<'source> {
         }
     }
 
-    pub fn as_string(&self) -> Cow<'source, str> {
+    pub fn as_string<R: Borrow<FluentResource>>(&self, scope: &Scope<R>) -> Cow<'source, str> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.as_string(),
             FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
-            FluentValue::Custom(s) => s.as_string(),
+            FluentValue::Custom(s) => s.as_string(&scope.bundle.intls),
             FluentValue::None => "???".into(),
         }
     }

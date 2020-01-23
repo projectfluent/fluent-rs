@@ -1,0 +1,188 @@
+use fluent_bundle::types::FluentType;
+use fluent_bundle::FluentArgs;
+use fluent_bundle::FluentBundle;
+use fluent_bundle::FluentResource;
+use fluent_bundle::FluentValue;
+use intl_memoizer::IntlLangMemoizer;
+use std::cell::RefCell;
+use unic_langid::langid;
+
+#[test]
+fn fluent_custom_type() {
+    #[derive(Debug, PartialEq)]
+    struct DateTime {
+        epoch: usize,
+    };
+
+    impl DateTime {
+        pub fn new(epoch: usize) -> Self {
+            Self { epoch }
+        }
+    }
+
+    impl FluentType for DateTime {
+        fn duplicate(&self) -> Box<dyn FluentType> {
+            Box::new(DateTime { epoch: self.epoch })
+        }
+        fn as_string(&self, _intls: &RefCell<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
+            format!("{}", self.epoch).into()
+        }
+    }
+
+    impl std::fmt::Display for DateTime {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "{}", self.epoch)
+        }
+    }
+
+    let dt = FluentValue::Custom(Box::new(DateTime::new(10)));
+    let dt2 = FluentValue::Custom(Box::new(DateTime::new(10)));
+    let dt3 = FluentValue::Custom(Box::new(DateTime::new(15)));
+
+    let sv = FluentValue::String("foo".into());
+
+    assert_eq!(dt == dt2, true);
+    assert_eq!(dt == dt3, false);
+    assert_eq!(dt == sv, false);
+}
+
+#[test]
+fn fluent_date_time_builtin() {
+    #[derive(Debug, PartialEq, Clone)]
+    enum DateTimeStyleValue {
+        Full,
+        Long,
+        Medium,
+        Short,
+        None,
+    };
+
+    impl std::default::Default for DateTimeStyleValue {
+        fn default() -> Self {
+            Self::None
+        }
+    }
+
+    impl<'l> From<&FluentValue<'l>> for DateTimeStyleValue {
+        fn from(input: &FluentValue) -> Self {
+            if let FluentValue::String(s) = input {
+                match s.as_ref() {
+                    "full" => Self::Full,
+                    "long" => Self::Long,
+                    "medium" => Self::Medium,
+                    "short" => Self::Short,
+                    _ => Self::None,
+                }
+            } else {
+                Self::None
+            }
+        }
+    }
+
+    #[derive(Debug, PartialEq, Default, Clone)]
+    struct DateTimeOptionsBag {
+        pub date_style: DateTimeStyleValue,
+        pub time_style: DateTimeStyleValue,
+    };
+
+    impl DateTimeOptionsBag {
+        pub fn merge(&mut self, input: &FluentArgs) {
+            for (key, value) in input {
+                match *key {
+                    "dateStyle" => self.date_style = value.into(),
+                    "timeStyle" => self.time_style = value.into(),
+                    _ => {}
+                }
+            }
+        }
+    }
+
+    impl<'l> From<&FluentArgs<'l>> for DateTimeOptionsBag {
+        fn from(input: &FluentArgs) -> Self {
+            let mut opts = Self::default();
+            for (key, value) in input {
+                match *key {
+                    "dateStyle" => opts.date_style = value.into(),
+                    "timeStyle" => opts.time_style = value.into(),
+                    _ => {}
+                }
+            }
+            opts
+        }
+    }
+
+    #[derive(Debug, PartialEq, Clone)]
+    struct DateTime {
+        epoch: usize,
+        options: DateTimeOptionsBag,
+    };
+
+    impl DateTime {
+        pub fn new(epoch: usize, options: DateTimeOptionsBag) -> Self {
+            Self { epoch, options }
+        }
+    }
+
+    impl FluentType for DateTime {
+        fn duplicate(&self) -> Box<dyn FluentType> {
+            Box::new(DateTime::new(self.epoch, DateTimeOptionsBag::default()))
+        }
+        fn as_string(&self, _intls: &RefCell<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
+            format!("2020-01-20 {}:00", self.epoch).into()
+        }
+    }
+
+    impl std::fmt::Display for DateTime {
+        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+            write!(f, "2020-01-20 {}:00", self.epoch)
+        }
+    }
+
+    let lang = langid!("en");
+    let mut bundle = FluentBundle::new(&[lang]);
+
+    let res = FluentResource::try_new(
+        r#"
+key-explicit = Hello { DATETIME(12, dateStyle: "full") } World
+key-ref = Hello { DATETIME($date, dateStyle: "full") } World
+    "#
+        .into(),
+    )
+    .unwrap();
+    bundle.add_resource(res).unwrap();
+    bundle.set_use_isolating(false);
+
+    bundle
+        .add_function("DATETIME", |positional, named| match positional.get(0) {
+            Some(FluentValue::Custom(custom)) => {
+                if let Some(that) = custom.as_ref().as_any().downcast_ref::<DateTime>() {
+                    let mut dt = that.clone();
+                    dt.options.merge(named);
+                    FluentValue::Custom(Box::new(dt))
+                } else {
+                    FluentValue::None
+                }
+            }
+            Some(FluentValue::Number(num)) => {
+                let num = num.value as usize;
+                FluentValue::Custom(Box::new(DateTime::new(num, named.into())))
+            }
+            _ => FluentValue::None,
+        })
+        .unwrap();
+
+    let mut errors = vec![];
+    let mut args = FluentArgs::new();
+    args.insert(
+        "date",
+        FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptionsBag::default()))),
+    );
+
+    let msg = bundle.get_message("key-explicit").unwrap();
+    let val = bundle.format_pattern(msg.value.unwrap(), Some(&args), &mut errors);
+    assert_eq!(val, "Hello 2020-01-20 12:00 World");
+
+    let msg = bundle.get_message("key-ref").unwrap();
+    let val = bundle.format_pattern(msg.value.unwrap(), Some(&args), &mut errors);
+    assert_eq!(val, "Hello 2020-01-20 10:00 World");
+}
