@@ -130,6 +130,9 @@ pub struct FluentBundle<R> {
     pub(crate) intls: RefCell<IntlLangMemoizer>,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
+    pub(crate) formatter: Option<
+        Box<dyn Fn(&FluentValue, &RefCell<IntlLangMemoizer>) -> Option<String> + Send + Sync>,
+    >,
 }
 
 impl<R> FluentBundle<R> {
@@ -169,6 +172,7 @@ impl<R> FluentBundle<R> {
             intls: RefCell::new(IntlLangMemoizer::new(lang)),
             use_isolating: true,
             transform: None,
+            formatter: None,
         }
     }
 
@@ -385,6 +389,17 @@ impl<R> FluentBundle<R> {
         }
     }
 
+    pub fn set_formatter<F>(&mut self, func: Option<F>)
+    where
+        F: Fn(&FluentValue, &RefCell<IntlLangMemoizer>) -> Option<String> + Send + Sync + 'static,
+    {
+        if let Some(f) = func {
+            self.formatter = Some(Box::new(f));
+        } else {
+            self.formatter = None;
+        }
+    }
+
     /// Returns true if this bundle contains a message with the given id.
     ///
     /// # Examples
@@ -509,6 +524,7 @@ impl<R> Default for FluentBundle<R> {
             use_isolating: true,
             intls: RefCell::new(IntlLangMemoizer::new(langid)),
             transform: None,
+            formatter: None,
         }
     }
 }

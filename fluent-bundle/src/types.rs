@@ -24,6 +24,7 @@ use intl_memoizer::{IntlLangMemoizer, Memoizable};
 use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
 use unic_langid::LanguageIdentifier;
 
+use crate::bundle::FluentArgs;
 use crate::resolve::Scope;
 use crate::resource::FluentResource;
 
@@ -168,6 +169,22 @@ pub struct FluentNumberOptionsBag {
     pub minimum_fraction_digits: usize,
 }
 
+impl FluentNumberOptionsBag {
+    pub fn merge(&mut self, opts: &FluentArgs) {
+        for (key, value) in opts {
+            match *key {
+                "minimumFractionDigits" => match value {
+                    FluentValue::Number(n) => {
+                        self.minimum_fraction_digits = n.value as usize;
+                    }
+                    _ => {}
+                },
+                _ => {}
+            }
+        }
+    }
+}
+
 impl std::default::Default for FluentNumberOptionsBag {
     fn default() -> Self {
         Self {
@@ -188,7 +205,25 @@ impl FluentNumber {
     }
 
     pub fn as_string(&self) -> Cow<'static, str> {
-        format!("{}", self.value).into()
+        let mut val = self.value.to_string();
+        if self.options.minimum_fraction_digits > 0 {
+            if let Some(pos) = val.find('.') {
+                let frac_num = val.len() - pos - 1;
+                let missing = if frac_num > self.options.minimum_fraction_digits {
+                    0
+                } else {
+                    self.options.minimum_fraction_digits - frac_num
+                };
+                val = format!("{}{}", val, "0".repeat(missing));
+            } else {
+                val = format!(
+                    "{}.{}",
+                    val,
+                    "0".repeat(self.options.minimum_fraction_digits)
+                );
+            }
+        }
+        format!("{}", val).into()
     }
 }
 
@@ -197,7 +232,7 @@ impl FromStr for FluentNumber {
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         f64::from_str(input).map(|n| {
-            let mfd = input.find('.').map(|pos| input.len() - pos);
+            let mfd = input.find('.').map(|pos| input.len() - pos - 1);
             let opts = FluentNumberOptionsBag {
                 minimum_fraction_digits: mfd.unwrap_or(0),
             };
@@ -251,7 +286,7 @@ impl<'source> FluentValue<'source> {
         let s = v.to_string();
         match f64::from_str(&s) {
             Ok(n) => {
-                let mfd = s.find('.').map(|pos| s.len() - pos);
+                let mfd = s.find('.').map(|pos| s.len() - pos - 1);
                 let opts = FluentNumberOptionsBag {
                     minimum_fraction_digits: mfd.unwrap_or(0),
                 };
@@ -291,6 +326,11 @@ impl<'source> FluentValue<'source> {
     }
 
     pub fn as_string<R: Borrow<FluentResource>>(&self, scope: &Scope<R>) -> Cow<'source, str> {
+        if let Some(formatter) = &scope.bundle.formatter {
+            if let Some(val) = formatter(self, &scope.bundle.intls) {
+                return val.into();
+            }
+        }
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.as_string(),

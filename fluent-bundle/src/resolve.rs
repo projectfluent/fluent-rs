@@ -180,7 +180,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     }
 
                     let result = scope.maybe_track(self, p);
-                    write!(string, "{}", result).expect("Writing failed");
+                    write!(string, "{}", result.as_string(scope)).expect("Writing failed");
 
                     if needs_isolation {
                         string.write_char('\u{2069}').expect("Writing failed");

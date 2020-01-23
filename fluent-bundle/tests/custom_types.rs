@@ -186,3 +186,52 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
     let val = bundle.format_pattern(msg.value.unwrap(), Some(&args), &mut errors);
     assert_eq!(val, "Hello 2020-01-20 10:00 World");
 }
+
+#[test]
+fn fluent_custom_number_format() {
+    fn custom_formatter(num: &FluentValue, _intls: &RefCell<IntlLangMemoizer>) -> Option<String> {
+        match num {
+            FluentValue::Number(_) => Some("CUSTOM".into()),
+            _ => None,
+        }
+    }
+
+    let res = FluentResource::try_new(
+        r#"
+key-num-implicit = Hello { 5.000 } World
+key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
+    "#
+        .into(),
+    )
+    .unwrap();
+    let mut bundle = FluentBundle::default();
+    bundle.add_resource(res).unwrap();
+    bundle.set_use_isolating(false);
+
+    bundle
+        .add_function("NUMBER", |positional, named| match positional.get(0) {
+            Some(FluentValue::Number(n)) => {
+                let mut num = n.clone();
+                num.options.merge(named);
+                FluentValue::Number(num)
+            }
+            _ => FluentValue::None,
+        })
+        .unwrap();
+
+    let mut errors = vec![];
+
+    let msg = bundle.get_message("key-num-explicit").unwrap();
+    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    assert_eq!(val, "Hello 5.00 World");
+
+    let msg = bundle.get_message("key-num-implicit").unwrap();
+    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    assert_eq!(val, "Hello 5.000 World");
+
+    bundle.set_formatter(Some(custom_formatter));
+
+    let msg = bundle.get_message("key-num-implicit").unwrap();
+    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    assert_eq!(val, "Hello CUSTOM World");
+}
