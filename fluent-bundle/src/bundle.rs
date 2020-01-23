@@ -470,7 +470,7 @@ impl<R> FluentBundle<R> {
     ///
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
-    ///     [FluentValue::String(str)] => FluentValue::Number(str.len().to_string().into()),
+    ///     [FluentValue::String(str)] => FluentValue::into_number(str.len()),
     ///     _ => FluentValue::None,
     /// }).expect("Failed to add a function to the bundle.");
     ///

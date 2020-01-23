@@ -25,7 +25,7 @@ fn main() {
     bundle
         .add_function("MEANING_OF_LIFE", |args, _named_args| {
             if let Some(arg0) = args.get(0) {
-                if *arg0 == FluentValue::Number("42".into()) {
+                if *arg0 == FluentValue::into_number(42) {
                     return "The answer to life, the universe, and everything".into();
                 }
             }

@@ -23,9 +23,9 @@ fn fluent_value_matches() {
     let string_val_copy = FluentValue::String("string1".into());
     let string_val2 = FluentValue::String("23.5".into());
 
-    let number_val = FluentValue::Number("-23.5".into());
-    let number_val_copy = FluentValue::Number("-23.5".into());
-    let number_val2 = FluentValue::Number("23.5".into());
+    let number_val = FluentValue::into_number(-23.5);
+    let number_val_copy = FluentValue::into_number(-23.5);
+    let number_val2 = FluentValue::into_number(23.5);
 
     assert_eq!(string_val.matches(&string_val_copy, &scope), true);
     assert_eq!(string_val.matches(&string_val2, &scope), false);
@@ -44,12 +44,12 @@ fn fluent_value_matches() {
     let string_cat_many = FluentValue::String("many".into());
     let string_cat_other = FluentValue::String("other".into());
 
-    let number_cat_zero = FluentValue::Number("0".into());
-    let number_cat_one = FluentValue::Number("1".into());
-    let number_cat_two = FluentValue::Number("2".into());
-    let number_cat_few = FluentValue::Number("3".into());
-    let number_cat_many = FluentValue::Number("11".into());
-    let number_cat_other = FluentValue::Number("101".into());
+    let number_cat_zero = FluentValue::into_number(0);
+    let number_cat_one = FluentValue::into_number(1);
+    let number_cat_two = FluentValue::into_number(2);
+    let number_cat_few = FluentValue::into_number(3);
+    let number_cat_many = FluentValue::into_number(11);
+    let number_cat_other = FluentValue::into_number(101);
 
     assert_eq!(string_cat_zero.matches(&number_cat_zero, &scope), true);
     assert_eq!(string_cat_one.matches(&number_cat_one, &scope), true);
@@ -72,8 +72,8 @@ fn fluent_value_from() {
     assert_eq!(value_str, FluentValue::String("my str".into()));
     assert_eq!(value_string, FluentValue::String("my string".into()));
 
-    assert_eq!(value_f64, FluentValue::Number("23.5".into()));
-    assert_eq!(value_isize, FluentValue::Number("-23".into()));
+    assert_eq!(value_f64, FluentValue::into_number(23.5));
+    assert_eq!(value_isize, FluentValue::into_number(-23));
 }
 
 #[test]

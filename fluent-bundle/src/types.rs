@@ -162,10 +162,59 @@ impl<T: Any + PartialEq> AnyEq for T {
     }
 }
 
+#[derive(Debug, PartialEq, Clone)]
+pub struct FluentNumberOptionsBag {
+    pub minimum_fraction_digits: usize,
+}
+
+impl std::default::Default for FluentNumberOptionsBag {
+    fn default() -> Self {
+        Self {
+            minimum_fraction_digits: 0,
+        }
+    }
+}
+
+#[derive(Debug, PartialEq, Clone)]
+pub struct FluentNumber {
+    pub value: f64,
+    pub options: FluentNumberOptionsBag,
+}
+
+impl FluentNumber {
+    pub fn new(value: f64, options: FluentNumberOptionsBag) -> Self {
+        Self { value, options }
+    }
+
+    pub fn as_string(&self) -> Cow<'static, str> {
+        format!("{}", self.value).into()
+    }
+}
+
+impl FromStr for FluentNumber {
+    type Err = std::num::ParseFloatError;
+
+    fn from_str(input: &str) -> Result<Self, Self::Err> {
+        f64::from_str(input).map(|n| {
+            let mfd = input.find('.').map(|pos| input.len() - pos);
+            let opts = FluentNumberOptionsBag {
+                minimum_fraction_digits: mfd.unwrap_or(0),
+            };
+            FluentNumber::new(n, opts)
+        })
+    }
+}
+
+impl std::fmt::Display for FluentNumber {
+    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
+        write!(f, "{}", self.value)
+    }
+}
+
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
-    Number(Cow<'source, str>),
+    Number(FluentNumber),
     Custom(Box<dyn FluentType>),
     Error(DisplayableNode<'source>),
     None,
@@ -200,7 +249,13 @@ impl<'source> FluentValue<'source> {
     pub fn into_number<S: ToString>(v: S) -> Self {
         let s = v.to_string();
         match f64::from_str(&s) {
-            Ok(_) => FluentValue::Number(s.into()),
+            Ok(n) => {
+                let mfd = s.find('.').map(|pos| s.len() - pos);
+                let opts = FluentNumberOptionsBag {
+                    minimum_fraction_digits: mfd.unwrap_or(0),
+                };
+                FluentValue::Number(FluentNumber::new(n, opts))
+            }
             Err(_) => FluentValue::String(s.into()),
         }
     }
@@ -227,7 +282,8 @@ impl<'source> FluentValue<'source> {
                 let pr = intls_borrow
                     .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
                     .expect("Failed to retrieve plural rules");
-                pr.0.select(b.as_ref()) == Ok(cat)
+                let num_val = b.as_string();
+                pr.0.select(num_val.as_ref()) == Ok(cat)
             }
             _ => false,
         }
@@ -236,7 +292,7 @@ impl<'source> FluentValue<'source> {
     pub fn as_string(&self) -> Cow<'source, str> {
         match self {
             FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => n.clone(),
+            FluentValue::Number(n) => n.as_string(),
             FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
             FluentValue::Custom(s) => s.as_string(),
             FluentValue::None => "???".into(),
@@ -248,7 +304,7 @@ impl<'source> fmt::Display for FluentValue<'source> {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         match self {
             FluentValue::String(s) => f.write_str(s),
-            FluentValue::Number(n) => f.write_str(n),
+            FluentValue::Number(n) => n.fmt(f),
             FluentValue::Error(d) => write!(f, "{{{}}}", d),
             FluentValue::Custom(s) => s.fmt(f),
             FluentValue::None => f.write_str("???"),
@@ -272,12 +328,12 @@ macro_rules! from_num {
     ($num:ty) => {
         impl<'source> From<$num> for FluentValue<'source> {
             fn from(n: $num) -> Self {
-                FluentValue::Number(n.to_string().into())
+                FluentValue::into_number(n)
             }
         }
         impl<'source> From<&'source $num> for FluentValue<'source> {
             fn from(n: &'source $num) -> Self {
-                FluentValue::Number(n.to_string().into())
+                FluentValue::into_number(n)
             }
         }
     };
@@ -306,6 +362,6 @@ mod tests {
         let x = 1i16;
         let y = &x;
         let z: FluentValue = y.into();
-        assert_eq!(z, FluentValue::Number("1".into()));
+        assert_eq!(z, FluentValue::into_number(1));
     }
 }

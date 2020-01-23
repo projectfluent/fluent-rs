@@ -142,7 +142,7 @@ fn create_bundle(
                     args.iter()
                         .fold(0.0, |acc, x| {
                             if let FluentValue::Number(v) = x {
-                                acc + f64::from_str(v).expect("Failed to format a number")
+                                acc + v.value
                             } else {
                                 panic!("Type cannot be used in SUM");
                             }
@@ -285,7 +285,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     args.iter()
                         .map(|(k, v)| {
                             let val = match f64::from_str(v) {
-                                Ok(_) => FluentValue::Number(v.into()),
+                                Ok(_) => FluentValue::into_number(v),
                                 Err(_) => FluentValue::String(v.into()),
                             };
                             (k.as_str(), val)
