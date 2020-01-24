@@ -212,17 +212,17 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
     }
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
     pub style: FluentNumberStyle,
     pub currency: Option<String>,
     pub currency_display: FluentNumberCurrencyDisplayStyle,
     pub use_grouping: bool,
-    pub minimum_integer_digits: usize,
-    pub minimum_fraction_digits: usize,
-    pub maximum_fraction_digits: usize,
-    pub minimum_significant_digits: usize,
-    pub maximum_significant_digits: usize,
+    pub minimum_integer_digits: Option<usize>,
+    pub minimum_fraction_digits: Option<usize>,
+    pub maximum_fraction_digits: Option<usize>,
+    pub minimum_significant_digits: Option<usize>,
+    pub maximum_significant_digits: Option<usize>,
 }
 
 impl FluentNumberOptions {
@@ -244,38 +244,22 @@ impl FluentNumberOptions {
                     _ => {}
                 },
                 ("minimumIntegerDigits", FluentValue::Number(n)) => {
-                    self.minimum_integer_digits = n.into();
+                    self.minimum_integer_digits = Some(n.into());
                 }
                 ("minimumFractionDigits", FluentValue::Number(n)) => {
-                    self.minimum_fraction_digits = n.into();
+                    self.minimum_fraction_digits = Some(n.into());
                 }
                 ("maximumFractionDigits", FluentValue::Number(n)) => {
-                    self.maximum_fraction_digits = n.into();
+                    self.maximum_fraction_digits = Some(n.into());
                 }
                 ("minimumSignificantDigits", FluentValue::Number(n)) => {
-                    self.minimum_significant_digits = n.into();
+                    self.minimum_significant_digits = Some(n.into());
                 }
                 ("maximumSignificantDigits", FluentValue::Number(n)) => {
-                    self.maximum_significant_digits = n.into();
+                    self.maximum_significant_digits = Some(n.into());
                 }
                 _ => {}
             }
-        }
-    }
-}
-
-impl std::default::Default for FluentNumberOptions {
-    fn default() -> Self {
-        Self {
-            style: FluentNumberStyle::default(),
-            currency: None,
-            currency_display: FluentNumberCurrencyDisplayStyle::default(),
-            use_grouping: true,
-            minimum_integer_digits: 1,
-            minimum_fraction_digits: 0,
-            maximum_fraction_digits: 3,
-            minimum_significant_digits: 1,
-            maximum_significant_digits: 21,
         }
     }
 }
@@ -293,24 +277,20 @@ impl FluentNumber {
 
     pub fn as_string(&self) -> Cow<'static, str> {
         let mut val = self.value.to_string();
-        if self.options.minimum_fraction_digits > 0 {
+        if let Some(minfd) = self.options.minimum_fraction_digits {
             if let Some(pos) = val.find('.') {
                 let frac_num = val.len() - pos - 1;
-                let missing = if frac_num > self.options.minimum_fraction_digits {
+                let missing = if frac_num > minfd {
                     0
                 } else {
-                    self.options.minimum_fraction_digits - frac_num
+                    minfd - frac_num
                 };
                 val = format!("{}{}", val, "0".repeat(missing));
             } else {
-                val = format!(
-                    "{}.{}",
-                    val,
-                    "0".repeat(self.options.minimum_fraction_digits)
-                );
+                val = format!("{}.{}", val, "0".repeat(minfd));
             }
         }
-        format!("{}", val).into()
+        val.into()
     }
 }
 
@@ -325,9 +305,13 @@ impl FromStr for FluentNumber {
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         f64::from_str(input).map(|n| {
-            let mfd = input.find('.').map(|pos| input.len() - pos - 1);
+            let mfd = if input.ends_with('0') {
+                input.find('.').map(|pos| input.len() - pos - 1)
+            } else {
+                None
+            };
             let opts = FluentNumberOptions {
-                minimum_fraction_digits: mfd.unwrap_or(0),
+                minimum_fraction_digits: mfd,
                 ..Default::default()
             };
             FluentNumber::new(n, opts)
@@ -376,18 +360,12 @@ impl<'s> Clone for FluentValue<'s> {
 }
 
 impl<'source> FluentValue<'source> {
-    pub fn into_number<S: ToString>(v: S) -> Self {
+    pub fn try_number<S: ToString>(v: S) -> Self {
         let s = v.to_string();
-        match f64::from_str(&s) {
-            Ok(n) => {
-                let mfd = s.find('.').map(|pos| s.len() - pos - 1);
-                let opts = FluentNumberOptions {
-                    minimum_fraction_digits: mfd.unwrap_or(0),
-                    ..Default::default()
-                };
-                FluentValue::Number(FluentNumber::new(n, opts))
-            }
-            Err(_) => FluentValue::String(s.into()),
+        if let Ok(num) = FluentNumber::from_str(&s.to_string()) {
+            FluentValue::Number(num)
+        } else {
+            FluentValue::String(s.into())
         }
     }
 
@@ -464,12 +442,12 @@ macro_rules! from_num {
     ($num:ty) => {
         impl<'source> From<$num> for FluentValue<'source> {
             fn from(n: $num) -> Self {
-                FluentValue::into_number(n)
+                FluentValue::try_number(n)
             }
         }
         impl<'source> From<&'source $num> for FluentValue<'source> {
             fn from(n: &'source $num) -> Self {
-                FluentValue::into_number(n)
+                FluentValue::try_number(n)
             }
         }
     };
@@ -498,6 +476,6 @@ mod tests {
         let x = 1i16;
         let y = &x;
         let z: FluentValue = y.into();
-        assert_eq!(z, FluentValue::into_number(1));
+        assert_eq!(z, FluentValue::try_number(1));
     }
 }

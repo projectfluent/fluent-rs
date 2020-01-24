@@ -209,7 +209,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
                                     FluentValue::String(name.into())
                                 }
                                 ast::VariantKey::NumberLiteral { value } => {
-                                    FluentValue::into_number(value)
+                                    FluentValue::try_number(value)
                                 }
                             };
                             if key.matches(&selector, &scope) {
@@ -257,7 +257,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                     }
                 })
                 .unwrap_or_else(|| generate_ref_error(scope, self.into())),
-            ast::InlineExpression::NumberLiteral { value } => FluentValue::into_number(*value),
+            ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(*value),
             ast::InlineExpression::TermReference {
                 id,
                 attribute,

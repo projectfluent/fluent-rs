@@ -285,7 +285,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     args.iter()
                         .map(|(k, v)| {
                             let val = match f64::from_str(v) {
-                                Ok(_) => FluentValue::into_number(v),
+                                Ok(_) => FluentValue::try_number(v),
                                 Err(_) => FluentValue::String(v.into()),
                             };
                             (k.as_str(), val)

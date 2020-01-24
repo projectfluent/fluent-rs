@@ -13,10 +13,7 @@ fn test_fluent_args() {
         args.get("name"),
         Some(&FluentValue::String(Cow::Borrowed("John")))
     );
-    assert_eq!(
-        args.get("emailCount"),
-        Some(&FluentValue::into_number(5))
-    );
+    assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number(5)));
     assert_eq!(
         args.get("customValue"),
         Some(&FluentValue::String(Cow::Borrowed("My Value")))

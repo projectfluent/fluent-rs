@@ -82,8 +82,8 @@ impl IntlMemoizer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
     use fluent_langneg::{negotiate_languages, NegotiationStrategy};
+    use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
 
     struct PluralRules(pub IntlPluralRules);
 
