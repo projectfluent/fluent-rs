@@ -164,12 +164,12 @@ impl<T: Any + PartialEq> AnyEq for T {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
-pub struct FluentNumberOptionsBag {
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub struct FluentNumberOptions {
     pub minimum_fraction_digits: usize,
 }
 
-impl FluentNumberOptionsBag {
+impl FluentNumberOptions {
     pub fn merge(&mut self, opts: &FluentArgs) {
         for (key, value) in opts {
             match *key {
@@ -185,7 +185,7 @@ impl FluentNumberOptionsBag {
     }
 }
 
-impl std::default::Default for FluentNumberOptionsBag {
+impl std::default::Default for FluentNumberOptions {
     fn default() -> Self {
         Self {
             minimum_fraction_digits: 0,
@@ -196,11 +196,11 @@ impl std::default::Default for FluentNumberOptionsBag {
 #[derive(Debug, PartialEq, Clone)]
 pub struct FluentNumber {
     pub value: f64,
-    pub options: FluentNumberOptionsBag,
+    pub options: FluentNumberOptions,
 }
 
 impl FluentNumber {
-    pub fn new(value: f64, options: FluentNumberOptionsBag) -> Self {
+    pub fn new(value: f64, options: FluentNumberOptions) -> Self {
         Self { value, options }
     }
 
@@ -233,7 +233,7 @@ impl FromStr for FluentNumber {
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         f64::from_str(input).map(|n| {
             let mfd = input.find('.').map(|pos| input.len() - pos - 1);
-            let opts = FluentNumberOptionsBag {
+            let opts = FluentNumberOptions {
                 minimum_fraction_digits: mfd.unwrap_or(0),
             };
             FluentNumber::new(n, opts)
@@ -287,7 +287,7 @@ impl<'source> FluentValue<'source> {
         match f64::from_str(&s) {
             Ok(n) => {
                 let mfd = s.find('.').map(|pos| s.len() - pos - 1);
-                let opts = FluentNumberOptionsBag {
+                let opts = FluentNumberOptions {
                     minimum_fraction_digits: mfd.unwrap_or(0),
                 };
                 FluentValue::Number(FluentNumber::new(n, opts))

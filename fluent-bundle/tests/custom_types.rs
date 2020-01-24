@@ -80,12 +80,12 @@ fn fluent_date_time_builtin() {
     }
 
     #[derive(Debug, PartialEq, Default, Clone)]
-    struct DateTimeOptionsBag {
+    struct DateTimeOptions {
         pub date_style: DateTimeStyleValue,
         pub time_style: DateTimeStyleValue,
     };
 
-    impl DateTimeOptionsBag {
+    impl DateTimeOptions {
         pub fn merge(&mut self, input: &FluentArgs) {
             for (key, value) in input {
                 match *key {
@@ -97,7 +97,7 @@ fn fluent_date_time_builtin() {
         }
     }
 
-    impl<'l> From<&FluentArgs<'l>> for DateTimeOptionsBag {
+    impl<'l> From<&FluentArgs<'l>> for DateTimeOptions {
         fn from(input: &FluentArgs) -> Self {
             let mut opts = Self::default();
             for (key, value) in input {
@@ -114,18 +114,18 @@ fn fluent_date_time_builtin() {
     #[derive(Debug, PartialEq, Clone)]
     struct DateTime {
         epoch: usize,
-        options: DateTimeOptionsBag,
+        options: DateTimeOptions,
     };
 
     impl DateTime {
-        pub fn new(epoch: usize, options: DateTimeOptionsBag) -> Self {
+        pub fn new(epoch: usize, options: DateTimeOptions) -> Self {
             Self { epoch, options }
         }
     }
 
     impl FluentType for DateTime {
         fn duplicate(&self) -> Box<dyn FluentType> {
-            Box::new(DateTime::new(self.epoch, DateTimeOptionsBag::default()))
+            Box::new(DateTime::new(self.epoch, DateTimeOptions::default()))
         }
         fn as_string(&self, _intls: &RefCell<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
             format!("2020-01-20 {}:00", self.epoch).into()
@@ -175,7 +175,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
     let mut args = FluentArgs::new();
     args.insert(
         "date",
-        FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptionsBag::default()))),
+        FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptions::default()))),
     );
 
     let msg = bundle.get_message("key-explicit").unwrap();
