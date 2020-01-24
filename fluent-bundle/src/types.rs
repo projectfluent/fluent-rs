@@ -165,20 +165,99 @@ impl<T: Any + PartialEq> AnyEq for T {
 }
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub enum FluentNumberStyle {
+    Decimal,
+    Currency,
+    Percent,
+}
+
+impl std::default::Default for FluentNumberStyle {
+    fn default() -> Self {
+        Self::Decimal
+    }
+}
+
+impl From<&str> for FluentNumberStyle {
+    fn from(input: &str) -> Self {
+        match input {
+            "decimal" => Self::Decimal,
+            "currency" => Self::Currency,
+            "percent" => Self::Percent,
+            _ => Self::default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+pub enum FluentNumberCurrencyDisplayStyle {
+    Symbol,
+    Code,
+    Name,
+}
+
+impl std::default::Default for FluentNumberCurrencyDisplayStyle {
+    fn default() -> Self {
+        Self::Symbol
+    }
+}
+
+impl From<&str> for FluentNumberCurrencyDisplayStyle {
+    fn from(input: &str) -> Self {
+        match input {
+            "symbol" => Self::Symbol,
+            "code" => Self::Code,
+            "name" => Self::Name,
+            _ => Self::default(),
+        }
+    }
+}
+
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
+    pub style: FluentNumberStyle,
+    pub currency: Option<String>,
+    pub currency_display: FluentNumberCurrencyDisplayStyle,
+    pub use_grouping: bool,
+    pub minimum_integer_digits: usize,
     pub minimum_fraction_digits: usize,
+    pub maximum_fraction_digits: usize,
+    pub minimum_significant_digits: usize,
+    pub maximum_significant_digits: usize,
 }
 
 impl FluentNumberOptions {
     pub fn merge(&mut self, opts: &FluentArgs) {
         for (key, value) in opts {
-            match *key {
-                "minimumFractionDigits" => match value {
-                    FluentValue::Number(n) => {
-                        self.minimum_fraction_digits = n.value as usize;
-                    }
+            match (*key, value) {
+                ("style", FluentValue::String(n)) => {
+                    self.style = n.as_ref().into();
+                }
+                ("currency", FluentValue::String(n)) => {
+                    self.currency = Some(n.to_string());
+                }
+                ("currencyDisplay", FluentValue::String(n)) => {
+                    self.currency_display = n.as_ref().into();
+                }
+                ("useGrouping", FluentValue::String(n)) => match n.as_ref() {
+                    "true" => self.use_grouping = true,
+                    "false" => self.use_grouping = false,
                     _ => {}
                 },
+                ("minimumIntegerDigits", FluentValue::Number(n)) => {
+                    self.minimum_integer_digits = n.into();
+                }
+                ("minimumFractionDigits", FluentValue::Number(n)) => {
+                    self.minimum_fraction_digits = n.into();
+                }
+                ("maximumFractionDigits", FluentValue::Number(n)) => {
+                    self.maximum_fraction_digits = n.into();
+                }
+                ("minimumSignificantDigits", FluentValue::Number(n)) => {
+                    self.minimum_significant_digits = n.into();
+                }
+                ("maximumSignificantDigits", FluentValue::Number(n)) => {
+                    self.maximum_significant_digits = n.into();
+                }
                 _ => {}
             }
         }
@@ -188,7 +267,15 @@ impl FluentNumberOptions {
 impl std::default::Default for FluentNumberOptions {
     fn default() -> Self {
         Self {
+            style: FluentNumberStyle::default(),
+            currency: None,
+            currency_display: FluentNumberCurrencyDisplayStyle::default(),
+            use_grouping: true,
+            minimum_integer_digits: 1,
             minimum_fraction_digits: 0,
+            maximum_fraction_digits: 3,
+            minimum_significant_digits: 1,
+            maximum_significant_digits: 21,
         }
     }
 }
@@ -227,6 +314,12 @@ impl FluentNumber {
     }
 }
 
+impl Into<usize> for &FluentNumber {
+    fn into(self) -> usize {
+        self.value as usize
+    }
+}
+
 impl FromStr for FluentNumber {
     type Err = std::num::ParseFloatError;
 
@@ -235,6 +328,7 @@ impl FromStr for FluentNumber {
             let mfd = input.find('.').map(|pos| input.len() - pos - 1);
             let opts = FluentNumberOptions {
                 minimum_fraction_digits: mfd.unwrap_or(0),
+                ..Default::default()
             };
             FluentNumber::new(n, opts)
         })
@@ -289,6 +383,7 @@ impl<'source> FluentValue<'source> {
                 let mfd = s.find('.').map(|pos| s.len() - pos - 1);
                 let opts = FluentNumberOptions {
                     minimum_fraction_digits: mfd.unwrap_or(0),
+                    ..Default::default()
                 };
                 FluentValue::Number(FluentNumber::new(n, opts))
             }
