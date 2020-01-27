@@ -135,7 +135,7 @@ impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source>
     }
 }
 
-pub trait FluentType: fmt::Debug + fmt::Display + AnyEq + 'static {
+pub trait FluentType: fmt::Debug + AnyEq + 'static {
     fn duplicate(&self) -> Box<dyn FluentType>;
     fn as_string(&self, intls: &RefCell<IntlLangMemoizer>) -> Cow<'static, str>;
 }
@@ -325,12 +325,6 @@ impl<'l> Into<FluentValue<'l>> for FluentNumber {
     }
 }
 
-impl std::fmt::Display for FluentNumber {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        write!(f, "{}", self.value)
-    }
-}
-
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
@@ -416,18 +410,6 @@ impl<'source> FluentValue<'source> {
             FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
             FluentValue::Custom(s) => s.as_string(&scope.bundle.intls),
             FluentValue::None => "???".into(),
-        }
-    }
-}
-
-impl<'source> fmt::Display for FluentValue<'source> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self {
-            FluentValue::String(s) => f.write_str(s),
-            FluentValue::Number(n) => n.fmt(f),
-            FluentValue::Error(d) => write!(f, "{{{}}}", d),
-            FluentValue::Custom(s) => s.fmt(f),
-            FluentValue::None => f.write_str("???"),
         }
     }
 }

@@ -29,12 +29,6 @@ fn fluent_custom_type() {
         }
     }
 
-    impl std::fmt::Display for DateTime {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "{}", self.epoch)
-        }
-    }
-
     let dt = FluentValue::Custom(Box::new(DateTime::new(10)));
     let dt2 = FluentValue::Custom(Box::new(DateTime::new(10)));
     let dt3 = FluentValue::Custom(Box::new(DateTime::new(15)));
@@ -123,12 +117,6 @@ fn fluent_date_time_builtin() {
         }
         fn as_string(&self, _intls: &RefCell<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
             format!("2020-01-20 {}:00", self.epoch).into()
-        }
-    }
-
-    impl std::fmt::Display for DateTime {
-        fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
-            write!(f, "2020-01-20 {}:00", self.epoch)
         }
     }
 

@@ -135,7 +135,11 @@ fn create_bundle(
             let result = match f.as_str() {
                 "CONCAT" => bundle.add_function(f.as_str(), |args, _name_args| {
                     args.iter()
-                        .fold(String::new(), |acc, x| acc + &x.to_string())
+                        .fold(String::new(), |acc, x| match x {
+                            FluentValue::String(s) => acc + &s.to_string(),
+                            FluentValue::Number(n) => acc + &n.value.to_string(),
+                            _ => acc,
+                        })
                         .into()
                 }),
                 "SUM" => bundle.add_function(f.as_str(), |args, _name_args| {
