@@ -319,6 +319,12 @@ impl FromStr for FluentNumber {
     }
 }
 
+impl<'l> Into<FluentValue<'l>> for FluentNumber {
+    fn into(self) -> FluentValue<'l> {
+        FluentValue::Number(self)
+    }
+}
+
 impl std::fmt::Display for FluentNumber {
     fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
         write!(f, "{}", self.value)

@@ -55,7 +55,7 @@ fn fluent_date_time_builtin() {
         Medium,
         Short,
         None,
-    };
+    }
 
     impl std::default::Default for DateTimeStyleValue {
         fn default() -> Self {
@@ -83,7 +83,7 @@ fn fluent_date_time_builtin() {
     struct DateTimeOptions {
         pub date_style: DateTimeStyleValue,
         pub time_style: DateTimeStyleValue,
-    };
+    }
 
     impl DateTimeOptions {
         pub fn merge(&mut self, input: &FluentArgs) {
@@ -100,13 +100,7 @@ fn fluent_date_time_builtin() {
     impl<'l> From<&FluentArgs<'l>> for DateTimeOptions {
         fn from(input: &FluentArgs) -> Self {
             let mut opts = Self::default();
-            for (key, value) in input {
-                match *key {
-                    "dateStyle" => opts.date_style = value.into(),
-                    "timeStyle" => opts.time_style = value.into(),
-                    _ => {}
-                }
-            }
+            opts.merge(input);
             opts
         }
     }
