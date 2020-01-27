@@ -299,11 +299,7 @@ impl FromStr for FluentNumber {
 
     fn from_str(input: &str) -> Result<Self, Self::Err> {
         f64::from_str(input).map(|n| {
-            let mfd = if input.ends_with('0') {
-                input.find('.').map(|pos| input.len() - pos - 1)
-            } else {
-                None
-            };
+            let mfd = input.find('.').map(|pos| input.len() - pos - 1);
             let opts = FluentNumberOptions {
                 minimum_fraction_digits: mfd,
                 ..Default::default()
