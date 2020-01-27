@@ -5,7 +5,6 @@ use std::collections::HashMap;
 use std::fs;
 use std::iter;
 use std::path::Path;
-use std::str::FromStr;
 
 use fluent_bundle::resolve::ResolverError;
 use fluent_bundle::FluentArgs;
@@ -288,9 +287,9 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
                     args.iter()
                         .map(|(k, v)| {
-                            let val = match f64::from_str(v) {
-                                Ok(_) => FluentValue::try_number(v),
-                                Err(_) => FluentValue::String(v.into()),
+                            let val = match v {
+                                TestArgumentValue::String(s) => FluentValue::String(s.into()),
+                                TestArgumentValue::Number(n) => FluentValue::Number(n.into()),
                             };
                             (k.as_str(), val)
                         })

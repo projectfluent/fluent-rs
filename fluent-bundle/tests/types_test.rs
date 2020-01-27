@@ -5,7 +5,7 @@ use fluent_bundle::FluentValue;
 use unic_langid::langid;
 
 #[test]
-fn fluent_value_number() {
+fn fluent_value_try_number() {
     let value = FluentValue::try_number("invalid");
     assert_eq!(value, FluentValue::String("invalid".into()));
 }
@@ -22,9 +22,9 @@ fn fluent_value_matches() {
     let string_val_copy = FluentValue::String("string1".into());
     let string_val2 = FluentValue::String("23.5".into());
 
-    let number_val = FluentValue::try_number(-23.5);
-    let number_val_copy = FluentValue::try_number(-23.5);
-    let number_val2 = FluentValue::try_number(23.5);
+    let number_val = FluentValue::from(-23.5);
+    let number_val_copy = FluentValue::from(-23.5);
+    let number_val2 = FluentValue::from(23.5);
 
     assert_eq!(string_val.matches(&string_val_copy, &scope), true);
     assert_eq!(string_val.matches(&string_val2, &scope), false);
@@ -43,12 +43,12 @@ fn fluent_value_matches() {
     let string_cat_many = FluentValue::String("many".into());
     let string_cat_other = FluentValue::String("other".into());
 
-    let number_cat_zero = FluentValue::try_number(0);
-    let number_cat_one = FluentValue::try_number(1);
-    let number_cat_two = FluentValue::try_number(2);
-    let number_cat_few = FluentValue::try_number(3);
-    let number_cat_many = FluentValue::try_number(11);
-    let number_cat_other = FluentValue::try_number(101);
+    let number_cat_zero = 0.into();
+    let number_cat_one = 1.into();
+    let number_cat_two = 2.into();
+    let number_cat_few = 3.into();
+    let number_cat_many = 11.into();
+    let number_cat_other = 101.into();
 
     assert_eq!(string_cat_zero.matches(&number_cat_zero, &scope), true);
     assert_eq!(string_cat_one.matches(&number_cat_one, &scope), true);
@@ -65,12 +65,12 @@ fn fluent_value_matches() {
 fn fluent_value_from() {
     let value_str = FluentValue::from("my str");
     let value_string = FluentValue::from(String::from("my string"));
-    let value_f64 = FluentValue::from(23.5 as f64);
-    let value_isize = FluentValue::from(-23 as isize);
+    let value_f64 = FluentValue::from(23.5);
+    let value_isize = FluentValue::from(-23);
 
-    assert_eq!(value_str, FluentValue::String("my str".into()));
-    assert_eq!(value_string, FluentValue::String("my string".into()));
+    assert_eq!(value_str, "my str".into());
+    assert_eq!(value_string, "my string".into());
 
-    assert_eq!(value_f64, FluentValue::try_number(23.5));
-    assert_eq!(value_isize, FluentValue::try_number(-23));
+    assert_eq!(value_f64, FluentValue::from(23.5));
+    assert_eq!(value_isize, FluentValue::from(-23));
 }

@@ -294,12 +294,6 @@ impl FluentNumber {
     }
 }
 
-impl Into<usize> for &FluentNumber {
-    fn into(self) -> usize {
-        self.value as usize
-    }
-}
-
 impl FromStr for FluentNumber {
     type Err = std::num::ParseFloatError;
 
@@ -428,14 +422,40 @@ impl<'source> From<&'source str> for FluentValue<'source> {
 
 macro_rules! from_num {
     ($num:ty) => {
-        impl<'source> From<$num> for FluentValue<'source> {
+        impl From<$num> for FluentNumber {
             fn from(n: $num) -> Self {
-                FluentValue::try_number(n)
+                FluentNumber {
+                    value: n as f64,
+                    options: FluentNumberOptions::default(),
+                }
             }
         }
-        impl<'source> From<&'source $num> for FluentValue<'source> {
-            fn from(n: &'source $num) -> Self {
-                FluentValue::try_number(n)
+        impl From<&$num> for FluentNumber {
+            fn from(n: &$num) -> Self {
+                FluentNumber {
+                    value: *n as f64,
+                    options: FluentNumberOptions::default(),
+                }
+            }
+        }
+        impl Into<$num> for FluentNumber {
+            fn into(self) -> $num {
+                self.value as $num
+            }
+        }
+        impl Into<$num> for &FluentNumber {
+            fn into(self) -> $num {
+                self.value as $num
+            }
+        }
+        impl From<$num> for FluentValue<'_> {
+            fn from(n: $num) -> Self {
+                FluentValue::Number(n.into())
+            }
+        }
+        impl From<&$num> for FluentValue<'_> {
+            fn from(n: &$num) -> Self {
+                FluentValue::Number(n.into())
             }
         }
     };

@@ -130,12 +130,20 @@ pub struct TestError {
 
 #[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
+#[serde(untagged)]
+pub enum TestArgumentValue {
+    String(String),
+    Number(f64),
+}
+
+#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[serde(deny_unknown_fields)]
 pub struct TestAssert {
     pub bundle: Option<String>,
     pub id: String,
     pub attribute: Option<String>,
     pub value: Option<String>,
-    pub args: Option<HashMap<String, String>>,
+    pub args: Option<HashMap<String, TestArgumentValue>>,
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
     pub errors: Vec<TestError>,
     pub missing: Option<bool>,
