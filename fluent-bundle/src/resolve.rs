@@ -131,7 +131,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
             return match self.elements[0] {
                 ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        FluentValue::String(transform(s))
+                        transform(s).into()
                     } else {
                         s.into()
                     }
@@ -188,7 +188,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                 }
             }
         }
-        FluentValue::String(string.into())
+        string.into()
     }
 }
 
@@ -205,9 +205,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
                     FluentValue::String(_) | FluentValue::Number(_) => {
                         for variant in variants {
                             let key = match variant.key {
-                                ast::VariantKey::Identifier { name } => {
-                                    FluentValue::String(name.into())
-                                }
+                                ast::VariantKey::Identifier { name } => name.into(),
                                 ast::VariantKey::NumberLiteral { value } => {
                                     FluentValue::try_number(value)
                                 }
@@ -238,9 +236,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
         R: Borrow<FluentResource>,
     {
         match self {
-            ast::InlineExpression::StringLiteral { value } => {
-                FluentValue::String(unescape_unicode(value))
-            }
+            ast::InlineExpression::StringLiteral { value } => unescape_unicode(value).into(),
             ast::InlineExpression::MessageReference { id, attribute } => scope
                 .bundle
                 .get_entry_message(&id.name)

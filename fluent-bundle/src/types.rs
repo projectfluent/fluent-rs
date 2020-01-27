@@ -355,7 +355,7 @@ impl<'source> FluentValue<'source> {
         if let Ok(num) = FluentNumber::from_str(&s.to_string()) {
             FluentValue::Number(num)
         } else {
-            FluentValue::String(s.into())
+            s.into()
         }
     }
 
@@ -413,6 +413,12 @@ impl<'source> From<String> for FluentValue<'source> {
 impl<'source> From<&'source str> for FluentValue<'source> {
     fn from(s: &'source str) -> Self {
         FluentValue::String(s.into())
+    }
+}
+
+impl<'source> From<Cow<'source, str>> for FluentValue<'source> {
+    fn from(s: Cow<'source, str>) -> Self {
+        FluentValue::String(s)
     }
 }
 

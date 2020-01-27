@@ -7,7 +7,7 @@ use unic_langid::langid;
 #[test]
 fn fluent_value_try_number() {
     let value = FluentValue::try_number("invalid");
-    assert_eq!(value, FluentValue::String("invalid".into()));
+    assert_eq!(value, "invalid".into());
 }
 
 #[test]
@@ -18,9 +18,9 @@ fn fluent_value_matches() {
     let bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_ars]);
     let scope = Scope::new(&bundle, None);
 
-    let string_val = FluentValue::String("string1".into());
-    let string_val_copy = FluentValue::String("string1".into());
-    let string_val2 = FluentValue::String("23.5".into());
+    let string_val = FluentValue::from("string1");
+    let string_val_copy = FluentValue::from("string1");
+    let string_val2 = FluentValue::from("23.5");
 
     let number_val = FluentValue::from(-23.5);
     let number_val_copy = FluentValue::from(-23.5);
@@ -36,12 +36,12 @@ fn fluent_value_matches() {
 
     assert_eq!(string_val2.matches(&number_val2, &scope), false);
 
-    let string_cat_zero = FluentValue::String("zero".into());
-    let string_cat_one = FluentValue::String("one".into());
-    let string_cat_two = FluentValue::String("two".into());
-    let string_cat_few = FluentValue::String("few".into());
-    let string_cat_many = FluentValue::String("many".into());
-    let string_cat_other = FluentValue::String("other".into());
+    let string_cat_zero = FluentValue::from("zero");
+    let string_cat_one = FluentValue::from("one");
+    let string_cat_two = FluentValue::from("two");
+    let string_cat_few = FluentValue::from("few");
+    let string_cat_many = FluentValue::from("many");
+    let string_cat_other = FluentValue::from("other");
 
     let number_cat_zero = 0.into();
     let number_cat_one = 1.into();

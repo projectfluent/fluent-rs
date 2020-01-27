@@ -33,7 +33,7 @@ fn fluent_custom_type() {
     let dt2 = FluentValue::Custom(Box::new(DateTime::new(10)));
     let dt3 = FluentValue::Custom(Box::new(DateTime::new(15)));
 
-    let sv = FluentValue::String("foo".into());
+    let sv = FluentValue::from("foo");
 
     assert_eq!(dt == dt2, true);
     assert_eq!(dt == dt3, false);

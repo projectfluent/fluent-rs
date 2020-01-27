@@ -288,8 +288,8 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     args.iter()
                         .map(|(k, v)| {
                             let val = match v {
-                                TestArgumentValue::String(s) => FluentValue::String(s.into()),
-                                TestArgumentValue::Number(n) => FluentValue::Number(n.into()),
+                                TestArgumentValue::String(s) => s.as_str().into(),
+                                TestArgumentValue::Number(n) => n.into(),
                             };
                             (k.as_str(), val)
                         })
