@@ -18,7 +18,10 @@ impl NumberFormat {
     }
 
     pub fn format(&self, input: isize) -> String {
-        format!("{}: {}", self.lang, input)
+        format!(
+            "{}: {}, MFD: {}",
+            self.lang, input, self.options.minimum_fraction_digits
+        )
     }
 }
 

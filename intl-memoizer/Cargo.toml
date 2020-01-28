@@ -1,6 +1,6 @@
 [package]
 name = "intl-memoizer"
-version = "0.1.0"
+version = "0.2.0"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Manish Goregaokar <manishsmail@gmail.com>"
@@ -19,8 +19,8 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 typemap = "0.3"
-unic-langid = "0.7"
-fluent-langneg = "0.11"
+unic-langid = "0.8"
+fluent-langneg = "0.12"
 
 [dev-dependencies]
-intl_pluralrules = "5.0.2"
+intl_pluralrules = "6.0"
