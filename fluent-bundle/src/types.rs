@@ -14,6 +14,7 @@
 use std::any::Any;
 use std::borrow::{Borrow, Cow};
 use std::cell::RefCell;
+use std::convert::TryInto;
 use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
@@ -21,7 +22,9 @@ use std::str::FromStr;
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_syntax::ast;
 use intl_memoizer::{IntlLangMemoizer, Memoizable};
-use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
+use intl_pluralrules::{
+    operands::PluralOperands, PluralCategory, PluralRuleType, PluralRules as IntlPluralRules,
+};
 use unic_langid::LanguageIdentifier;
 
 use crate::bundle::FluentArgs;
@@ -315,6 +318,23 @@ impl<'l> Into<FluentValue<'l>> for FluentNumber {
     }
 }
 
+impl Into<PluralOperands> for &FluentNumber {
+    fn into(self) -> PluralOperands {
+        let mut operands: PluralOperands = self
+            .value
+            .try_into()
+            .expect("Failed to generate operands out of FluentNumber");
+        if let Some(mfd) = self.options.minimum_fraction_digits {
+            if mfd > operands.v {
+                operands.f *= 10_usize.pow(mfd as u32 - operands.v as u32);
+                operands.v = mfd;
+            }
+        }
+        // XXX: Add support for other options.
+        operands
+    }
+}
+
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
@@ -353,7 +373,7 @@ impl<'source> FluentValue<'source> {
     pub fn try_number<S: ToString>(v: S) -> Self {
         let s = v.to_string();
         if let Ok(num) = FluentNumber::from_str(&s.to_string()) {
-            FluentValue::Number(num)
+            num.into()
         } else {
             s.into()
         }
@@ -381,8 +401,7 @@ impl<'source> FluentValue<'source> {
                 let pr = intls_borrow
                     .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
                     .expect("Failed to retrieve plural rules");
-                let num_val = b.as_string();
-                pr.0.select(num_val.as_ref()) == Ok(cat)
+                pr.0.select(b) == Ok(cat)
             }
             _ => false,
         }

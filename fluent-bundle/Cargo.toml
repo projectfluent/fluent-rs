@@ -18,22 +18,22 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-langneg = "0.11"
+fluent-langneg = "0.12"
 fluent-syntax = "0.9"
 failure = "0.1"
 failure_derive = "0.1"
-intl_pluralrules = "5.0"
+intl_pluralrules = "6.0"
 rental = "0.5"
-smallvec = "1.0"
-unic-langid = "0.7"
-intl-memoizer = { path = "../intl-memoizer" }
+smallvec = "1.1"
+unic-langid = "0.8"
+intl-memoizer = { version = "0.2", path = "../intl-memoizer" }
 
 [dev-dependencies]
 criterion = "0.3"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8"
 rand = "0.7"
-unic-langid = { version = "0.7", features = ["macros"] }
+unic-langid = { version = "0.8", features = ["macros"] }
 
 [[bench]]
 name = "resolver"

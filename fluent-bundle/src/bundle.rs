@@ -163,8 +163,8 @@ impl<R> FluentBundle<R> {
             .collect::<Vec<_>>();
         let lang = locales
             .get(0)
-            .expect("Expect at least one language")
-            .clone();
+            .cloned()
+            .unwrap_or_else(LanguageIdentifier::default);
         FluentBundle {
             locales,
             resources: vec![],
