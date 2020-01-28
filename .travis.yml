@@ -23,5 +23,5 @@ script:
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
-    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID
+    cargo tarpaulin --ciserver travis-ci --coveralls $TRAVIS_JOB_ID --exclude-files examples/
   fi
