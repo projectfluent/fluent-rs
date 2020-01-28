@@ -118,12 +118,24 @@ mod tests {
         let lang: LanguageIdentifier = "en".parse().unwrap();
 
         let mut memoizer = IntlMemoizer::default();
-        let en_memoizer = memoizer.get_for_lang(lang);
-        let mut en_memoizer_borrow = en_memoizer.borrow_mut();
+        {
+            let en_memoizer = memoizer.get_for_lang(lang.clone());
+            let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
-        let cb = en_memoizer_borrow
-            .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
-            .unwrap();
-        assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
+            let cb = en_memoizer_borrow
+                .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+                .unwrap();
+            assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
+        }
+
+        {
+            let en_memoizer = memoizer.get_for_lang(lang.clone());
+            let mut en_memoizer_borrow = en_memoizer.borrow_mut();
+
+            let cb = en_memoizer_borrow
+                .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+                .unwrap();
+            assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
+        }
     }
 }
