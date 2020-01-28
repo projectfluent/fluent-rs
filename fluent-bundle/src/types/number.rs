@@ -1,13 +1,12 @@
-use std::default::Default;
-use std::str::FromStr;
 use std::borrow::Cow;
 use std::convert::TryInto;
+use std::default::Default;
+use std::str::FromStr;
 
 use intl_pluralrules::operands::PluralOperands;
 
 use crate::bundle::FluentArgs;
 use crate::types::FluentValue;
-
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub enum FluentNumberStyle {
@@ -220,7 +219,6 @@ impl Into<PluralOperands> for &FluentNumber {
         operands
     }
 }
-
 
 from_num!(i8 i16 i32 i64 i128 isize);
 from_num!(u8 u16 u32 u64 u128 usize);

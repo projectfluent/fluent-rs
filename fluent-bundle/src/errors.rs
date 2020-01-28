@@ -1,13 +1,10 @@
 use crate::resolve::ResolverError;
 use fluent_syntax::parser::ParserError;
 
-#[derive(Debug, Fail, PartialEq)]
+#[derive(Debug, PartialEq)]
 pub enum FluentError {
-    #[fail(display = "attempted to override an existing {}: {}", kind, id)]
     Overriding { kind: &'static str, id: String },
-    #[fail(display = "Parser error")]
     ParserError(ParserError),
-    #[fail(display = "Resolver error")]
     ResolverError(ResolverError),
 }
 

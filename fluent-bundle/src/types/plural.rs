@@ -1,8 +1,6 @@
-use intl_pluralrules::{
-    PluralRuleType, PluralRules as IntlPluralRules,
-};
-use intl_memoizer::Memoizable;
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
+use intl_memoizer::Memoizable;
+use intl_pluralrules::{PluralRuleType, PluralRules as IntlPluralRules};
 use unic_langid::LanguageIdentifier;
 
 pub struct PluralRules(pub IntlPluralRules);
@@ -22,4 +20,3 @@ impl Memoizable for PluralRules {
         Ok(Self(IntlPluralRules::create(pr_lang, args.0)?))
     }
 }
-

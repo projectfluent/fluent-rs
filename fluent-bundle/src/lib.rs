@@ -81,8 +81,6 @@
 
 #[macro_use]
 extern crate rental;
-#[macro_use]
-extern crate failure_derive;
 
 mod bundle;
 mod entry;

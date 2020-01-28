@@ -26,9 +26,7 @@ use std::str::FromStr;
 
 use fluent_syntax::ast;
 use intl_memoizer::IntlLangMemoizer;
-use intl_pluralrules::{
-    PluralCategory, PluralRuleType
-};
+use intl_pluralrules::{PluralCategory, PluralRuleType};
 
 use crate::resolve::Scope;
 use crate::resource::FluentResource;
@@ -179,9 +177,9 @@ impl<'s> Clone for FluentValue<'s> {
             FluentValue::Custom(s) => {
                 let new_value: Box<dyn FluentType> = s.duplicate();
                 FluentValue::Custom(new_value)
-            },
+            }
             FluentValue::Error(e) => FluentValue::Error(e.clone()),
-            FluentValue::None => FluentValue::None
+            FluentValue::None => FluentValue::None,
         }
     }
 }
