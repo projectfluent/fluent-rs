@@ -389,6 +389,12 @@ impl<R> FluentBundle<R> {
         }
     }
 
+    /// This method allows to specify a function that will
+    /// be called before any `FluentValue` is formatted
+    /// allowing overrides.
+    ///
+    /// It's particularly useful for plugging in an external
+    /// formatter for `FluentValue::Number`.
     pub fn set_formatter<F>(&mut self, func: Option<F>)
     where
         F: Fn(&FluentValue, &RefCell<IntlLangMemoizer>) -> Option<String> + Send + Sync + 'static,

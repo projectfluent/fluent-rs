@@ -1,16 +1,3 @@
-//! The `FluentValue` enum represents values which can be formatted to a String.
-//!
-//! The [`ResolveValue`][] trait from the [`resolve`][] module evaluates AST nodes into
-//! `FluentValues` which can then be formatted to Strings using the i18n formatters stored by the
-//! `FluentBundle` instance if required.
-//!
-//! The arguments `HashMap` passed to [`FluentBundle::format`][] should also use `FluentValues`
-//! as values of arguments.
-//!
-//! [`ResolveValue`]: ../resolve/trait.ResolveValue.html
-//! [`resolve`]: ../resolve
-//! [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
-
 mod number;
 mod plural;
 
@@ -149,6 +136,18 @@ impl<T: Any + PartialEq> AnyEq for T {
     }
 }
 
+/// The `FluentValue` enum represents values which can be formatted to a String.
+///
+/// The [`ResolveValue`][] trait from the [`resolve`][] module evaluates AST nodes into
+/// `FluentValues` which can then be formatted to Strings using the i18n formatters stored by the
+/// `FluentBundle` instance if required.
+///
+/// The arguments `HashMap` passed to [`FluentBundle::format`][] should also use `FluentValues`
+/// as values of arguments.
+///
+/// [`ResolveValue`]: ../resolve/trait.ResolveValue.html
+/// [`resolve`]: ../resolve
+/// [`FluentBundle::format`]: ../bundle/struct.FluentBundle.html#method.format
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
