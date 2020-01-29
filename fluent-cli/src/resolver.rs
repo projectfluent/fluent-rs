@@ -28,7 +28,7 @@ fn resolve(s: String) -> String {
         value,
         ..Default::default()
     };
-    return serde_json::to_string(&output).expect("Serializing JSON failed.");
+    serde_json::to_string(&output).expect("Serializing JSON failed.")
 }
 
 fn main() {

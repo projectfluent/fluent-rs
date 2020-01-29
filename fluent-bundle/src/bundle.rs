@@ -164,7 +164,7 @@ impl<R> FluentBundle<R> {
         let lang = locales
             .get(0)
             .cloned()
-            .unwrap_or_else(LanguageIdentifier::default);
+            .unwrap_or_default();
         FluentBundle {
             locales,
             resources: vec![],
