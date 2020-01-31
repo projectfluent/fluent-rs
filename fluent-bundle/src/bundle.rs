@@ -161,10 +161,7 @@ impl<R> FluentBundle<R> {
             .into_iter()
             .map(|s| s.clone().into())
             .collect::<Vec<_>>();
-        let lang = locales
-            .get(0)
-            .cloned()
-            .unwrap_or_default();
+        let lang = locales.get(0).cloned().unwrap_or_default();
         FluentBundle {
             locales,
             resources: vec![],

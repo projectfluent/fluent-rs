@@ -153,9 +153,9 @@ impl FromStr for FluentNumber {
     }
 }
 
-impl<'l> Into<FluentValue<'l>> for FluentNumber {
-    fn into(self) -> FluentValue<'l> {
-        FluentValue::Number(self)
+impl<'l> From<FluentNumber> for FluentValue<'l> {
+    fn from(input: FluentNumber) -> Self {
+        FluentValue::Number(input)
     }
 }
 
@@ -177,14 +177,14 @@ macro_rules! from_num {
                 }
             }
         }
-        impl Into<$num> for FluentNumber {
-            fn into(self) -> $num {
-                self.value as $num
+        impl From<FluentNumber> for $num {
+            fn from(input: FluentNumber) -> Self {
+                input.value as $num
             }
         }
-        impl Into<$num> for &FluentNumber {
-            fn into(self) -> $num {
-                self.value as $num
+        impl From<&FluentNumber> for $num {
+            fn from(input: &FluentNumber) -> Self {
+                input.value as $num
             }
         }
         impl From<$num> for FluentValue<'_> {
@@ -203,13 +203,13 @@ macro_rules! from_num {
     };
 }
 
-impl Into<PluralOperands> for &FluentNumber {
-    fn into(self) -> PluralOperands {
-        let mut operands: PluralOperands = self
+impl From<&FluentNumber> for PluralOperands {
+    fn from(input: &FluentNumber) -> Self {
+        let mut operands: PluralOperands = input
             .value
             .try_into()
             .expect("Failed to generate operands out of FluentNumber");
-        if let Some(mfd) = self.options.minimum_fraction_digits {
+        if let Some(mfd) = input.options.minimum_fraction_digits {
             if mfd > operands.v {
                 operands.f *= 10_usize.pow(mfd as u32 - operands.v as u32);
                 operands.v = mfd;
