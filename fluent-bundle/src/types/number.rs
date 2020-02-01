@@ -56,7 +56,7 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
     }
 }
 
-#[derive(Default, Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
     pub style: FluentNumberStyle,
     pub currency: Option<String>,
@@ -67,6 +67,22 @@ pub struct FluentNumberOptions {
     pub maximum_fraction_digits: Option<usize>,
     pub minimum_significant_digits: Option<usize>,
     pub maximum_significant_digits: Option<usize>,
+}
+
+impl Default for FluentNumberOptions {
+    fn default() -> Self {
+        Self {
+            style: Default::default(),
+            currency: None,
+            currency_display: Default::default(),
+            use_grouping: true,
+            minimum_integer_digits: None,
+            minimum_fraction_digits: None,
+            maximum_fraction_digits: None,
+            minimum_significant_digits: None,
+            maximum_significant_digits: None,
+        }
+    }
 }
 
 impl FluentNumberOptions {
