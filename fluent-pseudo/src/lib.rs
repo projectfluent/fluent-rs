@@ -51,9 +51,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     let range = pos..s.len();
     let result_range = pos + diff..result.len();
     let transform_sub = transform(&s[range], flipped, elongate);
-    result
-        .to_mut()
-        .replace_range(result_range, &transform_sub);
+    result.to_mut().replace_range(result_range, &transform_sub);
     result
 }
 

@@ -98,11 +98,6 @@ impl FluentNumberOptions {
                 ("currencyDisplay", FluentValue::String(n)) => {
                     self.currency_display = n.as_ref().into();
                 }
-                ("useGrouping", FluentValue::String(n)) => match n.as_ref() {
-                    "true" => self.use_grouping = true,
-                    "false" => self.use_grouping = false,
-                    _ => {}
-                },
                 ("minimumIntegerDigits", FluentValue::Number(n)) => {
                     self.minimum_integer_digits = Some(n.into());
                 }
