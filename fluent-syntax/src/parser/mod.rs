@@ -498,7 +498,14 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
         if ps.is_current_byte(b'\n') {
             content.push(get_comment_line(ps)?);
         } else {
-            ps.expect_byte(b' ')?;
+            if let Err(e) = ps.expect_byte(b' ') {
+                if content.is_empty() {
+                    return Err(e);
+                } else {
+                    ps.ptr -= line_level;
+                    break;
+                }
+            }
             content.push(get_comment_line(ps)?);
         }
         ps.skip_eol();
@@ -693,6 +700,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
 }
 
 fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallArguments<'p>>> {
+    ps.skip_blank();
     if !ps.take_byte_if(b'(') {
         return Ok(None);
     }
