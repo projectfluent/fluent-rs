@@ -135,133 +135,177 @@
         280,
     ),
     Identifier(
-        281..286,
+        281..294,
+    ),
+    EqSign,
+    Text(
+        0,
+        295..300,
+    ),
+    Eot,
+    Dot,
+    Identifier(
+        306..311,
+    ),
+    EqSign,
+    Text(
+        0,
+        312..323,
+    ),
+    Eot,
+    Eol(
+        324,
+    ),
+    Identifier(
+        325..341,
+    ),
+    EqSign,
+    Text(
+        2,
+        348..353,
+    ),
+    Eot,
+    Dot,
+    Identifier(
+        359..364,
+    ),
+    EqSign,
+    Text(
+        6,
+        374..385,
+    ),
+    Eot,
+    Eol(
+        386,
+    ),
+    Identifier(
+        387..392,
     ),
     EqSign,
     OpenCurlyBraces,
     DoubleQuote,
     Text(
         0,
-        291..291,
+        397..397,
     ),
     DoubleQuote,
     CloseCurlyBraces,
     Eot,
     Eol(
-        294,
+        400,
     ),
     CommentSign,
     Text(
         0,
-        297..315,
+        403..421,
     ),
     Identifier(
-        316..321,
+        422..427,
     ),
     EqSign,
     Eot,
     Eol(
-        324,
+        430,
     ),
     CommentSign,
     Text(
         0,
-        327..341,
+        433..447,
     ),
     Identifier(
-        342..347,
+        448..453,
     ),
     Junk(
-        342..349,
+        448..455,
     ),
     Identifier(
-        349..354,
+        455..460,
     ),
     EqSign,
     Text(
         1,
-        357..365,
+        463..471,
     ),
     Eot,
     Eol(
-        366,
+        472,
     ),
     Identifier(
-        367..373,
+        473..479,
     ),
     EqSign,
     Text(
         1,
-        376..384,
+        482..490,
     ),
     Eot,
     Eol(
-        384,
+        490,
     ),
     Identifier(
-        385..391,
+        491..497,
     ),
     EqSign,
     Text(
         1,
-        394..402,
+        500..508,
     ),
     Eot,
     Eol(
-        402,
+        508,
     ),
     Identifier(
-        403..410,
+        509..516,
     ),
     EqSign,
     Text(
         1,
-        413..421,
+        519..527,
     ),
     Eot,
     Eol(
-        421,
+        527,
     ),
     Identifier(
-        422..429,
+        528..535,
     ),
     EqSign,
     Text(
         1,
-        432..440,
+        538..546,
     ),
     Eot,
     Eol(
-        441,
+        547,
     ),
     CommentSign,
     Text(
         0,
-        444..459,
+        550..565,
     ),
     Junk(
-        460..480,
+        566..586,
     ),
     CommentSign,
     Text(
         0,
-        482..497,
+        588..603,
     ),
     Identifier(
-        498..504,
+        604..610,
     ),
     Junk(
-        498..518,
+        604..624,
     ),
     CommentSign,
     Text(
         0,
-        520..535,
+        626..641,
     ),
     Identifier(
-        536..540,
+        642..646,
     ),
     Junk(
-        536..559,
+        642..665,
     ),
 ]

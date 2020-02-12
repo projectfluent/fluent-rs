@@ -43,14 +43,21 @@ fn lex_menubar() {
 
 #[test]
 fn lex_reference() {
-    for entry in glob("./tests/lexer/fixtures/reference/*.txt").expect("Failed to read glob pattern") {
+    for entry in
+        glob("./tests/lexer/fixtures/reference/*.txt").expect("Failed to read glob pattern")
+    {
         let p = entry.expect("Error while getting an entry");
-        let name = p.file_name().expect("File name doesn't exist").to_str().expect("Failed to extract a str.");
+        let name = p
+            .file_name()
+            .expect("File name doesn't exist")
+            .to_str()
+            .expect("Failed to extract a str.");
         let id = name.trim_end_matches(".txt");
 
         let input_path = format!("./tests/fixtures/{}.ftl", id);
         let input = read_file(&input_path, false).expect("Failed to read file.");
-        let output = read_file(&p.to_str().expect("Failed to extract a str."), true).expect("Failed to read file.");
+        let output = read_file(&p.to_str().expect("Failed to extract a str."), true)
+            .expect("Failed to read file.");
 
         let lexer = lexer::Lexer::new(input.as_bytes());
         let tokens: Vec<lexer::Token> = lexer.collect();

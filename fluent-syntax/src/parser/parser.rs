@@ -38,10 +38,7 @@ impl<'p> Parser<'p> {
                 c @ Token::CommentSign
                 | c @ Token::GroupCommentSign
                 | c @ Token::ResourceCommentSign => {
-                    let comment = self.get_comment(&c);
-                    if let Some(comment) = last_comment.replace(comment) {
-                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
-                    }
+                    self.add_comment(&c, &mut body, &mut last_comment);
                 }
                 Token::Junk(r) => {
                     if let Some(comment) = last_comment.take() {
@@ -147,7 +144,7 @@ impl<'p> Parser<'p> {
                 }
                 Some(Token::Eol(i)) => {
                     if !pe.is_empty() {
-                        let te = ast::PatternElement::TextElement(&self.source[i..i + 1]);
+                        let te = ast::PatternElement::TextElement(&self.source[i..=i]);
                         pe.push(te);
                     }
                 }
@@ -180,7 +177,7 @@ impl<'p> Parser<'p> {
                 }
                 Some(Token::Eol(i)) => {
                     if !pe.is_empty() {
-                        let te = ast::PatternElement::TextElement(&self.source[i..i + 1]);
+                        let te = ast::PatternElement::TextElement(&self.source[i..=i]);
                         pe.push(te);
                     }
                 }
@@ -216,7 +213,15 @@ impl<'p> Parser<'p> {
         ast::Attribute { id, value }
     }
 
-    fn get_comment(&mut self, token: &Token) -> ast::Comment<'p> {
+    fn add_comment(
+        &mut self,
+        token: &Token,
+        body: &mut Vec<ast::ResourceEntry<'p>>,
+        last_comment: &mut Option<ast::Comment<'p>>,
+    ) {
+        if let Some(comment) = last_comment.take() {
+            body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+        }
         let mut pe = vec![];
         let comment_type_token = token;
         let comment_type = match comment_type_token {
@@ -225,6 +230,7 @@ impl<'p> Parser<'p> {
             Token::ResourceCommentSign => ast::CommentType::Resource,
             _ => panic!(),
         };
+        let mut junk = None;
         match self.lexer.next() {
             Some(Token::Text(indent, mut r)) => {
                 if indent > 0 {
@@ -232,27 +238,47 @@ impl<'p> Parser<'p> {
                 }
                 pe.push(&self.source[r]);
             }
+            Some(Token::Junk(r)) => {
+                junk = Some(r);
+            }
             _ => panic!(),
         }
-        while let Some(token) = self.lexer.peek() {
-            if token != comment_type_token {
-                break;
-            }
-            self.lexer.next();
-            match self.lexer.next() {
-                Some(Token::Text(indent, mut r)) => {
-                    if indent > 0 {
-                        r.start -= indent - 1;
-                    }
-                    pe.push(&self.source[r]);
+        if junk.is_none() {
+            while let Some(token) = self.lexer.peek() {
+                if token != comment_type_token {
+                    break;
                 }
-                _ => panic!(),
+                self.lexer.next();
+                match self.lexer.next() {
+                    Some(Token::Text(indent, mut r)) => {
+                        if indent > 0 {
+                            r.start -= indent - 1;
+                        }
+                        pe.push(&self.source[r]);
+                    }
+                    Some(Token::Junk(r)) => {
+                        junk = Some(r);
+                        break;
+                    }
+                    _ => panic!(),
+                }
             }
         }
-        let content = pe.into_boxed_slice();
-        ast::Comment {
-            comment_type,
-            content,
+        if let Some(r) = junk {
+            if !pe.is_empty() {
+                body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
+                    ast::Comment {
+                        comment_type,
+                        content: pe.into_boxed_slice(),
+                    },
+                )));
+            }
+            body.push(ast::ResourceEntry::Junk(&self.source[r]));
+        } else if !pe.is_empty() {
+            *last_comment = Some(ast::Comment {
+                comment_type,
+                content: pe.into_boxed_slice(),
+            });
         }
     }
 
@@ -320,6 +346,6 @@ impl<'p> Parser<'p> {
             }
         }
 
-        return result;
+        result
     }
 }

@@ -94,6 +94,7 @@ impl<'l> Lexer<'l> {
                 Ok(Token::MinusSign)
             }
             b'#' => {
+                self.entry_start = self.ptr;
                 let start = self.ptr;
                 self.ptr += 1;
                 while let Some(b'#') = self.source.get(self.ptr) {
@@ -145,7 +146,7 @@ impl<'l> Lexer<'l> {
                 }
             }
         }
-        return Err(LexerError::Unknown);
+        Err(LexerError::Unknown)
     }
 
     fn tokenize_pattern(&mut self, b: u8) -> LexerResult {
@@ -203,7 +204,7 @@ impl<'l> Lexer<'l> {
     fn tokenize_comment(&mut self, b: u8) -> LexerResult {
         if b != b' ' {
             if b != b'\n' {
-                panic!();
+                return Err(LexerError::Unknown);
             }
             self.state = LexerState::Resource;
             self.entry_start = self.ptr;
@@ -355,7 +356,7 @@ impl<'l> Lexer<'l> {
             };
             match token {
                 Ok(token) => Ok(Some(token)),
-                Err(err) => Err(err)
+                Err(err) => Err(err),
             }
         } else {
             self.done = true;

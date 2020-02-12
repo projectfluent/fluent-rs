@@ -60,21 +60,41 @@
     CommentSign,
     Text(
         0,
-        130..130,
+        131..131,
     ),
     CommentSign,
     Text(
         0,
-        133..149,
+        134..150,
     ),
     GroupCommentSign,
     Text(
         0,
-        153..166,
+        154..167,
     ),
     ResourceCommentSign,
     Text(
         0,
-        171..187,
+        172..188,
+    ),
+    Eol(
+        189,
+    ),
+    CommentSign,
+    Text(
+        0,
+        192..198,
+    ),
+    CommentSign,
+    Junk(
+        199..206,
+    ),
+    GroupCommentSign,
+    Junk(
+        206..214,
+    ),
+    ResourceCommentSign,
+    Junk(
+        214..223,
     ),
 ]
