@@ -49,7 +49,7 @@ fn main() {
             };
             let nf = lang_memoizer2.try_get::<NumberFormat>((options,)).unwrap();
 
-            assert_eq!(&nf.format(2), "en-US: 2");
+            assert_eq!(&nf.format(2), "en-US: 2, MFD: 3");
         }
 
         // Reuse the same en-US memoizer
@@ -63,7 +63,7 @@ fn main() {
             };
             let nf2 = lang_memoizer4.try_get::<NumberFormat>((options2,)).unwrap();
 
-            assert_eq!(&nf2.format(2), "en-US: 2");
+            assert_eq!(&nf2.format(2), "en-US: 2, MFD: 3");
         }
 
         // Memoizer gets dropped
@@ -81,7 +81,7 @@ fn main() {
             };
             let nf = lang_memoizer2.try_get::<NumberFormat>((options,)).unwrap();
 
-            assert_eq!(&nf.format(2), "en-US: 2");
+            assert_eq!(&nf.format(2), "en-US: 2, MFD: 3");
         }
     }
 }

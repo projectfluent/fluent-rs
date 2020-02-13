@@ -18,7 +18,7 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-typemap = "0.3"
+type-map = "0.3"
 unic-langid = "0.8"
 fluent-langneg = "0.12"
 

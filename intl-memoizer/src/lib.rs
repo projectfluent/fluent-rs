@@ -3,7 +3,7 @@ use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
-use typemap::{Key, TypeMap};
+use type_map::TypeMap;
 use unic_langid::LanguageIdentifier;
 
 pub trait Memoizable {
@@ -12,12 +12,6 @@ pub trait Memoizable {
     fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error>
     where
         Self: std::marker::Sized;
-}
-
-struct MemoizeKey<T>(T);
-
-impl<T: Memoizable + 'static> Key for MemoizeKey<T> {
-    type Value = HashMap<T::Args, T>;
 }
 
 pub struct IntlLangMemoizer {
@@ -39,7 +33,7 @@ impl IntlLangMemoizer {
     {
         let cache = self
             .map
-            .entry::<MemoizeKey<T>>()
+            .entry::<HashMap<T::Args, T>>()
             .or_insert_with(HashMap::new);
 
         let e = match cache.entry(args.clone()) {
