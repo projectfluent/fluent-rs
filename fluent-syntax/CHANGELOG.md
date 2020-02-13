@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-syntax 0.9.2 (February 13, 2020)
+  - Import updated tests from the reference parser.
+  - Minor parser improvements to align with new tests.
+
 ## fluent-syntax 0.9.1 (November 26, 2019)
   - Dependency updates.
   - Better test coverage.
