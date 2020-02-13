@@ -136,21 +136,43 @@ impl<'p> Parser<'p> {
 
     fn maybe_get_pattern(&mut self) -> Option<ast::Pattern<'p>> {
         let mut pe = vec![];
+        let mut indents = vec![];
+        let mut new_line = false;
         loop {
             match self.lexer.next() {
-                Some(Token::Text(_, r)) => {
-                    let te = ast::PatternElement::TextElement(&self.source[r]);
-                    pe.push(te);
+                Some(Token::Text(indent, ref r)) => {
+                    if new_line {
+                        indents.push((Some(indent), Some(r.clone())));
+                        let te = ast::PatternElement::TextElement(&self.source[r.clone()]);
+                        pe.push(te);
+                    } else {
+                        indents.push((None, None));
+                        let mut r = r.clone();
+                        if !pe.is_empty() {
+                            r.start -= indent;
+                        }
+                        let te = ast::PatternElement::TextElement(&self.source[r]);
+                        pe.push(te);
+                    }
+                    new_line = false;
                 }
                 Some(Token::Eol(i)) => {
                     if !pe.is_empty() {
                         let te = ast::PatternElement::TextElement(&self.source[i..=i]);
                         pe.push(te);
+                        indents.push((None, None));
                     }
+                    new_line = true;
                 }
-                Some(Token::OpenCurlyBraces) => {
+                Some(Token::OpenCurlyBraces(i)) => {
                     let expr = self.get_expression();
                     pe.push(ast::PatternElement::Placeable(expr));
+                    if new_line {
+                        indents.push((Some(i), None));
+                    } else {
+                        indents.push((None, None));
+                    }
+                    new_line = false;
                 }
                 Some(Token::Eot) | None => {
                     break;
@@ -161,6 +183,24 @@ impl<'p> Parser<'p> {
         if pe.is_empty() {
             None
         } else {
+            if pe.len() > 1 {
+                let min_indent = indents.iter().filter_map(|(i, _)| *i).min();
+                if let Some(min_indent) = min_indent {
+                    for (elem, (i, r)) in pe.iter_mut().zip(indents) {
+                        if let ast::PatternElement::TextElement(t) = elem {
+                            if let Some(i) = i {
+                                let indent = i - min_indent;
+                                if indent > 0 {
+                                    if let Some(mut r) = r {
+                                        r.start -= indent;
+                                        *t = &self.source[r];
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
             Some(ast::Pattern {
                 elements: pe.into_boxed_slice(),
             })
@@ -168,32 +208,7 @@ impl<'p> Parser<'p> {
     }
 
     fn get_pattern(&mut self) -> ast::Pattern<'p> {
-        let mut pe = vec![];
-        loop {
-            match self.lexer.next() {
-                Some(Token::Text(_, r)) => {
-                    let te = ast::PatternElement::TextElement(&self.source[r]);
-                    pe.push(te);
-                }
-                Some(Token::Eol(i)) => {
-                    if !pe.is_empty() {
-                        let te = ast::PatternElement::TextElement(&self.source[i..=i]);
-                        pe.push(te);
-                    }
-                }
-                Some(Token::OpenCurlyBraces) => {
-                    let expr = self.get_expression();
-                    pe.push(ast::PatternElement::Placeable(expr));
-                }
-                Some(Token::Eot) | None => {
-                    break;
-                }
-                _ => panic!(),
-            }
-        }
-        ast::Pattern {
-            elements: pe.into_boxed_slice(),
-        }
+        self.maybe_get_pattern().unwrap()
     }
 
     fn get_identifier(&mut self) -> ast::Identifier<'p> {

@@ -1796,7 +1796,13 @@
         4445..4450,
     ),
     EqSign,
-    OpenCurlyBraces,
+    Text(
+        1,
+        4453..4464,
+    ),
+    OpenCurlyBraces(
+        0,
+    ),
     MinusSign,
     Identifier(
         4467..4488,
@@ -1858,7 +1864,13 @@
         4600..4605,
     ),
     EqSign,
-    OpenCurlyBraces,
+    Text(
+        1,
+        4608..4621,
+    ),
+    OpenCurlyBraces(
+        0,
+    ),
     MinusSign,
     Identifier(
         4624..4645,
@@ -2068,7 +2080,13 @@
         5108..5113,
     ),
     EqSign,
-    OpenCurlyBraces,
+    Text(
+        1,
+        5116..5121,
+    ),
+    OpenCurlyBraces(
+        0,
+    ),
     MinusSign,
     Identifier(
         5124..5142,
@@ -2188,7 +2206,9 @@
         5399..5404,
     ),
     EqSign,
-    OpenCurlyBraces,
+    OpenCurlyBraces(
+        1,
+    ),
     MinusSign,
     Identifier(
         5410..5428,
@@ -2222,7 +2242,9 @@
         5478..5483,
     ),
     EqSign,
-    OpenCurlyBraces,
+    OpenCurlyBraces(
+        1,
+    ),
     MinusSign,
     Identifier(
         5489..5507,
@@ -2454,7 +2476,13 @@
         6122..6127,
     ),
     EqSign,
-    OpenCurlyBraces,
+    Text(
+        1,
+        6130..6136,
+    ),
+    OpenCurlyBraces(
+        0,
+    ),
     MinusSign,
     Identifier(
         6139..6157,

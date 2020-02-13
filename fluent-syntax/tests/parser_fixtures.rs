@@ -21,6 +21,8 @@ const WHITELIST: &[&str] = &[
     "tests/fixtures/eof_value.ftl",
     "tests/fixtures/literal_expressions.ftl",
     "tests/fixtures/messages.ftl",
+    "tests/fixtures/mixed_entries.ftl",
+    "tests/fixtures/multiline_values.ftl",
     "tests/fixtures/whitespace_in_value.ftl",
 ];
 

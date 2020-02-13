@@ -1,0 +1,13 @@
+[
+    ResourceCommentSign,
+    Text(
+        0,
+        4..65,
+    ),
+    Eol(
+        66,
+    ),
+    Identifier(
+        67..77,
+    ),
+]

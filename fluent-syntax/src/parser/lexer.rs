@@ -13,7 +13,7 @@ pub enum Token {
     MinusSign,
     Text(usize, Range<usize>),
     Junk(Range<usize>),
-    OpenCurlyBraces,
+    OpenCurlyBraces(usize),
     CloseCurlyBraces,
     DoubleQuote,
     Number(Range<usize>),
@@ -141,7 +141,6 @@ impl<'l> Lexer<'l> {
                 }
                 None => return Err(LexerError::Unknown),
                 _ => {
-                    // println!("{:#}", self.source[self.ptr]);
                     return Err(LexerError::Unknown);
                 }
             }
@@ -173,7 +172,12 @@ impl<'l> Lexer<'l> {
             match b {
                 b'{' => {
                     self.state = LexerState::Expression;
-                    return Ok(Token::OpenCurlyBraces);
+                    if self.ptr > start {
+                        self.buffer = Some(Token::OpenCurlyBraces(0));
+                        return Ok(Token::Text(indent, start..self.ptr));
+                    } else {
+                        return Ok(Token::OpenCurlyBraces(indent));
+                    }
                 }
                 b'\n' if start == self.ptr => {
                     self.ptr += 1;
@@ -192,7 +196,11 @@ impl<'l> Lexer<'l> {
                     }
                 }
                 b'\n' => {
-                    return Ok(Token::Text(indent, start..self.ptr));
+                    let mut end = self.ptr - 1;
+                    while self.source[end] == b' ' {
+                        end -= 1;
+                    }
+                    return Ok(Token::Text(indent, start..end + 1));
                 }
                 _ => {}
             }
@@ -323,13 +331,16 @@ impl<'l> Lexer<'l> {
         let start = self.ptr;
         let indent = start - indent_start;
 
-        if indent == 0 {
-            self.ptr -= 1;
-            return NextLine::NewEntry;
-        }
-
         match self.source.get(self.ptr) {
-            Some(b'.') => NextLine::Attribute,
+            Some(b'.') if indent != 0 => NextLine::Attribute,
+            Some(b'{') => {
+                self.ptr = search_start;
+                NextLine::TextContinuation
+            }
+            _ if indent == 0 => {
+                self.ptr -= 1;
+                NextLine::NewEntry
+            }
             _ => {
                 self.ptr = search_start;
                 NextLine::TextContinuation

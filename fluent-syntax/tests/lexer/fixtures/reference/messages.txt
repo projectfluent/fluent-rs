@@ -182,7 +182,9 @@
         387..392,
     ),
     EqSign,
-    OpenCurlyBraces,
+    OpenCurlyBraces(
+        1,
+    ),
     DoubleQuote,
     Text(
         0,

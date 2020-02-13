@@ -63,6 +63,6 @@ fn lex_reference() {
         let tokens: Vec<lexer::Token> = lexer.collect();
 
         let result = format!("{:#?}", tokens);
-        assert_eq!(result, output);
+        assert_eq!(result, output, "Failed to match: {}", id);
     }
 }
