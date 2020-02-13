@@ -1,11 +1,26 @@
 use super::ast;
-use super::lexer::Lexer;
 use super::lexer::Token;
+use super::lexer::{Lexer, LexerError};
 use std::ops::Range;
+
+#[derive(Debug, PartialEq)]
+pub enum ParserError {
+    Unknown,
+}
+
+impl From<LexerError> for ParserError {
+    fn from(_input: LexerError) -> Self {
+        Self::Unknown
+    }
+}
+
+type ParserResult<T> = Result<T, ParserError>;
 
 pub struct Parser<'p> {
     source: &'p str,
     lexer: Lexer<'p>,
+    body: Vec<ast::ResourceEntry<'p>>,
+    last_comment: Option<ast::Comment<'p>>,
 }
 
 impl<'p> Parser<'p> {
@@ -13,354 +28,331 @@ impl<'p> Parser<'p> {
         Parser {
             lexer: Lexer::new(source.as_bytes()),
             source,
+            body: vec![],
+            last_comment: None,
         }
     }
 
     pub fn parse(mut self) -> ast::Resource<'p> {
-        let mut body = vec![];
-
-        let mut last_comment = None;
-
-        while let Some(token) = self.lexer.next() {
-            match token {
-                Token::Identifier(r) => {
-                    self.add_message(r, &mut body, last_comment.take());
-                }
-                Token::MinusSign => {
-                    let term = self.get_term(last_comment.take());
-                    body.push(ast::ResourceEntry::Entry(ast::Entry::Term(term)));
-                }
-                Token::Eol(_) => {
-                    if let Some(comment) = last_comment.take() {
-                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+        loop {
+            match self.add_entry() {
+                Ok(true) => {}
+                Ok(false) => break,
+                Err(_err) => {
+                    let junk = self.lexer.get_junk();
+                    if let Some(comment) = self.last_comment.take() {
+                        self.body
+                            .push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
                     }
+                    self.body.push(ast::ResourceEntry::Junk(&self.source[junk]));
                 }
-                c @ Token::CommentSign
-                | c @ Token::GroupCommentSign
-                | c @ Token::ResourceCommentSign => {
-                    self.add_comment(&c, &mut body, &mut last_comment);
-                }
-                Token::Junk(r) => {
-                    if let Some(comment) = last_comment.take() {
-                        body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
-                    }
-                    body.push(ast::ResourceEntry::Junk(&self.source[r]));
-                }
-                _ => panic!(),
             }
         }
 
-        if let Some(comment) = last_comment.take() {
-            body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+        if let Some(comment) = self.last_comment.take() {
+            self.body
+                .push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
         }
 
         ast::Resource {
-            body: body.into_boxed_slice(),
+            body: self.body.into_boxed_slice(),
         }
     }
 
-    fn add_message(
-        &mut self,
-        id: Range<usize>,
-        body: &mut Vec<ast::ResourceEntry<'p>>,
-        comment: Option<ast::Comment<'p>>,
-    ) {
+    fn add_entry(&mut self) -> Result<bool, ParserError> {
+        match self.lexer.try_next()? {
+            Some(Token::Identifier(r)) => {
+                self.add_message(r)?;
+                Ok(true)
+            }
+            Some(c @ Token::CommentSign)
+            | Some(c @ Token::GroupCommentSign)
+            | Some(c @ Token::ResourceCommentSign) => {
+                if let Some(comment) = self.last_comment.take() {
+                    self.body
+                        .push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                }
+                self.add_comment(&c)?;
+                Ok(true)
+            }
+            Some(Token::Eol(_)) => {
+                if let Some(comment) = self.last_comment.take() {
+                    self.body
+                        .push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+                }
+                Ok(true)
+            }
+            Some(Token::MinusSign) => {
+                self.add_term()?;
+                Ok(true)
+            }
+            Some(t) => panic!("Token: {:#?}", t),
+            None => Ok(false),
+        }
+    }
+
+    fn add_message(&mut self, id: Range<usize>) -> ParserResult<()> {
         let id = ast::Identifier {
             name: &self.source[id],
         };
 
-        match self.lexer.next() {
-            Some(Token::EqSign) => {}
-            Some(Token::Junk(r)) => {
-                if let Some(comment) = comment {
-                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
-                }
-                body.push(ast::ResourceEntry::Junk(&self.source[r]));
-                return;
-            }
-            None => {
-                if let Some(comment) = comment {
-                    body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
-                }
-                let junk = self.lexer.get_junk();
-                body.push(ast::ResourceEntry::Junk(&self.source[junk]));
-                return;
-            }
-            _ => panic!(),
-        };
+        self.lexer.expect(Token::EqSign)?;
 
-        let pattern = self.maybe_get_pattern();
+        let pattern = self.maybe_get_pattern()?;
 
         let mut attributes = vec![];
-        while let Some(Token::Dot) = self.lexer.peek() {
-            attributes.push(self.get_attribute());
+        while self.lexer.take_if(Token::Dot)? {
+            attributes.push(self.get_attribute()?);
         }
 
         if pattern.is_none() && attributes.is_empty() {
-            if let Some(comment) = comment {
-                body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
-            }
-            let junk = self.lexer.get_junk();
-            body.push(ast::ResourceEntry::Junk(&self.source[junk]));
-            return;
+            return Err(ParserError::Unknown);
         }
 
-        body.push(ast::ResourceEntry::Entry(ast::Entry::Message(
-            ast::Message {
+        self.body
+            .push(ast::ResourceEntry::Entry(ast::Entry::Message(
+                ast::Message {
+                    id,
+                    value: pattern,
+                    attributes: attributes.into_boxed_slice(),
+                    comment: self.last_comment.take(),
+                },
+            )));
+        Ok(())
+    }
+
+    fn add_term(&mut self) -> ParserResult<()> {
+        let id = self.get_identifier()?;
+
+        self.lexer.expect(Token::EqSign)?;
+
+        let pattern = self.get_pattern()?;
+
+        let mut attributes = vec![];
+        while self.lexer.take_if(Token::Dot)? {
+            attributes.push(self.get_attribute()?);
+        }
+
+        self.body
+            .push(ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term {
                 id,
                 value: pattern,
                 attributes: attributes.into_boxed_slice(),
-                comment,
-            },
-        )));
+                comment: self.last_comment.take(),
+            })));
+        Ok(())
     }
 
-    fn get_term(&mut self, comment: Option<ast::Comment<'p>>) -> ast::Term<'p> {
-        let id = self.get_identifier();
-
-        self.lexer.next(); // EqSign
-
-        let pattern = self.get_pattern();
-
-        let mut attributes = vec![];
-        while let Some(Token::Dot) = self.lexer.peek() {
-            attributes.push(self.get_attribute());
-        }
-        ast::Term {
-            id,
-            value: pattern,
-            attributes: attributes.into_boxed_slice(),
-            comment,
-        }
-    }
-
-    fn maybe_get_pattern(&mut self) -> Option<ast::Pattern<'p>> {
-        let mut pe = vec![];
+    fn maybe_get_pattern(&mut self) -> ParserResult<Option<ast::Pattern<'p>>> {
+        // Arena?
+        let mut pe = Vec::with_capacity(1);
         let mut indents = vec![];
-        let mut new_line = false;
         loop {
-            match self.lexer.next() {
-                Some(Token::Text(indent, ref r)) => {
-                    if new_line {
-                        indents.push((Some(indent), Some(r.clone())));
-                        let te = ast::PatternElement::TextElement(&self.source[r.clone()]);
-                        pe.push(te);
-                    } else {
-                        indents.push((None, None));
-                        let mut r = r.clone();
-                        if !pe.is_empty() {
-                            r.start -= indent;
-                        }
-                        let te = ast::PatternElement::TextElement(&self.source[r]);
-                        pe.push(te);
-                    }
-                    new_line = false;
+            match self.lexer.try_next()? {
+                Some(Token::Text(r)) => {
+                    pe.push(ast::PatternElement::TextElement(&self.source[r]));
                 }
-                Some(Token::Eol(i)) => {
-                    if !pe.is_empty() {
-                        let te = ast::PatternElement::TextElement(&self.source[i..=i]);
-                        pe.push(te);
-                        indents.push((None, None));
+                Some(Token::Indent(i)) => match self.lexer.try_next()? {
+                    Some(Token::Text(r)) => {
+                        pe.push(ast::PatternElement::TextElement(&self.source[r.clone()]));
+                        indents.push((i, Some(r), pe.len() - 1));
                     }
-                    new_line = true;
-                }
-                Some(Token::OpenCurlyBraces(i)) => {
-                    let expr = self.get_expression();
-                    pe.push(ast::PatternElement::Placeable(expr));
-                    if new_line {
-                        indents.push((Some(i), None));
-                    } else {
-                        indents.push((None, None));
+                    Some(Token::OpenCurlyBraces) => {
+                        let exp = self.get_expression()?;
+                        self.lexer.expect(Token::CloseCurlyBraces)?;
+                        pe.push(ast::PatternElement::Placeable(exp));
+                        indents.push((i, None, pe.len() - 1));
                     }
-                    new_line = false;
+                    _ => return Err(ParserError::Unknown),
+                },
+                Some(Token::Eol(eols)) => {
+                    for _ in 0..eols {
+                        pe.push(ast::PatternElement::TextElement("\n"));
+                    }
                 }
-                Some(Token::Eot) | None => {
+                Some(Token::OpenCurlyBraces) => {
+                    let exp = self.get_expression()?;
+                    self.lexer.expect(Token::CloseCurlyBraces)?;
+                    pe.push(ast::PatternElement::Placeable(exp));
+                }
+                Some(Token::Eot) => {
                     break;
                 }
-                _ => panic!(),
-            };
+                _ => {
+                    return Err(ParserError::Unknown);
+                }
+            }
         }
         if pe.is_empty() {
-            None
+            Ok(None)
         } else {
-            if pe.len() > 1 {
-                let min_indent = indents.iter().filter_map(|(i, _)| *i).min();
+            if !indents.is_empty() {
+                let min_indent = indents.iter().map(|(i, _, _)| *i).min();
                 if let Some(min_indent) = min_indent {
-                    for (elem, (i, r)) in pe.iter_mut().zip(indents) {
-                        if let ast::PatternElement::TextElement(t) = elem {
-                            if let Some(i) = i {
-                                let indent = i - min_indent;
-                                if indent > 0 {
-                                    if let Some(mut r) = r {
-                                        r.start -= indent;
-                                        *t = &self.source[r];
-                                    }
-                                }
+                    for (i, r, p) in indents {
+                        let indent = i - min_indent;
+                        match (unsafe { pe.get_unchecked_mut(p) }, r) {
+                            (ast::PatternElement::TextElement(ref mut s), Some(ref r)) => {
+                                *s = &self.source[r.start - indent..r.end];
                             }
+                            (ast::PatternElement::Placeable(_), None) => {}
+                            _ => unreachable!(),
                         }
                     }
                 }
             }
-            Some(ast::Pattern {
+            if pe.len() > 1 {
+                while let Some(ast::PatternElement::TextElement("\n")) = pe.last() {
+                    pe.pop();
+                }
+            }
+            // if let Some(ast::PatternElement::TextElement(ref mut s)) = pe.last_mut() {
+            //     *s = s.trim_right();
+            // }
+            Ok(Some(ast::Pattern {
                 elements: pe.into_boxed_slice(),
-            })
+            }))
         }
     }
 
-    fn get_pattern(&mut self) -> ast::Pattern<'p> {
-        self.maybe_get_pattern().unwrap()
+    fn get_pattern(&mut self) -> ParserResult<ast::Pattern<'p>> {
+        if let Some(pattern) = self.maybe_get_pattern()? {
+            Ok(pattern)
+        } else {
+            Err(ParserError::Unknown)
+        }
     }
 
-    fn get_identifier(&mut self) -> ast::Identifier<'p> {
-        match self.lexer.next() {
-            Some(Token::Identifier(r)) => ast::Identifier {
+    fn get_identifier(&mut self) -> ParserResult<ast::Identifier<'p>> {
+        match self.lexer.try_next()? {
+            Some(Token::Identifier(r)) => Ok(ast::Identifier {
                 name: &self.source[r],
-            },
-            _ => panic!(),
+            }),
+            _ => Err(ParserError::Unknown),
         }
     }
 
-    fn get_attribute(&mut self) -> ast::Attribute<'p> {
-        self.lexer.next(); // Dot
-        let id = self.get_identifier();
-        self.lexer.next(); // EqSign
-        let value = self.get_pattern();
-        ast::Attribute { id, value }
+    fn get_attribute(&mut self) -> ParserResult<ast::Attribute<'p>> {
+        let id = self.get_identifier()?;
+        self.lexer.expect(Token::EqSign)?; // EqSign
+        match self.maybe_get_pattern()? {
+            Some(value) => Ok(ast::Attribute { id, value }),
+            None => Err(ParserError::Unknown),
+        }
     }
 
-    fn add_comment(
-        &mut self,
-        token: &Token,
-        body: &mut Vec<ast::ResourceEntry<'p>>,
-        last_comment: &mut Option<ast::Comment<'p>>,
-    ) {
-        if let Some(comment) = last_comment.take() {
-            body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(comment)));
+    fn add_comment(&mut self, token: &Token) -> ParserResult<()> {
+        let mut pe = Vec::with_capacity(1);
+
+        let result;
+        loop {
+            match self.add_comment_line(token, &mut pe) {
+                Ok(true) => {}
+                Ok(false) => {
+                    result = Ok(());
+                    break;
+                }
+                Err(err) => {
+                    result = Err(err);
+                    break;
+                }
+            }
         }
-        let mut pe = vec![];
-        let comment_type_token = token;
-        let comment_type = match comment_type_token {
+        let comment_type = match token {
             Token::CommentSign => ast::CommentType::Regular,
             Token::GroupCommentSign => ast::CommentType::Group,
             Token::ResourceCommentSign => ast::CommentType::Resource,
-            _ => panic!(),
+            _ => unreachable!(),
         };
-        let mut junk = None;
-        match self.lexer.next() {
-            Some(Token::Text(indent, mut r)) => {
-                if indent > 0 {
-                    r.start -= indent - 1;
-                }
-                pe.push(&self.source[r]);
-            }
-            Some(Token::Junk(r)) => {
-                junk = Some(r);
-            }
-            _ => panic!(),
-        }
-        if junk.is_none() {
-            while let Some(token) = self.lexer.peek() {
-                if token != comment_type_token {
-                    break;
-                }
-                self.lexer.next();
-                match self.lexer.next() {
-                    Some(Token::Text(indent, mut r)) => {
-                        if indent > 0 {
-                            r.start -= indent - 1;
-                        }
-                        pe.push(&self.source[r]);
-                    }
-                    Some(Token::Junk(r)) => {
-                        junk = Some(r);
-                        break;
-                    }
-                    _ => panic!(),
-                }
-            }
-        }
-        if let Some(r) = junk {
-            if !pe.is_empty() {
-                body.push(ast::ResourceEntry::Entry(ast::Entry::Comment(
-                    ast::Comment {
-                        comment_type,
-                        content: pe.into_boxed_slice(),
-                    },
-                )));
-            }
-            body.push(ast::ResourceEntry::Junk(&self.source[r]));
-        } else if !pe.is_empty() {
-            *last_comment = Some(ast::Comment {
-                comment_type,
-                content: pe.into_boxed_slice(),
-            });
-        }
+        self.last_comment = Some(ast::Comment {
+            comment_type,
+            content: pe.into_boxed_slice(),
+        });
+        result
     }
 
-    fn get_expression(&mut self) -> ast::Expression<'p> {
-        let inline_expr = self.get_inline_expression();
-        self.lexer.next(); // CloseCurlyBraces
-        ast::Expression::InlineExpression(inline_expr)
+    fn add_comment_line(&mut self, token: &Token, pe: &mut Vec<&'p str>) -> ParserResult<bool> {
+        match self.lexer.try_next()? {
+            Some(Token::Text(r)) => {
+                pe.push(&self.source[r.start..r.end]);
+            }
+            Some(Token::Eol(_)) => {
+                pe.push("");
+            }
+            _ => {
+                return Err(ParserError::Unknown);
+            }
+        }
+        match self.lexer.try_peek()? {
+            Some(c @ Token::CommentSign)
+            | Some(c @ Token::GroupCommentSign)
+            | Some(c @ Token::ResourceCommentSign)
+                if c == token =>
+            {
+                self.lexer.try_next()?;
+            }
+            _ => {
+                return Ok(false);
+            }
+        }
+        Ok(true)
     }
 
-    fn get_inline_expression(&mut self) -> ast::InlineExpression<'p> {
-        match self.lexer.next() {
-            Some(Token::DoubleQuote) => match self.lexer.next() {
-                Some(Token::Text(_, r)) => {
-                    let value = &self.source[r];
-                    self.lexer.next(); // DoubleQuote
-                    ast::InlineExpression::StringLiteral { value }
+    fn get_expression(&mut self) -> ParserResult<ast::Expression<'p>> {
+        self.get_inline_expression()
+            .map(ast::Expression::InlineExpression)
+    }
+
+    fn get_inline_expression(&mut self) -> ParserResult<ast::InlineExpression<'p>> {
+        match self.lexer.try_next()? {
+            Some(Token::MinusSign) => match self.lexer.try_next()? {
+                Some(Token::Number(r)) => {
+                    let num = self.get_number(r, true)?;
+                    Ok(ast::InlineExpression::NumberLiteral {
+                        value: &self.source[num],
+                    })
                 }
-                _ => panic!(),
+                Some(Token::Identifier(r)) => {
+                    let id = ast::Identifier {
+                        name: &self.source[r],
+                    };
+                    Ok(ast::InlineExpression::TermReference {
+                        id,
+                        attribute: None,
+                        arguments: None,
+                    })
+                }
+                _ => Err(ParserError::Unknown),
             },
             Some(Token::Number(r)) => {
-                let range = self.get_number(r, false);
-                let value = &self.source[range];
-                ast::InlineExpression::NumberLiteral { value }
+                let num = self.get_number(r, false)?;
+                Ok(ast::InlineExpression::NumberLiteral {
+                    value: &self.source[num],
+                })
             }
-            Some(Token::MinusSign) => {
-                match self.lexer.next() {
-                    Some(Token::Identifier(r)) => {
-                        let id = ast::Identifier {
-                            name: &self.source[r],
-                        };
-                        ast::InlineExpression::TermReference {
-                            id,
-                            attribute: None,
-                            arguments: None,
-                        }
-                    }
-                    Some(Token::Number(r)) => {
-                        let range = self.get_number(r, true);
-                        let value = &self.source[range];
-                        ast::InlineExpression::NumberLiteral { value }
-                    }
-                    _ => panic!(),
-                }
-                // Some(Token::MinusSign) => {
-                //     let ident = self.get_identifier();
-                //     break;
-                // }
-            }
-            _ => panic!(),
+            Some(Token::Text(r)) => Ok(ast::InlineExpression::StringLiteral {
+                value: &self.source[r],
+            }),
+            _ => Err(ParserError::Unknown),
         }
     }
 
-    fn get_number(&mut self, decimal: Range<usize>, minus: bool) -> Range<usize> {
+    fn get_number(&mut self, decimal: Range<usize>, minus: bool) -> ParserResult<Range<usize>> {
         let mut result = decimal;
         if minus {
             result.start -= 1;
         }
-        if let Some(Token::Dot) = self.lexer.peek() {
-            self.lexer.next();
-            match self.lexer.next() {
+        if self.lexer.take_if(Token::Dot)? {
+            match self.lexer.try_next()? {
                 Some(Token::Number(r)) => {
                     result.end = r.end;
                 }
-                _ => panic!(),
+                _ => {
+                    return Err(ParserError::Unknown);
+                }
             }
         }
 
-        result
+        Ok(result)
     }
 }
