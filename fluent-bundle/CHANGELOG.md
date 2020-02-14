@@ -4,6 +4,18 @@
 
   - …
 
+## fluent-bundle 0.10.0 (February 13, 2020)
+  - Update `fluent-langneg` to 0.12.
+  - Update `intl_pluralrules` to 6.0.
+  - Update `unic-langid` to 0.8.
+  - Introduce `intl-memoizer`.
+  - Improve the ergonomics of FluentArgs.
+  - Add `add_resource_overriding`.
+  - Remove dependency on `failure`.
+  - Switch the strategy to mitigate bomb attack to limit the number of placeables.
+  - Introduce `FluentType` for custom types.
+  - Improve ergonomics of `FluentNumber` and bring its features closer to ECMA402 Intl.NumberFormat.
+
 ## fluent-bundle 0.9.0 (November 26, 2019)
   - Update `unic-langid` to 0.7.
   - Update `fluent-langneg` to 0.11.
