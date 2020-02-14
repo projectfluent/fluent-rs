@@ -10,7 +10,7 @@ fn localization_format_value() {
         res_mgr.get_bundles(vec![langid!("en-US"), langid!("pl")], res_ids.to_vec())
     };
 
-    let mut loc = Localization::new(vec!["test.ftl".into()], generate_messages);
+    let loc = Localization::new(vec!["test.ftl".into()], generate_messages);
 
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World");
