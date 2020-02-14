@@ -20,6 +20,9 @@ static FLIPPED_CAPS_MAP: &[char] = &[
     '⊥', '∩', 'Ʌ', 'M', 'X', '⅄', 'Z',
 ];
 
+static mut RE_EXCLUDED: Option<Regex> = None;
+static mut RE_AZ: Option<Regex> = None;
+
 pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     // Exclude access-keys and other single-char messages
     if s.len() == 1 {
@@ -27,7 +30,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     }
 
     // XML entities (&#x202a;) and XML tags.
-    let re_excluded = Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap();
+    let re_excluded = unsafe { RE_EXCLUDED.get_or_insert_with(|| Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap()) };
 
     let mut result = Cow::from(s);
 
@@ -56,8 +59,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
 }
 
 pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
-    // XXX: avoid recreating it on each call.
-    let re_az = Regex::new(r"[a-zA-Z]").unwrap();
+    let re_az = unsafe { RE_AZ.get_or_insert_with(|| Regex::new(r"[a-zA-Z]").unwrap()) };
 
     let (small_map, caps_map) = if flipped {
         (FLIPPED_SMALL_MAP, FLIPPED_CAPS_MAP)
