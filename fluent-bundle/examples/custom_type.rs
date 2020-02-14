@@ -9,7 +9,7 @@
 // Lastly, we'll also create a new formatter which will be memoizable.
 //
 // The type and its options are modelled after ECMA402 Intl.DateTimeFormat.
-use std::cell::RefCell;
+use std::sync::Mutex;
 
 use intl_memoizer::{IntlLangMemoizer, Memoizable};
 use unic_langid::LanguageIdentifier;
@@ -107,8 +107,10 @@ impl FluentType for DateTime {
     fn duplicate(&self) -> Box<dyn FluentType> {
         Box::new(DateTime::new(self.epoch, DateTimeOptions::default()))
     }
-    fn as_string(&self, intls: &RefCell<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
-        let mut intls = intls.borrow_mut();
+    fn as_string(&self, intls: &Mutex<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
+        let mut intls = intls
+            .lock()
+            .expect("Failed to get rw lock on intl memoizer.");
         let dtf = intls
             .try_get::<DateTimeFormatter>((self.options.clone(),))
             .expect("Failed to retrieve a formatter.");

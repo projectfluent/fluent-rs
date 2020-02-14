@@ -6,10 +6,10 @@ use plural::*;
 
 use std::any::Any;
 use std::borrow::{Borrow, Cow};
-use std::cell::RefCell;
 use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
+use std::sync::Mutex;
 
 use fluent_syntax::ast;
 use intl_memoizer::IntlLangMemoizer;
@@ -109,7 +109,7 @@ impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source>
 
 pub trait FluentType: fmt::Debug + AnyEq + 'static {
     fn duplicate(&self) -> Box<dyn FluentType>;
-    fn as_string(&self, intls: &RefCell<IntlLangMemoizer>) -> Cow<'static, str>;
+    fn as_string(&self, intls: &Mutex<IntlLangMemoizer>) -> Cow<'static, str>;
 }
 
 impl PartialEq for dyn FluentType {
@@ -211,8 +211,12 @@ impl<'source> FluentValue<'source> {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
-                let mut intls_borrow = scope.bundle.intls.borrow_mut();
-                let pr = intls_borrow
+                let mut intls = scope
+                    .bundle
+                    .intls
+                    .lock()
+                    .expect("Failed to get rw lock on intl memoizer.");
+                let pr = intls
                     .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
                     .expect("Failed to retrieve plural rules");
                 pr.0.select(b) == Ok(cat)
