@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.10.1 (February 15, 2020)
+  - Switch RefCell in FluentBundle to Mutex.
+
 ## fluent-bundle 0.10.0 (February 13, 2020)
   - Update `fluent-langneg` to 0.12.
   - Update `intl_pluralrules` to 6.0.
