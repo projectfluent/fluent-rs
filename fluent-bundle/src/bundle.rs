@@ -6,9 +6,9 @@
 
 use std::borrow::Borrow;
 use std::borrow::Cow;
-use std::cell::RefCell;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
+use std::sync::Mutex;
 
 use fluent_syntax::ast;
 use intl_memoizer::IntlLangMemoizer;
@@ -127,12 +127,11 @@ pub struct FluentBundle<R> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry>,
-    pub(crate) intls: RefCell<IntlLangMemoizer>,
+    pub(crate) intls: Mutex<IntlLangMemoizer>,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
-    pub(crate) formatter: Option<
-        Box<dyn Fn(&FluentValue, &RefCell<IntlLangMemoizer>) -> Option<String> + Send + Sync>,
-    >,
+    pub(crate) formatter:
+        Option<Box<dyn Fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String> + Send + Sync>>,
 }
 
 impl<R> FluentBundle<R> {
@@ -166,7 +165,7 @@ impl<R> FluentBundle<R> {
             locales,
             resources: vec![],
             entries: HashMap::new(),
-            intls: RefCell::new(IntlLangMemoizer::new(lang)),
+            intls: Mutex::new(IntlLangMemoizer::new(lang)),
             use_isolating: true,
             transform: None,
             formatter: None,
@@ -394,7 +393,7 @@ impl<R> FluentBundle<R> {
     /// formatter for `FluentValue::Number`.
     pub fn set_formatter<F>(&mut self, func: Option<F>)
     where
-        F: Fn(&FluentValue, &RefCell<IntlLangMemoizer>) -> Option<String> + Send + Sync + 'static,
+        F: Fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String> + Send + Sync + 'static,
     {
         if let Some(f) = func {
             self.formatter = Some(Box::new(f));
@@ -525,7 +524,7 @@ impl<R> Default for FluentBundle<R> {
             resources: vec![],
             entries: Default::default(),
             use_isolating: true,
-            intls: RefCell::new(IntlLangMemoizer::new(langid)),
+            intls: Mutex::new(IntlLangMemoizer::new(langid)),
             transform: None,
             formatter: None,
         }

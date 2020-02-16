@@ -2,7 +2,7 @@
 // to format selected types of values.
 //
 // This allows users to plug their own number formatter to Fluent.
-use std::cell::RefCell;
+use std::sync::Mutex;
 
 use intl_memoizer::IntlLangMemoizer;
 use unic_langid::LanguageIdentifier;
@@ -10,7 +10,7 @@ use unic_langid::LanguageIdentifier;
 use fluent_bundle::types::{FluentNumber, FluentNumberOptions, FluentValue};
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource};
 
-fn custom_formatter(num: &FluentValue, _intls: &RefCell<IntlLangMemoizer>) -> Option<String> {
+fn custom_formatter(num: &FluentValue, _intls: &Mutex<IntlLangMemoizer>) -> Option<String> {
     match num {
         FluentValue::Number(n) => Some(format!("CUSTOM({})", n.value).into()),
         _ => None,
