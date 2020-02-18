@@ -3,7 +3,7 @@ use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
-use type_map::TypeMap;
+use type_map::concurrent::TypeMap;
 use unic_langid::LanguageIdentifier;
 
 pub trait Memoizable {
@@ -27,9 +27,9 @@ impl IntlLangMemoizer {
         }
     }
 
-    pub fn try_get<T: Memoizable + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
+    pub fn try_get<T: Memoizable + Sync + Send + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
     where
-        T::Args: Eq,
+        T::Args: Eq + Sync + Send,
     {
         let cache = self
             .map
