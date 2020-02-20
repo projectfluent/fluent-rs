@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.10.2 (February 20, 2020)
+  - Update to `intl_memoizer` 0.3.0 to allow for Send+Sync on FluentBundle.
+
 ## fluent-bundle 0.10.1 (February 15, 2020)
   - Switch RefCell in FluentBundle to Mutex.
 
