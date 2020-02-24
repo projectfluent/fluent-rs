@@ -8,7 +8,7 @@ use intl_pluralrules::operands::PluralOperands;
 use crate::bundle::FluentArgs;
 use crate::types::FluentValue;
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum FluentNumberStyle {
     Decimal,
     Currency,
@@ -32,7 +32,7 @@ impl From<&str> for FluentNumberStyle {
     }
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum FluentNumberCurrencyDisplayStyle {
     Symbol,
     Code,
