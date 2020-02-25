@@ -131,21 +131,31 @@ impl FluentNumber {
     }
 
     pub fn as_string(&self) -> Cow<'static, str> {
-        let mut val = self.value.to_string();
+        let mut max_frac_digits = self.options.maximum_fraction_digits.unwrap_or(15);
+        // since the plural code currently parses the resulting fractional digits into a usize, we can't
+        // have a precision above 9 digits on 32 bit platforms
+        if std::mem::size_of::<usize>() < 8 {
+            max_frac_digits = max_frac_digits.min(9);
+        }
+        // create the string with maximum precision
+        let with_max_precision = format!(
+            "{number:.precision$}",
+            number = self.value,
+            precision = max_frac_digits
+        );
+        // and then remove any excess trailing zeros
+        let mut val: Cow<str> = with_max_precision.trim_end_matches('0').into();
+        // adding back any required to meet minimum_fraction_digits
         if let Some(minfd) = self.options.minimum_fraction_digits {
-            if let Some(pos) = val.find('.') {
-                let frac_num = val.len() - pos - 1;
-                let missing = if frac_num > minfd {
-                    0
-                } else {
-                    minfd - frac_num
-                };
-                val = format!("{}{}", val, "0".repeat(missing));
-            } else {
-                val = format!("{}.{}", val, "0".repeat(minfd));
+            let pos = val.find('.').expect("expected . in formatted string");
+            let frac_num = val.len() - pos - 1;
+            let zeros_needed = minfd - frac_num;
+            if zeros_needed > 0 {
+                val = format!("{}{}", val, "0".repeat(zeros_needed)).into();
             }
         }
-        val.into()
+        // lop off any trailing '.', then return an owned value
+        val.trim_end_matches('.').to_string().into()
     }
 }
 
@@ -217,7 +227,8 @@ macro_rules! from_num {
 impl From<&FluentNumber> for PluralOperands {
     fn from(input: &FluentNumber) -> Self {
         let mut operands: PluralOperands = input
-            .value
+            .as_string()
+            .as_ref()
             .try_into()
             .expect("Failed to generate operands out of FluentNumber");
         if let Some(mfd) = input.options.minimum_fraction_digits {
