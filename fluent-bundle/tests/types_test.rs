@@ -154,3 +154,10 @@ fn fluent_number_to_operands() {
         }
     );
 }
+
+#[test]
+fn many_decimal_places() {
+    // this should not panic on an i32 system
+    let num = FluentNumber::new(2.813829837982735, FluentNumberOptions::default());
+    let _operands = PluralOperands::from(&num);
+}
