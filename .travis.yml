@@ -19,8 +19,7 @@ before_cache: |
 script:
 - cargo clean
 - cargo build
-- cargo test
-- cargo test --manifest-path=./fluent-syntax/Cargo.toml --features json
+- cargo test --all-features
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
