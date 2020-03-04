@@ -10,6 +10,9 @@ rust:
   - nightly
   - beta
   - stable
+env:
+  - CARGO_EXTRA_ARGS="--all-features"
+  - CARGO_EXTRA_ARGS=""
 
 before_cache: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
@@ -18,8 +21,8 @@ before_cache: |
 
 script:
 - cargo clean
-- cargo build
-- cargo test --all-features
+- cargo build $CARGO_EXTRA_ARGS
+- cargo test $CARGO_EXTRA_ARGS
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then
