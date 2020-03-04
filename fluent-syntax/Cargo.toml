@@ -39,7 +39,7 @@ harness = false
 name = "parser"
 path = "src/bin/parser.rs"
 
-# [[test]]
-# name = "parser_fixtures"
-# path = "tests/parser_fixtures.rs"
-# required-features = ["json"]
+[[test]]
+name = "parser_fixtures"
+path = "tests/parser_fixtures.rs"
+required-features = ["json"]
