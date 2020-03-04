@@ -129,9 +129,8 @@ pub struct FluentBundle<R> {
     pub(crate) entries: HashMap<String, Entry>,
     pub(crate) intls: Mutex<IntlLangMemoizer>,
     pub(crate) use_isolating: bool,
-    pub(crate) transform: Option<Box<dyn Fn(&str) -> Cow<str> + Send + Sync>>,
-    pub(crate) formatter:
-        Option<Box<dyn Fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String> + Send + Sync>>,
+    pub(crate) transform: Option<fn(&str) -> Cow<str>>,
+    pub(crate) formatter: Option<fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String>>,
 }
 
 impl<R> FluentBundle<R> {
@@ -374,12 +373,9 @@ impl<R> FluentBundle<R> {
     /// This is currently primarly used for pseudolocalization,
     /// and `fluent-pseudo` crate provides a function
     /// that can be passed here.
-    pub fn set_transform<F>(&mut self, func: Option<F>)
-    where
-        F: Fn(&str) -> Cow<str> + Send + Sync + 'static,
-    {
+    pub fn set_transform(&mut self, func: Option<fn(&str) -> Cow<str>>) {
         if let Some(f) = func {
-            self.transform = Some(Box::new(f));
+            self.transform = Some(f);
         } else {
             self.transform = None;
         }
@@ -391,12 +387,12 @@ impl<R> FluentBundle<R> {
     ///
     /// It's particularly useful for plugging in an external
     /// formatter for `FluentValue::Number`.
-    pub fn set_formatter<F>(&mut self, func: Option<F>)
-    where
-        F: Fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String> + Send + Sync + 'static,
-    {
+    pub fn set_formatter(
+        &mut self,
+        func: Option<fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String>>,
+    ) {
         if let Some(f) = func {
-            self.formatter = Some(Box::new(f));
+            self.formatter = Some(f);
         } else {
             self.formatter = None;
         }
