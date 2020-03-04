@@ -26,3 +26,7 @@ criterion = "0.3"
 [[bench]]
 name = "parser"
 harness = false
+
+[[bin]]
+name = "parser"
+path = "./src/bin/parser.rs"
