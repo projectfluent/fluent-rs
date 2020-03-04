@@ -16,6 +16,10 @@ readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
+[dependencies]
+serde = { version = "1.0", features = ["derive"], optional = true }
+serde_json = { version = "1.0", optional = true }
+
 [dev-dependencies]
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
@@ -23,10 +27,19 @@ glob = "0.3"
 assert-json-diff = "1.0"
 criterion = "0.3"
 
+[features]
+default = []
+json = ["serde", "serde_json"]
+
 [[bench]]
 name = "parser"
 harness = false
 
 [[bin]]
 name = "parser"
-path = "./src/bin/parser.rs"
+path = "src/bin/parser.rs"
+
+# [[test]]
+# name = "parser_fixtures"
+# path = "tests/parser_fixtures.rs"
+# required-features = ["json"]

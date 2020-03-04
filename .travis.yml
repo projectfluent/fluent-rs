@@ -1,7 +1,7 @@
 language: rust
 sudo: required
 cache: cargo
-dist: trusty
+dist: bionic
 addons:
     apt:
         packages:
@@ -20,6 +20,7 @@ script:
 - cargo clean
 - cargo build
 - cargo test
+- cargo test --manifest-path=./fluent-syntax/Cargo.toml --features json
 
 after_success: |
   if [[ "$TRAVIS_RUST_VERSION" == stable ]]; then

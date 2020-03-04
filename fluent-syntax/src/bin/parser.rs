@@ -1,6 +1,5 @@
 use fluent_syntax::parser::parse;
 use std::env;
-use std::fmt::Write;
 use std::fs::File;
 use std::io;
 use std::io::Read;
@@ -16,9 +15,20 @@ fn main() {
     let args: Vec<String> = env::args().collect();
     let source = read_file(args.get(1).expect("Pass an argument")).expect("Failed to fetch file");
 
-    let ast = parse(&source);
+    let ast = parse(&source).expect("Failed to parse the source.");
 
-    let mut result = String::new();
-    write!(result, "{:#?}", ast).unwrap();
-    println!("{}", result);
+
+    #[cfg(feature = "json")]
+    {
+        use fluent_syntax::json;
+        let target_json = json::serialize_to_pretty_json(&ast).unwrap();
+        println!("{}", target_json);
+    }
+    #[cfg(not(feature = "json"))]
+    {
+        use std::fmt::Write;
+        let mut result = String::new();
+        write!(result, "{:#?}", ast).unwrap();
+        println!("{}", result);
+    }
 }
