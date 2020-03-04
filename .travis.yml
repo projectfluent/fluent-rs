@@ -1,5 +1,5 @@
 language: rust
-sudo: required
+os: linux
 cache: cargo
 dist: bionic
 addons:
