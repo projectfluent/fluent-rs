@@ -84,7 +84,7 @@ fn unicode_unescape_bench(c: &mut Criterion) {
 }
 
 fn parser_ctx_bench(c: &mut Criterion) {
-    let tests = &["browser"];
+    let tests = &["browser", "preferences"];
     let ftl_strings = get_ctxs(tests);
 
     c.bench_function_over_inputs(
