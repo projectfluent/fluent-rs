@@ -1,0 +1,351 @@
+{
+    "type": "Resource",
+    "body": [
+        {
+            "type": "Comment",
+            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
+        },
+        {
+            "type": "ResourceComment",
+            "content": "These strings appear in Urlbar Interventions. Interventions appear in the\nUrlbar in response to the user's query. For example, if we detect that the\nuser is searching how to clear their history, we show the Intervention\ndescribed by clear-data."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-clear-data"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Clear your cache, cookies, history and more."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-clear-data-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Choose What to Clear…"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-refresh-profile"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Restore default settings and remove old add-ons for optimal performance."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-refresh-profile-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Refresh "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "…"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "These strings describe Interventions helping the user with the Firefox update\nprocess."
+        },
+        {
+            "type": "GroupComment",
+            "content": "Shown when an update is available to download."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-ask"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "A new version of "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": " is available."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-ask-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Install and Restart to Update"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Shown when Firefox does not need to update so instead we offer to refresh\nthe user's profile."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-refresh"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": " is up to date. Trying to fix a problem? Restore default settings and remove old add-ons for optimal performance."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-refresh-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Refresh "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "…"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Shown when an update is downloaded and Firefox is ready to install it."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-restart"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "The latest "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": " is downloaded and ready to install."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-restart-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Restart to Update"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": "Shown when Firefox cannot update itself. The button will open the download\npage on the Firefox website."
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-web"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Get the latest "
+                    },
+                    {
+                        "type": "Placeable",
+                        "expression": {
+                            "type": "InlineExpression",
+                            "type": "TermReference",
+                            "id": {
+                                "type": "Identifier",
+                                "name": "brand-short-name"
+                            },
+                            "attribute": null,
+                            "arguments": null
+                        }
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": " browser."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "intervention-update-web-confirm"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Download Now"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "GroupComment",
+            "content": ""
+        }
+    ]
+}

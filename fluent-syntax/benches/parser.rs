@@ -36,7 +36,7 @@ fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<String>> {
                 let path = p.to_str().unwrap();
                 read_file(path).unwrap()
             })
-        .collect::<Vec<_>>();
+            .collect::<Vec<_>>();
         ftl_strings.insert(*test, strings);
     }
     return ftl_strings;
@@ -101,5 +101,10 @@ fn parser_ctx_bench(c: &mut Criterion) {
     );
 }
 
-criterion_group!(benches, parser_bench, unicode_unescape_bench, parser_ctx_bench);
+criterion_group!(
+    benches,
+    parser_bench,
+    unicode_unescape_bench,
+    parser_ctx_bench
+);
 criterion_main!(benches);

@@ -1,12 +1,11 @@
 use assert_json_diff::assert_json_include;
 use glob::glob;
 use serde_json::Value;
-use std::fs::File;
+use std::fs;
 use std::io;
-use std::io::prelude::*;
 
-use fluent_syntax::parser::parse;
 use fluent_syntax::json;
+use fluent_syntax::parser::parse;
 
 fn compare_jsons(value: &str, reference: &str) {
     let a: Value = serde_json::from_str(value).unwrap();
@@ -17,9 +16,7 @@ fn compare_jsons(value: &str, reference: &str) {
 }
 
 fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
-    let mut f = File::open(path)?;
-    let mut s = String::new();
-    f.read_to_string(&mut s)?;
+    let s = fs::read_to_string(path)?;
     if trim {
         Ok(s.trim().to_string())
     } else {
@@ -60,5 +57,61 @@ fn parse_fixtures() {
         let string = read_file(path, false).expect("Failed to read");
 
         let _ = parse(&string);
+    }
+}
+
+#[test]
+fn parse_bench_fixtures() {
+    for entry in glob("./benches/*.ftl").expect("Failed to read glob pattern") {
+        let p = entry.expect("Error while getting an entry");
+        let path = p.to_str().expect("Can't print path");
+        let file_name = p.file_name().unwrap().to_str().unwrap();
+
+        let reference_path = format!(
+            "./tests/fixtures/benches/{}",
+            file_name.replace(".ftl", ".json")
+        );
+        let reference_file = read_file(&reference_path, true).unwrap();
+        let ftl_file = read_file(&path, false).unwrap();
+
+        println!("Parsing: {:#?}", path);
+        let target_ast = match parse(&ftl_file) {
+            Ok(res) => res,
+            Err((res, _errors)) => res,
+        };
+
+        let target_json = json::serialize(&target_ast).unwrap();
+
+        compare_jsons(&target_json, &reference_file);
+    }
+
+    let contexts = &["browser", "preferences"];
+
+    for context in contexts {
+        for entry in glob(&format!("./benches/contexts/{}/*.ftl", context))
+            .expect("Failed to read glob pattern")
+        {
+            let p = entry.expect("Error while getting an entry");
+            let path = p.to_str().expect("Can't print path");
+            let file_name = p.file_name().unwrap().to_str().unwrap();
+
+            let reference_path = format!(
+                "./tests/fixtures/benches/contexts/{}/{}",
+                context,
+                file_name.replace(".ftl", ".json")
+            );
+            let reference_file = read_file(&reference_path, true).unwrap();
+            let ftl_file = read_file(&path, false).unwrap();
+
+            println!("Parsing: {:#?}", path);
+            let target_ast = match parse(&ftl_file) {
+                Ok(res) => res,
+                Err((res, _errors)) => res,
+            };
+
+            let target_json = json::serialize(&target_ast).unwrap();
+
+            compare_jsons(&target_json, &reference_file);
+        }
     }
 }

@@ -17,7 +17,6 @@ fn main() {
 
     let ast = parse(&source).expect("Failed to parse the source.");
 
-
     #[cfg(feature = "json")]
     {
         use fluent_syntax::json;

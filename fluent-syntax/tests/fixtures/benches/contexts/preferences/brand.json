@@ -1,0 +1,124 @@
+{
+    "type": "Resource",
+    "body": [
+        {
+            "type": "Comment",
+            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
+        },
+        {
+            "type": "GroupComment",
+            "content": "Firefox Brand\n\nFirefox must be treated as a brand, and kept in English.\nIt cannot be:\n- Declined to adapt to grammatical case.\n- Transliterated.\n- Translated.\n\nReference: https://www.mozilla.org/styleguide/communications/translation/"
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "brand-shorter-name"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Firefox"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "brand-short-name"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Firefox"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "brand-full-name"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Mozilla Firefox"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "brand-product-name"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Firefox"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "This brand name can be used in messages where the product name needs to\nremain unchanged across different versions (Nightly, Beta, etc.)."
+            }
+        },
+        {
+            "type": "Term",
+            "id": {
+                "type": "Identifier",
+                "name": "vendor-short-name"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Mozilla"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "trademarkInfo"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "Firefox and the Firefox logos are trademarks of the Mozilla Foundation."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}
