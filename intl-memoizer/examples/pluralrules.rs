@@ -23,11 +23,9 @@ fn main() {
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
     let lang_memoizer = memoizer.get_for_lang(lang.clone());
-    let mut lang_memoizer_borrow = lang_memoizer.borrow_mut();
-
-    let pr = lang_memoizer_borrow
-        .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+    let result = lang_memoizer
+        .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |pr| pr.0.select(5))
         .unwrap();
 
-    assert_eq!(pr.0.select(5), Ok(PluralCategory::OTHER));
+    assert_eq!(result, Ok(PluralCategory::OTHER));
 }
