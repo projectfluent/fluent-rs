@@ -1,10 +1,9 @@
+use fluent_bundle::memoizer::MemoizerKind;
 use fluent_bundle::types::FluentType;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use fluent_bundle::FluentValue;
-use intl_memoizer::IntlLangMemoizer;
-use std::sync::Mutex;
 use unic_langid::langid;
 
 #[test]
@@ -24,7 +23,13 @@ fn fluent_custom_type() {
         fn duplicate(&self) -> Box<dyn FluentType> {
             Box::new(DateTime { epoch: self.epoch })
         }
-        fn as_string(&self, _intls: &Mutex<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
+        fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
+            format!("{}", self.epoch).into()
+        }
+        fn as_string_threadsafe(
+            &self,
+            _: &intl_memoizer::concurrent::IntlLangMemoizer,
+        ) -> std::borrow::Cow<'static, str> {
             format!("{}", self.epoch).into()
         }
     }
@@ -115,7 +120,13 @@ fn fluent_date_time_builtin() {
         fn duplicate(&self) -> Box<dyn FluentType> {
             Box::new(DateTime::new(self.epoch, DateTimeOptions::default()))
         }
-        fn as_string(&self, _intls: &Mutex<IntlLangMemoizer>) -> std::borrow::Cow<'static, str> {
+        fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
+            format!("2020-01-20 {}:00", self.epoch).into()
+        }
+        fn as_string_threadsafe(
+            &self,
+            _intls: &intl_memoizer::concurrent::IntlLangMemoizer,
+        ) -> std::borrow::Cow<'static, str> {
             format!("2020-01-20 {}:00", self.epoch).into()
         }
     }
@@ -171,7 +182,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
 
 #[test]
 fn fluent_custom_number_format() {
-    fn custom_formatter(num: &FluentValue, _intls: &Mutex<IntlLangMemoizer>) -> Option<String> {
+    fn custom_formatter<M: MemoizerKind>(num: &FluentValue, _intls: &M) -> Option<String> {
         match num {
             FluentValue::Number(_) => Some("CUSTOM".into()),
             _ => None,

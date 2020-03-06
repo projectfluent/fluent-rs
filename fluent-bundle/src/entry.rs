@@ -4,7 +4,7 @@ use std::borrow::Borrow;
 
 use fluent_syntax::ast;
 
-use crate::bundle::{FluentArgs, FluentBundle};
+use crate::bundle::{FluentArgs, FluentBundleBase};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -23,7 +23,7 @@ pub trait GetEntry {
     fn get_entry_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
-impl<'bundle, R: Borrow<FluentResource>> GetEntry for FluentBundle<R> {
+impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundleBase<R, M> {
     fn get_entry_message(&self, id: &str) -> Option<&ast::Message> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Message(pos) => {

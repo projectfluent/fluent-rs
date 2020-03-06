@@ -8,15 +8,14 @@ use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
-use std::sync::Mutex;
 
 use fluent_syntax::ast;
-use intl_memoizer::IntlLangMemoizer;
 use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
+use crate::memoizer::MemoizerKind;
 use crate::resolve::{ResolveValue, Scope};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
@@ -123,17 +122,17 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 /// [`Arc<FluentResource>`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
 /// [`LanguageIdentifier`]: https://crates.io/crates/unic-langid
 /// [`Vec<FluentError>`]: ./enum.FluentError.html
-pub struct FluentBundle<R> {
+pub struct FluentBundleBase<R, M> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
     pub(crate) entries: HashMap<String, Entry>,
-    pub(crate) intls: Mutex<IntlLangMemoizer>,
+    pub(crate) intls: M,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<fn(&str) -> Cow<str>>,
-    pub(crate) formatter: Option<fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String>>,
+    pub(crate) formatter: Option<fn(&FluentValue, &M) -> Option<String>>,
 }
 
-impl<R> FluentBundle<R> {
+impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// Constructs a FluentBundle. `locales` is the fallback chain of locales
     /// to use for formatters like date and time. `locales` does not influence
     /// message selection.
@@ -160,11 +159,11 @@ impl<R> FluentBundle<R> {
             .map(|s| s.clone().into())
             .collect::<Vec<_>>();
         let lang = locales.get(0).cloned().unwrap_or_default();
-        FluentBundle {
+        FluentBundleBase {
             locales,
             resources: vec![],
             entries: HashMap::new(),
-            intls: Mutex::new(IntlLangMemoizer::new(lang)),
+            intls: M::new(lang),
             use_isolating: true,
             transform: None,
             formatter: None,
@@ -387,10 +386,7 @@ impl<R> FluentBundle<R> {
     ///
     /// It's particularly useful for plugging in an external
     /// formatter for `FluentValue::Number`.
-    pub fn set_formatter(
-        &mut self,
-        func: Option<fn(&FluentValue, &Mutex<IntlLangMemoizer>) -> Option<String>>,
-    ) {
+    pub fn set_formatter(&mut self, func: Option<fn(&FluentValue, &M) -> Option<String>>) {
         if let Some(f) = func {
             self.formatter = Some(f);
         } else {
@@ -512,15 +508,15 @@ impl<R> FluentBundle<R> {
     }
 }
 
-impl<R> Default for FluentBundle<R> {
+impl<R, M: MemoizerKind> Default for FluentBundleBase<R, M> {
     fn default() -> Self {
         let langid = LanguageIdentifier::default();
-        FluentBundle {
+        FluentBundleBase {
             locales: vec![langid.clone()],
             resources: vec![],
             entries: Default::default(),
             use_isolating: true,
-            intls: Mutex::new(IntlLangMemoizer::new(langid)),
+            intls: M::new(langid),
             transform: None,
             formatter: None,
         }

@@ -237,7 +237,7 @@ from_num!(f32 f64);
 
 #[cfg(test)]
 mod tests {
-    use super::*;
+    use crate::types::FluentValue;
 
     #[test]
     fn value_from_copy_ref() {
