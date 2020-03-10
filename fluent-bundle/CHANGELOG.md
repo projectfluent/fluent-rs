@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-bundle 0.11.0 (March 10, 2020)
+  - Separate out `concurrent` version of `FluentBundle`.
+  - Switch FluentBundle functions to use function pointers.
+
 ## fluent-bundle 0.10.2 (February 20, 2020)
   - Update to `intl_memoizer` 0.3.0 to allow for Send+Sync on FluentBundle.
 
