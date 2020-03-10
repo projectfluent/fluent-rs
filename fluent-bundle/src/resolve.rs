@@ -12,8 +12,9 @@ use std::fmt::Write;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
-use crate::bundle::{FluentArgs, FluentBundle};
+use crate::bundle::{FluentArgs, FluentBundleBase};
 use crate::entry::GetEntry;
+use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 use crate::types::DisplayableNode;
 use crate::types::FluentValue;
@@ -29,9 +30,9 @@ pub enum ResolverError {
 }
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Scope<'bundle, R: Borrow<FluentResource>> {
-    /// The current `FluentBundle` instance.
-    pub bundle: &'bundle FluentBundle<R>,
+pub struct Scope<'bundle, R: Borrow<FluentResource>, M> {
+    /// The current `FluentBundleBase` instance.
+    pub bundle: &'bundle FluentBundleBase<R, M>,
     /// The current arguments passed by the developer.
     args: Option<&'bundle FluentArgs<'bundle>>,
     /// Local args
@@ -47,8 +48,8 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>> {
     pub dirty: bool,
 }
 
-impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
-    pub fn new(bundle: &'bundle FluentBundle<R>, args: Option<&'bundle FluentArgs>) -> Self {
+impl<'bundle, R: Borrow<FluentResource>, M: MemoizerKind> Scope<'bundle, R, M> {
+    pub fn new(bundle: &'bundle FluentBundleBase<R, M>, args: Option<&'bundle FluentArgs>) -> Self {
         Scope {
             bundle,
             args,
@@ -98,8 +99,8 @@ impl<'bundle, R: Borrow<FluentResource>> Scope<'bundle, R> {
     }
 }
 
-fn generate_ref_error<'source, R>(
-    scope: &mut Scope<'source, R>,
+fn generate_ref_error<'source, R, M>(
+    scope: &mut Scope<'source, R, M>,
     node: DisplayableNode<'source>,
 ) -> FluentValue<'source>
 where
@@ -112,14 +113,20 @@ where
 }
 
 // Converts an AST node to a `FluentValue`.
-pub trait ResolveValue<'source> {
-    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+pub(crate) trait ResolveValue<'source> {
+    fn resolve<R, M: MemoizerKind>(
+        &'source self,
+        scope: &mut Scope<'source, R, M>,
+    ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>;
 }
 
 impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
-    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R, M: MemoizerKind>(
+        &'source self,
+        scope: &mut Scope<'source, R, M>,
+    ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -193,7 +200,10 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::Expression<'source> {
-    fn resolve<R>(&'source self, scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R, M: MemoizerKind>(
+        &'source self,
+        scope: &mut Scope<'source, R, M>,
+    ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -231,7 +241,10 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
 }
 
 impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
-    fn resolve<R>(&'source self, mut scope: &mut Scope<'source, R>) -> FluentValue<'source>
+    fn resolve<R, M: MemoizerKind>(
+        &'source self,
+        mut scope: &mut Scope<'source, R, M>,
+    ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
@@ -313,8 +326,8 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
     }
 }
 
-fn get_arguments<'bundle, R>(
-    scope: &mut Scope<'bundle, R>,
+fn get_arguments<'bundle, R, M: MemoizerKind>(
+    scope: &mut Scope<'bundle, R, M>,
     arguments: &'bundle Option<ast::CallArguments<'bundle>>,
 ) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
 where

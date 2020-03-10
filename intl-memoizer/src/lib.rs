@@ -3,8 +3,9 @@ use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
-use type_map::concurrent::TypeMap;
 use unic_langid::LanguageIdentifier;
+
+pub mod concurrent;
 
 pub trait Memoizable {
     type Args: 'static + Eq + Hash + Clone;
@@ -14,49 +15,55 @@ pub trait Memoizable {
         Self: std::marker::Sized;
 }
 
+#[derive(Debug)]
 pub struct IntlLangMemoizer {
     lang: LanguageIdentifier,
-    map: TypeMap,
+    map: RefCell<type_map::TypeMap>,
 }
 
 impl IntlLangMemoizer {
     pub fn new(lang: LanguageIdentifier) -> Self {
         Self {
             lang,
-            map: TypeMap::new(),
+            map: RefCell::new(type_map::TypeMap::new()),
         }
     }
 
-    pub fn try_get<T: Memoizable + Sync + Send + 'static>(&mut self, args: T::Args) -> Result<&T, T::Error>
+    pub fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
     where
-        T::Args: Eq + Sync + Send,
+        Self: Sized,
+        I: Memoizable + 'static,
+        U: FnOnce(&I) -> R,
     {
-        let cache = self
+        let mut map = self
             .map
-            .entry::<HashMap<T::Args, T>>()
+            .try_borrow_mut()
+            .expect("Cannot use memoizer reentrantly");
+        let cache = map
+            .entry::<HashMap<I::Args, I>>()
             .or_insert_with(HashMap::new);
 
         let e = match cache.entry(args.clone()) {
             Entry::Occupied(entry) => entry.into_mut(),
             Entry::Vacant(entry) => {
-                let val = T::construct(self.lang.clone(), args)?;
+                let val = I::construct(self.lang.clone(), args)?;
                 entry.insert(val)
             }
         };
-        Ok(e)
+        Ok(cb(&e))
     }
 }
 
 #[derive(Default)]
 pub struct IntlMemoizer {
-    map: HashMap<LanguageIdentifier, Weak<RefCell<IntlLangMemoizer>>>,
+    map: HashMap<LanguageIdentifier, Weak<IntlLangMemoizer>>,
 }
 
 impl IntlMemoizer {
-    pub fn get_for_lang(&mut self, lang: LanguageIdentifier) -> Rc<RefCell<IntlLangMemoizer>> {
+    pub fn get_for_lang(&mut self, lang: LanguageIdentifier) -> Rc<IntlLangMemoizer> {
         match self.map.entry(lang.clone()) {
             Entry::Vacant(empty) => {
-                let entry = Rc::new(RefCell::new(IntlLangMemoizer::new(lang)));
+                let entry = Rc::new(IntlLangMemoizer::new(lang));
                 empty.insert(Rc::downgrade(&entry));
                 entry
             }
@@ -64,7 +71,7 @@ impl IntlMemoizer {
                 if let Some(entry) = entry.get().upgrade() {
                     entry
                 } else {
-                    let e = Rc::new(RefCell::new(IntlLangMemoizer::new(lang)));
+                    let e = Rc::new(IntlLangMemoizer::new(lang));
                     entry.insert(Rc::downgrade(&e));
                     e
                 }
@@ -114,22 +121,20 @@ mod tests {
         let mut memoizer = IntlMemoizer::default();
         {
             let en_memoizer = memoizer.get_for_lang(lang.clone());
-            let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
-            let cb = en_memoizer_borrow
-                .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+            let result = en_memoizer
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
                 .unwrap();
-            assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
+            assert_eq!(result, Ok(PluralCategory::OTHER));
         }
 
         {
             let en_memoizer = memoizer.get_for_lang(lang.clone());
-            let mut en_memoizer_borrow = en_memoizer.borrow_mut();
 
-            let cb = en_memoizer_borrow
-                .try_get::<PluralRules>((PluralRuleType::CARDINAL,))
+            let result = en_memoizer
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
                 .unwrap();
-            assert_eq!(cb.0.select(5), Ok(PluralCategory::OTHER));
+            assert_eq!(result, Ok(PluralCategory::OTHER));
         }
     }
 }
