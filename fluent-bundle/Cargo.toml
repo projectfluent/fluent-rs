@@ -24,7 +24,7 @@ intl_pluralrules = "6.0"
 rental = "0.5"
 smallvec = "1.1"
 unic-langid = "0.8"
-intl-memoizer = { version = "0.3", path = "../intl-memoizer" }
+intl-memoizer = { version = "0.4", path = "../intl-memoizer" }
 
 [dev-dependencies]
 criterion = "0.3"
