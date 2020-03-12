@@ -16,6 +16,12 @@ repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
+include = [
+	"src/**/*",
+	"benches/*.rs",
+	"Cargo.toml",
+	"README.md"
+]
 
 [dependencies]
 fluent-bundle = { version = "0.11", path = "../fluent-bundle" }
