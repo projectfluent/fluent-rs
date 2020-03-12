@@ -15,6 +15,11 @@ repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
+exclude = [
+	"benches/**/*.ftl",
+	"tests/**/*.ftl",
+	"tests/**/*.json",
+]
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"], optional = true }
