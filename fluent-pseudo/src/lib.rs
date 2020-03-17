@@ -30,7 +30,8 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     }
 
     // XML entities (&#x202a;) and XML tags.
-    let re_excluded = unsafe { RE_EXCLUDED.get_or_insert_with(|| Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap()) };
+    let re_excluded =
+        unsafe { RE_EXCLUDED.get_or_insert_with(|| Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap()) };
 
     let mut result = Cow::from(s);
 
