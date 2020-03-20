@@ -601,7 +601,14 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     ps.ptr += 2; // ->
 
     ps.skip_blank_inline();
-    ps.expect_byte(b'\n')?;
+    if !ps.skip_eol() {
+        return error!(
+            ErrorKind::ExpectedCharRange {
+                range: "\n | \r\n".to_string()
+            },
+            ps.ptr
+        );
+    }
     ps.skip_blank();
 
     let variants = get_variants(ps)?;

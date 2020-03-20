@@ -59,7 +59,9 @@ impl<'p> ParserStream<'p> {
     pub fn skip_blank(&mut self) {
         loop {
             match self.source.get(self.ptr) {
-                Some(b) if [b' ', b'\n'].contains(b) => self.ptr += 1,
+                Some(b' ') => self.ptr += 1,
+                Some(b'\n') => self.ptr += 1,
+                Some(b'\r') if self.source.get(self.ptr + 1) == Some(&b'\n') => self.ptr += 2,
                 _ => break,
             }
         }
