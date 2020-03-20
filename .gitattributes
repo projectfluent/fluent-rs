@@ -1,1 +1,4 @@
 *.ftl eol=lf
+
+fluent-syntax/tests/fixtures/crlf.ftl eol=crlf
+fluent-syntax/tests/fixtures/cr.ftl eol=cr
