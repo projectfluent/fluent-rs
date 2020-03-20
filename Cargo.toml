@@ -8,3 +8,7 @@ members = [
     "fluent",
     "intl-memoizer"
 ]
+
+exclude = [
+    "fluent-cli",
+]
