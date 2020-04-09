@@ -20,7 +20,7 @@ fn fluent_custom_type() {
     }
 
     impl FluentType for DateTime {
-        fn duplicate(&self) -> Box<dyn FluentType> {
+        fn duplicate(&self) -> Box<dyn FluentType + Send> {
             Box::new(DateTime { epoch: self.epoch })
         }
         fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
@@ -117,7 +117,7 @@ fn fluent_date_time_builtin() {
     }
 
     impl FluentType for DateTime {
-        fn duplicate(&self) -> Box<dyn FluentType> {
+        fn duplicate(&self) -> Box<dyn FluentType + Send> {
             Box::new(DateTime::new(self.epoch, DateTimeOptions::default()))
         }
         fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {

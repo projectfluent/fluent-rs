@@ -102,7 +102,7 @@ impl DateTime {
 }
 
 impl FluentType for DateTime {
-    fn duplicate(&self) -> Box<dyn FluentType> {
+    fn duplicate(&self) -> Box<dyn FluentType + Send> {
         Box::new(DateTime::new(self.epoch, DateTimeOptions::default()))
     }
     fn as_string(&self, intls: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
