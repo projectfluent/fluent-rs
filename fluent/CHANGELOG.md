@@ -4,6 +4,10 @@
 
   - …
 
+## fluent 0.12.0 (May 6, 2020)
+  - Update `fluent-bundle` to 0.12.0.
+  - Update `unic-langid` to 0.9.0.
+
 ## fluent 0.11.0 (March 10, 2020)
   - Update `fluent-bundle` to 0.11.0.
 

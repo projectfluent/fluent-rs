@@ -4,6 +4,11 @@
 
   - …
 
+## fluent-resmgr 0.0.4 (May 6, 2020)
+  - Update `fluent-bundle` to 0.12.
+  - Update `unic-langid` to 0.9.
+  - Update `fluent-fallback` to 0.0.4.
+
 ## fluent-resmgr 0.0.3 (February 13, 2020)
   - Update `fluent-bundle` to 0.10.
   - Update `unic-langid` to 0.8.

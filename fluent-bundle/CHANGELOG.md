@@ -4,6 +4,13 @@
 
   - …
 
+## fluent-bundle 0.12.0 (May 6, 2020)
+  - Add `Send` to `FluentType::Custom` (#173)
+  - Update `intl-pluralrules` to 7.0.
+  - Update `unic-langid` to 0.9.
+  - Update `fluent-langneg` to 0.13.
+  - Fix handling of 64bit numbers on 32bit systems.
+
 ## fluent-bundle 0.11.0 (March 10, 2020)
   - Separate out `concurrent` version of `FluentBundle`.
   - Switch FluentBundle functions to use function pointers.

@@ -4,6 +4,10 @@
 
   - …
 
+## intl-memoizer 0.5.0 (May 6, 2020)
+  - Update `unic-langid` to 0.9.
+  - Update `fluent-langneg` to 0.13.
+
 ## intl-memoizer 0.4.0 (March 10, 2020)
   - Separate out `concurrent` version of `IntlLangMemoizer`.
 

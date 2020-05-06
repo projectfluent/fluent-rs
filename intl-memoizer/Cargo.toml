@@ -4,7 +4,7 @@ description = """
 A memoizer specifically tailored for storing lazy-initialized
 intl formatters.
 """
-version = "0.4.0"
+version = "0.5.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -25,8 +25,8 @@ include = [
 
 [dependencies]
 type-map = "0.3"
-unic-langid = "0.8"
+unic-langid = "0.9"
 
 [dev-dependencies]
-intl_pluralrules = "6.0"
-fluent-langneg = "0.12"
+intl_pluralrules = "7.0"
+fluent-langneg = "0.13"
