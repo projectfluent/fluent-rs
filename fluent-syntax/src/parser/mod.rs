@@ -5,6 +5,7 @@ mod ftlstream;
 use std::cmp;
 use std::result;
 use std::str;
+use std::borrow::Cow;
 
 use self::errors::ErrorKind;
 pub use self::errors::ParserError;
@@ -54,7 +55,7 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
                 err.slice = Some((entry_start, ps.ptr));
                 errors.push(err);
                 let slice = ps.get_slice(entry_start, ps.ptr);
-                body.push(ast::ResourceEntry::Junk(slice));
+                body.push(ast::ResourceEntry::Junk(slice.into()));
             }
         }
         last_blank_count = ps.skip_blank_block();
@@ -197,7 +198,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
         }
     }
 
-    let name = ps.get_slice(ps.ptr, ptr);
+    let name = ps.get_slice(ps.ptr, ptr).into();
     ps.ptr = ptr;
 
     Ok(ast::Identifier { name })
@@ -220,7 +221,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
 
     let key = if ps.is_number_start() {
         ast::VariantKey::NumberLiteral {
-            value: get_number_literal(ps)?,
+            value: get_number_literal(ps)?.into(),
         }
     } else {
         ast::VariantKey::Identifier {
@@ -413,9 +414,9 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     };
                     let slice = ps.get_slice(start, end);
                     if last_non_blank == i {
-                        ast::PatternElement::TextElement(slice.trim_end())
+                        ast::PatternElement::TextElement(slice.trim_end().into())
                     } else {
-                        ast::PatternElement::TextElement(slice)
+                        ast::PatternElement::TextElement(slice.into())
                     }
                 }
             })
@@ -498,7 +499,7 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
         if ps.ptr == ps.length {
             break;
         } else if ps.is_current_byte(b'\n') {
-            content.push(get_comment_line(ps)?);
+            content.push(Cow::from(get_comment_line(ps)?));
         } else {
             if let Err(e) = ps.expect_byte(b' ') {
                 if content.is_empty() {
@@ -508,10 +509,11 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
                     break;
                 }
             }
-            content.push(get_comment_line(ps)?);
+            content.push(Cow::from(get_comment_line(ps)?));
         }
         ps.skip_eol();
     }
+
 
     let comment = match level {
         Some(3) => ast::Comment::ResourceComment { content },
@@ -651,11 +653,11 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
             }
 
             ps.expect_byte(b'"')?;
-            let slice = ps.get_slice(start, ps.ptr - 1);
+            let slice = ps.get_slice(start, ps.ptr - 1).into();
             Ok(ast::InlineExpression::StringLiteral { value: slice })
         }
         Some(b) if b.is_ascii_digit() => {
-            let num = get_number_literal(ps)?;
+            let num = get_number_literal(ps)?.into();
             Ok(ast::InlineExpression::NumberLiteral { value: num })
         }
         Some(b'-') => {
@@ -671,7 +673,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
                 })
             } else {
                 ps.ptr -= 1;
-                let num = get_number_literal(ps)?;
+                let num = get_number_literal(ps)?.into();
                 Ok(ast::InlineExpression::NumberLiteral { value: num })
             }
         }
@@ -734,9 +736,9 @@ fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallA
             } => {
                 ps.skip_blank();
                 if ps.is_current_byte(b':') {
-                    if argument_names.contains(&id.name.to_owned()) {
+                    if argument_names.contains(&id.name) {
                         return error!(
-                            ErrorKind::DuplicatedNamedArgument(id.name.to_owned()),
+                            ErrorKind::DuplicatedNamedArgument(id.name.to_string()),
                             ps.ptr
                         );
                     }
@@ -745,7 +747,7 @@ fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallA
                     let val = get_inline_expression(ps)?;
                     argument_names.push(id.name.to_owned());
                     named.push(ast::NamedArgument {
-                        name: ast::Identifier { name: id.name },
+                        name: ast::Identifier { name: id.name.clone() },
                         value: val,
                     });
                 } else {
