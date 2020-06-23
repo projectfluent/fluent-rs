@@ -227,7 +227,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         for (entry_pos, entry) in res.ast().body.iter().enumerate() {
             let id = match entry {
                 ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => &*id.name,
+                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
                 _ => continue,
             };
 
@@ -331,7 +331,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         for (entry_pos, entry) in res.ast().body.iter().enumerate() {
             let id = match entry {
                 ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => &*id.name,
+                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
                 _ => continue,
             };
 
@@ -432,7 +432,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         };
 
         for attr in message.attributes.iter() {
-            attributes.insert(&*attr.id.name, &attr.value);
+            attributes.insert(attr.id.name, &attr.value);
         }
         Some(FluentMessage { value, attributes })
     }

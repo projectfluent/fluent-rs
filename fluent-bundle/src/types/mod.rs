@@ -73,8 +73,8 @@ impl<'source> fmt::Display for DisplayableNode<'source> {
     }
 }
 
-impl<'source> From<&'source ast::Expression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &'source ast::Expression<'source>) -> Self {
+impl<'source> From<&ast::Expression<'source>> for DisplayableNode<'source> {
+    fn from(expr: &ast::Expression<'source>) -> Self {
         match expr {
             ast::Expression::InlineExpression(e) => e.into(),
             ast::Expression::SelectExpression { .. } => DisplayableNode::default(),
@@ -82,23 +82,23 @@ impl<'source> From<&'source ast::Expression<'source>> for DisplayableNode<'sourc
     }
 }
 
-impl<'source> From<&'source ast::InlineExpression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &'source ast::InlineExpression<'source>) -> Self {
+impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
+    fn from(expr: &ast::InlineExpression<'source>) -> Self {
         match expr {
             ast::InlineExpression::MessageReference { id, attribute } => DisplayableNode {
-                node_type: DisplayableNodeType::Message(&id.name),
-                attribute: attribute.as_ref().map(|attr| &*attr.name),
+                node_type: DisplayableNodeType::Message(id.name),
+                attribute: attribute.as_ref().map(|attr| attr.name),
             },
             ast::InlineExpression::TermReference { id, attribute, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Term(&id.name),
-                attribute: attribute.as_ref().map(|attr| &*attr.name),
+                node_type: DisplayableNodeType::Term(id.name),
+                attribute: attribute.as_ref().map(|attr| attr.name),
             },
             ast::InlineExpression::VariableReference { id } => DisplayableNode {
-                node_type: DisplayableNodeType::Variable(&id.name),
+                node_type: DisplayableNodeType::Variable(id.name),
                 attribute: None,
             },
             ast::InlineExpression::FunctionReference { id, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Function(&id.name),
+                node_type: DisplayableNodeType::Function(id.name),
                 attribute: None,
             },
             _ => DisplayableNode::default(),

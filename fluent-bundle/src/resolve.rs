@@ -136,11 +136,11 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 
         if self.elements.len() == 1 {
             return match self.elements[0] {
-                ast::PatternElement::TextElement(ref s) => {
+                ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        transform(&s).into()
+                        transform(s).into()
                     } else {
-                        s.as_ref().into()
+                        s.into()
                     }
                 }
                 ast::PatternElement::Placeable(ref p) => scope.maybe_track(self, p),
@@ -156,7 +156,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
             match elem {
                 ast::PatternElement::TextElement(s) => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        string.push_str(&transform(&s))
+                        string.push_str(&transform(s))
                     } else {
                         string.push_str(&s)
                     }
@@ -215,9 +215,9 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
                     FluentValue::String(_) | FluentValue::Number(_) => {
                         for variant in variants {
                             let key = match variant.key {
-                                ast::VariantKey::Identifier { ref name } => name.as_ref().into(),
-                                ast::VariantKey::NumberLiteral { ref value } => {
-                                    FluentValue::try_number(&*value)
+                                ast::VariantKey::Identifier { name } => name.into(),
+                                ast::VariantKey::NumberLiteral { value } => {
+                                    FluentValue::try_number(value)
                                 }
                             };
                             if key.matches(&selector, &scope) {
@@ -266,7 +266,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                     }
                 })
                 .unwrap_or_else(|| generate_ref_error(scope, self.into())),
-            ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(&*value),
+            ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(*value),
             ast::InlineExpression::TermReference {
                 id,
                 attribute,
@@ -298,7 +298,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
                 let (resolved_positional_args, resolved_named_args) =
                     get_arguments(scope, arguments);
 
-                let func = scope.bundle.get_entry_function(&*id.name);
+                let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
                     func(resolved_positional_args.as_slice(), &resolved_named_args)
@@ -309,7 +309,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
             ast::InlineExpression::VariableReference { id } => {
                 let args = scope.local_args.as_ref().or(scope.args);
 
-                if let Some(arg) = args.and_then(|args| args.get(&*id.name)) {
+                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
                     arg.clone()
                 } else {
                     let entry: DisplayableNode = self.into();
@@ -342,7 +342,7 @@ where
         }
 
         for arg in named {
-            resolved_named_args.insert(&arg.name.name, arg.value.resolve(scope));
+            resolved_named_args.insert(arg.name.name, arg.value.resolve(scope));
         }
     }
 
