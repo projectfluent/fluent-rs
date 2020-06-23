@@ -1,5 +1,5 @@
 use crate::ast::*;
-use std::fmt::{self, Display, Error, Write};
+use std::fmt::{self, Error, Write};
 
 pub fn serialize(resource: &Resource<'_>) -> String {
     let options = Options::default();
@@ -178,7 +178,15 @@ impl Serializer {
             PatternElement::Placeable(expr) => {
                 self.writer.write_literal("{ ")?;
                 self.serialize_expression(expr)?;
-                self.writer.write_literal(" }")?;
+
+                if matches!(expr, Expression::SelectExpression { .. }) {
+                    // select adds its own newline and indent, emit the brace
+                    // *without* a space so we don't get 5 spaces instead of 4
+                    self.writer.write_literal("}")?;
+                } else {
+                    self.writer.write_literal(" }")?;
+                }
+
                 Ok(())
             }
         }
@@ -251,10 +259,43 @@ impl Serializer {
 
     fn serialize_select_expression(
         &mut self,
-        _selector: &InlineExpression<'_>,
-        _variants: &[Variant<'_>],
+        selector: &InlineExpression<'_>,
+        variants: &[Variant<'_>],
     ) -> Result<(), Error> {
-        unimplemented!()
+        self.serialize_inline_expression(selector)?;
+        self.writer.write_literal(" ->")?;
+
+        self.writer.newline();
+        self.writer.indent();
+
+        for variant in variants {
+            self.serialize_variant(variant)?;
+            self.writer.newline();
+        }
+
+        self.writer.dedent();
+        Ok(())
+    }
+
+    fn serialize_variant(&mut self, variant: &Variant<'_>) -> Result<(), Error> {
+        if variant.default {
+            self.writer.write_literal("*")?;
+        }
+
+        self.writer.write_literal("[")?;
+        self.serialize_variant_key(&variant.key)?;
+        self.writer.write_literal("]")?;
+        self.serialize_pattern(&variant.value)?;
+
+        Ok(())
+    }
+
+    fn serialize_variant_key(&mut self, key: &VariantKey<'_>) -> Result<(), Error> {
+        match key {
+            VariantKey::NumberLiteral { value } | VariantKey::Identifier { name: value } => {
+                self.writer.write_literal(value)
+            }
+        }
     }
 
     fn serialize_call_arguments(&mut self, args: &CallArguments<'_>) -> Result<(), Error> {
@@ -335,10 +376,14 @@ impl TextWriter {
         self.buffer.push_str("\n");
     }
 
-    fn write_literal<D: Display>(&mut self, item: D) -> fmt::Result {
+    fn write_literal(&mut self, mut item: &str) -> fmt::Result {
         if self.buffer.ends_with("\n") {
             // we've just added a newline, make sure it's properly indented
             self.write_indent();
+
+            // we've just added indentation, so we don't care about leading
+            // spaces
+            item = item.trim_start();
         }
 
         write!(self.buffer, "{}", item)
@@ -446,7 +491,7 @@ mod tests {
     );
     round_trip_test!(
         multiline_variant,
-        "foo =\n    { $sel ->\n        *[a]\n            AAA\n           BBBB\n    }\n",
+        "foo =\n    { $sel ->\n        *[a]\n            AAA\n            BBBB\n    }\n",
     );
     round_trip_test!(
         multiline_variant_with_first_line_inline,
@@ -456,5 +501,18 @@ mod tests {
     round_trip_test!(
         variant_key_number,
         "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+    );
+    round_trip_test!(
+        select_expression_in_block_value,
+        "foo =\n    Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+    );
+    round_trip_test!(
+        select_expression_in_inline_value,
+        "foo = Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo =\n    Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+    );
+    round_trip_test!(
+        select_expression_in_multiline_value,
+        "foo =\n    Foo\n    Bar { $sel ->\n        *[a] A\n        [b] B\n    }\n",
     );
 }
