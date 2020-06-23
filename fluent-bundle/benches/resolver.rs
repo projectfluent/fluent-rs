@@ -32,7 +32,7 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .iter()
         .filter_map(|entry| match entry {
             ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { id, .. })) => {
-                Some(id.name.to_owned())
+                Some(id.name.to_string())
             }
             _ => None,
         })
