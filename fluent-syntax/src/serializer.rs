@@ -1,28 +1,27 @@
 use crate::ast::*;
-use std::io::{Error, Write};
+use std::fmt::{self, Display, Error, Write};
 
 pub fn serialize(resource: &Resource<'_>) -> String {
-    let mut buffer = Vec::new();
     let options = Options::default();
+    let mut ser = Serializer::new(options);
 
-    Serializer::new(&mut buffer, options)
-        .serialize_resource(resource)
+    ser.serialize_resource(resource)
         .expect("Writing to an in-memory buffer never fails");
 
-    String::from_utf8(buffer).expect("The serializer only ever emits valid UTF-8")
+    ser.into_serialized_text()
 }
 
 #[derive(Debug)]
-pub struct Serializer<W> {
-    writer: W,
+pub struct Serializer {
+    writer: TextWriter,
     options: Options,
     state: State,
 }
 
-impl<W: Write> Serializer<W> {
-    pub fn new(writer: W, options: Options) -> Self {
+impl Serializer {
+    pub fn new(options: Options) -> Self {
         Serializer {
-            writer,
+            writer: TextWriter::default(),
             options,
             state: State::default(),
         }
@@ -42,16 +41,24 @@ impl<W: Write> Serializer<W> {
         Ok(())
     }
 
+    pub fn into_serialized_text(self) -> String {
+        self.writer.buffer
+    }
+
     fn serialize_entry(&mut self, entry: &Entry<'_>) -> Result<(), Error> {
         match entry {
             Entry::Message(msg) => self.serialize_message(msg),
-            Entry::Comment(comment) => self.serialize_comment(comment),
+            Entry::Comment(comment) => {
+                self.serialize_comment(comment)?;
+                self.writer.newline();
+                Ok(())
+            }
             Entry::Term(term) => self.serialize_term(term),
         }
     }
 
     fn serialize_junk(&mut self, junk: &str) -> Result<(), Error> {
-        write!(self.writer, "{}", junk)
+        self.writer.write_literal(junk)
     }
 
     fn serialize_comment(&mut self, comment: &Comment<'_>) -> Result<(), Error> {
@@ -62,11 +69,18 @@ impl<W: Write> Serializer<W> {
         };
 
         if self.state.has_entries {
-            writeln!(self.writer)?;
+            self.writer.newline();
         }
 
         for line in lines {
-            writeln!(self.writer, "{} {}", prefix, line)?;
+            self.writer.write_literal(prefix)?;
+
+            if !line.trim().is_empty() {
+                self.writer.write_literal(" ")?;
+                self.writer.write_literal(line)?;
+            }
+
+            self.writer.newline();
         }
 
         Ok(())
@@ -77,17 +91,16 @@ impl<W: Write> Serializer<W> {
             self.serialize_comment(comment)?;
         }
 
-        write!(self.writer, "{} =", msg.id.name)?;
+        self.writer.write_literal(&msg.id.name)?;
+        self.writer.write_literal(" =")?;
 
         if let Some(value) = msg.value.as_ref() {
             self.serialize_pattern(value)?;
         }
 
-        for attr in &msg.attributes {
-            self.serialize_attribute(attr)?;
-        }
+        self.serialize_attributes(&msg.attributes)?;
 
-        writeln!(self.writer)?;
+        self.writer.newline();
         Ok(())
     }
 
@@ -96,14 +109,14 @@ impl<W: Write> Serializer<W> {
             self.serialize_comment(comment)?;
         }
 
-        write!(self.writer, "{} =", term.id.name)?;
+        self.writer.write_literal("-")?;
+        self.writer.write_literal(&term.id.name)?;
+        self.writer.write_literal(" =")?;
         self.serialize_pattern(&term.value)?;
 
-        for attr in &term.attributes {
-            self.serialize_attribute(attr)?;
-        }
+        self.serialize_attributes(&term.attributes)?;
 
-        writeln!(self.writer)?;
+        self.writer.newline();
 
         Ok(())
     }
@@ -115,21 +128,45 @@ impl<W: Write> Serializer<W> {
         });
 
         if start_on_newline {
-            unimplemented!("Write a new line then indent everything afterwards");
+            self.writer.newline();
+            self.writer.indent();
+        } else {
+            self.writer.write_literal(" ")?;
         }
-
-        write!(self.writer, " ")?;
 
         for element in &pattern.elements {
             self.serialize_element(element)?;
         }
 
+        if start_on_newline {
+            self.writer.dedent();
+        }
+
+        Ok(())
+    }
+
+    fn serialize_attributes(&mut self, attrs: &[Attribute<'_>]) -> Result<(), Error> {
+        if attrs.is_empty() {
+            return Ok(());
+        }
+
+        self.writer.indent();
+
+        for attr in attrs {
+            self.writer.newline();
+            self.serialize_attribute(attr)?;
+        }
+
+        self.writer.dedent();
+
         Ok(())
     }
 
     fn serialize_attribute(&mut self, attr: &Attribute<'_>) -> Result<(), Error> {
-        writeln!(self.writer)?;
-        write!(self.writer, "    .{} =", attr.id.name)?;
+        self.writer.write_literal(".")?;
+        self.writer.write_literal(&attr.id.name)?;
+        self.writer.write_literal(" =")?;
+
         self.serialize_pattern(&attr.value)?;
 
         Ok(())
@@ -137,11 +174,11 @@ impl<W: Write> Serializer<W> {
 
     fn serialize_element(&mut self, elem: &PatternElement<'_>) -> Result<(), Error> {
         match elem {
-            PatternElement::TextElement(text) => write!(self.writer, "{}", text),
+            PatternElement::TextElement(text) => self.writer.write_literal(text),
             PatternElement::Placeable(expr) => {
-                write!(self.writer, "{{ ")?;
+                self.writer.write_literal("{ ")?;
                 self.serialize_expression(expr)?;
-                write!(self.writer, " }}")?;
+                self.writer.write_literal(" }")?;
                 Ok(())
             }
         }
@@ -158,23 +195,34 @@ impl<W: Write> Serializer<W> {
 
     fn serialize_inline_expression(&mut self, expr: &InlineExpression<'_>) -> Result<(), Error> {
         match expr {
-            InlineExpression::StringLiteral { value } => write!(self.writer, "\"{}\"", value),
-            InlineExpression::NumberLiteral { value } => write!(self.writer, "{}", value),
+            InlineExpression::StringLiteral { value } => {
+                self.writer.write_literal("\"")?;
+                self.writer.write_literal(value)?;
+                self.writer.write_literal("\"")?;
+                Ok(())
+            }
+            InlineExpression::NumberLiteral { value } => self.writer.write_literal(value),
             InlineExpression::VariableReference {
                 id: Identifier { name: value },
-            } => write!(self.writer, "${}", value),
+            } => {
+                self.writer.write_literal("$")?;
+                self.writer.write_literal(value)?;
+                Ok(())
+            }
             InlineExpression::FunctionReference { id, arguments } => {
-                write!(self.writer, "{}", id.name)?;
+                self.writer.write_literal(&id.name)?;
+
                 if let Some(args) = arguments.as_ref() {
                     self.serialize_call_arguments(args)?;
                 }
                 Ok(())
             }
             InlineExpression::MessageReference { id, attribute } => {
-                write!(self.writer, "{}", id.name)?;
+                self.writer.write_literal(&id.name)?;
 
                 if let Some(attr) = attribute.as_ref() {
-                    write!(self.writer, ".{}", attr.name)?;
+                    self.writer.write_literal(".")?;
+                    self.writer.write_literal(&attr.name)?;
                 }
 
                 Ok(())
@@ -184,10 +232,12 @@ impl<W: Write> Serializer<W> {
                 attribute,
                 arguments,
             } => {
-                write!(self.writer, "-{}", id.name)?;
+                self.writer.write_literal("-")?;
+                self.writer.write_literal(&id.name)?;
 
                 if let Some(attr) = attribute.as_ref() {
-                    write!(self.writer, ".{}", attr.name)?;
+                    self.writer.write_literal(".")?;
+                    self.writer.write_literal(&attr.name)?;
                 }
                 if let Some(args) = arguments.as_ref() {
                     self.serialize_call_arguments(args)?;
@@ -210,11 +260,11 @@ impl<W: Write> Serializer<W> {
     fn serialize_call_arguments(&mut self, args: &CallArguments<'_>) -> Result<(), Error> {
         let mut argument_written = false;
 
-        write!(self.writer, "(")?;
+        self.writer.write_literal("(")?;
 
         for positional in &args.positional {
             if !argument_written {
-                write!(self.writer, ", ")?;
+                self.writer.write_literal(", ")?;
                 argument_written = true;
             }
 
@@ -223,15 +273,16 @@ impl<W: Write> Serializer<W> {
 
         for named in &args.named {
             if !argument_written {
-                write!(self.writer, ", ")?;
+                self.writer.write_literal(", ")?;
                 argument_written = true;
             }
 
-            write!(self.writer, "{}: ", named.name.name)?;
+            self.writer.write_literal(&named.name.name)?;
+            self.writer.write_literal(": ")?;
             self.serialize_inline_expression(&named.value)?;
         }
 
-        write!(self.writer, ")")?;
+        self.writer.write_literal(")")?;
         Ok(())
     }
 }
@@ -256,15 +307,77 @@ struct State {
     has_entries: bool,
 }
 
+#[derive(Debug, Clone, Default)]
+struct TextWriter {
+    buffer: String,
+    indent_level: usize,
+}
+
+impl TextWriter {
+    fn indent(&mut self) {
+        self.indent_level += 1;
+    }
+
+    fn dedent(&mut self) {
+        self.indent_level = self
+            .indent_level
+            .checked_sub(1)
+            .expect("Dedenting without a corresponding indent");
+    }
+
+    fn write_indent(&mut self) {
+        for _ in 0..self.indent_level {
+            self.buffer.push_str("    ");
+        }
+    }
+
+    fn newline(&mut self) {
+        self.buffer.push_str("\n");
+    }
+
+    fn write_literal<D: Display>(&mut self, item: D) -> fmt::Result {
+        if self.buffer.ends_with("\n") {
+            // we've just added a newline, make sure it's properly indented
+            self.write_indent();
+        }
+
+        write!(self.buffer, "{}", item)
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
 
+    #[test]
+    fn write_something_then_indent() -> fmt::Result {
+        let mut writer = TextWriter::default();
+
+        writer.write_literal("foo =")?;
+        writer.newline();
+        writer.indent();
+        writer.write_literal("first line")?;
+        writer.newline();
+        writer.write_literal("second line")?;
+        writer.newline();
+        writer.dedent();
+        writer.write_literal("not indented")?;
+        writer.newline();
+
+        let got = &writer.buffer;
+        assert_eq!(
+            got,
+            "foo =\n    first line\n    second line\nnot indented\n"
+        );
+
+        Ok(())
+    }
+
     macro_rules! round_trip_test {
-        ($name:ident, $text:expr) => {
+        ($name:ident, $text:expr $(,)?) => {
             round_trip_test!($name, $text, $text);
         };
-        ($name:ident, $text:expr, $should_be:expr) => {
+        ($name:ident, $text:expr, $should_be:expr $(,)?) => {
             #[test]
             fn $name() {
                 let resource = crate::parser::parse($text).unwrap();
@@ -282,7 +395,7 @@ mod tests {
     round_trip_test!(
         inline_multiline_message,
         "foo = Foo\n    Bar\n",
-        "foo =\n    Foo\n    Bar\n"
+        "foo =\n    Foo\n    Bar\n",
     );
     round_trip_test!(message_reference, "foo = Foo { bar }\n");
     round_trip_test!(term_reference, "foo = Foo { -bar }\n");
@@ -292,52 +405,56 @@ mod tests {
     round_trip_test!(attribute_expression, "foo = Foo { bar.baz }\n");
     round_trip_test!(
         resource_comment,
-        "### A multiline\n### resource comment.\n\nfoo = Foo\n"
+        "### A multiline\n### resource comment.\n\nfoo = Foo\n",
     );
     round_trip_test!(
         message_comment,
-        "# A multiline\n# message comment.\nfoo = Foo\n"
+        "# A multiline\n# message comment.\nfoo = Foo\n",
     );
     round_trip_test!(
         group_comment,
-        "## Comment Header\n##\n## A multiline\n# group comment.\n\nfoo = Foo\n"
+        "## Comment Header\n##\n## A multiline\n## group comment.\n\nfoo = Foo\n",
     );
     round_trip_test!(
         standalone_comment,
-        "foo = Foo\n\n# A Standalone Comment\n\nbar = Bar\n"
+        "foo = Foo\n\n# A Standalone Comment\n\nbar = Bar\n",
     );
     round_trip_test!(
         multiline_with_placeable,
-        "foo =\n    Foo { bar }\n    Baz\n"
+        "foo =\n    Foo { bar }\n    Baz\n",
     );
     round_trip_test!(attribute, "foo =\n    .attr = Foo Attr\n");
     round_trip_test!(
         multiline_attribute,
-        "foo =\n    .attr =\n        Foo Attr\n        Continued\n"
+        "foo =\n    .attr =\n        Foo Attr\n        Continued\n",
     );
     round_trip_test!(
         two_attributes,
-        "foo =\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n"
+        "foo =\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         value_and_attributes,
-        "foo = Foo Value\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n"
+        "foo = Foo Value\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         multiline_value_and_attributes,
-        "foo = Foo Value\n    Continued\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n"
+        "foo =\n    Foo Value\n    Continued\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         select_expression,
-        "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n"
+        "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n",
     );
     round_trip_test!(
         multiline_variant,
-        "foo =\n    { $sel ->\n        *[a]\n            AAA\n           BBBB\n    }\n"
+        "foo =\n    { $sel ->\n        *[a]\n            AAA\n           BBBB\n    }\n",
     );
     round_trip_test!(
         multiline_variant_with_first_line_inline,
         "foo =\n    { $sel ->\n        *[a] AAA\n        BBB\n    }\n",
-        "foo =\n    { $sel ->\n        *[a]\n            AAA\n            BBB\n    }\n"
+        "foo =\n    { $sel ->\n        *[a]\n            AAA\n            BBB\n    }\n",
+    );
+    round_trip_test!(
+        variant_key_number,
+        "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n",
     );
 }
