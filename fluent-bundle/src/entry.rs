@@ -18,13 +18,13 @@ pub enum Entry {
 }
 
 pub trait GetEntry {
-    fn get_entry_message(&self, id: &str) -> Option<&ast::Message>;
-    fn get_entry_term(&self, id: &str) -> Option<&ast::Term>;
+    fn get_entry_message(&self, id: &str) -> Option<&ast::Message<&str>>;
+    fn get_entry_term(&self, id: &str) -> Option<&ast::Term<&str>>;
     fn get_entry_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
 impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundleBase<R, M> {
-    fn get_entry_message(&self, id: &str) -> Option<&ast::Message> {
+    fn get_entry_message(&self, id: &str) -> Option<&ast::Message<&str>> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Message(pos) => {
                 let res = self.resources.get(pos[0])?.borrow();
@@ -40,7 +40,7 @@ impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundleBase<R, M> 
         })
     }
 
-    fn get_entry_term(&self, id: &str) -> Option<&ast::Term> {
+    fn get_entry_term(&self, id: &str) -> Option<&ast::Term<&str>> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Term(pos) => {
                 let res = self.resources.get(pos[0])?.borrow();

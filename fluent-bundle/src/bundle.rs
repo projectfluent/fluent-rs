@@ -24,8 +24,8 @@ use crate::types::FluentValue;
 /// value, and attributes.
 #[derive(Debug, PartialEq)]
 pub struct FluentMessage<'m> {
-    pub value: Option<&'m ast::Pattern<'m>>,
-    pub attributes: HashMap<&'m str, &'m ast::Pattern<'m>>,
+    pub value: Option<&'m ast::Pattern<&'m str>>,
+    pub attributes: HashMap<&'m str, &'m ast::Pattern<&'m str>>,
 }
 
 /// A map of arguments passed from the code to
@@ -439,7 +439,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 
     pub fn format_pattern<'bundle>(
         &'bundle self,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
         args: Option<&'bundle FluentArgs>,
         errors: &mut Vec<FluentError>,
     ) -> Cow<'bundle, str>

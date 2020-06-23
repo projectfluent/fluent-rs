@@ -41,7 +41,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>, M> {
     /// Laughs and Quadratic Blowup attacks.
     placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
+    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<&'bundle str>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
     /// Makes the resolver bail.
@@ -69,8 +69,8 @@ impl<'bundle, R: Borrow<FluentResource>, M: MemoizerKind> Scope<'bundle, R, M> {
     // for placeables.
     pub fn maybe_track(
         &mut self,
-        pattern: &'bundle ast::Pattern,
-        placeable: &'bundle ast::Expression,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        placeable: &'bundle ast::Expression<&'bundle str>,
     ) -> FluentValue<'bundle> {
         if self.travelled.is_empty() {
             self.travelled.push(pattern);
@@ -84,7 +84,7 @@ impl<'bundle, R: Borrow<FluentResource>, M: MemoizerKind> Scope<'bundle, R, M> {
 
     pub fn track(
         &mut self,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
         entry: DisplayableNode<'bundle>,
     ) -> FluentValue<'bundle> {
         if self.travelled.contains(&pattern) {
@@ -122,7 +122,7 @@ pub(crate) trait ResolveValue<'source> {
         R: Borrow<FluentResource>;
 }
 
-impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
+impl<'source> ResolveValue<'source> for ast::Pattern<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
@@ -199,7 +199,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
     }
 }
 
-impl<'source> ResolveValue<'source> for ast::Expression<'source> {
+impl<'source> ResolveValue<'source> for ast::Expression<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
@@ -240,7 +240,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
     }
 }
 
-impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
+impl<'source> ResolveValue<'source> for ast::InlineExpression<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         mut scope: &mut Scope<'source, R, M>,
@@ -328,7 +328,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
 fn get_arguments<'bundle, R, M: MemoizerKind>(
     scope: &mut Scope<'bundle, R, M>,
-    arguments: &'bundle Option<ast::CallArguments<'bundle>>,
+    arguments: &'bundle Option<ast::CallArguments<&'bundle str>>,
 ) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
 where
     R: Borrow<FluentResource>,

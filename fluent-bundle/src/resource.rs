@@ -8,7 +8,7 @@ rental! {
         #[rental(covariant, debug)]
         pub struct FluentResource {
             string: String,
-            ast: ast::Resource<'string>,
+            ast: ast::Resource<&'string str>,
         }
     }
 }
@@ -35,7 +35,7 @@ impl FluentResource {
         }
     }
 
-    pub fn ast(&self) -> &ast::Resource {
+    pub fn ast(&self) -> &ast::Resource<&str> {
         self.0.all().ast
     }
 }
