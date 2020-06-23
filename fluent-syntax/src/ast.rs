@@ -1,5 +1,3 @@
-use std::borrow::Cow;
-
 #[derive(Debug, PartialEq)]
 pub struct Resource<'ast> {
     pub body: Vec<ResourceEntry<'ast>>,
@@ -8,7 +6,7 @@ pub struct Resource<'ast> {
 #[derive(Debug, PartialEq)]
 pub enum ResourceEntry<'ast> {
     Entry(Entry<'ast>),
-    Junk(Cow<'ast, str>),
+    Junk(&'ast str),
 }
 
 #[derive(Debug, PartialEq)]
@@ -41,7 +39,7 @@ pub struct Pattern<'ast> {
 
 #[derive(Debug, PartialEq)]
 pub enum PatternElement<'ast> {
-    TextElement(Cow<'ast, str>),
+    TextElement(&'ast str),
     Placeable(Expression<'ast>),
 }
 
@@ -53,7 +51,7 @@ pub struct Attribute<'ast> {
 
 #[derive(Debug, PartialEq)]
 pub struct Identifier<'ast> {
-    pub name: Cow<'ast, str>,
+    pub name: &'ast str,
 }
 
 #[derive(Debug, PartialEq)]
@@ -65,24 +63,24 @@ pub struct Variant<'ast> {
 
 #[derive(Debug, PartialEq)]
 pub enum VariantKey<'ast> {
-    Identifier { name: Cow<'ast, str> },
-    NumberLiteral { value: Cow<'ast, str> },
+    Identifier { name: &'ast str },
+    NumberLiteral { value: &'ast str },
 }
 
 #[derive(Debug, PartialEq)]
 pub enum Comment<'ast> {
-    Comment { content: Vec<Cow<'ast, str>> },
-    GroupComment { content: Vec<Cow<'ast, str>> },
-    ResourceComment { content: Vec<Cow<'ast, str>> },
+    Comment { content: Vec<&'ast str> },
+    GroupComment { content: Vec<&'ast str> },
+    ResourceComment { content: Vec<&'ast str> },
 }
 
 #[derive(Debug, PartialEq)]
 pub enum InlineExpression<'ast> {
     StringLiteral {
-        value: Cow<'ast, str>,
+        value: &'ast str,
     },
     NumberLiteral {
-        value: Cow<'ast, str>,
+        value: &'ast str,
     },
     FunctionReference {
         id: Identifier<'ast>,
