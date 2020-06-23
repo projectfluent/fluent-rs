@@ -13,7 +13,9 @@ use super::ast;
 
 pub type Result<T> = result::Result<T, ParserError>;
 
-pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
+pub fn parse(
+    source: &str,
+) -> result::Result<ast::Resource<&str>, (ast::Resource<&str>, Vec<ParserError>)> {
     let mut errors = vec![];
 
     let mut ps = ParserStream::new(source);
@@ -70,7 +72,7 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     }
 }
 
-fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Entry<'p>> {
+fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Entry<&'p str>> {
     let entry = match ps.source[ps.ptr] {
         b'#' => ast::Entry::Comment(get_comment(ps)?),
         b'-' => ast::Entry::Term(get_term(ps, entry_start)?),
@@ -79,7 +81,7 @@ fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::E
     Ok(entry)
 }
 
-fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Message<'p>> {
+fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Message<&'p str>> {
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
     ps.expect_byte(b'=')?;
@@ -107,7 +109,7 @@ fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast:
     })
 }
 
-fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Term<'p>> {
+fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Term<&'p str>> {
     ps.expect_byte(b'-')?;
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
@@ -137,7 +139,7 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
     }
 }
 
-fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
+fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<&'p str>> {
     let mut attributes = vec![];
 
     loop {
@@ -159,7 +161,7 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
     attributes
 }
 
-fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
+fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<&'p str>> {
     ps.expect_byte(b'.')?;
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
@@ -172,7 +174,7 @@ fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
     }
 }
 
-fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
+fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<&'p str>> {
     let mut ptr = ps.ptr;
 
     match ps.source.get(ptr) {
@@ -203,7 +205,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
     Ok(ast::Identifier { name })
 }
 
-fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Identifier<'p>>> {
+fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Identifier<&'p str>>> {
     if !ps.take_byte_if(b'.') {
         Ok(None)
     } else {
@@ -212,7 +214,7 @@ fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::I
     }
 }
 
-fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>> {
+fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<&'p str>> {
     if !ps.take_byte_if(b'[') {
         return error!(ErrorKind::ExpectedToken('['), ps.ptr);
     }
@@ -235,7 +237,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
     Ok(key)
 }
 
-fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> {
+fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<&'p str>>> {
     let mut variants = vec![];
     let mut has_default = false;
 
@@ -300,8 +302,8 @@ enum TextElementPosition {
 // but without slicing them out of the source string. This makes the indentation adjustments
 // cheaper since they'll happen on the pointers, rather than extracted slices.
 #[derive(Debug)]
-enum PatternElementPlaceholders<'a> {
-    Placeable(ast::Expression<'a>),
+enum PatternElementPlaceholders<'p> {
+    Placeable(ast::Expression<&'p str>),
     // (start, end, indent, position)
     TextElement(usize, usize, usize, TextElementPosition),
 }
@@ -315,7 +317,7 @@ enum TextElementType {
     NonBlank,
 }
 
-fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>> {
+fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<&'p str>>> {
     let mut elements = vec![];
     let mut last_non_blank = None;
     let mut common_indent = None;
@@ -478,7 +480,7 @@ fn get_text_slice<'p>(
     ))
 }
 
-fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
+fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<&'p str>> {
     let mut level = None;
     let mut content = vec![];
 
@@ -541,7 +543,7 @@ fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     Ok(ps.get_slice(start_pos, ps.ptr))
 }
 
-fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
+fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<&'p str>> {
     ps.expect_byte(b'{')?;
     ps.skip_blank();
     let exp = get_expression(ps)?;
@@ -562,7 +564,7 @@ fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
     Ok(exp)
 }
 
-fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
+fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<&'p str>> {
     let exp = get_inline_expression(ps)?;
 
     ps.skip_blank();
@@ -619,7 +621,7 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     })
 }
 
-fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
+fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<&'p str>> {
     match ps.source.get(ps.ptr) {
         Some(b'"') => {
             ps.ptr += 1; // "
@@ -708,7 +710,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
     }
 }
 
-fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallArguments<'p>>> {
+fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallArguments<&'p str>>> {
     ps.skip_blank();
     if !ps.take_byte_if(b'(') {
         return Ok(None);
