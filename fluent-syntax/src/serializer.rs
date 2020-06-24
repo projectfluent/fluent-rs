@@ -178,18 +178,28 @@ impl Serializer {
     fn serialize_element(&mut self, elem: &PatternElement<'_>) -> Result<(), Error> {
         match elem {
             PatternElement::TextElement(text) => self.writer.write_literal(text),
+            PatternElement::Placeable(Expression::InlineExpression(
+                InlineExpression::Placeable { expression },
+            )) => {
+                // A placeable inside a placeable is a special case because we
+                // don't want the braces to look silly (e.g. "{ { Foo() } }").
+                self.writer.write_literal("{{ ")?;
+                self.serialize_expression(expression)?;
+                self.writer.write_literal(" }}")?;
+                Ok(())
+            }
+            PatternElement::Placeable(expr @ Expression::SelectExpression { .. }) => {
+                // select adds its own newline and indent, emit the brace
+                // *without* a space so we don't get 5 spaces instead of 4
+                self.writer.write_literal("{ ")?;
+                self.serialize_expression(expr)?;
+                self.writer.write_literal("}")?;
+                Ok(())
+            }
             PatternElement::Placeable(expr) => {
                 self.writer.write_literal("{ ")?;
                 self.serialize_expression(expr)?;
-
-                if matches!(expr, Expression::SelectExpression { .. }) {
-                    // select adds its own newline and indent, emit the brace
-                    // *without* a space so we don't get 5 spaces instead of 4
-                    self.writer.write_literal("}")?;
-                } else {
-                    self.writer.write_literal(" }")?;
-                }
-
+                self.writer.write_literal(" }")?;
                 Ok(())
             }
         }
@@ -256,7 +266,13 @@ impl Serializer {
 
                 Ok(())
             }
-            InlineExpression::Placeable { expression } => self.serialize_expression(expression),
+            InlineExpression::Placeable { expression } => {
+                self.writer.write_literal("{")?;
+                self.serialize_expression(expression)?;
+                self.writer.write_literal("}")?;
+
+                Ok(())
+            }
         }
     }
 
@@ -307,23 +323,23 @@ impl Serializer {
         self.writer.write_literal("(")?;
 
         for positional in &args.positional {
-            if !argument_written {
+            if argument_written {
                 self.writer.write_literal(", ")?;
-                argument_written = true;
             }
 
             self.serialize_inline_expression(positional)?;
+            argument_written = true;
         }
 
         for named in &args.named {
-            if !argument_written {
+            if argument_written {
                 self.writer.write_literal(", ")?;
-                argument_written = true;
             }
 
             self.writer.write_literal(&named.name.name)?;
             self.writer.write_literal(": ")?;
             self.serialize_inline_expression(&named.value)?;
+            argument_written = true;
         }
 
         self.writer.write_literal(")")?;
@@ -520,5 +536,62 @@ mod tests {
         select_expression_in_multiline_value,
         "foo =\n\tFoo\n\tBar { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
     );
+    round_trip_test!(
+        nested_select_expression,
+        "foo =\n\t{ $a ->\n\t\t*[a]\n\t\t\t{ $b ->\n\t\t\t\t*[b] Foo\n\t\t\t}\n\t}\n",
     );
+    round_trip_test!(
+        selector_external_argument,
+        "foo =\n\t{ $bar ->\n\t\t*[a] A\n\t}\n",
+    );
+    round_trip_test!(
+        selector_number_expression,
+        "foo =\n\t{ 1 ->\n\t\t*[a] A\n\t}\n",
+    );
+    round_trip_test!(
+        selector_string_expression,
+        "foo =\n\t{ \"bar\" ->\n\t\t*[a] A\n\t}\n",
+    );
+    round_trip_test!(
+        selector_attribute_expression,
+        "foo =\n\t{ -bar.baz ->\n\t\t*[a] A\n\t}\n",
+    );
+    round_trip_test!(call_expression, "foo = { FOO() }\n",);
+    round_trip_test!(
+        call_expression_with_string_expression,
+        "foo = { FOO(\"bar\") }\n",
+    );
+    round_trip_test!(call_expression_with_number_expression, "foo = { FOO(1) }\n",);
+    round_trip_test!(
+        call_expression_with_message_reference,
+        "foo = { FOO(bar) }\n",
+    );
+    round_trip_test!(
+        call_expression_with_external_argument,
+        "foo = { FOO($bar) }\n",
+    );
+    round_trip_test!(
+        call_expression_with_number_named_argument,
+        "foo = { FOO(bar: 1) }\n",
+    );
+    round_trip_test!(
+        call_expression_with_string_named_argument,
+        "foo = { FOO(bar: \"bar\") }\n",
+    );
+    round_trip_test!(
+        call_expression_with_two_positional_arguments,
+        "foo = { FOO(bar, baz) }\n",
+    );
+    round_trip_test!(
+        call_expression_with_positional_and_named_arguments,
+        "foo = { FOO(bar, 1, baz: \"baz\") }\n",
+    );
+    round_trip_test!(macro_call, "foo = { -term() }\n",);
+    round_trip_test!(nested_placeables, "foo = {{ FOO() }}\n",);
+    round_trip_test!(backslash_in_text_element, "foo = \\{ placeable }\n",);
+    round_trip_test!(
+        excaped_special_char_in_string_literal,
+        "foo = { \"Escaped \\\" quote\" }\n",
+    );
+    round_trip_test!(unicode_escape_sequence, "foo = { \"\\u0065\" }\n",);
 }
