@@ -2,7 +2,10 @@ use crate::ast::*;
 use std::fmt::{self, Error, Write};
 
 pub fn serialize(resource: &Resource<'_>) -> String {
-    let options = Options::default();
+    serialize_with_options(resource, Options::default())
+}
+
+pub fn serialize_with_options(resource: &Resource<'_>, options: Options) -> String {
     let mut ser = Serializer::new(options);
 
     ser.serialize_resource(resource)
@@ -425,10 +428,15 @@ mod tests {
         ($name:ident, $text:expr, $should_be:expr $(,)?) => {
             #[test]
             fn $name() {
-                let resource = crate::parser::parse($text).unwrap();
+                // Note: We add tabs to the input so it's easier to recognise
+                // indentation
+                let input_without_tabs = $text.replace("\t", "    ");
+                let should_be_without_tabs = $should_be.replace("\t", "    ");
+
+                let resource = crate::parser::parse(&input_without_tabs).unwrap();
                 let got = serialize(&resource);
 
-                assert_eq!(got, $should_be);
+                assert_eq!(got, should_be_without_tabs);
             }
         };
     }
@@ -464,55 +472,53 @@ mod tests {
         standalone_comment,
         "foo = Foo\n\n# A Standalone Comment\n\nbar = Bar\n",
     );
-    round_trip_test!(
-        multiline_with_placeable,
-        "foo =\n    Foo { bar }\n    Baz\n",
-    );
-    round_trip_test!(attribute, "foo =\n    .attr = Foo Attr\n");
+    round_trip_test!(multiline_with_placeable, "foo =\n\tFoo { bar }\n\tBaz\n",);
+    round_trip_test!(attribute, "foo =\n\t.attr = Foo Attr\n");
     round_trip_test!(
         multiline_attribute,
-        "foo =\n    .attr =\n        Foo Attr\n        Continued\n",
+        "foo =\n\t.attr =\n\t\tFoo Attr\n\t\tContinued\n",
     );
     round_trip_test!(
         two_attributes,
-        "foo =\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
+        "foo =\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         value_and_attributes,
-        "foo = Foo Value\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
+        "foo = Foo Value\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         multiline_value_and_attributes,
-        "foo =\n    Foo Value\n    Continued\n    .attr-a = Foo Attr A\n    .attr-b = Foo Attr B\n",
+        "foo =\n\tFoo Value\n\tContinued\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
     );
     round_trip_test!(
         select_expression,
-        "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo =\n\t{ $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         multiline_variant,
-        "foo =\n    { $sel ->\n        *[a]\n            AAA\n            BBBB\n    }\n",
+        "foo =\n\t{ $sel ->\n\t\t*[a]\n\t\t\tAAA\n\t\t\tBBBB\n\t}\n",
     );
     round_trip_test!(
         multiline_variant_with_first_line_inline,
-        "foo =\n    { $sel ->\n        *[a] AAA\n        BBB\n    }\n",
-        "foo =\n    { $sel ->\n        *[a]\n            AAA\n            BBB\n    }\n",
+        "foo =\n\t{ $sel ->\n\t\t*[a] AAA\n\t\tBBB\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t\t*[a]\n\t\t\tAAA\n\t\t\tBBB\n\t}\n",
     );
     round_trip_test!(
         variant_key_number,
-        "foo =\n    { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo =\n\t{ $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_block_value,
-        "foo =\n    Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo =\n\tFoo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_inline_value,
-        "foo = Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
-        "foo =\n    Foo { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo = Foo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\tFoo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_multiline_value,
-        "foo =\n    Foo\n    Bar { $sel ->\n        *[a] A\n        [b] B\n    }\n",
+        "foo =\n\tFoo\n\tBar { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+    );
     );
 }
