@@ -410,7 +410,7 @@ impl TextWriter {
 }
 
 #[cfg(test)]
-mod tests {
+mod serialize_resource_tests {
     use super::*;
 
     #[test]
@@ -594,4 +594,121 @@ mod tests {
         "foo = { \"Escaped \\\" quote\" }\n",
     );
     round_trip_test!(unicode_escape_sequence, "foo = { \"\\u0065\" }\n",);
+
+    // Serialize padding around comments
+
+    round_trip_test!(
+        standalone_comment_has_not_padding_when_first,
+        "# Comment A\n\nfoo = Foo\n\n# Comment B\n\nbar = Bar\n"
+    );
+    round_trip_test!(
+        group_comment_has_not_padding_when_first,
+        "## Group A\n\nfoo = Foo\n\n## Group B\n\nbar = Bar\n"
+    );
+    round_trip_test!(
+        resource_comment_has_not_padding_when_first,
+        "### Resource Comment A\n\nfoo = Foo\n\n### Resource Comment B\n\nbar = Bar\n"
+    );
+}
+
+#[cfg(test)]
+mod serialize_expression_tests {
+    use super::*;
+
+    macro_rules! expression_test {
+        ($name:ident, $input:expr) => {
+            #[test]
+            fn $name() {
+                let input_without_tabs = $input.replace("\t", "    ");
+                let src = format!("foo = {{ {} }}", input_without_tabs);
+                let resource = crate::parser::parse(&src).unwrap();
+
+                // extract the first expression from the value of the first
+                // message
+                assert_eq!(resource.body.len(), 1);
+                let first_item = &resource.body[0];
+                let message = match first_item {
+                    ResourceEntry::Entry(Entry::Message(msg)) => msg,
+                    other => panic!("Expected a message but found {:#?}", other),
+                };
+                let value = message.value.as_ref().expect("The message has a value");
+                assert_eq!(value.elements.len(), 1);
+                let expr = match &value.elements[0] {
+                    PatternElement::Placeable(expr) => expr,
+                    other => panic!("Expected a single expression but found {:#?}", other),
+                };
+
+                // we've finally extracted the first expression, now we can
+                // actually serialize it and finish the test
+                let mut serializer = Serializer::new(Options::default());
+                serializer.serialize_expression(expr).unwrap();
+                let got = serializer.into_serialized_text();
+
+                assert_eq!(got, input_without_tabs);
+            }
+        };
+    }
+
+    expression_test!(string_expression, "\"str\"");
+    expression_test!(number_expression, "3");
+    expression_test!(message_reference, "msg");
+    expression_test!(external_arguemnt, "$ext");
+    expression_test!(attribute_expression, "msg.attr");
+    expression_test!(call_expression, "BUILTIN(3.14, kwarg: \"value\")");
+    expression_test!(select_expression, "$num ->\n\t*[one] One\n");
+}
+
+#[cfg(test)]
+mod serialize_variant_key_tests {
+    use super::*;
+
+    macro_rules! variant_key_test {
+        ($name:ident, $input:expr => $( $keys:expr ),+ $(,)?) => {
+            #[test]
+            #[allow(unused_assignments)]
+            fn $name() {
+                let input_without_tabs = $input.replace("\t", "    ");
+                let src = format!("foo = {{ {}\n }}", input_without_tabs);
+                let resource = crate::parser::parse(&src).unwrap();
+
+                // extract variant from the first expression from the value of
+                // the first message
+                assert_eq!(resource.body.len(), 1);
+                let first_item = &resource.body[0];
+                let message = match first_item {
+                    ResourceEntry::Entry(Entry::Message(msg)) => msg,
+                    other => panic!("Expected a message but found {:#?}", other),
+                };
+                let value = message.value.as_ref().expect("The message has a value");
+                assert_eq!(value.elements.len(), 1);
+                let variants = match &value.elements[0] {
+                    PatternElement::Placeable(Expression::SelectExpression { variants, .. }) => variants,
+                    other => panic!("Expected a single select expression but found {:#?}", other),
+                };
+
+                let mut ix = 0;
+
+                $(
+                    let variant_key = &variants[ix].key;
+
+                    // we've finally extracted the variant key, now we can
+                    // actually serialize it and finish the test
+                    let mut serializer = Serializer::new(Options::default());
+                    serializer.serialize_variant_key(variant_key).unwrap();
+                    let got = serializer.into_serialized_text();
+
+                    assert_eq!(got, $keys);
+
+                    ix += 1;
+                )*
+            }
+        };
+    }
+
+    variant_key_test!(identifiers, "$num ->\n\t[one] One\n\t*[other] Other" => "one", "other");
+    variant_key_test!(
+        number_literals,
+        "$num ->\n\t[-123456789] Minus a lot\n\t[0] Zero\n\t*[3.14] Pi\n\t[007] James"
+        => "-123456789", "0", "3.14", "007",
+    );
 }
