@@ -52,6 +52,10 @@ impl Serializer {
         match entry {
             Entry::Message(msg) => self.serialize_message(msg),
             Entry::Comment(comment) => {
+                if self.state.has_entries {
+                    self.writer.newline();
+                }
+
                 self.serialize_comment(comment)?;
                 self.writer.newline();
                 Ok(())
@@ -70,10 +74,6 @@ impl Serializer {
             Comment::GroupComment { content } => ("##", content),
             Comment::ResourceComment { content } => ("###", content),
         };
-
-        if self.state.has_entries {
-            self.writer.newline();
-        }
 
         for line in lines {
             self.writer.write_literal(prefix)?;
@@ -479,6 +479,10 @@ mod serialize_resource_tests {
     round_trip_test!(
         message_comment,
         "# A multiline\n# message comment.\nfoo = Foo\n",
+    );
+    round_trip_test!(
+        dont_prefix_a_subsequent_entry_comment_with_a_newline,
+        "first = Firstsubsequent_ Comment\nfoo = Foo\n",
     );
     round_trip_test!(
         group_comment,
