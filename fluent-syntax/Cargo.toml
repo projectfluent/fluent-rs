@@ -25,6 +25,7 @@ include = [
 [dependencies]
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }
+bytes = "0.5.5"
 
 [dev-dependencies]
 serde = { version = "1.0", features = ["derive"] }

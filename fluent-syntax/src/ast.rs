@@ -1,3 +1,5 @@
+pub use crate::arc_str::ArcStr;
+
 #[derive(Debug, PartialEq)]
 pub struct Resource<'ast> {
     pub body: Vec<ResourceEntry<'ast>>,
