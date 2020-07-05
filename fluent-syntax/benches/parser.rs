@@ -4,28 +4,25 @@ use criterion::Criterion;
 use std::collections::HashMap;
 use std::fs;
 use std::io;
-use std::io::Read;
 
+use fluent_syntax::ast::ArcStr;
 use fluent_syntax::parser::parse;
 use fluent_syntax::unicode::unescape_unicode;
 
-fn read_file(path: &str) -> Result<String, io::Error> {
-    let mut f = fs::File::open(path)?;
-    let mut s = String::new();
-    f.read_to_string(&mut s)?;
-    Ok(s)
+fn read_file(path: &str) -> Result<ArcStr, io::Error> {
+    std::fs::read_to_string(path).map(Into::into)
 }
 
-fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, String> {
+fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, ArcStr> {
     let mut ftl_strings = HashMap::new();
     for test in tests {
         let path = format!("./benches/{}.ftl", test);
         ftl_strings.insert(*test, read_file(&path).expect("Couldn't load file"));
     }
-    return ftl_strings;
+    ftl_strings
 }
 
-fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<String>> {
+fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<ArcStr>> {
     let mut ftl_strings = HashMap::new();
     for test in tests {
         let paths = fs::read_dir(format!("./benches/contexts/{}", test)).unwrap();
@@ -39,7 +36,7 @@ fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<String>> {
             .collect::<Vec<_>>();
         ftl_strings.insert(*test, strings);
     }
-    return ftl_strings;
+    ftl_strings
 }
 
 fn parser_bench(c: &mut Criterion) {
@@ -50,7 +47,7 @@ fn parser_bench(c: &mut Criterion) {
         "parse",
         move |b, &&name| {
             let source = &ftl_strings[name];
-            b.iter(|| parse(source).expect("Parsing of the FTL failed."))
+            b.iter(|| parse(source.clone()).expect("Parsing of the FTL failed."))
         },
         tests,
     );
@@ -93,7 +90,7 @@ fn parser_ctx_bench(c: &mut Criterion) {
             let sources = &ftl_strings[name];
             b.iter(|| {
                 for source in sources {
-                    parse(source).expect("Parsing of the FTL failed.");
+                    parse(source.clone()).expect("Parsing of the FTL failed.");
                 }
             })
         },
