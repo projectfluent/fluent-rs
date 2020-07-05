@@ -1,4 +1,5 @@
 use bytes::Bytes;
+use std::borrow::Borrow;
 use std::fmt::{self, Display, Formatter};
 use std::ops::{Bound, Deref, Index, RangeBounds};
 use std::slice::SliceIndex;
@@ -70,7 +71,20 @@ impl ArcStr {
         }
 
         // Safety: We've just done our bounds checks.
-        Some(ArcStr(self.0.slice(range)))
+        unsafe { Some(self.slice_unchecked(range)) }
+    }
+
+    pub unsafe fn slice_unchecked<R>(&self, range: R) -> Self
+    where
+        R: RangeBounds<usize>,
+    {
+        ArcStr(self.0.slice(range))
+    }
+
+    pub fn slice_with_trimmed_end(&self) -> Self {
+        let trimmed_length = self.as_str().trim_end().len();
+
+        unsafe { self.slice_unchecked(..trimmed_length) }
     }
 
     pub fn as_str(&self) -> &str {
@@ -89,9 +103,33 @@ impl Deref for ArcStr {
     }
 }
 
+impl<'a> From<&'a str> for ArcStr {
+    fn from(s: &'a str) -> Self {
+        ArcStr::copy_from_slice(s)
+    }
+}
+
+impl<'a> From<&'a String> for ArcStr {
+    fn from(s: &'a String) -> Self {
+        ArcStr::copy_from_slice(s)
+    }
+}
+
+impl From<String> for ArcStr {
+    fn from(s: String) -> Self {
+        ArcStr(Bytes::from(s.into_bytes()))
+    }
+}
+
 impl AsRef<str> for ArcStr {
     fn as_ref(&self) -> &str {
         &*self
+    }
+}
+
+impl Borrow<str> for ArcStr {
+    fn borrow(&self) -> &str {
+        self.as_str()
     }
 }
 

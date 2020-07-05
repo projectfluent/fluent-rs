@@ -1,127 +1,127 @@
 pub use crate::arc_str::ArcStr;
 
 #[derive(Debug, PartialEq)]
-pub struct Resource<'ast> {
-    pub body: Vec<ResourceEntry<'ast>>,
+pub struct Resource {
+    pub body: Vec<ResourceEntry>,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum ResourceEntry<'ast> {
-    Entry(Entry<'ast>),
-    Junk(&'ast str),
+pub enum ResourceEntry {
+    Entry(Entry),
+    Junk(ArcStr),
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Entry<'ast> {
-    Message(Message<'ast>),
-    Term(Term<'ast>),
-    Comment(Comment<'ast>),
+pub enum Entry {
+    Message(Message),
+    Term(Term),
+    Comment(Comment),
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Message<'ast> {
-    pub id: Identifier<'ast>,
-    pub value: Option<Pattern<'ast>>,
-    pub attributes: Vec<Attribute<'ast>>,
-    pub comment: Option<Comment<'ast>>,
+pub struct Message {
+    pub id: Identifier,
+    pub value: Option<Pattern>,
+    pub attributes: Vec<Attribute>,
+    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Term<'ast> {
-    pub id: Identifier<'ast>,
-    pub value: Pattern<'ast>,
-    pub attributes: Vec<Attribute<'ast>>,
-    pub comment: Option<Comment<'ast>>,
+pub struct Term {
+    pub id: Identifier,
+    pub value: Pattern,
+    pub attributes: Vec<Attribute>,
+    pub comment: Option<Comment>,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Pattern<'ast> {
-    pub elements: Vec<PatternElement<'ast>>,
+pub struct Pattern {
+    pub elements: Vec<PatternElement>,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum PatternElement<'ast> {
-    TextElement(&'ast str),
-    Placeable(Expression<'ast>),
+pub enum PatternElement {
+    TextElement(ArcStr),
+    Placeable(Expression),
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Attribute<'ast> {
-    pub id: Identifier<'ast>,
-    pub value: Pattern<'ast>,
+pub struct Attribute {
+    pub id: Identifier,
+    pub value: Pattern,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Identifier<'ast> {
-    pub name: &'ast str,
+pub struct Identifier {
+    pub name: ArcStr,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct Variant<'ast> {
-    pub key: VariantKey<'ast>,
-    pub value: Pattern<'ast>,
+pub struct Variant {
+    pub key: VariantKey,
+    pub value: Pattern,
     pub default: bool,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum VariantKey<'ast> {
-    Identifier { name: &'ast str },
-    NumberLiteral { value: &'ast str },
+pub enum VariantKey {
+    Identifier { name: ArcStr },
+    NumberLiteral { value: ArcStr },
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Comment<'ast> {
-    Comment { content: Vec<&'ast str> },
-    GroupComment { content: Vec<&'ast str> },
-    ResourceComment { content: Vec<&'ast str> },
+pub enum Comment {
+    Comment { content: Vec<ArcStr> },
+    GroupComment { content: Vec<ArcStr> },
+    ResourceComment { content: Vec<ArcStr> },
 }
 
 #[derive(Debug, PartialEq)]
-pub enum InlineExpression<'ast> {
+pub enum InlineExpression {
     StringLiteral {
-        value: &'ast str,
+        value: ArcStr,
     },
     NumberLiteral {
-        value: &'ast str,
+        value: ArcStr,
     },
     FunctionReference {
-        id: Identifier<'ast>,
-        arguments: Option<CallArguments<'ast>>,
+        id: Identifier,
+        arguments: Option<CallArguments>,
     },
     MessageReference {
-        id: Identifier<'ast>,
-        attribute: Option<Identifier<'ast>>,
+        id: Identifier,
+        attribute: Option<Identifier>,
     },
     TermReference {
-        id: Identifier<'ast>,
-        attribute: Option<Identifier<'ast>>,
-        arguments: Option<CallArguments<'ast>>,
+        id: Identifier,
+        attribute: Option<Identifier>,
+        arguments: Option<CallArguments>,
     },
     VariableReference {
-        id: Identifier<'ast>,
+        id: Identifier,
     },
     Placeable {
-        expression: Box<Expression<'ast>>,
+        expression: Box<Expression>,
     },
 }
 
 #[derive(Debug, PartialEq)]
-pub struct CallArguments<'ast> {
-    pub positional: Vec<InlineExpression<'ast>>,
-    pub named: Vec<NamedArgument<'ast>>,
+pub struct CallArguments {
+    pub positional: Vec<InlineExpression>,
+    pub named: Vec<NamedArgument>,
 }
 
 #[derive(Debug, PartialEq)]
-pub struct NamedArgument<'ast> {
-    pub name: Identifier<'ast>,
-    pub value: InlineExpression<'ast>,
+pub struct NamedArgument {
+    pub name: Identifier,
+    pub value: InlineExpression,
 }
 
 #[derive(Debug, PartialEq)]
-pub enum Expression<'ast> {
-    InlineExpression(InlineExpression<'ast>),
+pub enum Expression {
+    InlineExpression(InlineExpression),
     SelectExpression {
-        selector: InlineExpression<'ast>,
-        variants: Vec<Variant<'ast>>,
+        selector: InlineExpression,
+        variants: Vec<Variant>,
     },
 }

@@ -1,28 +1,31 @@
-use super::errors::{ErrorKind, ParserError};
-use super::Result;
-use std::str;
+use super::{
+    errors::{ErrorKind, ParserError},
+    Result,
+};
+use crate::arc_str::ArcStr;
 
-pub struct ParserStream<'p> {
-    pub source: &'p [u8],
+pub struct ParserStream {
+    pub source: ArcStr,
     pub length: usize,
     pub ptr: usize,
 }
 
-impl<'p> ParserStream<'p> {
-    pub fn new(stream: &'p str) -> Self {
+impl ParserStream {
+    pub fn new(stream: ArcStr) -> Self {
+        let length = stream.len();
         ParserStream {
-            source: stream.as_bytes(),
-            length: stream.len(),
+            source: stream,
             ptr: 0,
+            length,
         }
     }
 
     pub fn is_current_byte(&self, b: u8) -> bool {
-        self.source.get(self.ptr) == Some(&b)
+        self.next_byte() == Some(b)
     }
 
     pub fn is_byte_at(&self, b: u8, pos: usize) -> bool {
-        self.source.get(pos) == Some(&b)
+        self.byte_at(pos) == Some(b)
     }
 
     pub fn expect_byte(&mut self, b: u8) -> Result<()> {
@@ -56,12 +59,20 @@ impl<'p> ParserStream<'p> {
         count
     }
 
+    pub fn next_byte(&self) -> Option<u8> {
+        self.byte_at(self.ptr)
+    }
+
+    pub fn byte_at(&self, index: usize) -> Option<u8> {
+        self.source.as_bytes().get(index).copied()
+    }
+
     pub fn skip_blank(&mut self) {
         loop {
-            match self.source.get(self.ptr) {
+            match self.next_byte() {
                 Some(b' ') => self.ptr += 1,
                 Some(b'\n') => self.ptr += 1,
-                Some(b'\r') if self.source.get(self.ptr + 1) == Some(&b'\n') => self.ptr += 2,
+                Some(b'\r') if self.byte_at(self.ptr + 1) == Some(b'\n') => self.ptr += 2,
                 _ => break,
             }
         }
@@ -69,17 +80,17 @@ impl<'p> ParserStream<'p> {
 
     pub fn skip_blank_inline(&mut self) -> usize {
         let start = self.ptr;
-        while let Some(b' ') = self.source.get(self.ptr) {
+        while let Some(b' ') = self.next_byte() {
             self.ptr += 1;
         }
         self.ptr - start
     }
 
     pub fn skip_to_next_entry_start(&mut self) {
-        while let Some(b) = self.source.get(self.ptr) {
-            let new_line = self.ptr == 0 || self.source.get(self.ptr - 1) == Some(&b'\n');
+        while let Some(b) = self.next_byte() {
+            let new_line = self.ptr == 0 || self.byte_at(self.ptr - 1) == Some(b'\n');
 
-            if new_line && (b.is_ascii_alphabetic() || [b'-', b'#'].contains(b)) {
+            if new_line && (b.is_ascii_alphabetic() || [b'-', b'#'].contains(&b)) {
                 break;
             }
 
@@ -88,7 +99,7 @@ impl<'p> ParserStream<'p> {
     }
 
     pub fn skip_eol(&mut self) -> bool {
-        match self.source.get(self.ptr) {
+        match self.next_byte() {
             Some(b'\n') => {
                 self.ptr += 1;
                 true
@@ -104,7 +115,7 @@ impl<'p> ParserStream<'p> {
     pub fn skip_unicode_escape_sequence(&mut self, length: usize) -> Result<()> {
         let start = self.ptr;
         for _ in 0..length {
-            match self.source.get(self.ptr) {
+            match self.next_byte() {
                 Some(b) if b.is_ascii_hexdigit() => self.ptr += 1,
                 _ => break,
             }
@@ -116,7 +127,7 @@ impl<'p> ParserStream<'p> {
                 self.ptr + 1
             };
             return error!(
-                ErrorKind::InvalidUnicodeEscapeSequence(self.get_slice(start, end).to_owned()),
+                ErrorKind::InvalidUnicodeEscapeSequence(self.get_slice(start, end).to_string()),
                 self.ptr
             );
         }
@@ -124,7 +135,7 @@ impl<'p> ParserStream<'p> {
     }
 
     pub fn is_identifier_start(&self) -> bool {
-        match self.source.get(self.ptr) {
+        match self.next_byte() {
             Some(b) if b.is_ascii_alphabetic() => true,
             _ => false,
         }
@@ -135,28 +146,30 @@ impl<'p> ParserStream<'p> {
     }
 
     pub fn is_number_start(&self) -> bool {
-        match self.source.get(self.ptr) {
-            Some(b) if (b == &b'-') || b.is_ascii_digit() => true,
+        match self.next_byte() {
+            Some(b) if (b == b'-') || b.is_ascii_digit() => true,
             _ => false,
         }
     }
 
     pub fn is_eol(&self) -> bool {
-        match self.source.get(self.ptr) {
+        match self.next_byte() {
             Some(b'\n') => true,
             Some(b'\r') if self.is_byte_at(b'\n', self.ptr + 1) => true,
             _ => false,
         }
     }
 
-    pub fn get_slice(&self, start: usize, end: usize) -> &'p str {
-        str::from_utf8(&self.source[start..end]).expect("Slicing the source failed")
+    pub fn get_slice(&self, start: usize, end: usize) -> ArcStr {
+        self.source
+            .slice(start..end)
+            .expect("Slicing the source failed")
     }
 
     pub fn skip_digits(&mut self) -> Result<()> {
         let start = self.ptr;
         loop {
-            match self.source.get(self.ptr) {
+            match self.next_byte() {
                 Some(b) if b.is_ascii_digit() => self.ptr += 1,
                 _ => break,
             }

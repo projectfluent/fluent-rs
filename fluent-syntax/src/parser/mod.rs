@@ -4,19 +4,22 @@ mod ftlstream;
 
 use std::cmp;
 use std::result;
-use std::str;
 
 use self::errors::ErrorKind;
 pub use self::errors::ParserError;
 use self::ftlstream::ParserStream;
 use super::ast;
+use crate::arc_str::ArcStr;
 
 pub type Result<T> = result::Result<T, ParserError>;
 
-pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)> {
+pub fn parse<S>(source: S) -> result::Result<ast::Resource, (ast::Resource, Vec<ParserError>)>
+where
+    S: Into<ArcStr>,
+{
     let mut errors = vec![];
 
-    let mut ps = ParserStream::new(source);
+    let mut ps = ParserStream::new(source.into());
 
     let mut body = vec![];
 
@@ -70,8 +73,8 @@ pub fn parse(source: &str) -> result::Result<ast::Resource, (ast::Resource, Vec<
     }
 }
 
-fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Entry<'p>> {
-    let entry = match ps.source[ps.ptr] {
+fn get_entry(ps: &mut ParserStream, entry_start: usize) -> Result<ast::Entry> {
+    let entry = match ps.next_byte().unwrap() {
         b'#' => ast::Entry::Comment(get_comment(ps)?),
         b'-' => ast::Entry::Term(get_term(ps, entry_start)?),
         _ => ast::Entry::Message(get_message(ps, entry_start)?),
@@ -79,7 +82,7 @@ fn get_entry<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::E
     Ok(entry)
 }
 
-fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Message<'p>> {
+fn get_message(ps: &mut ParserStream, entry_start: usize) -> Result<ast::Message> {
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
     ps.expect_byte(b'=')?;
@@ -107,7 +110,7 @@ fn get_message<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast:
     })
 }
 
-fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Term<'p>> {
+fn get_term(ps: &mut ParserStream, entry_start: usize) -> Result<ast::Term> {
     ps.expect_byte(b'-')?;
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
@@ -137,7 +140,7 @@ fn get_term<'p>(ps: &mut ParserStream<'p>, entry_start: usize) -> Result<ast::Te
     }
 }
 
-fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
+fn get_attributes(ps: &mut ParserStream) -> Vec<ast::Attribute> {
     let mut attributes = vec![];
 
     loop {
@@ -159,7 +162,7 @@ fn get_attributes<'p>(ps: &mut ParserStream<'p>) -> Vec<ast::Attribute<'p>> {
     attributes
 }
 
-fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
+fn get_attribute(ps: &mut ParserStream) -> Result<ast::Attribute> {
     ps.expect_byte(b'.')?;
     let id = get_identifier(ps)?;
     ps.skip_blank_inline();
@@ -172,10 +175,10 @@ fn get_attribute<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Attribute<'p>> {
     }
 }
 
-fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> {
+fn get_identifier(ps: &mut ParserStream) -> Result<ast::Identifier> {
     let mut ptr = ps.ptr;
 
-    match ps.source.get(ptr) {
+    match ps.byte_at(ptr) {
         Some(b) if b.is_ascii_alphabetic() => {
             ptr += 1;
         }
@@ -189,8 +192,8 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
         }
     }
 
-    while let Some(b) = ps.source.get(ptr) {
-        if b.is_ascii_alphabetic() || b.is_ascii_digit() || [b'_', b'-'].contains(b) {
+    while let Some(b) = ps.byte_at(ptr) {
+        if b.is_ascii_alphabetic() || b.is_ascii_digit() || [b'_', b'-'].contains(&b) {
             ptr += 1;
         } else {
             break;
@@ -203,7 +206,7 @@ fn get_identifier<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Identifier<'p>> 
     Ok(ast::Identifier { name })
 }
 
-fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Identifier<'p>>> {
+fn get_attribute_accessor(ps: &mut ParserStream) -> Result<Option<ast::Identifier>> {
     if !ps.take_byte_if(b'.') {
         Ok(None)
     } else {
@@ -212,7 +215,7 @@ fn get_attribute_accessor<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::I
     }
 }
 
-fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>> {
+fn get_variant_key(ps: &mut ParserStream) -> Result<ast::VariantKey> {
     if !ps.take_byte_if(b'[') {
         return error!(ErrorKind::ExpectedToken('['), ps.ptr);
     }
@@ -235,7 +238,7 @@ fn get_variant_key<'p>(ps: &mut ParserStream<'p>) -> Result<ast::VariantKey<'p>>
     Ok(key)
 }
 
-fn get_variants<'p>(ps: &mut ParserStream<'p>) -> Result<Vec<ast::Variant<'p>>> {
+fn get_variants(ps: &mut ParserStream) -> Result<Vec<ast::Variant>> {
     let mut variants = vec![];
     let mut has_default = false;
 
@@ -300,8 +303,8 @@ enum TextElementPosition {
 // but without slicing them out of the source string. This makes the indentation adjustments
 // cheaper since they'll happen on the pointers, rather than extracted slices.
 #[derive(Debug)]
-enum PatternElementPlaceholders<'a> {
-    Placeable(ast::Expression<'a>),
+enum PatternElementPlaceholders {
+    Placeable(ast::Expression),
     // (start, end, indent, position)
     TextElement(usize, usize, usize, TextElementPosition),
 }
@@ -315,7 +318,7 @@ enum TextElementType {
     NonBlank,
 }
 
-fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>> {
+fn get_pattern(ps: &mut ParserStream) -> Result<Option<ast::Pattern>> {
     let mut elements = vec![];
     let mut last_non_blank = None;
     let mut common_indent = None;
@@ -346,7 +349,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                 if ps.ptr >= ps.length {
                     break;
                 }
-                let b = ps.source[ps.ptr];
+                let b = ps.next_byte().unwrap();
                 if indent == 0 {
                     if b != b'\n' {
                         break;
@@ -413,7 +416,7 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
                     };
                     let slice = ps.get_slice(start, end);
                     if last_non_blank == i {
-                        ast::PatternElement::TextElement(slice.trim_end())
+                        ast::PatternElement::TextElement(slice.slice_with_trimmed_end())
                     } else {
                         ast::PatternElement::TextElement(slice)
                     }
@@ -426,14 +429,14 @@ fn get_pattern<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::Pattern<'p>>
     Ok(None)
 }
 
-fn get_text_slice<'p>(
-    ps: &mut ParserStream<'p>,
+fn get_text_slice(
+    ps: &mut ParserStream,
 ) -> Result<(usize, usize, TextElementType, TextElementTermination)> {
     let start_pos = ps.ptr;
     let mut text_element_type = TextElementType::Blank;
 
     while ps.ptr < ps.length {
-        match ps.source[ps.ptr] {
+        match ps.next_byte().unwrap() {
             b' ' => ps.ptr += 1,
             b'\n' => {
                 ps.ptr += 1;
@@ -478,7 +481,7 @@ fn get_text_slice<'p>(
     ))
 }
 
-fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
+fn get_comment(ps: &mut ParserStream) -> Result<ast::Comment> {
     let mut level = None;
     let mut content = vec![];
 
@@ -521,7 +524,7 @@ fn get_comment<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Comment<'p>> {
     Ok(comment)
 }
 
-fn get_comment_level<'p>(ps: &mut ParserStream<'p>) -> usize {
+fn get_comment_level(ps: &mut ParserStream) -> usize {
     let mut chars = 0;
 
     while ps.take_byte_if(b'#') {
@@ -531,7 +534,7 @@ fn get_comment_level<'p>(ps: &mut ParserStream<'p>) -> usize {
     chars
 }
 
-fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
+fn get_comment_line(ps: &mut ParserStream) -> Result<ArcStr> {
     let start_pos = ps.ptr;
 
     while ps.ptr < ps.length && !ps.is_eol() {
@@ -541,7 +544,7 @@ fn get_comment_line<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
     Ok(ps.get_slice(start_pos, ps.ptr))
 }
 
-fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
+fn get_placeable(ps: &mut ParserStream) -> Result<ast::Expression> {
     ps.expect_byte(b'{')?;
     ps.skip_blank();
     let exp = get_expression(ps)?;
@@ -562,7 +565,7 @@ fn get_placeable<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
     Ok(exp)
 }
 
-fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> {
+fn get_expression(ps: &mut ParserStream) -> Result<ast::Expression> {
     let exp = get_inline_expression(ps)?;
 
     ps.skip_blank();
@@ -619,14 +622,14 @@ fn get_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::Expression<'p>> 
     })
 }
 
-fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExpression<'p>> {
-    match ps.source.get(ps.ptr) {
+fn get_inline_expression(ps: &mut ParserStream) -> Result<ast::InlineExpression> {
+    match ps.next_byte() {
         Some(b'"') => {
             ps.ptr += 1; // "
             let start = ps.ptr;
             while ps.ptr < ps.length {
-                match ps.source[ps.ptr] {
-                    b'\\' => match ps.source.get(ps.ptr + 1) {
+                match ps.next_byte().unwrap() {
+                    b'\\' => match ps.byte_at(ps.ptr + 1) {
                         Some(b'\\') => ps.ptr += 2,
                         Some(b'{') => ps.ptr += 2,
                         Some(b'"') => ps.ptr += 2,
@@ -708,7 +711,7 @@ fn get_inline_expression<'p>(ps: &mut ParserStream<'p>) -> Result<ast::InlineExp
     }
 }
 
-fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallArguments<'p>>> {
+fn get_call_arguments(ps: &mut ParserStream) -> Result<Option<ast::CallArguments>> {
     ps.skip_blank();
     if !ps.take_byte_if(b'(') {
         return Ok(None);
@@ -734,18 +737,20 @@ fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallA
             } => {
                 ps.skip_blank();
                 if ps.is_current_byte(b':') {
-                    if argument_names.contains(&id.name.to_owned()) {
+                    if argument_names.contains(&id.name) {
                         return error!(
-                            ErrorKind::DuplicatedNamedArgument(id.name.to_owned()),
+                            ErrorKind::DuplicatedNamedArgument(id.name.to_string()),
                             ps.ptr
                         );
                     }
                     ps.ptr += 1;
                     ps.skip_blank();
                     let val = get_inline_expression(ps)?;
-                    argument_names.push(id.name.to_owned());
+                    argument_names.push(id.name.clone());
                     named.push(ast::NamedArgument {
-                        name: ast::Identifier { name: id.name },
+                        name: ast::Identifier {
+                            name: id.name.clone(),
+                        },
                         value: val,
                     });
                 } else {
@@ -773,7 +778,7 @@ fn get_call_arguments<'p>(ps: &mut ParserStream<'p>) -> Result<Option<ast::CallA
     Ok(Some(ast::CallArguments { positional, named }))
 }
 
-fn get_number_literal<'p>(ps: &mut ParserStream<'p>) -> Result<&'p str> {
+fn get_number_literal(ps: &mut ParserStream) -> Result<ArcStr> {
     let start = ps.ptr;
     ps.take_byte_if(b'-');
     ps.skip_digits()?;
