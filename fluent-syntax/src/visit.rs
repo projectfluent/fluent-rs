@@ -146,7 +146,7 @@ where
     }
 }
 
-fn visit_message<V>(visitor: &mut V, msg: &Message)
+pub fn visit_message<V>(visitor: &mut V, msg: &Message)
 where
     V: Visitor + ?Sized,
 {
@@ -161,7 +161,7 @@ where
     }
 }
 
-fn visit_term<V>(visitor: &mut V, term: &Term)
+pub fn visit_term<V>(visitor: &mut V, term: &Term)
 where
     V: Visitor + ?Sized,
 {
@@ -174,7 +174,7 @@ where
     visitor.visit_pattern(&term.value);
 }
 
-fn visit_attributes<V>(visitor: &mut V, attributes: &[Attribute<'_>])
+pub fn visit_attributes<V>(visitor: &mut V, attributes: &[Attribute<'_>])
 where
     V: Visitor + ?Sized,
 {
@@ -183,7 +183,7 @@ where
     }
 }
 
-fn visit_attribute<V>(visitor: &mut V, attribute: &Attribute<'_>)
+pub fn visit_attribute<V>(visitor: &mut V, attribute: &Attribute<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -191,14 +191,14 @@ where
     visitor.visit_pattern(&attribute.value);
 }
 
-fn visit_pattern<V>(visitor: &mut V, pattern: &Pattern<'_>)
+pub fn visit_pattern<V>(visitor: &mut V, pattern: &Pattern<'_>)
 where
     V: Visitor + ?Sized,
 {
     visitor.visit_pattern_elements(&pattern.elements);
 }
 
-fn visit_pattern_elements<V>(visitor: &mut V, elements: &[PatternElement<'_>])
+pub fn visit_pattern_elements<V>(visitor: &mut V, elements: &[PatternElement<'_>])
 where
     V: Visitor + ?Sized,
 {
@@ -207,7 +207,7 @@ where
     }
 }
 
-fn visit_pattern_element<V>(visitor: &mut V, element: &PatternElement<'_>)
+pub fn visit_pattern_element<V>(visitor: &mut V, element: &PatternElement<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -217,7 +217,7 @@ where
     }
 }
 
-fn visit_expression<V>(visitor: &mut V, expr: &Expression<'_>)
+pub fn visit_expression<V>(visitor: &mut V, expr: &Expression<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -229,7 +229,7 @@ where
     }
 }
 
-fn visit_inline_expression<V>(visitor: &mut V, expr: &InlineExpression<'_>)
+pub fn visit_inline_expression<V>(visitor: &mut V, expr: &InlineExpression<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -252,7 +252,7 @@ where
     }
 }
 
-fn visit_select<V>(visitor: &mut V, selector: &InlineExpression<'_>, variants: &[Variant<'_>])
+pub fn visit_select<V>(visitor: &mut V, selector: &InlineExpression<'_>, variants: &[Variant<'_>])
 where
     V: Visitor + ?Sized,
 {
@@ -260,7 +260,7 @@ where
     visitor.visit_variants(variants);
 }
 
-fn visit_function_reference<V>(
+pub fn visit_function_reference<V>(
     visitor: &mut V,
     id: &Identifier<'_>,
     arguments: &Option<CallArguments<'_>>,
@@ -273,14 +273,14 @@ fn visit_function_reference<V>(
     }
 }
 
-fn visit_variable_reference<V>(visitor: &mut V, id: &Identifier<'_>)
+pub fn visit_variable_reference<V>(visitor: &mut V, id: &Identifier<'_>)
 where
     V: Visitor + ?Sized,
 {
     visitor.visit_identifier(id);
 }
 
-fn visit_message_reference<V>(
+pub fn visit_message_reference<V>(
     visitor: &mut V,
     id: &Identifier<'_>,
     attribute: &Option<Identifier<'_>>,
@@ -293,7 +293,7 @@ fn visit_message_reference<V>(
     }
 }
 
-fn visit_term_reference<V>(
+pub fn visit_term_reference<V>(
     visitor: &mut V,
     id: &Identifier,
     attribute: &Option<Identifier>,
@@ -310,7 +310,7 @@ fn visit_term_reference<V>(
     }
 }
 
-fn visit_call_arguments<V>(visitor: &mut V, args: &CallArguments<'_>)
+pub fn visit_call_arguments<V>(visitor: &mut V, args: &CallArguments<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -323,7 +323,7 @@ where
     }
 }
 
-fn visit_named_argument<V>(visitor: &mut V, arg: &NamedArgument<'_>)
+pub fn visit_named_argument<V>(visitor: &mut V, arg: &NamedArgument<'_>)
 where
     V: Visitor + ?Sized,
 {
@@ -331,7 +331,7 @@ where
     visitor.visit_inline_expression(&arg.value);
 }
 
-fn visit_variants<V>(visitor: &mut V, variants: &[Variant<'_>])
+pub fn visit_variants<V>(visitor: &mut V, variants: &[Variant<'_>])
 where
     V: Visitor + ?Sized,
 {
@@ -340,7 +340,7 @@ where
     }
 }
 
-fn visit_variant<V>(visitor: &mut V, variant: &Variant<'_>)
+pub fn visit_variant<V>(visitor: &mut V, variant: &Variant<'_>)
 where
     V: Visitor + ?Sized,
 {
