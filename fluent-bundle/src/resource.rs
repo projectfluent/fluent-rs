@@ -1,6 +1,7 @@
 use fluent_syntax::ast;
 use fluent_syntax::parser::parse;
 use fluent_syntax::parser::ParserError;
+use fluent_syntax::visit::Visitor;
 
 rental! {
     mod rentals {
@@ -35,7 +36,10 @@ impl FluentResource {
         }
     }
 
-    pub fn ast(&self) -> &ast::Resource {
-        self.0.all().ast
+    pub fn accept<V>(&self, visitor: &mut V)
+    where
+        V: Visitor + ?Sized,
+    {
+        visitor.visit_resource(self.0.all().ast)
     }
 }

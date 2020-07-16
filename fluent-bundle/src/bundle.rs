@@ -10,6 +10,7 @@ use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
 
 use fluent_syntax::ast;
+use fluent_syntax::visit::Visitor;
 use unic_langid::LanguageIdentifier;
 
 use crate::entry::Entry;
@@ -222,37 +223,15 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         let mut errors = vec![];
 
         let res = r.borrow();
-        let res_pos = self.resources.len();
+        let mut visitor = AddResource {
+            errors: &mut errors,
+            entries: &mut self.entries,
+            resource_position: self.resources.len(),
+            entry_position: 0,
+        };
 
-        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
-            let id = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
-                _ => continue,
-            };
+        res.accept(&mut visitor);
 
-            let (entry, kind) = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
-                    (Entry::Message([res_pos, entry_pos]), "message")
-                }
-                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
-                    (Entry::Term([res_pos, entry_pos]), "term")
-                }
-                _ => continue,
-            };
-
-            match self.entries.entry(id.to_string()) {
-                HashEntry::Vacant(empty) => {
-                    empty.insert(entry);
-                }
-                HashEntry::Occupied(_) => {
-                    errors.push(FluentError::Overriding {
-                        kind,
-                        id: id.to_string(),
-                    });
-                }
-            }
-        }
         self.resources.push(r);
 
         if errors.is_empty() {
@@ -326,27 +305,15 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         R: Borrow<FluentResource>,
     {
         let res = r.borrow();
-        let res_pos = self.resources.len();
 
-        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
-            let id = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
-                _ => continue,
-            };
+        let mut visitor = AddResourceOverriding {
+            resource_position: self.resources.len(),
+            entries: &mut self.entries,
+            entry_position: 0,
+        };
 
-            let entry = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
-                    Entry::Message([res_pos, entry_pos])
-                }
-                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
-                    Entry::Term([res_pos, entry_pos])
-                }
-                _ => continue,
-            };
+        res.accept(&mut visitor);
 
-            self.entries.insert(id.to_string(), entry);
-        }
         self.resources.push(r);
     }
 
@@ -520,5 +487,58 @@ impl<R, M: MemoizerKind> Default for FluentBundleBase<R, M> {
             transform: None,
             formatter: None,
         }
+    }
+}
+
+struct AddResourceOverriding<'a> {
+    resource_position: usize,
+    entries: &'a mut HashMap<String, Entry>,
+    entry_position: usize,
+}
+
+impl<'a> Visitor for AddResourceOverriding<'a> {
+    fn visit_term(&mut self, term: &ast::Term<'_>) {
+        self.entries.insert(
+            term.id.name.to_string(),
+            Entry::Term([self.resource_position, self.entry_position]),
+        );
+
+        self.entry_position += 1;
+    }
+
+    fn visit_message(&mut self, msg: &ast::Message<'_>) {
+        self.entries.insert(
+            msg.id.name.to_string(),
+            Entry::Message([self.resource_position, self.entry_position]),
+        );
+
+        self.entry_position += 1;
+    }
+}
+
+struct AddResource<'a> {
+    errors: &'a mut Vec<FluentError>,
+    entries: &'a mut HashMap<String, Entry>,
+    resource_position: usize,
+    entry_position: usize,
+}
+
+impl<'a> Visitor for AddResource<'a> {
+    fn visit_term(&mut self, term: &ast::Term<'_>) {
+        let id = term.id.name;
+        let kind = "term";
+        let entry = Entry::Term([self.resource_position, self.entry_position]);
+
+        match self.entries.entry(id.to_string()) {
+            HashEntry::Vacant(empty) => {
+                empty.insert(entry);
+            }
+            HashEntry::Occupied(_) => self.errors.push(FluentError::Overriding {
+                kind,
+                id: id.to_string(),
+            }),
+        }
+
+        self.entry_position += 1;
     }
 }
