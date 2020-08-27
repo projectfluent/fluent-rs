@@ -27,6 +27,7 @@ use std::fs::File;
 use std::io;
 use std::io::prelude::*;
 use std::iter;
+use std::path::{Path, PathBuf};
 use std::str::FromStr;
 use unic_langid::LanguageIdentifier;
 
@@ -114,7 +115,7 @@ fn main() {
     res_path_scheme.push("{locale}");
     res_path_scheme.push("{res_id}");
     let res_path_scheme = res_path_scheme.to_str().unwrap();
-    let generate_messages = |res_ids: &[String]| {
+    let generate_messages = |res_ids: Vec<PathBuf>| {
         let mut locales = resolved_locales.iter();
         let res_mgr = &resources;
         let res_ids = res_ids.to_vec();
@@ -125,7 +126,7 @@ fn main() {
                 let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
 
                 for res_id in &res_ids {
-                    let path = res_path.replace("{res_id}", res_id);
+                    let path = res_path.replace("{res_id}", res_id.to_str().unwrap());
                     let res = res_mgr.get(&path).unwrap_or_else(|| {
                         let source = read_file(&path).unwrap();
                         let res = FluentResource::try_new(source).unwrap();
@@ -141,7 +142,7 @@ fn main() {
     // 6. Create a new Localization instance which will be used to maintain the localization
     //    context for this UI.
     let loc = Localization::new(
-        L10N_RESOURCES.iter().map(|s| s.to_string()).collect(),
+        L10N_RESOURCES.iter().map(|res| res.into()).collect(),
         generate_messages,
     );
 

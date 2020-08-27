@@ -8,6 +8,7 @@ use std::cell::RefCell;
 use std::fs;
 use std::io;
 use std::iter;
+use std::path::{Path, PathBuf};
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -17,11 +18,12 @@ fn read_file(path: &str) -> Result<String, io::Error> {
 fn localization_format() {
     let resources: FrozenMap<String, Box<FluentResource>> = FrozenMap::new();
 
-    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+    let resource_ids: Vec<PathBuf> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
     let locales = vec![langid!("pl"), langid!("en-US")];
 
-    let generate_messages = |res_ids: &[String]| {
+    let res_ids: Vec<&Path> = resource_ids.iter().map(|res_id| res_id.as_path()).collect();
+    let generate_messages = |_res_ids: Vec<PathBuf>| {
         let mut locales = locales.iter();
         let res_mgr = &resources;
         let res_ids = res_ids.to_vec();
@@ -32,7 +34,7 @@ fn localization_format() {
                 let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
 
                 for res_id in &res_ids {
-                    let path = res_path.replace("{res_id}", res_id);
+                    let path = res_path.replace("{res_id}", res_id.to_str().unwrap());
                     let res = res_mgr.get(&path).unwrap_or_else(|| {
                         let source = read_file(&path).unwrap();
                         let res = FluentResource::try_new(source).unwrap();
@@ -45,7 +47,7 @@ fn localization_format() {
         })
     };
 
-    let loc = Localization::new(resource_ids, generate_messages);
+    let loc = Localization::new(resource_ids.clone(), generate_messages);
 
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [pl]");
@@ -61,19 +63,20 @@ fn localization_format() {
 fn localization_on_change() {
     let resources: FrozenMap<String, Box<FluentResource>> = FrozenMap::new();
 
-    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+    let resource_ids: Vec<PathBuf> = vec!["test.ftl".into(), "test2.ftl".into()];
     let res_path_scheme = "./tests/resources/{locale}/{res_id}";
 
     let available_locales = RefCell::new(vec![langid!("en-US")]);
 
-    let generate_messages = |res_ids: &[String]| {
+    let res_ids: Vec<&Path> = resource_ids.iter().map(|res_id| res_id.as_path()).collect();
+    let generate_messages = |_res_ids: Vec<PathBuf>| {
         let mut bundles = vec![];
 
         for locale in available_locales.borrow().iter() {
             let mut bundle = FluentBundle::new(vec![locale]);
             let res_path = res_path_scheme.replace("{locale}", &locale.to_string());
-            for res_id in res_ids {
-                let path = res_path.replace("{res_id}", res_id);
+            for res_id in &res_ids {
+                let path = res_path.replace("{res_id}", res_id.to_str().unwrap());
                 let res = if let Some(res) = resources.get(&path) {
                     res
                 } else {
@@ -89,7 +92,7 @@ fn localization_on_change() {
         return bundles.into_iter();
     };
 
-    let mut loc = Localization::new(resource_ids, generate_messages);
+    let mut loc = Localization::new(resource_ids.clone(), generate_messages);
 
     let value = loc.format_value("hello-world", None);
     assert_eq!(value, "Hello World [en]");

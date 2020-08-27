@@ -1,19 +1,20 @@
 use std::borrow::Borrow;
 use std::borrow::Cow;
+use std::path::PathBuf;
 
 use fluent_bundle::FluentResource;
 use fluent_bundle::{FluentArgs, FluentBundle};
 
 use reiterate::Reiterate;
 
-struct FluentBundleIterator<R, I>
+struct FluentBundleIteratorSync<R, I>
 where
     I: Iterator<Item = FluentBundle<R>>,
 {
     iter: I,
 }
 
-impl<R, I> Iterator for FluentBundleIterator<R, I>
+impl<R, I> Iterator for FluentBundleIteratorSync<R, I>
 where
     I: Iterator<Item = FluentBundle<R>>,
 {
@@ -27,23 +28,23 @@ pub struct Localization<'loc, R, I>
 where
     I: Iterator<Item = FluentBundle<R>> + 'loc,
 {
-    pub resource_ids: Vec<String>,
-    bundles: Reiterate<FluentBundleIterator<R, I>>,
-    generate_bundles: Box<dyn FnMut(&[String]) -> FluentBundleIterator<R, I> + 'loc>,
+    pub resource_ids: Vec<PathBuf>,
+    bundles: Reiterate<FluentBundleIteratorSync<R, I>>,
+    generate_bundles: Box<dyn FnMut(Vec<PathBuf>) -> FluentBundleIteratorSync<R, I> + 'loc>,
 }
 
 impl<'loc, R, I> Localization<'loc, R, I>
 where
     I: Iterator<Item = FluentBundle<R>>,
 {
-    pub fn new<F>(resource_ids: Vec<String>, mut generate_bundles: F) -> Self
+    pub fn new<F>(resource_ids: Vec<PathBuf>, mut generate_bundles: F) -> Self
     where
-        F: FnMut(&[String]) -> I + 'loc,
+        F: FnMut(Vec<PathBuf>) -> I + 'loc,
     {
-        let mut generate = move |x: &[String]| FluentBundleIterator {
+        let mut generate = move |x: Vec<PathBuf>| FluentBundleIteratorSync {
             iter: generate_bundles(x),
         };
-        let bundles = Reiterate::new(generate(&resource_ids));
+        let bundles = Reiterate::new(generate(resource_ids.clone()));
         Localization {
             resource_ids,
             bundles,
@@ -52,7 +53,7 @@ where
     }
 
     pub fn on_change(&mut self) {
-        self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
+        self.bundles = Reiterate::new((self.generate_bundles)(self.resource_ids.clone()));
     }
 
     pub fn format_value<'l>(&'l self, id: &'l str, args: Option<&'l FluentArgs>) -> Cow<'l, str>
