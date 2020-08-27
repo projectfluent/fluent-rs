@@ -25,3 +25,4 @@ reiterate = "0.1.3"
 elsa = "1.3.2"
 unic-langid = { version = "0.9", features = ["macros"] }
 fluent-langneg = "0.13"
+l10nregistry = { path = "../../l10nregistry-rs" }
