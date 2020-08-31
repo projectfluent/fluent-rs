@@ -12,7 +12,7 @@
 // //! parameter with a comma-separated list of locales requested by the user.
 // //!
 // //! Example:
-// //!   
+// //!
 // //!   cargo run --example simple-fallback 123 de,pl
 // //!
 // //! If the second argument is omitted, `en-US` locale is used as the
@@ -77,7 +77,7 @@
 //
 // static L10N_RESOURCES: &[&str] = &["simple.ftl"];
 //
-// fn main() {
+fn main() {}
 //     // 1. Get the command line arguments.
 //     let args: Vec<String> = env::args().collect();
 
