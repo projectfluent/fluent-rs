@@ -1,14 +1,9 @@
-use std::path::{Path, PathBuf};
-
 use fluent_fallback::Localization;
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
-use unic_langid::{LanguageIdentifier, langid};
+use unic_langid::{langid, LanguageIdentifier};
 
-const LOCALES: &[LanguageIdentifier] = &[
-    langid!("pl"),
-    langid!("en-US"),
-];
+const LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
 
 fn get_app_locales() -> &'static [LanguageIdentifier] {
     LOCALES
@@ -16,7 +11,7 @@ fn get_app_locales() -> &'static [LanguageIdentifier] {
 
 #[test]
 fn localization_format_sync() {
-    let resource_ids: Vec<PathBuf> = vec!["test.ftl".into(), "test2.ftl".into()];
+    let resource_ids = vec!["test.ftl", "test2.ftl"];
 
     let main_fs = FileSource::new(
         "main".to_string(),
@@ -28,21 +23,19 @@ fn localization_format_sync() {
 
     reg.register_sources(vec![main_fs]).unwrap();
 
-    let generate_messages = |res_ids: &[PathBuf]| {
+    let loc = Localization::new(resource_ids.iter(), |res_ids| {
         let locales = get_app_locales();
-        reg.generate_bundles_sync(locales, res_ids)
-    };
+        Box::new(reg.generate_bundles_sync(locales, res_ids))
+    });
 
-    let loc = Localization::new(resource_ids.clone(), Some(generate_messages));
+    let value = loc.format_value_sync("hello-world", None);
+    assert_eq!(value, "Hello World [pl]");
 
-    // let value = loc.format_value_sync("hello-world", None);
-    // assert_eq!(value, "Hello World [pl]");
-    //
-    // let value = loc.format_value_sync("missing-message", None);
-    // assert_eq!(value, "missing-message");
-    //
-    // let value = loc.format_value_sync("hello-world-3", None);
-    // assert_eq!(value, "Hello World 3 [en]");
+    let value = loc.format_value_sync("missing-message", None);
+    assert_eq!(value, "missing-message");
+
+    let value = loc.format_value_sync("hello-world-3", None);
+    assert_eq!(value, "Hello World 3 [en]");
 }
 
 #[test]
