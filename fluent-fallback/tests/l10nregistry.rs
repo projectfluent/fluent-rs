@@ -1,6 +1,9 @@
+use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_fallback::Localization;
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
+use std::path::Path;
+use std::rc::Rc;
 use unic_langid::{langid, LanguageIdentifier};
 
 const LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
@@ -9,9 +12,28 @@ fn get_app_locales() -> &'static [LanguageIdentifier] {
     LOCALES
 }
 
+type ResRc = Rc<FluentResource>;
+
+fn get_new_localization<'l>(reg: &'l L10nRegistry, res_ids: &'l [&'l str]) -> Localization<
+    'l,
+    ResRc,
+    impl Iterator<Item = FluentBundle<ResRc>> + 'l,
+    &'l &'l str,
+    impl Iterator<Item = &'l &'l str> + Clone + 'l>
+ {
+
+    let loc = Localization::new(res_ids.iter(), move |res_ids| {
+        let locales = get_app_locales();
+        Box::new(reg.generate_bundles_sync(locales, res_ids))
+    });
+    loc
+}
+
 #[test]
 fn localization_format_sync() {
     let resource_ids = vec!["test.ftl", "test2.ftl"];
+
+    let mut reg = L10nRegistry::new();
 
     let main_fs = FileSource::new(
         "main".to_string(),
@@ -19,14 +41,9 @@ fn localization_format_sync() {
         "./tests/resources/{locale}/".into(),
     );
 
-    let mut reg = L10nRegistry::new();
-
     reg.register_sources(vec![main_fs]).unwrap();
 
-    let loc = Localization::new(resource_ids.iter(), |res_ids| {
-        let locales = get_app_locales();
-        Box::new(reg.generate_bundles_sync(locales, res_ids))
-    });
+    let loc = get_new_localization(&reg, &resource_ids);
 
     let value = loc.format_value_sync("hello-world", None);
     assert_eq!(value, "Hello World [pl]");
