@@ -1,4 +1,4 @@
-use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_bundle::FluentResource;
 use fluent_fallback::Localization;
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
@@ -51,14 +51,14 @@ fn localization_format_sync() {
 
     let loc = get_new_localization(reg, resource_ids);
 
-    // let value = loc.format_value_sync("hello-world", None);
-    // assert_eq!(value, "Hello World [pl]");
-    //
-    // let value = loc.format_value_sync("missing-message", None);
-    // assert_eq!(value, "missing-message");
-    //
-    // let value = loc.format_value_sync("hello-world-3", None);
-    // assert_eq!(value, "Hello World 3 [en]");
+    let value = loc.format_value_sync("hello-world", None);
+    assert_eq!(value, "Hello World [pl]");
+
+    let value = loc.format_value_sync("missing-message", None);
+    assert_eq!(value, "missing-message");
+
+    let value = loc.format_value_sync("hello-world-3", None);
+    assert_eq!(value, "Hello World 3 [en]");
 }
 
 #[test]
