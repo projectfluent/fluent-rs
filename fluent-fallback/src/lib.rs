@@ -1,83 +1,27 @@
-use std::borrow::Borrow;
-use std::borrow::Cow;
-use std::path::Path;
+use fluent_bundle::FluentBundle;
+use std::path::PathBuf;
 
 use reiterate::Reiterate;
 
-use fluent_bundle::FluentResource;
-use fluent_bundle::{FluentArgs, FluentBundle};
+pub type BundleIterator<R> = dyn Iterator<Item = Box<FluentBundle<R>>>;
 
-struct FluentBundleIterator<R, I>
-where
-    I: Iterator<Item = FluentBundle<R>>,
-{
-    iter: I,
+pub struct Localization<R> {
+    pub resource_ids: Vec<PathBuf>,
+    bundles: Reiterate<Box<BundleIterator<R>>>,
+    generate_bundles_sync: Option<Box<dyn FnMut(Vec<PathBuf>) -> Box<BundleIterator<R>>>>,
 }
 
-impl<R, I> Iterator for FluentBundleIterator<R, I>
-where
-    I: Iterator<Item = FluentBundle<R>>,
-{
-    type Item = Box<FluentBundle<R>>;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.next().map(Box::new)
-    }
-}
-
-pub struct Localization<'loc, R, I, P, L>
-where
-    P: AsRef<Path>,
-    L: Iterator<Item = P> + Clone,
-    I: Iterator<Item = FluentBundle<R>> + 'loc,
-{
-    pub resource_ids: L,
-    bundles: Reiterate<FluentBundleIterator<R, I>>,
-    generate_bundles_sync: Option<Box<dyn FnMut(L) -> FluentBundleIterator<R, I> + 'loc>>,
-}
-
-impl<'loc, R, I, P, L> Localization<'loc, R, I, P, L>
-where
-    I: Iterator<Item = FluentBundle<R>>,
-    P: AsRef<Path>,
-    L: Iterator<Item = P> + Clone,
-{
-    pub fn new<F>(resource_ids: L, mut generate_bundles_sync: F) -> Self
+impl<R> Localization<R> {
+    pub fn new<F: 'static>(resource_ids: Vec<PathBuf>, mut generate_bundles_sync: F) -> Self
     where
-        F: FnMut(L) -> I + 'loc,
+        F: FnMut(Vec<PathBuf>) -> Box<BundleIterator<R>>,
     {
-        let mut generate = move |x: L| FluentBundleIterator {
-            iter: generate_bundles_sync(x),
-        };
-        let bundles = Reiterate::new(generate(resource_ids.clone()));
-        Localization {
+        let bundles = Reiterate::new(generate_bundles_sync(resource_ids.clone()));
+
+        Self {
             resource_ids,
             bundles,
-            generate_bundles_sync: Some(Box::new(generate)),
+            generate_bundles_sync: Some(Box::new(generate_bundles_sync)),
         }
-    }
-
-    pub fn on_change(&mut self) {
-        self.bundles = Reiterate::new((self.generate_bundles_sync.as_mut().unwrap())(
-            self.resource_ids.clone(),
-        ));
-    }
-
-    pub fn format_value_sync<'l>(
-        &'l self,
-        id: &'l str,
-        args: Option<&'l FluentArgs>,
-    ) -> Cow<'l, str>
-    where
-        R: Borrow<FluentResource>,
-    {
-        for bundle in &self.bundles {
-            if let Some(msg) = bundle.get_message(id) {
-                if let Some(pattern) = msg.value {
-                    let mut errors = vec![];
-                    return bundle.format_pattern(pattern, args, &mut errors);
-                }
-            }
-        }
-        id.into()
     }
 }
