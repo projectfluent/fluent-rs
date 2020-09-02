@@ -6,7 +6,25 @@ use std::path::PathBuf;
 use std::rc::Rc;
 use unic_langid::{langid, LanguageIdentifier};
 
-const LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
+static LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
+static mut L10N_REGISTRY: Option<L10nRegistry> = None;
+
+fn get_l10n_registry() -> &'static L10nRegistry {
+    let reg: &mut Option<L10nRegistry> = unsafe { &mut L10N_REGISTRY };
+
+    reg.get_or_insert_with(|| {
+        let mut reg = L10nRegistry::new();
+
+        let main_fs = FileSource::new(
+            "main".to_string(),
+            get_app_locales().to_vec(),
+            "./tests/resources/{locale}/".into(),
+        );
+
+        reg.register_sources(vec![main_fs]).unwrap();
+        reg
+    })
+}
 
 fn get_app_locales() -> &'static [LanguageIdentifier] {
     LOCALES
@@ -14,7 +32,7 @@ fn get_app_locales() -> &'static [LanguageIdentifier] {
 
 type ResRc = Rc<FluentResource>;
 
-fn get_new_localization<'l>(reg: &'l L10nRegistry, res_ids: Vec<PathBuf>) -> Localization<ResRc> {
+fn get_new_localization(reg: &'static L10nRegistry, res_ids: Vec<PathBuf>) -> Localization<ResRc> {
     let loc = Localization::new(res_ids, move |res_ids| {
         let locales = get_app_locales();
         Box::new(
@@ -29,17 +47,9 @@ fn get_new_localization<'l>(reg: &'l L10nRegistry, res_ids: Vec<PathBuf>) -> Loc
 fn localization_format_sync() {
     let resource_ids = vec!["test.ftl".into(), "test2.ftl".into()];
 
-    let mut reg = L10nRegistry::new();
+    let reg = get_l10n_registry();
 
-    let main_fs = FileSource::new(
-        "main".to_string(),
-        get_app_locales().to_vec(),
-        "./tests/resources/{locale}/".into(),
-    );
-
-    reg.register_sources(vec![main_fs]).unwrap();
-
-    let loc = get_new_localization(&reg, resource_ids);
+    let loc = get_new_localization(reg, resource_ids);
 
     // let value = loc.format_value_sync("hello-world", None);
     // assert_eq!(value, "Hello World [pl]");
