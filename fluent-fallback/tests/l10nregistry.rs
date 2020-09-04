@@ -2,12 +2,19 @@ use fluent_bundle::FluentResource;
 use fluent_fallback::Localization;
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
-use std::path::PathBuf;
+use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use unic_langid::{langid, LanguageIdentifier};
 
 static LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
 static mut L10N_REGISTRY: Option<L10nRegistry> = None;
+
+fn fetch_sync(path: &Path) -> Result<Option<String>, std::io::Error> {
+    if !path.exists() {
+        return Ok(None);
+    }
+    Ok(Some(std::fs::read_to_string(path)?))
+}
 
 fn get_l10n_registry() -> &'static L10nRegistry {
     let reg: &mut Option<L10nRegistry> = unsafe { &mut L10N_REGISTRY };
@@ -19,6 +26,7 @@ fn get_l10n_registry() -> &'static L10nRegistry {
             "main".to_string(),
             get_app_locales().to_vec(),
             "./tests/resources/{locale}/".into(),
+            fetch_sync,
         );
 
         reg.register_sources(vec![main_fs]).unwrap();
