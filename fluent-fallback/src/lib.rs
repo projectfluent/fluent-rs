@@ -1,22 +1,21 @@
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource};
 use std::borrow::Borrow;
 use std::borrow::Cow;
-use std::path::PathBuf;
 
 use reiterate::Reiterate;
 
 pub type BundleIterator<R> = dyn Iterator<Item = Box<FluentBundle<R>>>;
 
 pub struct Localization<R> {
-    pub resource_ids: Vec<PathBuf>,
+    pub resource_ids: Vec<String>,
     bundles: Reiterate<Box<BundleIterator<R>>>,
-    generate_bundles_sync: Box<dyn FnMut(Vec<PathBuf>) -> Box<BundleIterator<R>>>,
+    generate_bundles_sync: Box<dyn FnMut(Vec<String>) -> Box<BundleIterator<R>>>,
 }
 
 impl<R> Localization<R> {
-    pub fn new<F: 'static>(resource_ids: Vec<PathBuf>, mut generate_bundles_sync: F) -> Self
+    pub fn new<F: 'static>(resource_ids: Vec<String>, mut generate_bundles_sync: F) -> Self
     where
-        F: FnMut(Vec<PathBuf>) -> Box<BundleIterator<R>>,
+        F: FnMut(Vec<String>) -> Box<BundleIterator<R>>,
     {
         let bundles = Reiterate::new(generate_bundles_sync(resource_ids.clone()));
 
