@@ -2,15 +2,14 @@ use fluent_bundle::FluentResource;
 use fluent_fallback::Localization;
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
-use std::path::{Path, PathBuf};
 use std::rc::Rc;
 use unic_langid::{langid, LanguageIdentifier};
 
 static LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
 static mut L10N_REGISTRY: Option<L10nRegistry> = None;
 
-fn fetch_sync(path: &Path) -> Result<Option<String>, std::io::Error> {
-    if !path.exists() {
+fn fetch_sync(path: &str) -> Result<Option<String>, std::io::Error> {
+    if !std::path::Path::new(path).exists() {
         return Ok(None);
     }
     Ok(Some(std::fs::read_to_string(path)?))
@@ -40,7 +39,7 @@ fn get_app_locales() -> &'static [LanguageIdentifier] {
 
 type ResRc = Rc<FluentResource>;
 
-fn get_new_localization(reg: &'static L10nRegistry, res_ids: Vec<PathBuf>) -> Localization<ResRc> {
+fn get_new_localization(reg: &'static L10nRegistry, res_ids: Vec<String>) -> Localization<ResRc> {
     let loc = Localization::new(res_ids, move |res_ids| {
         let locales = get_app_locales();
         Box::new(
@@ -71,7 +70,7 @@ fn localization_format_sync() {
 
 #[test]
 fn localization_format_async() {
-    // let resource_ids: Vec<PathBuf> = vec!["test.ftl".into(), "test2.ftl".into()];
+    // let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     // let pl = langid!("pl");
     // let en_us = langid!("en-US");
     // let locales = vec![&pl, &en_us];
@@ -83,7 +82,7 @@ fn localization_format_async() {
     // reg.register_sources(vec![main_fs]).unwrap();
     //
     // let res_ids: Vec<&Path> = resource_ids.iter().map(|res_id| res_id.as_path()).collect();
-    // let generate_messages = |_res_ids: Vec<PathBuf>| {
+    // let generate_messages = |_res_ids: Vec<String>| {
     //     reg.generate_bundles(&locales, &res_ids)
     // };
     //
