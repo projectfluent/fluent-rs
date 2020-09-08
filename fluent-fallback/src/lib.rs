@@ -6,6 +6,11 @@ use reiterate::Reiterate;
 
 pub type BundleIterator<R> = dyn Iterator<Item = Box<FluentBundle<R>>>;
 
+pub struct L10nKey<'l> {
+    pub id: String,
+    pub args: Option<FluentArgs<'l>>,
+}
+
 pub struct Localization<R> {
     pub resource_ids: Vec<String>,
     bundles: Reiterate<Box<BundleIterator<R>>>,
@@ -47,5 +52,27 @@ impl<R> Localization<R> {
             }
         }
         id.into()
+    }
+
+    pub fn format_values_sync<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<Cow<'l, str>>>
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+        let mut result: Vec<Option<Cow<'l, str>>> =
+            std::iter::repeat(None).take(keys.len()).collect();
+
+        for (i, key) in keys.iter().enumerate() {
+            for bundle in &self.bundles {
+                if let Some(msg) = bundle.get_message(&key.id) {
+                    if let Some(pattern) = msg.value {
+                        let val = bundle.format_pattern(pattern, key.args.as_ref(), &mut errors);
+                        result[i] = Some(val.clone());
+                        break;
+                    }
+                }
+            }
+        }
+        result
     }
 }
