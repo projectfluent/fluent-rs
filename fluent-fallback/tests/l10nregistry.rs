@@ -1,7 +1,8 @@
 use fluent_bundle::FluentResource;
-use fluent_fallback::Localization;
+use fluent_fallback::{L10nKey, Localization};
 use l10nregistry::registry::L10nRegistry;
 use l10nregistry::source::FileSource;
+use std::borrow::Cow;
 use std::rc::Rc;
 use unic_langid::{langid, LanguageIdentifier};
 
@@ -51,7 +52,7 @@ fn get_new_localization(reg: &'static L10nRegistry, res_ids: Vec<String>) -> Loc
 }
 
 #[test]
-fn localization_format_sync() {
+fn localization_format_value_sync() {
     let resource_ids = vec!["test.ftl".into(), "test2.ftl".into()];
 
     let reg = get_l10n_registry();
@@ -69,7 +70,36 @@ fn localization_format_sync() {
 }
 
 #[test]
-fn localization_format_async() {
+fn localization_format_values_sync() {
+    let resource_ids = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let reg = get_l10n_registry();
+
+    let loc = get_new_localization(reg, resource_ids);
+
+    let keys = vec![
+        L10nKey {
+            id: "hello-world".to_string(),
+            args: None,
+        },
+        L10nKey {
+            id: "missing-message".to_string(),
+            args: None,
+        },
+        L10nKey {
+            id: "hello-world-3".to_string(),
+            args: None,
+        },
+    ];
+    let values = loc.format_values_sync(&keys);
+    assert_eq!(values.len(), 3);
+    assert_eq!(values[0], Some(Cow::Borrowed("Hello World [pl]")));
+    assert_eq!(values[1], None);
+    assert_eq!(values[2], Some(Cow::Borrowed("Hello World 3 [en]")));
+}
+
+#[test]
+fn localization_format_value_async() {
     // let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     // let pl = langid!("pl");
     // let en_us = langid!("en-US");
