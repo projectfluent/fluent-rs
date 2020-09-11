@@ -76,8 +76,10 @@ fn unicode_unescape_bench(c: &mut Criterion) {
     ];
     c.bench_function("unicode", move |b| {
         b.iter(|| {
+            let mut result = String::new();
             for s in strings {
-                unescape_unicode(s);
+                unescape_unicode(&mut result, s).expect("Failed to write");
+                result.clear();
             }
         })
     });

@@ -14,7 +14,7 @@ use fluent_syntax::ast;
 use intl_pluralrules::{PluralCategory, PluralRuleType};
 
 use crate::memoizer::MemoizerKind;
-use crate::resolve::Scope;
+use crate::resolver::Scope;
 use crate::resource::FluentResource;
 
 #[derive(Debug, PartialEq, Clone)]

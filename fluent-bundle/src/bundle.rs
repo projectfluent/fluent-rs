@@ -8,6 +8,7 @@ use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
+use std::fmt;
 
 use fluent_syntax::ast;
 use unic_langid::LanguageIdentifier;
@@ -16,7 +17,7 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::memoizer::MemoizerKind;
-use crate::resolve::{ResolveValue, Scope};
+use crate::resolver::{Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -437,23 +438,25 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Some(FluentMessage { value, attributes })
     }
 
-    pub fn format_pattern<'bundle>(
+    pub fn format_pattern<'bundle, W>(
         &'bundle self,
+        w: &mut W,
         pattern: &'bundle ast::Pattern,
         args: Option<&'bundle FluentArgs>,
         errors: &mut Vec<FluentError>,
-    ) -> Cow<'bundle, str>
+    ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
+        W: fmt::Write,
     {
         let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).as_string(&scope);
+        pattern.write(w, &mut scope)?;
 
         for err in scope.errors {
             errors.push(err.into());
         }
 
-        result
+        Ok(())
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
