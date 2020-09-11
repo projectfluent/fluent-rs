@@ -4,7 +4,8 @@ use std::borrow::Borrow;
 
 use fluent_syntax::ast;
 
-use crate::bundle::{FluentArgs, FluentBundleBase};
+use crate::args::FluentArgs;
+use crate::bundle::FluentBundleBase;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 

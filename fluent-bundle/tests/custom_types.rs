@@ -86,8 +86,8 @@ fn fluent_date_time_builtin() {
 
     impl DateTimeOptions {
         pub fn merge(&mut self, input: &FluentArgs) {
-            for (key, value) in input {
-                match *key {
+            for (key, value) in input.iter() {
+                match key {
                     "dateStyle" => self.date_style = value.into(),
                     "timeStyle" => self.time_style = value.into(),
                     _ => {}
@@ -166,7 +166,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
 
     let mut errors = vec![];
     let mut args = FluentArgs::new();
-    args.insert(
+    args.add(
         "date",
         FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptions::default()))),
     );

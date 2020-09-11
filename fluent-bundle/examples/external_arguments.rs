@@ -21,7 +21,7 @@ unread-emails =
         .expect("Failed to add FTL resources to the bundle.");
 
     let mut args = FluentArgs::new();
-    args.insert("name", FluentValue::from("John"));
+    args.add("name", FluentValue::from("John"));
 
     let msg = bundle
         .get_message("hello-world")
@@ -38,7 +38,7 @@ unread-emails =
     println!("{}", value);
 
     let mut args = FluentArgs::new();
-    args.insert("emailCount", 1.into());
+    args.add("emailCount", 1.into());
 
     let msg = bundle
         .get_message("unread-emails")

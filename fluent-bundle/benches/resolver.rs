@@ -7,7 +7,7 @@ use std::fs::File;
 use std::io;
 use std::io::Read;
 
-use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
 use unic_langid::langid;
 
@@ -40,20 +40,20 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
-fn get_args(name: &str) -> Option<HashMap<&str, FluentValue>> {
+fn get_args(name: &str) -> Option<FluentArgs> {
     match name {
         "preferences" => {
-            let mut prefs_args = HashMap::new();
-            prefs_args.insert("name", FluentValue::from("John"));
-            prefs_args.insert("tabCount", FluentValue::from(5));
-            prefs_args.insert("count", FluentValue::from(3));
-            prefs_args.insert("version", FluentValue::from("65.0"));
-            prefs_args.insert("path", FluentValue::from("/tmp"));
-            prefs_args.insert("num", FluentValue::from(4));
-            prefs_args.insert("email", FluentValue::from("john@doe.com"));
-            prefs_args.insert("value", FluentValue::from(4.5));
-            prefs_args.insert("unit", FluentValue::from("mb"));
-            prefs_args.insert("service-name", FluentValue::from("Mozilla Disk"));
+            let mut prefs_args = FluentArgs::new();
+            prefs_args.add("name", FluentValue::from("John"));
+            prefs_args.add("tabCount", FluentValue::from(5));
+            prefs_args.add("count", FluentValue::from(3));
+            prefs_args.add("version", FluentValue::from("65.0"));
+            prefs_args.add("path", FluentValue::from("/tmp"));
+            prefs_args.add("num", FluentValue::from(4));
+            prefs_args.add("email", FluentValue::from("john@doe.com"));
+            prefs_args.add("value", FluentValue::from(4.5));
+            prefs_args.add("unit", FluentValue::from("mb"));
+            prefs_args.add("service-name", FluentValue::from("Mozilla Disk"));
             Some(prefs_args)
         }
         _ => None,
