@@ -3,10 +3,8 @@ use std::fmt;
 
 const UNKNOWN_CHAR: char = '�';
 
-fn encode_unicode(s: &str) -> char {
-    u32::from_str_radix(s, 16)
-        .ok()
-        .and_then(char::from_u32)
+fn encode_unicode(s: Option<&str>) -> char {
+    s.and_then(|s| u32::from_str_radix(s, 16).ok().and_then(char::from_u32))
         .unwrap_or(UNKNOWN_CHAR)
 }
 
@@ -37,10 +35,11 @@ where
                 let seq_start = ptr + 1;
                 let len = if u == &b'u' { 4 } else { 6 };
                 ptr += len;
-                encode_unicode(&input[seq_start..seq_start + len])
+                encode_unicode(input.get(seq_start..seq_start + len))
             }
             _ => UNKNOWN_CHAR,
         };
+        ptr += 1;
         w.write_char(new_char)?;
         start = ptr;
     }
