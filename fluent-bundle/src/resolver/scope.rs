@@ -2,7 +2,7 @@ use crate::bundle::FluentBundleBase;
 use crate::{FluentArgs, FluentResource};
 // use crate::types::{FluentValue, DisplayableNode};
 use crate::memoizer::MemoizerKind;
-use crate::resolver::{ResolverError, WriteValue};
+use crate::resolver::{ResolveValue, ResolverError, WriteValue};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
 use std::fmt;
@@ -66,20 +66,37 @@ impl<'bundle, R, M: MemoizerKind> Scope<'bundle, R, M> {
         return Ok(());
     }
 
-    // pub fn track(
-    //     &mut self,
-    //     pattern: &'bundle ast::Pattern,
-    //     entry: DisplayableNode<'bundle>,
-    // ) -> FluentValue<'bundle>
-    // where R: Borrow<FluentResource>{
-    //     if self.travelled.contains(&pattern) {
-    //         self.errors.push(ResolverError::Cyclic);
-    //         FluentValue::Error(entry)
-    //     } else {
-    //         self.travelled.push(pattern);
-    //         let result = pattern.resolve(self);
-    //         self.travelled.pop();
-    //         result
-    //     }
-    // }
+    pub fn track<W>(
+        &mut self,
+        w: &mut W,
+        pattern: &'bundle ast::Pattern,
+        exp: &ast::InlineExpression,
+    ) -> fmt::Result
+    where
+        R: Borrow<FluentResource>,
+        W: fmt::Write,
+    {
+        if self.travelled.contains(&pattern) {
+            self.errors.push(ResolverError::Cyclic);
+            w.write_char('{')?;
+            exp.write_error(w)?;
+            w.write_char('}')
+        } else {
+            self.travelled.push(pattern);
+            let result = pattern.write(w, self);
+            self.travelled.pop();
+            result
+        }
+    }
+
+    pub fn generate_ref_error<W>(&mut self, w: &mut W, exp: &ast::InlineExpression) -> fmt::Result
+    where
+        W: fmt::Write,
+    {
+        self.errors
+            .push(ResolverError::Reference(exp.resolve_error()));
+        w.write_char('{')?;
+        exp.write_error(w)?;
+        w.write_char('}')
+    }
 }

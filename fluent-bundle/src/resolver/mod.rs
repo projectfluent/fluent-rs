@@ -45,14 +45,18 @@ use crate::types::FluentValue;
 // }
 
 // Converts an AST node to a `FluentValue`.
-pub(crate) trait ResolveValue<'source> {
-    fn resolve<R, M: MemoizerKind>(
+pub(crate) trait ResolveValue {
+    fn resolve<'source, R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
     ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
     {
+        unimplemented!();
+    }
+
+    fn resolve_error(&self) -> String {
         unimplemented!();
     }
 }
@@ -62,6 +66,13 @@ pub(crate) trait WriteValue {
     where
         W: fmt::Write,
         R: Borrow<FluentResource>;
+
+    fn write_error<W>(&self, w: &mut W) -> fmt::Result
+    where
+        W: fmt::Write,
+    {
+        unimplemented!();
+    }
 }
 
 // impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
