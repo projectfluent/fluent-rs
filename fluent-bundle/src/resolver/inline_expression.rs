@@ -38,7 +38,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                         msg.value.as_ref().map(|value| scope.track(w, value, self))
                     }
                 })
-                .unwrap_or_else(|| scope.generate_ref_error(w, self)),
+                .unwrap_or_else(|| scope.write_ref_error(w, self)),
             ast::InlineExpression::NumberLiteral { value } => {
                 FluentValue::try_number(*value).write(w, scope)
             }
@@ -59,7 +59,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                         Some(scope.track(w, &term.value, self))
                     }
                 })
-                .unwrap_or_else(|| scope.generate_ref_error(w, self)),
+                .unwrap_or_else(|| scope.write_ref_error(w, self)),
             ast::InlineExpression::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) =
                     get_arguments(scope, arguments);
@@ -70,7 +70,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                     let val = func(resolved_positional_args.as_slice(), &resolved_named_args);
                     w.write_str(&val.as_string(scope))
                 } else {
-                    scope.generate_ref_error(w, self)
+                    scope.write_ref_error(w, self)
                 }
             }
             ast::InlineExpression::VariableReference { id } => {
@@ -80,7 +80,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                     // XXX: Move args to use fmt::Write
                     w.write_str(&arg.as_string(scope))
                 } else {
-                    scope.generate_ref_error(w, self)
+                    scope.write_ref_error(w, self)
                 }
             }
             ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
@@ -103,6 +103,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                 id,
                 attribute: None,
             } => w.write_str(id.name),
+            ast::InlineExpression::VariableReference { id } => write!(w, "${}", id.name),
             _ => unreachable!(),
         }
     }
@@ -164,16 +165,15 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
             //         scope.generate_ref_error(w, self)
             //     }
             // }
-            // ast::InlineExpression::VariableReference { id } => {
-            //     let args = scope.local_args.as_ref().or(scope.args);
+            ast::InlineExpression::VariableReference { id } => {
+                let args = scope.local_args.as_ref().or(scope.args);
 
-            //     if let Some(arg) = args.and_then(|args| args.get(id.name)) {
-            //         // XXX: Move args to use fmt::Write
-            //         w.write_str(&arg.as_string(scope))
-            //     } else {
-            //         scope.generate_ref_error(w, self)
-            //     }
-            // }
+                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
+                    arg.clone()
+                } else {
+                    scope.generate_ref_error(self)
+                }
+            }
             // ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
             _ => {
                 unimplemented!();
@@ -189,7 +189,16 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                     .expect("Failed to write to String.");
                 error
             }
-            _ => unreachable!(),
+            ast::InlineExpression::VariableReference { id } => {
+                let mut error = String::from("Unknown variable: ");
+                self.write_error(&mut error)
+                    .expect("Failed to write to String.");
+                error
+            }
+            b @ _ => {
+                dbg!(b);
+                unreachable!()
+            }
         }
     }
 }

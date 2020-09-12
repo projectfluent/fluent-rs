@@ -91,7 +91,7 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         }
     }
 
-    pub fn generate_ref_error<W>(&mut self, w: &mut W, exp: &ast::InlineExpression) -> fmt::Result
+    pub fn write_ref_error<W>(&mut self, w: &mut W, exp: &ast::InlineExpression) -> fmt::Result
     where
         W: fmt::Write,
     {
@@ -100,5 +100,14 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         w.write_char('{')?;
         exp.write_error(w)?;
         w.write_char('}')
+    }
+
+    pub fn generate_ref_error(
+        &mut self,
+        exp: &'scope ast::InlineExpression,
+    ) -> FluentValue<'scope> {
+        self.errors
+            .push(ResolverError::Reference(exp.resolve_error()));
+        FluentValue::Error(exp.into())
     }
 }

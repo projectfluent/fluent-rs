@@ -214,13 +214,13 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
 
     let mut errors = vec![];
 
-    // let msg = bundle.get_message("key-num-explicit").unwrap();
-    // let val = bundle.format_pattern_to_string(msg.value.unwrap(), None, &mut errors);
-    // assert_eq!(val, "Hello 5.00 World");
+    let msg = bundle.get_message("key-num-explicit").unwrap();
+    let val = bundle.format_pattern_to_string(msg.value.unwrap(), None, &mut errors);
+    assert_eq!(val, "Hello 5.00 World");
 
-    // let msg = bundle.get_message("key-num-implicit").unwrap();
-    // let val = bundle.format_pattern_to_string(msg.value.unwrap(), None, &mut errors);
-    // assert_eq!(val, "Hello 5.000 World");
+    let msg = bundle.get_message("key-num-implicit").unwrap();
+    let val = bundle.format_pattern_to_string(msg.value.unwrap(), None, &mut errors);
+    assert_eq!(val, "Hello 5.000 World");
 
     bundle.set_formatter(Some(custom_formatter));
 
