@@ -1,7 +1,7 @@
 use crate::bundle::FluentBundleBase;
 use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, ResolverError, WriteValue};
-use crate::types::FluentValue;
+use crate::types::{DisplayableNode, FluentValue};
 use crate::{FluentArgs, FluentResource};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
@@ -86,6 +86,25 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         } else {
             self.travelled.push(pattern);
             let result = pattern.write(w, self);
+            self.travelled.pop();
+            result
+        }
+    }
+
+    pub fn track_resolve(
+        &mut self,
+        pattern: &'scope ast::Pattern,
+        entry: DisplayableNode<'scope>,
+    ) -> FluentValue<'scope>
+    where
+        R: Borrow<FluentResource>,
+    {
+        if self.travelled.contains(&pattern) {
+            self.errors.push(ResolverError::Cyclic);
+            FluentValue::Error(entry)
+        } else {
+            self.travelled.push(pattern);
+            let result = pattern.resolve(self);
             self.travelled.pop();
             result
         }

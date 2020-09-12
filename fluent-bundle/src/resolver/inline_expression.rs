@@ -103,8 +103,22 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                 id,
                 attribute: None,
             } => w.write_str(id.name),
+            ast::InlineExpression::TermReference {
+                id,
+                attribute: Some(attribute),
+                ..
+            } => write!(w, "-{}.{}", id.name, attribute.name),
+            ast::InlineExpression::TermReference {
+                id,
+                attribute: None,
+                ..
+            } => write!(w, "-{}", id.name),
+            ast::InlineExpression::FunctionReference { id, .. } => write!(w, "{}()", id.name),
             ast::InlineExpression::VariableReference { id } => write!(w, "${}", id.name),
-            _ => unreachable!(),
+            b @ _ => {
+                dbg!(b);
+                unreachable!()
+            }
         }
     }
 }
@@ -134,37 +148,36 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
             //     })
             //     .unwrap_or_else(|| scope.generate_ref_error(w, self)),
             ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(*value),
-            // ast::InlineExpression::TermReference {
-            //     id,
-            //     attribute,
-            //     arguments,
-            // } => scope
-            //     .bundle
-            //     .get_entry_term(&id.name)
-            //     .and_then(|term| {
-            //         if let Some(attr) = attribute {
-            //             term.attributes
-            //                 .iter()
-            //                 .find(|a| a.id.name == attr.name)
-            //                 .map(|attr| scope.track(w, &attr.value, self))
-            //         } else {
-            //             Some(scope.track(w, &term.value, self))
-            //         }
-            //     })
-            //     .unwrap_or_else(|| scope.generate_ref_error(w, self)),
-            // ast::InlineExpression::FunctionReference { id, arguments } => {
+            ast::InlineExpression::TermReference {
+                id,
+                attribute,
+                arguments,
+            } => scope
+                .bundle
+                .get_entry_term(&id.name)
+                .and_then(|term| {
+                    if let Some(attr) = attribute {
+                        term.attributes
+                            .iter()
+                            .find(|a| a.id.name == attr.name)
+                            .map(|attr| scope.track_resolve(&attr.value, self.into()))
+                    } else {
+                        Some(scope.track_resolve(&term.value, self.into()))
+                    }
+                })
+                .unwrap_or_else(|| scope.generate_ref_error(self)),
+            ast::InlineExpression::FunctionReference { id, arguments } => {
 
-            //     let (resolved_positional_args, resolved_named_args) = get_arguments(scope, arguments);
+                let (resolved_positional_args, resolved_named_args) = get_arguments(scope, arguments);
 
-            //     let func = scope.bundle.get_entry_function(id.name);
+                let func = scope.bundle.get_entry_function(id.name);
 
-            //     if let Some(func) = func {
-            //         let val = func(resolved_positional_args.as_slice(), &resolved_named_args);
-            //         w.write_str(&val.as_string(scope))
-            //     } else {
-            //         scope.generate_ref_error(w, self)
-            //     }
-            // }
+                if let Some(func) = func {
+                    func(resolved_positional_args.as_slice(), &resolved_named_args)
+                } else {
+                    scope.generate_ref_error(self)
+                }
+            }
             ast::InlineExpression::VariableReference { id } => {
                 let args = scope.local_args.as_ref().or(scope.args);
 
@@ -175,7 +188,8 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                 }
             }
             // ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
-            _ => {
+            b @ _ => {
+                dbg!(b);
                 unimplemented!();
             }
         }
@@ -191,6 +205,18 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
             }
             ast::InlineExpression::VariableReference { id } => {
                 let mut error = String::from("Unknown variable: ");
+                self.write_error(&mut error)
+                    .expect("Failed to write to String.");
+                error
+            }
+            ast::InlineExpression::TermReference { .. } => {
+                let mut error = String::from("Unknown term: ");
+                self.write_error(&mut error)
+                    .expect("Failed to write to String.");
+                error
+            }
+            ast::InlineExpression::FunctionReference { .. } => {
+                let mut error = String::from("Unknown function: ");
                 self.write_error(&mut error)
                     .expect("Failed to write to String.");
                 error
