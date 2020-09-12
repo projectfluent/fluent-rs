@@ -10,7 +10,11 @@ use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 
 impl<'p> WriteValue for ast::Expression<'p> {
-    fn write<W, R, M: MemoizerKind>(&self, w: &mut W, scope: &mut Scope<R, M>) -> fmt::Result
+    fn write<'scope, W, R, M: MemoizerKind>(
+        &'scope self,
+        w: &mut W,
+        scope: &mut Scope<'scope, R, M>,
+    ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,

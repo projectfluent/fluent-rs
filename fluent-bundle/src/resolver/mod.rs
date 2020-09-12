@@ -35,7 +35,7 @@ use crate::types::FluentValue;
 pub(crate) trait ResolveValue {
     fn resolve<'source, R, M: MemoizerKind>(
         &'source self,
-        scope: &'source mut Scope<'source, R, M>,
+        scope: &mut Scope<'source, R, M>,
     ) -> FluentValue<'source>
     where
         R: Borrow<FluentResource>,
@@ -49,10 +49,17 @@ pub(crate) trait ResolveValue {
 }
 
 pub(crate) trait WriteValue {
-    fn write<W, R, M: MemoizerKind>(&self, w: &mut W, scope: &mut Scope<R, M>) -> fmt::Result
+    fn write<'source, W, R, M: MemoizerKind>(
+        &'source self,
+        w: &mut W,
+        scope: &mut Scope<'source, R, M>,
+    ) -> fmt::Result
     where
         W: fmt::Write,
-        R: Borrow<FluentResource>;
+        R: Borrow<FluentResource>,
+    {
+        unimplemented!();
+    }
 
     fn write_error<W>(&self, _w: &mut W) -> fmt::Result
     where

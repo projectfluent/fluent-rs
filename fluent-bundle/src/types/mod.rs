@@ -226,6 +226,26 @@ impl<'source> FluentValue<'source> {
         }
     }
 
+    pub fn write<W, R, M>(&self, w: &mut W, scope: &Scope<R, M>) -> fmt::Result
+    where
+        W: fmt::Write,
+        R: Borrow<FluentResource>,
+        M: MemoizerKind,
+    {
+        if let Some(formatter) = &scope.bundle.formatter {
+            if let Some(val) = formatter(self, &scope.bundle.intls) {
+                return w.write_str(&val);
+            }
+        }
+        match self {
+            FluentValue::String(s) => w.write_str(s),
+            FluentValue::Number(n) => w.write_str(&n.as_string()),
+            FluentValue::Error(d) => write!(w, "{{{}}}", &d.to_string()),
+            FluentValue::Custom(s) => w.write_str(&scope.bundle.intls.stringify_value(&**s)),
+            FluentValue::None => w.write_str("???"),
+        }
+    }
+
     pub fn as_string<R: Borrow<FluentResource>, M: MemoizerKind>(
         &self,
         scope: &Scope<R, M>,

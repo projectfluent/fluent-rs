@@ -390,6 +390,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     pub fn set_formatter(&mut self, func: Option<fn(&FluentValue, &M) -> Option<String>>) {
         if let Some(f) = func {
             self.formatter = Some(f);
+            println!("SET");
         } else {
             self.formatter = None;
         }

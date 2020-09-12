@@ -10,7 +10,11 @@ use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 
 impl<'p> WriteValue for ast::Pattern<'p> {
-    fn write<W, R, M: MemoizerKind>(&self, w: &mut W, scope: &mut Scope<R, M>) -> fmt::Result
+    fn write<'scope, W, R, M: MemoizerKind>(
+        &'scope self,
+        w: &mut W,
+        scope: &mut Scope<'scope, R, M>,
+    ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
@@ -19,15 +23,16 @@ impl<'p> WriteValue for ast::Pattern<'p> {
             w.write_str("???")?;
             return Ok(());
         }
-        if self.elements.len() == 1 {
-            match self.elements[0] {
+
+        for elem in &self.elements {
+            match elem {
                 ast::PatternElement::TextElement(s) => {
                     w.write_str(s)?;
                 }
                 ast::PatternElement::Placeable(ref p) => {
                     p.write(w, scope)?;
                 }
-            };
+            }
         }
         Ok(())
     }
