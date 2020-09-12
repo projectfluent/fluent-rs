@@ -25,7 +25,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
                     w.write_str(s)?;
                 }
                 ast::PatternElement::Placeable(ref p) => {
-                    unimplemented!();
+                    p.write(w, scope)?;
                 }
             };
         }

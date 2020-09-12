@@ -19,7 +19,7 @@ macro_rules! assert_format {
         let mut errors = vec![];
         assert!(msg.value.is_some());
         assert_eq!(
-            $bundle.format_pattern(&msg.value.unwrap(), $args, &mut errors),
+            $bundle.format_pattern_to_string(&msg.value.unwrap(), $args, &mut errors),
             $expected
         );
         assert!(errors.is_empty());
@@ -29,7 +29,7 @@ macro_rules! assert_format {
         let mut errors = vec![];
         assert!(msg.value.is_some());
         assert_eq!(
-            $bundle.format_pattern(&msg.value.unwrap(), $args, &mut errors),
+            $bundle.format_pattern_to_string(&msg.value.unwrap(), $args, &mut errors),
             $expected
         );
         assert_eq!(errors, $errors);
@@ -50,7 +50,10 @@ macro_rules! assert_format_attr {
         let msg = $bundle.get_message($id).expect("Message doesn't exists");
         let mut errors = vec![];
         let attr = msg.attributes.get($name).expect("Attribute exists");
-        assert_eq!($bundle.format_pattern(&attr, $args, &mut errors), $expected);
+        assert_eq!(
+            $bundle.format_pattern_to_string(&attr, $args, &mut errors),
+            $expected
+        );
         assert!(errors.is_empty());
     };
 }

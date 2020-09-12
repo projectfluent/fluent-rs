@@ -6,7 +6,7 @@ use std::fs;
 use std::iter;
 use std::path::Path;
 
-use fluent_bundle::resolve::ResolverError;
+use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
 use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
@@ -295,7 +295,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                         })
                         .collect()
                 });
-                let value = bundle.format_pattern(&val, args.as_ref(), &mut errors);
+                let value = bundle.format_pattern_to_string(&val, args.as_ref(), &mut errors);
                 assert_eq!(
                     &value,
                     expected_value,

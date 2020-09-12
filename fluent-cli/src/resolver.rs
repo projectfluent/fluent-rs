@@ -22,7 +22,7 @@ fn resolve(s: String) -> String {
 
     let mut errors = vec![];
     let value = bundle
-        .format_pattern(msg.value.expect("Message has no value"), None, &mut errors)
+        .format_pattern_to_string(msg.value.expect("Message has no value"), None, &mut errors)
         .into();
     let output = Output {
         value,

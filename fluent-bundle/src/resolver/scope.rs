@@ -1,33 +1,33 @@
 use crate::bundle::FluentBundleBase;
-use crate::{FluentArgs, FluentResource};
-// use crate::types::{FluentValue, DisplayableNode};
 use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, ResolverError, WriteValue};
+use crate::types::FluentValue;
+use crate::{FluentArgs, FluentResource};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
 use std::fmt;
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Scope<'bundle, R, M> {
+pub struct Scope<'scope, R, M> {
     /// The current `FluentBundleBase` instance.
-    pub bundle: &'bundle FluentBundleBase<R, M>,
+    pub bundle: &'scope FluentBundleBase<R, M>,
     /// The current arguments passed by the developer.
-    pub(super) args: Option<&'bundle FluentArgs<'bundle>>,
+    pub(super) args: Option<&'scope FluentArgs<'scope>>,
     /// Local args
-    pub(super) local_args: Option<FluentArgs<'bundle>>,
+    pub(super) local_args: Option<FluentArgs<'scope>>,
     /// The running count of resolved placeables. Used to detect the Billion
     /// Laughs and Quadratic Blowup attacks.
     pub(super) placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
+    travelled: smallvec::SmallVec<[&'scope ast::Pattern<'scope>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
     /// Makes the resolver bail.
     pub dirty: bool,
 }
 
-impl<'bundle, R, M: MemoizerKind> Scope<'bundle, R, M> {
-    pub fn new(bundle: &'bundle FluentBundleBase<R, M>, args: Option<&'bundle FluentArgs>) -> Self {
+impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
+    pub fn new(bundle: &'scope FluentBundleBase<R, M>, args: Option<&'scope FluentArgs>) -> Self {
         Scope {
             bundle,
             args,
@@ -48,8 +48,8 @@ impl<'bundle, R, M: MemoizerKind> Scope<'bundle, R, M> {
     pub fn maybe_track<W>(
         &mut self,
         w: &mut W,
-        pattern: &'bundle ast::Pattern,
-        placeable: &'bundle ast::Expression,
+        pattern: &'scope ast::Pattern,
+        exp: &'scope ast::Expression,
     ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
@@ -58,18 +58,20 @@ impl<'bundle, R, M: MemoizerKind> Scope<'bundle, R, M> {
         if self.travelled.is_empty() {
             self.travelled.push(pattern);
         }
-        placeable.write(w, self)?;
+        exp.write(w, self)?;
         if self.dirty {
-            w.write_str("???");
-            return Ok(());
+            w.write_char('{')?;
+            exp.write_error(w)?;
+            w.write_char('}')
+        } else {
+            Ok(())
         }
-        return Ok(());
     }
 
     pub fn track<W>(
         &mut self,
         w: &mut W,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'scope ast::Pattern,
         exp: &ast::InlineExpression,
     ) -> fmt::Result
     where

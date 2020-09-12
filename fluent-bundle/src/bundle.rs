@@ -60,7 +60,7 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];
 /// let pattern = msg.value.expect("Message has no value.");
-/// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+/// let value = bundle.format_pattern_to_string(&pattern, Some(&args), &mut errors);
 /// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
 ///
 /// ```
@@ -308,7 +308,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let msg = bundle.get_message("hello")
     ///     .expect("Failed to retrieve the message");
     /// let value = msg.value.expect("Failed to retrieve the value of the message");
-    /// assert_eq!(bundle.format_pattern(value, None, &mut errors), "Another Hi!");
+    /// assert_eq!(bundle.format_pattern_to_string(value, None, &mut errors), "Another Hi!");
     /// ```
     ///
     /// # Whitespace
@@ -459,6 +459,28 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Ok(())
     }
 
+    pub fn format_pattern_to_string<'bundle>(
+        &'bundle self,
+        pattern: &'bundle ast::Pattern,
+        args: Option<&'bundle FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> String
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut result = String::new();
+        let mut scope = Scope::new(self, args);
+        pattern
+            .write(&mut result, &mut scope)
+            .expect("Failed to write to a string.");
+
+        for err in scope.errors {
+            errors.push(err.into());
+        }
+
+        return result;
+    }
+
     /// Makes the provided rust function available to messages with the name `id`. See
     /// the [FTL syntax guide] to learn how these are used in messages.
     ///
@@ -489,7 +511,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let msg = bundle.get_message("length").expect("Message doesn't exist.");
     /// let mut errors = vec![];
     /// let pattern = msg.value.expect("Message has no value.");
-    /// let value = bundle.format_pattern(&pattern, None, &mut errors);
+    /// let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
     /// assert_eq!(&value, "5");
     /// ```
     ///

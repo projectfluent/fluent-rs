@@ -185,6 +185,6 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
     let mut args = FluentArgs::new();
     let epoch: u64 = 1580127760093;
     args.insert("epoch", epoch.into());
-    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
+    let value = bundle.format_pattern_to_string(pattern, Some(&args), &mut errors);
     println!("{}", value);
 }

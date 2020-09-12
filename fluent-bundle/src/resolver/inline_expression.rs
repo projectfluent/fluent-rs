@@ -7,8 +7,11 @@ use std::fmt;
 use fluent_syntax::ast;
 use fluent_syntax::unicode::unescape_unicode;
 
+use crate::bundle::FluentArgs;
+use crate::entry::GetEntry;
 use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
+use crate::FluentValue;
 
 impl<'p> WriteValue for ast::InlineExpression<'p> {
     fn write<W, R, M: MemoizerKind>(&self, w: &mut W, scope: &mut Scope<R, M>) -> fmt::Result
@@ -20,72 +23,59 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
             ast::InlineExpression::StringLiteral { value } => unescape_unicode(w, value),
             ast::InlineExpression::MessageReference { id, attribute } => scope
                 .bundle
-                .get_message(&id.name)
+                .get_entry_message(&id.name)
                 .and_then(|msg| {
                     if let Some(attr) = attribute {
                         msg.attributes
-                            .get(attr.name)
-                            .map(|pattern| scope.track(w, pattern, self))
+                            .iter()
+                            .find(|a| a.id.name == attr.name)
+                            .map(|attr| scope.track(w, &attr.value, self))
                     } else {
                         msg.value.as_ref().map(|value| scope.track(w, value, self))
                     }
                 })
                 .unwrap_or_else(|| scope.generate_ref_error(w, self)),
             ast::InlineExpression::NumberLiteral { value } => w.write_str(value),
-            //     ast::InlineExpression::TermReference {
-            //         id,
-            //         attribute,
-            //         arguments,
-            //     } => {
-            //         let (_, resolved_named_args) = get_arguments(scope, arguments);
+            ast::InlineExpression::TermReference {
+                id,
+                attribute,
+                arguments,
+            } => scope
+                .bundle
+                .get_entry_term(&id.name)
+                .and_then(|term| {
+                    if let Some(attr) = attribute {
+                        term.attributes
+                            .iter()
+                            .find(|a| a.id.name == attr.name)
+                            .map(|attr| scope.track(w, &attr.value, self))
+                    } else {
+                        Some(scope.track(w, &term.value, self))
+                    }
+                })
+                .unwrap_or_else(|| scope.generate_ref_error(w, self)),
+            ast::InlineExpression::FunctionReference { id, arguments } => {
+                let (resolved_positional_args, resolved_named_args) = (vec![], FluentArgs::new());
 
-            //         scope.local_args = Some(resolved_named_args);
+                let func = scope.bundle.get_entry_function(id.name);
 
-            //         let value = scope
-            //             .bundle
-            //             .get_entry_term(&id.name)
-            //             .and_then(|term| {
-            //                 if let Some(attr) = attribute {
-            //                     term.attributes
-            //                         .iter()
-            //                         .find(|a| a.id.name == attr.name)
-            //                         .map(|attr| scope.track(&attr.value, self.into()))
-            //                 } else {
-            //                     Some(scope.track(&term.value, self.into()))
-            //                 }
-            //             })
-            //             .unwrap_or_else(|| generate_ref_error(scope, self.into()));
+                if let Some(func) = func {
+                    let val = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    w.write_str(&val.as_string(scope))
+                } else {
+                    scope.generate_ref_error(w, self)
+                }
+            }
+            ast::InlineExpression::VariableReference { id } => {
+                let args = scope.local_args.as_ref().or(scope.args);
 
-            //         scope.local_args = None;
-            //         value
-            //     }
-            //     ast::InlineExpression::FunctionReference { id, arguments } => {
-            //         let (resolved_positional_args, resolved_named_args) =
-            //             get_arguments(scope, arguments);
-
-            //         let func = scope.bundle.get_entry_function(id.name);
-
-            //         if let Some(func) = func {
-            //             func(resolved_positional_args.as_slice(), &resolved_named_args)
-            //         } else {
-            //             generate_ref_error(scope, self.into())
-            //         }
-            //     }
-            // ast::InlineExpression::VariableReference { id } => {
-            //     let args = scope.local_args.as_ref().or(scope.args);
-
-            //     if let Some(arg) = args.and_then(|args| args.get(id.name)) {
-            //         arg.clone()
-            //     } else {
-            //         let entry: DisplayableNode = self.into();
-            //         if scope.local_args.is_none() {
-            //             scope
-            //                 .errors
-            //                 .push(ResolverError::Reference(entry.get_error()));
-            //         }
-            //         FluentValue::Error(entry)
-            //     }
-            // }
+                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
+                    // XXX: Move args to use fmt::Write
+                    w.write_str(&arg.as_string(scope))
+                } else {
+                    scope.generate_ref_error(w, self)
+                }
+            }
             ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
             _ => {
                 unimplemented!();

@@ -1,4 +1,4 @@
-use fluent_bundle::resolve::Scope;
+use fluent_bundle::resolver::Scope;
 use fluent_bundle::types::{
     FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle,
 };
