@@ -52,4 +52,11 @@ impl<'p> WriteValue for ast::Expression<'p> {
             }
         }
     }
+
+    fn write_error<W>(&self, _w: &mut W) -> fmt::Result
+    where
+        W: fmt::Write,
+    {
+        Ok(())
+    }
 }

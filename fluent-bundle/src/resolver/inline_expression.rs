@@ -97,9 +97,6 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                 }
             }
             ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
-            _ => {
-                unimplemented!();
-            }
         }
     }
 
@@ -146,20 +143,22 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
     {
         match self {
             ast::InlineExpression::StringLiteral { value } => unescape_unicode_to_str(value).into(),
-            // ast::InlineExpression::MessageReference { id, attribute } => scope
-            //     .bundle
-            //     .get_entry_message(&id.name)
-            //     .and_then(|msg| {
-            //         if let Some(attr) = attribute {
-            //             msg.attributes
-            //                 .iter()
-            //                 .find(|a| a.id.name == attr.name)
-            //                 .map(|attr| scope.track(w, &attr.value, self))
-            //         } else {
-            //             msg.value.as_ref().map(|value| scope.track(w, value, self))
-            //         }
-            //     })
-            //     .unwrap_or_else(|| scope.generate_ref_error(w, self)),
+            ast::InlineExpression::MessageReference { id, attribute } => scope
+                .bundle
+                .get_entry_message(&id.name)
+                .and_then(|msg| {
+                    if let Some(attr) = attribute {
+                        msg.attributes
+                            .iter()
+                            .find(|a| a.id.name == attr.name)
+                            .map(|attr| scope.track_resolve(&attr.value, self.into()))
+                    } else {
+                        msg.value
+                            .as_ref()
+                            .map(|value| scope.track_resolve(value, self.into()))
+                    }
+                })
+                .unwrap_or_else(|| scope.generate_ref_error(self)),
             ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(*value),
             ast::InlineExpression::TermReference {
                 id,
@@ -238,7 +237,7 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                     .expect("Failed to write to String.");
                 error
             }
-            ast::InlineExpression::VariableReference { id } => {
+            ast::InlineExpression::VariableReference { .. } => {
                 let mut error = String::from("Unknown variable: ");
                 self.write_error(&mut error)
                     .expect("Failed to write to String.");

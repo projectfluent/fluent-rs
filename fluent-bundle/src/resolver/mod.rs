@@ -29,8 +29,6 @@ use crate::resource::FluentResource;
 // use crate::types::DisplayableNode;
 use crate::types::FluentValue;
 
-// const MAX_PLACEABLES: u8 = 100;
-
 // Converts an AST node to a `FluentValue`.
 pub(crate) trait ResolveValue {
     fn resolve<'source, R, M: MemoizerKind>(
@@ -38,14 +36,9 @@ pub(crate) trait ResolveValue {
         scope: &mut Scope<'source, R, M>,
     ) -> FluentValue<'source>
     where
-        R: Borrow<FluentResource>,
-    {
-        unimplemented!();
-    }
+        R: Borrow<FluentResource>;
 
-    fn resolve_error(&self) -> String {
-        unimplemented!();
-    }
+    fn resolve_error(&self) -> String;
 }
 
 pub(crate) trait WriteValue {
@@ -56,15 +49,9 @@ pub(crate) trait WriteValue {
     ) -> fmt::Result
     where
         W: fmt::Write,
-        R: Borrow<FluentResource>,
-    {
-        unimplemented!();
-    }
+        R: Borrow<FluentResource>;
 
     fn write_error<W>(&self, _w: &mut W) -> fmt::Result
     where
-        W: fmt::Write,
-    {
-        unimplemented!();
-    }
+        W: fmt::Write;
 }

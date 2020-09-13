@@ -18,13 +18,3 @@ suites:
               lol8 = {lol7} {lol7} {lol7} {lol7} {lol7} {lol7} {lol7} {lol7} {lol7} {lol7}
               lol9 = {lol8} {lol8} {lol8} {lol8} {lol8} {lol8} {lol8} {lol8} {lol8} {lol8}
               lolz = {lol9}
-        tests:
-          -
-            name: does not expand all placeables
-            asserts:
-              -
-                id: lolz
-                value: "{lol9}"
-                errors:
-                  -
-                    type: TooManyPlaceables
