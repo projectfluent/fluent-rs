@@ -47,7 +47,7 @@ impl<'p> WriteValue for ast::Expression<'p> {
                         return variant.value.write(w, scope);
                     }
                 }
-                scope.errors.push(ResolverError::MissingDefault);
+                scope.add_error(ResolverError::MissingDefault);
                 Ok(())
             }
         }

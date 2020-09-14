@@ -1,8 +1,8 @@
 use crate::bundle::FluentBundleBase;
 use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, ResolverError, WriteValue};
-use crate::types::{DisplayableNode, FluentValue};
-use crate::{FluentArgs, FluentResource};
+use crate::types::FluentValue;
+use crate::{FluentArgs, FluentError, FluentResource};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
 use std::fmt;
@@ -21,21 +21,31 @@ pub struct Scope<'scope, R, M> {
     /// Tracks hashes to prevent infinite recursion.
     travelled: smallvec::SmallVec<[&'scope ast::Pattern<'scope>; 2]>,
     /// Track errors accumulated during resolving.
-    pub errors: Vec<ResolverError>,
+    pub errors: Option<&'scope mut Vec<FluentError>>,
     /// Makes the resolver bail.
     pub dirty: bool,
 }
 
 impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
-    pub fn new(bundle: &'scope FluentBundleBase<R, M>, args: Option<&'scope FluentArgs>) -> Self {
+    pub fn new(
+        bundle: &'scope FluentBundleBase<R, M>,
+        args: Option<&'scope FluentArgs>,
+        errors: Option<&'scope mut Vec<FluentError>>,
+    ) -> Self {
         Scope {
             bundle,
             args,
             local_args: None,
             placeables: 0,
             travelled: Default::default(),
-            errors: vec![],
+            errors,
             dirty: false,
+        }
+    }
+
+    pub fn add_error(&mut self, error: ResolverError) {
+        if let Some(errors) = self.errors.as_mut() {
+            errors.push(error.into());
         }
     }
 
@@ -79,7 +89,7 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         W: fmt::Write,
     {
         if self.travelled.contains(&pattern) {
-            self.errors.push(ResolverError::Cyclic);
+            self.add_error(ResolverError::Cyclic);
             w.write_char('{')?;
             exp.write_error(w)?;
             w.write_char('}')
@@ -91,31 +101,11 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         }
     }
 
-    pub fn track_resolve(
-        &mut self,
-        pattern: &'scope ast::Pattern,
-        entry: DisplayableNode<'scope>,
-    ) -> FluentValue<'scope>
-    where
-        R: Borrow<FluentResource>,
-    {
-        if self.travelled.contains(&pattern) {
-            self.errors.push(ResolverError::Cyclic);
-            FluentValue::Error(entry)
-        } else {
-            self.travelled.push(pattern);
-            let result = pattern.resolve(self);
-            self.travelled.pop();
-            result
-        }
-    }
-
     pub fn write_ref_error<W>(&mut self, w: &mut W, exp: &ast::InlineExpression) -> fmt::Result
     where
         W: fmt::Write,
     {
-        self.errors
-            .push(ResolverError::Reference(exp.resolve_error()));
+        self.add_error(ResolverError::Reference(exp.resolve_error()));
         w.write_char('{')?;
         exp.write_error(w)?;
         w.write_char('}')
@@ -125,8 +115,7 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         &mut self,
         exp: &'scope ast::InlineExpression,
     ) -> FluentValue<'scope> {
-        self.errors
-            .push(ResolverError::Reference(exp.resolve_error()));
-        FluentValue::Error(exp.into())
+        self.add_error(ResolverError::Reference(exp.resolve_error()));
+        FluentValue::Error
     }
 }

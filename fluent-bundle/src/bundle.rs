@@ -17,7 +17,7 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::memoizer::MemoizerKind;
-use crate::resolver::{Scope, WriteValue};
+use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -444,42 +444,27 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         w: &mut W,
         pattern: &'bundle ast::Pattern,
         args: Option<&'bundle FluentArgs>,
-        errors: &mut Vec<FluentError>,
+        errors: &'bundle mut Vec<FluentError>,
     ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
         W: fmt::Write,
     {
-        let mut scope = Scope::new(self, args);
-        pattern.write(w, &mut scope)?;
-
-        for err in scope.errors {
-            errors.push(err.into());
-        }
-
-        Ok(())
+        let mut scope = Scope::new(self, args, Some(errors));
+        pattern.write(w, &mut scope)
     }
 
     pub fn format_pattern_to_string<'bundle>(
         &'bundle self,
         pattern: &'bundle ast::Pattern,
         args: Option<&'bundle FluentArgs>,
-        errors: &mut Vec<FluentError>,
-    ) -> String
+        errors: &'bundle mut Vec<FluentError>,
+    ) -> Cow<'bundle, str>
     where
         R: Borrow<FluentResource>,
     {
-        let mut result = String::new();
-        let mut scope = Scope::new(self, args);
-        pattern
-            .write(&mut result, &mut scope)
-            .expect("Failed to write to a string.");
-
-        for err in scope.errors {
-            errors.push(err.into());
-        }
-
-        return result;
+        let mut scope = Scope::new(self, args, Some(errors));
+        pattern.resolve(&mut scope).as_string(&scope)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See

@@ -16,17 +16,10 @@ pub use errors::ResolverError;
 pub use scope::Scope;
 
 use std::borrow::Borrow;
-// use std::fmt::Write;
 use std::fmt;
 
-// use fluent_syntax::ast;
-// use fluent_syntax::unicode::unescape_unicode;
-
-// use crate::bundle::FluentArgs;
-// use crate::entry::GetEntry;
 use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
-// use crate::types::DisplayableNode;
 use crate::types::FluentValue;
 
 // Converts an AST node to a `FluentValue`.

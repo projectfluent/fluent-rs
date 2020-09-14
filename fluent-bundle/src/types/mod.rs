@@ -6,105 +6,14 @@ use plural::*;
 
 use std::any::Any;
 use std::borrow::{Borrow, Cow};
-use std::default::Default;
 use std::fmt;
 use std::str::FromStr;
 
-use fluent_syntax::ast;
 use intl_pluralrules::{PluralCategory, PluralRuleType};
 
 use crate::memoizer::MemoizerKind;
 use crate::resolver::Scope;
 use crate::resource::FluentResource;
-
-#[derive(Debug, PartialEq, Clone)]
-pub enum DisplayableNodeType<'source> {
-    Message(&'source str),
-    Term(&'source str),
-    Variable(&'source str),
-    Function(&'source str),
-    Expression,
-}
-
-#[derive(Debug, PartialEq, Clone)]
-pub struct DisplayableNode<'source> {
-    node_type: DisplayableNodeType<'source>,
-    attribute: Option<&'source str>,
-}
-
-impl<'source> Default for DisplayableNode<'source> {
-    fn default() -> Self {
-        DisplayableNode {
-            node_type: DisplayableNodeType::Expression,
-            attribute: None,
-        }
-    }
-}
-
-impl<'source> DisplayableNode<'source> {
-    pub fn get_error(&self) -> String {
-        if self.attribute.is_some() {
-            format!("Unknown attribute: {}", self)
-        } else {
-            match self.node_type {
-                DisplayableNodeType::Message(..) => format!("Unknown message: {}", self),
-                DisplayableNodeType::Term(..) => format!("Unknown term: {}", self),
-                DisplayableNodeType::Variable(..) => format!("Unknown variable: {}", self),
-                DisplayableNodeType::Function(..) => format!("Unknown function: {}", self),
-                DisplayableNodeType::Expression => "Failed to resolve an expression.".to_string(),
-            }
-        }
-    }
-}
-
-impl<'source> fmt::Display for DisplayableNode<'source> {
-    fn fmt(&self, f: &mut fmt::Formatter<'_>) -> fmt::Result {
-        match self.node_type {
-            DisplayableNodeType::Message(id) => write!(f, "{}", id)?,
-            DisplayableNodeType::Term(id) => write!(f, "-{}", id)?,
-            DisplayableNodeType::Variable(id) => write!(f, "${}", id)?,
-            DisplayableNodeType::Function(id) => write!(f, "{}()", id)?,
-            DisplayableNodeType::Expression => f.write_str("???")?,
-        };
-        if let Some(attr) = self.attribute {
-            write!(f, ".{}", attr)?;
-        }
-        Ok(())
-    }
-}
-
-impl<'source> From<&ast::Expression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &ast::Expression<'source>) -> Self {
-        match expr {
-            ast::Expression::InlineExpression(e) => e.into(),
-            ast::Expression::SelectExpression { .. } => DisplayableNode::default(),
-        }
-    }
-}
-
-impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &ast::InlineExpression<'source>) -> Self {
-        match expr {
-            ast::InlineExpression::MessageReference { id, attribute } => DisplayableNode {
-                node_type: DisplayableNodeType::Message(id.name),
-                attribute: attribute.as_ref().map(|attr| attr.name),
-            },
-            ast::InlineExpression::TermReference { id, attribute, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Term(id.name),
-                attribute: attribute.as_ref().map(|attr| attr.name),
-            },
-            ast::InlineExpression::VariableReference { id } => DisplayableNode {
-                node_type: DisplayableNodeType::Variable(id.name),
-                attribute: None,
-            },
-            ast::InlineExpression::FunctionReference { id, .. } => DisplayableNode {
-                node_type: DisplayableNodeType::Function(id.name),
-                attribute: None,
-            },
-            _ => DisplayableNode::default(),
-        }
-    }
-}
 
 pub trait FluentType: fmt::Debug + AnyEq + 'static {
     fn duplicate(&self) -> Box<dyn FluentType + Send>;
@@ -156,7 +65,7 @@ pub enum FluentValue<'source> {
     String(Cow<'source, str>),
     Number(FluentNumber),
     Custom(Box<dyn FluentType + Send>),
-    Error(DisplayableNode<'source>),
+    Error,
     None,
 }
 impl<'s> PartialEq for FluentValue<'s> {
@@ -179,7 +88,7 @@ impl<'s> Clone for FluentValue<'s> {
                 let new_value: Box<dyn FluentType + Send> = s.duplicate();
                 FluentValue::Custom(new_value)
             }
-            FluentValue::Error(e) => FluentValue::Error(e.clone()),
+            FluentValue::Error => FluentValue::Error,
             FluentValue::None => FluentValue::None,
         }
     }
@@ -188,7 +97,7 @@ impl<'s> Clone for FluentValue<'s> {
 impl<'source> FluentValue<'source> {
     pub fn try_number<S: ToString>(v: S) -> Self {
         let s = v.to_string();
-        if let Ok(num) = FluentNumber::from_str(&s.to_string()) {
+        if let Ok(num) = FluentNumber::from_str(&s) {
             num.into()
         } else {
             s.into()
@@ -240,7 +149,7 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => w.write_str(s),
             FluentValue::Number(n) => w.write_str(&n.as_string()),
-            FluentValue::Error(d) => write!(w, "{{{}}}", &d.to_string()),
+            FluentValue::Error => write!(w, "{{??}}"),
             FluentValue::Custom(s) => w.write_str(&scope.bundle.intls.stringify_value(&**s)),
             FluentValue::None => w.write_str("???"),
         }
@@ -258,7 +167,7 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.as_string(),
-            FluentValue::Error(d) => format!("{{{}}}", d.to_string()).into(),
+            FluentValue::Error => format!("{{???}}").into(),
             FluentValue::Custom(s) => scope.bundle.intls.stringify_value(&**s),
             FluentValue::None => "???".into(),
         }

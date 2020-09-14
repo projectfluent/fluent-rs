@@ -1,5 +1,5 @@
 use super::scope::Scope;
-use super::{ResolveValue, ResolverError, WriteValue};
+use super::{ResolverError, WriteValue};
 
 use std::borrow::Borrow;
 use std::fmt;
@@ -7,6 +7,7 @@ use std::fmt;
 use fluent_syntax::ast;
 
 use crate::memoizer::MemoizerKind;
+use crate::resolver::ResolveValue;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -42,7 +43,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
                     scope.placeables += 1;
                     if scope.placeables > MAX_PLACEABLES {
                         scope.dirty = true;
-                        scope.errors.push(ResolverError::TooManyPlaceables);
+                        scope.add_error(ResolverError::TooManyPlaceables);
                         return w.write_str("???");
                     }
 
@@ -89,13 +90,21 @@ impl<'p> ResolveValue for ast::Pattern<'p> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut string = String::new();
-        self.write(&mut string, scope)
-            .expect("Failed to write to string");
-        string.into()
+        let len = self.elements.len();
+
+        if len == 1 {
+            match self.elements[0] {
+                ast::PatternElement::TextElement(s) => return s.into(),
+                _ => {}
+            }
+        }
+
+        let mut result = String::new();
+        self.write(&mut result, scope).unwrap();
+        result.into()
     }
 
     fn resolve_error(&self) -> String {
-        "".to_string()
+        unreachable!()
     }
 }

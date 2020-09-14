@@ -11,7 +11,7 @@ use crate::bundle::FluentArgs;
 use crate::entry::GetEntry;
 use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
-use crate::types::{DisplayableNode, FluentValue};
+use crate::types::FluentValue;
 
 impl<'p> WriteValue for ast::InlineExpression<'p> {
     fn write<'scope, W, R, M: MemoizerKind>(
@@ -87,9 +87,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                     arg.write(w, scope)
                 } else {
                     if scope.local_args.is_none() {
-                        scope
-                            .errors
-                            .push(ResolverError::Reference(self.resolve_error()));
+                        scope.add_error(ResolverError::Reference(self.resolve_error()));
                     }
                     w.write_char('{')?;
                     self.write_error(w)?;
@@ -125,7 +123,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
             } => write!(w, "-{}", id.name),
             ast::InlineExpression::FunctionReference { id, .. } => write!(w, "{}()", id.name),
             ast::InlineExpression::VariableReference { id } => write!(w, "${}", id.name),
-            b @ _ => {
+            b => {
                 dbg!(b);
                 unreachable!()
             }
@@ -151,11 +149,17 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                         msg.attributes
                             .iter()
                             .find(|a| a.id.name == attr.name)
-                            .map(|attr| scope.track_resolve(&attr.value, self.into()))
+                            .map(|attr| {
+                                let mut result = String::new();
+                                scope.track(&mut result, &attr.value, self).unwrap();
+                                result.into()
+                            })
                     } else {
-                        msg.value
-                            .as_ref()
-                            .map(|value| scope.track_resolve(value, self.into()))
+                        msg.value.as_ref().map(|value| {
+                            let mut result = String::new();
+                            scope.track(&mut result, value, self).unwrap();
+                            result.into()
+                        })
                     }
                 })
                 .unwrap_or_else(|| scope.generate_ref_error(self)),
@@ -177,9 +181,15 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                             term.attributes
                                 .iter()
                                 .find(|a| a.id.name == attr.name)
-                                .map(|attr| scope.track_resolve(&attr.value, self.into()))
+                                .map(|attr| {
+                                    let mut result = String::new();
+                                    scope.track(&mut result, &attr.value, self).unwrap();
+                                    FluentValue::String(result.into())
+                                })
                         } else {
-                            Some(scope.track_resolve(&term.value, self.into()))
+                            let mut result = String::new();
+                            scope.track(&mut result, &term.value, self).unwrap();
+                            Some(FluentValue::String(result.into()))
                         }
                     })
                     .unwrap_or_else(|| scope.generate_ref_error(self));
@@ -204,13 +214,10 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                 if let Some(arg) = args.and_then(|args| args.get(id.name)) {
                     arg.clone()
                 } else {
-                    let entry: DisplayableNode = self.into();
                     if scope.local_args.is_none() {
-                        scope
-                            .errors
-                            .push(ResolverError::Reference(entry.get_error()));
+                        scope.add_error(ResolverError::Reference(self.resolve_error()));
                     }
-                    FluentValue::Error(entry)
+                    FluentValue::Error
                 }
             }
             // ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
