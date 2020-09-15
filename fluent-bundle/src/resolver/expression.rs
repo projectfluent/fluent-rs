@@ -11,7 +11,7 @@ use crate::resolver::{ResolveValue, ResolverError};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-impl<'p> WriteValue for ast::Expression<'p> {
+impl<'p> WriteValue for ast::Expression<&'p str> {
     fn write<'scope, W, R, M: MemoizerKind>(
         &'scope self,
         w: &mut W,

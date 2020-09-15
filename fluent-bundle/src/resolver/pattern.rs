@@ -13,7 +13,7 @@ use crate::types::FluentValue;
 
 const MAX_PLACEABLES: u8 = 100;
 
-impl<'p> WriteValue for ast::Pattern<'p> {
+impl<'p> WriteValue for ast::Pattern<&'p str> {
     fn write<'scope, W, R, M: MemoizerKind>(
         &'scope self,
         w: &mut W,
@@ -31,14 +31,14 @@ impl<'p> WriteValue for ast::Pattern<'p> {
             }
 
             match elem {
-                ast::PatternElement::TextElement(s) => {
+                ast::PatternElement::TextElement { value } => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        w.write_str(&transform(s))?;
+                        w.write_str(&transform(value))?;
                     } else {
-                        w.write_str(s)?;
+                        w.write_str(value)?;
                     }
                 }
-                ast::PatternElement::Placeable(ref p) => {
+                ast::PatternElement::Placeable { ref expression } => {
                     scope.placeables += 1;
                     if scope.placeables > MAX_PLACEABLES {
                         scope.dirty = true;
@@ -48,7 +48,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
 
                     let needs_isolation = scope.bundle.use_isolating
                         && len > 1
-                        && match p {
+                        && match expression {
                             ast::Expression::InlineExpression(
                                 ast::InlineExpression::MessageReference { .. },
                             )
@@ -63,7 +63,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
                     if needs_isolation {
                         w.write_char('\u{2068}')?;
                     }
-                    scope.maybe_track(w, self, p)?;
+                    scope.maybe_track(w, self, expression)?;
                     if needs_isolation {
                         w.write_char('\u{2069}')?;
                     }
@@ -81,7 +81,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
     }
 }
 
-impl<'p> ResolveValue for ast::Pattern<'p> {
+impl<'p> ResolveValue for ast::Pattern<&'p str> {
     fn resolve<'source, R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
@@ -92,11 +92,11 @@ impl<'p> ResolveValue for ast::Pattern<'p> {
         let len = self.elements.len();
 
         if len == 1 {
-            if let ast::PatternElement::TextElement(s) = self.elements[0] {
+            if let ast::PatternElement::TextElement { value } = self.elements[0] {
                 return scope
                     .bundle
                     .transform
-                    .map_or_else(|| s.into(), |transform| transform(s).into());
+                    .map_or_else(|| value.into(), |transform| transform(value).into());
             }
         }
 

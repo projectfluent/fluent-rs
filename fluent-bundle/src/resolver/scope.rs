@@ -19,7 +19,7 @@ pub struct Scope<'scope, R, M> {
     /// Laughs and Quadratic Blowup attacks.
     pub(super) placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'scope ast::Pattern<'scope>; 2]>,
+    travelled: smallvec::SmallVec<[&'scope ast::Pattern<&'scope str>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Option<&'scope mut Vec<FluentError>>,
     /// Makes the resolver bail.
@@ -58,8 +58,8 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
     pub fn maybe_track<W>(
         &mut self,
         w: &mut W,
-        pattern: &'scope ast::Pattern,
-        exp: &'scope ast::Expression,
+        pattern: &'scope ast::Pattern<&str>,
+        exp: &'scope ast::Expression<&str>,
     ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
@@ -81,8 +81,8 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
     pub fn track<W>(
         &mut self,
         w: &mut W,
-        pattern: &'scope ast::Pattern,
-        exp: &ast::InlineExpression,
+        pattern: &'scope ast::Pattern<&str>,
+        exp: &ast::InlineExpression<&str>,
     ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
@@ -101,7 +101,11 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         }
     }
 
-    pub fn write_ref_error<W>(&mut self, w: &mut W, exp: &ast::InlineExpression) -> fmt::Result
+    pub fn write_ref_error<W>(
+        &mut self,
+        w: &mut W,
+        exp: &ast::InlineExpression<&str>,
+    ) -> fmt::Result
     where
         W: fmt::Write,
     {
@@ -113,7 +117,7 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
 
     pub fn get_arguments(
         &mut self,
-        arguments: &'scope Option<ast::CallArguments<'scope>>,
+        arguments: &'scope Option<ast::CallArguments<&'scope str>>,
     ) -> (Vec<FluentValue<'scope>>, FluentArgs<'scope>)
     where
         R: Borrow<FluentResource>,

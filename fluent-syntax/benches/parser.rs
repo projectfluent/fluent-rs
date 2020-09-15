@@ -6,7 +6,7 @@ use std::fs;
 use std::io;
 use std::io::Read;
 
-use fluent_syntax::parser::parse;
+use fluent_syntax::parser::Parser;
 use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -50,7 +50,11 @@ fn parser_bench(c: &mut Criterion) {
         "parse",
         move |b, &&name| {
             let source = &ftl_strings[name];
-            b.iter(|| parse(source).expect("Parsing of the FTL failed."))
+            b.iter(|| {
+                Parser::new(source.as_str())
+                    .parse()
+                    .expect("Parsing of the FTL failed.")
+            })
         },
         tests,
     );
@@ -102,7 +106,9 @@ fn parser_ctx_bench(c: &mut Criterion) {
             let sources = &ftl_strings[name];
             b.iter(|| {
                 for source in sources {
-                    parse(source).expect("Parsing of the FTL failed.");
+                    Parser::new(source.as_str())
+                        .parse()
+                        .expect("Parsing of the FTL failed.");
                 }
             })
         },

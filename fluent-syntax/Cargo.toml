@@ -25,6 +25,7 @@ include = [
 [dependencies]
 serde = { version = "1.0", features = ["derive"], optional = true }
 serde_json = { version = "1.0", optional = true }
+serde-tuple-vec-map = { version = "1.0" }
 
 [dev-dependencies]
 serde = { version = "1.0", features = ["derive"] }

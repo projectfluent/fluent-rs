@@ -12,7 +12,7 @@ use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-impl<'p> WriteValue for ast::InlineExpression<'p> {
+impl<'p> WriteValue for ast::InlineExpression<&'p str> {
     fn write<'scope, W, R, M: MemoizerKind>(
         &'scope self,
         w: &mut W,
@@ -131,7 +131,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
     }
 }
 
-impl<'p> ResolveValue for ast::InlineExpression<'p> {
+impl<'p> ResolveValue for ast::InlineExpression<&'p str> {
     fn resolve<'source, R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,

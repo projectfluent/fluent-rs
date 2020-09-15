@@ -215,18 +215,14 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 
         for (entry_pos, entry) in res.ast().body.iter().enumerate() {
             let id = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
+                ast::Entry::Message(ast::Message { ref id, .. })
+                | ast::Entry::Term(ast::Term { ref id, .. }) => id.name,
                 _ => continue,
             };
 
             let (entry, kind) = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
-                    (Entry::Message([res_pos, entry_pos]), "message")
-                }
-                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
-                    (Entry::Term([res_pos, entry_pos]), "term")
-                }
+                ast::Entry::Message(..) => (Entry::Message([res_pos, entry_pos]), "message"),
+                ast::Entry::Term(..) => (Entry::Term([res_pos, entry_pos]), "term"),
                 _ => continue,
             };
 
@@ -319,18 +315,14 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 
         for (entry_pos, entry) in res.ast().body.iter().enumerate() {
             let id = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(ast::Message { ref id, .. }))
-                | ast::ResourceEntry::Entry(ast::Entry::Term(ast::Term { ref id, .. })) => id.name,
+                ast::Entry::Message(ast::Message { ref id, .. })
+                | ast::Entry::Term(ast::Term { ref id, .. }) => id.name,
                 _ => continue,
             };
 
             let entry = match entry {
-                ast::ResourceEntry::Entry(ast::Entry::Message(..)) => {
-                    Entry::Message([res_pos, entry_pos])
-                }
-                ast::ResourceEntry::Entry(ast::Entry::Term(..)) => {
-                    Entry::Term([res_pos, entry_pos])
-                }
+                ast::Entry::Message(..) => Entry::Message([res_pos, entry_pos]),
+                ast::Entry::Term(..) => Entry::Term([res_pos, entry_pos]),
                 _ => continue,
             };
 
@@ -429,7 +421,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     pub fn format_pattern<'bundle, W>(
         &'bundle self,
         w: &mut W,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'bundle ast::Pattern<&str>,
         args: Option<&'bundle FluentArgs>,
         errors: &mut Vec<FluentError>,
     ) -> fmt::Result
@@ -443,7 +435,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 
     pub fn format_pattern_to_string<'bundle>(
         &'bundle self,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'bundle ast::Pattern<&str>,
         args: Option<&'bundle FluentArgs>,
         errors: &'bundle mut Vec<FluentError>,
     ) -> Cow<'bundle, str>
