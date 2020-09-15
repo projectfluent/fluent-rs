@@ -444,7 +444,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         w: &mut W,
         pattern: &'bundle ast::Pattern,
         args: Option<&'bundle FluentArgs>,
-        errors: &'bundle mut Vec<FluentError>,
+        errors: &mut Vec<FluentError>,
     ) -> fmt::Result
     where
         R: Borrow<FluentResource>,
@@ -464,7 +464,8 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         R: Borrow<FluentResource>,
     {
         let mut scope = Scope::new(self, args, Some(errors));
-        pattern.resolve(&mut scope).as_string(&scope)
+        let value = pattern.resolve(&mut scope);
+        value.as_string(&scope)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
