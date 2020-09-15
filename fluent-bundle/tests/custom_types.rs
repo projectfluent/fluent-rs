@@ -208,7 +208,7 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
                 num.options.merge(named);
                 FluentValue::Number(num)
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .unwrap();
 

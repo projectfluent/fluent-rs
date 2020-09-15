@@ -171,7 +171,7 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
                 let options = named.into();
                 FluentValue::Custom(Box::new(DateTime::new(epoch, options)))
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .expect("Failed to add a function.");
     bundle.set_use_isolating(false);

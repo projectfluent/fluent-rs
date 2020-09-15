@@ -44,7 +44,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
                     num.options.merge(named);
                     FluentValue::Number(num)
                 }
-                _ => FluentValue::None,
+                _ => FluentValue::Error,
             }
         })
         .expect("Failed to add a function.");

@@ -492,7 +492,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
     ///     [FluentValue::String(str)] => str.len().into(),
-    ///     _ => FluentValue::None,
+    ///     _ => FluentValue::Error,
     /// }).expect("Failed to add a function to the bundle.");
     ///
     /// let msg = bundle.get_message("length").expect("Message doesn't exist.");
