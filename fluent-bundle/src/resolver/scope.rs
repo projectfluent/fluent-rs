@@ -111,11 +111,26 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         w.write_char('}')
     }
 
-    pub fn generate_ref_error(
+    pub fn get_arguments(
         &mut self,
-        exp: &'scope ast::InlineExpression,
-    ) -> FluentValue<'scope> {
-        self.add_error(ResolverError::Reference(exp.resolve_error()));
-        FluentValue::None
+        arguments: &'scope Option<ast::CallArguments<'scope>>,
+    ) -> (Vec<FluentValue<'scope>>, FluentArgs<'scope>)
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut resolved_positional_args = Vec::new();
+        let mut resolved_named_args = FluentArgs::new();
+
+        if let Some(ast::CallArguments { named, positional }) = arguments {
+            for expression in positional {
+                resolved_positional_args.push(expression.resolve(self));
+            }
+
+            for arg in named {
+                resolved_named_args.insert(arg.name.name, arg.value.resolve(self));
+            }
+        }
+
+        (resolved_positional_args, resolved_named_args)
     }
 }

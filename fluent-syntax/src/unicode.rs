@@ -50,7 +50,7 @@ where
     Ok(())
 }
 
-pub fn unescape_unicode_to_str(input: &str) -> Cow<str> {
+pub fn unescape_unicode_to_string(input: &str) -> Cow<str> {
     let bytes = input.as_bytes();
     let mut result = Cow::from(input);
 

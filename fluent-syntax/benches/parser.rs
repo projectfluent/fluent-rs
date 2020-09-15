@@ -7,7 +7,7 @@ use std::io;
 use std::io::Read;
 
 use fluent_syntax::parser::parse;
-use fluent_syntax::unicode::unescape_unicode;
+use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = fs::File::open(path)?;
@@ -80,6 +80,13 @@ fn unicode_unescape_bench(c: &mut Criterion) {
             for s in strings {
                 unescape_unicode(&mut result, s).expect("Failed to write");
                 result.clear();
+            }
+        })
+    });
+    c.bench_function("unicode_to_string", move |b| {
+        b.iter(|| {
+            for s in strings {
+                let _ = unescape_unicode_to_string(s);
             }
         })
     });

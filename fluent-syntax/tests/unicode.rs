@@ -1,9 +1,11 @@
-use fluent_syntax::unicode::unescape_unicode;
+use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
 
 fn test_unescape_unicode(input: &str, output: &str) {
     let mut s = String::new();
     unescape_unicode(&mut s, input).expect("Failed to write.");
     assert_eq!(&s, output);
+    let result = unescape_unicode_to_string(input);
+    assert_eq!(&result, output);
 }
 
 #[test]

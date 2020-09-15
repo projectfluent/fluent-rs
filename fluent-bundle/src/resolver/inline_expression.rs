@@ -5,9 +5,8 @@ use std::borrow::Borrow;
 use std::fmt;
 
 use fluent_syntax::ast;
-use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_str};
+use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
 
-use crate::bundle::FluentArgs;
 use crate::entry::GetEntry;
 use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
@@ -47,7 +46,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                 attribute,
                 arguments,
             } => {
-                let (_, resolved_named_args) = get_arguments(scope, arguments);
+                let (_, resolved_named_args) = scope.get_arguments(arguments);
 
                 scope.local_args = Some(resolved_named_args);
                 let result = scope
@@ -69,7 +68,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
             }
             ast::InlineExpression::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) =
-                    get_arguments(scope, arguments);
+                    scope.get_arguments(arguments);
 
                 let func = scope.bundle.get_entry_function(id.name);
 
@@ -141,79 +140,10 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
         R: Borrow<FluentResource>,
     {
         match self {
-            ast::InlineExpression::StringLiteral { value } => unescape_unicode_to_str(value).into(),
-            ast::InlineExpression::MessageReference { id, attribute } => scope
-                .bundle
-                .get_entry_message(&id.name)
-                .and_then(|msg| {
-                    if let Some(attr) = attribute {
-                        msg.attributes
-                            .iter()
-                            .find(|a| a.id.name == attr.name)
-                            .map(|attr| {
-                                let mut result = String::new();
-                                scope.track(&mut result, &attr.value, self).unwrap();
-                                result.into()
-                            })
-                    } else {
-                        msg.value.as_ref().map(|value| {
-                            let mut result = String::new();
-                            scope.track(&mut result, value, self).unwrap();
-                            result.into()
-                        })
-                    }
-                })
-                .unwrap_or_else(|| scope.generate_ref_error(self)),
+            ast::InlineExpression::StringLiteral { value } => {
+                unescape_unicode_to_string(value).into()
+            }
             ast::InlineExpression::NumberLiteral { value } => FluentValue::try_number(*value),
-            ast::InlineExpression::TermReference {
-                id,
-                attribute,
-                arguments,
-            } => {
-                let (_, resolved_named_args) = get_arguments(scope, arguments);
-
-                scope.local_args = Some(resolved_named_args);
-
-                let result = scope
-                    .bundle
-                    .get_entry_term(&id.name)
-                    .and_then(|term| {
-                        if let Some(attr) = attribute {
-                            term.attributes
-                                .iter()
-                                .find(|a| a.id.name == attr.name)
-                                .map(|attr| {
-                                    let mut result = String::new();
-                                    scope.track(&mut result, &attr.value, self).unwrap();
-                                    FluentValue::String(result.into())
-                                })
-                        } else {
-                            let mut result = String::new();
-                            scope.track(&mut result, &term.value, self).unwrap();
-                            Some(FluentValue::String(result.into()))
-                        }
-                    })
-                    .unwrap_or_else(|| scope.generate_ref_error(self));
-                scope.local_args = None;
-                result
-            }
-            ast::InlineExpression::FunctionReference { id, arguments } => {
-                let (resolved_positional_args, resolved_named_args) =
-                    get_arguments(scope, arguments);
-
-                let func = scope.bundle.get_entry_function(id.name);
-
-                if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
-                    if let FluentValue::Error = result {
-                        self.resolve_error().into()
-                    } else {
-                        result
-                    }
-                } else {
-                    scope.generate_ref_error(self)
-                }
-            }
             ast::InlineExpression::VariableReference { id } => {
                 let args = scope.local_args.as_ref().or(scope.args);
 
@@ -223,11 +153,13 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                     if scope.local_args.is_none() {
                         scope.add_error(ResolverError::Reference(self.resolve_error()));
                     }
-                    FluentValue::None
+                    FluentValue::Error
                 }
             }
             _ => {
-                unreachable!();
+                let mut result = String::new();
+                self.write(&mut result, scope).expect("Failed to write");
+                result.into()
             }
         }
     }
@@ -277,27 +209,4 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
             _ => unreachable!(),
         }
     }
-}
-
-fn get_arguments<'bundle, R, M: MemoizerKind>(
-    scope: &mut Scope<'bundle, R, M>,
-    arguments: &'bundle Option<ast::CallArguments<'bundle>>,
-) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
-where
-    R: Borrow<FluentResource>,
-{
-    let mut resolved_positional_args = Vec::new();
-    let mut resolved_named_args = FluentArgs::new();
-
-    if let Some(ast::CallArguments { named, positional }) = arguments {
-        for expression in positional {
-            resolved_positional_args.push(expression.resolve(scope));
-        }
-
-        for arg in named {
-            resolved_named_args.insert(arg.name.name, arg.value.resolve(scope));
-        }
-    }
-
-    (resolved_positional_args, resolved_named_args)
 }
