@@ -91,13 +91,14 @@ pub mod concurrent;
 mod entry;
 mod errors;
 pub mod memoizer;
+mod message;
 pub mod resolver;
 mod resource;
 pub mod types;
 
 pub use args::FluentArgs;
-pub use bundle::FluentMessage;
 pub use errors::FluentError;
+pub use message::{FluentAttribute, FluentMessage};
 pub use resource::FluentResource;
 pub use types::FluentValue;
 
