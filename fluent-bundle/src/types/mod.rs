@@ -65,9 +65,10 @@ pub enum FluentValue<'source> {
     String(Cow<'source, str>),
     Number(FluentNumber),
     Custom(Box<dyn FluentType + Send>),
-    Error,
     None,
+    Error,
 }
+
 impl<'s> PartialEq for FluentValue<'s> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
@@ -149,9 +150,9 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => w.write_str(s),
             FluentValue::Number(n) => w.write_str(&n.as_string()),
-            FluentValue::Error => write!(w, "{{??}}"),
             FluentValue::Custom(s) => w.write_str(&scope.bundle.intls.stringify_value(&**s)),
-            FluentValue::None => w.write_str("???"),
+            FluentValue::Error => Ok(()),
+            FluentValue::None => Ok(()),
         }
     }
 
@@ -167,9 +168,9 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.as_string(),
-            FluentValue::Error => format!("{{???}}").into(),
             FluentValue::Custom(s) => scope.bundle.intls.stringify_value(&**s),
-            FluentValue::None => "???".into(),
+            FluentValue::Error => "".into(),
+            FluentValue::None => "".into(),
         }
     }
 }

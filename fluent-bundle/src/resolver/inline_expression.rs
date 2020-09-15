@@ -74,8 +74,12 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    let val = func(resolved_positional_args.as_slice(), &resolved_named_args);
-                    w.write_str(&val.as_string(scope))
+                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    if let FluentValue::Error = result {
+                        self.write_error(w)
+                    } else {
+                        w.write_str(&result.as_string(scope))
+                    }
                 } else {
                     scope.write_ref_error(w, self)
                 }
@@ -123,10 +127,7 @@ impl<'p> WriteValue for ast::InlineExpression<'p> {
             } => write!(w, "-{}", id.name),
             ast::InlineExpression::FunctionReference { id, .. } => write!(w, "{}()", id.name),
             ast::InlineExpression::VariableReference { id } => write!(w, "${}", id.name),
-            b => {
-                dbg!(b);
-                unreachable!()
-            }
+            _ => unreachable!(),
         }
     }
 }
@@ -203,7 +204,12 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    func(resolved_positional_args.as_slice(), &resolved_named_args)
+                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    if let FluentValue::Error = result {
+                        self.resolve_error().into()
+                    } else {
+                        result
+                    }
                 } else {
                     scope.generate_ref_error(self)
                 }
@@ -217,13 +223,11 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                     if scope.local_args.is_none() {
                         scope.add_error(ResolverError::Reference(self.resolve_error()));
                     }
-                    FluentValue::Error
+                    FluentValue::None
                 }
             }
-            // ast::InlineExpression::Placeable { expression } => expression.write(w, scope),
-            b @ _ => {
-                dbg!(b);
-                unimplemented!();
+            _ => {
+                unreachable!();
             }
         }
     }
@@ -270,10 +274,7 @@ impl<'p> ResolveValue for ast::InlineExpression<'p> {
                     .expect("Failed to write to String.");
                 error
             }
-            b @ _ => {
-                dbg!(b);
-                unreachable!()
-            }
+            _ => unreachable!(),
         }
     }
 }

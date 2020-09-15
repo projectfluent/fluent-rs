@@ -116,6 +116,6 @@ impl<'scope, R, M: MemoizerKind> Scope<'scope, R, M> {
         exp: &'scope ast::InlineExpression,
     ) -> FluentValue<'scope> {
         self.add_error(ResolverError::Reference(exp.resolve_error()));
-        FluentValue::Error
+        FluentValue::None
     }
 }

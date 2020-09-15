@@ -27,7 +27,6 @@ impl<'p> WriteValue for ast::Pattern<'p> {
 
         for elem in &self.elements {
             if scope.dirty {
-                w.write_str("???")?;
                 return Ok(());
             }
 
@@ -44,7 +43,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
                     if scope.placeables > MAX_PLACEABLES {
                         scope.dirty = true;
                         scope.add_error(ResolverError::TooManyPlaceables);
-                        return w.write_str("???");
+                        return Ok(());
                     }
 
                     let needs_isolation = scope.bundle.use_isolating
@@ -64,7 +63,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
                     if needs_isolation {
                         w.write_char('\u{2068}')?;
                     }
-                    p.write(w, scope)?;
+                    scope.maybe_track(w, self, p)?;
                     if needs_isolation {
                         w.write_char('\u{2069}')?;
                     }
@@ -78,7 +77,7 @@ impl<'p> WriteValue for ast::Pattern<'p> {
     where
         W: fmt::Write,
     {
-        Ok(())
+        unreachable!()
     }
 }
 
@@ -93,14 +92,17 @@ impl<'p> ResolveValue for ast::Pattern<'p> {
         let len = self.elements.len();
 
         if len == 1 {
-            match self.elements[0] {
-                ast::PatternElement::TextElement(s) => return s.into(),
-                _ => {}
+            if let ast::PatternElement::TextElement(s) = self.elements[0] {
+                return scope
+                    .bundle
+                    .transform
+                    .map_or_else(|| s.into(), |transform| transform(s).into());
             }
         }
 
         let mut result = String::new();
-        self.write(&mut result, scope).unwrap();
+        self.write(&mut result, scope)
+            .expect("Failed to write to a string.");
         result.into()
     }
 

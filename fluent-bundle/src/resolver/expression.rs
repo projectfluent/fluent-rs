@@ -53,10 +53,13 @@ impl<'p> WriteValue for ast::Expression<'p> {
         }
     }
 
-    fn write_error<W>(&self, _w: &mut W) -> fmt::Result
+    fn write_error<W>(&self, w: &mut W) -> fmt::Result
     where
         W: fmt::Write,
     {
-        Ok(())
+        match self {
+            ast::Expression::InlineExpression(exp) => exp.write_error(w),
+            ast::Expression::SelectExpression { .. } => unreachable!(),
+        }
     }
 }
