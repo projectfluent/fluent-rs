@@ -73,8 +73,8 @@ impl<'source> fmt::Display for DisplayableNode<'source> {
     }
 }
 
-impl<'source> From<&ast::Expression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &ast::Expression<'source>) -> Self {
+impl<'source> From<&ast::Expression<&'source str>> for DisplayableNode<'source> {
+    fn from(expr: &ast::Expression<&'source str>) -> Self {
         match expr {
             ast::Expression::InlineExpression(e) => e.into(),
             ast::Expression::SelectExpression { .. } => DisplayableNode::default(),
@@ -82,8 +82,8 @@ impl<'source> From<&ast::Expression<'source>> for DisplayableNode<'source> {
     }
 }
 
-impl<'source> From<&ast::InlineExpression<'source>> for DisplayableNode<'source> {
-    fn from(expr: &ast::InlineExpression<'source>) -> Self {
+impl<'source> From<&ast::InlineExpression<&'source str>> for DisplayableNode<'source> {
+    fn from(expr: &ast::InlineExpression<&'source str>) -> Self {
         match expr {
             ast::InlineExpression::MessageReference { id, attribute } => DisplayableNode {
                 node_type: DisplayableNodeType::Message(id.name),
