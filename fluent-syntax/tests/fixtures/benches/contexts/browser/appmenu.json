@@ -1,147 +1,138 @@
 {
-    "type": "Resource",
-    "body": [
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "App Menu"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-protection-report-title"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Privacy Protections"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-protection-report-tooltip"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "GroupComment",
-            "content": "App Menu"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "appmenuitem-protection-report-title"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Privacy Protections"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "appmenuitem-protection-report-tooltip"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Go to your privacy report"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Zoom Controls"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "appmenuitem-zoom-enlarge"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Zoom in"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "appmenuitem-zoom-reduce"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Zoom out"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Firefox Account toolbar button and Sync panel in App menu."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "fxa-toolbar-sync-now"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Sync Now"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Go to your privacy report"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Zoom Controls"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-zoom-enlarge"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Zoom in"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-zoom-reduce"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Zoom out"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Firefox Account toolbar button and Sync panel in App menu."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fxa-toolbar-sync-now"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Sync Now"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    }
+  ]
 }

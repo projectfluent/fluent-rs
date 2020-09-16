@@ -1,19 +1,13 @@
-use assert_json_diff::assert_json_include;
+mod helper;
+
 use glob::glob;
-use serde_json::Value;
 use std::fs;
 use std::io;
 
-use fluent_syntax::json;
-use fluent_syntax::parser::parse;
+use fluent_syntax::ast;
+use fluent_syntax::parser::Parser;
 
-fn compare_jsons(value: &str, reference: &str) {
-    let a: Value = serde_json::from_str(value).unwrap();
-
-    let b: Value = serde_json::from_str(reference).unwrap();
-
-    assert_json_include!(actual: a, expected: b);
-}
+use helper::adapt_ast;
 
 fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
     let s = fs::read_to_string(path)?;
@@ -24,25 +18,37 @@ fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
     }
 }
 
+// We temporarily blacklist the CRLF test until we improve PartialEq
+// between two `Pattern`s with different `TextElement`s.
+const BLACKLIST: &[&str] = &["tests/fixtures/crlf.ftl"];
+
 #[test]
 fn parse_fixtures_compare() {
     for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
+        if BLACKLIST.contains(&path) {
+            continue;
+        }
 
         let reference_path = path.replace(".ftl", ".json");
         let reference_file = read_file(&reference_path, true).unwrap();
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        let target_ast = match parse(&ftl_file) {
+        let target_ast = match Parser::new(ftl_file).parse() {
             Ok(res) => res,
             Err((res, _errors)) => res,
         };
 
-        let target_json = json::serialize(&target_ast).unwrap();
+        let mut ref_ast: ast::Resource<String> =
+            serde_json::from_str(reference_file.as_str()).unwrap();
+        adapt_ast(&mut ref_ast);
 
-        compare_jsons(&target_json, &reference_file);
+        assert_eq!(target_ast.body.len(), ref_ast.body.len());
+        for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
+            assert_eq!(entry, ref_entry);
+        }
     }
 }
 
@@ -56,7 +62,7 @@ fn parse_fixtures() {
 
         let string = read_file(path, false).expect("Failed to read");
 
-        let _ = parse(&string);
+        let _ = Parser::new(string.as_str()).parse();
     }
 }
 
@@ -75,14 +81,19 @@ fn parse_bench_fixtures() {
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        let target_ast = match parse(&ftl_file) {
+        let target_ast = match Parser::new(ftl_file).parse() {
             Ok(res) => res,
             Err((res, _errors)) => res,
         };
 
-        let target_json = json::serialize(&target_ast).unwrap();
+        let mut ref_ast: ast::Resource<String> =
+            serde_json::from_str(reference_file.as_str()).unwrap();
+        adapt_ast(&mut ref_ast);
 
-        compare_jsons(&target_json, &reference_file);
+        assert_eq!(target_ast.body.len(), ref_ast.body.len());
+        for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
+            assert_eq!(entry, ref_entry);
+        }
     }
 
     let contexts = &["browser", "preferences"];
@@ -104,14 +115,19 @@ fn parse_bench_fixtures() {
             let ftl_file = read_file(&path, false).unwrap();
 
             println!("Parsing: {:#?}", path);
-            let target_ast = match parse(&ftl_file) {
+            let target_ast = match Parser::new(ftl_file).parse() {
                 Ok(res) => res,
                 Err((res, _errors)) => res,
             };
 
-            let target_json = json::serialize(&target_ast).unwrap();
+            let mut ref_ast: ast::Resource<String> =
+                serde_json::from_str(reference_file.as_str()).unwrap();
+            adapt_ast(&mut ref_ast);
 
-            compare_jsons(&target_json, &reference_file);
+            assert_eq!(target_ast.body.len(), ref_ast.body.len());
+            for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
+                assert_eq!(entry, ref_entry);
+            }
         }
     }
 }

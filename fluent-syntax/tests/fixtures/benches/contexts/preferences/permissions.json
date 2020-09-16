@@ -1,1858 +1,1604 @@
 {
-    "type": "Resource",
-    "body": [
-        {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Exceptions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 45em"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-close-key"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "key"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "w"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-address"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Address of website"
-                    }
-                ]
-            },
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "d"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-block"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "B"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-session"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow for Session"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "S"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-allow"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "A"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-name"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Website"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-status"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Status"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-remove"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Remove Website"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "R"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-remove-all"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Remove All Websites"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "e"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-button-cancel"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Cancel"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "C"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-button-ok"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Save Changes"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "S"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-autoplay-menu"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Default for all websites:"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-searchbox"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "placeholder"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Search Website"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-autoplay-allow"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow Audio and Video"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-autoplay-block"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block Audio"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-autoplay-blockall"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block Audio and Video"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-allow"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-block"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-prompt"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Always Ask"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-listitem-allow"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-listitem-block"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-capabilities-listitem-allow-session"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allow for Session"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Invalid Hostname Dialog"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-invalid-uri-title"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Invalid Hostname Entered"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-invalid-uri-label"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Please enter a valid hostname"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Exceptions - Tracking Protection"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-etp-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Exceptions for Enhanced Tracking Protection"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-etp-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You’ve turned off protections on these websites."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Exceptions - Cookies"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-cookie-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Exceptions - Cookies and Site Data"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-cookie-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You can specify which websites are always or never allowed to use cookies and site data.  Type the exact address of the site you want to manage and then click Block, Allow for Session, or Allow."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Exceptions - Pop-ups"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-popup-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allowed Websites - Pop-ups"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-popup-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You can specify which websites are allowed to open pop-up windows. Type the exact address of the site you want to allow and then click Allow."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Exceptions - Saved Logins"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-saved-logins-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Exceptions - Saved Logins"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-saved-logins-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Logins for the following websites will not be saved"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Exceptions - Add-ons"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-addons-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Allowed Websites - Add-ons Installation"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-exceptions-addons-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You can specify which websites are allowed to install add-ons. Type the exact address of the site you want to allow and then click Allow."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Autoplay"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-autoplay-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Autoplay"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-autoplay-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You can manage the sites that do not follow your default autoplay settings here."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Notifications"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-notification-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Notification Permissions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-notification-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The following websites have requested to send you notifications. You can specify which websites are allowed to send you notifications. You can also block new requests asking to allow notifications."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-notification-disable-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block new requests asking to allow notifications"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-notification-disable-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This will prevent any websites not listed above from requesting permission to send notifications. Blocking notifications may break some website features."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Location"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-location-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Location Permissions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-location-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The following websites have requested to access your location. You can specify which websites are allowed to access your location. You can also block new requests asking to access your location."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-location-disable-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block new requests asking to access your location"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-location-disable-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This will prevent any websites not listed above from requesting permission to access your location. Blocking access to your location may break some website features."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Virtual Reality"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-xr-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Virtual Reality Permissions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-xr-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The following websites have requested to access your virtual reality devices. You can specify which websites are allowed to access your virtual reality devices. You can also block new requests asking to access your virtual reality devices."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-xr-disable-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block new requests asking to access your virtual reality devices"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-xr-disable-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This will prevent any websites not listed above from requesting permission to access your virtual reality devices. Blocking access to your virtual reality devices may break some website features."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Camera"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-camera-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Camera Permissions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-camera-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The following websites have requested to access your camera. You can specify which websites are allowed to access your camera. You can also block new requests asking to access your camera."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-camera-disable-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block new requests asking to access your camera"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-camera-disable-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This will prevent any websites not listed above from requesting permission to access your camera. Blocking access to your camera may break some website features."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Site Permissions - Microphone"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-microphone-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Settings - Microphone Permissions"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "MessageReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "permissions-window"
-                                    },
-                                    "attribute": {
-                                        "type": "Identifier",
-                                        "name": "style"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-microphone-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The following websites have requested to access your microphone. You can specify which websites are allowed to access your microphone. You can also block new requests asking to access your microphone."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-microphone-disable-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block new requests asking to access your microphone"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "permissions-site-microphone-disable-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This will prevent any websites not listed above from requesting permission to access your microphone. Blocking access to your microphone may break some website features."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exceptions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 45em"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-close-key"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-address"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Address of website"
+          }
+        ]
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "d"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-block"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-session"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow for Session"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-allow"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-name"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Website"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-status"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Status"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-remove"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove Website"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-remove-all"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove All Websites"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-button-cancel"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cancel"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-button-ok"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Changes"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-autoplay-menu"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Default for all websites:"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-searchbox"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "placeholder"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Search Website"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-autoplay-allow"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow Audio and Video"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-autoplay-block"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block Audio"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-autoplay-blockall"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block Audio and Video"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-allow"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-block"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-prompt"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Always Ask"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-listitem-allow"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-listitem-block"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-capabilities-listitem-allow-session"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow for Session"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Invalid Hostname Dialog"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-invalid-uri-title"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Invalid Hostname Entered"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-invalid-uri-label"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Please enter a valid hostname"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Exceptions - Tracking Protection"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-etp-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exceptions for Enhanced Tracking Protection"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-etp-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You’ve turned off protections on these websites."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Exceptions - Cookies"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-cookie-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exceptions - Cookies and Site Data"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-cookie-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can specify which websites are always or never allowed to use cookies and site data.  Type the exact address of the site you want to manage and then click Block, Allow for Session, or Allow."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Exceptions - Pop-ups"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-popup-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allowed Websites - Pop-ups"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-popup-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can specify which websites are allowed to open pop-up windows. Type the exact address of the site you want to allow and then click Allow."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Exceptions - Saved Logins"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-saved-logins-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exceptions - Saved Logins"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-saved-logins-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Logins for the following websites will not be saved"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Exceptions - Add-ons"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-addons-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allowed Websites - Add-ons Installation"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-exceptions-addons-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can specify which websites are allowed to install add-ons. Type the exact address of the site you want to allow and then click Allow."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Autoplay"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-autoplay-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Autoplay"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-autoplay-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can manage the sites that do not follow your default autoplay settings here."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Notifications"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-notification-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Notification Permissions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-notification-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites have requested to send you notifications. You can specify which websites are allowed to send you notifications. You can also block new requests asking to allow notifications."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-notification-disable-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block new requests asking to allow notifications"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-notification-disable-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This will prevent any websites not listed above from requesting permission to send notifications. Blocking notifications may break some website features."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Location"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-location-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Location Permissions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-location-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites have requested to access your location. You can specify which websites are allowed to access your location. You can also block new requests asking to access your location."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-location-disable-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block new requests asking to access your location"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-location-disable-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This will prevent any websites not listed above from requesting permission to access your location. Blocking access to your location may break some website features."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Virtual Reality"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-xr-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Virtual Reality Permissions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-xr-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites have requested to access your virtual reality devices. You can specify which websites are allowed to access your virtual reality devices. You can also block new requests asking to access your virtual reality devices."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-xr-disable-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block new requests asking to access your virtual reality devices"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-xr-disable-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This will prevent any websites not listed above from requesting permission to access your virtual reality devices. Blocking access to your virtual reality devices may break some website features."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Camera"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-camera-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Camera Permissions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-camera-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites have requested to access your camera. You can specify which websites are allowed to access your camera. You can also block new requests asking to access your camera."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-camera-disable-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block new requests asking to access your camera"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-camera-disable-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This will prevent any websites not listed above from requesting permission to access your camera. Blocking access to your camera may break some website features."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Site Permissions - Microphone"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-microphone-window"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings - Microphone Permissions"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "MessageReference",
+                  "id": {
+                    "name": "permissions-window"
+                  },
+                  "attribute": {
+                    "name": "style"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-microphone-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites have requested to access your microphone. You can specify which websites are allowed to access your microphone. You can also block new requests asking to access your microphone."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-microphone-disable-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block new requests asking to access your microphone"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "permissions-site-microphone-disable-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This will prevent any websites not listed above from requesting permission to access your microphone. Blocking access to your microphone may break some website features."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    }
+  ]
 }
