@@ -1,1238 +1,1068 @@
 {
-    "type": "Resource",
-    "body": [
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Strings used for device manager"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Device Manager"
+              }
+            ]
+          }
         },
         {
-            "type": "GroupComment",
-            "content": "Strings used for device manager"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Device Manager"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 67em; height: 32em;"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-devlist"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Security Modules and Devices"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-header-details"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Details"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-header-value"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Value"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-login"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Log In"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "n"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-logout"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Log Out"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "O"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-changepw"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Change Password"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "P"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-load"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Load"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "L"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-unload"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Unload"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "U"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-enable-fips"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Enable FIPS"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "F"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devmgr-button-disable-fips"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Disable FIPS"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "F"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Strings used for load device"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Load PKCS#11 Device Driver"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device-info"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Enter the information for the module you want to add."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device-modname"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Module Name"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "M"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device-modname-default"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "New PKCS#11 Module"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device-filename"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Module filename"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "f"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-device-browse"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Browse…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "B"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Token Manager"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Status"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-disabled"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Disabled"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-not-present"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Not Present"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-uninitialized"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Uninitialized"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-not-logged-in"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Not Logged In"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-logged-in"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Logged In"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-status-ready"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Ready"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-desc"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Description"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-man-id"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manufacturer"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-hwversion"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "HW Version"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-fwversion"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "FW Version"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-modname"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Module"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-modpath"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Path"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "login-failed"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Failed to Login"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Label"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "devinfo-serialnum"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Serial Number"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "fips-nonempty-password-required"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "FIPS mode requires that you have a Master Password set for each security device. Please set the password before trying to enable FIPS mode."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "unable-to-toggle-fips"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Unable to change the FIPS mode for the security device. It is recommended that you exit and restart this application."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-pk11-module-file-picker-title"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Choose a PKCS#11 device driver to load"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-module-help-empty-module-name"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "The module name cannot be empty."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Load Module Dialog"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "load-module-help-root-certs-module-name"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "‘Root Certs‘ is reserved and cannot be used as the module name."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Do not translate 'Root Certs'"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-module-failure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Unable to add module"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "del-module-warning"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Are you sure you want to delete this security module?"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "del-module-error"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Unable to delete module"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 67em; height: 32em;"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-devlist"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Security Modules and Devices"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-header-details"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Details"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-header-value"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Value"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-login"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Log In"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "n"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-logout"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Log Out"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "O"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-changepw"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Change Password"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-load"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Load"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-unload"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Unload"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-enable-fips"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Enable FIPS"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-disable-fips"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disable FIPS"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Strings used for load device"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Load PKCS#11 Device Driver"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-info"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Enter the information for the module you want to add."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-modname"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module Name"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "M"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-modname-default"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "New PKCS#11 Module"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-filename"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module filename"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "f"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-browse"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Browse…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Token Manager"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Status"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-disabled"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disabled"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-not-present"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Not Present"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-uninitialized"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Uninitialized"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-not-logged-in"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Not Logged In"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-logged-in"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Logged In"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-ready"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Ready"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-desc"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Description"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-man-id"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manufacturer"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-hwversion"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "HW Version"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-fwversion"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "FW Version"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-modname"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-modpath"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Path"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "login-failed"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to Login"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Label"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-serialnum"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Serial Number"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fips-nonempty-password-required"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "FIPS mode requires that you have a Master Password set for each security device. Please set the password before trying to enable FIPS mode."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unable-to-toggle-fips"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to change the FIPS mode for the security device. It is recommended that you exit and restart this application."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-pk11-module-file-picker-title"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose a PKCS#11 device driver to load"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-module-help-empty-module-name"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "The module name cannot be empty."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Load Module Dialog"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-module-help-root-certs-module-name"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "‘Root Certs‘ is reserved and cannot be used as the module name."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Do not translate 'Root Certs'"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-module-failure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to add module"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "del-module-warning"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete this security module?"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "del-module-error"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to delete module"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    }
+  ]
 }

@@ -41,7 +41,7 @@ pub struct Scope<'bundle, R: Borrow<FluentResource>, M> {
     /// Laughs and Quadratic Blowup attacks.
     placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<'bundle>; 2]>,
+    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<&'bundle str>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Vec<ResolverError>,
     /// Makes the resolver bail.
@@ -69,8 +69,8 @@ impl<'bundle, R: Borrow<FluentResource>, M: MemoizerKind> Scope<'bundle, R, M> {
     // for placeables.
     pub fn maybe_track(
         &mut self,
-        pattern: &'bundle ast::Pattern,
-        placeable: &'bundle ast::Expression,
+        pattern: &'bundle ast::Pattern<&str>,
+        placeable: &'bundle ast::Expression<&str>,
     ) -> FluentValue<'bundle> {
         if self.travelled.is_empty() {
             self.travelled.push(pattern);
@@ -84,7 +84,7 @@ impl<'bundle, R: Borrow<FluentResource>, M: MemoizerKind> Scope<'bundle, R, M> {
 
     pub fn track(
         &mut self,
-        pattern: &'bundle ast::Pattern,
+        pattern: &'bundle ast::Pattern<&str>,
         entry: DisplayableNode<'bundle>,
     ) -> FluentValue<'bundle> {
         if self.travelled.contains(&pattern) {
@@ -122,7 +122,7 @@ pub(crate) trait ResolveValue<'source> {
         R: Borrow<FluentResource>;
 }
 
-impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
+impl<'source> ResolveValue<'source> for ast::Pattern<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
@@ -136,14 +136,16 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
 
         if self.elements.len() == 1 {
             return match self.elements[0] {
-                ast::PatternElement::TextElement(s) => {
+                ast::PatternElement::TextElement { value } => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        transform(s).into()
+                        transform(value).into()
                     } else {
-                        s.into()
+                        value.into()
                     }
                 }
-                ast::PatternElement::Placeable(ref p) => scope.maybe_track(self, p),
+                ast::PatternElement::Placeable { ref expression } => {
+                    scope.maybe_track(self, expression)
+                }
             };
         }
 
@@ -154,14 +156,14 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
             }
 
             match elem {
-                ast::PatternElement::TextElement(s) => {
+                ast::PatternElement::TextElement { value } => {
                     if let Some(ref transform) = scope.bundle.transform {
-                        string.push_str(&transform(s))
+                        string.push_str(&transform(value))
                     } else {
-                        string.push_str(&s)
+                        string.push_str(&value)
                     }
                 }
-                ast::PatternElement::Placeable(p) => {
+                ast::PatternElement::Placeable { expression } => {
                     scope.placeables += 1;
                     if scope.placeables > MAX_PLACEABLES {
                         scope.dirty = true;
@@ -170,7 +172,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                     }
 
                     let needs_isolation = scope.bundle.use_isolating
-                        && match p {
+                        && match expression {
                             ast::Expression::InlineExpression(
                                 ast::InlineExpression::MessageReference { .. },
                             )
@@ -186,7 +188,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
                         string.write_char('\u{2068}').expect("Writing failed");
                     }
 
-                    let result = scope.maybe_track(self, p);
+                    let result = scope.maybe_track(self, expression);
                     write!(string, "{}", result.as_string(scope)).expect("Writing failed");
 
                     if needs_isolation {
@@ -199,7 +201,7 @@ impl<'source> ResolveValue<'source> for ast::Pattern<'source> {
     }
 }
 
-impl<'source> ResolveValue<'source> for ast::Expression<'source> {
+impl<'source> ResolveValue<'source> for ast::Expression<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         scope: &mut Scope<'source, R, M>,
@@ -240,7 +242,7 @@ impl<'source> ResolveValue<'source> for ast::Expression<'source> {
     }
 }
 
-impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
+impl<'source> ResolveValue<'source> for ast::InlineExpression<&'source str> {
     fn resolve<R, M: MemoizerKind>(
         &'source self,
         mut scope: &mut Scope<'source, R, M>,
@@ -328,7 +330,7 @@ impl<'source> ResolveValue<'source> for ast::InlineExpression<'source> {
 
 fn get_arguments<'bundle, R, M: MemoizerKind>(
     scope: &mut Scope<'bundle, R, M>,
-    arguments: &'bundle Option<ast::CallArguments<'bundle>>,
+    arguments: &'bundle Option<ast::CallArguments<&'bundle str>>,
 ) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
 where
     R: Borrow<FluentResource>,

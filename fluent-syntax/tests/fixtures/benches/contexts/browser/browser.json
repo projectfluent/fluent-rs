@@ -1,2749 +1,2441 @@
 {
-    "type": "Resource",
-    "body": [
-        {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "browser-main-window-title"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-main-window-title"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "mode"
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "private"
+                  },
+                  "value": {
+                    "elements": [
+                      {
                         "type": "Placeable",
                         "expression": {
-                            "type": "SelectExpression",
-                            "selector": {
-                                "type": "VariableReference",
-                                "id": {
-                                    "type": "Identifier",
-                                    "name": "mode"
-                                }
-                            },
-                            "variants": [
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "private"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "TermReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "brand-full-name"
-                                                    },
-                                                    "attribute": null,
-                                                    "arguments": null
-                                                }
-                                            },
-                                            {
-                                                "type": "TextElement",
-                                                "value": " (Private Browsing)"
-                                            }
-                                        ]
-                                    },
-                                    "default": false
-                                },
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "default"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "TermReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "brand-full-name"
-                                                    },
-                                                    "attribute": null,
-                                                    "arguments": null
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "default": true
-                                }
-                            ]
+                          "type": "TermReference",
+                          "id": {
+                            "name": "brand-full-name"
+                          },
+                          "attribute": null,
+                          "arguments": null
                         }
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "This is the default window title in case there is no content\ntitle to be displayed.\n\nDepending on the $mode, the string will look like this (in en-US):\n\n\"default\" - \"Mozilla Firefox\"\n\"private\" - \"Mozilla Firefox (Private Browsing)\"\n\nVariables\n  $mode (String) - \"private\" in case of a private browsing mode, \"default\" otherwise."
+                      },
+                      {
+                        "type": "TextElement",
+                        "value": " (Private Browsing)"
+                      }
+                    ]
+                  },
+                  "default": false
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "default"
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "Placeable",
+                        "expression": {
+                          "type": "TermReference",
+                          "id": {
+                            "name": "brand-full-name"
+                          },
+                          "attribute": null,
+                          "arguments": null
+                        }
+                      }
+                    ]
+                  },
+                  "default": true
+                }
+              ]
             }
-        },
-        {
-            "type": "GroupComment",
-            "content": "This is the default window title in case there is content\ntitle to be displayed.\n\nOn macOS the title doesn't include the brand name, on all other\nplatforms it does.\n\nFor example, in private mode on Windows, the title will be:\n\"Example Title - Mozilla Firefox (Private Browsing)\"\n\nwhile on macOS in default mode it will be:\n\"Example Title\"\n\nVariables\n  $title (String) - Content title string."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "browser-main-window-content-title-default"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This is the default window title in case there is no content",
+          "title to be displayed.",
+          "",
+          "Depending on the $mode, the string will look like this (in en-US):",
+          "",
+          "\"default\" - \"Mozilla Firefox\"",
+          "\"private\" - \"Mozilla Firefox (Private Browsing)\"",
+          "",
+          "Variables",
+          "  $mode (String) - \"private\" in case of a private browsing mode, \"default\" otherwise."
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "This is the default window title in case there is content",
+        "title to be displayed.",
+        "",
+        "On macOS the title doesn't include the brand name, on all other",
+        "platforms it does.",
+        "",
+        "For example, in private mode on Windows, the title will be:",
+        "\"Example Title - Mozilla Firefox (Private Browsing)\"",
+        "",
+        "while on macOS in default mode it will be:",
+        "\"Example Title\"",
+        "",
+        "Variables",
+        "  $title (String) - Content title string."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-main-window-content-title-default"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "PLATFORM"
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": []
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "macos"
+                  },
+                  "value": {
+                    "elements": [
+                      {
                         "type": "Placeable",
                         "expression": {
-                            "type": "SelectExpression",
-                            "selector": {
-                                "type": "FunctionReference",
-                                "id": {
-                                    "type": "Identifier",
-                                    "name": "PLATFORM"
-                                },
-                                "arguments": {
-                                    "type": "CallArguments",
-                                    "positional": [],
-                                    "named": []
-                                }
-                            },
-                            "variants": [
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "macos"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "VariableReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "title"
-                                                    }
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "default": false
-                                },
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "other"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "VariableReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "title"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "type": "TextElement",
-                                                "value": " - "
-                                            },
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "TermReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "brand-full-name"
-                                                    },
-                                                    "attribute": null,
-                                                    "arguments": null
-                                                }
-                                            }
-                                        ]
-                                    },
-                                    "default": true
-                                }
-                            ]
+                          "type": "VariableReference",
+                          "id": {
+                            "name": "title"
+                          }
                         }
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "browser-main-window-content-title-private"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
+                      }
+                    ]
+                  },
+                  "default": false
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other"
+                  },
+                  "value": {
+                    "elements": [
+                      {
                         "type": "Placeable",
                         "expression": {
-                            "type": "SelectExpression",
-                            "selector": {
-                                "type": "FunctionReference",
-                                "id": {
-                                    "type": "Identifier",
-                                    "name": "PLATFORM"
-                                },
-                                "arguments": {
-                                    "type": "CallArguments",
-                                    "positional": [],
-                                    "named": []
-                                }
-                            },
-                            "variants": [
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "macos"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "VariableReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "title"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "type": "TextElement",
-                                                "value": " - (Private Browsing)"
-                                            }
-                                        ]
-                                    },
-                                    "default": false
-                                },
-                                {
-                                    "type": "Variant",
-                                    "key": {
-                                        "type": "Identifier",
-                                        "name": "other"
-                                    },
-                                    "value": {
-                                        "type": "Pattern",
-                                        "elements": [
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "VariableReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "title"
-                                                    }
-                                                }
-                                            },
-                                            {
-                                                "type": "TextElement",
-                                                "value": " - "
-                                            },
-                                            {
-                                                "type": "Placeable",
-                                                "expression": {
-                                                    "type": "InlineExpression",
-                                                    "type": "TermReference",
-                                                    "id": {
-                                                        "type": "Identifier",
-                                                        "name": "brand-full-name"
-                                                    },
-                                                    "attribute": null,
-                                                    "arguments": null
-                                                }
-                                            },
-                                            {
-                                                "type": "TextElement",
-                                                "value": " (Private Browsing)"
-                                            }
-                                        ]
-                                    },
-                                    "default": true
-                                }
-                            ]
+                          "type": "VariableReference",
+                          "id": {
+                            "name": "title"
+                          }
                         }
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": ""
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-identity-button"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "aria-label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "View site information"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Tooltips for images appearing in the address bar"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-services-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open install message panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Change whether you can receive notifications from the site"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-midi-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open MIDI panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-eme-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage use of DRM software"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-authn-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open Web Authentication panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-canvas-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage canvas extraction permission"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-rtc-share-microphone-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage sharing your microphone with the site"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-default-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open message panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-geolocation-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open location request panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-xr-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open virtual reality permission panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-storage-access-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open browsing activity permission panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-translate-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Translate this page"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-rtc-share-screen-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage sharing your windows or screen with the site"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-indexed-db-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open offline storage message panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-password-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open save password message panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-translated-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage page translation"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-plugins-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage plug-in use"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-rtc-share-devices-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage sharing your camera and/or microphone with the site"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-autoplay-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open autoplay panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-persistent-storage-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Store data in Persistent Storage"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-addons-notification-anchor"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Open add-on installation message panel"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-tip-help-icon"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Get help"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-search-tips-confirm"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
+                      },
+                      {
                         "type": "TextElement",
-                        "value": "Okay, Got It"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-tip-icon-description"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "alt"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Tip:"
-                            }
-                        ]
-                    }
+                        "value": " - "
+                      },
+                      {
+                        "type": "Placeable",
+                        "expression": {
+                          "type": "TermReference",
+                          "id": {
+                            "name": "brand-full-name"
+                          },
+                          "attribute": null,
+                          "arguments": null
+                        }
+                      }
+                    ]
+                  },
+                  "default": true
                 }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Read out before Urlbar Tip text content so screenreader users know the\nsubsequent text is a tip offered by the browser. It should end in a colon or\nlocalized equivalent."
+              ]
             }
-        },
-        {
-            "type": "GroupComment",
-            "content": "Prompts users to use the Urlbar when they open a new tab or visit the\nhomepage of their default search engine.\nVariables:\n $engineName (String): The name of the user's default search engine. e.g. \"Google\" or \"DuckDuckGo\"."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-search-tips-onboard"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Type less, find more: Search "
-                    },
-                    {
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-main-window-content-title-private"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "PLATFORM"
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": []
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "macos"
+                  },
+                  "value": {
+                    "elements": [
+                      {
                         "type": "Placeable",
                         "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "engineName"
-                            }
+                          "type": "VariableReference",
+                          "id": {
+                            "name": "title"
+                          }
                         }
-                    },
-                    {
+                      },
+                      {
                         "type": "TextElement",
-                        "value": " right from your address bar."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-search-tips-redirect-2"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Start your search in the address bar to see suggestions from "
-                    },
-                    {
+                        "value": " - (Private Browsing)"
+                      }
+                    ]
+                  },
+                  "default": false
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other"
+                  },
+                  "value": {
+                    "elements": [
+                      {
                         "type": "Placeable",
                         "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "engineName"
-                            }
+                          "type": "VariableReference",
+                          "id": {
+                            "name": "title"
+                          }
                         }
-                    },
-                    {
+                      },
+                      {
                         "type": "TextElement",
-                        "value": " and your browsing history."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": ""
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-geolocation-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked location information for this website."
-                            }
-                        ]
-                    }
+                        "value": " - "
+                      },
+                      {
+                        "type": "Placeable",
+                        "expression": {
+                          "type": "TermReference",
+                          "id": {
+                            "name": "brand-full-name"
+                          },
+                          "attribute": null,
+                          "arguments": null
+                        }
+                      },
+                      {
+                        "type": "TextElement",
+                        "value": " (Private Browsing)"
+                      }
+                    ]
+                  },
+                  "default": true
                 }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-xr-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked virtual reality device access for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-web-notifications-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked notifications for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-camera-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked your camera for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-microphone-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked your microphone for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-screen-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked this website from sharing your screen."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-persistent-storage-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked persistent storage for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-popup-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked pop-ups for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-autoplay-media-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked autoplay media with sound for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-canvas-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked canvas data extraction for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-midi-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked MIDI access for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-install-blocked"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "You have blocked add-on installation for this website."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-star-edit-bookmark"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Edit this bookmark ("
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "VariableReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "shortcut"
-                                    }
-                                }
-                            },
-                            {
-                                "type": "TextElement",
-                                "value": ")"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Variables\n  $shortcut (String) - A keyboard shortcut for the edit bookmark command."
+              ]
             }
-        },
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        ""
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-identity-button"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "urlbar-star-add-bookmark"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Bookmark this page ("
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "VariableReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "shortcut"
-                                    }
-                                }
-                            },
-                            {
-                                "type": "TextElement",
-                                "value": ")"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Variables\n  $shortcut (String) - A keyboard shortcut for the add bookmark command."
-            }
-        },
-        {
-            "type": "GroupComment",
-            "content": "Page Action Context Menu"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "page-action-add-to-urlbar"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Add to Address Bar"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "page-action-manage-extension"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Manage Extension…"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "page-action-remove-from-urlbar"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Remove from Address Bar"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Auto-hide Context Menu"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "full-screen-autohide"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Hide Toolbars"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "H"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "full-screen-exit"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Exit Full Screen Mode"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "F"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Search Engine selection buttons (one-offs)"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-with-title"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This time, search with:"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "This string prompts the user to use the list of one-click search engines in\nthe Urlbar and searchbar."
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-change-settings-button"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Change Search Settings"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "This string won't wrap, so if the translated string is longer,\nconsider translating it as if it said only \"Search Settings\"."
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-change-settings-compact-button"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "tooltiptext"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Change search settings"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-context-open-new-tab"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Search in New Tab"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "T"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-context-set-as-default"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Set as Default Search Engine"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "D"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "search-one-offs-context-set-as-default-private"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Set as Default Search Engine for Private Windows"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "P"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Bookmark Panel"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bookmark-panel-show-editor-checkbox"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Show editor when saving"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "S"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bookmark-panel-done-button"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Done"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bookmark-panel"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "min-width: 23em"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Width of the bookmark panel.\nShould be large enough to fully display the Done and\nCancel/Remove Bookmark buttons."
-            }
-        },
-        {
-            "type": "GroupComment",
-            "content": "Identity Panel"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-not-secure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Connection not secure"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-secure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Connection secure"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-internal"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This is a secure "
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " page."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-file"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This page is stored on your computer."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-extension-page"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This page is loaded from an extension."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-active-blocked"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " has blocked parts of this page that are not secure."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-custom-root"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Connection verified by a certificate issuer that is not recognized by Mozilla."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-passive-loaded"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Parts of this page are not secure (such as images)."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-active-loaded"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have disabled protection on this page."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-weak-encryption"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This page uses weak encryption."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-insecure-login-forms"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Logins entered on this page could be compromised."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-permissions"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Permissions"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-permissions-reload-hint"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You may need to reload the page for changes to apply."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-permissions-empty"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have not granted this site any special permissions."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-clear-site-data"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Clear Cookies and Site Data…"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-not-secure-security-view"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You are not securely connected to this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-connection-verified"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You are securely connected to this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-ev-owner-label"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Certificate issued to:"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-custom-root"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Mozilla does not recognize this certificate issuer. It may have been added from your operating system or by an administrator. <label data-l10n-name=\"link\">Learn More</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-remove-cert-exception"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Remove Exception"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "R"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-insecure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Your connection to this site is not private. Information you submit could be viewed by others (like passwords, messages, credit cards, etc.)."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-insecure-login-forms"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The login information you enter on this page is not secure and could be compromised."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-weak-cipher-intro"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Your connection to this website uses weak encryption and is not private."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-weak-cipher-risk"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Other people can view your information or modify the website’s behavior."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-active-blocked"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " has blocked parts of this page that are not secure. <label data-l10n-name=\"link\">Learn More</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-passive-loaded"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Your connection is not private and information you share with the site could be viewed by others."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-passive-loaded-insecure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This website contains content that is not secure (such as images). <label data-l10n-name=\"link\">Learn More</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-passive-loaded-mixed"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Although "
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " has blocked some content, there is still content on the page that is not secure (such as images). <label data-l10n-name=\"link\">Learn More</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-active-loaded"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This website contains content that is not secure (such as scripts) and your connection to it is not private."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-description-active-loaded-insecure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Information you share with this site could be viewed by others (like passwords, messages, credit cards, etc.)."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-learn-more"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Learn More"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-disable-mixed-content-blocking"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Disable protection for now"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "D"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-enable-mixed-content-blocking"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Enable protection"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "E"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "identity-more-info-link-text"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "More Information"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
+          "id": {
+            "name": "aria-label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View site information"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Tooltips for images appearing in the address bar"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-services-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open install message panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Change whether you can receive notifications from the site"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-midi-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open MIDI panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-eme-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage use of DRM software"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-authn-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Web Authentication panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-canvas-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage canvas extraction permission"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-rtc-share-microphone-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage sharing your microphone with the site"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-default-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open message panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-geolocation-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open location request panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-xr-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open virtual reality permission panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-storage-access-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open browsing activity permission panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-translate-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Translate this page"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-rtc-share-screen-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage sharing your windows or screen with the site"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-indexed-db-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open offline storage message panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-password-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open save password message panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-translated-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage page translation"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-plugins-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage plug-in use"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-rtc-share-devices-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage sharing your camera and/or microphone with the site"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-autoplay-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open autoplay panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-persistent-storage-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Store data in Persistent Storage"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-addons-notification-anchor"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open add-on installation message panel"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-tip-help-icon"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Get help"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-search-tips-confirm"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Okay, Got It"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-tip-icon-description"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "alt"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Tip:"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Read out before Urlbar Tip text content so screenreader users know the",
+          "subsequent text is a tip offered by the browser. It should end in a colon or",
+          "localized equivalent."
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Prompts users to use the Urlbar when they open a new tab or visit the",
+        "homepage of their default search engine.",
+        "Variables:",
+        " $engineName (String): The name of the user's default search engine. e.g. \"Google\" or \"DuckDuckGo\"."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-search-tips-onboard"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Type less, find more: Search "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "engineName"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " right from your address bar."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-search-tips-redirect-2"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Start your search in the address bar to see suggestions from "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "engineName"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " and your browsing history."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        ""
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-geolocation-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked location information for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-xr-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked virtual reality device access for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-web-notifications-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked notifications for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-camera-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked your camera for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-microphone-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked your microphone for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-screen-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked this website from sharing your screen."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-persistent-storage-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked persistent storage for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-popup-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked pop-ups for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-autoplay-media-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked autoplay media with sound for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-canvas-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked canvas data extraction for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-midi-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked MIDI access for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-install-blocked"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "You have blocked add-on installation for this website."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-star-edit-bookmark"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit this bookmark ("
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "VariableReference",
+                  "id": {
+                    "name": "shortcut"
+                  }
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables",
+          "  $shortcut (String) - A keyboard shortcut for the edit bookmark command."
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "urlbar-star-add-bookmark"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark this page ("
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "VariableReference",
+                  "id": {
+                    "name": "shortcut"
+                  }
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables",
+          "  $shortcut (String) - A keyboard shortcut for the add bookmark command."
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Page Action Context Menu"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "page-action-add-to-urlbar"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add to Address Bar"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "page-action-manage-extension"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage Extension…"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "page-action-remove-from-urlbar"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove from Address Bar"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Auto-hide Context Menu"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "full-screen-autohide"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Hide Toolbars"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "H"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "full-screen-exit"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exit Full Screen Mode"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Search Engine selection buttons (one-offs)"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-with-title"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This time, search with:"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This string prompts the user to use the list of one-click search engines in",
+          "the Urlbar and searchbar."
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-change-settings-button"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Change Search Settings"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "This string won't wrap, so if the translated string is longer,",
+          "consider translating it as if it said only \"Search Settings\"."
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-change-settings-compact-button"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Change search settings"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-context-open-new-tab"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Search in New Tab"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-context-set-as-default"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Set as Default Search Engine"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "search-one-offs-context-set-as-default-private"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Set as Default Search Engine for Private Windows"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Bookmark Panel"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bookmark-panel-show-editor-checkbox"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Show editor when saving"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bookmark-panel-done-button"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Done"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bookmark-panel"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "min-width: 23em"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Width of the bookmark panel.",
+          "Should be large enough to fully display the Done and",
+          "Cancel/Remove Bookmark buttons."
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Identity Panel"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-not-secure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Connection not secure"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-secure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Connection secure"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-internal"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This is a secure "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " page."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-file"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This page is stored on your computer."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-extension-page"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This page is loaded from an extension."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-active-blocked"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " has blocked parts of this page that are not secure."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-custom-root"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Connection verified by a certificate issuer that is not recognized by Mozilla."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-passive-loaded"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Parts of this page are not secure (such as images)."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-active-loaded"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have disabled protection on this page."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-weak-encryption"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This page uses weak encryption."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-insecure-login-forms"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Logins entered on this page could be compromised."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-permissions"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Permissions"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-permissions-reload-hint"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You may need to reload the page for changes to apply."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-permissions-empty"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have not granted this site any special permissions."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-clear-site-data"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear Cookies and Site Data…"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-not-secure-security-view"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are not securely connected to this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-connection-verified"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are securely connected to this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-ev-owner-label"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Certificate issued to:"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-custom-root"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Mozilla does not recognize this certificate issuer. It may have been added from your operating system or by an administrator. <label data-l10n-name=\"link\">Learn More</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-remove-cert-exception"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove Exception"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-insecure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Your connection to this site is not private. Information you submit could be viewed by others (like passwords, messages, credit cards, etc.)."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-insecure-login-forms"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The login information you enter on this page is not secure and could be compromised."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-weak-cipher-intro"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Your connection to this website uses weak encryption and is not private."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-weak-cipher-risk"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Other people can view your information or modify the website’s behavior."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-active-blocked"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " has blocked parts of this page that are not secure. <label data-l10n-name=\"link\">Learn More</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-passive-loaded"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Your connection is not private and information you share with the site could be viewed by others."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-passive-loaded-insecure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This website contains content that is not secure (such as images). <label data-l10n-name=\"link\">Learn More</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-passive-loaded-mixed"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Although "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " has blocked some content, there is still content on the page that is not secure (such as images). <label data-l10n-name=\"link\">Learn More</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-active-loaded"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This website contains content that is not secure (such as scripts) and your connection to it is not private."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-description-active-loaded-insecure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Information you share with this site could be viewed by others (like passwords, messages, credit cards, etc.)."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-learn-more"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Learn More"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-disable-mixed-content-blocking"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disable protection for now"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-enable-mixed-content-blocking"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Enable protection"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "E"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identity-more-info-link-text"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "More Information"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    }
+  ]
 }
