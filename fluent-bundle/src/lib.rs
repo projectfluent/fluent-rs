@@ -90,7 +90,7 @@ pub mod concurrent;
 mod entry;
 mod errors;
 pub mod memoizer;
-pub mod resolve;
+pub mod resolver;
 mod resource;
 pub mod types;
 

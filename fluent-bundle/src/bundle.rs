@@ -8,6 +8,7 @@ use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
+use std::fmt;
 
 use fluent_syntax::ast;
 use unic_langid::LanguageIdentifier;
@@ -16,7 +17,7 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::memoizer::MemoizerKind;
-use crate::resolve::{ResolveValue, Scope};
+use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -429,6 +430,21 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Some(FluentMessage { value, attributes })
     }
 
+    pub fn write_pattern<'bundle, W>(
+        &'bundle self,
+        w: &mut W,
+        pattern: &'bundle ast::Pattern<&str>,
+        args: Option<&'bundle FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> fmt::Result
+    where
+        R: Borrow<FluentResource>,
+        W: fmt::Write,
+    {
+        let mut scope = Scope::new(self, args, Some(errors));
+        pattern.write(w, &mut scope)
+    }
+
     pub fn format_pattern<'bundle>(
         &'bundle self,
         pattern: &'bundle ast::Pattern<&str>,
@@ -438,14 +454,9 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).as_string(&scope);
-
-        for err in scope.errors {
-            errors.push(err.into());
-        }
-
-        result
+        let mut scope = Scope::new(self, args, Some(errors));
+        let value = pattern.resolve(&mut scope);
+        value.as_string(&scope)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
@@ -472,7 +483,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
     ///     [FluentValue::String(str)] => str.len().into(),
-    ///     _ => FluentValue::None,
+    ///     _ => FluentValue::Error,
     /// }).expect("Failed to add a function to the bundle.");
     ///
     /// let msg = bundle.get_message("length").expect("Message doesn't exist.");

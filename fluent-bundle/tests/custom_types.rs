@@ -153,14 +153,14 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
                     dt.options.merge(named);
                     FluentValue::Custom(Box::new(dt))
                 } else {
-                    FluentValue::None
+                    FluentValue::Error
                 }
             }
             Some(FluentValue::Number(num)) => {
                 let num = num.value as usize;
                 FluentValue::Custom(Box::new(DateTime::new(num, named.into())))
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .unwrap();
 
@@ -208,7 +208,7 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
                 num.options.merge(named);
                 FluentValue::Number(num)
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .unwrap();
 

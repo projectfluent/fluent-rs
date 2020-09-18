@@ -43,8 +43,7 @@ suites:
             asserts:
               -
                 id: pass-nothing
-                ## XXX: Difference from JS
-                value: "???"
+                value: "IDENTITY()"
           -
             name: accepts strings
             asserts:
