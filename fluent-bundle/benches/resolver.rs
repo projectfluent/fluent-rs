@@ -98,11 +98,11 @@ fn resolver_bench(c: &mut Criterion) {
                     let msg = bundle.get_message(id).expect("Message found");
                     let mut errors = vec![];
                     if let Some(value) = msg.value {
-                        let _ = bundle.format_pattern(&mut s, value, args.as_ref(), &mut errors);
+                        let _ = bundle.write_pattern(&mut s, value, args.as_ref(), &mut errors);
                         s.clear();
                     }
                     for (_, value) in msg.attributes {
-                        let _ = bundle.format_pattern(&mut s, value, args.as_ref(), &mut errors);
+                        let _ = bundle.write_pattern(&mut s, value, args.as_ref(), &mut errors);
                         s.clear();
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
@@ -122,10 +122,10 @@ fn resolver_bench(c: &mut Criterion) {
                     let msg = bundle.get_message(id).expect("Message found");
                     let mut errors = vec![];
                     if let Some(value) = msg.value {
-                        let _ = bundle.format_pattern_to_string(value, args.as_ref(), &mut errors);
+                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
                     }
                     for (_, value) in msg.attributes {
-                        let _ = bundle.format_pattern_to_string(value, args.as_ref(), &mut errors);
+                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }

@@ -22,10 +22,7 @@ fn add_resource_override() {
         .expect("Failed to retireve a message")
         .value
         .expect("Failed to retireve a value of a message");
-    assert_eq!(
-        bundle.format_pattern_to_string(value, None, &mut errors),
-        "Value"
-    );
+    assert_eq!(bundle.format_pattern(value, None, &mut errors), "Value");
 
     bundle.add_resource_overriding(&res2);
 
@@ -34,10 +31,7 @@ fn add_resource_override() {
         .expect("Failed to retireve a message")
         .value
         .expect("Failed to retireve a value of a message");
-    assert_eq!(
-        bundle.format_pattern_to_string(value, None, &mut errors),
-        "Value 2"
-    );
+    assert_eq!(bundle.format_pattern(value, None, &mut errors), "Value 2");
 
     assert!(errors.is_empty());
 }

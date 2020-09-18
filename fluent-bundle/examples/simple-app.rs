@@ -138,7 +138,7 @@ fn main() {
                         .get_message("response-msg")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value.expect("Message has no value.");
-                    let value = bundle.format_pattern_to_string(&pattern, Some(&args), &mut errors);
+                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
@@ -150,7 +150,7 @@ fn main() {
                         .get_message("input-parse-error")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value.expect("Message has no value.");
-                    let value = bundle.format_pattern_to_string(&pattern, Some(&args), &mut errors);
+                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
             }
@@ -161,7 +161,7 @@ fn main() {
                 .get_message("missing-arg-error")
                 .expect("Message doesn't exist.");
             let pattern = msg.value.expect("Message has no value.");
-            let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
+            let value = bundle.format_pattern(&pattern, None, &mut errors);
             println!("{}", value);
         }
     }

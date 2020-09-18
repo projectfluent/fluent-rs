@@ -61,7 +61,7 @@ fn main() {
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "Hey there! \u{2068}I'm a function!\u{2069}");
 
     let msg = bundle
@@ -69,7 +69,7 @@ fn main() {
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "The answer to life, the universe, and everything");
 
     let msg = bundle
@@ -77,6 +77,6 @@ fn main() {
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
+    let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(&value, "All your base belong to us");
 }

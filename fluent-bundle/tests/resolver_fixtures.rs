@@ -295,7 +295,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                         })
                         .collect()
                 });
-                let value = bundle.format_pattern_to_string(&val, args.as_ref(), &mut errors);
+                let value = bundle.format_pattern(&val, args.as_ref(), &mut errors);
                 assert_eq!(
                     &value,
                     expected_value,
