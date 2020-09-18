@@ -94,12 +94,13 @@ pub mod resolver;
 mod resource;
 pub mod types;
 mod args;
+mod message;
 
-pub use bundle::FluentMessage;
 pub use errors::FluentError;
 pub use resource::FluentResource;
 pub use types::FluentValue;
 pub use args::FluentArgs;
+pub use message::{FluentAttribute, FluentMessage};
 
 pub type FluentBundle<R> = bundle::FluentBundleBase<R, IntlLangMemoizer>;
 

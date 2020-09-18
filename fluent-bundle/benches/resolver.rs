@@ -5,6 +5,7 @@ use criterion::Criterion;
 use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::collections::HashMap;
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
@@ -37,10 +38,10 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
-fn get_args(name: &str) -> Option<HashMap<&str, FluentValue>> {
+fn get_args(name: &str) -> Option<FluentArgs> {
     match name {
         "preferences" => {
-            let mut prefs_args = HashMap::new();
+            let mut prefs_args = FluentArgs::new();
             prefs_args.add("name", FluentValue::from("John"));
             prefs_args.add("tabCount", FluentValue::from(5));
             prefs_args.add("count", FluentValue::from(3));
