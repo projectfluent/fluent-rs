@@ -4,9 +4,10 @@ use std::borrow::Borrow;
 
 use fluent_syntax::ast;
 
-use crate::bundle::{FluentArgs, FluentBundleBase};
+use crate::bundle::FluentBundleBase;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+use crate::args::FluentArgs;
 
 pub type FluentFunction =
     Box<dyn for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Send + Sync>;

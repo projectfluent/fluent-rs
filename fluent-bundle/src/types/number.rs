@@ -5,7 +5,7 @@ use std::str::FromStr;
 
 use intl_pluralrules::operands::PluralOperands;
 
-use crate::bundle::FluentArgs;
+use crate::args::FluentArgs;
 use crate::types::FluentValue;
 
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
@@ -87,8 +87,8 @@ impl Default for FluentNumberOptions {
 
 impl FluentNumberOptions {
     pub fn merge(&mut self, opts: &FluentArgs) {
-        for (key, value) in opts {
-            match (*key, value) {
+        for (key, value) in opts.iter() {
+            match (key, value) {
                 ("style", FluentValue::String(n)) => {
                     self.style = n.as_ref().into();
                 }

@@ -20,6 +20,7 @@ use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+use crate::args::FluentArgs;
 
 /// A single localization unit composed of an identifier,
 /// value, and attributes.
@@ -29,19 +30,13 @@ pub struct FluentMessage<'m> {
     pub attributes: HashMap<&'m str, &'m ast::Pattern<&'m str>>,
 }
 
-/// A map of arguments passed from the code to
-/// the localization to be used for message
-/// formatting.
-pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
-
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
 ///
 /// # Examples
 ///
 /// ```
-/// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-/// use std::collections::HashMap;
+/// use fluent_bundle::{FluentBundle, FluentResource, FluentValue, FluentArgs};
 /// use unic_langid::langid;
 ///
 /// let ftl_string = String::from("intro = Welcome, { $name }.");
@@ -54,8 +49,8 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 /// bundle.add_resource(&resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
-/// let mut args = HashMap::new();
-/// args.insert("name", FluentValue::from("Rustacean"));
+/// let mut args = FluentArgs::new();
+/// args.add("name", FluentValue::from("Rustacean"));
 ///
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];

@@ -68,8 +68,8 @@ impl DateTimeOptions {
     // If you want to limit which options the localizer can override,
     // here's the right place to do it.
     pub fn merge(&mut self, input: &FluentArgs) {
-        for (key, value) in input {
-            match *key {
+        for (key, value) in input.iter() {
+            match key {
                 "dateStyle" => self.date_style = value.into(),
                 "timeStyle" => self.time_style = value.into(),
                 _ => {}
@@ -184,7 +184,7 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
 
     let mut args = FluentArgs::new();
     let epoch: u64 = 1580127760093;
-    args.insert("epoch", epoch.into());
+    args.add("epoch", epoch.into());
     let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     println!("{}", value);
 }

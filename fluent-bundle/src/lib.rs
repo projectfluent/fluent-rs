@@ -46,7 +46,7 @@
 //! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = FluentArgs::new();
-//! args.insert("name", FluentValue::from("John"));
+//! args.add("name", FluentValue::from("John"));
 //!
 //! let msg = bundle.get_message("intro")
 //!     .expect("Message doesn't exist.");
@@ -93,11 +93,13 @@ pub mod memoizer;
 pub mod resolver;
 mod resource;
 pub mod types;
+mod args;
 
-pub use bundle::{FluentArgs, FluentMessage};
+pub use bundle::FluentMessage;
 pub use errors::FluentError;
 pub use resource::FluentResource;
 pub use types::FluentValue;
+pub use args::FluentArgs;
 
 pub type FluentBundle<R> = bundle::FluentBundleBase<R, IntlLangMemoizer>;
 

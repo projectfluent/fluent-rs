@@ -91,7 +91,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
         .expect("Message doesn't exist.");
     let pattern = msg.value.expect("Message has no value.");
     let mut args = FluentArgs::new();
-    args.insert("num", FluentValue::from(-15));
+    args.add("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
     assert_eq!(
         value,
@@ -104,7 +104,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
         .expect("Message doesn't exist.");
     let pattern = msg.value.expect("Message has no value.");
     let mut args = FluentArgs::new();
-    args.insert("num", FluentValue::from(-15));
+    args.add("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
     assert_eq!(
         value,
@@ -128,7 +128,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
             ..Default::default()
         },
     );
-    args.insert("num", num.into());
+    args.add("num", num.into());
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 
     // Notice, that since we specificed minimum and maximum fraction digits options

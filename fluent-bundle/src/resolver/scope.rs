@@ -131,7 +131,7 @@ impl<'scope, 'errors, R, M: MemoizerKind> Scope<'scope, 'errors, R, M> {
             }
 
             for arg in named {
-                resolved_named_args.insert(arg.name.name, arg.value.resolve(self));
+                resolved_named_args.add(arg.name.name, arg.value.resolve(self));
             }
         }
 
