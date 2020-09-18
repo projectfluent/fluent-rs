@@ -1,5 +1,6 @@
 use criterion::criterion_group;
 use criterion::criterion_main;
+use criterion::BenchmarkId;
 use criterion::Criterion;
 use std::collections::HashMap;
 use std::fs::File;
@@ -70,41 +71,68 @@ fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     }
 }
 
+fn get_bundle(name: &'static str, source: &str) -> (FluentBundle<FluentResource>, Vec<String>) {
+    let res = FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
+    let ids = get_ids(&res);
+    let lids = &[langid!("en")];
+    let mut bundle = FluentBundle::new(lids);
+    bundle
+        .add_resource(res)
+        .expect("Couldn't add FluentResource to the FluentBundle");
+    add_functions(name, &mut bundle);
+    (bundle, ids)
+}
+
 fn resolver_bench(c: &mut Criterion) {
     let tests = &["simple", "preferences", "menubar", "unescape"];
     let ftl_strings = get_strings(tests);
 
-    c.bench_function_over_inputs(
-        "resolve",
-        move |b, &&name| {
-            let source = &ftl_strings[name];
-            let res =
-                FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
-            let ids = get_ids(&res);
-            let lids = &[langid!("en")];
-            let mut bundle = FluentBundle::new(lids);
-            bundle
-                .add_resource(res)
-                .expect("Couldn't add FluentResource to the FluentBundle");
-            add_functions(name, &mut bundle);
+    let mut group = c.benchmark_group("resolve");
+    for (name, source) in &ftl_strings {
+        group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
+            let (bundle, ids) = get_bundle(name, source);
             let args = get_args(name);
+            b.iter(|| {
+                let mut s = String::new();
+                for id in &ids {
+                    let msg = bundle.get_message(id).expect("Message found");
+                    let mut errors = vec![];
+                    if let Some(value) = msg.value {
+                        let _ = bundle.format_pattern(&mut s, value, args.as_ref(), &mut errors);
+                        s.clear();
+                    }
+                    for (_, value) in msg.attributes {
+                        let _ = bundle.format_pattern(&mut s, value, args.as_ref(), &mut errors);
+                        s.clear();
+                    }
+                    assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
+                }
+            })
+        });
+    }
+    group.finish();
 
+    let mut group = c.benchmark_group("resolve_to_str");
+    for (name, source) in &ftl_strings {
+        group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
+            let (bundle, ids) = get_bundle(name, source);
+            let args = get_args(name);
             b.iter(|| {
                 for id in &ids {
                     let msg = bundle.get_message(id).expect("Message found");
                     let mut errors = vec![];
                     if let Some(value) = msg.value {
-                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                        let _ = bundle.format_pattern_to_string(value, args.as_ref(), &mut errors);
                     }
                     for (_, value) in msg.attributes {
-                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                        let _ = bundle.format_pattern_to_string(value, args.as_ref(), &mut errors);
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }
             })
-        },
-        tests,
-    );
+        });
+    }
+    group.finish();
 }
 
 criterion_group!(benches, resolver_bench);

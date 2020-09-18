@@ -20,7 +20,7 @@ bazbar = { baz } Bar
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
     println!("{}", value);
 
     let msg = bundle
@@ -28,6 +28,6 @@ bazbar = { baz } Bar
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value.expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, None, &mut errors);
+    let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
     println!("{}", value);
 }

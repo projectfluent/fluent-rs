@@ -63,7 +63,7 @@ where
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
                     let mut errors = vec![];
-                    return bundle.format_pattern(pattern, args, &mut errors);
+                    return bundle.format_pattern_to_string(pattern, args, &mut errors);
                 }
             }
         }

@@ -1,32 +1,23 @@
-use fluent_syntax::unicode::unescape_unicode;
-use std::borrow::Cow;
+use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
 
-fn is_cow_borrowed<'a>(input: Cow<'a, str>) -> bool {
-    if let Cow::Borrowed(_) = input {
-        true
-    } else {
-        false
-    }
+fn test_unescape_unicode(input: &str, output: &str) {
+    let mut s = String::new();
+    unescape_unicode(&mut s, input).expect("Failed to write.");
+    assert_eq!(&s, output);
+    let result = unescape_unicode_to_string(input);
+    assert_eq!(&result, output);
 }
 
 #[test]
 fn unescape_unicode_test() {
-    assert!(is_cow_borrowed(unescape_unicode("foo")));
-
-    assert_eq!(unescape_unicode("foo"), "foo");
-    assert_eq!(unescape_unicode("foo \\\\"), "foo \\");
-    assert_eq!(unescape_unicode("foo \\\""), "foo \"");
-    assert_eq!(unescape_unicode("foo \\\\ faa"), "foo \\ faa");
-    assert_eq!(
-        unescape_unicode("foo \\\\ faa \\\\ fii"),
-        "foo \\ faa \\ fii"
-    );
-    assert_eq!(
-        unescape_unicode("foo \\\\\\\" faa \\\"\\\\ fii"),
-        "foo \\\" faa \"\\ fii"
-    );
-    assert_eq!(unescape_unicode("\\u0041\\u004F"), "AO");
-    assert_eq!(unescape_unicode("\\uA"), "�");
-    assert_eq!(unescape_unicode("\\uA0Pl"), "�");
-    assert_eq!(unescape_unicode("\\d Foo"), "� Foo");
+    test_unescape_unicode("foo", "foo");
+    test_unescape_unicode("foo \\\\", "foo \\");
+    test_unescape_unicode("foo \\\"", "foo \"");
+    test_unescape_unicode("foo \\\\ faa", "foo \\ faa");
+    test_unescape_unicode("foo \\\\ faa \\\\ fii", "foo \\ faa \\ fii");
+    test_unescape_unicode("foo \\\\\\\" faa \\\"\\\\ fii", "foo \\\" faa \"\\ fii");
+    test_unescape_unicode("\\u0041\\u004F", "AO");
+    test_unescape_unicode("\\uA", "�");
+    test_unescape_unicode("\\uA0Pl", "�");
+    test_unescape_unicode("\\d Foo", "� Foo");
 }

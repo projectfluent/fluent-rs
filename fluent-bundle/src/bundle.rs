@@ -8,6 +8,7 @@ use std::borrow::Borrow;
 use std::borrow::Cow;
 use std::collections::hash_map::{Entry as HashEntry, HashMap};
 use std::default::Default;
+use std::fmt;
 
 use fluent_syntax::ast;
 use unic_langid::LanguageIdentifier;
@@ -16,7 +17,7 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::memoizer::MemoizerKind;
-use crate::resolve::{ResolveValue, Scope};
+use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -59,7 +60,7 @@ pub type FluentArgs<'args> = HashMap<&'args str, FluentValue<'args>>;
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];
 /// let pattern = msg.value.expect("Message has no value.");
-/// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+/// let value = bundle.format_pattern_to_string(&pattern, Some(&args), &mut errors);
 /// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
 ///
 /// ```
@@ -303,7 +304,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let msg = bundle.get_message("hello")
     ///     .expect("Failed to retrieve the message");
     /// let value = msg.value.expect("Failed to retrieve the value of the message");
-    /// assert_eq!(bundle.format_pattern(value, None, &mut errors), "Another Hi!");
+    /// assert_eq!(bundle.format_pattern_to_string(value, None, &mut errors), "Another Hi!");
     /// ```
     ///
     /// # Whitespace
@@ -429,7 +430,22 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Some(FluentMessage { value, attributes })
     }
 
-    pub fn format_pattern<'bundle>(
+    pub fn format_pattern<'bundle, W>(
+        &'bundle self,
+        w: &mut W,
+        pattern: &'bundle ast::Pattern<&str>,
+        args: Option<&'bundle FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> fmt::Result
+    where
+        R: Borrow<FluentResource>,
+        W: fmt::Write,
+    {
+        let mut scope = Scope::new(self, args, Some(errors));
+        pattern.write(w, &mut scope)
+    }
+
+    pub fn format_pattern_to_string<'bundle>(
         &'bundle self,
         pattern: &'bundle ast::Pattern<&str>,
         args: Option<&'bundle FluentArgs>,
@@ -438,14 +454,9 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     where
         R: Borrow<FluentResource>,
     {
-        let mut scope = Scope::new(self, args);
-        let result = pattern.resolve(&mut scope).as_string(&scope);
-
-        for err in scope.errors {
-            errors.push(err.into());
-        }
-
-        result
+        let mut scope = Scope::new(self, args, Some(errors));
+        let value = pattern.resolve(&mut scope);
+        value.as_string(&scope)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See
@@ -472,13 +483,13 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// // Register a fn that maps from string to string length
     /// bundle.add_function("STRLEN", |positional, _named| match positional {
     ///     [FluentValue::String(str)] => str.len().into(),
-    ///     _ => FluentValue::None,
+    ///     _ => FluentValue::Error,
     /// }).expect("Failed to add a function to the bundle.");
     ///
     /// let msg = bundle.get_message("length").expect("Message doesn't exist.");
     /// let mut errors = vec![];
     /// let pattern = msg.value.expect("Message has no value.");
-    /// let value = bundle.format_pattern(&pattern, None, &mut errors);
+    /// let value = bundle.format_pattern_to_string(&pattern, None, &mut errors);
     /// assert_eq!(&value, "5");
     /// ```
     ///

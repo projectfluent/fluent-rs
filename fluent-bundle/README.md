@@ -41,7 +41,7 @@ fn main() {
     let val = msg.value.expect("Message has no value.");
 
     let mut errors = vec![];
-    let value = bundle.format_pattern(val, None, &mut errors);
+    let value = bundle.format_pattern_to_string(val, None, &mut errors);
 
     assert_eq!(&value, "Hello, world!");
 }

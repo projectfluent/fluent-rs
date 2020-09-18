@@ -6,7 +6,7 @@ use std::fs;
 use std::iter;
 use std::path::Path;
 
-use fluent_bundle::resolve::ResolverError;
+use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
 use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
@@ -153,7 +153,7 @@ fn create_bundle(
                         .into()
                 }),
                 "IDENTITY" => bundle.add_function(f.as_str(), |args, _name_args| {
-                    args.get(0).cloned().unwrap_or(FluentValue::None)
+                    args.get(0).cloned().unwrap_or(FluentValue::Error)
                 }),
                 "NUMBER" => bundle.add_function(f.as_str(), |args, _name_args| {
                     args.get(0).expect("Argument must be passed").clone()
@@ -295,7 +295,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                         })
                         .collect()
                 });
-                let value = bundle.format_pattern(&val, args.as_ref(), &mut errors);
+                let value = bundle.format_pattern_to_string(&val, args.as_ref(), &mut errors);
                 assert_eq!(
                     &value,
                     expected_value,
