@@ -86,7 +86,7 @@ use intl_memoizer::{IntlLangMemoizer, Memoizable};
 use unic_langid::LanguageIdentifier;
 
 mod args;
-mod bundle;
+pub mod bundle;
 pub mod concurrent;
 mod entry;
 mod errors;

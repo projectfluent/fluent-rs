@@ -342,6 +342,21 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Some(FluentMessage { value, attributes })
     }
 
+    /// Writes a formatted pattern which comes from a `FluentMessage`.
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// let msg = bundle.get_message("hello-world");
+    ///
+    /// let pattern = msg.value.expect("Missing Value.");
+    /// let mut errors = vec![];
+    ///
+    /// let mut s = new String();
+    /// pattern.write_pattern(&mut s, &pattern, None, &mut errors).expect("Failed to write.");
+    ///
+    /// assert_eq!(s, "Hello World");
+    /// ```
     pub fn write_pattern<'bundle, W>(
         &'bundle self,
         w: &mut W,
@@ -357,6 +372,20 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         pattern.write(w, &mut scope)
     }
 
+    /// Formats a pattern which comes from a `FluentMessage`.
+    ///
+    /// # Example
+    ///
+    /// ```ignore
+    /// let msg = bundle.get_message("hello-world");
+    ///
+    /// let pattern = msg.value.expect("Missing Value.");
+    /// let mut errors = vec![];
+    ///
+    /// let result = pattern.format_pattern(&pattern, None, &mut errors);
+    ///
+    /// assert_eq!(result, "Hello World");
+    /// ```
     pub fn format_pattern<'bundle>(
         &'bundle self,
         pattern: &'bundle ast::Pattern<&str>,
