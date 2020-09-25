@@ -324,6 +324,27 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         self.get_entry_message(id).is_some()
     }
 
+    /// Retrieves a `FluentMessage` from a bundle.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use unic_langid::langid;
+    ///
+    /// let ftl_string = String::from("hello-world = Hello World!");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Failed to parse an FTL string.");
+    ///
+    /// let langid_en = langid!("en-US");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    ///
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    ///
+    /// let msg = bundle.get_message("hello-world");
+    /// assert_eq!(msg.is_some(), true);
+    /// ```
     pub fn get_message(&self, id: &str) -> Option<FluentMessage>
     where
         R: Borrow<FluentResource>,
@@ -346,16 +367,32 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///
     /// # Example
     ///
-    /// ```ignore
-    /// let msg = bundle.get_message("hello-world");
+    /// ```
+    /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use unic_langid::langid;
     ///
-    /// let pattern = msg.value.expect("Missing Value.");
+    /// let ftl_string = String::from("hello-world = Hello World!");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Failed to parse an FTL string.");
+    ///
+    /// let langid_en = langid!("en-US");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    ///
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    ///
+    /// let msg = bundle.get_message("hello-world")
+    ///     .expect("Failed to retrieve a FluentMessage.");
+    ///
+    /// let pattern = msg.value
+    ///     .expect("Missing Value.");
     /// let mut errors = vec![];
     ///
-    /// let mut s = new String();
-    /// pattern.write_pattern(&mut s, &pattern, None, &mut errors).expect("Failed to write.");
+    /// let mut s = String::new();
+    /// bundle.write_pattern(&mut s, &pattern, None, &mut errors)
+    ///     .expect("Failed to write.");
     ///
-    /// assert_eq!(s, "Hello World");
+    /// assert_eq!(s, "Hello World!");
     /// ```
     pub fn write_pattern<'bundle, W>(
         &'bundle self,
@@ -376,15 +413,30 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///
     /// # Example
     ///
-    /// ```ignore
-    /// let msg = bundle.get_message("hello-world");
+    /// ```
+    /// use fluent_bundle::{FluentBundle, FluentResource};
+    /// use unic_langid::langid;
     ///
-    /// let pattern = msg.value.expect("Missing Value.");
+    /// let ftl_string = String::from("hello-world = Hello World!");
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Failed to parse an FTL string.");
+    ///
+    /// let langid_en = langid!("en-US");
+    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    ///
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    ///
+    /// let msg = bundle.get_message("hello-world")
+    ///     .expect("Failed to retrieve a FluentMessage.");
+    ///
+    /// let pattern = msg.value
+    ///     .expect("Missing Value.");
     /// let mut errors = vec![];
     ///
-    /// let result = pattern.format_pattern(&pattern, None, &mut errors);
+    /// let result = bundle.format_pattern(&pattern, None, &mut errors);
     ///
-    /// assert_eq!(result, "Hello World");
+    /// assert_eq!(result, "Hello World!");
     /// ```
     pub fn format_pattern<'bundle>(
         &'bundle self,
