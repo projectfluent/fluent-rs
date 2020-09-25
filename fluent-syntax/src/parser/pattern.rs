@@ -78,7 +78,7 @@ where
                         if b != Some(&b'\n') {
                             break;
                         }
-                    } else if !self.is_byte_pattern_continuation(*b.unwrap()) {
+                    } else if !Self::is_byte_pattern_continuation(*b.unwrap()) {
                         self.ptr = slice_start;
                         break;
                     }

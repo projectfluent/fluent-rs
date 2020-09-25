@@ -2,10 +2,10 @@ use criterion::criterion_group;
 use criterion::criterion_main;
 use criterion::BenchmarkId;
 use criterion::Criterion;
+use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::Read;
-use std::collections::HashMap;
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;

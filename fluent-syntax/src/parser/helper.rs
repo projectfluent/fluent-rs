@@ -113,7 +113,7 @@ where
         self.ptr - start
     }
 
-    pub(super) fn is_byte_pattern_continuation(&self, b: u8) -> bool {
+    pub(super) fn is_byte_pattern_continuation(b: u8) -> bool {
         ![b'}', b'.', b'[', b'*'].contains(&b)
     }
 

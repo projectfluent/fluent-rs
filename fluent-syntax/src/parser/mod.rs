@@ -98,7 +98,7 @@ where
                     comment::Level::Regular => ast::Entry::Comment(comment),
                     comment::Level::Group => ast::Entry::GroupComment(comment),
                     comment::Level::Resource => ast::Entry::ResourceComment(comment),
-                    _ => unreachable!(),
+                    comment::Level::None => unreachable!(),
                 }
             }
             Some(b'-') => ast::Entry::Term(self.get_term(entry_start)?),
@@ -230,11 +230,11 @@ where
     }
 
     fn get_attribute_accessor(&mut self) -> Result<Option<ast::Identifier<S>>> {
-        if !self.take_byte_if(b'.') {
-            Ok(None)
-        } else {
+        if self.take_byte_if(b'.') {
             let ident = self.get_identifier()?;
             Ok(Some(ident))
+        } else {
+            Ok(None)
         }
     }
 
@@ -292,10 +292,10 @@ where
             }
         }
 
-        if !has_default {
-            error!(ErrorKind::MissingDefaultVariant, self.ptr)
-        } else {
+        if has_default {
             Ok(variants)
+        } else {
+            error!(ErrorKind::MissingDefaultVariant, self.ptr)
         }
     }
 

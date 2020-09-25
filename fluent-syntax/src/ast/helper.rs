@@ -16,10 +16,10 @@ pub enum CommentDef<S> {
 impl<'s, S> From<CommentDef<S>> for Comment<S> {
     fn from(input: CommentDef<S>) -> Self {
         match input {
-            CommentDef::Single { content } => Comment {
+            CommentDef::Single { content } => Self {
                 content: vec![content],
             },
-            CommentDef::Multi { content } => Comment { content },
+            CommentDef::Multi { content } => Self { content },
         }
     }
 }

@@ -67,62 +67,60 @@ pub enum ErrorKind {
 impl Display for ErrorKind {
     fn fmt(&self, f: &mut Formatter<'_>) -> fmt::Result {
         match self {
-            ErrorKind::Generic => write!(f, "An error occurred"),
-            ErrorKind::ExpectedEntry => write!(f, "Expected an entry"),
-            ErrorKind::ExpectedToken(letter) => {
+            Self::Generic => write!(f, "An error occurred"),
+            Self::ExpectedEntry => write!(f, "Expected an entry"),
+            Self::ExpectedToken(letter) => {
                 write!(f, "Expected a token starting with \"{}\"", letter)
             }
-            ErrorKind::ExpectedCharRange { range } => write!(f, "Expected one of \"{}\"", range),
-            ErrorKind::ExpectedMessageField { entry_id } => {
+            Self::ExpectedCharRange { range } => write!(f, "Expected one of \"{}\"", range),
+            Self::ExpectedMessageField { entry_id } => {
                 write!(f, "Expected a message field for \"{}\"", entry_id)
             }
-            ErrorKind::ExpectedTermField { entry_id } => {
+            Self::ExpectedTermField { entry_id } => {
                 write!(f, "Expected a term field for \"{}\"", entry_id)
             }
-            ErrorKind::ForbiddenWhitespace => write!(f, "Whitespace is not allowed here"),
-            ErrorKind::ForbiddenCallee => write!(f, "Callee is not allowed here"),
-            ErrorKind::ForbiddenKey => write!(f, "Key is not allowed here"),
-            ErrorKind::MissingDefaultVariant => {
+            Self::ForbiddenWhitespace => write!(f, "Whitespace is not allowed here"),
+            Self::ForbiddenCallee => write!(f, "Callee is not allowed here"),
+            Self::ForbiddenKey => write!(f, "Key is not allowed here"),
+            Self::MissingDefaultVariant => {
                 write!(f, "The select expression must have a default variant")
             }
-            ErrorKind::MissingVariants => {
+            Self::MissingVariants => {
                 write!(f, "The select expression must have one or more variants")
             }
-            ErrorKind::MissingValue => write!(f, "Expected a value"),
-            ErrorKind::MissingVariantKey => write!(f, "Expected a variant key"),
-            ErrorKind::MissingLiteral => write!(f, "Expected a literal"),
-            ErrorKind::MultipleDefaultVariants => {
+            Self::MissingValue => write!(f, "Expected a value"),
+            Self::MissingVariantKey => write!(f, "Expected a variant key"),
+            Self::MissingLiteral => write!(f, "Expected a literal"),
+            Self::MultipleDefaultVariants => {
                 write!(f, "A select expression can only have one default variant",)
             }
-            ErrorKind::MessageReferenceAsSelector => {
+            Self::MessageReferenceAsSelector => {
                 write!(f, "Message references can't be used as a selector")
             }
-            ErrorKind::TermReferenceAsSelector => {
+            Self::TermReferenceAsSelector => {
                 write!(f, "Term references can't be used as a selector")
             }
-            ErrorKind::MessageAttributeAsSelector => {
+            Self::MessageAttributeAsSelector => {
                 write!(f, "Message attributes can't be used as a selector")
             }
-            ErrorKind::TermAttributeAsPlaceable => {
+            Self::TermAttributeAsPlaceable => {
                 write!(f, "Term attributes can't be used as a placeable")
             }
-            ErrorKind::UnterminatedStringExpression => write!(f, "Unterminated string expression"),
-            ErrorKind::PositionalArgumentFollowsNamed => {
+            Self::UnterminatedStringExpression => write!(f, "Unterminated string expression"),
+            Self::PositionalArgumentFollowsNamed => {
                 write!(f, "Positional arguments must come before named arguments",)
             }
-            ErrorKind::DuplicatedNamedArgument(name) => {
+            Self::DuplicatedNamedArgument(name) => {
                 write!(f, "The \"{}\" argument appears twice", name)
             }
-            ErrorKind::ForbiddenVariantAccessor => write!(f, "Forbidden variant accessor"),
-            ErrorKind::UnknownEscapeSequence(seq) => {
-                write!(f, "Unknown escape sequence, \"{}\"", seq)
-            }
-            ErrorKind::InvalidUnicodeEscapeSequence(seq) => {
+            Self::ForbiddenVariantAccessor => write!(f, "Forbidden variant accessor"),
+            Self::UnknownEscapeSequence(seq) => write!(f, "Unknown escape sequence, \"{}\"", seq),
+            Self::InvalidUnicodeEscapeSequence(seq) => {
                 write!(f, "Invalid unicode escape sequence, \"{}\"", seq)
             }
-            ErrorKind::UnbalancedClosingBrace => write!(f, "Unbalanced closing brace"),
-            ErrorKind::ExpectedInlineExpression => write!(f, "Expected an inline expression"),
-            ErrorKind::ExpectedSimpleExpressionAsSelector => {
+            Self::UnbalancedClosingBrace => write!(f, "Unbalanced closing brace"),
+            Self::ExpectedInlineExpression => write!(f, "Expected an inline expression"),
+            Self::ExpectedSimpleExpressionAsSelector => {
                 write!(f, "Expected a simple expression as selector")
             }
         }

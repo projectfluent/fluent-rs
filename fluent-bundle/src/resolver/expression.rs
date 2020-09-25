@@ -22,8 +22,8 @@ impl<'p> WriteValue for ast::Expression<&'p str> {
         R: Borrow<FluentResource>,
     {
         match self {
-            ast::Expression::InlineExpression(exp) => exp.write(w, scope),
-            ast::Expression::SelectExpression { selector, variants } => {
+            Self::InlineExpression(exp) => exp.write(w, scope),
+            Self::SelectExpression { selector, variants } => {
                 let selector = selector.resolve(scope);
                 match selector {
                     FluentValue::String(_) | FluentValue::Number(_) => {
@@ -34,7 +34,7 @@ impl<'p> WriteValue for ast::Expression<&'p str> {
                                     FluentValue::try_number(value)
                                 }
                             };
-                            if key.matches(&selector, &scope) {
+                            if key.matches(&selector, scope) {
                                 return variant.value.write(w, scope);
                             }
                         }
@@ -58,8 +58,8 @@ impl<'p> WriteValue for ast::Expression<&'p str> {
         W: fmt::Write,
     {
         match self {
-            ast::Expression::InlineExpression(exp) => exp.write_error(w),
-            ast::Expression::SelectExpression { .. } => unreachable!(),
+            Self::InlineExpression(exp) => exp.write_error(w),
+            Self::SelectExpression { .. } => unreachable!(),
         }
     }
 }

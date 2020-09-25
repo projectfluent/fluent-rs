@@ -5,7 +5,7 @@ pub trait Slice<'s>: AsRef<str> + Clone + PartialEq {
 }
 
 impl<'s> Slice<'s> for String {
-    fn slice(&self, range: Range<usize>) -> String {
+    fn slice(&self, range: Range<usize>) -> Self {
         self[range].to_string()
     }
 
@@ -15,7 +15,7 @@ impl<'s> Slice<'s> for String {
 }
 
 impl<'s> Slice<'s> for &'s str {
-    fn slice(&self, range: Range<usize>) -> &'s str {
+    fn slice(&self, range: Range<usize>) -> Self {
         &self[range]
     }
 

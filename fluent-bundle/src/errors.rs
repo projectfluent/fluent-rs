@@ -10,12 +10,12 @@ pub enum FluentError {
 
 impl From<ResolverError> for FluentError {
     fn from(error: ResolverError) -> Self {
-        FluentError::ResolverError(error)
+        Self::ResolverError(error)
     }
 }
 
 impl From<ParserError> for FluentError {
     fn from(error: ParserError) -> Self {
-        FluentError::ParserError(error)
+        Self::ParserError(error)
     }
 }

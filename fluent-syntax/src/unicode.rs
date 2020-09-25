@@ -80,8 +80,7 @@ pub fn unescape_unicode_to_string(input: &str) -> Cow<str> {
                 ptr += len;
                 input
                     .get(start..(start + len))
-                    .map(|slice| encode_unicode(Some(slice)))
-                    .unwrap_or(UNKNOWN_CHAR)
+                    .map_or(UNKNOWN_CHAR, |slice| encode_unicode(Some(slice)))
             }
             _ => UNKNOWN_CHAR,
         };

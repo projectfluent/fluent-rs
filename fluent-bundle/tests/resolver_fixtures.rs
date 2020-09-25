@@ -167,7 +167,7 @@ fn create_bundle(
     }
     let res_subset = b.and_then(|b| b.resources.as_ref());
 
-    for res in resources.iter() {
+    for res in resources {
         if let Some(res_subset) = res_subset {
             if let Some(ref name) = res.name {
                 if !res_subset.contains(name) {
