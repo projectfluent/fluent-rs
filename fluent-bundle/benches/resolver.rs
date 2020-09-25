@@ -88,7 +88,9 @@ fn resolver_bench(c: &mut Criterion) {
     let ftl_strings = get_strings(tests);
 
     let mut group = c.benchmark_group("resolve");
-    for (name, source) in &ftl_strings {
+    for name in tests {
+        let source = ftl_strings.get(name)
+            .expect("Failed to find the source.");
         group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
             let (bundle, ids) = get_bundle(name, source);
             let args = get_args(name);
@@ -113,7 +115,9 @@ fn resolver_bench(c: &mut Criterion) {
     group.finish();
 
     let mut group = c.benchmark_group("resolve_to_str");
-    for (name, source) in &ftl_strings {
+    for name in tests {
+        let source = ftl_strings.get(name)
+            .expect("Failed to find the source.");
         group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
             let (bundle, ids) = get_bundle(name, source);
             let args = get_args(name);

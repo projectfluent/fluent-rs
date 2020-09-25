@@ -4,7 +4,7 @@ description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.12.0"
+version = "0.13.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -25,10 +25,10 @@ include = [
 
 [dependencies]
 fluent-langneg = "0.13"
-fluent-syntax = { version = "0.9", path = "../fluent-syntax" }
+fluent-syntax = { version = "0.10", path = "../fluent-syntax" }
 intl_pluralrules = "7.0"
 rental = "0.5"
-smallvec = "1.0"
+smallvec = "1"
 unic-langid = "0.9"
 intl-memoizer = { version = "0.5", path = "../intl-memoizer" }
 

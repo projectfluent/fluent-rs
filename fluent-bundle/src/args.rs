@@ -13,6 +13,10 @@ impl<'args> FluentArgs<'args> {
         Self(vec![])
     }
 
+    pub fn with_capacity(capacity: usize) -> Self {
+        Self(Vec::with_capacity(capacity))
+    }
+
     pub fn get(&self, key: &str) -> Option<&FluentValue<'args>> {
         self.0.iter().find(|(k, _)| key == *k).map(|(_, v)| v)
     }

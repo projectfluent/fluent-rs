@@ -18,7 +18,7 @@ keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 
 [dependencies]
-fluent-bundle = { version = "0.12", path = "../fluent-bundle" }
+fluent-bundle = { version = "0.13", path = "../fluent-bundle" }
 reiterate = "0.1.3"
 
 [dev-dependencies]

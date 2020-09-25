@@ -4,6 +4,16 @@
 
   - …
 
+## fluent-bundle 0.13.0 (September 24, 2020)
+  - Update to `fluent-syntax` 0.10.
+  - Add `FluentBundle::write_pattern` which can write to pre-allocated buffer.
+  - Get rid of `DisplayableNode` and simplify `FluentValue`.
+  - Reorganize `Resolver` around `impl Write`.
+  - Introduce `FluentArgs` as a struct over `Vec<FluentArg>`.
+  - Introduce `FluentMessage` and `FluentAttributes`.
+  - Make `FluentArgs` accept `Cow<str>` as keys.
+
+
 ## fluent-bundle 0.12.0 (May 6, 2020)
   - Add `Send` to `FluentType::Custom` (#173)
   - Update `intl-pluralrules` to 7.0.
