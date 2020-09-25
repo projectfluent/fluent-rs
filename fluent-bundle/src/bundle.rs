@@ -21,14 +21,7 @@ use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
-
-/// A single localization unit composed of an identifier,
-/// value, and attributes.
-#[derive(Debug, PartialEq)]
-pub struct FluentMessage<'m> {
-    pub value: Option<&'m ast::Pattern<&'m str>>,
-    pub attributes: HashMap<&'m str, &'m ast::Pattern<&'m str>>,
-}
+use crate::message::{FluentMessage, FluentAttribute};
 
 /// Base class for a [`FluentBundle`] struct. See its docs for details.
 /// It also is implemented for [`concurrent::FluentBundle`].
@@ -351,14 +344,13 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     {
         let message = self.get_entry_message(id)?;
         let value = message.value.as_ref();
-        let mut attributes = if message.attributes.is_empty() {
-            HashMap::new()
-        } else {
-            HashMap::with_capacity(message.attributes.len())
-        };
+        let mut attributes = Vec::with_capacity(message.attributes.len());
 
         for attr in &message.attributes {
-            attributes.insert(attr.id.name, &attr.value);
+            attributes.push(FluentAttribute {
+                id: &attr.id.name,
+                value: &attr.value
+            });
         }
         Some(FluentMessage { value, attributes })
     }

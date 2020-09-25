@@ -103,8 +103,8 @@ fn resolver_bench(c: &mut Criterion) {
                         let _ = bundle.write_pattern(&mut s, value, args.as_ref(), &mut errors);
                         s.clear();
                     }
-                    for (_, value) in msg.attributes {
-                        let _ = bundle.write_pattern(&mut s, value, args.as_ref(), &mut errors);
+                    for attr in msg.attributes {
+                        let _ = bundle.write_pattern(&mut s, attr.value, args.as_ref(), &mut errors);
                         s.clear();
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
@@ -128,8 +128,8 @@ fn resolver_bench(c: &mut Criterion) {
                     if let Some(value) = msg.value {
                         let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
                     }
-                    for (_, value) in msg.attributes {
-                        let _ = bundle.format_pattern(value, args.as_ref(), &mut errors);
+                    for attr in msg.attributes {
+                        let _ = bundle.format_pattern(attr.value, args.as_ref(), &mut errors);
                     }
                     assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
                 }

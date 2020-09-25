@@ -250,7 +250,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
         if let Some(expected_missing) = assert.missing {
             let missing = if let Some(ref attr) = assert.attribute {
                 if let Some(msg) = bundle.get_message(&assert.id) {
-                    msg.attributes.contains_key(attr.as_str())
+                    msg.get_attribute(attr.as_str()).is_some()
                 } else {
                     false
                 }
@@ -273,10 +273,10 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     scope.get_path()
                 ));
                 let val = if let Some(ref attr) = assert.attribute {
-                    msg.attributes.get(attr.as_str()).expect(&format!(
+                    msg.get_attribute(attr.as_str()).expect(&format!(
                         "Failed to retrieve an attribute of a message {}.{}.",
                         assert.id, attr
-                    ))
+                    )).value
                 } else {
                     msg.value.expect(&format!(
                         "Failed to retrieve a value of a message {}.",
