@@ -6,6 +6,7 @@ addons:
     apt:
         packages:
             - libssl-dev
+cache: cargo
 rust:
   - nightly
   - beta
