@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-bundle 0.13.1 (September 24, 2020)
+  - Replace `HashMap` based `FluentMessage` with `Vec` based one.
+  - 0.13.1 brings close to 40% performance improvements over 0.12 on our benchmarks!
+
 ## fluent-bundle 0.13.0 (September 24, 2020)
   - Update to `fluent-syntax` 0.10.
   - Add `FluentBundle::write_pattern` which can write to pre-allocated buffer.
