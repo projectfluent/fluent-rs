@@ -4,6 +4,13 @@
 
   - …
 
+## fluent-syntax 0.10.0 (September 24, 2020)
+  - Refactored AST to be generic over S which enables sliced, or owned ASTs.
+  - Simplified the AST to get it closer to reference AST.
+  - Refactored the parser to be composable.
+  - Moved serde derives onto AST nodes behind `serde` optional feature.
+  - Around 8-10% performance improvement on parsing "browser" and "preferences" contexts.
+
 ## fluent-syntax 0.9.3 (March 4, 2020)
   - Move JSON serialization from tests to source code behind the feature flag.
   - Fix a minor syntax issue that caused the parser to recognize a comment ending on EOF as Junk.
