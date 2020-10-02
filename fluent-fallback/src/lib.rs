@@ -11,11 +11,13 @@ pub struct L10nKey<'l> {
     pub args: Option<FluentArgs<'l>>,
 }
 
+#[derive(Debug)]
 pub struct L10nAttribute {
     pub name: String,
     pub value: String,
 }
 
+#[derive(Debug)]
 pub struct L10nMessage {
     pub value: Option<String>,
     pub attributes: Vec<L10nAttribute>,
