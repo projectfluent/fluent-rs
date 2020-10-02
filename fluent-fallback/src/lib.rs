@@ -11,6 +11,16 @@ pub struct L10nKey<'l> {
     pub args: Option<FluentArgs<'l>>,
 }
 
+pub struct L10nAttribute {
+    pub name: String,
+    pub value: String,
+}
+
+pub struct L10nMessage {
+    pub value: Option<String>,
+    pub attributes: Vec<L10nAttribute>,
+}
+
 pub struct Localization<R> {
     pub resource_ids: Vec<String>,
     bundles: Reiterate<Box<BundleIterator<R>>>,
@@ -59,8 +69,8 @@ impl<R> Localization<R> {
         R: Borrow<FluentResource>,
     {
         let mut errors = vec![];
-        let mut result: Vec<Option<Cow<'l, str>>> =
-            std::iter::repeat(None).take(keys.len()).collect();
+        let mut result: Vec<Option<Cow<'l, str>>> = vec![];
+        result.resize_with(keys.len(), Default::default);
 
         for (i, key) in keys.iter().enumerate() {
             for bundle in &self.bundles {
@@ -70,6 +80,42 @@ impl<R> Localization<R> {
                         result[i] = Some(val.clone());
                         break;
                     }
+                }
+            }
+        }
+        result
+    }
+
+    pub fn format_messages_sync<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<L10nMessage>>
+    where
+        R: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+        let mut result: Vec<Option<L10nMessage>> = vec![];
+        result.resize_with(keys.len(), Default::default);
+
+        for (i, key) in keys.iter().enumerate() {
+            for bundle in &self.bundles {
+                if let Some(msg) = bundle.get_message(&key.id) {
+                    let value = msg.value.map(|pattern| {
+                        bundle
+                            .format_pattern(pattern, key.args.as_ref(), &mut errors)
+                            .into_owned()
+                    });
+                    let attributes = msg
+                        .attributes
+                        .iter()
+                        .map(|attr| {
+                            let value = bundle
+                                .format_pattern(attr.value, key.args.as_ref(), &mut errors)
+                                .into_owned();
+                            L10nAttribute {
+                                name: attr.id.to_string(),
+                                value,
+                            }
+                        })
+                        .collect();
+                    result[i] = Some(L10nMessage { value, attributes });
                 }
             }
         }
