@@ -99,6 +99,44 @@ fn localization_format_values_sync() {
 }
 
 #[test]
+fn localization_format_messages_sync() {
+    let resource_ids = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let reg = get_l10n_registry();
+
+    let loc = get_new_localization(reg, resource_ids);
+
+    let keys = vec![
+        L10nKey {
+            id: "message-1".to_string(),
+            args: None,
+        },
+        L10nKey {
+            id: "message-2".to_string(),
+            args: None,
+        },
+    ];
+    let messages = loc.format_messages_sync(&keys);
+    assert_eq!(messages.len(), 2);
+    assert_eq!(
+        messages[0].as_ref().unwrap().value,
+        Some("Message 1 Value [en]".to_string())
+    );
+    assert_eq!(
+        messages[0].as_ref().unwrap().attributes[0].value,
+        "Message 1 Attribute [en]".to_string()
+    );
+    assert_eq!(
+        messages[1].as_ref().unwrap().value,
+        Some("Message 2 Value [en]".to_string())
+    );
+    assert_eq!(
+        messages[1].as_ref().unwrap().attributes[0].value,
+        "Message 2 Attribute [en]".to_string()
+    );
+}
+
+#[test]
 fn localization_format_value_async() {
     // let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     // let pl = langid!("pl");
