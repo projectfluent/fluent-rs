@@ -30,6 +30,7 @@ pub struct Localization<R> {
 }
 
 impl<R> Localization<R> {
+    // XXX: Consider a constructor that doesn't take resourceIds as well
     pub fn new<F: 'static>(resource_ids: Vec<String>, mut generate_bundles_sync: F) -> Self
     where
         F: FnMut(Vec<String>) -> Box<BundleIterator<R>>,
@@ -41,6 +42,18 @@ impl<R> Localization<R> {
             bundles,
             generate_bundles_sync: Box::new(generate_bundles_sync),
         }
+    }
+
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.extend(res_ids);
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.retain(|id| !res_ids.contains(id));
+        self.on_change();
+        self.resource_ids.len()
     }
 
     pub fn on_change(&mut self) {
