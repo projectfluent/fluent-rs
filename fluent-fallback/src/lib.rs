@@ -51,7 +51,11 @@ impl<R> Localization<R> {
     }
 
     pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        self.resource_ids.extend(res_ids);
+        for res_id in res_ids {
+            if !self.resource_ids.contains(&res_id) {
+                self.resource_ids.push(res_id);
+            }
+        }
         self.on_change();
         self.resource_ids.len()
     }
