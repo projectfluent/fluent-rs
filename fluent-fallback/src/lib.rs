@@ -25,13 +25,18 @@ pub struct L10nMessage {
 
 pub struct Localization<R> {
     pub resource_ids: Vec<String>,
+    is_sync: bool,
     bundles: Reiterate<Box<BundleIterator<R>>>,
     generate_bundles_sync: Box<dyn FnMut(Vec<String>) -> Box<BundleIterator<R>>>,
 }
 
 impl<R> Localization<R> {
     // XXX: Consider a constructor that doesn't take resourceIds as well
-    pub fn new<F: 'static>(resource_ids: Vec<String>, mut generate_bundles_sync: F) -> Self
+    pub fn new<F: 'static>(
+        resource_ids: Vec<String>,
+        mut generate_bundles_sync: F,
+        is_sync: bool,
+    ) -> Self
     where
         F: FnMut(Vec<String>) -> Box<BundleIterator<R>>,
     {
@@ -40,6 +45,7 @@ impl<R> Localization<R> {
         Self {
             resource_ids,
             bundles,
+            is_sync,
             generate_bundles_sync: Box::new(generate_bundles_sync),
         }
     }
@@ -54,6 +60,14 @@ impl<R> Localization<R> {
         self.resource_ids.retain(|id| !res_ids.contains(id));
         self.on_change();
         self.resource_ids.len()
+    }
+
+    pub fn is_sync(&self) -> bool {
+        self.is_sync
+    }
+
+    pub fn switch_to_async(&mut self) {
+        self.is_sync = false;
     }
 
     pub fn on_change(&mut self) {

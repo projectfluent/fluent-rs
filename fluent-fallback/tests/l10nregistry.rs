@@ -41,13 +41,17 @@ fn get_app_locales() -> &'static [LanguageIdentifier] {
 type ResRc = Rc<FluentResource>;
 
 fn get_new_localization(reg: &'static L10nRegistry, res_ids: Vec<String>) -> Localization<ResRc> {
-    let loc = Localization::new(res_ids, move |res_ids| {
-        let locales = get_app_locales();
-        Box::new(
-            reg.generate_bundles_sync(locales, res_ids)
-                .map(|bundle| Box::new(bundle)),
-        )
-    });
+    let loc = Localization::new(
+        res_ids,
+        move |res_ids| {
+            let locales = get_app_locales();
+            Box::new(
+                reg.generate_bundles_sync(locales, res_ids)
+                    .map(|bundle| Box::new(bundle)),
+            )
+        },
+        true,
+    );
     loc
 }
 
