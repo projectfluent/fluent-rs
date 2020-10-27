@@ -28,3 +28,4 @@ fluent-langneg = "0.13"
 l10nregistry = { path = "../../l10nregistry-rs", features = ["tokio"] }
 tokio = { version = "0.3", features = ["macros"] }
 unic-langid = { version = "0.9", features = ["macros"] }
+serial_test = "0.5"

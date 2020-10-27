@@ -2,6 +2,7 @@ use std::borrow::Cow;
 
 use fluent_fallback::{AsyncLocalization, L10nKey, SyncLocalization};
 use l10nregistry::registry::L10nRegistry;
+use serial_test::serial;
 use unic_langid::{langid, LanguageIdentifier};
 
 static LOCALES: &[LanguageIdentifier] = &[langid!("pl"), langid!("en-US")];
@@ -63,6 +64,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn localization_format_value_sync() {
         let loc = setup_sync_test();
 
@@ -77,6 +79,7 @@ mod tests {
     }
 
     #[test]
+    #[serial]
     fn localization_format_values_sync() {
         let loc = setup_sync_test();
 
@@ -102,6 +105,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[serial]
     async fn localization_format_value_async() {
         let loc = setup_async_test();
 
@@ -116,6 +120,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[serial]
     async fn localization_format_values_async() {
         let loc = setup_async_test();
 
@@ -141,6 +146,7 @@ mod tests {
     }
 
     #[tokio::test]
+    #[serial]
     async fn localization_upgrade() {
         let loc = setup_sync_test();
         let value = loc.format_value_sync("hello-world", None);
