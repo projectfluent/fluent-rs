@@ -1,72 +1,305 @@
-use std::borrow::Borrow;
-use std::borrow::Cow;
+use cache::{AsyncCache, Cache};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentError, FluentResource};
+use futures::Stream;
 
-use fluent_bundle::FluentResource;
-use fluent_bundle::{FluentArgs, FluentBundle};
+use std::{
+    borrow::{Borrow, Cow},
+    ops::{Deref, DerefMut},
+};
 
-use reiterate::Reiterate;
+mod cache;
 
-struct FluentBundleIterator<R, I>
-where
-    I: Iterator<Item = FluentBundle<R>>,
-{
-    iter: I,
+pub trait BundleGeneratorSync {
+    type Resource;
+    type Iter: Iterator<Item = FluentBundle<Self::Resource>>;
+
+    fn bundles_sync(&self, resource_ids: Vec<String>) -> Self::Iter;
 }
 
-impl<R, I> Iterator for FluentBundleIterator<R, I>
+pub trait BundleGenerator {
+    type Resource;
+    type Stream: Stream<Item = FluentBundle<Self::Resource>>;
+
+    fn bundles(&self, resource_ids: Vec<String>) -> Self::Stream;
+}
+
+pub struct L10nKey<'l> {
+    pub id: String,
+    pub args: Option<FluentArgs<'l>>,
+}
+
+#[derive(Debug)]
+pub struct L10nAttribute {
+    pub name: String,
+    pub value: String,
+}
+
+#[derive(Debug)]
+pub struct L10nMessage {
+    pub value: Option<String>,
+    pub attributes: Vec<L10nAttribute>,
+}
+
+pub struct SyncLocalization<G: BundleGeneratorSync> {
+    resource_ids: Vec<String>,
+    bundles: Cache<G::Iter>,
+    generator: G,
+}
+
+impl<G> SyncLocalization<G>
 where
-    I: Iterator<Item = FluentBundle<R>>,
+    G: BundleGeneratorSync + Default,
 {
-    type Item = Box<FluentBundle<R>>;
-    fn next(&mut self) -> Option<Self::Item> {
-        self.iter.next().map(Box::new)
+    pub fn new(resource_ids: Vec<String>) -> Self {
+        Self::with_generator(resource_ids, G::default())
     }
 }
 
-pub struct Localization<'loc, R, I>
+impl<G> SyncLocalization<G>
 where
-    I: Iterator<Item = FluentBundle<R>> + 'loc,
+    G: BundleGeneratorSync,
 {
-    pub resource_ids: Vec<String>,
-    bundles: Reiterate<FluentBundleIterator<R, I>>,
-    generate_bundles: Box<dyn FnMut(&[String]) -> FluentBundleIterator<R, I> + 'loc>,
-}
+    pub fn with_generator(resource_ids: Vec<String>, generator: G) -> Self {
+        let bundles = Cache::new(generator.bundles_sync(resource_ids.clone()));
 
-impl<'loc, R, I> Localization<'loc, R, I>
-where
-    I: Iterator<Item = FluentBundle<R>>,
-{
-    pub fn new<F>(resource_ids: Vec<String>, mut generate_bundles: F) -> Self
-    where
-        F: FnMut(&[String]) -> I + 'loc,
-    {
-        let mut generate = move |x: &[String]| FluentBundleIterator {
-            iter: generate_bundles(x),
-        };
-        let bundles = Reiterate::new(generate(&resource_ids));
-        Localization {
+        Self {
             resource_ids,
             bundles,
-            generate_bundles: Box::new(generate),
+            generator,
         }
     }
 
     pub fn on_change(&mut self) {
-        self.bundles = Reiterate::new((self.generate_bundles)(&self.resource_ids));
+        // This invalidates the cache by recreating it.
+        self.bundles = Cache::new(self.generator.bundles_sync(self.resource_ids.clone()));
     }
 
-    pub fn format_value<'l>(&'l self, id: &'l str, args: Option<&'l FluentArgs>) -> Cow<'l, str>
+    fn format_value_sync_opt<'l>(
+        &'l self,
+        id: &str,
+        args: Option<&'l FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> Option<Cow<'_, str>>
     where
-        R: Borrow<FluentResource>,
+        G::Resource: Borrow<FluentResource>,
     {
         for bundle in &self.bundles {
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
-                    let mut errors = vec![];
-                    return bundle.format_pattern(pattern, args, &mut errors);
+                    return Some(bundle.format_pattern(pattern, args, errors));
                 }
             }
         }
-        id.into()
+        None
+    }
+
+    pub fn format_value_sync<'l>(
+        &'l self,
+        id: &'l str,
+        args: Option<&'l FluentArgs>,
+    ) -> Cow<'l, str>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut _errors = vec![];
+
+        self.format_value_sync_opt(id, args, &mut _errors)
+            .unwrap_or_else(|| id.into())
+    }
+
+    pub fn format_values_sync<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<Cow<'l, str>>>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+
+        keys.iter()
+            .map(|key| self.format_value_sync_opt(&key.id, key.args.as_ref(), &mut errors))
+            .collect::<Vec<_>>()
+    }
+
+    pub fn format_messages_sync<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<L10nMessage>>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+        let mut result: Vec<Option<L10nMessage>> = vec![];
+        result.resize_with(keys.len(), Default::default);
+
+        for (i, key) in keys.iter().enumerate() {
+            for bundle in &self.bundles {
+                if let Some(msg) = bundle.get_message(&key.id) {
+                    let value = msg.value.map(|pattern| {
+                        bundle
+                            .format_pattern(pattern, key.args.as_ref(), &mut errors)
+                            .into_owned()
+                    });
+                    let attributes = msg
+                        .attributes
+                        .iter()
+                        .map(|attr| {
+                            let value = bundle
+                                .format_pattern(attr.value, key.args.as_ref(), &mut errors)
+                                .into_owned();
+                            L10nAttribute {
+                                name: attr.id.to_string(),
+                                value,
+                            }
+                        })
+                        .collect();
+                    result[i] = Some(L10nMessage { value, attributes });
+                }
+            }
+        }
+        result
+    }
+}
+
+impl<G> SyncLocalization<G>
+where
+    G: BundleGenerator + BundleGeneratorSync,
+{
+    pub fn upgrade(self) -> AsyncLocalization<G> {
+        let Self {
+            resource_ids,
+            generator,
+            ..
+        } = self;
+
+        let bundles = AsyncCache::new(generator.bundles(resource_ids.clone()));
+        AsyncLocalization {
+            resource_ids,
+            bundles,
+            generator,
+        }
+    }
+}
+
+impl<G> Deref for SyncLocalization<G>
+where
+    G: BundleGeneratorSync,
+{
+    type Target = G;
+
+    fn deref(&self) -> &Self::Target {
+        &self.generator
+    }
+}
+
+impl<G> DerefMut for SyncLocalization<G>
+where
+    G: BundleGeneratorSync,
+{
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.generator
+    }
+}
+
+pub struct AsyncLocalization<G: BundleGenerator> {
+    resource_ids: Vec<String>,
+    bundles: AsyncCache<G::Stream>,
+    generator: G,
+}
+
+impl<G> AsyncLocalization<G>
+where
+    G: BundleGenerator + Default,
+{
+    pub fn new(resource_ids: Vec<String>) -> Self {
+        Self::with_generator(resource_ids, G::default())
+    }
+}
+
+impl<G> AsyncLocalization<G>
+where
+    G: BundleGenerator,
+{
+    pub fn with_generator(resource_ids: Vec<String>, generator: G) -> Self {
+        let bundles = AsyncCache::new(generator.bundles(resource_ids.clone()));
+
+        Self {
+            resource_ids,
+            bundles,
+            generator,
+        }
+    }
+
+    pub fn on_change(&mut self) {
+        // This invalidates the cache by recreating it.
+        self.bundles = AsyncCache::new(self.generator.bundles(self.resource_ids.clone()));
+    }
+
+    async fn format_value_opt<'l>(
+        &'l self,
+        id: &str,
+        args: Option<&'l FluentArgs<'l>>,
+        errors: &mut Vec<FluentError>,
+    ) -> Option<Cow<'_, str>>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        use futures::StreamExt;
+        let mut bundle_stream = self.bundles.stream();
+        while let Some(bundle) = bundle_stream.next().await {
+            if let Some(msg) = bundle.get_message(id) {
+                if let Some(pattern) = msg.value {
+                    return Some(bundle.format_pattern(pattern, args, errors));
+                }
+            }
+        }
+        None
+    }
+
+    pub async fn format_value<'l>(
+        &'l self,
+        id: &'l str,
+        args: Option<&'l FluentArgs<'l>>,
+    ) -> Cow<'l, str>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut _errors = vec![];
+
+        self.format_value_opt(id, args, &mut _errors)
+            .await
+            .unwrap_or_else(|| id.into())
+    }
+
+    pub async fn format_values<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<Cow<'l, str>>>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+        let mut results = vec![];
+        let mut i = 0;
+        while i < keys.len() {
+            let key = &keys[i];
+            let value = self
+                .format_value_opt(&key.id, key.args.as_ref(), &mut errors)
+                .await;
+            results.push(value);
+            i += 1;
+        }
+        results
+    }
+}
+
+impl<G> Deref for AsyncLocalization<G>
+where
+    G: BundleGenerator,
+{
+    type Target = G;
+
+    fn deref(&self) -> &Self::Target {
+        &self.generator
+    }
+}
+
+impl<G> DerefMut for AsyncLocalization<G>
+where
+    G: BundleGenerator,
+{
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        &mut self.generator
     }
 }
