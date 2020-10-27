@@ -1,4 +1,4 @@
-use fluent_fallback::Localization;
+use fluent_fallback::SyncLocalization;
 use fluent_resmgr::resource_manager::ResourceManager;
 use unic_langid::langid;
 
@@ -6,19 +6,15 @@ use unic_langid::langid;
 fn localization_format_value() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
-    let generate_messages = |res_ids: &[String]| {
-        res_mgr.get_bundles(vec![langid!("en-US"), langid!("pl")], res_ids.to_vec())
-    };
+    let loc = SyncLocalization::with_generator(vec!["test.ftl".into()], res_mgr);
 
-    let loc = Localization::new(vec!["test.ftl".into()], generate_messages);
-
-    let value = loc.format_value("hello-world", None);
+    let value = loc.format_value_sync("hello-world", None);
     assert_eq!(value, "Hello World");
 
-    let value2 = loc.format_value("new-message", None);
+    let value2 = loc.format_value_sync("new-message", None);
     assert_eq!(value2, "Nowa Wiadomość");
 
-    let value3 = loc.format_value("missing-message", None);
+    let value3 = loc.format_value_sync("missing-message", None);
     assert_eq!(value3, "missing-message");
 }
 

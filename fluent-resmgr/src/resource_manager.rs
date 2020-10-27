@@ -1,5 +1,6 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_fallback::BundleGeneratorSync;
 use std::fs;
 use std::io;
 use std::iter;
@@ -71,5 +72,42 @@ impl ResourceManager {
                 bundle
             })
         })
+    }
+}
+
+// Due to limitation of trait, we need a nameable Iterator type.  Due to the
+// lack of GATs, these have to own members instead of taking slices.
+pub struct BundleIter {
+    locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+    resource_ids: Vec<String>,
+}
+
+impl Iterator for BundleIter {
+    type Item = FluentBundle<FluentResource>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let locale = self.locales.next()?;
+
+        let mut bundle = FluentBundle::new(Some(&locale));
+
+        for res_id in &self.resource_ids {
+            let full_path = format!("./tests/resources/{}/{}", locale, res_id);
+            let source = fs::read_to_string(full_path).unwrap();
+            let res = FluentResource::try_new(source).unwrap();
+            bundle.add_resource(res).unwrap();
+        }
+        Some(bundle)
+    }
+}
+
+impl BundleGeneratorSync for ResourceManager {
+    type Resource = FluentResource;
+    type Iter = BundleIter;
+
+    fn bundles_sync(&self, resource_ids: Vec<String>) -> Self::Iter {
+        BundleIter {
+            locales: vec!["en-US".parse().unwrap(), "pl".parse().unwrap()].into_iter(),
+            resource_ids,
+        }
     }
 }
