@@ -24,6 +24,7 @@ futures = "0.3"
 pin-cell = { git = "https://github.com/withoutboats/pin-cell", rev = "4d5803d83c6b3bffd62c9e73a0ceaf5ec6f01495" }
 
 [dev-dependencies]
+fluent-langneg = "0.13"
 l10nregistry = { path = "../../l10nregistry-rs", features = ["tokio"] }
 tokio = { version = "0.3", features = ["macros"] }
 unic-langid = { version = "0.9", features = ["macros"] }
