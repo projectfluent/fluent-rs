@@ -53,6 +53,22 @@ where
     pub fn new(resource_ids: Vec<String>) -> Self {
         Self::with_generator(resource_ids, G::default())
     }
+
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        for res_id in res_ids {
+            if !self.resource_ids.contains(&res_id) {
+                self.resource_ids.push(res_id);
+            }
+        }
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.retain(|id| !res_ids.contains(id));
+        self.on_change();
+        self.resource_ids.len()
+    }
 }
 
 impl<G> SyncLocalization<G>
@@ -67,6 +83,10 @@ where
             bundles,
             generator,
         }
+    }
+
+    pub fn is_sync(&self) -> bool {
+        true
     }
 
     pub fn on_change(&mut self) {
@@ -222,6 +242,10 @@ where
             bundles,
             generator,
         }
+    }
+
+    pub fn is_sync(&self) -> bool {
+        false
     }
 
     pub fn on_change(&mut self) {
