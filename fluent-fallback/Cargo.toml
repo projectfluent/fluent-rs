@@ -19,7 +19,7 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 chunky-vec = "0.1"
-fluent-bundle = { version = "0.13", path = "../fluent-bundle" }
+fluent-bundle = { version = "0.13" }
 futures = "0.3"
 pin-cell = { git = "https://github.com/withoutboats/pin-cell", rev = "4d5803d83c6b3bffd62c9e73a0ceaf5ec6f01495" }
 
