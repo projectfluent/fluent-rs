@@ -113,6 +113,37 @@ where
         None
     }
 
+    fn format_message_sync_opt<'l>(
+        &'l self,
+        id: &str,
+        args: Option<&'l FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> Option<L10nMessage>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        for bundle in &self.bundles {
+            if let Some(msg) = bundle.get_message(id) {
+                let value = msg
+                    .value
+                    .map(|pattern| bundle.format_pattern(pattern, args, errors).into_owned());
+                let attributes = msg
+                    .attributes
+                    .iter()
+                    .map(|attr| {
+                        let value = bundle.format_pattern(attr.value, args, errors).into_owned();
+                        L10nAttribute {
+                            name: attr.id.to_string(),
+                            value,
+                        }
+                    })
+                    .collect();
+                return Some(L10nMessage { value, attributes });
+            }
+        }
+        None
+    }
+
     pub fn format_value_sync<'l>(
         &'l self,
         id: &'l str,
@@ -143,35 +174,9 @@ where
         G::Resource: Borrow<FluentResource>,
     {
         let mut errors = vec![];
-        let mut result: Vec<Option<L10nMessage>> = vec![];
-        result.resize_with(keys.len(), Default::default);
-
-        for (i, key) in keys.iter().enumerate() {
-            for bundle in &self.bundles {
-                if let Some(msg) = bundle.get_message(&key.id) {
-                    let value = msg.value.map(|pattern| {
-                        bundle
-                            .format_pattern(pattern, key.args.as_ref(), &mut errors)
-                            .into_owned()
-                    });
-                    let attributes = msg
-                        .attributes
-                        .iter()
-                        .map(|attr| {
-                            let value = bundle
-                                .format_pattern(attr.value, key.args.as_ref(), &mut errors)
-                                .into_owned();
-                            L10nAttribute {
-                                name: attr.id.to_string(),
-                                value,
-                            }
-                        })
-                        .collect();
-                    result[i] = Some(L10nMessage { value, attributes });
-                }
-            }
-        }
-        result
+        keys.iter()
+            .map(|key| self.format_message_sync_opt(&key.id, key.args.as_ref(), &mut errors))
+            .collect::<Vec<_>>()
     }
 }
 
@@ -274,6 +279,39 @@ where
         None
     }
 
+    async fn format_message_opt<'l>(
+        &'l self,
+        id: &str,
+        args: Option<&'l FluentArgs<'l>>,
+        errors: &mut Vec<FluentError>,
+    ) -> Option<L10nMessage>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        use futures::StreamExt;
+        let mut bundle_stream = self.bundles.stream();
+        while let Some(bundle) = bundle_stream.next().await {
+            if let Some(msg) = bundle.get_message(id) {
+                let value = msg
+                    .value
+                    .map(|pattern| bundle.format_pattern(pattern, args, errors).into_owned());
+                let attributes = msg
+                    .attributes
+                    .iter()
+                    .map(|attr| {
+                        let value = bundle.format_pattern(attr.value, args, errors).into_owned();
+                        L10nAttribute {
+                            name: attr.id.to_string(),
+                            value,
+                        }
+                    })
+                    .collect();
+                return Some(L10nMessage { value, attributes });
+            }
+        }
+        None
+    }
+
     pub async fn format_value<'l>(
         &'l self,
         id: &'l str,
@@ -300,6 +338,24 @@ where
             let key = &keys[i];
             let value = self
                 .format_value_opt(&key.id, key.args.as_ref(), &mut errors)
+                .await;
+            results.push(value);
+            i += 1;
+        }
+        results
+    }
+
+    pub async fn format_messages<'l>(&'l self, keys: &'l [L10nKey<'l>]) -> Vec<Option<L10nMessage>>
+    where
+        G::Resource: Borrow<FluentResource>,
+    {
+        let mut errors = vec![];
+        let mut results = vec![];
+        let mut i = 0;
+        while i < keys.len() {
+            let key = &keys[i];
+            let value = self
+                .format_message_opt(&key.id, key.args.as_ref(), &mut errors)
                 .await;
             results.push(value);
             i += 1;
