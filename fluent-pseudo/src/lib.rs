@@ -74,7 +74,8 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
         if cc >= 97 && cc <= 122 {
             let pos = cc - 97;
             let new_char = small_map[pos as usize];
-            if elongate && (cc == 97 || cc == 101 || cc == 105 || cc == 111 || cc == 117) {
+            // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
+            if elongate && (cc == 97 || cc == 101 || cc == 111 || cc == 117) {
                 let mut s = new_char.to_string();
                 s.push(new_char);
                 s
@@ -116,7 +117,7 @@ mod tests {
         assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a>");
 
         let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true);
-        assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a> iiƞ <b>ḿẏ</b> Ħoouuşee.");
+        assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a> iƞ <b>ḿẏ</b> Ħoouuşee.");
 
         // Don't touch single character values.
         let x = transform_dom("f", false, true);
