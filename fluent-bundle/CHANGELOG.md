@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.13.2 (November 11, 2020)
+  - Re-add `Debug` to `FluentArgs`
+
 ## fluent-bundle 0.13.1 (September 24, 2020)
   - Replace `HashMap` based `FluentMessage` with `Vec` based one.
   - 0.13.1 brings close to 40% performance improvements over 0.12 on our benchmarks!
