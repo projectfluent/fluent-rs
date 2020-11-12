@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-pseudo 0.2.3 (November 12, 2020)
+  - Improve readability of the accented pseudo.
+
 ## fluent-pseudo 0.2.2 (February 13, 2020)
   - Static references to regexps.
 

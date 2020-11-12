@@ -69,7 +69,7 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     };
 
     re_az.replace_all(s, |caps: &Captures| {
-        let ch = caps[0].chars().nth(0).unwrap();
+        let ch = caps[0].chars().next().unwrap();
         let cc = ch as u8;
         if cc >= 97 && cc <= 122 {
             let pos = cc - 97;
