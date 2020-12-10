@@ -230,6 +230,22 @@ impl<G> AsyncLocalization<G>
 where
     G: BundleGenerator + Default,
 {
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        for res_id in res_ids {
+            if !self.resource_ids.contains(&res_id) {
+                self.resource_ids.push(res_id);
+            }
+        }
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.retain(|id| !res_ids.contains(id));
+        self.on_change();
+        self.resource_ids.len()
+    }
+
     pub fn new(resource_ids: Vec<String>) -> Self {
         Self::with_generator(resource_ids, G::default())
     }
