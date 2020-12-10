@@ -273,10 +273,12 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     scope.get_path()
                 ));
                 let val = if let Some(ref attr) = assert.attribute {
-                    msg.get_attribute(attr.as_str()).expect(&format!(
-                        "Failed to retrieve an attribute of a message {}.{}.",
-                        assert.id, attr
-                    )).value
+                    msg.get_attribute(attr.as_str())
+                        .expect(&format!(
+                            "Failed to retrieve an attribute of a message {}.{}.",
+                            assert.id, attr
+                        ))
+                        .value
                 } else {
                     msg.value.expect(&format!(
                         "Failed to retrieve a value of a message {}.",

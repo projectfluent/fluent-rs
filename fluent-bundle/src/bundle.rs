@@ -18,10 +18,10 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::FluentError;
 use crate::memoizer::MemoizerKind;
+use crate::message::{FluentAttribute, FluentMessage};
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
-use crate::message::{FluentMessage, FluentAttribute};
 
 /// Base class for a [`FluentBundle`] struct. See its docs for details.
 /// It also is implemented for [`concurrent::FluentBundle`].
@@ -349,7 +349,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         for attr in &message.attributes {
             attributes.push(FluentAttribute {
                 id: &attr.id.name,
-                value: &attr.value
+                value: &attr.value,
             });
         }
         Some(FluentMessage { value, attributes })
