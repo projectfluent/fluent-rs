@@ -53,22 +53,6 @@ where
     pub fn new(resource_ids: Vec<String>) -> Self {
         Self::with_generator(resource_ids, G::default())
     }
-
-    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        for res_id in res_ids {
-            if !self.resource_ids.contains(&res_id) {
-                self.resource_ids.push(res_id);
-            }
-        }
-        self.on_change();
-        self.resource_ids.len()
-    }
-
-    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        self.resource_ids.retain(|id| !res_ids.contains(id));
-        self.on_change();
-        self.resource_ids.len()
-    }
 }
 
 impl<G> SyncLocalization<G>
@@ -85,6 +69,22 @@ where
         }
     }
 
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        for res_id in res_ids {
+            if !self.resource_ids.contains(&res_id) {
+                self.resource_ids.push(res_id);
+            }
+        }
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.retain(|id| !res_ids.contains(id));
+        self.on_change();
+        self.resource_ids.len()
+    }
+
     pub fn is_sync(&self) -> bool {
         true
     }
@@ -92,6 +92,10 @@ where
     pub fn on_change(&mut self) {
         // This invalidates the cache by recreating it.
         self.bundles = Cache::new(self.generator.bundles_sync(self.resource_ids.clone()));
+    }
+
+    pub fn prefetch_sync(&self) {
+        self.bundles.into_iter().next();
     }
 
     fn format_value_sync_opt<'l>(
@@ -230,22 +234,6 @@ impl<G> AsyncLocalization<G>
 where
     G: BundleGenerator + Default,
 {
-    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        for res_id in res_ids {
-            if !self.resource_ids.contains(&res_id) {
-                self.resource_ids.push(res_id);
-            }
-        }
-        self.on_change();
-        self.resource_ids.len()
-    }
-
-    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        self.resource_ids.retain(|id| !res_ids.contains(id));
-        self.on_change();
-        self.resource_ids.len()
-    }
-
     pub fn new(resource_ids: Vec<String>) -> Self {
         Self::with_generator(resource_ids, G::default())
     }
@@ -263,6 +251,28 @@ where
             bundles,
             generator,
         }
+    }
+
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        for res_id in res_ids {
+            if !self.resource_ids.contains(&res_id) {
+                self.resource_ids.push(res_id);
+            }
+        }
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.resource_ids.retain(|id| !res_ids.contains(id));
+        self.on_change();
+        self.resource_ids.len()
+    }
+
+    pub async fn prefetch(&self) {
+        use futures::StreamExt;
+        let mut bundle_stream = self.bundles.stream();
+        bundle_stream.next().await;
     }
 
     pub fn is_sync(&self) -> bool {
