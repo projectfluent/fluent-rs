@@ -5,6 +5,7 @@ members = [
     "fluent-fallback",
     "fluent-resmgr",
     "fluent-pseudo",
+    "fluent-testing",
     "fluent",
     "intl-memoizer"
 ]
