@@ -98,11 +98,12 @@ fn main() {
     );
     let current_locale = resolved_locales
         .get(0)
+        .cloned()
         .expect("At least one locale should match.");
 
     // 5. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut bundle = FluentBundle::new(resolved_locales.clone());
+    let mut bundle = FluentBundle::new(resolved_locales.into_iter().cloned().collect());
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {

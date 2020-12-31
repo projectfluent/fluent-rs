@@ -16,7 +16,7 @@ use unic_langid::LanguageIdentifier;
 use crate::args::FluentArgs;
 use crate::entry::Entry;
 use crate::entry::GetEntry;
-use crate::errors::FluentError;
+use crate::errors::{EntryKind, FluentError};
 use crate::memoizer::MemoizerKind;
 use crate::message::{FluentAttribute, FluentMessage};
 use crate::resolver::{ResolveValue, Scope, WriteValue};
@@ -39,7 +39,7 @@ pub struct FluentBundleBase<R, M> {
 }
 
 impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
-    /// Constructs a FluentBundle. `locales` is the fallback chain of locales
+    /// Constructs a `FluentBundle`. `locales` is the fallback chain of locales
     /// to use for formatters like date and time. `locales` does not influence
     /// message selection.
     ///
@@ -51,25 +51,19 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// use unic_langid::langid;
     ///
     /// let langid_en = langid!("en-US");
-    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_en]);
+    /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_en]);
     /// ```
     ///
     /// # Errors
     ///
     /// This will panic if no formatters can be found for the locales.
-    pub fn new<'a, L: 'a + Into<LanguageIdentifier> + PartialEq + Clone>(
-        locales: impl IntoIterator<Item = &'a L>,
-    ) -> Self {
-        let locales = locales
-            .into_iter()
-            .map(|s| s.clone().into())
-            .collect::<Vec<_>>();
-        let lang = locales.get(0).cloned().unwrap_or_default();
+    pub fn new(locales: Vec<LanguageIdentifier>) -> Self {
+        let first_locale = locales.get(0).cloned().unwrap_or_default();
         Self {
             locales,
             resources: vec![],
             entries: HashMap::new(),
-            intls: M::new(lang),
+            intls: M::new(first_locale),
             use_isolating: true,
             transform: None,
             formatter: None,
@@ -82,7 +76,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// existing key in the bundle, the new entry will be ignored and a
     /// `FluentError::Overriding` will be added to the result.
     ///
-    /// The method can take any type that can be borrowed to FluentResource:
+    /// The method can take any type that can be borrowed to `FluentResource`:
     ///   - FluentResource
     ///   - &FluentResource
     ///   - Rc<FluentResource>
@@ -104,7 +98,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -138,8 +132,10 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
             };
 
             let (entry, kind) = match entry {
-                ast::Entry::Message(..) => (Entry::Message([res_pos, entry_pos]), "message"),
-                ast::Entry::Term(..) => (Entry::Term([res_pos, entry_pos]), "term"),
+                ast::Entry::Message(..) => {
+                    (Entry::Message([res_pos, entry_pos]), EntryKind::Message)
+                }
+                ast::Entry::Term(..) => (Entry::Term([res_pos, entry_pos]), EntryKind::Term),
                 _ => continue,
             };
 
@@ -199,7 +195,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///
     /// let langid_en = langid!("en-US");
     ///
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
@@ -304,7 +300,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Failed to parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     /// assert_eq!(true, bundle.has_message("hello"));
@@ -330,7 +326,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///     .expect("Failed to parse an FTL string.");
     ///
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     ///
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
@@ -348,7 +344,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 
         for attr in &message.attributes {
             attributes.push(FluentAttribute {
-                id: &attr.id.name,
+                id: attr.id.name,
                 value: &attr.value,
             });
         }
@@ -368,7 +364,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///     .expect("Failed to parse an FTL string.");
     ///
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     ///
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
@@ -414,7 +410,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     ///     .expect("Failed to parse an FTL string.");
     ///
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     ///
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
@@ -461,7 +457,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
     /// let resource = FluentResource::try_new(ftl_string)
     ///     .expect("Could not parse an FTL string.");
     /// let langid_en = langid!("en-US");
-    /// let mut bundle = FluentBundle::new(&[langid_en]);
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
     /// bundle.add_resource(&resource)
     ///     .expect("Failed to add FTL resources to the bundle.");
     ///
@@ -489,7 +485,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
                 Ok(())
             }
             HashEntry::Occupied(_) => Err(FluentError::Overriding {
-                kind: "function",
+                kind: EntryKind::Function,
                 id: id.to_owned(),
             }),
         }
@@ -499,7 +495,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
 impl<R, M: MemoizerKind> Default for FluentBundleBase<R, M> {
     fn default() -> Self {
         let langid = LanguageIdentifier::default();
-        FluentBundleBase {
+        Self {
             locales: vec![langid.clone()],
             resources: vec![],
             entries: Default::default(),

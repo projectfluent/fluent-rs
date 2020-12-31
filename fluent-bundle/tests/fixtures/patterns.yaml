@@ -90,12 +90,11 @@ suites:
             asserts:
               -
                 id: bar
-                # XXX: Difference from JS
                 value: "{foo} Bar"
                 errors:
                   -
-                    type: Reference
-                    desc: "Unknown message: foo"
+                    type: NoValue
+                    desc: "No value: foo"
       -
         name: Cyclic reference
         resources:

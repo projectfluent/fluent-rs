@@ -74,6 +74,7 @@ fn generate_random_hash() -> String {
     let mut rng = thread_rng();
     let chars: String = iter::repeat(())
         .map(|()| rng.sample(Alphanumeric))
+        .map(char::from)
         .take(7)
         .collect();
     chars
@@ -105,7 +106,7 @@ fn create_bundle(
                 .collect()
         })
         .expect("Failed to calculate locales.");
-    let mut bundle = FluentBundle::new(&locales);
+    let mut bundle = FluentBundle::new(locales);
     let use_isolating = b.and_then(|b| b.use_isolating).or_else(|| {
         defaults
             .as_ref()
@@ -318,9 +319,12 @@ fn test_errors(errors: &[FluentError], reference: Option<&[TestError]>) {
     for (error, reference) in errors.into_iter().zip(reference) {
         match error {
             FluentError::ResolverError(err) => match err {
-                ResolverError::Reference(desc) => {
-                    assert_eq!(reference.desc.as_ref(), Some(desc));
+                ResolverError::Reference(_) => {
+                    assert_eq!(reference.desc.as_ref(), Some(&err.to_string()));
                     assert_eq!(reference.error_type, "Reference");
+                }
+                ResolverError::NoValue(_) => {
+                    assert_eq!(reference.error_type, "NoValue");
                 }
                 ResolverError::Cyclic => {
                     assert_eq!(reference.error_type, "Cyclic");

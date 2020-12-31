@@ -30,7 +30,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
-    let mut bundle = FluentBundle::new(&[lang]);
+    let mut bundle = FluentBundle::new(vec![lang]);
     bundle
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");

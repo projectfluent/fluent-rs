@@ -132,7 +132,7 @@ fn fluent_date_time_builtin() {
     }
 
     let lang = langid!("en");
-    let mut bundle = FluentBundle::new(&[lang]);
+    let mut bundle = FluentBundle::new(vec![lang]);
 
     let res = FluentResource::try_new(
         r#"

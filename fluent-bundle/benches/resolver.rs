@@ -74,7 +74,7 @@ fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
 fn get_bundle(name: &'static str, source: &str) -> (FluentBundle<FluentResource>, Vec<String>) {
     let res = FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
     let ids = get_ids(&res);
-    let lids = &[langid!("en")];
+    let lids = vec![langid!("en")];
     let mut bundle = FluentBundle::new(lids);
     bundle
         .add_resource(res)

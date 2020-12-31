@@ -9,7 +9,7 @@ fn add_resource_override() {
     let en_us: LanguageIdentifier = "en-US"
         .parse()
         .expect("Failed to parse a language identifier");
-    let mut bundle = FluentBundle::<&FluentResource>::new(&[en_us]);
+    let mut bundle = FluentBundle::new(vec![en_us]);
 
     bundle.add_resource(&res).expect("Failed to add a resource");
 
