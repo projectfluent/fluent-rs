@@ -65,7 +65,7 @@ macro_rules! assert_get_resource_from_str {
 #[macro_export]
 macro_rules! assert_get_bundle {
     ($res:expr) => {{
-        let mut bundle: FluentBundle<&FluentResource> = FluentBundle::new(&["x-testing"]);
+        let mut bundle: FluentBundle<&FluentResource> = FluentBundle::new(vec!["x-testing"]);
         bundle.set_use_isolating(false);
         bundle
             .add_resource($res)

@@ -28,7 +28,7 @@ fn main() {
         .expect("Could not parse an FTL string.");
 
     let langid_en = langid!("en");
-    let mut bundle = FluentBundle::new(&[langid_en]);
+    let mut bundle = FluentBundle::new(vec![langid_en]);
 
     // Set pseudolocalization
     bundle.set_transform(Some(transform_wrapper));
