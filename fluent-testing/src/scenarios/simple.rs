@@ -1,4 +1,6 @@
-use crate::*;
+use super::structs::*;
+use crate::files::FileSource;
+use crate::queries;
 
 pub fn get_scenario() -> Scenario {
     Scenario::new(
@@ -7,7 +9,6 @@ pub fn get_scenario() -> Scenario {
             "browser",
             "browser/{locale}/",
             vec!["en-US"],
-            None,
         )],
         vec!["en-US"],
         vec!["browser/sanitize.ftl"],

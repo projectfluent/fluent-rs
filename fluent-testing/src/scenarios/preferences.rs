@@ -1,11 +1,13 @@
-use crate::*;
+use super::structs::*;
+use crate::files::FileSource;
+use crate::queries;
 
 pub fn get_scenario() -> Scenario {
     Scenario::new(
         "preferences",
         vec![
-            FileSource::new("browser", "browser/{locale}/", vec!["en-US"], None),
-            FileSource::new("toolkit", "toolkit/{locale}/", vec!["en-US"], None),
+            FileSource::new("browser", "browser/{locale}/", vec!["en-US"]),
+            FileSource::new("toolkit", "toolkit/{locale}/", vec!["en-US"]),
         ],
         vec![
             "en-US",

@@ -1,8 +1,9 @@
 mod browser;
 mod preferences;
 mod simple;
+mod structs;
 
-use crate::*;
+use structs::*;
 
 #[macro_export]
 macro_rules! queries {
