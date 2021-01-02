@@ -8,7 +8,7 @@ pub fn get_scenario() -> Scenario {
         vec![FileSource::new(
             "browser",
             "browser/{locale}/",
-            vec!["en-US"],
+            vec!["en-US", "pl"],
         )],
         vec!["en-US"],
         vec!["browser/sanitize.ftl"],

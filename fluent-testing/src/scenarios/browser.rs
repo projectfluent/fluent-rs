@@ -6,8 +6,8 @@ pub fn get_scenario() -> Scenario {
     Scenario::new(
         "browser",
         vec![
-            FileSource::new("browser", "browser/{locale}/", vec!["en-US"]),
-            FileSource::new("toolkit", "toolkit/{locale}/", vec!["en-US"]),
+            FileSource::new("browser", "browser/{locale}/", vec!["en-US", "pl"]),
+            FileSource::new("toolkit", "toolkit/{locale}/", vec!["en-US", "pl"]),
         ],
         vec!["en-US"],
         vec![
