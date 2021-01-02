@@ -1,5 +1,4 @@
 use super::structs::*;
-use crate::files::FileSource;
 use crate::queries;
 
 pub fn get_scenario() -> Scenario {

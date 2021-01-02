@@ -1,7 +1,7 @@
 mod browser;
 mod preferences;
 mod simple;
-mod structs;
+pub mod structs;
 
 use structs::*;
 
