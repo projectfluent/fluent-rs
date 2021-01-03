@@ -1,6 +1,6 @@
 use std::fs;
 
-use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_bundle::{FluentBundle, FluentError, FluentResource};
 use fluent_fallback::{BundleGeneratorSync, SyncLocalization};
 use unic_langid::{langid, LanguageIdentifier};
 
@@ -26,20 +26,33 @@ struct BundleIter {
 }
 
 impl Iterator for BundleIter {
-    type Item = FluentBundle<FluentResource>;
+    type Item =
+        Result<FluentBundle<FluentResource>, (FluentBundle<FluentResource>, Vec<FluentError>)>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let locale = self.locales.next()?;
 
-        let mut bundle = FluentBundle::new(Some(&locale));
+        let mut bundle = FluentBundle::new(vec![locale.clone()]);
+
+        let mut errors = vec![];
 
         for res_id in &self.resource_ids {
             let full_path = format!("./tests/resources/{}/{}", locale, res_id);
             let source = fs::read_to_string(full_path).unwrap();
-            let res = FluentResource::try_new(source).unwrap();
+            let res = match FluentResource::try_new(source) {
+                Ok(res) => res,
+                Err((res, err)) => {
+                    errors.extend(err.into_iter().map(Into::into));
+                    res
+                }
+            };
             bundle.add_resource(res).unwrap();
         }
-        Some(bundle)
+        if errors.is_empty() {
+            Some(Ok(bundle))
+        } else {
+            Some(Err((bundle, errors)))
+        }
     }
 }
 

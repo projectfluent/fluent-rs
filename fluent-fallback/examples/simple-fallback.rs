@@ -20,7 +20,7 @@
 
 use std::{env, fs, io, path::PathBuf, str::FromStr};
 
-use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentError, FluentResource, FluentValue};
 use fluent_fallback::{BundleGeneratorSync, SyncLocalization};
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
@@ -164,7 +164,8 @@ struct BundleIter {
 }
 
 impl Iterator for BundleIter {
-    type Item = FluentBundle<FluentResource>;
+    type Item =
+        Result<FluentBundle<FluentResource>, (FluentBundle<FluentResource>, Vec<FluentError>)>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let locale = self.locales.next()?;
@@ -172,15 +173,28 @@ impl Iterator for BundleIter {
             .res_path_scheme
             .as_str()
             .replace("{locale}", &locale.to_string());
-        let mut bundle = FluentBundle::new(Some(&locale));
+        let mut bundle = FluentBundle::new(vec![locale]);
+
+        let mut errors = vec![];
 
         for res_id in &self.resource_ids {
             let res_path = res_path_scheme.as_str().replace("{res_id}", res_id);
             let source = fs::read_to_string(res_path).unwrap();
-            let res = FluentResource::try_new(source).unwrap();
+            let res = match FluentResource::try_new(source) {
+                Ok(res) => res,
+                Err((res, err)) => {
+                    errors.extend(err.into_iter().map(Into::into));
+                    res
+                }
+            };
             bundle.add_resource(res).unwrap();
         }
-        Some(bundle)
+
+        if errors.is_empty() {
+            Some(Ok(bundle))
+        } else {
+            Some(Err((bundle, errors)))
+        }
     }
 }
 

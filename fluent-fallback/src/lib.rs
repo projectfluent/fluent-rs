@@ -11,14 +11,24 @@ mod cache;
 
 pub trait BundleGeneratorSync {
     type Resource;
-    type Iter: Iterator<Item = FluentBundle<Self::Resource>>;
+    type Iter: Iterator<
+        Item = Result<
+            FluentBundle<Self::Resource>,
+            (FluentBundle<Self::Resource>, Vec<FluentError>),
+        >,
+    >;
 
     fn bundles_sync(&self, resource_ids: Vec<String>) -> Self::Iter;
 }
 
 pub trait BundleGenerator {
     type Resource;
-    type Stream: Stream<Item = FluentBundle<Self::Resource>>;
+    type Stream: Stream<
+        Item = Result<
+            FluentBundle<Self::Resource>,
+            (FluentBundle<Self::Resource>, Vec<FluentError>),
+        >,
+    >;
 
     fn bundles(&self, resource_ids: Vec<String>) -> Self::Stream;
 }
@@ -108,6 +118,13 @@ where
         G::Resource: Borrow<FluentResource>,
     {
         for bundle in &self.bundles {
+            let bundle = match bundle {
+                Ok(bundle) => bundle,
+                Err((bundle, err)) => {
+                    errors.extend(err.iter().cloned());
+                    bundle
+                }
+            };
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
                     return Some(bundle.format_pattern(pattern, args, errors));
@@ -127,6 +144,13 @@ where
         G::Resource: Borrow<FluentResource>,
     {
         for bundle in &self.bundles {
+            let bundle = match bundle {
+                Ok(bundle) => bundle,
+                Err((bundle, err)) => {
+                    errors.extend(err.iter().cloned());
+                    bundle
+                }
+            };
             if let Some(msg) = bundle.get_message(id) {
                 let value = msg
                     .value
@@ -296,6 +320,13 @@ where
         use futures::StreamExt;
         let mut bundle_stream = self.bundles.stream();
         while let Some(bundle) = bundle_stream.next().await {
+            let bundle = match bundle {
+                Ok(bundle) => bundle,
+                Err((bundle, err)) => {
+                    errors.extend(err.iter().cloned());
+                    bundle
+                }
+            };
             if let Some(msg) = bundle.get_message(id) {
                 if let Some(pattern) = msg.value {
                     return Some(bundle.format_pattern(pattern, args, errors));
@@ -317,6 +348,13 @@ where
         use futures::StreamExt;
         let mut bundle_stream = self.bundles.stream();
         while let Some(bundle) = bundle_stream.next().await {
+            let bundle = match bundle {
+                Ok(bundle) => bundle,
+                Err((bundle, err)) => {
+                    errors.extend(err.iter().cloned());
+                    bundle
+                }
+            };
             if let Some(msg) = bundle.get_message(id) {
                 let value = msg
                     .value
