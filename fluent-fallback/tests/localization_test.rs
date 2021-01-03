@@ -127,6 +127,8 @@ fn localization_format() {
 
     let value = loc.format_value_sync("hello-world-3", None, &mut errors);
     assert_eq!(value, "Hello World 3 [en]");
+
+    assert_eq!(errors.len(), 1);
 }
 
 #[test]
