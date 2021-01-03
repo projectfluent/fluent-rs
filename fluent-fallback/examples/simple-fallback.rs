@@ -20,8 +20,8 @@
 
 use std::{env, fs, io, path::PathBuf, str::FromStr};
 
-use fluent_bundle::{FluentArgs, FluentBundle, FluentError, FluentResource, FluentValue};
-use fluent_fallback::{BundleGeneratorSync, SyncLocalization};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
+use fluent_fallback::{generator::{FluentBundleResult, BundleGenerator, BundleIterator, BundleStream}, Localization};
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
 use unic_langid::LanguageIdentifier;
@@ -106,13 +106,16 @@ fn main() {
 
     // 5. Create a new Localization instance which will be used to maintain the localization
     //    context for this UI.  `Bundles` provides the custom logic for obtaining resources.
-    let loc = SyncLocalization::with_generator(
+    let loc = Localization::with_generator(
         L10N_RESOURCES.iter().map(|&res| res.into()).collect(),
+        true,
         Bundles {
             locales: resolved_locales.into_iter().cloned().collect(),
             res_path_scheme,
         },
     );
+
+    let mut errors = vec![];
 
     // 6. Check if the input is provided.
     match args.get(1) {
@@ -126,20 +129,20 @@ fn main() {
                     args.add("input", FluentValue::from(i));
                     args.add("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    let value = loc.format_value_sync("response-msg", Some(&args));
+                    let value = loc.format_value_sync("response-msg", Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
                     args.add("input", FluentValue::from(input.as_str()));
                     args.add("reason", FluentValue::from(err.to_string()));
-                    let value = loc.format_value_sync("input-parse-error-msg", Some(&args));
+                    let value = loc.format_value_sync("input-parse-error-msg", Some(&args), &mut errors);
                     println!("{}", value);
                 }
             }
         }
         None => {
-            let value = loc.format_value_sync("missing-arg-error", None);
+            let value = loc.format_value_sync("missing-arg-error", None, &mut errors);
             println!("{}", value);
         }
     }
@@ -160,12 +163,16 @@ fn collatz(n: isize) -> isize {
 struct BundleIter {
     res_path_scheme: String,
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-    resource_ids: Vec<String>,
+    res_ids: Vec<String>,
+}
+
+impl BundleIterator for BundleIter {
+    type Resource= FluentResource;
 }
 
 impl Iterator for BundleIter {
     type Item =
-        Result<FluentBundle<FluentResource>, (FluentBundle<FluentResource>, Vec<FluentError>)>;
+        FluentBundleResult<FluentResource>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let locale = self.locales.next()?;
@@ -177,7 +184,7 @@ impl Iterator for BundleIter {
 
         let mut errors = vec![];
 
-        for res_id in &self.resource_ids {
+        for res_id in &self.res_ids {
             let res_path = res_path_scheme.as_str().replace("{res_id}", res_id);
             let source = fs::read_to_string(res_path).unwrap();
             let res = match FluentResource::try_new(source) {
@@ -198,15 +205,35 @@ impl Iterator for BundleIter {
     }
 }
 
-impl BundleGeneratorSync for Bundles {
+impl BundleStream for BundleIter {
+    type Resource = FluentResource;
+}
+
+impl futures::Stream for BundleIter {
+    type Item = FluentBundleResult<FluentResource>;
+
+    fn poll_next(
+        self: std::pin::Pin<&mut Self>,
+        _cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        todo!()
+    }
+}
+
+impl BundleGenerator for Bundles {
     type Resource = FluentResource;
     type Iter = BundleIter;
+    type Stream = BundleIter;
 
-    fn bundles_sync(&self, resource_ids: Vec<String>) -> Self::Iter {
+    fn bundles_iter(&self, res_ids: Vec<String>) -> Self::Iter {
         BundleIter {
             res_path_scheme: self.res_path_scheme.to_string_lossy().to_string(),
             locales: self.locales.clone().into_iter(),
-            resource_ids,
+            res_ids,
         }
+    }
+
+    fn bundles_stream(&self, _res_ids: Vec<String>) -> Self::Stream {
+        todo!()
     }
 }
