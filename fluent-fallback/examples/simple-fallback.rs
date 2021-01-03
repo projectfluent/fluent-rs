@@ -21,7 +21,10 @@
 use std::{env, fs, io, path::PathBuf, str::FromStr};
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
-use fluent_fallback::{generator::{FluentBundleResult, BundleGenerator, BundleIterator, BundleStream}, Localization};
+use fluent_fallback::{
+    generator::{BundleGenerator, BundleIterator, BundleStream, FluentBundleResult},
+    Localization,
+};
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
 use unic_langid::LanguageIdentifier;
@@ -136,7 +139,8 @@ fn main() {
                     let mut args = FluentArgs::new();
                     args.add("input", FluentValue::from(input.as_str()));
                     args.add("reason", FluentValue::from(err.to_string()));
-                    let value = loc.format_value_sync("input-parse-error-msg", Some(&args), &mut errors);
+                    let value =
+                        loc.format_value_sync("input-parse-error-msg", Some(&args), &mut errors);
                     println!("{}", value);
                 }
             }
@@ -167,12 +171,11 @@ struct BundleIter {
 }
 
 impl BundleIterator for BundleIter {
-    type Resource= FluentResource;
+    type Resource = FluentResource;
 }
 
 impl Iterator for BundleIter {
-    type Item =
-        FluentBundleResult<FluentResource>;
+    type Item = FluentBundleResult<FluentResource>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let locale = self.locales.next()?;
