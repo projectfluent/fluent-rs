@@ -19,7 +19,9 @@ include = [
 	"src/**/*",
 	"benches/*.rs",
 	"Cargo.toml",
-	"README.md"
+	"README.md",
+	"LICENSE-APACHE",
+	"LICENSE-MIT"
 ]
 
 [dependencies]
