@@ -1,6 +1,9 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
-use fluent_fallback::BundleGeneratorSync;
+use fluent_fallback::generator::{
+    BundleGenerator, BundleIterator, BundleStream, FluentBundleResult,
+};
+use futures::stream::Stream;
 use std::fs;
 use std::io;
 use std::iter;
@@ -45,7 +48,7 @@ impl ResourceManager {
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
     ) -> FluentBundle<&FluentResource> {
-        let mut bundle = FluentBundle::new(&locales);
+        let mut bundle = FluentBundle::new(locales.clone());
         for res_id in &resource_ids {
             let res = self.get_resource(res_id, &locales[0].to_string());
             bundle.add_resource(res).unwrap();
@@ -64,7 +67,7 @@ impl ResourceManager {
         iter::from_fn(move || {
             locales.get(ptr).map(|locale| {
                 ptr += 1;
-                let mut bundle = FluentBundle::new(vec![locale]);
+                let mut bundle = FluentBundle::new(vec![locale.clone()]);
                 for res_id in &resource_ids {
                     let res = res_mgr.get_resource(&res_id, &locale.to_string());
                     bundle.add_resource(res).unwrap();
@@ -82,13 +85,17 @@ pub struct BundleIter {
     resource_ids: Vec<String>,
 }
 
+impl BundleIterator for BundleIter {
+    type Resource = FluentResource;
+}
+
 impl Iterator for BundleIter {
-    type Item = FluentBundle<FluentResource>;
+    type Item = FluentBundleResult<FluentResource>;
 
     fn next(&mut self) -> Option<Self::Item> {
         let locale = self.locales.next()?;
 
-        let mut bundle = FluentBundle::new(Some(&locale));
+        let mut bundle = FluentBundle::new(vec![locale.clone()]);
 
         for res_id in &self.resource_ids {
             let full_path = format!("./tests/resources/{}/{}", locale, res_id);
@@ -96,18 +103,38 @@ impl Iterator for BundleIter {
             let res = FluentResource::try_new(source).unwrap();
             bundle.add_resource(res).unwrap();
         }
-        Some(bundle)
+        Some(Ok(bundle))
     }
 }
 
-impl BundleGeneratorSync for ResourceManager {
+impl BundleStream for BundleIter {
+    type Resource = FluentResource;
+}
+
+impl Stream for BundleIter {
+    type Item = FluentBundleResult<FluentResource>;
+
+    fn poll_next(
+        self: std::pin::Pin<&mut Self>,
+        _cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        todo!()
+    }
+}
+
+impl BundleGenerator for ResourceManager {
     type Resource = FluentResource;
     type Iter = BundleIter;
+    type Stream = BundleIter;
 
-    fn bundles_sync(&self, resource_ids: Vec<String>) -> Self::Iter {
+    fn bundles_iter(&self, resource_ids: Vec<String>) -> Self::Iter {
         BundleIter {
             locales: vec!["en-US".parse().unwrap(), "pl".parse().unwrap()].into_iter(),
             resource_ids,
         }
+    }
+
+    fn bundles_stream(&self, _res_ids: Vec<String>) -> Self::Stream {
+        todo!()
     }
 }
