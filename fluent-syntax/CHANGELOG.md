@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-syntax 0.10.1 (January 3, 2021)
+  - Make `ParserError` `Clone`.
+  - Apply `clippy` lints.
+
 ## fluent-syntax 0.10.0 (September 24, 2020)
   - Refactored AST to be generic over S which enables sliced, or owned ASTs.
   - Simplified the AST to get it closer to reference AST.
