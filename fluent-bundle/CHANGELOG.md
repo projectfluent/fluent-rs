@@ -4,6 +4,12 @@
 
   - …
 
+## fluent-bundle 0.14.0 (January 3, 2021)
+  - Switch `FluentBundle::new` to take a `Vec<LanguageIdentifier>`.
+  - Switch `rental` to `ouroboros`.
+  - Add `Default` to `FluentArgs`.
+  - Make `FluentError` implement `Error`.
+
 ## fluent-bundle 0.13.2 (November 11, 2020)
   - Re-add `Debug` to `FluentArgs`
 
