@@ -4,6 +4,14 @@
 
   - …
 
+## fluent-fallback 0.1.0 (January 3, 2021)
+  - Update `fluent-bundle` to 0.14.
+  - Switch from `elsa` to `chunky-vec`.
+  - Add `Localization::with_generator`.
+  - Add support for Streamed bundles.
+  - Add `LocalizationError`.
+  - Make `L10nKey`, `L10nMessage` and `L10nAttribute` types.
+
 ## fluent-fallback 0.0.4 (May 6, 2020)
   - Update `fluent-bundle` to 0.12.
   - Update `unic-langid` to 0.9.
