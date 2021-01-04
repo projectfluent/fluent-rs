@@ -1,0 +1,61 @@
+name: Build and test
+
+on:
+  # Triggers the workflow on push or pull request events but only for the master branch
+  push:
+    branches: [ master ]
+  pull_request:
+    branches: [ master ]
+  # Allows you to run this workflow manually from the Actions tab
+  workflow_dispatch:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        rust-version:
+          - stable
+          - beta
+          - nightly
+        cargo-args:
+          - ''
+          - '--all-features'
+    steps:
+      - name: Clone repository
+        uses: actions/checkout@v2
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          profile: minimal
+          toolchain: ${{ matrix.rust-version }}
+          override: true
+      - name: Run cargo clean
+        uses: actions-rs/cargo@v1
+        with:
+          command: clean
+      - name: Run cargo build
+        uses: actions-rs/cargo@v1
+        with:
+          command: build
+          args: ${{ matrix.cargo-args }}
+      - name: Run cargo test
+        uses: actions-rs/cargo@v1
+        with:
+          command: test
+          args: ${{ matrix.cargo-args }}
+
+      # This is currently failing, even in Travis
+      #- name: Run cargo-tarpaulin
+      #  if: matrix.rust-version == 'stable'
+      #  uses: actions-rs/tarpaulin@v0.1
+      #  with:
+      #    version: 'latest'
+      #    args: '--all-features --exclude-files examples/'
+
+      # This needs a secret set up to run
+      #- name: Upload to codecov.io
+      #  if: ${{ matrix.rust-version }} == 'stable'
+      #  uses: codecov/codecov-action@v1.0.2
+      #  with:
+      #    token: ${{secrets.CODECOV_TOKEN}}
