@@ -69,6 +69,20 @@ where
         self.res_ids.push(res_id);
     }
 
+    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) {
+        self.res_ids.extend(res_ids);
+    }
+
+    pub fn remove_resource_id(&mut self, res_id: String) -> usize {
+        self.res_ids.retain(|x| *x != res_id);
+        self.res_ids.len()
+    }
+
+    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
+        self.res_ids.retain(|x| !res_ids.contains(x));
+        self.res_ids.len()
+    }
+
     pub fn prefetch(&self) {
         let bundles = self.get_bundles();
         bundles.prefetch();
@@ -203,13 +217,13 @@ where
         id: &'l str,
         args: Option<&'l FluentArgs>,
         errors: &mut Vec<LocalizationError>,
-    ) -> Cow<'l, str> {
+    ) -> Result<Cow<'l, str>, LocalizationError> {
         let mut format_errors = vec![];
         let result = match self.get_bundles() {
             Bundles::Iter(cache) => {
-                Self::format_with_fallback_sync(cache, id, args, errors, &mut format_errors)
+                Ok(Self::format_with_fallback_sync(cache, id, args, errors, &mut format_errors))
             }
-            Bundles::Stream(_) => panic!(),
+            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         };
         if !format_errors.is_empty() {
             errors.extend(format_errors.into_iter().map(|e| (id, e).into()));
@@ -221,9 +235,9 @@ where
         &'l self,
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
-    ) -> Vec<Cow<'l, str>> {
+    ) -> Result<Vec<Cow<'l, str>>, LocalizationError> {
         match self.get_bundles() {
-            Bundles::Iter(cache) => keys
+            Bundles::Iter(cache) => Ok(keys
                 .iter()
                 .map(|key| {
                     let mut format_errors = vec![];
@@ -239,8 +253,8 @@ where
                     }
                     result
                 })
-                .collect::<Vec<_>>(),
-            Bundles::Stream(_) => panic!(),
+                .collect::<Vec<_>>()),
+            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
     }
 
@@ -248,9 +262,9 @@ where
         &'l self,
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
-    ) -> Vec<Option<L10nMessage<'l>>> {
+    ) -> Result<Vec<Option<L10nMessage<'l>>>, LocalizationError> {
         match self.get_bundles() {
-            Bundles::Iter(cache) => keys
+            Bundles::Iter(cache) => Ok(keys
                 .iter()
                 .map(|key| {
                     let mut format_errors = vec![];
@@ -266,8 +280,8 @@ where
                     }
                     result
                 })
-                .collect::<Vec<_>>(),
-            Bundles::Stream(_) => panic!(),
+                .collect::<Vec<_>>()),
+            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
     }
 }

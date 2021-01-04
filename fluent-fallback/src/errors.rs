@@ -13,9 +13,7 @@ pub enum LocalizationError {
     MissingValue {
         id: String,
     },
-    SyncRequestInAsyncMode {
-        id: String,
-    },
+    SyncRequestInAsyncMode,
 }
 
 impl<I: ToString> From<(I, FluentError)> for LocalizationError {
@@ -31,7 +29,7 @@ impl From<FluentError> for LocalizationError {
     fn from(error: FluentError) -> Self {
         Self::Bundle {
             id: None,
-            error: error,
+            error,
         }
     }
 }
@@ -46,9 +44,8 @@ impl std::fmt::Display for LocalizationError {
             Self::Bundle { id: None, error } => write!(f, "Bundle error: {}", error),
             Self::MissingMessage { id } => write!(f, "Missing message: {}", id),
             Self::MissingValue { id } => write!(f, "Missing value in message: {}", id),
-            Self::SyncRequestInAsyncMode { id } => {
-                write!(f, "Requested {} synchronously while in async mode", id)
-            }
+            Self::SyncRequestInAsyncMode =>
+                write!(f, "Triggered synchronous format while in async mode"),
         }
     }
 }

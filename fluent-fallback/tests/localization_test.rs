@@ -120,13 +120,13 @@ fn localization_format() {
     let loc = Localization::with_generator(resource_ids, true, locales);
 
     let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value, "Hello World [pl]");
+    assert_eq!(value.unwrap(), "Hello World [pl]");
 
     let value = loc.format_value_sync("missing-message", None, &mut errors);
-    assert_eq!(value, "missing-message");
+    assert_eq!(value.unwrap(), "missing-message");
 
     let value = loc.format_value_sync("hello-world-3", None, &mut errors);
-    assert_eq!(value, "Hello World 3 [en]");
+    assert_eq!(value.unwrap(), "Hello World 3 [en]");
 
     assert_eq!(errors.len(), 1);
 }
@@ -141,11 +141,11 @@ fn localization_on_change() {
     let mut loc = Localization::with_generator(resource_ids, true, locales.clone());
 
     let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value, "Hello World [en]");
+    assert_eq!(value.unwrap(), "Hello World [en]");
 
     locales.insert(0, langid!("pl"));
     loc.on_change();
 
     let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value, "Hello World [pl]");
+    assert_eq!(value.unwrap(), "Hello World [pl]");
 }
