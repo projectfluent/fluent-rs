@@ -54,6 +54,7 @@ jobs:
         env:
           RUST_BACKTRACE: 1
       - name: upload to Coveralls
+        if: matrix.rust-version == 'stable' && matrix.cargo-args != ''
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
