@@ -44,18 +44,17 @@ jobs:
         with:
           command: test
           args: ${{ matrix.cargo-args }}
+
       - name: Run cargo-tarpaulin
         if: matrix.rust-version == 'stable' && matrix.cargo-args != ''
         uses: actions-rs/tarpaulin@v0.1
         with:
           version: 'latest'
-          args: '${{ matrix.cargo-args }} --exclude-files examples/'
+          args: '${{ matrix.cargo-args }} --exclude-files examples/ --out Lcov'
         env:
           RUST_BACKTRACE: 1
-
-      # This needs a secret set up to run
-      #- name: Upload to codecov.io
-      #  if: matrix.rust-version == 'stable' && matrix.cargo-args != ''
-      #  uses: codecov/codecov-action@v1.0.2
-      #  with:
-      #    token: ${{secrets.CODECOV_TOKEN}}
+      - name: upload to Coveralls
+        uses: coverallsapp/github-action@master
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          path-to-lcov: './lcov.info'
