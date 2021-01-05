@@ -16,7 +16,6 @@ jobs:
       matrix:
         rust-version:
           - stable
-          - beta
           - nightly
         cargo-args:
           - ''
@@ -50,7 +49,7 @@ jobs:
         uses: actions-rs/tarpaulin@v0.1
         with:
           version: 'latest'
-          args: '${{ matrix.cargo-args }} --exclude-files examples/ --out Lcov'
+          args: '${{ matrix.cargo-args }} --exclude-files examples/ --exclude-files fluent-testing/ --out Lcov'
         env:
           RUST_BACKTRACE: 1
       - name: upload to Coveralls
