@@ -39,9 +39,11 @@ pub struct FluentBundleBase<R, M> {
 }
 
 impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
-    /// Constructs a `FluentBundle`. `locales` is the fallback chain of locales
-    /// to use for formatters like date and time. `locales` does not influence
-    /// message selection.
+    /// Constructs a FluentBundle. The first element in `locales` should be the
+    /// language this bundle represents, and will be used to determine the
+    /// correct plural rules for this bundle. You can optionally provide extra
+    /// languages in the list; they will be used as fallback date and time
+    /// formatters if a formatter for the primary language is unavailable.
     ///
     /// # Examples
     ///
