@@ -30,5 +30,5 @@ type-map = "0.3"
 unic-langid = "0.9"
 
 [dev-dependencies]
-intl_pluralrules = "7.0"
+intl_pluralrules = "7.0.1"
 fluent-langneg = "0.13"
