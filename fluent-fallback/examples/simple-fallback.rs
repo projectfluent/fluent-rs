@@ -132,21 +132,26 @@ fn main() {
                     args.add("input", FluentValue::from(i));
                     args.add("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
-                    let value = loc.format_value_sync("response-msg", Some(&args), &mut errors).unwrap();
+                    let value = loc
+                        .format_value_sync("response-msg", Some(&args), &mut errors)
+                        .unwrap();
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
                     args.add("input", FluentValue::from(input.as_str()));
                     args.add("reason", FluentValue::from(err.to_string()));
-                    let value =
-                        loc.format_value_sync("input-parse-error-msg", Some(&args), &mut errors).unwrap();
+                    let value = loc
+                        .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
+                        .unwrap();
                     println!("{}", value);
                 }
             }
         }
         None => {
-            let value = loc.format_value_sync("missing-arg-error", None, &mut errors).unwrap();
+            let value = loc
+                .format_value_sync("missing-arg-error", None, &mut errors)
+                .unwrap();
             println!("{}", value);
         }
     }

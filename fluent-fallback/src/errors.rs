@@ -27,10 +27,7 @@ impl<I: ToString> From<(I, FluentError)> for LocalizationError {
 
 impl From<FluentError> for LocalizationError {
     fn from(error: FluentError) -> Self {
-        Self::Bundle {
-            id: None,
-            error,
-        }
+        Self::Bundle { id: None, error }
     }
 }
 
@@ -44,8 +41,9 @@ impl std::fmt::Display for LocalizationError {
             Self::Bundle { id: None, error } => write!(f, "Bundle error: {}", error),
             Self::MissingMessage { id } => write!(f, "Missing message: {}", id),
             Self::MissingValue { id } => write!(f, "Missing value in message: {}", id),
-            Self::SyncRequestInAsyncMode =>
-                write!(f, "Triggered synchronous format while in async mode"),
+            Self::SyncRequestInAsyncMode => {
+                write!(f, "Triggered synchronous format while in async mode")
+            }
         }
     }
 }
