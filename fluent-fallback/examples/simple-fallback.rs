@@ -134,6 +134,7 @@ fn main() {
                     // 7.3. Format the message.
                     let value = loc
                         .format_value_sync("response-msg", Some(&args), &mut errors)
+                        .unwrap()
                         .unwrap();
                     println!("{}", value);
                 }
@@ -143,6 +144,7 @@ fn main() {
                     args.add("reason", FluentValue::from(err.to_string()));
                     let value = loc
                         .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
+                        .unwrap()
                         .unwrap();
                     println!("{}", value);
                 }
@@ -151,6 +153,7 @@ fn main() {
         None => {
             let value = loc
                 .format_value_sync("missing-arg-error", None, &mut errors)
+                .unwrap()
                 .unwrap();
             println!("{}", value);
         }
@@ -175,9 +178,7 @@ struct BundleIter {
     res_ids: Vec<String>,
 }
 
-impl BundleIterator for BundleIter {
-    type Resource = FluentResource;
-}
+impl BundleIterator<FluentResource> for BundleIter {}
 
 impl Iterator for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
@@ -213,9 +214,7 @@ impl Iterator for BundleIter {
     }
 }
 
-impl BundleStream for BundleIter {
-    type Resource = FluentResource;
-}
+impl BundleStream<FluentResource> for BundleIter {}
 
 impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;

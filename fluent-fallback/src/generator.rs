@@ -4,26 +4,18 @@ use std::borrow::Borrow;
 
 pub type FluentBundleResult<R> = Result<FluentBundle<R>, (FluentBundle<R>, Vec<FluentError>)>;
 
-pub trait BundleIterator:
-    Iterator<Item = FluentBundleResult<<Self as BundleIterator>::Resource>>
-{
-    type Resource: Borrow<FluentResource>;
-
+pub trait BundleIterator<R>: Iterator<Item = FluentBundleResult<R>> {
     fn prefetch(&mut self) {}
 }
 
-pub trait BundleStream:
-    Stream<Item = FluentBundleResult<<Self as BundleStream>::Resource>>
-{
-    type Resource: Borrow<FluentResource>;
-
+pub trait BundleStream<R>: Stream<Item = FluentBundleResult<R>> {
     fn prefetch(&mut self) {}
 }
 
 pub trait BundleGenerator {
     type Resource: Borrow<FluentResource>;
-    type Iter: BundleIterator;
-    type Stream: BundleStream;
+    type Iter: BundleIterator<Self::Resource>;
+    type Stream: BundleStream<Self::Resource>;
 
     // Can we make it a slice?
     fn bundles_iter(&self, res_ids: Vec<String>) -> Self::Iter;

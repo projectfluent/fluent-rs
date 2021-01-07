@@ -11,22 +11,24 @@ use chunky_vec::ChunkyVec;
 use futures::{ready, Stream};
 use pin_cell::{PinCell, PinMut};
 
-pub struct Cache<I>
+pub struct Cache<I, R>
 where
-    I: BundleIterator,
+    I: BundleIterator<R>,
 {
     iter: RefCell<I>,
     items: UnsafeCell<ChunkyVec<I::Item>>,
+    res: std::marker::PhantomData<R>,
 }
 
-impl<I> Cache<I>
+impl<I, R> Cache<I, R>
 where
-    I: BundleIterator,
+    I: BundleIterator<R>,
 {
     pub fn new(iter: I) -> Self {
         Self {
             iter: RefCell::new(iter),
             items: Default::default(),
+            res: std::marker::PhantomData,
         }
     }
 
@@ -57,17 +59,17 @@ where
     }
 }
 
-pub struct CacheIter<'a, I>
+pub struct CacheIter<'a, I, R>
 where
-    I: BundleIterator,
+    I: BundleIterator<R>,
 {
-    cache: &'a Cache<I>,
+    cache: &'a Cache<I, R>,
     curr: usize,
 }
 
-impl<'a, I> Iterator for CacheIter<'a, I>
+impl<'a, I, R> Iterator for CacheIter<'a, I, R>
 where
-    I: BundleIterator,
+    I: BundleIterator<R>,
 {
     type Item = &'a I::Item;
 
@@ -97,12 +99,12 @@ where
     }
 }
 
-impl<'a, I> IntoIterator for &'a Cache<I>
+impl<'a, I, R> IntoIterator for &'a Cache<I, R>
 where
-    I: BundleIterator,
+    I: BundleIterator<R>,
 {
     type Item = &'a I::Item;
-    type IntoIter = CacheIter<'a, I>;
+    type IntoIter = CacheIter<'a, I, R>;
 
     fn into_iter(self) -> Self::IntoIter {
         CacheIter {
@@ -114,22 +116,24 @@ where
 
 ////////////////////////////////////////////////////////////////////////////////
 
-pub struct AsyncCache<S>
+pub struct AsyncCache<S, R>
 where
-    S: BundleStream,
+    S: BundleStream<R>,
 {
     stream: PinCell<S>,
     items: UnsafeCell<ChunkyVec<S::Item>>,
+    res: std::marker::PhantomData<R>,
 }
 
-impl<S> AsyncCache<S>
+impl<S, R> AsyncCache<S, R>
 where
-    S: BundleStream,
+    S: BundleStream<R>,
 {
     pub fn new(stream: S) -> Self {
         Self {
             stream: PinCell::new(stream),
             items: Default::default(),
+            res: std::marker::PhantomData,
         }
     }
 
@@ -155,7 +159,7 @@ where
         }
     }
 
-    pub fn stream(&self) -> AsyncCacheStream<'_, S> {
+    pub fn stream(&self) -> AsyncCacheStream<'_, S, R> {
         AsyncCacheStream {
             cache: self,
             curr: 0,
@@ -168,9 +172,9 @@ where
     }
 }
 
-impl<S> AsyncCache<S>
+impl<S, R> AsyncCache<S, R>
 where
-    S: BundleStream,
+    S: BundleStream<R>,
 {
     // Helper function that gets the next value from wrapped stream.
     fn poll_next_item(&self, cx: &mut Context<'_>) -> Poll<Option<S::Item>> {
@@ -179,17 +183,17 @@ where
     }
 }
 
-pub struct AsyncCacheStream<'a, S>
+pub struct AsyncCacheStream<'a, S, R>
 where
-    S: BundleStream,
+    S: BundleStream<R>,
 {
-    cache: &'a AsyncCache<S>,
+    cache: &'a AsyncCache<S, R>,
     curr: usize,
 }
 
-impl<'a, S> Stream for AsyncCacheStream<'a, S>
+impl<'a, S, R> Stream for AsyncCacheStream<'a, S, R>
 where
-    S: BundleStream,
+    S: BundleStream<R>,
 {
     type Item = &'a S::Item;
 

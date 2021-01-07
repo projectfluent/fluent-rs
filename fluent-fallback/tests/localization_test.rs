@@ -1,3 +1,4 @@
+use std::borrow::Cow;
 use std::fs;
 
 use fluent_bundle::{FluentBundle, FluentResource};
@@ -45,9 +46,7 @@ struct BundleIter {
     res_ids: Vec<String>,
 }
 
-impl BundleIterator for BundleIter {
-    type Resource = FluentResource;
-}
+impl BundleIterator<FluentResource> for BundleIter {}
 
 impl Iterator for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
@@ -79,9 +78,7 @@ impl Iterator for BundleIter {
     }
 }
 
-impl BundleStream for BundleIter {
-    type Resource = FluentResource;
-}
+impl BundleStream<FluentResource> for BundleIter {}
 
 impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
@@ -119,14 +116,20 @@ fn localization_format() {
 
     let loc = Localization::with_generator(resource_ids, true, locales);
 
-    let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value.unwrap(), "Hello World [pl]");
+    let value = loc
+        .format_value_sync("hello-world", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
 
-    let value = loc.format_value_sync("missing-message", None, &mut errors);
-    assert_eq!(value.unwrap(), "missing-message");
+    let value = loc
+        .format_value_sync("missing-message", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, None);
 
-    let value = loc.format_value_sync("hello-world-3", None, &mut errors);
-    assert_eq!(value.unwrap(), "Hello World 3 [en]");
+    let value = loc
+        .format_value_sync("hello-world-3", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, Some(Cow::Borrowed("Hello World 3 [en]")));
 
     assert_eq!(errors.len(), 1);
 }
@@ -140,12 +143,16 @@ fn localization_on_change() {
 
     let mut loc = Localization::with_generator(resource_ids, true, locales.clone());
 
-    let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value.unwrap(), "Hello World [en]");
+    let value = loc
+        .format_value_sync("hello-world", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, Some(Cow::Borrowed("Hello World [en]")));
 
     locales.insert(0, langid!("pl"));
     loc.on_change();
 
-    let value = loc.format_value_sync("hello-world", None, &mut errors);
-    assert_eq!(value.unwrap(), "Hello World [pl]");
+    let value = loc
+        .format_value_sync("hello-world", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
 }
