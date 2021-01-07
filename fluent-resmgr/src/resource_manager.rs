@@ -85,8 +85,7 @@ pub struct BundleIter {
     resource_ids: Vec<String>,
 }
 
-impl BundleIterator for BundleIter {
-    type Resource = FluentResource;
+impl BundleIterator<FluentResource> for BundleIter {
 }
 
 impl Iterator for BundleIter {
@@ -107,8 +106,7 @@ impl Iterator for BundleIter {
     }
 }
 
-impl BundleStream for BundleIter {
-    type Resource = FluentResource;
+impl BundleStream<FluentResource> for BundleIter {
 }
 
 impl Stream for BundleIter {

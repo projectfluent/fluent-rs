@@ -1,6 +1,7 @@
 use fluent_fallback::Localization;
 use fluent_resmgr::resource_manager::ResourceManager;
 use unic_langid::langid;
+use std::borrow::Cow;
 
 #[test]
 fn localization_format_value() {
@@ -12,17 +13,17 @@ fn localization_format_value() {
     let value = loc
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
-    assert_eq!(value, "Hello World");
+    assert_eq!(value, Some(Cow::Borrowed("Hello World")));
 
     let value2 = loc
         .format_value_sync("new-message", None, &mut errors)
         .unwrap();
-    assert_eq!(value2, "Nowa Wiadomość");
+    assert_eq!(value2, Some(Cow::Borrowed("Nowa Wiadomość")));
 
     let value3 = loc
         .format_value_sync("missing-message", None, &mut errors)
         .unwrap();
-    assert_eq!(value3, "missing-message");
+    assert_eq!(value3, None);
 }
 
 #[test]
