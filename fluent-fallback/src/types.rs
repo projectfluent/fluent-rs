@@ -1,6 +1,7 @@
 use fluent_bundle::FluentArgs;
 use std::borrow::Cow;
 
+#[derive(Debug)]
 pub struct L10nKey<'l> {
     pub id: Cow<'l, str>,
     pub args: Option<FluentArgs<'l>>,
