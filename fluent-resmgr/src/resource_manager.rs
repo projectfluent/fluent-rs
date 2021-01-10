@@ -1,8 +1,6 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
-use fluent_fallback::generator::{
-    BundleGenerator, BundleIterator, BundleStream, FluentBundleResult,
-};
+use fluent_fallback::generator::{BundleGenerator, FluentBundleResult};
 use futures::stream::Stream;
 use std::fs;
 use std::io;
@@ -85,9 +83,6 @@ pub struct BundleIter {
     resource_ids: Vec<String>,
 }
 
-impl BundleIterator<FluentResource> for BundleIter {
-}
-
 impl Iterator for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
 
@@ -104,9 +99,6 @@ impl Iterator for BundleIter {
         }
         Some(Ok(bundle))
     }
-}
-
-impl BundleStream<FluentResource> for BundleIter {
 }
 
 impl Stream for BundleIter {

@@ -1,6 +1,6 @@
 use crate::cache::{AsyncCache, Cache};
 use crate::errors::LocalizationError;
-use crate::generator::BundleGenerator;
+use crate::generator::{BundleGenerator, BundleIterator};
 use crate::types::{L10nAttribute, L10nKey, L10nMessage};
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
 use once_cell::sync::OnceCell;
@@ -17,6 +17,8 @@ where
 impl<G> Bundles<G>
 where
     G: BundleGenerator,
+    G::Iter: BundleIterator,
+    G::Stream: BundleIterator,
 {
     fn prefetch(&self) {
         match self {
@@ -81,11 +83,6 @@ where
     pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
         self.res_ids.retain(|x| !res_ids.contains(x));
         self.res_ids.len()
-    }
-
-    pub fn prefetch(&self) {
-        let bundles = self.get_bundles();
-        bundles.prefetch();
     }
 
     pub fn set_async(&mut self) {
@@ -169,6 +166,18 @@ where
             Bundles::Iter(cache) => Ok(Self::format_messages_from_iter(cache, keys, errors)),
             Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
+    }
+}
+
+impl<G> Localization<G>
+where
+    G: BundleGenerator,
+    G::Iter: BundleIterator,
+    G::Stream: BundleIterator,
+{
+    pub fn prefetch(&self) {
+        let bundles = self.get_bundles();
+        bundles.prefetch();
     }
 }
 

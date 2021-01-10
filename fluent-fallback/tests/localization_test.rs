@@ -3,7 +3,7 @@ use std::fs;
 
 use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_fallback::{
-    generator::{BundleGenerator, BundleIterator, BundleStream, FluentBundleResult},
+    generator::{BundleGenerator, FluentBundleResult},
     Localization,
 };
 use std::cell::RefCell;
@@ -46,8 +46,6 @@ struct BundleIter {
     res_ids: Vec<String>,
 }
 
-impl BundleIterator<FluentResource> for BundleIter {}
-
 impl Iterator for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
 
@@ -77,8 +75,6 @@ impl Iterator for BundleIter {
         }
     }
 }
-
-impl BundleStream<FluentResource> for BundleIter {}
 
 impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;

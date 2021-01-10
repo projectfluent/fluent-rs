@@ -6,14 +6,14 @@ use std::{
     task::Poll,
 };
 
-use crate::generator::{BundleIterator, BundleStream};
+use crate::generator::BundleIterator;
 use chunky_vec::ChunkyVec;
 use futures::{ready, Stream};
 use pin_cell::{PinCell, PinMut};
 
 pub struct Cache<I, R>
 where
-    I: BundleIterator<R>,
+    I: Iterator,
 {
     iter: RefCell<I>,
     items: UnsafeCell<ChunkyVec<I::Item>>,
@@ -22,7 +22,7 @@ where
 
 impl<I, R> Cache<I, R>
 where
-    I: BundleIterator<R>,
+    I: Iterator,
 {
     pub fn new(iter: I) -> Self {
         Self {
@@ -53,7 +53,12 @@ where
             (*items).push_get(new_value)
         }
     }
+}
 
+impl<I, R> Cache<I, R>
+where
+    I: BundleIterator + Iterator,
+{
     pub fn prefetch(&self) {
         self.iter.borrow_mut().prefetch();
     }
@@ -61,7 +66,7 @@ where
 
 pub struct CacheIter<'a, I, R>
 where
-    I: BundleIterator<R>,
+    I: Iterator,
 {
     cache: &'a Cache<I, R>,
     curr: usize,
@@ -69,7 +74,7 @@ where
 
 impl<'a, I, R> Iterator for CacheIter<'a, I, R>
 where
-    I: BundleIterator<R>,
+    I: Iterator,
 {
     type Item = &'a I::Item;
 
@@ -101,7 +106,7 @@ where
 
 impl<'a, I, R> IntoIterator for &'a Cache<I, R>
 where
-    I: BundleIterator<R>,
+    I: Iterator,
 {
     type Item = &'a I::Item;
     type IntoIter = CacheIter<'a, I, R>;
@@ -118,7 +123,7 @@ where
 
 pub struct AsyncCache<S, R>
 where
-    S: BundleStream<R>,
+    S: Stream,
 {
     stream: PinCell<S>,
     items: UnsafeCell<ChunkyVec<S::Item>>,
@@ -127,7 +132,7 @@ where
 
 impl<S, R> AsyncCache<S, R>
 where
-    S: BundleStream<R>,
+    S: Stream,
 {
     pub fn new(stream: S) -> Self {
         Self {
@@ -165,7 +170,12 @@ where
             curr: 0,
         }
     }
+}
 
+impl<S, R> AsyncCache<S, R>
+where
+    S: BundleIterator + Stream,
+{
     pub fn prefetch(&self) {
         let pin = unsafe { Pin::new_unchecked(&self.stream) };
         unsafe { PinMut::as_mut(&mut pin.borrow_mut()).get_unchecked_mut() }.prefetch();
@@ -174,7 +184,7 @@ where
 
 impl<S, R> AsyncCache<S, R>
 where
-    S: BundleStream<R>,
+    S: Stream,
 {
     // Helper function that gets the next value from wrapped stream.
     fn poll_next_item(&self, cx: &mut Context<'_>) -> Poll<Option<S::Item>> {
@@ -185,7 +195,7 @@ where
 
 pub struct AsyncCacheStream<'a, S, R>
 where
-    S: BundleStream<R>,
+    S: Stream,
 {
     cache: &'a AsyncCache<S, R>,
     curr: usize,
@@ -193,7 +203,7 @@ where
 
 impl<'a, S, R> Stream for AsyncCacheStream<'a, S, R>
 where
-    S: BundleStream<R>,
+    S: Stream,
 {
     type Item = &'a S::Item;
 

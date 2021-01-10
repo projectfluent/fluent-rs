@@ -22,7 +22,7 @@ use std::{env, fs, io, path::PathBuf, str::FromStr};
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_fallback::{
-    generator::{BundleGenerator, BundleIterator, BundleStream, FluentBundleResult},
+    generator::{BundleGenerator, FluentBundleResult},
     Localization,
 };
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
@@ -178,8 +178,6 @@ struct BundleIter {
     res_ids: Vec<String>,
 }
 
-impl BundleIterator<FluentResource> for BundleIter {}
-
 impl Iterator for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
 
@@ -213,8 +211,6 @@ impl Iterator for BundleIter {
         }
     }
 }
-
-impl BundleStream<FluentResource> for BundleIter {}
 
 impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
