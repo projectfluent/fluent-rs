@@ -1,6 +1,6 @@
 use crate::cache::{AsyncCache, Cache};
 use crate::errors::LocalizationError;
-use crate::generator::{BundleGenerator, BundleIterator};
+use crate::generator::{BundleGenerator, BundleIterator, BundleStream};
 use crate::types::{L10nAttribute, L10nKey, L10nMessage};
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
 use once_cell::sync::OnceCell;
@@ -18,12 +18,26 @@ impl<G> Bundles<G>
 where
     G: BundleGenerator,
     G::Iter: BundleIterator,
-    G::Stream: BundleIterator,
 {
-    fn prefetch(&self) {
+    fn prefetch_sync(&self) {
         match self {
             Self::Iter(iter) => iter.prefetch(),
-            Self::Stream(stream) => stream.prefetch(),
+            Self::Stream(_) => todo!(),
+        }
+    }
+}
+
+impl<G> Bundles<G>
+where
+    G: BundleGenerator,
+    G::Stream: BundleStream,
+{
+    async fn prefetch_async(&self) {
+        match self {
+            Self::Iter(_) => {
+                todo!();
+            }
+            Self::Stream(stream) => stream.prefetch().await,
         }
     }
 }
@@ -173,11 +187,21 @@ impl<G> Localization<G>
 where
     G: BundleGenerator,
     G::Iter: BundleIterator,
-    G::Stream: BundleIterator,
 {
-    pub fn prefetch(&self) {
+    pub fn prefetch_sync(&self) {
         let bundles = self.get_bundles();
-        bundles.prefetch();
+        bundles.prefetch_sync();
+    }
+}
+
+impl<G> Localization<G>
+where
+    G: BundleGenerator,
+    G::Stream: BundleStream,
+{
+    pub async fn prefetch_async(&self) {
+        let bundles = self.get_bundles();
+        bundles.prefetch_async().await
     }
 }
 

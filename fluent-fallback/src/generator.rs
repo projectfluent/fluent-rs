@@ -5,7 +5,12 @@ use std::borrow::Borrow;
 pub type FluentBundleResult<R> = Result<FluentBundle<R>, (FluentBundle<R>, Vec<FluentError>)>;
 
 pub trait BundleIterator {
-    fn prefetch(&mut self) {}
+    fn prefetch_sync(&mut self) {}
+}
+
+#[async_trait::async_trait(?Send)]
+pub trait BundleStream {
+    async fn prefetch_async(&mut self) {}
 }
 
 pub trait BundleGenerator {

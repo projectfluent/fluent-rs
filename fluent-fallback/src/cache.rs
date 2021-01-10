@@ -6,7 +6,7 @@ use std::{
     task::Poll,
 };
 
-use crate::generator::BundleIterator;
+use crate::generator::{BundleIterator, BundleStream};
 use chunky_vec::ChunkyVec;
 use futures::{ready, Stream};
 use pin_cell::{PinCell, PinMut};
@@ -60,7 +60,7 @@ where
     I: BundleIterator + Iterator,
 {
     pub fn prefetch(&self) {
-        self.iter.borrow_mut().prefetch();
+        self.iter.borrow_mut().prefetch_sync();
     }
 }
 
@@ -174,11 +174,13 @@ where
 
 impl<S, R> AsyncCache<S, R>
 where
-    S: BundleIterator + Stream,
+    S: BundleStream + Stream,
 {
-    pub fn prefetch(&self) {
+    pub async fn prefetch(&self) {
         let pin = unsafe { Pin::new_unchecked(&self.stream) };
-        unsafe { PinMut::as_mut(&mut pin.borrow_mut()).get_unchecked_mut() }.prefetch();
+        unsafe { PinMut::as_mut(&mut pin.borrow_mut()).get_unchecked_mut() }
+            .prefetch_async()
+            .await
     }
 }
 
