@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.14.1 (January 12, 2021)
+  - Bump `ouroboros` to 0.7.
+
 ## fluent-bundle 0.14.0 (January 3, 2021)
   - Switch `FluentBundle::new` to take a `Vec<LanguageIdentifier>`.
   - Switch `rental` to `ouroboros`.
