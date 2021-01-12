@@ -4,6 +4,12 @@
 
   - …
 
+## fluent-fallback 0.2.0 (January 12, 2021)
+  - Separate `Sync` and `Async` bundle generators.
+  - Reorganize fallback logic.
+  - Separate out prefetching trait.
+  - Vendor in pin-cell.
+
 ## fluent-fallback 0.1.0 (January 3, 2021)
   - Update `fluent-bundle` to 0.14.
   - Switch from `elsa` to `chunky-vec`.

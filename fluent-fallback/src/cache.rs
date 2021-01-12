@@ -9,7 +9,7 @@ use std::{
 use crate::generator::{BundleIterator, BundleStream};
 use chunky_vec::ChunkyVec;
 use futures::{ready, Stream};
-use pin_cell::{PinCell, PinMut};
+use crate::pin_cell::{PinCell, PinMut};
 
 pub struct Cache<I, R>
 where
