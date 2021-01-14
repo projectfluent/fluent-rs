@@ -81,6 +81,10 @@ where
         }
     }
 
+    pub fn is_sync(&self) -> bool {
+        self.sync
+    }
+
     pub fn add_resource_id(&mut self, res_id: String) {
         self.res_ids.push(res_id);
     }

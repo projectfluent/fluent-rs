@@ -374,23 +374,14 @@ pub fn get_scenario() -> Scenario {
             ("fullscreen-warning-no-domain", "This document is now full screen"),
             ("fullscreen-exit-button", "Exit Full Screen (Esc)"),
             ("pointerlock-warning-no-domain", "This document has control of your pointer. Press Esc to take back control."),
-
-
             ("text-action-undo", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Undo"), L10nAttribute::new("accesskey", "U")]))),
             ("text-action-cut", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Cut"), L10nAttribute::new("accesskey", "t")]))),
             ("text-action-copy", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Copy"), L10nAttribute::new("accesskey", "C")]))),
             ("text-action-paste", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Paste"), L10nAttribute::new("accesskey", "P")]))),
             ("text-action-delete", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Delete"), L10nAttribute::new("accesskey", "D")]))),
             ("text-action-select-all", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Select All"), L10nAttribute::new("accesskey", "A")]))),
-
-
-
-
             (L10nKey::new("urlbar-pocket-button", Some(vec![L10nArgument::new("tabCount", "1")])), L10nMessage::new(None, Some(vec![L10nAttribute::new("tooltiptext", "Save to Pocket")]))),
-
             ("menu-bookmark-this-page", L10nMessage::new(None, Some(vec![L10nAttribute::new("label", "Bookmark This Page")]))),
-
-
             (L10nKey::new("urlbar-star-add-bookmark", Some(vec![L10nArgument::new("shortcut", "Ctrl+D")])), L10nMessage::new(None, Some(vec![L10nAttribute::new("tooltiptext", "Bookmark this page (Ctrl+D)")]))),
             (L10nKey::new("main-context-menu-bookmark-add-with-shortcut", Some(vec![L10nArgument::new("shortcut", "Ctrl+D")])), L10nMessage::new(None, Some(vec![L10nAttribute::new("aria-label", "Bookmark This Page"), L10nAttribute::new("accesskey", "m"), L10nAttribute::new("tooltiptext", "Bookmark this page (Ctrl+D)")])))
         ],

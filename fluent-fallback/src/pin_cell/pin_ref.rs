@@ -23,7 +23,7 @@ impl<'a, T: ?Sized> PinRef<'a, T> {
     pub fn clone(orig: &PinRef<'a, T>) -> PinRef<'a, T> {
         panic!()
     }
- 
+
     pub fn map<U, F>(orig: PinRef<'a, T>, f: F) -> PinRef<'a, U> where
         F: FnOnce(Pin<&T>) -> Pin<&U>,
     {

@@ -17,7 +17,6 @@ impl<'a, T: ?Sized> Deref for PinMut<'a, T> {
     }
 }
 
-
 impl<'a, T: ?Sized> PinMut<'a, T> {
     /// Get a pinned mutable reference to the value inside this wrapper.
     pub fn as_mut<'b>(orig: &'b mut PinMut<'a, T>) -> Pin<&'b mut T> {

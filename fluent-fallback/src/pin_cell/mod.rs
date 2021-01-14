@@ -12,14 +12,14 @@
 //! to use interior mutability with the knowledge that `T` will never actually
 //! be moved out of the `RefCell` that wraps it.
 
-mod pin_ref;
 mod pin_mut;
+mod pin_ref;
 
-use core::cell::{RefCell, RefMut, BorrowMutError};
+use core::cell::{BorrowMutError, RefCell, RefMut};
 use core::pin::Pin;
 
-pub use pin_ref::PinRef;
 pub use pin_mut::PinMut;
+pub use pin_ref::PinRef;
 
 /// A mutable memory location with dynamically checked borrow rules
 ///
@@ -35,7 +35,9 @@ pub struct PinCell<T: ?Sized> {
 impl<T> PinCell<T> {
     /// Creates a new `PinCell` containing `value`.
     pub const fn new(value: T) -> PinCell<T> {
-        PinCell { inner: RefCell::new(value) }
+        PinCell {
+            inner: RefCell::new(value),
+        }
     }
 }
 
@@ -69,9 +71,7 @@ impl<T: ?Sized> PinCell<T> {
         //
         // see discussion on tracking issue #49150 about pin projection
         // invariants
-        let pin_ref_mut: Pin<RefMut<'a, T>> = unsafe {
-            Pin::new_unchecked(ref_mut)
-        };
+        let pin_ref_mut: Pin<RefMut<'a, T>> = unsafe { Pin::new_unchecked(ref_mut) };
 
         Ok(PinMut { inner: pin_ref_mut })
     }

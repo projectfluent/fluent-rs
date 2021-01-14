@@ -2,7 +2,7 @@ mod cache;
 mod errors;
 pub mod generator;
 mod localization;
-pub mod types;
 mod pin_cell;
+pub mod types;
 
 pub use localization::Localization;
