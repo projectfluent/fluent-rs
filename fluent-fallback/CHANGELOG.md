@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.2.2 (January 16, 2021)
+  - Invalidate bundles on resource list change.
+
 ## fluent-fallback 0.2.1 (January 15, 2021)
   - Add `Localization::is_sync`
 
