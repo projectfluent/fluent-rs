@@ -87,19 +87,23 @@ where
 
     pub fn add_resource_id(&mut self, res_id: String) {
         self.res_ids.push(res_id);
+        self.on_change();
     }
 
     pub fn add_resource_ids(&mut self, res_ids: Vec<String>) {
         self.res_ids.extend(res_ids);
+        self.on_change();
     }
 
     pub fn remove_resource_id(&mut self, res_id: String) -> usize {
         self.res_ids.retain(|x| *x != res_id);
+        self.on_change();
         self.res_ids.len()
     }
 
     pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
         self.res_ids.retain(|x| !res_ids.contains(x));
+        self.on_change();
         self.res_ids.len()
     }
 
