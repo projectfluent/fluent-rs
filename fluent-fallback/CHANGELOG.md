@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.2.1 (January 15, 2021)
+  - Add `Localization::is_sync`
+
 ## fluent-fallback 0.2.0 (January 12, 2021)
   - Separate `Sync` and `Async` bundle generators.
   - Reorganize fallback logic.
