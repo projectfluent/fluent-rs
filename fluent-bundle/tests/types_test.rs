@@ -107,7 +107,7 @@ fn fluent_number_style() {
     args.add("style", "currency".into());
     args.add("currency", "EUR".into());
     args.add("currencyDisplay", "code".into());
-    args.add("useGrouping", "true".into());
+    args.add("useGrouping", "false".into());
     args.add("minimumIntegerDigits", 3.into());
     args.add("minimumFractionDigits", 3.into());
     args.add("maximumFractionDigits", 8.into());
@@ -120,7 +120,7 @@ fn fluent_number_style() {
     assert_eq!(fno.style, FluentNumberStyle::Currency);
     assert_eq!(fno.currency, Some("EUR".to_string()));
     assert_eq!(fno.currency_display, FluentNumberCurrencyDisplayStyle::Code);
-    assert_eq!(fno.use_grouping, true);
+    assert_eq!(fno.use_grouping, false);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
     assert_eq!(num.as_string(), "0.2");
