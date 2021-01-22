@@ -4,7 +4,7 @@
 framework designed to unleash the entire expressive power of natural language translations.
 
 [![crates.io](http://meritbadge.herokuapp.com/fluent-syntax)](https://crates.io/crates/fluent-syntax)
-[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
+![Build Status]https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
 
 Status
