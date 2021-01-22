@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.14.2 (January 21, 2021)
+  - Switch to `FxHash` for entry hashing.
+
 ## fluent-bundle 0.14.1 (January 12, 2021)
   - Bump `ouroboros` to 0.7.
 
