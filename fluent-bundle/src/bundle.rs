@@ -6,7 +6,8 @@
 
 use std::borrow::Borrow;
 use std::borrow::Cow;
-use std::collections::hash_map::{Entry as HashEntry, HashMap};
+use rustc_hash::FxHashMap;
+use std::collections::hash_map::Entry as HashEntry;
 use std::default::Default;
 use std::fmt;
 
@@ -31,7 +32,7 @@ use crate::types::FluentValue;
 pub struct FluentBundleBase<R, M> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
-    pub(crate) entries: HashMap<String, Entry>,
+    pub(crate) entries: FxHashMap<String, Entry>,
     pub(crate) intls: M,
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<fn(&str) -> Cow<str>>,
@@ -64,7 +65,7 @@ impl<R, M: MemoizerKind> FluentBundleBase<R, M> {
         Self {
             locales,
             resources: vec![],
-            entries: HashMap::new(),
+            entries: FxHashMap::default(),
             intls: M::new(first_locale),
             use_isolating: true,
             transform: None,
