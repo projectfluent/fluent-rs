@@ -33,6 +33,7 @@ ouroboros = "0.7"
 smallvec = "1"
 unic-langid = "0.9"
 intl-memoizer = { version = "0.5", path = "../intl-memoizer" }
+rustc-hash = "1"
 
 [dev-dependencies]
 criterion = "0.3"
