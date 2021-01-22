@@ -6,6 +6,7 @@ use std::collections::HashMap;
 use std::fs::File;
 use std::io;
 use std::io::Read;
+use std::rc::Rc;
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
@@ -86,6 +87,24 @@ fn get_bundle(name: &'static str, source: &str) -> (FluentBundle<FluentResource>
 fn resolver_bench(c: &mut Criterion) {
     let tests = &["simple", "preferences", "menubar", "unescape"];
     let ftl_strings = get_strings(tests);
+
+    let mut group = c.benchmark_group("construct");
+    for name in tests {
+        let source = ftl_strings.get(name).expect("Failed to find the source.");
+        group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
+            let res = Rc::new(FluentResource::try_new(source.to_string())
+                .expect("Couldn't parse an FTL source"));
+            b.iter(|| {
+                let lids = vec![langid!("en")];
+                let mut bundle = FluentBundle::new(lids);
+                bundle
+                    .add_resource(res.clone())
+                    .expect("Couldn't add FluentResource to the FluentBundle");
+                add_functions(name, &mut bundle);
+            })
+        });
+    }
+    group.finish();
 
     let mut group = c.benchmark_group("resolve");
     for name in tests {
