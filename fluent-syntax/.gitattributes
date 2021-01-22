@@ -1,2 +1,3 @@
 tests/fixtures/crlf.ftl eol=crlf
+tests/fixtures/crlf-issue213.ftl eol=crlf
 tests/fixtures/cr.ftl eol=cr

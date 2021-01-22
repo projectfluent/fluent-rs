@@ -1,0 +1,65 @@
+{
+    "type": "Resource",
+    "body": [
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "multiline-message-indented-breaks"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "This is a multiline message 1."
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "This is a multiline message 2."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "multiline-message"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "This is a multiline message 1."
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "\n"
+                    },
+                    {
+                        "type": "TextElement",
+                        "value": "This is a multiline message 2."
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": null
+        }
+    ]
+}
