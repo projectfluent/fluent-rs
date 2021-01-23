@@ -5,8 +5,8 @@
 Resource Manager provides a standalone solution for managing localization resources which
 can be used by `fluent-fallback` or other higher level bindings.
 
-[![crates.io](http://meritbadge.herokuapp.com/fluent-resmgr)](https://crates.io/crates/fluent-resmgr)
-![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)
+[![crates.io](https://meritbadge.herokuapp.com/fluent-resmgr)](https://crates.io/crates/fluent-resmgr)
+[![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)](https://github.com/projectfluent/fluent-rs/actions?query=branch%3Amaster+workflow%3A%22Build+and+test%22)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
 
 Project Fluent keeps simple things simple and makes complex things possible.
