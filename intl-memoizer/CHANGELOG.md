@@ -4,6 +4,9 @@
 
   - …
 
+## intl-memoizer 0.5.1 (January 22, 2021)
+  - Update `type-map` to 0.4.
+
 ## intl-memoizer 0.5.0 (May 6, 2020)
   - Update `unic-langid` to 0.9.
   - Update `fluent-langneg` to 0.13.
