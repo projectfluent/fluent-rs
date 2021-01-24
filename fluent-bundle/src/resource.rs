@@ -21,7 +21,7 @@ impl FluentResource {
 
         let res = InnerFluentResourceBuilder {
             string: source,
-            ast_builder: |string: &str| match Parser::new(string).parse() {
+            ast_builder: |string: &str| match Parser::new(string).parse_runtime() {
                 Ok(ast) => ast,
                 Err((ast, err)) => {
                     errors = Some(err);
