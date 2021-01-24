@@ -18,18 +18,12 @@ fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
     }
 }
 
-// We temporarily blacklist the CRLF test until we improve PartialEq
-// between two `Pattern`s with different `TextElement`s.
-const BLACKLIST: &[&str] = &["tests/fixtures/crlf.ftl"];
-
 #[test]
 fn parse_fixtures_compare() {
     for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
         let p = entry.expect("Error while getting an entry");
         let path = p.to_str().expect("Can't print path");
-        if BLACKLIST.contains(&path) {
-            continue;
-        }
+        let is_crlf = path.contains("crlf");
 
         let reference_path = path.replace(".ftl", ".json");
         let reference_file = read_file(&reference_path, true).unwrap();
@@ -43,7 +37,7 @@ fn parse_fixtures_compare() {
 
         let mut ref_ast: ast::Resource<String> =
             serde_json::from_str(reference_file.as_str()).unwrap();
-        adapt_ast(&mut ref_ast);
+        adapt_ast(&mut ref_ast, is_crlf);
 
         assert_eq!(target_ast.body.len(), ref_ast.body.len());
         for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
@@ -88,7 +82,7 @@ fn parse_bench_fixtures() {
 
         let mut ref_ast: ast::Resource<String> =
             serde_json::from_str(reference_file.as_str()).unwrap();
-        adapt_ast(&mut ref_ast);
+        adapt_ast(&mut ref_ast, false);
 
         assert_eq!(target_ast.body.len(), ref_ast.body.len());
         for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
@@ -122,7 +116,7 @@ fn parse_bench_fixtures() {
 
             let mut ref_ast: ast::Resource<String> =
                 serde_json::from_str(reference_file.as_str()).unwrap();
-            adapt_ast(&mut ref_ast);
+            adapt_ast(&mut ref_ast, false);
 
             assert_eq!(target_ast.body.len(), ref_ast.body.len());
             for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
