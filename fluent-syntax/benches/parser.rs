@@ -114,6 +114,23 @@ fn parser_ctx_bench(c: &mut Criterion) {
         },
         tests,
     );
+
+    let ftl_strings = get_ctxs(tests);
+
+    c.bench_function_over_inputs(
+        "parse_ctx_runtime",
+        move |b, &&name| {
+            let sources = &ftl_strings[name];
+            b.iter(|| {
+                for source in sources {
+                    Parser::new(source.as_str())
+                        .parse_runtime()
+                        .expect("Parsing of the FTL failed.");
+                }
+            })
+        },
+        tests,
+    );
 }
 
 criterion_group!(

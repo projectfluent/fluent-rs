@@ -7,7 +7,7 @@ use std::io;
 use fluent_syntax::ast;
 use fluent_syntax::parser::Parser;
 
-use helper::adapt_ast;
+use helper::{adapt_ast, strip_comments};
 
 fn read_file(path: &str, trim: bool) -> Result<String, io::Error> {
     let s = fs::read_to_string(path)?;
@@ -115,7 +115,7 @@ fn parse_bench_fixtures() {
             let ftl_file = read_file(&path, false).unwrap();
 
             println!("Parsing: {:#?}", path);
-            let target_ast = match Parser::new(ftl_file).parse() {
+            let target_ast = match Parser::new(ftl_file.clone()).parse() {
                 Ok(res) => res,
                 Err((res, _errors)) => res,
             };
@@ -123,6 +123,19 @@ fn parse_bench_fixtures() {
             let mut ref_ast: ast::Resource<String> =
                 serde_json::from_str(reference_file.as_str()).unwrap();
             adapt_ast(&mut ref_ast);
+
+            assert_eq!(target_ast.body.len(), ref_ast.body.len());
+            for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {
+                assert_eq!(entry, ref_entry);
+            }
+
+            // Skipping comments
+            let target_ast = match Parser::new(ftl_file).parse_runtime() {
+                Ok(res) => res,
+                Err((res, _errors)) => res,
+            };
+
+            strip_comments(&mut ref_ast);
 
             assert_eq!(target_ast.body.len(), ref_ast.body.len());
             for (entry, ref_entry) in target_ast.body.iter().zip(ref_ast.body.iter()) {

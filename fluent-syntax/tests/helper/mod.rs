@@ -79,3 +79,24 @@ pub fn adapt_ast(ast: &mut ast::Resource<String>) {
         }
     }
 }
+
+pub fn strip_comments(ast: &mut ast::Resource<String>) {
+    ast.body.retain(|entry| match entry {
+        ast::Entry::Comment(..)
+        | ast::Entry::GroupComment(..)
+        | ast::Entry::ResourceComment(..) => false,
+        _ => true,
+    });
+
+    for entry in &mut ast.body {
+        match entry {
+            ast::Entry::Message(ref mut msg) => {
+                msg.comment = None;
+            }
+            ast::Entry::Term(ref mut term) => {
+                term.comment = None;
+            }
+            _ => {}
+        }
+    }
+}

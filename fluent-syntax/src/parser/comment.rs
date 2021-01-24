@@ -50,6 +50,20 @@ where
         Ok((ast::Comment { content }, level))
     }
 
+    pub(super) fn skip_comment(&mut self) {
+        loop {
+            while self.ptr < self.length && !self.is_current_byte(b'\n') {
+                self.ptr += 1;
+            }
+            self.ptr += 1;
+            if self.is_current_byte(b'#') {
+                self.ptr += 1;
+            } else {
+                break;
+            }
+        }
+    }
+
     fn get_comment_level(&mut self) -> Level {
         let mut chars = 0;
 
