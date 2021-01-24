@@ -19,9 +19,11 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
                 for (i, b) in value.as_bytes().iter().enumerate() {
                     if b == &b'\n' {
                         if crlf {
-                            let chunk = &value.as_bytes()[start..=i - 1];
-                            let value = String::from_utf8_lossy(chunk).to_string();
-                            elements.push(ast::PatternElement::TextElement { value });
+                            if i > start {
+                                let chunk = &value.as_bytes()[start..=i - 1];
+                                let value = String::from_utf8_lossy(chunk).to_string();
+                                elements.push(ast::PatternElement::TextElement { value });
+                            }
                             elements.push(ast::PatternElement::TextElement {
                                 value: "\n".to_string(),
                             });
