@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-bundle 0.14.3 (January 24, 2021)
+  - Use the `Parser::parse_runtime` in `FluentResource::try_new`.
+  - Update to `fluent-syntax` 0.10.2.
+
 ## fluent-bundle 0.14.2 (January 21, 2021)
   - Switch to `FxHash` for entry hashing.
 
