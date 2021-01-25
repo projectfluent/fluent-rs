@@ -75,7 +75,7 @@ where
                     }
                     let b = self.source.as_ref().as_bytes().get(self.ptr);
                     if indent == 0 {
-                        if b != Some(&b'\n') {
+                        if b != Some(&b'\r') && b != Some(&b'\n') {
                             break;
                         }
                     } else if !Self::is_byte_pattern_continuation(*b.unwrap()) {
