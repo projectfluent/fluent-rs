@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-syntax 0.10.2 (January 24, 2021)
+  - Add `parse_runtime` method on `Parser` which skips comments.
+  - Fix handling of empty CRLF lines in mutliline patterns.
+
 ## fluent-syntax 0.10.1 (January 3, 2021)
   - Make `ParserError` `Clone`.
   - Apply `clippy` lints.
