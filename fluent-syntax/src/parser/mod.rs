@@ -92,7 +92,7 @@ where
     }
 
     fn get_entry(&mut self, entry_start: usize) -> Result<ast::Entry<S>> {
-        let entry = match self.source.as_ref().as_bytes().get(self.ptr) {
+        let entry = match self.source.get(self.ptr) {
             Some(b'#') => {
                 let (comment, level) = self.get_comment()?;
                 match level {
@@ -170,7 +170,7 @@ where
         loop {
             let line_start = self.ptr;
             self.skip_blank_inline();
-            if !self.is_current_byte(b'.') {
+            if !self.take_byte_if(b'.') {
                 self.ptr = line_start;
                 break;
             }
@@ -186,7 +186,6 @@ where
     }
 
     fn get_attribute(&mut self) -> Result<ast::Attribute<S>> {
-        self.expect_byte(b'.')?;
         let id = self.get_identifier()?;
         self.skip_blank_inline();
         self.expect_byte(b'=')?;
@@ -199,32 +198,25 @@ where
     }
 
     fn get_identifier(&mut self) -> Result<ast::Identifier<S>> {
-        let mut ptr = self.ptr;
+        let start = self.ptr;
 
-        match self.source.as_ref().as_bytes().get(ptr) {
-            Some(b) if b.is_ascii_alphabetic() => {
-                ptr += 1;
-            }
-            _ => {
-                return error!(
-                    ErrorKind::ExpectedCharRange {
-                        range: "a-zA-Z".to_string()
-                    },
-                    ptr
-                );
-            }
+        if self.is_identifier_start() {
+            self.ptr += 1;
+        } else {
+            return error!(
+                ErrorKind::ExpectedCharRange {
+                    range: "a-zA-Z".to_string()
+                },
+                self.ptr
+            );
         }
 
-        while let Some(b) = self.source.as_ref().as_bytes().get(ptr) {
-            if b.is_ascii_alphabetic() || b.is_ascii_digit() || [b'_', b'-'].contains(b) {
-                ptr += 1;
-            } else {
-                break;
-            }
+        while matches!(self.source.get(self.ptr), Some(b) if b.is_ascii_alphanumeric() || *b == b'-' || *b == b'_')
+        {
+            self.ptr += 1
         }
 
-        let name = self.source.slice(self.ptr..ptr);
-        self.ptr = ptr;
+        let name = self.source.slice(start..self.ptr);
 
         Ok(ast::Identifier { name })
     }

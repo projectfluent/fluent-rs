@@ -64,13 +64,13 @@ where
     }
 
     pub(super) fn get_inline_expression(&mut self) -> Result<ast::InlineExpression<S>> {
-        match self.source.as_ref().as_bytes().get(self.ptr) {
+        match self.source.get(self.ptr) {
             Some(b'"') => {
                 self.ptr += 1; // "
                 let start = self.ptr;
-                while let Some(b) = self.source.as_ref().as_bytes().get(self.ptr) {
+                while let Some(b) = self.source.get(self.ptr) {
                     match b {
-                        b'\\' => match self.source.as_ref().as_bytes().get(self.ptr + 1) {
+                        b'\\' => match self.source.get(self.ptr + 1) {
                             Some(b'\\') | Some(b'{') | Some(b'"') => self.ptr += 2,
                             Some(b'u') => {
                                 self.ptr += 2;
@@ -126,7 +126,7 @@ where
                 let id = self.get_identifier()?;
                 let arguments = self.get_call_arguments()?;
                 if arguments.is_some() {
-                    if !Self::is_callee(id.name.as_ref().as_bytes()) {
+                    if !Self::is_callee(&id.name) {
                         return error!(ErrorKind::ForbiddenCallee, self.ptr);
                     }
 
