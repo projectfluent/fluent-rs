@@ -41,4 +41,8 @@ impl FluentResource {
     pub fn ast(&self) -> &ast::Resource<&str> {
         self.0.borrow_ast()
     }
+
+    pub fn source(&self) -> &str {
+        &self.0.borrow_string()
+    }
 }
