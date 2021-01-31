@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-syntax 0.10.3 (January 31, 2021)
+  - A bunch of microoptimizations driven by the ioi benchmark.
+
 ## fluent-syntax 0.10.2 (January 24, 2021)
   - Add `parse_runtime` method on `Parser` which skips comments.
   - Fix handling of empty CRLF lines in mutliline patterns.
