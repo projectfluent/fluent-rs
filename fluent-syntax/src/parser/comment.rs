@@ -52,13 +52,13 @@ where
 
     pub(super) fn skip_comment(&mut self) {
         loop {
-            while self.ptr < self.length {
+            while self.ptr < self.length && !self.is_current_byte(b'\n') {
                 self.ptr += 1;
-                if self.is_byte_at(b'\n', self.ptr - 1) {
-                    break;
-                }
             }
-            if !self.take_byte_if(b'#') {
+            self.ptr += 1;
+            if self.is_current_byte(b'#') {
+                self.ptr += 1;
+            } else {
                 break;
             }
         }

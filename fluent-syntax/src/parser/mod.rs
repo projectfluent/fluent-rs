@@ -1,5 +1,7 @@
 #[macro_use]
 mod errors;
+#[macro_use]
+mod macros;
 mod comment;
 mod expression;
 mod helper;
@@ -92,7 +94,7 @@ where
     }
 
     fn get_entry(&mut self, entry_start: usize) -> Result<ast::Entry<S>> {
-        let entry = match self.source.get(self.ptr) {
+        let entry = match get_current_byte!(self) {
             Some(b'#') => {
                 let (comment, level) = self.get_comment()?;
                 match level {
@@ -198,25 +200,26 @@ where
     }
 
     fn get_identifier(&mut self) -> Result<ast::Identifier<S>> {
-        let start = self.ptr;
+        let mut ptr = self.ptr;
 
         if self.is_identifier_start() {
-            self.ptr += 1;
+            ptr += 1;
         } else {
             return error!(
                 ErrorKind::ExpectedCharRange {
                     range: "a-zA-Z".to_string()
                 },
-                self.ptr
+                ptr
             );
         }
 
-        while matches!(self.source.get(self.ptr), Some(b) if b.is_ascii_alphanumeric() || *b == b'-' || *b == b'_')
+        while matches!(get_byte!(self, ptr), Some(b) if b.is_ascii_alphanumeric() || *b == b'-' || *b == b'_')
         {
-            self.ptr += 1
+            ptr += 1;
         }
 
-        let name = self.source.slice(start..self.ptr);
+        let name = self.source.slice(self.ptr..ptr);
+        self.ptr = ptr;
 
         Ok(ast::Identifier { name })
     }
@@ -231,6 +234,9 @@ where
     }
 
     fn get_variant_key(&mut self) -> Result<ast::VariantKey<S>> {
+        if !self.take_byte_if(b'[') {
+            return error!(ErrorKind::ExpectedToken('['), self.ptr);
+        }
         self.skip_blank();
 
         let key = if self.is_number_start() {
@@ -254,11 +260,8 @@ where
         let mut variants = vec![];
         let mut has_default = false;
 
-        while self.ptr < self.length {
+        while self.is_current_byte(b'*') || self.is_current_byte(b'[') {
             let default = self.take_byte_if(b'*');
-            if !self.take_byte_if(b'[') {
-                break;
-            }
 
             if default {
                 if has_default {

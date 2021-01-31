@@ -41,7 +41,7 @@ where
     }
 
     fn get_entry_runtime(&mut self, entry_start: usize) -> Result<Option<ast::Entry<S>>> {
-        let entry = match self.source.get(self.ptr) {
+        let entry = match get_current_byte!(self) {
             Some(b'#') => {
                 self.skip_comment();
                 None

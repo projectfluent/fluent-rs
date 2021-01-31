@@ -29,6 +29,15 @@ enum PatternElementPlaceholders<S> {
     TextElement(usize, usize, usize, TextElementPosition),
 }
 
+// This enum tracks whether the text element is blank or not.
+// This is important to identify text elements which should not be taken into account
+// when calculating common indent.
+#[derive(Debug, PartialEq)]
+enum TextElementType {
+    Blank,
+    NonBlank,
+}
+
 impl<'s, S> Parser<S>
 where
     S: Slice<'s>,
@@ -61,7 +70,7 @@ where
                 let mut indent = 0;
                 if text_element_role == TextElementPosition::LineStart {
                     indent = self.skip_blank_inline();
-                    if let Some(b) = self.source.get(self.ptr) {
+                    if let Some(b) = get_current_byte!(self) {
                         if indent == 0 {
                             if b != &b'\r' && b != &b'\n' {
                                 break;
@@ -74,9 +83,11 @@ where
                         break;
                     }
                 }
-                let (end, is_blank, termination_reason) = self.get_text_slice()?;
-                if slice_start != end {
-                    if text_element_role == TextElementPosition::LineStart && !is_blank {
+                let (start, end, text_element_type, termination_reason) = self.get_text_slice()?;
+                if start != end {
+                    if text_element_role == TextElementPosition::LineStart
+                        && text_element_type == TextElementType::NonBlank
+                    {
                         if let Some(common) = common_indent {
                             if indent < common {
                                 common_indent = Some(indent);
@@ -86,10 +97,10 @@ where
                         }
                     }
                     if text_element_role != TextElementPosition::LineStart
-                        || !is_blank
+                        || text_element_type == TextElementType::NonBlank
                         || termination_reason == TextElementTermination::LineFeed
                     {
-                        if !is_blank {
+                        if text_element_type == TextElementType::NonBlank {
                             last_non_blank = Some(elements.len());
                         }
                         elements.push(PatternElementPlaceholders::TextElement(
@@ -105,7 +116,7 @@ where
                     TextElementTermination::LineFeed => TextElementPosition::LineStart,
                     TextElementTermination::CRLF => TextElementPosition::LineStart,
                     TextElementTermination::PlaceableStart => TextElementPosition::Continuation,
-                    TextElementTermination::EOF => break,
+                    TextElementTermination::EOF => TextElementPosition::Continuation,
                 };
             }
         }
@@ -142,32 +153,55 @@ where
         Ok(None)
     }
 
-    fn get_text_slice(&mut self) -> Result<(usize, bool, TextElementTermination)> {
-        let mut is_blank = true;
+    fn get_text_slice(
+        &mut self,
+    ) -> Result<(usize, usize, TextElementType, TextElementTermination)> {
+        let start_pos = self.ptr;
+        let mut text_element_type = TextElementType::Blank;
 
-        while let Some(b) = self.source.get(self.ptr) {
+        while let Some(b) = get_current_byte!(self) {
             match b {
                 b' ' => self.ptr += 1,
                 b'\n' => {
                     self.ptr += 1;
-                    return Ok((self.ptr, is_blank, TextElementTermination::LineFeed));
+                    return Ok((
+                        start_pos,
+                        self.ptr,
+                        text_element_type,
+                        TextElementTermination::LineFeed,
+                    ));
                 }
                 b'\r' if self.is_byte_at(b'\n', self.ptr + 1) => {
                     self.ptr += 1;
-                    return Ok((self.ptr - 1, is_blank, TextElementTermination::CRLF));
+                    return Ok((
+                        start_pos,
+                        self.ptr - 1,
+                        text_element_type,
+                        TextElementTermination::CRLF,
+                    ));
                 }
                 b'{' => {
-                    return Ok((self.ptr, is_blank, TextElementTermination::PlaceableStart));
+                    return Ok((
+                        start_pos,
+                        self.ptr,
+                        text_element_type,
+                        TextElementTermination::PlaceableStart,
+                    ));
                 }
                 b'}' => {
                     return error!(ErrorKind::UnbalancedClosingBrace, self.ptr);
                 }
                 _ => {
-                    is_blank = false;
+                    text_element_type = TextElementType::NonBlank;
                     self.ptr += 1
                 }
             }
         }
-        Ok((self.ptr, is_blank, TextElementTermination::EOF))
+        Ok((
+            start_pos,
+            self.ptr,
+            text_element_type,
+            TextElementTermination::EOF,
+        ))
     }
 }

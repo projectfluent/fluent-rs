@@ -64,13 +64,15 @@ where
     }
 
     pub(super) fn get_inline_expression(&mut self) -> Result<ast::InlineExpression<S>> {
-        match self.source.get(self.ptr) {
+        match get_current_byte!(self) {
+            // match self.source.get2(self.ptr) {
+            // match get_byte!(self, self.ptr) {
             Some(b'"') => {
                 self.ptr += 1; // "
                 let start = self.ptr;
-                while let Some(b) = self.source.get(self.ptr) {
+                while let Some(b) = get_current_byte!(self) {
                     match b {
-                        b'\\' => match self.source.get(self.ptr + 1) {
+                        b'\\' => match get_byte!(self, self.ptr + 1) {
                             Some(b'\\') | Some(b'{') | Some(b'"') => self.ptr += 2,
                             Some(b'u') => {
                                 self.ptr += 2;
