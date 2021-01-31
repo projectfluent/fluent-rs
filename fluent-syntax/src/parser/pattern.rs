@@ -57,7 +57,7 @@ where
         };
 
         while self.ptr < self.length {
-            if self.is_current_byte(b'{') {
+            if self.take_byte_if(b'{') {
                 if text_element_role == TextElementPosition::LineStart {
                     common_indent = Some(0);
                 }

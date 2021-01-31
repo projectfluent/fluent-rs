@@ -9,7 +9,9 @@ where
     ) -> std::result::Result<ast::Resource<S>, (ast::Resource<S>, Vec<ParserError>)> {
         let mut errors = vec![];
 
-        let mut body = vec![];
+        // That default allocation gives the lowest
+        // number of instructions and cycles in ioi.
+        let mut body = Vec::with_capacity(6);
 
         self.skip_blank_block();
 

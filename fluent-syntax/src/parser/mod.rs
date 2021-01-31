@@ -28,7 +28,7 @@ where
     S: Slice<'s>,
 {
     pub fn new(source: S) -> Self {
-        let length = source.as_ref().len();
+        let length = source.as_ref().as_bytes().len();
         Self {
             source,
             ptr: 0,
@@ -199,29 +199,31 @@ where
         }
     }
 
-    fn get_identifier(&mut self) -> Result<ast::Identifier<S>> {
+    fn get_identifier_unchecked(&mut self) -> ast::Identifier<S> {
         let mut ptr = self.ptr;
-
-        if self.is_identifier_start() {
-            ptr += 1;
-        } else {
-            return error!(
-                ErrorKind::ExpectedCharRange {
-                    range: "a-zA-Z".to_string()
-                },
-                ptr
-            );
-        }
 
         while matches!(get_byte!(self, ptr), Some(b) if b.is_ascii_alphanumeric() || *b == b'-' || *b == b'_')
         {
             ptr += 1;
         }
 
-        let name = self.source.slice(self.ptr..ptr);
+        let name = self.source.slice(self.ptr - 1..ptr);
         self.ptr = ptr;
 
-        Ok(ast::Identifier { name })
+        ast::Identifier { name }
+    }
+
+    fn get_identifier(&mut self) -> Result<ast::Identifier<S>> {
+        if !self.is_identifier_start() {
+            return error!(
+                ErrorKind::ExpectedCharRange {
+                    range: "a-zA-Z".to_string()
+                },
+                self.ptr
+            );
+        }
+        self.ptr += 1;
+        Ok(self.get_identifier_unchecked())
     }
 
     fn get_attribute_accessor(&mut self) -> Result<Option<ast::Identifier<S>>> {
@@ -234,9 +236,6 @@ where
     }
 
     fn get_variant_key(&mut self) -> Result<ast::VariantKey<S>> {
-        if !self.take_byte_if(b'[') {
-            return error!(ErrorKind::ExpectedToken('['), self.ptr);
-        }
         self.skip_blank();
 
         let key = if self.is_number_start() {
@@ -257,18 +256,21 @@ where
     }
 
     fn get_variants(&mut self) -> Result<Vec<ast::Variant<S>>> {
-        let mut variants = vec![];
+        let mut variants = Vec::with_capacity(2);
         let mut has_default = false;
 
-        while self.is_current_byte(b'*') || self.is_current_byte(b'[') {
+        loop {
             let default = self.take_byte_if(b'*');
-
             if default {
                 if has_default {
                     return error!(ErrorKind::MultipleDefaultVariants, self.ptr);
                 } else {
                     has_default = true;
                 }
+            }
+
+            if !self.take_byte_if(b'[') {
+                break;
             }
 
             let key = self.get_variant_key()?;
@@ -295,7 +297,6 @@ where
     }
 
     fn get_placeable(&mut self) -> Result<ast::Expression<S>> {
-        self.expect_byte(b'{')?;
         self.skip_blank();
         let exp = self.get_expression()?;
         self.skip_blank_inline();

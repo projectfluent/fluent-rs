@@ -105,7 +105,8 @@ where
             Some(b'-') => {
                 self.ptr += 1; // -
                 if self.is_identifier_start() {
-                    let id = self.get_identifier()?;
+                    self.ptr += 1;
+                    let id = self.get_identifier_unchecked();
                     let attribute = self.get_attribute_accessor()?;
                     let arguments = self.get_call_arguments()?;
                     Ok(ast::InlineExpression::TermReference {
@@ -120,12 +121,13 @@ where
                 }
             }
             Some(b'$') => {
-                self.ptr += 1; // -
+                self.ptr += 1; // $
                 let id = self.get_identifier()?;
                 Ok(ast::InlineExpression::VariableReference { id })
             }
             Some(b) if b.is_ascii_alphabetic() => {
-                let id = self.get_identifier()?;
+                self.ptr += 1;
+                let id = self.get_identifier_unchecked();
                 let arguments = self.get_call_arguments()?;
                 if arguments.is_some() {
                     if !Self::is_callee(&id.name) {
@@ -139,6 +141,7 @@ where
                 }
             }
             Some(b'{') => {
+                self.ptr += 1; // {
                 let exp = self.get_placeable()?;
                 Ok(ast::InlineExpression::Placeable {
                     expression: Box::new(exp),
