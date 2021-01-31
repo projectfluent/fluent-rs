@@ -231,9 +231,6 @@ where
     }
 
     fn get_variant_key(&mut self) -> Result<ast::VariantKey<S>> {
-        if !self.take_byte_if(b'[') {
-            return error!(ErrorKind::ExpectedToken('['), self.ptr);
-        }
         self.skip_blank();
 
         let key = if self.is_number_start() {
@@ -257,8 +254,11 @@ where
         let mut variants = vec![];
         let mut has_default = false;
 
-        while self.is_current_byte(b'*') || self.is_current_byte(b'[') {
+        while self.ptr < self.length {
             let default = self.take_byte_if(b'*');
+            if !self.take_byte_if(b'[') {
+                break;
+            }
 
             if default {
                 if has_default {

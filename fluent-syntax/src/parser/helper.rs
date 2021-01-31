@@ -19,7 +19,7 @@ where
         while let Some(b) = self.source.get(self.ptr) {
             let new_line = self.ptr == 0 || self.source.get(self.ptr - 1) == Some(&b'\n');
 
-            if new_line && (b.is_ascii_alphabetic() || [b'-', b'#'].contains(b)) {
+            if new_line && (b.is_ascii_alphabetic() || b == &b'-' || b == &b'#') {
                 break;
             }
 
@@ -125,7 +125,7 @@ where
     }
 
     pub(super) fn is_number_start(&self) -> bool {
-        matches!(self.source.get(self.ptr), Some(b) if (b == &b'-') || b.is_ascii_digit())
+        matches!(self.source.get(self.ptr), Some(b) if b.is_ascii_digit() || b == &b'-')
     }
 
     pub(super) fn is_eol(&self) -> bool {

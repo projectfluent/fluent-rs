@@ -61,16 +61,16 @@ where
                 let mut indent = 0;
                 if text_element_role == TextElementPosition::LineStart {
                     indent = self.skip_blank_inline();
-                    if self.ptr >= self.length {
-                        break;
-                    }
-                    let b = self.source.get(self.ptr);
-                    if indent == 0 {
-                        if b != Some(&b'\r') && b != Some(&b'\n') {
+                    if let Some(b) = self.source.get(self.ptr) {
+                        if indent == 0 {
+                            if b != &b'\r' && b != &b'\n' {
+                                break;
+                            }
+                        } else if !Self::is_byte_pattern_continuation(*b) {
+                            self.ptr = slice_start;
                             break;
                         }
-                    } else if !Self::is_byte_pattern_continuation(*b.unwrap()) {
-                        self.ptr = slice_start;
+                    } else {
                         break;
                     }
                 }
@@ -103,9 +103,9 @@ where
 
                 text_element_role = match termination_reason {
                     TextElementTermination::LineFeed => TextElementPosition::LineStart,
-                    TextElementTermination::CRLF => TextElementPosition::Continuation,
+                    TextElementTermination::CRLF => TextElementPosition::LineStart,
                     TextElementTermination::PlaceableStart => TextElementPosition::Continuation,
-                    TextElementTermination::EOF => TextElementPosition::Continuation,
+                    TextElementTermination::EOF => break,
                 };
             }
         }
