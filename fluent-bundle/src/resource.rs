@@ -8,6 +8,7 @@ use ouroboros::self_referencing;
 pub struct InnerFluentResource {
     string: String,
     #[borrows(string)]
+    #[covariant]
     ast: ast::Resource<&'this str>,
 }
 

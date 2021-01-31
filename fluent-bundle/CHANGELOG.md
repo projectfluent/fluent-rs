@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-bundle 0.14.4 (January 31, 2021)
+  - Expose `FluentResource::source()`.
+  - Update `ouroboros` to 0.8.
+
 ## fluent-bundle 0.14.3 (January 24, 2021)
   - Use the `Parser::parse_runtime` in `FluentResource::try_new`.
   - Update to `fluent-syntax` 0.10.2.
