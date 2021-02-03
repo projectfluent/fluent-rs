@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.3.9 (February 3, 2021)
+  - Handle locale management in `Localization`.
+
 ## fluent-fallback 0.2.2 (January 16, 2021)
   - Invalidate bundles on resource list change.
 
