@@ -3,6 +3,7 @@ use std::fs;
 
 use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_fallback::{
+    env::LocalesProvider,
     generator::{BundleGenerator, FluentBundleResult},
     Localization,
 };
@@ -36,6 +37,12 @@ impl Locales {
 
     pub fn insert(&mut self, index: usize, element: LanguageIdentifier) {
         self.inner.insert(index, element);
+    }
+}
+
+impl LocalesProvider for Locales {
+    fn locales(&self) -> <Vec<LanguageIdentifier> as IntoIterator>::IntoIter {
+        self.inner.locales.borrow().clone().into_iter()
     }
 }
 
@@ -87,19 +94,26 @@ impl futures::Stream for BundleIter {
     }
 }
 
-impl BundleGenerator for Locales {
+struct ResourceManager;
+
+impl BundleGenerator for ResourceManager {
     type Resource = FluentResource;
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(&self, res_ids: Vec<String>) -> Self::Iter {
-        BundleIter {
-            locales: self.inner.locales.borrow().clone().into_iter(),
-            res_ids,
-        }
+    fn bundles_iter(
+        &self,
+        locales: std::vec::IntoIter<LanguageIdentifier>,
+        res_ids: Vec<String>,
+    ) -> Self::Iter {
+        BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(&self, _res_ids: Vec<String>) -> Self::Stream {
+    fn bundles_stream(
+        &self,
+        _locales: std::vec::IntoIter<LanguageIdentifier>,
+        _res_ids: Vec<String>,
+    ) -> Self::Stream {
         todo!()
     }
 }
@@ -108,9 +122,10 @@ impl BundleGenerator for Locales {
 fn localization_format() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
     let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let loc = Localization::with_generator(resource_ids, true, locales);
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
 
     let value = loc
         .format_value_sync("hello-world", None, &mut errors)
@@ -135,9 +150,10 @@ fn localization_on_change() {
     let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
 
     let mut locales = Locales::new(vec![langid!("en-US")]);
+    let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let mut loc = Localization::with_generator(resource_ids, true, locales.clone());
+    let mut loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
 
     let value = loc
         .format_value_sync("hello-world", None, &mut errors)

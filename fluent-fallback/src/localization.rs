@@ -1,4 +1,5 @@
 use crate::cache::{AsyncCache, Cache};
+use crate::env::LocalesProvider;
 use crate::errors::LocalizationError;
 use crate::generator::{BundleGenerator, BundleIterator, BundleStream};
 use crate::types::{L10nAttribute, L10nKey, L10nMessage};
@@ -42,40 +43,46 @@ where
     }
 }
 
-pub struct Localization<G>
+pub struct Localization<G, P>
 where
     G: BundleGenerator,
+    P: LocalesProvider,
 {
     // Replace with `OneCell` once it stabilizes
     // https://github.com/rust-lang/rust/issues/74465
     bundles: OnceCell<Bundles<G>>,
     generator: G,
+    provider: P,
     res_ids: Vec<String>,
     sync: bool,
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator + Default,
+    P: LocalesProvider + Default,
 {
     pub fn new(res_ids: Vec<String>, sync: bool) -> Self {
         Self {
             bundles: OnceCell::new(),
             generator: G::default(),
+            provider: P::default(),
             res_ids,
             sync,
         }
     }
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator,
+    P: LocalesProvider,
 {
-    pub fn with_generator(res_ids: Vec<String>, sync: bool, generator: G) -> Self {
+    pub fn with_env(res_ids: Vec<String>, sync: bool, provider: P, generator: G) -> Self {
         Self {
             bundles: OnceCell::new(),
             generator,
+            provider,
             res_ids,
             sync,
         }
@@ -191,10 +198,11 @@ where
     }
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator,
     G::Iter: BundleIterator,
+    P: LocalesProvider,
 {
     pub fn prefetch_sync(&self) {
         let bundles = self.get_bundles();
@@ -202,10 +210,11 @@ where
     }
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator,
     G::Stream: BundleStream,
+    P: LocalesProvider,
 {
     pub async fn prefetch_async(&self) {
         let bundles = self.get_bundles();
@@ -213,19 +222,22 @@ where
     }
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator,
+    P: LocalesProvider,
 {
     fn get_bundles(&self) -> &Bundles<G> {
         self.bundles.get_or_init(|| {
             if self.sync {
                 Bundles::Iter(Cache::new(
-                    self.generator.bundles_iter(self.res_ids.clone()),
+                    self.generator
+                        .bundles_iter(self.provider.locales(), self.res_ids.clone()),
                 ))
             } else {
                 Bundles::Stream(AsyncCache::new(
-                    self.generator.bundles_stream(self.res_ids.clone()),
+                    self.generator
+                        .bundles_stream(self.provider.locales(), self.res_ids.clone()),
                 ))
             }
         })
@@ -408,9 +420,10 @@ where
     }
 }
 
-impl<G> Localization<G>
+impl<G, P> Localization<G, P>
 where
     G: BundleGenerator,
+    P: LocalesProvider,
 {
     async fn format_messages_from_stream<'l>(
         stream: &'l AsyncCache<G::Stream, G::Resource>,

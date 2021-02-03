@@ -1,6 +1,7 @@
 use fluent_bundle::{FluentBundle, FluentError, FluentResource};
 use futures::Stream;
 use std::borrow::Borrow;
+use unic_langid::LanguageIdentifier;
 
 pub type FluentBundleResult<R> = Result<FluentBundle<R>, (FluentBundle<R>, Vec<FluentError>)>;
 
@@ -18,7 +19,14 @@ pub trait BundleGenerator {
     type Iter: Iterator<Item = FluentBundleResult<Self::Resource>>;
     type Stream: Stream<Item = FluentBundleResult<Self::Resource>>;
 
-    // Can we make it a slice?
-    fn bundles_iter(&self, res_ids: Vec<String>) -> Self::Iter;
-    fn bundles_stream(&self, res_ids: Vec<String>) -> Self::Stream;
+    fn bundles_iter(
+        &self,
+        locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+        res_ids: Vec<String>,
+    ) -> Self::Iter;
+    fn bundles_stream(
+        &self,
+        locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+        res_ids: Vec<String>,
+    ) -> Self::Stream;
 }

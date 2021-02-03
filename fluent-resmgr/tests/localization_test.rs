@@ -7,7 +7,12 @@ use unic_langid::langid;
 fn localization_format_value() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
-    let loc = Localization::with_generator(vec!["test.ftl".into()], true, res_mgr);
+    let loc = Localization::with_env(
+        vec!["test.ftl".into()],
+        true,
+        vec!["en-US".parse().unwrap(), "pl".parse().unwrap()],
+        res_mgr,
+    );
     let mut errors = vec![];
 
     let value = loc

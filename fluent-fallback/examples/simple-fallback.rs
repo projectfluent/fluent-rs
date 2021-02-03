@@ -33,7 +33,6 @@ use unic_langid::LanguageIdentifier;
 /// resource paths into full paths. It is used to customise
 /// `fluent-fallback::SyncLocalization`.
 struct Bundles {
-    locales: Vec<LanguageIdentifier>,
     res_path_scheme: PathBuf,
 }
 
@@ -109,13 +108,14 @@ fn main() {
 
     // 5. Create a new Localization instance which will be used to maintain the localization
     //    context for this UI.  `Bundles` provides the custom logic for obtaining resources.
-    let loc = Localization::with_generator(
+    let loc = Localization::with_env(
         L10N_RESOURCES.iter().map(|&res| res.into()).collect(),
         true,
-        Bundles {
-            locales: resolved_locales.into_iter().cloned().collect(),
-            res_path_scheme,
-        },
+        resolved_locales
+            .iter()
+            .map(|&l| l.to_owned())
+            .collect::<Vec<LanguageIdentifier>>(),
+        Bundles { res_path_scheme },
     );
 
     let mut errors = vec![];
@@ -228,15 +228,23 @@ impl BundleGenerator for Bundles {
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(&self, res_ids: Vec<String>) -> Self::Iter {
+    fn bundles_iter(
+        &self,
+        locales: std::vec::IntoIter<LanguageIdentifier>,
+        res_ids: Vec<String>,
+    ) -> Self::Iter {
         BundleIter {
             res_path_scheme: self.res_path_scheme.to_string_lossy().to_string(),
-            locales: self.locales.clone().into_iter(),
+            locales,
             res_ids,
         }
     }
 
-    fn bundles_stream(&self, _res_ids: Vec<String>) -> Self::Stream {
+    fn bundles_stream(
+        &self,
+        _locales: std::vec::IntoIter<LanguageIdentifier>,
+        _res_ids: Vec<String>,
+    ) -> Self::Stream {
         todo!()
     }
 }

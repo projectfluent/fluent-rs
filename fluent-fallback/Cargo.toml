@@ -23,6 +23,7 @@ fluent-bundle = { version = "0.14", path = "../fluent-bundle" }
 futures = "0.3"
 once_cell = "1.5"
 async-trait = "0.1"
+unic-langid = { version = "0.9" }
 
 [dev-dependencies]
 fluent-langneg = "0.13"

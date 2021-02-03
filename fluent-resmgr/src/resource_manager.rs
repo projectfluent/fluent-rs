@@ -80,7 +80,7 @@ impl ResourceManager {
 // lack of GATs, these have to own members instead of taking slices.
 pub struct BundleIter {
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-    resource_ids: Vec<String>,
+    res_ids: Vec<String>,
 }
 
 impl Iterator for BundleIter {
@@ -91,7 +91,7 @@ impl Iterator for BundleIter {
 
         let mut bundle = FluentBundle::new(vec![locale.clone()]);
 
-        for res_id in &self.resource_ids {
+        for res_id in &self.res_ids {
             let full_path = format!("./tests/resources/{}/{}", locale, res_id);
             let source = fs::read_to_string(full_path).unwrap();
             let res = FluentResource::try_new(source).unwrap();
@@ -117,14 +117,19 @@ impl BundleGenerator for ResourceManager {
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(&self, resource_ids: Vec<String>) -> Self::Iter {
-        BundleIter {
-            locales: vec!["en-US".parse().unwrap(), "pl".parse().unwrap()].into_iter(),
-            resource_ids,
-        }
+    fn bundles_iter(
+        &self,
+        locales: std::vec::IntoIter<LanguageIdentifier>,
+        res_ids: Vec<String>,
+    ) -> Self::Iter {
+        BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(&self, _res_ids: Vec<String>) -> Self::Stream {
+    fn bundles_stream(
+        &self,
+        _locales: std::vec::IntoIter<LanguageIdentifier>,
+        _res_ids: Vec<String>,
+    ) -> Self::Stream {
         todo!()
     }
 }
