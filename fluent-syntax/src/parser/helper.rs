@@ -131,6 +131,7 @@ where
         match get_current_byte!(self) {
             Some(b'\n') => true,
             Some(b'\r') if self.is_byte_at(b'\n', self.ptr + 1) => true,
+            None => true,
             _ => false,
         }
     }

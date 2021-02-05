@@ -32,7 +32,7 @@ where
             if self.ptr == self.length {
                 break;
             } else if self.is_current_byte(b'\n') {
-                content.push(self.get_comment_line()?);
+                content.push(self.get_comment_line());
             } else {
                 if let Err(e) = self.expect_byte(b' ') {
                     if content.is_empty() {
@@ -42,7 +42,7 @@ where
                         break;
                     }
                 }
-                content.push(self.get_comment_line()?);
+                content.push(self.get_comment_line());
             }
             self.skip_eol();
         }
@@ -82,13 +82,13 @@ where
         }
     }
 
-    fn get_comment_line(&mut self) -> Result<S> {
+    fn get_comment_line(&mut self) -> S {
         let start_pos = self.ptr;
 
-        while self.ptr < self.length && !self.is_eol() {
+        while !self.is_eol() {
             self.ptr += 1;
         }
 
-        Ok(self.source.slice(start_pos..self.ptr))
+        self.source.slice(start_pos..self.ptr)
     }
 }
