@@ -5,7 +5,7 @@ use std::fs;
 use std::io;
 
 use fluent_syntax::ast;
-use fluent_syntax::parser::Parser;
+use fluent_syntax::parser::{parse, parse_runtime};
 
 use helper::{adapt_ast, strip_comments};
 
@@ -30,7 +30,7 @@ fn parse_fixtures_compare() {
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        let target_ast = match Parser::new(ftl_file).parse() {
+        let target_ast = match parse(ftl_file) {
             Ok(res) => res,
             Err((res, _errors)) => res,
         };
@@ -56,7 +56,7 @@ fn parse_fixtures() {
 
         let string = read_file(path, false).expect("Failed to read");
 
-        let _ = Parser::new(string.as_str()).parse();
+        let _ = parse(string.as_str());
     }
 }
 
@@ -75,7 +75,7 @@ fn parse_bench_fixtures() {
         let ftl_file = read_file(&path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
-        let target_ast = match Parser::new(ftl_file).parse() {
+        let target_ast = match parse(ftl_file) {
             Ok(res) => res,
             Err((res, _errors)) => res,
         };
@@ -109,7 +109,7 @@ fn parse_bench_fixtures() {
             let ftl_file = read_file(&path, false).unwrap();
 
             println!("Parsing: {:#?}", path);
-            let target_ast = match Parser::new(ftl_file.clone()).parse() {
+            let target_ast = match parse(ftl_file.clone()) {
                 Ok(res) => res,
                 Err((res, _errors)) => res,
             };
@@ -124,7 +124,7 @@ fn parse_bench_fixtures() {
             }
 
             // Skipping comments
-            let target_ast = match Parser::new(ftl_file).parse_runtime() {
+            let target_ast = match parse_runtime(ftl_file) {
                 Ok(res) => res,
                 Err((res, _errors)) => res,
             };

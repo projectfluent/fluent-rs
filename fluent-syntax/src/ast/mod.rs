@@ -1,3 +1,86 @@
+//! Abstract Syntax Tree representation of the Fluent Translation List.
+//!
+//! The AST of Fluent contains all nodes structures to represent a complete
+//! representation of the FTL resource.
+//!
+//! The AST is intended to preserve all semantic information and allow for round-trip
+//! of a canonically written FTL resource.
+//!
+//! # Example
+//!
+//! ```
+//! use fluent_syntax::parser;
+//! use fluent_syntax::ast;
+//!
+//! let ftl = r#"
+//!
+//! ## This is a message comment
+//! hello-world = Hello World!
+//!     .tooltip = Tooltip for you, { $userName }.
+//!
+//! "#;
+//!
+//! let resource = parser::parse(ftl)
+//!     .expect("Failed to parse an FTL resource.");
+//!
+//! assert_eq!(
+//!     resource.body[0],
+//!     ast::Entry::Message(
+//!         ast::Message {
+//!             id: ast::Identifier {
+//!                 name: "hello-world"
+//!             },
+//!             value: Some(ast::Pattern {
+//!                 elements: vec![
+//!                     ast::PatternElement::TextElement {
+//!                         value: "Hello World!"
+//!                     },
+//!                 ]
+//!             }),
+//!             attributes: vec![
+//!                 ast::Attribute {
+//!                     id: ast::Identifier {
+//!                         name: "tooltip"
+//!                     },
+//!                     value: ast::Pattern {
+//!                         elements: vec![
+//!                             ast::PatternElement::TextElement {
+//!                                 value: "Tooltip for you, "
+//!                             },
+//!                             ast::PatternElement::Placeable {
+//!                                 expression: ast::Expression::InlineExpression(
+//!                                     ast::InlineExpression::VariableReference {
+//!                                         id: ast::Identifier {
+//!                                             name: "userName"
+//!                                         }
+//!                                     }
+//!                                 )
+//!                             },
+//!                             ast::PatternElement::TextElement {
+//!                                 value: "."
+//!                             },
+//!                         ]
+//!                     }
+//!                 }
+//!             ],
+//!             comment: Some(
+//!                 ast::Comment {
+//!                     content: vec!["This is a message comment"]
+//!                 }
+//!             )
+//!         }
+//!     ),
+//! );
+//! ```
+//!
+//! ## Errors
+//!
+//! AST does preserve blocks containing invaid syntax as [`Entry::Junk`].
+//!
+//! ## White space
+//!
+//! At the moment, AST does not preserve white space. In result only a
+//! canonical form of the AST is suitable for a round-trip.
 mod helper;
 
 #[cfg(feature = "serde")]

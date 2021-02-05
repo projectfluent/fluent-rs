@@ -1,11 +1,16 @@
-use super::*;
+use super::{
+    core::{Parser, Result},
+    errors::ParserError,
+    slice::Slice,
+};
+use crate::ast;
 
 impl<'s, S> Parser<S>
 where
     S: Slice<'s>,
 {
     pub fn parse_runtime(
-        &mut self,
+        mut self,
     ) -> std::result::Result<ast::Resource<S>, (ast::Resource<S>, Vec<ParserError>)> {
         let mut errors = vec![];
 
@@ -26,7 +31,7 @@ where
                 Ok(None) => {}
                 Err(mut err) => {
                     self.skip_to_next_entry_start();
-                    err.slice = Some((entry_start, self.ptr));
+                    err.slice = Some(entry_start..self.ptr);
                     errors.push(err);
                     let content = self.source.slice(entry_start..self.ptr);
                     body.push(ast::Entry::Junk { content });

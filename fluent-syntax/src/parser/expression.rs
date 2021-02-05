@@ -1,5 +1,5 @@
 use super::errors::{ErrorKind, ParserError};
-use super::{Parser, Result, Slice};
+use super::{core::Parser, core::Result, slice::Slice};
 use crate::ast;
 
 impl<'s, S> Parser<S>
@@ -65,8 +65,6 @@ where
 
     pub(super) fn get_inline_expression(&mut self) -> Result<ast::InlineExpression<S>> {
         match get_current_byte!(self) {
-            // match self.source.get2(self.ptr) {
-            // match get_byte!(self, self.ptr) {
             Some(b'"') => {
                 self.ptr += 1; // "
                 let start = self.ptr;
@@ -82,13 +80,16 @@ where
                                 self.ptr += 2;
                                 self.skip_unicode_escape_sequence(6)?;
                             }
-                            _ => return error!(ErrorKind::Generic, self.ptr),
+                            b @ _ => {
+                                let seq = b.unwrap_or(&b' ').to_string();
+                                return error!(ErrorKind::UnknownEscapeSequence(seq), self.ptr);
+                            }
                         },
                         b'"' => {
                             break;
                         }
                         b'\n' => {
-                            return error!(ErrorKind::Generic, self.ptr);
+                            return error!(ErrorKind::UnterminatedStringLiteral, self.ptr);
                         }
                         _ => self.ptr += 1,
                     }
@@ -149,5 +150,71 @@ where
             }
             _ => error!(ErrorKind::ExpectedInlineExpression, self.ptr),
         }
+    }
+
+    pub fn get_call_arguments(&mut self) -> Result<Option<ast::CallArguments<S>>> {
+        self.skip_blank();
+        if !self.take_byte_if(b'(') {
+            return Ok(None);
+        }
+
+        let mut positional = vec![];
+        let mut named = vec![];
+        let mut argument_names = vec![];
+
+        self.skip_blank();
+
+        while self.ptr < self.length {
+            if self.is_current_byte(b')') {
+                break;
+            }
+
+            let expr = self.get_inline_expression()?;
+
+            if let ast::InlineExpression::MessageReference {
+                ref id,
+                attribute: None,
+            } = expr
+            {
+                self.skip_blank();
+                if self.is_current_byte(b':') {
+                    if argument_names.contains(&id.name) {
+                        return error!(
+                            ErrorKind::DuplicatedNamedArgument(id.name.as_ref().to_owned()),
+                            self.ptr
+                        );
+                    }
+                    self.ptr += 1;
+                    self.skip_blank();
+                    let val = self.get_inline_expression()?;
+
+                    argument_names.push(id.name.clone());
+                    named.push(ast::NamedArgument {
+                        name: ast::Identifier {
+                            name: id.name.clone(),
+                        },
+                        value: val,
+                    });
+                } else {
+                    if !argument_names.is_empty() {
+                        return error!(ErrorKind::PositionalArgumentFollowsNamed, self.ptr);
+                    }
+                    positional.push(expr);
+                }
+            } else {
+                if !argument_names.is_empty() {
+                    return error!(ErrorKind::PositionalArgumentFollowsNamed, self.ptr);
+                }
+                positional.push(expr);
+            }
+
+            self.skip_blank();
+            self.take_byte_if(b',');
+            self.skip_blank();
+        }
+
+        self.expect_byte(b')')?;
+
+        Ok(Some(ast::CallArguments { positional, named }))
     }
 }

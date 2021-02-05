@@ -1,5 +1,5 @@
 use super::errors::{ErrorKind, ParserError};
-use super::{Parser, Result, Slice};
+use super::{core::Parser, core::Result, slice::Slice};
 
 impl<'s, S> Parser<S>
 where

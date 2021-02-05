@@ -1,4 +1,4 @@
-use super::{Parser, Result, Slice};
+use super::{core::Parser, core::Result, Slice};
 use crate::ast;
 
 #[derive(Debug, PartialEq, Clone, Copy)]
