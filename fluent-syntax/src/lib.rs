@@ -3,10 +3,10 @@
 //! `fluent-syntax` is a lowest level component of the system which exposes components
 //! necessary for parsing and operating on Fluent Translation Lists ("FTL").
 //!
-//! The crate provides the `parser` module which allows for parsing of an
-//! input string to an Abstract Syntax Tree defined in the `ast` module.
+//! The crate provides a [`parser`] module which allows for parsing of an
+//! input string to an Abstract Syntax Tree defined in the [`ast`] module.
 //!
-//! The `unicode` module exposes a set of helper functions used to decode
+//! The [`unicode`] module exposes a set of helper functions used to decode
 //! escaped unicode literals according to Fluent specification.
 //!
 //! # Example
