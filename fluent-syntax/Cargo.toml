@@ -45,6 +45,10 @@ all-benchmarks = []
 name = "parser"
 harness = false
 
+[[bench]]
+name = "parser_iai"
+harness = false
+
 [[bin]]
 name = "parser"
 path = "src/bin/parser.rs"
