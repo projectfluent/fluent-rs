@@ -39,6 +39,7 @@ iai = "0.1"
 [features]
 default = []
 json = ["serde", "serde_json"]
+all-benchmarks = []
 
 [[bench]]
 name = "parser"
