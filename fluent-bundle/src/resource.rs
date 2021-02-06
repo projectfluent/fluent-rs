@@ -1,6 +1,5 @@
 use fluent_syntax::ast;
-use fluent_syntax::parser::Parser;
-use fluent_syntax::parser::ParserError;
+use fluent_syntax::parser::{parse_runtime, ParserError};
 use ouroboros::self_referencing;
 
 #[self_referencing]
@@ -22,7 +21,7 @@ impl FluentResource {
 
         let res = InnerFluentResourceBuilder {
             string: source,
-            ast_builder: |string: &str| match Parser::new(string).parse_runtime() {
+            ast_builder: |string: &str| match parse_runtime(string) {
                 Ok(ast) => ast,
                 Err((ast, err)) => {
                     errors = Some(err);
