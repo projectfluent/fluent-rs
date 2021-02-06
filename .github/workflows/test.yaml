@@ -44,17 +44,17 @@ jobs:
           override: true
           components: llvm-tools-preview
       - name: Install grcov
-        if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+        if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
         run: if [[ ! -e ~/.cargo/bin/grcov ]]; then cargo install grcov; fi
       - name: Run tests
         run: cargo test
         env:
           RUSTFLAGS: '-Zinstrument-coverage'
       - name: Run grcov
-        if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+        if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
         run: grcov . --binary-path target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../**' --ignore '/*' -o coverage.lcov
       - name: Coveralls upload
-        if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+        if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
         uses: coverallsapp/github-action@master
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
