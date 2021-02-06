@@ -9,6 +9,7 @@ on:
   # Allows you to run this workflow manually from the Actions tab
   workflow_dispatch:
 
+name: Tests & Code Coverage
 jobs:
   test:
     runs-on: ubuntu-latest
@@ -20,41 +21,42 @@ jobs:
         cargo-args:
           - ''
           - '--all-features'
-    steps:
-      - name: Clone repository
-        uses: actions/checkout@v2
-      - name: Set up Rust
-        uses: actions-rs/toolchain@v1
-        with:
-          profile: minimal
-          toolchain: ${{ matrix.rust-version }}
-          override: true
-      - name: Run cargo clean
-        uses: actions-rs/cargo@v1
-        with:
-          command: clean
-      - name: Run cargo build
-        uses: actions-rs/cargo@v1
-        with:
-          command: build
-          args: ${{ matrix.cargo-args }}
-      - name: Run cargo test
-        uses: actions-rs/cargo@v1
-        with:
-          command: test
-          args: ${{ matrix.cargo-args }}
-
-      - name: Run cargo-tarpaulin
-        if: matrix.rust-version == 'stable' && matrix.cargo-args != ''
-        uses: actions-rs/tarpaulin@v0.1
-        with:
-          version: 'latest'
-          args: '${{ matrix.cargo-args }} --exclude-files examples/ --exclude-files fluent-testing/ --out Lcov'
-        env:
-          RUST_BACKTRACE: 1
-      - name: upload to Coveralls
-        if: matrix.rust-version == 'stable' && matrix.cargo-args != ''
-        uses: coverallsapp/github-action@master
-        with:
-          github-token: ${{ secrets.GITHUB_TOKEN }}
-          path-to-lcov: './lcov.info'
+        steps:
+          - uses: actions/checkout@v1
+          - name: Cache cargo registry
+            uses: actions/cache@v1
+            with:
+              path: ~/.cargo/registry
+              key: ${{ runner.os }}-cargo-registry-${{ hashFiles('**/Cargo.lock') }}
+          - name: Cache cargo index
+            uses: actions/cache@v1
+            with:
+              path: ~/.cargo/git
+              key: ${{ runner.os }}-cargo-index-${{ hashFiles('**/Cargo.lock') }}
+          - name: Cache cargo binaries
+            uses: actions/cache@v1
+            with:
+              path: ~/.cargo/bin
+              key: ${{ runner.os }}-cargo-bin-${{ hashFiles('**/Cargo.lock') }}
+          - name: Toolchain setup
+            uses: actions-rs/toolchain@v1
+            with:
+              toolchain: nightly
+              override: true
+              components: llvm-tools-preview
+          - name: Install grcov
+            if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+            run: if [[ ! -e ~/.cargo/bin/grcov ]]; then cargo install grcov; fi
+          - name: Run tests
+            run: cargo test
+            env:
+              RUSTFLAGS: '-Zinstrument-coverage'
+          - name: Run grcov
+            if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+            run: grcov . --binary-path target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../**' --ignore '/*' -o coverage.lcov
+          - name: Coveralls upload
+            if: matrix.rust-version == 'stable' && matrix.cargo-args == '--all-features'
+            uses: coverallsapp/github-action@master
+            with:
+              github-token: ${{ secrets.GITHUB_TOKEN }}
+              path-to-lcov: coverage.lcov
