@@ -47,7 +47,7 @@ jobs:
         if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
         run: if [[ ! -e ~/.cargo/bin/grcov ]]; then cargo install grcov; fi
       - name: Run tests
-        run: cargo test
+        run: cargo test --all-features --no-fail-fast
         env:
           RUSTFLAGS: '-Zinstrument-coverage'
       - name: Run grcov
