@@ -38,7 +38,7 @@ unread-emails =
     println!("{}", value);
 
     let mut args = FluentArgs::new();
-    args.add("emailCount", 1.into());
+    args.add("emailCount", 1);
 
     let msg = bundle
         .get_message("unread-emails")

@@ -1,9 +1,15 @@
 //! Fluent is a modern localization system designed to improve how software is translated.
 //!
-//! The Rust implementation provides the low level components for syntax operations, like parser
-//! and AST, and the core localization struct - [`FluentBundle`].
+//! `fluent-bundle` is the mid-level component of the [Fluent Localization
+//! System](https://www.projectfluent.org).
 //!
-//! [`FluentBundle`] is the low level container for storing and formatting localization messages
+//! It builds on top of the low level [`fluent-syntax`](../fluent-syntax) package, and provides
+//! foundational types and structures required for executing localization at runtime.
+//!
+//! # Fluent Bundle
+//! The core structure on that level is [`FluentBundle`].
+//!
+//! [`FluentBundle`] is a low level container for storing and formatting localization messages
 //! in a single locale.
 //!
 //! This crate provides also a number of structures needed for a localization API such as [`FluentResource`],
@@ -22,10 +28,13 @@
 //! // Used to provide a locale for the bundle.
 //! use unic_langid::langid;
 //!
-//! let ftl_string = String::from("
+//! let ftl_string = r#"
+//!
 //! hello-world = Hello, world!
 //! intro = Welcome, { $name }.
-//! ");
+//!
+//! "#.to_string();
+//!
 //! let res = FluentResource::try_new(ftl_string)
 //!     .expect("Failed to parse an FTL string.");
 //!
@@ -38,15 +47,18 @@
 //!
 //! let msg = bundle.get_message("hello-world")
 //!     .expect("Message doesn't exist.");
+//!
 //! let mut errors = vec![];
+//!
 //! let pattern = msg.value
 //!     .expect("Message has no value.");
+//!
 //! let value = bundle.format_pattern(&pattern, None, &mut errors);
 //!
 //! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = FluentArgs::new();
-//! args.add("name", FluentValue::from("John"));
+//! args.add("name", "John");
 //!
 //! let msg = bundle.get_message("intro")
 //!     .expect("Message doesn't exist.");

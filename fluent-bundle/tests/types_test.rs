@@ -104,16 +104,16 @@ fn fluent_number_style() {
     let mut fno = FluentNumberOptions::default();
 
     let mut args = FluentArgs::new();
-    args.add("style", "currency".into());
-    args.add("currency", "EUR".into());
-    args.add("currencyDisplay", "code".into());
-    args.add("useGrouping", "false".into());
-    args.add("minimumIntegerDigits", 3.into());
-    args.add("minimumFractionDigits", 3.into());
-    args.add("maximumFractionDigits", 8.into());
-    args.add("minimumSignificantDigits", 1.into());
-    args.add("maximumSignificantDigits", 10.into());
-    args.add("someRandomOption", 10.into());
+    args.add("style", "currency");
+    args.add("currency", "EUR");
+    args.add("currencyDisplay", "code");
+    args.add("useGrouping", "false");
+    args.add("minimumIntegerDigits", 3);
+    args.add("minimumFractionDigits", 3);
+    args.add("maximumFractionDigits", 8);
+    args.add("minimumSignificantDigits", 1);
+    args.add("maximumSignificantDigits", 10);
+    args.add("someRandomOption", 10);
 
     fno.merge(&args);
 

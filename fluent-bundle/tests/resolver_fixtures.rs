@@ -290,7 +290,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
                     args.iter()
                         .map(|(k, v)| {
-                            let val = match v {
+                            let val: FluentValue = match v {
                                 TestArgumentValue::String(s) => s.as_str().into(),
                                 TestArgumentValue::Number(n) => n.into(),
                             };

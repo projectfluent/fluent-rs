@@ -11,7 +11,7 @@ pub struct FluentArgs<'args>(Vec<(Cow<'args, str>, FluentValue<'args>)>);
 
 impl<'args> FluentArgs<'args> {
     pub fn new() -> Self {
-        Self(vec![])
+        Self::default()
     }
 
     pub fn with_capacity(capacity: usize) -> Self {
@@ -22,11 +22,12 @@ impl<'args> FluentArgs<'args> {
         self.0.iter().find(|(k, _)| key == *k).map(|(_, v)| v)
     }
 
-    pub fn add<K>(&mut self, key: K, value: FluentValue<'args>)
+    pub fn add<K, V>(&mut self, key: K, value: V)
     where
         K: Into<Cow<'args, str>>,
+        V: Into<FluentValue<'args>>,
     {
-        self.0.push((key.into(), value));
+        self.0.push((key.into(), value.into()));
     }
 
     pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
@@ -34,25 +35,14 @@ impl<'args> FluentArgs<'args> {
     }
 }
 
-impl<'args> FromIterator<(&'args str, FluentValue<'args>)> for FluentArgs<'args> {
+impl<'args, K, V> FromIterator<(K, V)> for FluentArgs<'args>
+where
+    K: Into<Cow<'args, str>>,
+    V: Into<FluentValue<'args>>,
+{
     fn from_iter<I>(iter: I) -> Self
     where
-        I: IntoIterator<Item = (&'args str, FluentValue<'args>)>,
-    {
-        let mut c = FluentArgs::new();
-
-        for (k, v) in iter {
-            c.add(k, v);
-        }
-
-        c
-    }
-}
-
-impl<'args> FromIterator<(String, FluentValue<'args>)> for FluentArgs<'args> {
-    fn from_iter<I>(iter: I) -> Self
-    where
-        I: IntoIterator<Item = (String, FluentValue<'args>)>,
+        I: IntoIterator<Item = (K, V)>,
     {
         let mut c = FluentArgs::new();
 

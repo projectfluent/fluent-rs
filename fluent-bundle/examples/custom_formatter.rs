@@ -128,7 +128,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
             ..Default::default()
         },
     );
-    args.add("num", num.into());
+    args.add("num", num);
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 
     // Notice, that since we specificed minimum and maximum fraction digits options

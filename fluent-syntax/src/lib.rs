@@ -3,7 +3,7 @@
 //! `fluent-syntax` is the lowest level component of the [Fluent Localization
 //! System](https://www.projectfluent.org).
 //!
-//! It exposes components necessary for parsing and operating on Fluent Translation Lists ("FTL").
+//! It exposes components necessary for parsing and tooling operations on Fluent Translation Lists ("FTL").
 //!
 //! The crate provides a [`parser`] module which allows for parsing of an
 //! input string to an Abstract Syntax Tree defined in the [`ast`] module.
