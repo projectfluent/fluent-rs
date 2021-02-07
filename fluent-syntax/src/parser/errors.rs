@@ -164,4 +164,6 @@ pub enum ErrorKind {
     ExpectedInlineExpression,
     #[error("Expected a simple expression as selector")]
     ExpectedSimpleExpressionAsSelector,
+    #[error("Expected a string or number literal")]
+    ExpectedLiteral,
 }

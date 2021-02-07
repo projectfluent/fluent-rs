@@ -1,7 +1,9 @@
 //! Fluent is a modern localization system designed to improve how software is translated.
 //!
-//! `fluent-syntax` is a lowest level component of the system which exposes components
-//! necessary for parsing and operating on Fluent Translation Lists ("FTL").
+//! `fluent-syntax` is the lowest level component of the [Fluent Localization
+//! System](https://www.projectfluent.org).
+//! 
+//! It exposes components necessary for parsing and operating on Fluent Translation Lists ("FTL").
 //!
 //! The crate provides a [`parser`] module which allows for parsing of an
 //! input string to an Abstract Syntax Tree defined in the [`ast`] module.

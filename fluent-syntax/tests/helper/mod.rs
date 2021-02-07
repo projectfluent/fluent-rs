@@ -53,12 +53,12 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
 
 fn adapt_expression(expression: &mut ast::Expression<String>, crlf: bool) {
     match expression {
-        ast::Expression::SelectExpression { variants, .. } => {
+        ast::Expression::Select { variants, .. } => {
             for variant in variants {
                 adapt_pattern(&mut variant.value, crlf);
             }
         }
-        ast::Expression::InlineExpression(_) => {}
+        ast::Expression::Inline(_) => {}
     }
 }
 

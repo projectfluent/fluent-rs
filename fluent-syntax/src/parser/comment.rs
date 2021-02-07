@@ -65,21 +65,16 @@ where
     }
 
     fn get_comment_level(&mut self) -> Level {
-        let mut chars = 0;
-
-        for _ in 0..3 {
+        if self.take_byte_if(b'#') {
             if self.take_byte_if(b'#') {
-                chars += 1;
+                if self.take_byte_if(b'#') {
+                    return Level::Resource;
+                }
+                return Level::Group;
             }
+            return Level::Regular;
         }
-
-        match chars {
-            0 => Level::None,
-            1 => Level::Regular,
-            2 => Level::Group,
-            3 => Level::Resource,
-            _ => unreachable!(),
-        }
+        Level::None
     }
 
     fn get_comment_line(&mut self) -> S {

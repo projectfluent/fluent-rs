@@ -7,7 +7,7 @@ where
     S: Slice<'s>,
 {
     pub(super) fn get_expression(&mut self) -> Result<ast::Expression<S>> {
-        let exp = self.get_inline_expression()?;
+        let exp = self.get_inline_expression(false)?;
 
         self.skip_blank();
 
@@ -17,7 +17,7 @@ where
                     return error!(ErrorKind::TermAttributeAsPlaceable, self.ptr);
                 }
             }
-            return Ok(ast::Expression::InlineExpression(exp));
+            return Ok(ast::Expression::Inline(exp));
         }
 
         match exp {
@@ -57,13 +57,16 @@ where
 
         let variants = self.get_variants()?;
 
-        Ok(ast::Expression::SelectExpression {
+        Ok(ast::Expression::Select {
             selector: exp,
             variants,
         })
     }
 
-    pub(super) fn get_inline_expression(&mut self) -> Result<ast::InlineExpression<S>> {
+    pub(super) fn get_inline_expression(
+        &mut self,
+        only_literal: bool,
+    ) -> Result<ast::InlineExpression<S>> {
         match get_current_byte!(self) {
             Some(b'"') => {
                 self.ptr += 1; // "
@@ -103,7 +106,7 @@ where
                 let num = self.get_number_literal()?;
                 Ok(ast::InlineExpression::NumberLiteral { value: num })
             }
-            Some(b'-') => {
+            Some(b'-') if !only_literal => {
                 self.ptr += 1; // -
                 if self.is_identifier_start() {
                     self.ptr += 1;
@@ -121,7 +124,7 @@ where
                     Ok(ast::InlineExpression::NumberLiteral { value: num })
                 }
             }
-            Some(b'$') => {
+            Some(b'$') if !only_literal => {
                 self.ptr += 1; // $
                 let id = self.get_identifier()?;
                 Ok(ast::InlineExpression::VariableReference { id })
@@ -130,7 +133,7 @@ where
                 self.ptr += 1;
                 let id = self.get_identifier_unchecked();
                 let arguments = self.get_call_arguments()?;
-                if arguments.is_some() {
+                if let Some(arguments) = arguments {
                     if !Self::is_callee(&id.name) {
                         return error!(ErrorKind::ForbiddenCallee, self.ptr);
                     }
@@ -141,13 +144,14 @@ where
                     Ok(ast::InlineExpression::MessageReference { id, attribute })
                 }
             }
-            Some(b'{') => {
+            Some(b'{') if !only_literal => {
                 self.ptr += 1; // {
                 let exp = self.get_placeable()?;
                 Ok(ast::InlineExpression::Placeable {
                     expression: Box::new(exp),
                 })
             }
+            _ if only_literal => error!(ErrorKind::ExpectedLiteral, self.ptr),
             _ => error!(ErrorKind::ExpectedInlineExpression, self.ptr),
         }
     }
@@ -169,7 +173,7 @@ where
                 break;
             }
 
-            let expr = self.get_inline_expression()?;
+            let expr = self.get_inline_expression(false)?;
 
             if let ast::InlineExpression::MessageReference {
                 ref id,
@@ -186,7 +190,7 @@ where
                     }
                     self.ptr += 1;
                     self.skip_blank();
-                    let val = self.get_inline_expression()?;
+                    let val = self.get_inline_expression(true)?;
 
                     argument_names.push(id.name.clone());
                     named.push(ast::NamedArgument {

@@ -293,9 +293,8 @@ where
         self.expect_byte(b'}')?;
 
         let invalid_expression_found = match &exp {
-            ast::Expression::InlineExpression(ast::InlineExpression::TermReference {
-                ref attribute,
-                ..
+            ast::Expression::Inline(ast::InlineExpression::TermReference {
+                ref attribute, ..
             }) => attribute.is_some(),
             _ => false,
         };

@@ -51,7 +51,7 @@
 //!                                 value: "Tooltip for you, "
 //!                             },
 //!                             ast::PatternElement::Placeable {
-//!                                 expression: ast::Expression::InlineExpression(
+//!                                 expression: ast::Expression::Inline(
 //!                                     ast::InlineExpression::VariableReference {
 //!                                         id: ast::Identifier {
 //!                                             name: "userName"
@@ -367,7 +367,7 @@ pub struct Term<S> {
 ///                             value: "Welcome, "
 ///                         },
 ///                         ast::PatternElement::Placeable {
-///                             expression: ast::Expression::InlineExpression(
+///                             expression: ast::Expression::Inline(
 ///                                 ast::InlineExpression::VariableReference {
 ///                                     id: ast::Identifier {
 ///                                         name: "userName"
@@ -444,7 +444,7 @@ pub struct Pattern<S> {
 ///                             value: "Welcome, "
 ///                         },
 ///                         ast::PatternElement::Placeable {
-///                             expression: ast::Expression::InlineExpression(
+///                             expression: ast::Expression::Inline(
 ///                                 ast::InlineExpression::VariableReference {
 ///                                     id: ast::Identifier {
 ///                                         name: "userName"
@@ -590,6 +590,83 @@ pub struct Identifier<S> {
     pub name: S,
 }
 
+/// Variant is a single branch of a value in a [`Select`](Expression::Select) expression.
+///
+/// It's a pair of [`VariantKey`] and [`Pattern`]. If the selector match the
+/// key, then the value of the variant is returned as the value of the expression.
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// hello-world = { $var ->
+///     [key1] Value 1
+///    *[other] Value 2
+/// }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(ast::Message {
+///                 id: ast::Identifier {
+///                     name: "hello-world"
+///                 },
+///                 value: Some(ast::Pattern {
+///                     elements: vec![
+///                         ast::PatternElement::Placeable {
+///                             expression: ast::Expression::Select {
+///                                 selector: ast::InlineExpression::VariableReference {
+///                                     id: ast::Identifier { name: "var" },
+///                                 },
+///                                 variants: vec![
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::Identifier {
+///                                             name: "key1"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 1",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: false,
+///                                     },
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::Identifier {
+///                                             name: "other"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 2",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: true,
+///                                     },
+///                                 ]
+///                             }
+///                         }
+///                     ]
+///                 }),
+///                 attributes: vec![],
+///                 comment: None,
+///             }),
+///         ]
+///     }
+/// );
+/// ```
 #[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
@@ -599,6 +676,82 @@ pub struct Variant<S> {
     pub default: bool,
 }
 
+/// A key of a [`Variant`].
+///
+/// Variant key can be either an identifier or a number.
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// hello-world = { $var ->
+///     [0] Value 1
+///    *[other] Value 2
+/// }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(ast::Message {
+///                 id: ast::Identifier {
+///                     name: "hello-world"
+///                 },
+///                 value: Some(ast::Pattern {
+///                     elements: vec![
+///                         ast::PatternElement::Placeable {
+///                             expression: ast::Expression::Select {
+///                                 selector: ast::InlineExpression::VariableReference {
+///                                     id: ast::Identifier { name: "var" },
+///                                 },
+///                                 variants: vec![
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::NumberLiteral {
+///                                             value: "0"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 1",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: false,
+///                                     },
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::Identifier {
+///                                             name: "other"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 2",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: true,
+///                                     },
+///                                 ]
+///                             }
+///                         }
+///                     ]
+///                 }),
+///                 attributes: vec![],
+///                 comment: None,
+///             }),
+///         ]
+///     }
+/// );
+/// ```
 #[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
@@ -652,7 +805,81 @@ pub struct Comment<S> {
     pub content: Vec<S>,
 }
 
-#[derive(Debug, PartialEq, Clone)]
+/// List of arguments for a [`FunctionReference`](InlineExpression::FunctionReference) or a
+/// [`TermReference`](InlineExpression::TermReference).
+///
+/// Function and Term reference may contain a list of positional and
+/// named arguments passed to them.
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// key = { FUNC($var1, "literal", style: "long") }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(
+///                 ast::Message {
+///                     id: ast::Identifier {
+///                         name: "key"
+///                     },
+///                     value: Some(ast::Pattern {
+///                         elements: vec![
+///                             ast::PatternElement::Placeable {
+///                                 expression: ast::Expression::Inline(
+///                                     ast::InlineExpression::FunctionReference {
+///                                         id: ast::Identifier {
+///                                             name: "FUNC"
+///                                         },
+///                                         arguments: ast::CallArguments {
+///                                             positional: vec![
+///                                                 ast::InlineExpression::VariableReference {
+///                                                     id: ast::Identifier {
+///                                                         name: "var1"
+///                                                     }
+///                                                 },
+///                                                 ast::InlineExpression::StringLiteral {
+///                                                     value: "literal",
+///                                                 }
+///                                             ],
+///                                             named: vec![
+///                                                 ast::NamedArgument {
+///                                                     name: ast::Identifier {
+///                                                         name: "style"
+///                                                     },
+///                                                     value: ast::InlineExpression::StringLiteral
+///                                                     {
+///                                                         value: "long"
+///                                                     }
+///                                                 }
+///                                             ],
+///                                         }
+///                                     }
+///                                 )
+///                             },
+///                         ]
+///                     }),
+///                     attributes: vec![],
+///                     comment: None,
+///                 }
+///             )
+///         ]
+///     }
+/// );
+/// ```
+#[derive(Debug, PartialEq, Clone, Default)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub struct CallArguments<S> {
@@ -660,6 +887,67 @@ pub struct CallArguments<S> {
     pub named: Vec<NamedArgument<S>>,
 }
 
+/// A key-value pair used in [`CallArguments`].
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// key = { FUNC(style: "long") }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(
+///                 ast::Message {
+///                     id: ast::Identifier {
+///                         name: "key"
+///                     },
+///                     value: Some(ast::Pattern {
+///                         elements: vec![
+///                             ast::PatternElement::Placeable {
+///                                 expression: ast::Expression::Inline(
+///                                     ast::InlineExpression::FunctionReference {
+///                                         id: ast::Identifier {
+///                                             name: "FUNC"
+///                                         },
+///                                         arguments: ast::CallArguments {
+///                                             positional: vec![],
+///                                             named: vec![
+///                                                 ast::NamedArgument {
+///                                                     name: ast::Identifier {
+///                                                         name: "style"
+///                                                     },
+///                                                     value: ast::InlineExpression::StringLiteral
+///                                                     {
+///                                                         value: "long"
+///                                                     }
+///                                                 }
+///                                             ],
+///                                         }
+///                                     }
+///                                 )
+///                             },
+///                         ]
+///                     }),
+///                     attributes: vec![],
+///                     comment: None,
+///                 }
+///             )
+///         ]
+///     }
+/// );
+/// ```
 #[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
@@ -668,44 +956,491 @@ pub struct NamedArgument<S> {
     pub value: InlineExpression<S>,
 }
 
+/// A subset of expressions which can be used as [`Placeable`](PatternElement::Placeable),
+/// [`selector`](Expression::Select), or in [`CallArguments`].
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// key = { $emailCount }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(
+///                 ast::Message {
+///                     id: ast::Identifier {
+///                         name: "key"
+///                     },
+///                     value: Some(ast::Pattern {
+///                         elements: vec![
+///                             ast::PatternElement::Placeable {
+///                                 expression: ast::Expression::Inline(
+///                                     ast::InlineExpression::VariableReference {
+///                                         id: ast::Identifier {
+///                                             name: "emailCount"
+///                                         },
+///                                     }
+///                                 )
+///                             },
+///                         ]
+///                     }),
+///                     attributes: vec![],
+///                     comment: None,
+///                 }
+///             )
+///         ]
+///     }
+/// );
+/// ```
 #[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum InlineExpression<S> {
-    StringLiteral {
-        value: S,
-    },
-    NumberLiteral {
-        value: S,
-    },
+    /// Single line string literal enclosed in `"`.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { "this is a literal" }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::StringLiteral {
+    ///                                         value: "this is a literal",
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
+    StringLiteral { value: S },
+    /// A number literal.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { -0.5 }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::NumberLiteral {
+    ///                                         value: "-0.5",
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
+    NumberLiteral { value: S },
+    /// A function reference.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { FUNC() }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::FunctionReference {
+    ///                                         id: ast::Identifier {
+    ///                                             name: "FUNC"
+    ///                                         },
+    ///                                         arguments: ast::CallArguments::default(),
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
     FunctionReference {
         id: Identifier<S>,
-        arguments: Option<CallArguments<S>>,
+        arguments: CallArguments<S>,
     },
+    /// A reference to another message.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { key2 }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::MessageReference {
+    ///                                         id: ast::Identifier {
+    ///                                             name: "key2"
+    ///                                         },
+    ///                                         attribute: None,
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
     MessageReference {
         id: Identifier<S>,
         attribute: Option<Identifier<S>>,
     },
+    /// A reference to a term.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { -brand-name }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::TermReference {
+    ///                                         id: ast::Identifier {
+    ///                                             name: "brand-name"
+    ///                                         },
+    ///                                         attribute: None,
+    ///                                         arguments: None,
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
     TermReference {
         id: Identifier<S>,
         attribute: Option<Identifier<S>>,
         arguments: Option<CallArguments<S>>,
     },
-    VariableReference {
-        id: Identifier<S>,
-    },
-    Placeable {
-        expression: Box<Expression<S>>,
-    },
+    /// A reference to a variable.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { $var1 }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::VariableReference {
+    ///                                         id: ast::Identifier {
+    ///                                             name: "var1"
+    ///                                         },
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
+    VariableReference { id: Identifier<S> },
+    /// A placeable which may contain another expression.
+    ///
+    /// # Example
+    ///
+    /// ```
+    /// use fluent_syntax::parser;
+    /// use fluent_syntax::ast;
+    ///
+    /// let ftl = r#"
+    ///
+    /// key = { { "placeable" } }
+    ///
+    /// "#;
+    ///
+    /// let resource = parser::parse(ftl)
+    ///     .expect("Failed to parse an FTL resource.");
+    ///
+    /// assert_eq!(
+    ///     resource,
+    ///     ast::Resource {
+    ///         body: vec![
+    ///             ast::Entry::Message(
+    ///                 ast::Message {
+    ///                     id: ast::Identifier {
+    ///                         name: "key"
+    ///                     },
+    ///                     value: Some(ast::Pattern {
+    ///                         elements: vec![
+    ///                             ast::PatternElement::Placeable {
+    ///                                 expression: ast::Expression::Inline(
+    ///                                     ast::InlineExpression::Placeable {
+    ///                                         expression: Box::new(
+    ///                                             ast::Expression::Inline(
+    ///                                                 ast::InlineExpression::StringLiteral {
+    ///                                                     value: "placeable"
+    ///                                                 }
+    ///                                             )
+    ///                                         )
+    ///                                     }
+    ///                                 )
+    ///                             },
+    ///                         ]
+    ///                     }),
+    ///                     attributes: vec![],
+    ///                     comment: None,
+    ///                 }
+    ///             )
+    ///         ]
+    ///     }
+    /// );
+    /// ```
+    Placeable { expression: Box<Expression<S>> },
 }
 
+/// An expression that is either a select expression or an inline expression.
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::ast;
+///
+/// let ftl = r#"
+///
+/// key = { $var ->
+///     [key1] Value 1
+///    *[other] Value 2
+/// }
+///
+/// "#;
+///
+/// let resource = parser::parse(ftl)
+///     .expect("Failed to parse an FTL resource.");
+///
+/// assert_eq!(
+///     resource,
+///     ast::Resource {
+///         body: vec![
+///             ast::Entry::Message(ast::Message {
+///                 id: ast::Identifier {
+///                     name: "key"
+///                 },
+///                 value: Some(ast::Pattern {
+///                     elements: vec![
+///                         ast::PatternElement::Placeable {
+///                             expression: ast::Expression::Select {
+///                                 selector: ast::InlineExpression::VariableReference {
+///                                     id: ast::Identifier { name: "var" },
+///                                 },
+///                                 variants: vec![
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::Identifier {
+///                                             name: "key1"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 1",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: false,
+///                                     },
+///                                     ast::Variant {
+///                                         key: ast::VariantKey::Identifier {
+///                                             name: "other"
+///                                         },
+///                                         value: ast::Pattern {
+///                                             elements: vec![
+///                                                 ast::PatternElement::TextElement {
+///                                                     value: "Value 2",
+///                                                 }
+///                                             ]
+///                                         },
+///                                         default: true,
+///                                     },
+///                                 ]
+///                             }
+///                         }
+///                     ]
+///                 }),
+///                 attributes: vec![],
+///                 comment: None,
+///             }),
+///         ]
+///     }
+/// );
+/// ```
 #[derive(Debug, PartialEq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(untagged))]
 pub enum Expression<S> {
-    SelectExpression {
+    Select {
         selector: InlineExpression<S>,
         variants: Vec<Variant<S>>,
     },
-    InlineExpression(InlineExpression<S>),
+    Inline(InlineExpression<S>),
 }
