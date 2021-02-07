@@ -1,14 +1,13 @@
 use intl_memoizer::{concurrent::IntlLangMemoizer, Memoizable};
 use unic_langid::LanguageIdentifier;
 
-use crate::bundle::FluentBundleBase;
+use crate::bundle::FluentBundle;
 use crate::memoizer::MemoizerKind;
 use crate::types::FluentType;
 
-/// Concurrent version of [`FluentBundle`] struct. See its docs for details.
-///
-/// [`FluentBundle`]: ../type.FluentBundle.html
-pub type FluentBundle<R> = FluentBundleBase<R, IntlLangMemoizer>;
+impl<R> FluentBundle<R, IntlLangMemoizer> {
+    pub fn new_concurrent() {}
+}
 
 impl MemoizerKind for IntlLangMemoizer {
     fn new(lang: LanguageIdentifier) -> Self

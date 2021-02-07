@@ -59,7 +59,7 @@ fn get_args(name: &str) -> Option<FluentArgs> {
     }
 }
 
-fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
+fn add_functions<R, M>(name: &'static str, bundle: &mut FluentBundle<R, M>) {
     match name {
         "preferences" => {
             bundle
@@ -72,7 +72,13 @@ fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     }
 }
 
-fn get_bundle(name: &'static str, source: &str) -> (FluentBundle<FluentResource>, Vec<String>) {
+fn get_bundle(
+    name: &'static str,
+    source: &str,
+) -> (
+    FluentBundle<FluentResource, intl_memoizer::IntlLangMemoizer>,
+    Vec<String>,
+) {
     let res = FluentResource::try_new(source.to_owned()).expect("Couldn't parse an FTL source");
     let ids = get_ids(&res);
     let lids = vec![langid!("en")];

@@ -9,14 +9,14 @@ use std::path::Path;
 use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
-use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
+use fluent_bundle::{FluentBundle as FluentBundleBase, FluentResource, FluentValue};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use unic_langid::LanguageIdentifier;
 
 use helpers::*;
 
-type FluentBundle = FluentBundleGeneric<FluentResource>;
+type FluentBundle = FluentBundleBase<FluentResource, intl_memoizer::IntlLangMemoizer>;
 
 fn transform_example(s: &str) -> Cow<str> {
     s.replace("a", "A").into()

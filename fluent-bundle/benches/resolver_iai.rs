@@ -1,10 +1,10 @@
-use fluent_bundle::{FluentResource, FluentBundle, FluentArgs, FluentValue};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
-use unic_langid::{LanguageIdentifier, langid};
+use unic_langid::{langid, LanguageIdentifier};
 
 const LANG_EN: LanguageIdentifier = langid!("en");
 
-fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
+fn add_functions<R, M>(name: &'static str, bundle: &mut FluentBundle<R, M>) {
     match name {
         "preferences" => {
             bundle
@@ -49,16 +49,12 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
 }
 
 fn iai_resolve() {
-    let files = &[
-        include_str!("preferences.ftl"),
-    ];
+    let files = &[include_str!("preferences.ftl")];
     for source in files {
-        let res = FluentResource::try_new(source.to_string())
-            .expect("failed to parse FTL.");
+        let res = FluentResource::try_new(source.to_string()).expect("failed to parse FTL.");
         let ids = get_ids(&res);
         let mut bundle = FluentBundle::new(vec![LANG_EN]);
-        bundle.add_resource(res)
-            .expect("Failed to add a resource.");
+        bundle.add_resource(res).expect("Failed to add a resource.");
         add_functions("preferences", &mut bundle);
         let args = get_args("preferences");
         let mut s = String::new();
@@ -66,12 +62,14 @@ fn iai_resolve() {
             let msg = bundle.get_message(id).expect("Message found");
             let mut errors = vec![];
             if let Some(value) = msg.value {
-                bundle.write_pattern(&mut s, value, args.as_ref(), &mut errors)
+                bundle
+                    .write_pattern(&mut s, value, args.as_ref(), &mut errors)
                     .expect("Failed to write a pattern.");
                 s.clear();
             }
             for attr in msg.attributes {
-                bundle.write_pattern(&mut s, attr.value, args.as_ref(), &mut errors)
+                bundle
+                    .write_pattern(&mut s, attr.value, args.as_ref(), &mut errors)
                     .expect("Failed to write a pattern.");
                 s.clear();
             }
