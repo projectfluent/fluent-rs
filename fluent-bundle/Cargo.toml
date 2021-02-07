@@ -37,6 +37,7 @@ rustc-hash = "1"
 
 [dev-dependencies]
 criterion = "0.3"
+iai = "0.1"
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8"
 rand = "0.8"
@@ -44,4 +45,8 @@ unic-langid = { version = "0.9", features = ["macros"] }
 
 [[bench]]
 name = "resolver"
+harness = false
+
+[[bench]]
+name = "resolver_iai"
 harness = false

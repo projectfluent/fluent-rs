@@ -176,7 +176,7 @@ pub use types::FluentValue;
 ///
 /// # Concurrency
 ///
-/// As you may have noticed, `FluentBundle` is a specialization of [`FluentBundleBase`]
+/// As you may have noticed, `FluentBundle` is a specialization of [`bundle::FluentBundleBase`]
 /// which works with an [`IntlMemoizer`][] over `RefCell`.
 /// In scenarios where the memoizer must work concurrently, there's an implementation of
 /// `IntlMemoizer` that uses `Mutex` and there's [`concurrent::FluentBundle`] which works with that.
