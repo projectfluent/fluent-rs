@@ -92,8 +92,9 @@ fn resolver_bench(c: &mut Criterion) {
     for name in tests {
         let source = ftl_strings.get(name).expect("Failed to find the source.");
         group.bench_with_input(BenchmarkId::from_parameter(name), &source, |b, source| {
-            let res = Rc::new(FluentResource::try_new(source.to_string())
-                .expect("Couldn't parse an FTL source"));
+            let res = Rc::new(
+                FluentResource::try_new(source.to_string()).expect("Couldn't parse an FTL source"),
+            );
             b.iter(|| {
                 let lids = vec![langid!("en")];
                 let mut bundle = FluentBundle::new(lids);

@@ -71,7 +71,7 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     re_az.replace_all(s, |caps: &Captures| {
         let ch = caps[0].chars().next().unwrap();
         let cc = ch as u8;
-        if cc >= 97 && cc <= 122 {
+        if (97..=122).contains(&cc) {
             let pos = cc - 97;
             let new_char = small_map[pos as usize];
             // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
@@ -82,7 +82,7 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
             } else {
                 new_char.to_string()
             }
-        } else if cc >= 65 && cc <= 90 {
+        } else if (65..=90).contains(&cc) {
             let pos = cc - 65;
             let new_char = caps_map[pos as usize];
             new_char.to_string()

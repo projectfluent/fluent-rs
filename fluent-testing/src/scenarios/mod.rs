@@ -9,11 +9,11 @@ use structs::*;
 macro_rules! queries {
     ( $( $x:expr ),* ) => {
         {
-            let mut temp_vec: Vec<Query> = Vec::new();
-            $(
-                temp_vec.push($x.into());
-            )*
-            Queries(temp_vec)
+            Queries(vec![
+                $(
+                    $x.into(),
+                )*
+            ])
         }
     };
 }

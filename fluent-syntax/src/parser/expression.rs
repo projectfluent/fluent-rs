@@ -83,7 +83,7 @@ where
                                 self.ptr += 2;
                                 self.skip_unicode_escape_sequence(6)?;
                             }
-                            b @ _ => {
+                            b => {
                                 let seq = b.unwrap_or(&b' ').to_string();
                                 return error!(ErrorKind::UnknownEscapeSequence(seq), self.ptr);
                             }

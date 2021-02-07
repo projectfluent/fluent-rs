@@ -47,7 +47,7 @@ impl<T: ?Sized> PinCell<T> {
     /// The borrow lasts until the returned `PinMut` or all `PinMut`s derived
     /// from it exit scope. The value cannot be borrowed while this borrow is
     /// active.
-    pub fn borrow_mut<'a>(self: Pin<&'a Self>) -> PinMut<'a, T> {
+    pub fn borrow_mut(self: Pin<&Self>) -> PinMut<'_, T> {
         self.try_borrow_mut().expect("already borrowed")
     }
 
@@ -89,10 +89,9 @@ impl<T> From<RefCell<T>> for PinCell<T> {
     }
 }
 
-impl<T> Into<RefCell<T>> for PinCell<T> {
-    fn into(self) -> RefCell<T> {
-        self.inner
+impl<T> From<PinCell<T>> for RefCell<T> {
+    fn from(input: PinCell<T>) -> Self {
+        input.inner
     }
 }
-
 // TODO CoerceUnsized

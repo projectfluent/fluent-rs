@@ -117,7 +117,7 @@ impl<'scope, 'errors, R, M: MemoizerKind> Scope<'scope, 'errors, R, M> {
 
     pub fn get_arguments(
         &mut self,
-        arguments: &'scope Option<ast::CallArguments<&'scope str>>,
+        arguments: Option<&'scope ast::CallArguments<&'scope str>>,
     ) -> (Vec<FluentValue<'scope>>, FluentArgs<'scope>)
     where
         R: Borrow<FluentResource>,

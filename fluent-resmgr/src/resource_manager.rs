@@ -54,8 +54,8 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(
-        &'l self,
+    pub fn get_bundles(
+        &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
     ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {

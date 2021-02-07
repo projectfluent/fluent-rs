@@ -4,9 +4,9 @@
 //! internationalization formatters, functions, scopeironmental variables and are expected to be used
 //! together.
 
+use rustc_hash::FxHashMap;
 use std::borrow::Borrow;
 use std::borrow::Cow;
-use rustc_hash::FxHashMap;
 use std::collections::hash_map::Entry as HashEntry;
 use std::default::Default;
 use std::fmt;

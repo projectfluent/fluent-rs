@@ -58,7 +58,7 @@ impl<'p> WriteValue for ast::InlineExpression<&'p str> {
                 attribute,
                 arguments,
             } => {
-                let (_, resolved_named_args) = scope.get_arguments(arguments);
+                let (_, resolved_named_args) = scope.get_arguments(arguments.as_ref());
 
                 scope.local_args = Some(resolved_named_args);
                 let result = scope
@@ -83,7 +83,7 @@ impl<'p> WriteValue for ast::InlineExpression<&'p str> {
             }
             Self::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) =
-                    scope.get_arguments(arguments);
+                    scope.get_arguments(Some(arguments));
 
                 let func = scope.bundle.get_entry_function(id.name);
 
