@@ -29,7 +29,7 @@ hello-world2 = Hello { $name ->
     println!("{}", value);
 
     let mut args = FluentArgs::new();
-    args.add("name", FluentValue::from("moon"));
+    args.set("name", FluentValue::from("moon"));
 
     let msg = bundle
         .get_message("hello-world2")

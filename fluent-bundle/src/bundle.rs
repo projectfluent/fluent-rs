@@ -44,7 +44,7 @@ use crate::types::FluentValue;
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
 /// let mut args = FluentArgs::new();
-/// args.add("name", FluentValue::from("Rustacean"));
+/// args.set("name", FluentValue::from("Rustacean"));
 ///
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];

@@ -21,16 +21,16 @@ fn get_args(name: &str) -> Option<FluentArgs> {
     match name {
         "preferences" => {
             let mut prefs_args = FluentArgs::new();
-            prefs_args.add("name", FluentValue::from("John"));
-            prefs_args.add("tabCount", FluentValue::from(5));
-            prefs_args.add("count", FluentValue::from(3));
-            prefs_args.add("version", FluentValue::from("65.0"));
-            prefs_args.add("path", FluentValue::from("/tmp"));
-            prefs_args.add("num", FluentValue::from(4));
-            prefs_args.add("email", FluentValue::from("john@doe.com"));
-            prefs_args.add("value", FluentValue::from(4.5));
-            prefs_args.add("unit", FluentValue::from("mb"));
-            prefs_args.add("service-name", FluentValue::from("Mozilla Disk"));
+            prefs_args.set("name", FluentValue::from("John"));
+            prefs_args.set("tabCount", FluentValue::from(5));
+            prefs_args.set("count", FluentValue::from(3));
+            prefs_args.set("version", FluentValue::from("65.0"));
+            prefs_args.set("path", FluentValue::from("/tmp"));
+            prefs_args.set("num", FluentValue::from(4));
+            prefs_args.set("email", FluentValue::from("john@doe.com"));
+            prefs_args.set("value", FluentValue::from(4.5));
+            prefs_args.set("unit", FluentValue::from("mb"));
+            prefs_args.set("service-name", FluentValue::from("Mozilla Disk"));
             Some(prefs_args)
         }
         _ => None,

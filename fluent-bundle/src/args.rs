@@ -18,16 +18,29 @@ impl<'args> FluentArgs<'args> {
         Self(Vec::with_capacity(capacity))
     }
 
-    pub fn get(&self, key: &str) -> Option<&FluentValue<'args>> {
-        self.0.iter().find(|(k, _)| key == *k).map(|(_, v)| v)
+    pub fn get<K>(&self, key: K) -> Option<&FluentValue<'args>>
+    where
+        K: Into<Cow<'args, str>>,
+    {
+        let key = key.into();
+        if let Ok(idx) = self.0.binary_search_by_key(&&key, |(k, _)| k) {
+            Some(&self.0[idx].1)
+        } else {
+            None
+        }
     }
 
-    pub fn add<K, V>(&mut self, key: K, value: V)
+    pub fn set<K, V>(&mut self, key: K, value: V)
     where
         K: Into<Cow<'args, str>>,
         V: Into<FluentValue<'args>>,
     {
-        self.0.push((key.into(), value.into()));
+        let key = key.into();
+        let idx = match self.0.binary_search_by_key(&&key, |(k, _)| k) {
+            Ok(idx) => idx,
+            Err(idx) => idx,
+        };
+        self.0.insert(idx, (key, value.into()));
     }
 
     pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
@@ -44,13 +57,18 @@ where
     where
         I: IntoIterator<Item = (K, V)>,
     {
-        let mut c = FluentArgs::new();
+        let iter = iter.into_iter();
+        let mut args = if let Some(size) = iter.size_hint().1 {
+            FluentArgs::with_capacity(size)
+        } else {
+            FluentArgs::new()
+        };
 
         for (k, v) in iter {
-            c.add(k, v);
+            args.set(k, v);
         }
 
-        c
+        args
     }
 }
 

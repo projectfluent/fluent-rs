@@ -58,7 +58,7 @@
 //! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = FluentArgs::new();
-//! args.add("name", "John");
+//! args.set("name", "John");
 //!
 //! let msg = bundle.get_message("intro")
 //!     .expect("Message doesn't exist.");

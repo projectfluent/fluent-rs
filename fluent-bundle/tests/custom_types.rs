@@ -166,7 +166,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
 
     let mut errors = vec![];
     let mut args = FluentArgs::new();
-    args.add(
+    args.set(
         "date",
         FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptions::default()))),
     );

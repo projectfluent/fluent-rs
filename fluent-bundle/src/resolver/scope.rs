@@ -125,19 +125,17 @@ impl<'scope, 'errors, R, M> Scope<'scope, 'errors, R, M> {
         R: Borrow<FluentResource>,
         M: MemoizerKind,
     {
-        let mut resolved_positional_args = Vec::new();
-        let mut resolved_named_args = FluentArgs::new();
+        if let Some(ast::CallArguments { positional, named }) = arguments {
+            let positional = positional.iter().map(|expr| expr.resolve(self)).collect();
 
-        if let Some(ast::CallArguments { named, positional }) = arguments {
-            for expression in positional {
-                resolved_positional_args.push(expression.resolve(self));
-            }
+            let named = named
+                .iter()
+                .map(|arg| (arg.name.name, arg.value.resolve(self)))
+                .collect();
 
-            for arg in named {
-                resolved_named_args.add(arg.name.name, arg.value.resolve(self));
-            }
+            (positional, named)
+        } else {
+            (Vec::new(), FluentArgs::new())
         }
-
-        (resolved_positional_args, resolved_named_args)
     }
 }
