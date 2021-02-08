@@ -9,14 +9,12 @@ use std::path::Path;
 use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
-use fluent_bundle::{FluentBundle as FluentBundleBase, FluentResource, FluentValue};
+use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use unic_langid::LanguageIdentifier;
 
 use helpers::*;
-
-type FluentBundle = FluentBundleBase<FluentResource, intl_memoizer::IntlLangMemoizer>;
 
 fn transform_example(s: &str) -> Cow<str> {
     s.replace("a", "A").into()
@@ -41,7 +39,10 @@ impl Scope {
             .join(" > ")
     }
 
-    fn get_bundles(&self, defaults: &Option<TestDefaults>) -> HashMap<String, FluentBundle> {
+    fn get_bundles(
+        &self,
+        defaults: &Option<TestDefaults>,
+    ) -> HashMap<String, FluentBundle<FluentResource>> {
         let mut bundles = HashMap::new();
 
         let mut available_resources = vec![];
@@ -90,7 +91,7 @@ fn create_bundle(
     b: Option<&TestBundle>,
     defaults: &Option<TestDefaults>,
     resources: &Vec<&TestResource>,
-) -> FluentBundle {
+) -> FluentBundle<FluentResource> {
     let mut errors = vec![];
 
     let locales: Vec<LanguageIdentifier> = b

@@ -4,7 +4,7 @@ use unic_langid::{langid, LanguageIdentifier};
 
 const LANG_EN: LanguageIdentifier = langid!("en");
 
-fn add_functions<R, M>(name: &'static str, bundle: &mut FluentBundle<R, M>) {
+fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     match name {
         "preferences" => {
             bundle

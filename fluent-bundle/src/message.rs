@@ -1,6 +1,4 @@
 use fluent_syntax::ast;
-use std::borrow::Cow;
-use fluent_syntax::parser::Slice;
 
 #[derive(Debug, PartialEq)]
 pub struct FluentAttribute<'m> {

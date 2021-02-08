@@ -129,8 +129,8 @@ fn main() {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = FluentArgs::new();
-                    args.add("input", FluentValue::from(i));
-                    args.add("value", FluentValue::from(collatz(i)));
+                    args.set("input", FluentValue::from(i));
+                    args.set("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
                     let value = loc
                         .format_value_sync("response-msg", Some(&args), &mut errors)
@@ -140,8 +140,8 @@ fn main() {
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
-                    args.add("input", FluentValue::from(input.as_str()));
-                    args.add("reason", FluentValue::from(err.to_string()));
+                    args.set("input", FluentValue::from(input.as_str()));
+                    args.set("reason", FluentValue::from(err.to_string()));
                     let value = loc
                         .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
                         .unwrap()

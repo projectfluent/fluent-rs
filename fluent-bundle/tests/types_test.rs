@@ -20,7 +20,7 @@ fn fluent_value_matches() {
     // We'll use `ars` locale since it happens to have all
     // plural rules categories.
     let langid_ars = langid!("ars");
-    let bundle: FluentBundle<FluentResource, _> = FluentBundle::new(vec![langid_ars]);
+    let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
     let scope = Scope::new(&bundle, None, None);
 
     let string_val = FluentValue::from("string1");
