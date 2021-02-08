@@ -185,18 +185,16 @@ impl<R, M> FluentBundle<R, M> {
         let res = r.borrow();
         let res_pos = self.resources.len();
 
-        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
-            let id = match entry {
-                ast::Entry::Message(ast::Message { ref id, .. })
-                | ast::Entry::Term(ast::Term { ref id, .. }) => id.name,
-                _ => continue,
-            };
-
-            let (entry, kind) = match entry {
-                ast::Entry::Message(..) => {
-                    (Entry::Message([res_pos, entry_pos]), EntryKind::Message)
+        for (entry_pos, entry) in res.entries().enumerate() {
+            let (id, entry, kind) = match entry {
+                ast::Entry::Message(ast::Message { ref id, .. }) => (
+                    id.name,
+                    Entry::Message((res_pos, entry_pos)),
+                    EntryKind::Message,
+                ),
+                ast::Entry::Term(ast::Term { ref id, .. }) => {
+                    (id.name, Entry::Term((res_pos, entry_pos)), EntryKind::Term)
                 }
-                ast::Entry::Term(..) => (Entry::Term([res_pos, entry_pos]), EntryKind::Term),
                 _ => continue,
             };
 
@@ -287,16 +285,14 @@ impl<R, M> FluentBundle<R, M> {
         let res = r.borrow();
         let res_pos = self.resources.len();
 
-        for (entry_pos, entry) in res.ast().body.iter().enumerate() {
-            let id = match entry {
-                ast::Entry::Message(ast::Message { ref id, .. })
-                | ast::Entry::Term(ast::Term { ref id, .. }) => id.name,
-                _ => continue,
-            };
-
-            let entry = match entry {
-                ast::Entry::Message(..) => Entry::Message([res_pos, entry_pos]),
-                ast::Entry::Term(..) => Entry::Term([res_pos, entry_pos]),
+        for (entry_pos, entry) in res.entries().enumerate() {
+            let (id, entry) = match entry {
+                ast::Entry::Message(ast::Message { ref id, .. }) => {
+                    (id.name, Entry::Message((res_pos, entry_pos)))
+                }
+                ast::Entry::Term(ast::Term { ref id, .. }) => {
+                    (id.name, Entry::Term((res_pos, entry_pos)))
+                }
                 _ => continue,
             };
 

@@ -45,4 +45,12 @@ impl FluentResource {
     pub fn source(&self) -> &str {
         &self.0.borrow_string()
     }
+
+    pub fn entries(&self) -> impl Iterator<Item = &ast::Entry<&str>> {
+        self.0.borrow_ast().body.iter()
+    }
+
+    pub fn get_entry(&self, idx: usize) -> Option<&ast::Entry<&str>> {
+        self.0.borrow_ast().body.get(idx)
+    }
 }

@@ -13,8 +13,8 @@ pub type FluentFunction =
     Box<dyn for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Send + Sync>;
 
 pub enum Entry {
-    Message([usize; 2]),
-    Term([usize; 2]),
+    Message((usize, usize)),
+    Term((usize, usize)),
     Function(FluentFunction),
 }
 
@@ -28,8 +28,8 @@ impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     fn get_entry_message(&self, id: &str) -> Option<&ast::Message<&str>> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Message(pos) => {
-                let res = self.resources.get(pos[0])?.borrow();
-                if let Some(ast::Entry::Message(ref msg)) = res.ast().body.get(pos[1]) {
+                let res = self.resources.get(pos.0)?.borrow();
+                if let Some(ast::Entry::Message(ref msg)) = res.get_entry(pos.1) {
                     Some(msg)
                 } else {
                     None
@@ -42,8 +42,8 @@ impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     fn get_entry_term(&self, id: &str) -> Option<&ast::Term<&str>> {
         self.entries.get(id).and_then(|entry| match *entry {
             Entry::Term(pos) => {
-                let res = self.resources.get(pos[0])?.borrow();
-                if let Some(ast::Entry::Term(ref msg)) = res.ast().body.get(pos[1]) {
+                let res = self.resources.get(pos.0)?.borrow();
+                if let Some(ast::Entry::Term(ref msg)) = res.get_entry(pos.1) {
                     Some(msg)
                 } else {
                     None
