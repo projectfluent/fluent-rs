@@ -26,10 +26,10 @@ pub trait GetEntry {
 
 impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     fn get_entry_message(&self, id: &str) -> Option<&ast::Message<&str>> {
-        self.entries.get(id).and_then(|entry| match *entry {
+        self.entries.get(id).and_then(|ref entry| match entry {
             Entry::Message(pos) => {
                 let res = self.resources.get(pos.0)?.borrow();
-                if let Some(ast::Entry::Message(ref msg)) = res.get_entry(pos.1) {
+                if let ast::Entry::Message(ref msg) = res.get_entry(pos.1)? {
                     Some(msg)
                 } else {
                     None
@@ -40,10 +40,10 @@ impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     }
 
     fn get_entry_term(&self, id: &str) -> Option<&ast::Term<&str>> {
-        self.entries.get(id).and_then(|entry| match *entry {
+        self.entries.get(id).and_then(|ref entry| match entry {
             Entry::Term(pos) => {
                 let res = self.resources.get(pos.0)?.borrow();
-                if let Some(ast::Entry::Term(ref msg)) = res.get_entry(pos.1) {
+                if let ast::Entry::Term(ref msg) = res.get_entry(pos.1)? {
                     Some(msg)
                 } else {
                     None
@@ -54,7 +54,7 @@ impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     }
 
     fn get_entry_function(&self, id: &str) -> Option<&FluentFunction> {
-        self.entries.get(id).and_then(|entry| match entry {
+        self.entries.get(id).and_then(|ref entry| match entry {
             Entry::Function(function) => Some(function),
             _ => None,
         })

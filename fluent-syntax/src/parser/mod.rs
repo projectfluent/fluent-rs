@@ -79,7 +79,7 @@ mod slice;
 
 use crate::ast;
 pub use errors::{ErrorKind, ParserError};
-use slice::Slice;
+pub use slice::Slice;
 
 /// Parser result always returns an AST representation of the input,
 /// and if parsing errors were encountered, a list of [`ParserError`] elements

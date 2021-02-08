@@ -3,24 +3,81 @@
 //! `fluent-bundle` is the mid-level component of the [Fluent Localization
 //! System](https://www.projectfluent.org).
 //!
-//! It builds on top of the low level [`fluent-syntax`](../fluent-syntax) package, and provides
+//! The crate builds on top of the low level [`fluent-syntax`](../fluent-syntax) package, and provides
 //! foundational types and structures required for executing localization at runtime.
 //!
-//! # Fluent Bundle
-//! The core structure on that level is [`FluentBundle`].
+//! There are four core concepts to understand Fluent runtime:
 //!
-//! [`FluentBundle`] is a low level container for storing and formatting localization messages
-//! in a single locale.
+//! # 1) Message
 //!
-//! This crate provides also a number of structures needed for a localization API such as [`FluentResource`],
-//! [`FluentMessage`], [`FluentArgs`], and [`FluentValue`].
+//! [`FluentMessage`] is the core unit of the system.
+//! It has an identifier, a value and a list of attributes.
 //!
-//! Together, they allow implementations to build higher-level APIs that use [`FluentBundle`]
-//! and add user friendly helpers, framework bindings, error fallbacking,
-//! language negotiation between user requested languages and available resources,
-//! and I/O for loading selected resources.
+//! The identifier is a key that must be unique within a [`FluentResource`] to
+//! which the message belongs to.
 //!
-//! # Example
+//! The shape of the message must also contain a value, attributes or both.
+//!
+//! ### Simple Message
+//!
+//! ```text
+//! hello-world = Hello, { $user }!
+//! ```
+//!
+//! ### Compound Message
+//!
+//! ```text
+//! confirm-modal = Are you sure?
+//!     .confirm = Yes
+//!     .cancel = No
+//!     .tooltip = Closing the window will lose all unsaved data.
+//! ```
+//!
+//! # 2) Resource
+//!
+//! [`FluentResource`] wraps an [`Abstract Syntax Tree`](../fluent_syntax/ast/index.html) produced by the
+//! [`parser`](../fluent_syntax/parser/index.html) and provides an access to a list
+//! of its entries.
+//!
+//! A good mental model for a resource is a single FTL file, but in the future
+//! there's nothing preventing a resource from being stored in a data base,
+//! pre-parsed format or in some other structured form.
+//!
+//! # 3) Bundle
+//!
+//! [`FluentBundle`] is the core structure of the Fluent system at runtime.
+//!
+//! It is a single-locale container storing a combination of multiple [`FluentResource`]
+//! instances, combined with a set of internationalization components.
+//!
+//! The main function of the bundle is to provide a context in which messages can
+//! reference each other, terms, and functions, and use memoized internationalization
+//! components to provide resolved localization messages.
+//!
+//! A bundle is a thin wrapper, usually storing just references to the resources allocated
+//! in a long-lived collection, like a resource manager or a simple vector.
+//!
+//! In result, [`FluentBundle`] is cheap to construct, and higher level APIs can
+//! easily generate different permutations of [`FluentResource`] lists and
+//! resolve messages within those combinations.
+//!
+//! # 4) Arguments & Values
+//!
+//! [`FluentArgs`] is a collection, similar to a `HashMap`, which stores a key-value pair list of
+//! arguments provided by the developer to the [`format_pattern`](FluentBundle::format_pattern) method.
+//! Those arguments are used during message formatting to resolve selections, or can be
+//! interpolated into the message as a variable.
+//!
+//! The keys of the argument list are strings, and the values are limited to one of the
+//! [`FluentValue`] types.
+//!
+//! # Summary
+//!
+//! Together, [`FluentMessage`], [`FluentResource`], [`FluentBundle`], and [`FluentArgs`] provide
+//! all the necessary components of the Fluent localization system, and are sufficient
+//! to complete a simple localization API.
+//!
+//! ## Example
 //!
 //! ```
 //! use fluent_bundle::{FluentBundle, FluentValue, FluentResource, FluentArgs};

@@ -19,7 +19,7 @@ use crate::entry::Entry;
 use crate::entry::GetEntry;
 use crate::errors::{EntryKind, FluentError};
 use crate::memoizer::MemoizerKind;
-use crate::message::{FluentAttribute, FluentMessage};
+use crate::message::FluentMessage;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
@@ -187,10 +187,9 @@ impl<R, M> FluentBundle<R, M> {
 
         for (entry_pos, entry) in res.entries().enumerate() {
             let (id, entry) = match entry {
-                ast::Entry::Message(ast::Message { ref id, .. }) => (
-                    id.name,
-                    Entry::Message((res_pos, entry_pos)),
-                ),
+                ast::Entry::Message(ast::Message { ref id, .. }) => {
+                    (id.name, Entry::Message((res_pos, entry_pos)))
+                }
                 ast::Entry::Term(ast::Term { ref id, .. }) => {
                     (id.name, Entry::Term((res_pos, entry_pos)))
                 }
@@ -205,7 +204,7 @@ impl<R, M> FluentBundle<R, M> {
                     let kind = match entry {
                         Entry::Message(..) => EntryKind::Message,
                         Entry::Term(..) => EntryKind::Term,
-                        _ => unreachable!()
+                        _ => unreachable!(),
                     };
                     errors.push(FluentError::Overriding {
                         kind,
@@ -328,11 +327,7 @@ impl<R, M> FluentBundle<R, M> {
     /// and `fluent-pseudo` crate provides a function
     /// that can be passed here.
     pub fn set_transform(&mut self, func: Option<fn(&str) -> Cow<str>>) {
-        if let Some(f) = func {
-            self.transform = Some(f);
-        } else {
-            self.transform = None;
-        }
+        self.transform = func;
     }
 
     /// This method allows to specify a function that will
@@ -342,11 +337,7 @@ impl<R, M> FluentBundle<R, M> {
     /// It's particularly useful for plugging in an external
     /// formatter for `FluentValue::Number`.
     pub fn set_formatter(&mut self, func: Option<fn(&FluentValue, &M) -> Option<String>>) {
-        if let Some(f) = func {
-            self.formatter = Some(f);
-        } else {
-            self.formatter = None;
-        }
+        self.formatter = func;
     }
 
     /// Returns true if this bundle contains a message with the given id.
@@ -395,21 +386,11 @@ impl<R, M> FluentBundle<R, M> {
     /// let msg = bundle.get_message("hello-world");
     /// assert_eq!(msg.is_some(), true);
     /// ```
-    pub fn get_message(&self, id: &str) -> Option<FluentMessage>
+    pub fn get_message(&self, id: &str) -> Option<FluentMessage<&str>>
     where
         R: Borrow<FluentResource>,
     {
-        let message = self.get_entry_message(id)?;
-        let value = message.value.as_ref();
-        let mut attributes = Vec::with_capacity(message.attributes.len());
-
-        for attr in &message.attributes {
-            attributes.push(FluentAttribute {
-                id: attr.id.name,
-                value: &attr.value,
-            });
-        }
-        Some(FluentMessage { value, attributes })
+        self.get_entry_message(id).map(Into::into)
     }
 
     /// Writes a formatted pattern which comes from a `FluentMessage`.
