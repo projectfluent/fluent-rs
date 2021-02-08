@@ -386,7 +386,7 @@ impl<R, M> FluentBundle<R, M> {
     /// let msg = bundle.get_message("hello-world");
     /// assert_eq!(msg.is_some(), true);
     /// ```
-    pub fn get_message(&self, id: &str) -> Option<FluentMessage<&str>>
+    pub fn get_message(&self, id: &str) -> Option<FluentMessage>
     where
         R: Borrow<FluentResource>,
     {

@@ -8,6 +8,11 @@
 //!
 //! There are four core concepts to understand Fluent runtime:
 //!
+//! * [`FluentMessage`] - A single translation unit
+//! * [`FluentResource`] - A list of [`FluentMessage`] units
+//! * [`FluentBundle`] - A collection of [`FluentResource`] lists
+//! * [`FluentArgs`] - A list of [`FluentValue`] elements used to resolve a [`FluentMessage`] value
+//!
 //! # 1) Message
 //!
 //! [`FluentMessage`] is the core unit of the system.

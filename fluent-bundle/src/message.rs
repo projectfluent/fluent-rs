@@ -1,38 +1,70 @@
-use fluent_syntax::{ast, parser::Slice};
+use fluent_syntax::ast;
 
 #[derive(Debug, PartialEq)]
-pub struct FluentAttribute<'m, S> {
-    pub id: &'m S,
-    pub value: &'m ast::Pattern<S>,
+pub struct FluentAttribute<'m> {
+    pub id: &'m str,
+    pub value: &'m ast::Pattern<&'m str>,
 }
 
-impl<'m, S> From<&'m ast::Attribute<S>> for FluentAttribute<'m, S> {
-    fn from(attr: &'m ast::Attribute<S>) -> Self {
+impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
+    fn from(attr: &'m ast::Attribute<&'m str>) -> Self {
         FluentAttribute {
-            id: &attr.id.name,
+            id: attr.id.name,
             value: &attr.value,
         }
     }
 }
-/// A single localization unit composed of an identifier,
-/// value, and attributes.
+
+/// [`FluentMessage`] is a basic translation unit of the Fluent system.
+///
+/// A message is composed of a value and, optionally a list of attributes.
+///
+/// ### Simple Message
+///
+/// ```
+/// use fluent_bundle::{FluentResource, FluentBundle};
+///
+/// let source = r#"
+///
+/// hello-world = Hello, ${ user }
+///
+/// "#;
+///
+/// let resource = FluentResource::try_new(source.to_string())
+///     .expect("Failed to parse the resource.");
+///
+/// let mut bundle = FluentBundle::default();
+/// bundle.add_resource(resource)
+///     .expect("Failed to add a resource.");
+///
+/// let msg = bundle.get_message("hello-world")
+///     .expect("Failed to retrieve a message.");
+///
+/// assert!(msg.value.is_some());
+/// ```
+///
+/// ### Compound Message
+///
+/// ```text
+/// confirm-modal = Are you sure?
+///     .confirm = Yes
+///     .cancel = No
+///     .tooltip = Closing the window will lose all unsaved data.
+/// ```
 #[derive(Debug, PartialEq)]
-pub struct FluentMessage<'m, S> {
-    pub value: Option<&'m ast::Pattern<S>>,
-    pub attributes: Vec<FluentAttribute<'m, S>>,
+pub struct FluentMessage<'m> {
+    pub value: Option<&'m ast::Pattern<&'m str>>,
+    pub attributes: Vec<FluentAttribute<'m>>,
 }
 
-impl<'m, S> FluentMessage<'m, S> {
-    pub fn get_attribute(&self, key: &str) -> Option<&FluentAttribute<S>>
-    where
-        S: Slice<'m>,
-    {
-        self.attributes.iter().find(|attr| attr.id.as_ref() == key)
+impl<'m> FluentMessage<'m> {
+    pub fn get_attribute(&self, key: &str) -> Option<&FluentAttribute> {
+        self.attributes.iter().find(|attr| attr.id == key)
     }
 }
 
-impl<'m, S> From<&'m ast::Message<S>> for FluentMessage<'m, S> {
-    fn from(msg: &'m ast::Message<S>) -> Self {
+impl<'m> From<&'m ast::Message<&'m str>> for FluentMessage<'m> {
+    fn from(msg: &'m ast::Message<&'m str>) -> Self {
         FluentMessage {
             value: msg.value.as_ref(),
             attributes: msg.attributes.iter().map(Into::into).collect(),
