@@ -39,7 +39,7 @@ fn resmgr_get_bundle() {
 
     let mut errors = vec![];
     let msg = bundle.get_message("hello-world").expect("Message exists");
-    let pattern = msg.value.expect("Message has a value");
+    let pattern = msg.value().expect("Message has a value");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Hello World");
 }

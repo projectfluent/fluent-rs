@@ -61,15 +61,15 @@ fn iai_resolve() {
         for id in &ids {
             let msg = bundle.get_message(id).expect("Message found");
             let mut errors = vec![];
-            if let Some(value) = msg.value {
+            if let Some(value) = msg.value() {
                 bundle
                     .write_pattern(&mut s, value, args.as_ref(), &mut errors)
                     .expect("Failed to write a pattern.");
                 s.clear();
             }
-            for attr in msg.attributes {
+            for attr in msg.attributes() {
                 bundle
-                    .write_pattern(&mut s, attr.value, args.as_ref(), &mut errors)
+                    .write_pattern(&mut s, attr.value(), args.as_ref(), &mut errors)
                     .expect("Failed to write a pattern.");
                 s.clear();
             }

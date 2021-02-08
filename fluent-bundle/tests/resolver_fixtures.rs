@@ -280,9 +280,9 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                             "Failed to retrieve an attribute of a message {}.{}.",
                             assert.id, attr
                         ))
-                        .value
+                        .value()
                 } else {
-                    msg.value.expect(&format!(
+                    msg.value().expect(&format!(
                         "Failed to retrieve a value of a message {}.",
                         assert.id
                     ))

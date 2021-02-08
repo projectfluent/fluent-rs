@@ -2,16 +2,22 @@ use fluent_syntax::ast;
 
 #[derive(Debug, PartialEq)]
 pub struct FluentAttribute<'m> {
-    pub id: &'m str,
-    pub value: &'m ast::Pattern<&'m str>,
+    node: &'m ast::Attribute<&'m str>,
+}
+
+impl<'m> FluentAttribute<'m> {
+    pub fn id(&self) -> &'m str {
+        &self.node.id.name
+    }
+
+    pub fn value(&self) -> &'m ast::Pattern<&'m str> {
+        &self.node.value
+    }
 }
 
 impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
     fn from(attr: &'m ast::Attribute<&'m str>) -> Self {
-        FluentAttribute {
-            id: attr.id.name,
-            value: &attr.value,
-        }
+        FluentAttribute { node: attr }
     }
 }
 
@@ -40,7 +46,7 @@ impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
 /// let msg = bundle.get_message("hello-world")
 ///     .expect("Failed to retrieve a message.");
 ///
-/// assert!(msg.value.is_some());
+/// assert!(msg.value().is_some());
 /// ```
 ///
 /// That value can be then passed to
@@ -65,21 +71,29 @@ impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
 /// ```
 #[derive(Debug, PartialEq)]
 pub struct FluentMessage<'m> {
-    pub value: Option<&'m ast::Pattern<&'m str>>,
-    pub attributes: Vec<FluentAttribute<'m>>,
+    node: &'m ast::Message<&'m str>,
 }
 
 impl<'m> FluentMessage<'m> {
-    pub fn get_attribute(&self, key: &str) -> Option<&FluentAttribute> {
-        self.attributes.iter().find(|attr| attr.id == key)
+    pub fn value(&self) -> Option<&'m ast::Pattern<&'m str>> {
+        self.node.value.as_ref()
+    }
+
+    pub fn attributes(&self) -> impl Iterator<Item = FluentAttribute<'m>> {
+        self.node.attributes.iter().map(Into::into)
+    }
+
+    pub fn get_attribute(&self, key: &str) -> Option<FluentAttribute<'m>> {
+        self.node
+            .attributes
+            .iter()
+            .find(|attr| attr.id.name == key)
+            .map(Into::into)
     }
 }
 
 impl<'m> From<&'m ast::Message<&'m str>> for FluentMessage<'m> {
     fn from(msg: &'m ast::Message<&'m str>) -> Self {
-        FluentMessage {
-            value: msg.value.as_ref(),
-            attributes: msg.attributes.iter().map(Into::into).collect(),
-        }
+        FluentMessage { node: msg }
     }
 }

@@ -12,6 +12,7 @@ use std::default::Default;
 use std::fmt;
 
 use fluent_syntax::ast;
+use intl_memoizer::IntlLangMemoizer;
 use unic_langid::LanguageIdentifier;
 
 use crate::args::FluentArgs;
@@ -170,7 +171,7 @@ impl<R, M> FluentBundle<R, M> {
     /// let mut errors = vec![];
     /// let msg = bundle.get_message("hello")
     ///     .expect("Failed to retrieve the message");
-    /// let value = msg.value.expect("Failed to retrieve the value of the message");
+    /// let value = msg.value().expect("Failed to retrieve the value of the message");
     /// assert_eq!(bundle.format_pattern(value, None, &mut errors), "Another Hi!");
     /// ```
     ///
@@ -290,7 +291,7 @@ impl<R, M> FluentBundle<R, M> {
     /// let msg = bundle.get_message("hello-world");
     /// assert_eq!(msg.is_some(), true);
     /// ```
-    pub fn get_message(&self, id: &str) -> Option<FluentMessage>
+    pub fn get_message<'l>(&'l self, id: &str) -> Option<FluentMessage<'l>>
     where
         R: Borrow<FluentResource>,
     {
@@ -318,7 +319,7 @@ impl<R, M> FluentBundle<R, M> {
     /// let msg = bundle.get_message("hello-world")
     ///     .expect("Failed to retrieve a FluentMessage.");
     ///
-    /// let pattern = msg.value
+    /// let pattern = msg.value()
     ///     .expect("Missing Value.");
     /// let mut errors = vec![];
     ///
@@ -365,7 +366,7 @@ impl<R, M> FluentBundle<R, M> {
     /// let msg = bundle.get_message("hello-world")
     ///     .expect("Failed to retrieve a FluentMessage.");
     ///
-    /// let pattern = msg.value
+    /// let pattern = msg.value()
     ///     .expect("Missing Value.");
     /// let mut errors = vec![];
     ///
@@ -417,7 +418,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// let msg = bundle.get_message("length").expect("Message doesn't exist.");
     /// let mut errors = vec![];
-    /// let pattern = msg.value.expect("Message has no value.");
+    /// let pattern = msg.value().expect("Message has no value.");
     /// let value = bundle.format_pattern(&pattern, None, &mut errors);
     /// assert_eq!(&value, "5");
     /// ```
@@ -440,13 +441,13 @@ impl<R, M> FluentBundle<R, M> {
     }
 }
 
-impl<R> Default for FluentBundle<R, intl_memoizer::IntlLangMemoizer> {
+impl<R> Default for FluentBundle<R, IntlLangMemoizer> {
     fn default() -> Self {
         Self::new(vec![LanguageIdentifier::default()])
     }
 }
 
-impl<R> FluentBundle<R, intl_memoizer::IntlLangMemoizer> {
+impl<R> FluentBundle<R, IntlLangMemoizer> {
     /// Constructs a FluentBundle. The first element in `locales` should be the
     /// language this bundle represents, and will be used to determine the
     /// correct plural rules for this bundle. You can optionally provide extra
@@ -473,7 +474,7 @@ impl<R> FluentBundle<R, intl_memoizer::IntlLangMemoizer> {
             locales,
             resources: vec![],
             entries: FxHashMap::default(),
-            intls: intl_memoizer::IntlLangMemoizer::new(first_locale),
+            intls: IntlLangMemoizer::new(first_locale),
             use_isolating: true,
             transform: None,
             formatter: None,
@@ -481,7 +482,7 @@ impl<R> FluentBundle<R, intl_memoizer::IntlLangMemoizer> {
     }
 }
 
-impl crate::memoizer::MemoizerKind for intl_memoizer::IntlLangMemoizer {
+impl crate::memoizer::MemoizerKind for IntlLangMemoizer {
     fn new(lang: LanguageIdentifier) -> Self
     where
         Self: Sized,

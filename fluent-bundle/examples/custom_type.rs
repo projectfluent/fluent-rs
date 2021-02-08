@@ -179,7 +179,7 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
     let msg = bundle
         .get_message("key-date")
         .expect("Failed to retrieve the message.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut errors = vec![];
 
     let mut args = FluentArgs::new();

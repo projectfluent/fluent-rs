@@ -104,24 +104,24 @@ fn main() {
                     // 6.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = FluentArgs::new();
-                    args.add("input", FluentValue::from(i));
-                    args.add("value", FluentValue::from(collatz(i)));
+                    args.set("input", FluentValue::from(i));
+                    args.set("value", FluentValue::from(collatz(i)));
                     // 6.3. Format the message.
                     let mut errors = vec![];
                     let msg = bundle.get_message("response-msg").expect("Message exists");
-                    let pattern = msg.value.expect("Message has a value");
+                    let pattern = msg.value().expect("Message has a value");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
-                    args.add("input", FluentValue::from(input.to_string()));
-                    args.add("reason", FluentValue::from(err.to_string()));
+                    args.set("input", FluentValue::from(input.to_string()));
+                    args.set("reason", FluentValue::from(err.to_string()));
                     let mut errors = vec![];
                     let msg = bundle
                         .get_message("input-parse-error-msg")
                         .expect("Message exists");
-                    let pattern = msg.value.expect("Message has a value");
+                    let pattern = msg.value().expect("Message has a value");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
@@ -132,7 +132,7 @@ fn main() {
             let msg = bundle
                 .get_message("missing-arg-error")
                 .expect("Message exists");
-            let pattern = msg.value.expect("Message has a value");
+            let pattern = msg.value().expect("Message has a value");
             let value = bundle.format_pattern(&pattern, None, &mut errors);
             println!("{}", value);
         }

@@ -250,15 +250,15 @@ where
     ) -> Option<L10nMessage<'l>> {
         if let Some(msg) = bundle.get_message(&key.id) {
             let value = msg
-                .value
+                .value()
                 .map(|pattern| bundle.format_pattern(pattern, key.args.as_ref(), format_errors));
             let attributes = msg
-                .attributes
-                .iter()
+                .attributes()
                 .map(|attr| {
-                    let value = bundle.format_pattern(attr.value, key.args.as_ref(), format_errors);
+                    let value =
+                        bundle.format_pattern(attr.value(), key.args.as_ref(), format_errors);
                     L10nAttribute {
-                        name: attr.id.into(),
+                        name: attr.id().into(),
                         value,
                     }
                 })
@@ -353,7 +353,7 @@ where
                 .filter(|(_, cell)| cell.is_none())
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
-                    if let Some(value) = msg.value {
+                    if let Some(value) = msg.value() {
                         *cell = Some(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
@@ -404,7 +404,7 @@ where
             });
 
             if let Some(msg) = bundle.get_message(id) {
-                if let Some(value) = msg.value {
+                if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
                     errors.extend(format_errors.into_iter().map(Into::into));
@@ -514,7 +514,7 @@ where
                 .filter(|(_, cell)| cell.is_none())
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
-                    if let Some(value) = msg.value {
+                    if let Some(value) = msg.value() {
                         *cell = Some(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
@@ -567,7 +567,7 @@ where
             });
 
             if let Some(msg) = bundle.get_message(id) {
-                if let Some(value) = msg.value {
+                if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
                     errors.extend(format_errors.into_iter().map(Into::into));

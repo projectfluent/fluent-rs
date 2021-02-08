@@ -58,7 +58,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an implicitly encoded number: 5.");
     println!("{}", value);
@@ -71,7 +71,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an implicitly encoded number: CUSTOM(5).");
     println!("{}", value);
@@ -81,7 +81,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an explicitly encoded number: CUSTOM(5).");
     println!("{}", value);
@@ -89,7 +89,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
     args.set("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
@@ -102,7 +102,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
     args.set("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
@@ -118,7 +118,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
     let num = FluentNumber::new(
         25.2,

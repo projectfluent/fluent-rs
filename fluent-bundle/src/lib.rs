@@ -112,7 +112,7 @@
 //!
 //! let mut errors = vec![];
 //!
-//! let pattern = msg.value
+//! let pattern = msg.value()
 //!     .expect("Message has no value.");
 //!
 //! let value = bundle.format_pattern(&pattern, None, &mut errors);
@@ -125,7 +125,7 @@
 //! let msg = bundle.get_message("intro")
 //!     .expect("Message doesn't exist.");
 //! let mut errors = vec![];
-//! let pattern = msg.value.expect("Message has no value.");
+//! let pattern = msg.value().expect("Message has no value.");
 //! let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 //!
 //! // The FSI/PDI isolation marks ensure that the direction of
@@ -190,7 +190,7 @@ use bundle::FluentBundle as FluentBundleBase;
 ///
 /// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
 /// let mut errors = vec![];
-/// let pattern = msg.value.expect("Message has no value.");
+/// let pattern = msg.value().expect("Message has no value.");
 /// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 /// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
 ///
