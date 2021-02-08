@@ -1,4 +1,6 @@
 use fluent_syntax::ast;
+use std::borrow::Cow;
+use fluent_syntax::parser::Slice;
 
 #[derive(Debug, PartialEq)]
 pub struct FluentAttribute<'m> {
@@ -19,7 +21,7 @@ impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
 ///
 /// A message is composed of a value and, optionally a list of attributes.
 ///
-/// ### Simple Message
+/// # Example
 ///
 /// ```
 /// use fluent_bundle::{FluentResource, FluentBundle};
@@ -43,8 +45,20 @@ impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
 /// assert!(msg.value.is_some());
 /// ```
 ///
-/// ### Compound Message
+/// That value can be then passed to
+/// [`FluentBundle::format_pattern`](crate::FluentBundle::format_pattern) to be formatted
+/// within the context of a given [`FluentBundle`](crate::FluentBundle) instance.
 ///
+/// # Compound Message
+///
+/// A message may contain just a simple `id` and `value`, but it can also be what is
+/// called a "compound" message.
+///
+/// In such case, the message contains a list of key-value attributes that represent
+/// different translation values associated with a single translation unit.
+///
+/// This is useful for scenarios where a [`FluentMessage`] is associated with a
+/// complex User Interface widget which has multiple attributes that need to be translated.
 /// ```text
 /// confirm-modal = Are you sure?
 ///     .confirm = Yes
