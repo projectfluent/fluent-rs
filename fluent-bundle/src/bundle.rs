@@ -186,14 +186,13 @@ impl<R, M> FluentBundle<R, M> {
         let res_pos = self.resources.len();
 
         for (entry_pos, entry) in res.entries().enumerate() {
-            let (id, entry, kind) = match entry {
+            let (id, entry) = match entry {
                 ast::Entry::Message(ast::Message { ref id, .. }) => (
                     id.name,
                     Entry::Message((res_pos, entry_pos)),
-                    EntryKind::Message,
                 ),
                 ast::Entry::Term(ast::Term { ref id, .. }) => {
-                    (id.name, Entry::Term((res_pos, entry_pos)), EntryKind::Term)
+                    (id.name, Entry::Term((res_pos, entry_pos)))
                 }
                 _ => continue,
             };
@@ -203,6 +202,11 @@ impl<R, M> FluentBundle<R, M> {
                     empty.insert(entry);
                 }
                 HashEntry::Occupied(_) => {
+                    let kind = match entry {
+                        Entry::Message(..) => EntryKind::Message,
+                        Entry::Term(..) => EntryKind::Term,
+                        _ => unreachable!()
+                    };
                     errors.push(FluentError::Overriding {
                         kind,
                         id: id.to_string(),
