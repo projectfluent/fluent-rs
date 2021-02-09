@@ -38,9 +38,7 @@ fn get_args(name: &str) -> Option<FluentArgs> {
 }
 
 fn get_ids(res: &FluentResource) -> Vec<String> {
-    res.ast()
-        .body
-        .iter()
+    res.entries()
         .filter_map(|entry| match entry {
             ast::Entry::Message(ast::Message { id, .. }) => Some(id.name.to_owned()),
             _ => None,

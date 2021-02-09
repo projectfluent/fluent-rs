@@ -34,24 +34,48 @@ use crate::types::FluentValue;
 /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue, FluentArgs};
 /// use unic_langid::langid;
 ///
+/// // 1. Create a FluentResource
+///
 /// let ftl_string = String::from("intro = Welcome, { $name }.");
 /// let resource = FluentResource::try_new(ftl_string)
 ///     .expect("Could not parse an FTL string.");
 ///
+///
+/// // 2. Create a FluentBundle
+///
 /// let langid_en = langid!("en-US");
 /// let mut bundle = FluentBundle::new(vec![langid_en]);
+///
+///
+/// // 3. Add the resource to the bundle
 ///
 /// bundle.add_resource(&resource)
 ///     .expect("Failed to add FTL resources to the bundle.");
 ///
-/// let mut args = FluentArgs::new();
-/// args.set("name", FluentValue::from("Rustacean"));
 ///
-/// let msg = bundle.get_message("intro").expect("Message doesn't exist.");
+/// // 4. Retrieve a FluentMessage from the bundle
+///
+/// let msg = bundle.get_message("intro")
+///     .expect("Message doesn't exist.");
+///
+/// let mut args = FluentArgs::new();
+/// args.set("name", "Rustacean");
+///
+///
+/// // 5. Format the value of the message
+///
 /// let mut errors = vec![];
-/// let pattern = msg.value().expect("Message has no value.");
-/// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
-/// assert_eq!(&value, "Welcome, \u{2068}Rustacean\u{2069}.");
+///
+/// let pattern = msg.value()
+///     .expect("Message has no value.");
+///
+/// assert_eq!(
+///     bundle.format_pattern(&pattern, Some(&args), &mut errors),
+///     // The placeholder is wrapper in Unicode Directionality Marks
+///     // to indicate that the placeholder may be of different direction
+///     // than surrounding string.
+///     "Welcome, \u{2068}Rustacean\u{2069}."
+/// );
 ///
 /// ```
 ///
@@ -66,27 +90,28 @@ use crate::types::FluentValue;
 ///
 /// ## Add Resources
 ///
-/// Next, call [`add_resource`] one or more times, supplying translations in the FTL syntax.
+/// Next, call [`add_resource`](FluentBundle::add_resource) one or more times, supplying translations in the FTL syntax.
 ///
 /// Since [`FluentBundle`] is generic over anything that can borrow a [`FluentResource`],
 /// one can use [`FluentBundle`] to own its resources, store references to them,
-/// or even [`Rc<FluentResource>`] or [`Arc<FluentResource>`].
+/// or even [`Rc<FluentResource>`](std::rc::Rc) or [`Arc<FluentResource>`](std::sync::Arc).
 ///
 /// The [`FluentBundle`] instance is now ready to be used for localization.
 ///
 /// ## Format
 ///
-/// To format a translation, call [`get_message`] to retrieve a [`FluentMessage`],
-/// and then call [`format_pattern`] on the message value or attribute in order to
+/// To format a translation, call [`get_message`](FluentBundle::get_message) to retrieve a [`FluentMessage`],
+/// and then call [`format_pattern`](FluentBundle::format_pattern) on the message value or attribute in order to
 /// retrieve the translated string.
 ///
-/// The result of [`format_pattern`] is an [`Cow<str>`]. It is
+/// The result of [`format_pattern`](FluentBundle::format_pattern) is an
+/// [`Cow<str>`](std::borrow::Cow). It is
 /// recommended to treat the result as opaque from the perspective of the program and use it only
 /// to display localized messages. Do not examine it or alter in any way before displaying.  This
 /// is a general good practice as far as all internationalization operations are concerned.
 ///
 /// If errors were encountered during formatting, they will be
-/// accumulated in the [`Vec<FluentError>`] passed as the third argument.
+/// accumulated in the [`Vec<FluentError>`](FluentError) passed as the third argument.
 ///
 /// While they are not fatal, they usually indicate problems with the translation,
 /// and should be logged or reported in a way that allows the developer to notice
@@ -102,25 +127,10 @@ use crate::types::FluentValue;
 ///
 /// # Concurrency
 ///
-/// As you may have noticed, `FluentBundle` is a specialization of [`FluentBundle`]
-/// which works with an [`IntlMemoizer`][] over `RefCell`.
+/// As you may have noticed, [`fluent_bundle::FluentBundle`](crate::FluentBundle) is a specialization of [`fluent_bundle::bundle::FluentBundle`](crate::bundle::FluentBundle)
+/// which works with an [`IntlLangMemoizer`] over [`RefCell`](std::cell::RefCell).
 /// In scenarios where the memoizer must work concurrently, there's an implementation of
-/// `IntlMemoizer` that uses `Mutex` and there's [`concurrent::FluentBundle`] which works with that.
-///
-/// [`add_resource`]: ./bundle/struct.FluentBundle.html#method.add_resource
-/// [`FluentBundle::new`]: ./bundle/struct.FluentBundle.html#method.new
-/// [`FluentMessage`]: ./struct.FluentMessage.html
-/// [`FluentBundle`]: ./type.FluentBundle.html
-/// [`FluentResource`]: ./struct.FluentResource.html
-/// [`get_message`]: ./bundle/struct.FluentBundle.html#method.get_message
-/// [`format_pattern`]: ./bundle/struct.FluentBundle.html#method.format_pattern
-/// [`Cow<str>`]: http://doc.rust-lang.org/std/borrow/enum.Cow.html
-/// [`Rc<FluentResource>`]: https://doc.rust-lang.org/std/rc/struct.Rc.html
-/// [`Arc<FluentResource>`]: https://doc.rust-lang.org/std/sync/struct.Arc.html
-/// [`LanguageIdentifier`]: https://crates.io/crates/unic-langid
-/// [`IntlMemoizer`]: https://github.com/projectfluent/fluent-rs/tree/master/intl-memoizer
-/// [`Vec<FluentError>`]: ./enum.FluentError.html
-/// [`concurrent::FluentBundle`]: ./concurrent/type.FluentBundle.html
+/// [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer) that uses [`Mutex`](std::sync::Mutex) and there's [`FluentBundle::new_concurrent`] which works with that.
 pub struct FluentBundle<R, M> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,

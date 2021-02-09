@@ -148,7 +148,8 @@ impl<'m> From<&'m ast::Attribute<&'m str>> for FluentAttribute<'m> {
 ///
 /// # Compound Message
 ///
-/// A message may contain a `value`, but it can also contain `attributes`.
+/// A message may contain a `value`, but it can also contain a list of [`FluentAttribute`] elements.
+///
 /// If a message contains attributes, it is called a "compound" message.
 ///
 /// In such case, the message contains a list of key-value attributes that represent

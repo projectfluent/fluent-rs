@@ -6,6 +6,44 @@ use crate::types::FluentValue;
 /// A map of arguments passed from the code to
 /// the localization to be used for message
 /// formatting.
+///
+/// # Example
+///
+/// ```
+/// use fluent_bundle::{FluentArgs, FluentBundle, FluentResource};
+///
+/// let mut args = FluentArgs::new();
+/// args.set("user", "John");
+/// args.set("emailCount", 5);
+///
+/// let res = FluentResource::try_new(r#"
+///
+/// msg-key = Hello, { $user }. You have { $emailCount } messages.
+///
+/// "#.to_string())
+///     .expect("Failed to parse FTL.");
+///
+/// let mut bundle = FluentBundle::default();
+///
+/// // For this example, we'll turn on BiDi support.
+/// // Please, be careful when doing it, it's a risky move.
+/// bundle.set_use_isolating(false);
+///
+/// bundle.add_resource(res)
+///     .expect("Failed to add a resource.");
+///
+/// let mut err = vec![];
+///
+/// let msg = bundle.get_message("msg-key")
+///     .expect("Failed to retrieve a message.");
+/// let value = msg.value()
+///     .expect("Failed to retrieve a value.");
+///
+/// assert_eq!(
+///     bundle.format_pattern(value, Some(&args), &mut err),
+///     "Hello, John. You have 5 messages."
+/// );
+/// ```
 #[derive(Debug, Default)]
 pub struct FluentArgs<'args>(Vec<(Cow<'args, str>, FluentValue<'args>)>);
 

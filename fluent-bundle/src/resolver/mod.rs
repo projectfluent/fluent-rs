@@ -1,11 +1,3 @@
-//! The `ResolveValue` trait resolves Fluent AST nodes to [`FluentValues`].
-//!
-//! This is an internal API used by [`FluentBundle`] to evaluate Messages, Attributes and other
-//! AST nodes to [`FluentValues`] which can be then formatted to strings.
-//!
-//! [`FluentValues`]: ../types/enum.FluentValue.html
-//! [`FluentBundle`]: ../bundle/struct.FluentBundle.html
-
 mod errors;
 mod expression;
 mod inline_expression;

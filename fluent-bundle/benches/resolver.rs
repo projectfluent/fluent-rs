@@ -29,9 +29,7 @@ fn get_strings(tests: &[&'static str]) -> HashMap<&'static str, String> {
 }
 
 fn get_ids(res: &FluentResource) -> Vec<String> {
-    res.ast()
-        .body
-        .iter()
+    res.entries()
         .filter_map(|entry| match entry {
             ast::Entry::Message(ast::Message { id, .. }) => Some(id.name.to_owned()),
             _ => None,

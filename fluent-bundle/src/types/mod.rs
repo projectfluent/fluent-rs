@@ -1,3 +1,16 @@
+//! `types` module contains types necessary for Fluent runtime
+//! value handling.
+//! The core struct is [`FluentValue`] which is a type that can be passed
+//! to the [`FluentBundle::format_pattern`](crate::bundle::FluentBundle) as an argument, it can be passed
+//! to any Fluent Function, and any function may return it.
+//!
+//! This part of functionality is not fully hashed out yet, since we're waiting
+//! for the internationalization APIs to mature, at which point all number
+//! formatting operations will be moved out of Fluent.
+//!
+//! For now, [`FluentValue`] can be a string, a number, or a custom [`FluentType`]
+//! which allows users of the library to implement their own types of values,
+//! such as dates, or more complex structures needed for their bindings.
 mod number;
 mod plural;
 
