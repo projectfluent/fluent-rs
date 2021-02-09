@@ -4,6 +4,14 @@
 
   - …
 
+## fluent-syntax 0.11.0 (February 9, 2021)
+  - Document the crate.
+  - Switch to use `thiserror` for Error annotations.
+  - Add `iai` benchmarks.
+  - Minor updates to AST names.
+  - Introduce `parse`/`parse_runtime` functions instead of `Parser` struct.
+  - Make `ParserError` use `Range`.
+
 ## fluent-syntax 0.10.3 (January 31, 2021)
   - A bunch of microoptimizations driven by the ioi benchmark.
 

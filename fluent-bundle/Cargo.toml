@@ -27,7 +27,7 @@ include = [
 
 [dependencies]
 fluent-langneg = "0.13"
-fluent-syntax = { version = "0.10.3", path = "../fluent-syntax" }
+fluent-syntax = { version = "0.11", path = "../fluent-syntax" }
 intl_pluralrules = "7.0.1"
 ouroboros = "0.8"
 smallvec = "1"
