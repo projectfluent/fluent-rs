@@ -46,7 +46,7 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
-fn iai_resolve() {
+fn iai_resolve_preferences() {
     let files = &[include_str!("preferences.ftl")];
     for source in files {
         let res = FluentResource::try_new(source.to_string()).expect("failed to parse FTL.");
@@ -76,4 +76,4 @@ fn iai_resolve() {
     }
 }
 
-iai::main!(iai_resolve);
+iai::main!(iai_resolve_preferences);

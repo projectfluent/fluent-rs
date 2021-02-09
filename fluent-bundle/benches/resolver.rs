@@ -83,7 +83,15 @@ fn get_bundle(name: &'static str, source: &str) -> (FluentBundle<FluentResource>
 }
 
 fn resolver_bench(c: &mut Criterion) {
-    let tests = &["simple", "preferences", "menubar", "unescape"];
+    let tests = &[
+        #[cfg(feature = "all-benchmarks")]
+        "simple",
+        "preferences",
+        #[cfg(feature = "all-benchmarks")]
+        "menubar",
+        #[cfg(feature = "all-benchmarks")]
+        "unescape",
+    ];
     let ftl_strings = get_strings(tests);
 
     let mut group = c.benchmark_group("construct");

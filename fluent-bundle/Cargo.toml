@@ -43,6 +43,10 @@ serde_yaml = "0.8"
 rand = "0.8"
 unic-langid = { version = "0.9", features = ["macros"] }
 
+[features]
+default = []
+all-benchmarks = []
+
 [[bench]]
 name = "resolver"
 harness = false
