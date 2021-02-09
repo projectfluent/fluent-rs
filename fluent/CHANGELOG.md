@@ -4,6 +4,9 @@
 
   - …
 
+## fluent 0.15.9 (February 9, 2021)
+  - Update `fluent-bundle` to 0.15.0.
+
 ## fluent 0.14.4 (January 31, 2021)
   - Update `fluent-bundle` to 0.14.4.
 
