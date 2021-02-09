@@ -4,6 +4,16 @@
 
   - …
 
+## fluent-bundle 0.15.0 (February 9, 2021)
+  - Document the crate.
+  - Update `fluent-syntax` to 0.11.0.
+  - Add `iai` benchmarks.
+  - Switch `FluentArgs::add` to `FluentArgs::set`.
+  - Make `FluentArgs::set` take `Into<V>`.
+  - Make `FluentMessage` and `FluentAttribute` fields use getters.
+  - Sort `FluentArgs` keys.
+  - Turn `FluentMessage` and `FluentAttribute` to be shallow wrappers around `AST` entries.
+
 ## fluent-bundle 0.14.4 (January 31, 2021)
   - Expose `FluentResource::source()`.
   - Update `ouroboros` to 0.8.
