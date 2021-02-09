@@ -4,7 +4,10 @@
 
   - …
 
-## fluent-fallback 0.3.9 (February 3, 2021)
+## fluent-fallback 0.4.0 (February 9, 2021)
+  - Use `fluent-bundle` 0.15.
+
+## fluent-fallback 0.3.0 (February 3, 2021)
   - Handle locale management in `Localization`.
 
 ## fluent-fallback 0.2.2 (January 16, 2021)
