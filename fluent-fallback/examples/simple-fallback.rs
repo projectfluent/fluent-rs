@@ -20,16 +20,16 @@
 
 use std::{env, fs, io, path::PathBuf, str::FromStr};
 
-use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
+use fluent_bundle::{FluentArgs, FluentBundle, FluentResource};
 use fluent_fallback::{
     generator::{BundleGenerator, FluentBundleResult},
     Localization,
 };
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
-use unic_langid::LanguageIdentifier;
+use unic_langid::{langid, LanguageIdentifier};
 
-/// This helper struct holds the available locales and scheme for converting
+/// This helper struct holds the scheme for converting
 /// resource paths into full paths. It is used to customise
 /// `fluent-fallback::SyncLocalization`.
 struct Bundles {
@@ -43,8 +43,6 @@ struct Bundles {
 /// It is expected that every directory inside it
 /// has a name that is a valid BCP47 language tag.
 fn get_available_locales() -> io::Result<Vec<LanguageIdentifier>> {
-    let mut locales = vec![];
-
     let mut dir = env::current_dir()?;
     if dir.to_string_lossy().ends_with("fluent-rs") {
         dir.push("fluent-fallback");
@@ -52,53 +50,46 @@ fn get_available_locales() -> io::Result<Vec<LanguageIdentifier>> {
     dir.push("examples");
     dir.push("resources");
     let res_dir = fs::read_dir(dir)?;
-    for entry in res_dir {
-        if let Ok(entry) = entry {
-            let path = entry.path();
-            if path.is_dir() {
-                if let Some(name) = path.file_name() {
-                    if let Some(name) = name.to_str() {
-                        let langid: LanguageIdentifier = name.parse().expect("Parsing failed.");
-                        locales.push(langid);
-                    }
-                }
-            }
-        }
-    }
+
+    let locales = res_dir
+        .into_iter()
+        .filter_map(|entry| entry.ok())
+        .filter(|entry| entry.path().is_dir())
+        .filter_map(|dir| {
+            let file_name = dir.file_name();
+            let name = file_name.to_str()?;
+            Some(name.parse().expect("Parsing failed."))
+        })
+        .collect();
     Ok(locales)
 }
 
-static L10N_RESOURCES: &[&str] = &["simple.ftl"];
+fn resolve_app_locales<'l>(args: &[String]) -> Vec<LanguageIdentifier> {
+    let default_locale = langid!("en-US");
+    let available = get_available_locales().expect("Retrieving available locales failed.");
 
-fn main() {
-    // 1. Get the command line arguments.
-    let args: Vec<String> = env::args().collect();
-
-    // 2. If the argument length is more than 1,
-    //    take the second argument as a comma-separated
-    //    list of requested locales.
     let requested: Vec<LanguageIdentifier> = args.get(2).map_or(vec![], |arg| {
         arg.split(",")
             .map(|s| s.parse().expect("Parsing locale failed."))
             .collect()
     });
 
-    // 3. Negotiate it against the avialable ones
-    let default_locale: LanguageIdentifier = "en-US".parse().expect("Parsing failed.");
-    let available = get_available_locales().expect("Retrieving available locales failed.");
-    let resolved_locales = negotiate_languages(
+    negotiate_languages(
         &requested,
         &available,
         Some(&default_locale),
         NegotiationStrategy::Filtering,
-    );
+    )
+    .into_iter()
+    .cloned()
+    .collect()
+}
 
-    // 4. Construct the path scheme for converting `locale` and `res_id` resource
-    //    path into full path passed to OS for loading.
-    //    Eg. ./examples/resources/{locale}/{res_id}
+fn get_resource_manager() -> Bundles {
     let mut res_path_scheme = env::current_dir().expect("Failed to retrieve current dir.");
+
     if res_path_scheme.to_string_lossy().ends_with("fluent-rs") {
-        res_path_scheme.push("fluent-bundle");
+        res_path_scheme.push("fluent-fallback");
     }
     res_path_scheme.push("examples");
     res_path_scheme.push("resources");
@@ -106,50 +97,50 @@ fn main() {
     res_path_scheme.push("{locale}");
     res_path_scheme.push("{res_id}");
 
-    // 5. Create a new Localization instance which will be used to maintain the localization
-    //    context for this UI.  `Bundles` provides the custom logic for obtaining resources.
+    Bundles { res_path_scheme }
+}
+
+static L10N_RESOURCES: &[&str] = &["simple.ftl"];
+
+fn main() {
+    let args: Vec<String> = env::args().collect();
+
+    let app_locales: Vec<LanguageIdentifier> = resolve_app_locales(&args);
+
+    let bundles = get_resource_manager();
+
     let loc = Localization::with_env(
         L10N_RESOURCES.iter().map(|&res| res.into()).collect(),
         true,
-        resolved_locales
-            .iter()
-            .map(|&l| l.to_owned())
-            .collect::<Vec<LanguageIdentifier>>(),
-        Bundles { res_path_scheme },
+        app_locales,
+        bundles,
     );
 
     let mut errors = vec![];
 
-    // 6. Check if the input is provided.
     match args.get(1) {
-        Some(input) => {
-            // 7.1. Cast it to a number.
-            match isize::from_str(&input) {
-                Ok(i) => {
-                    // 7.2. Construct a map of arguments
-                    //      to format the message.
-                    let mut args = FluentArgs::new();
-                    args.set("input", FluentValue::from(i));
-                    args.set("value", FluentValue::from(collatz(i)));
-                    // 7.3. Format the message.
-                    let value = loc
-                        .format_value_sync("response-msg", Some(&args), &mut errors)
-                        .unwrap()
-                        .unwrap();
-                    println!("{}", value);
-                }
-                Err(err) => {
-                    let mut args = FluentArgs::new();
-                    args.set("input", FluentValue::from(input.as_str()));
-                    args.set("reason", FluentValue::from(err.to_string()));
-                    let value = loc
-                        .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
-                        .unwrap()
-                        .unwrap();
-                    println!("{}", value);
-                }
+        Some(input) => match isize::from_str(&input) {
+            Ok(i) => {
+                let mut args = FluentArgs::new();
+                args.set("input", i);
+                args.set("value", collatz(i));
+                let value = loc
+                    .format_value_sync("response-msg", Some(&args), &mut errors)
+                    .unwrap()
+                    .unwrap();
+                println!("{}", value);
             }
-        }
+            Err(err) => {
+                let mut args = FluentArgs::new();
+                args.set("input", input.as_str());
+                args.set("reason", err.to_string());
+                let value = loc
+                    .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
+                    .unwrap()
+                    .unwrap();
+                println!("{}", value);
+            }
+        },
         None => {
             let value = loc
                 .format_value_sync("missing-arg-error", None, &mut errors)
@@ -238,13 +229,5 @@ impl BundleGenerator for Bundles {
             locales,
             res_ids,
         }
-    }
-
-    fn bundles_stream(
-        &self,
-        _locales: std::vec::IntoIter<LanguageIdentifier>,
-        _res_ids: Vec<String>,
-    ) -> Self::Stream {
-        todo!()
     }
 }

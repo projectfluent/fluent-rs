@@ -21,12 +21,17 @@ pub trait BundleGenerator {
 
     fn bundles_iter(
         &self,
-        locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-        res_ids: Vec<String>,
-    ) -> Self::Iter;
+        _locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+        _res_ids: Vec<String>,
+    ) -> Self::Iter {
+        unimplemented!();
+    }
+
     fn bundles_stream(
         &self,
-        locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-        res_ids: Vec<String>,
-    ) -> Self::Stream;
+        _locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+        _res_ids: Vec<String>,
+    ) -> Self::Stream {
+        unimplemented!();
+    }
 }

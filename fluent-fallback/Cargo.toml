@@ -28,3 +28,4 @@ unic-langid = { version = "0.9" }
 [dev-dependencies]
 fluent-langneg = "0.13"
 unic-langid = { version = "0.9", features = ["macros"] }
+fluent-resmgr = { path = "../fluent-resmgr" }
