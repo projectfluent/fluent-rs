@@ -60,7 +60,7 @@
 //!
 //! Currently, [`Localization`] can be specialized over an implementation of
 //! [`generator::BundleGenerator`] trait which provides a method to generate an
-//! [`Iterator`] and [`Stream`].
+//! [`Iterator`] and [`Stream`](futures::stream::Stream).
 //!
 //! This is not very elegant and will likely be improved in the future, but for the time being, if
 //! the customer doesn't need one of the modes, the unnecessary method should use the
