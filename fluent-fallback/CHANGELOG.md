@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.4.1 (April 9, 2021)
+  - Align errors closer to fluent.js
+
 ## fluent-fallback 0.4.0 (February 9, 2021)
   - Use `fluent-bundle` 0.15.
 
