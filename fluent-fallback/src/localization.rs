@@ -274,7 +274,6 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<L10nMessage<'l>>> {
-        let mut format_errors = vec![];
         let mut result: Vec<Option<L10nMessage>> = Vec::with_capacity(keys.len());
 
         for _ in 0..keys.len() {
@@ -295,10 +294,19 @@ where
                 .zip(&mut result)
                 .filter(|(_, cell)| cell.is_none())
             {
+                let mut format_errors = vec![];
                 let msg = Self::format_message_from_bundle(bundle, key, &mut format_errors);
 
                 if msg.is_none() {
                     has_missing = true;
+                } else {
+                    if !format_errors.is_empty() {
+                        errors.push(LocalizationError::Resolver {
+                            id: key.id.to_string(),
+                            locale: bundle.locales.get(0).cloned().unwrap(),
+                            errors: format_errors,
+                        });
+                    }
                 }
 
                 *cell = msg;
@@ -308,7 +316,6 @@ where
                 break;
             }
         }
-        errors.extend(format_errors.into_iter().map(Into::into));
 
         if !is_complete {
             for (key, _) in keys
@@ -330,7 +337,6 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<Cow<'l, str>>> {
-        let mut format_errors = vec![];
         let mut result: Vec<Option<Cow<'l, str>>> = Vec::with_capacity(keys.len());
 
         for _ in 0..keys.len() {
@@ -354,11 +360,19 @@ where
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
                     if let Some(value) = msg.value() {
+                        let mut format_errors = vec![];
                         *cell = Some(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
                             &mut format_errors,
                         ));
+                        if !format_errors.is_empty() {
+                            errors.push(LocalizationError::Resolver {
+                                id: key.id.to_string(),
+                                locale: bundle.locales.get(0).cloned().unwrap(),
+                                errors: format_errors,
+                            });
+                        }
                     } else {
                         errors.push(LocalizationError::MissingValue {
                             id: key.id.to_string(),
@@ -373,8 +387,6 @@ where
                 break;
             }
         }
-
-        errors.extend(format_errors.into_iter().map(Into::into));
 
         if !is_complete {
             for (key, _) in keys
@@ -407,7 +419,13 @@ where
                 if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
-                    errors.extend(format_errors.into_iter().map(Into::into));
+                    if !format_errors.is_empty() {
+                        errors.push(LocalizationError::Resolver {
+                            id: id.to_string(),
+                            locale: bundle.locales.get(0).cloned().unwrap(),
+                            errors: format_errors,
+                        });
+                    }
                     return Some(result);
                 } else {
                     errors.push(LocalizationError::MissingValue { id: id.to_string() });
@@ -430,8 +448,6 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<L10nMessage<'l>>> {
-        let mut format_errors = vec![];
-
         let mut result: Vec<Option<L10nMessage>> = Vec::with_capacity(keys.len());
 
         for _ in 0..keys.len() {
@@ -454,10 +470,20 @@ where
                 .zip(&mut result)
                 .filter(|(_, cell)| cell.is_none())
             {
+                let mut format_errors = vec![];
+
                 let msg = Self::format_message_from_bundle(bundle, key, &mut format_errors);
 
                 if msg.is_none() {
                     has_missing = true;
+                } else {
+                    if !format_errors.is_empty() {
+                        errors.push(LocalizationError::Resolver {
+                            id: key.id.to_string(),
+                            locale: bundle.locales.get(0).cloned().unwrap(),
+                            errors: format_errors,
+                        });
+                    }
                 }
 
                 *cell = msg;
@@ -467,7 +493,6 @@ where
                 break;
             }
         }
-        errors.extend(format_errors.into_iter().map(Into::into));
 
         if !is_complete {
             for (key, _) in keys
@@ -489,8 +514,6 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<Cow<'l, str>>> {
-        let mut format_errors = vec![];
-
         let mut result: Vec<Option<Cow<'l, str>>> = Vec::with_capacity(keys.len());
 
         for _ in 0..keys.len() {
@@ -515,11 +538,19 @@ where
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
                     if let Some(value) = msg.value() {
+                        let mut format_errors = vec![];
                         *cell = Some(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
                             &mut format_errors,
                         ));
+                        if !format_errors.is_empty() {
+                            errors.push(LocalizationError::Resolver {
+                                id: key.id.to_string(),
+                                locale: bundle.locales.get(0).cloned().unwrap(),
+                                errors: format_errors,
+                            });
+                        }
                     } else {
                         errors.push(LocalizationError::MissingValue {
                             id: key.id.to_string(),
@@ -535,7 +566,6 @@ where
                 break;
             }
         }
-        errors.extend(format_errors.into_iter().map(Into::into));
 
         if !is_complete {
             for (key, _) in keys
@@ -570,7 +600,13 @@ where
                 if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
-                    errors.extend(format_errors.into_iter().map(Into::into));
+                    if !format_errors.is_empty() {
+                        errors.push(LocalizationError::Resolver {
+                            id: id.to_string(),
+                            locale: bundle.locales.get(0).cloned().unwrap(),
+                            errors: format_errors,
+                        });
+                    }
                     return Some(result);
                 } else {
                     errors.push(LocalizationError::MissingValue { id: id.to_string() });
