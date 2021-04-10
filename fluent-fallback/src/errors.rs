@@ -30,19 +30,19 @@ impl From<FluentError> for LocalizationError {
 impl std::fmt::Display for LocalizationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Bundle { error } => write!(f, "Bundle error: {}", error),
+            Self::Bundle { error } => write!(f, "[fluent][bundle] error: {}", error),
             Self::Resolver { id, locale, errors } => {
                 let errors: Vec<String> = errors.iter().map(|err| err.to_string()).collect();
                 write!(
                     f,
-                    "[resolver] errors in {}/{}: {}",
-                    id,
+                    "[fluent][resolver] errors in {}/{}: {}",
                     locale.to_string(),
+                    id,
                     errors.join(", ")
                 )
             }
-            Self::MissingMessage { id } => write!(f, "Missing message: {}", id),
-            Self::MissingValue { id } => write!(f, "Missing value in message: {}", id),
+            Self::MissingMessage { id } => write!(f, "[fluent] Missing message: {}", id),
+            Self::MissingValue { id } => write!(f, "[fluent] Missing value in message: {}", id),
             Self::SyncRequestInAsyncMode => {
                 write!(f, "Triggered synchronous format while in async mode")
             }
