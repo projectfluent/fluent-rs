@@ -117,6 +117,19 @@ pub struct Resource<S> {
     pub body: Vec<Entry<S>>,
 }
 
+impl<'s> std::convert::TryFrom<&'s String> for Resource<&'s str> {
+    type Error = (Self, Vec<crate::parser::ParserError>);
+
+    fn try_from(string: &'s String) -> Result<Self, Self::Error> {
+        match crate::parser::parse_runtime(string.as_str()) {
+            Ok(res) => Ok(res),
+            Err((res, errors)) => {
+                Err((res, errors))
+            }
+        }
+    }
+}
+
 /// A top-level node representing an entry of a [`Resource`].
 ///
 /// Every [`Entry`] is a standalone element and the parser is capable

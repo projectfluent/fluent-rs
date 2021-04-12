@@ -1,55 +1,11 @@
 use fluent_syntax::ast;
-use fluent_syntax::parser::{parse_runtime, ParserError};
-use once_self_cell::unsync_once_self_cell;
+use fluent_syntax::parser::ParserError;
+use self_cell::self_cell;
+use std::convert::TryInto;
 
-struct Ast<'s>(ast::Resource<&'s str>);
+type Resource<'s> = ast::Resource<&'s str>;
+self_cell!(InnerFluentResource, {Debug}, try_from, String, Resource, covariant);
 
-impl<'s> From<&'s String> for Ast<'s> {
-    fn from(string: &'s String) -> Self {
-        match parse_runtime(string.as_str()) {
-            Ok(ast) => Ast(ast),
-            Err((ast, _)) => {
-                //XXX: Handle errors
-                Ast(ast)
-            }
-        }
-    }
-}
-
-
-unsync_once_self_cell!(InnerFluentResource, String, Ast<'_>, derive(Debug));
-
-/// A resource containing a list of localization messages.
-///
-/// [`FluentResource`] wraps an [`Abstract Syntax Tree`](../fluent_syntax/ast/index.html) produced by the
-/// [`parser`](../fluent_syntax/parser/index.html) and provides an access to a list
-/// of its entries.
-///
-/// A good mental model for a resource is a single FTL file, but in the future
-/// there's nothing preventing a resource from being stored in a data base,
-/// pre-parsed format or in some other structured form.
-///
-/// # Example
-///
-/// ```
-/// use fluent_bundle::FluentResource;
-///
-/// let source = r#"
-///
-/// hello-world = Hello World!
-///
-/// "#;
-///
-/// let resource = FluentResource::try_new(source.to_string())
-///     .expect("Errors encountered while parsing a resource.");
-///
-/// assert_eq!(resource.entries().count(), 1);
-/// ```
-///
-/// # Ownership
-///
-/// A resource owns the source string and the AST contains references
-/// to the slices of the source.
 #[derive(Debug)]
 pub struct FluentResource(InnerFluentResource);
 
@@ -83,7 +39,12 @@ impl FluentResource {
     /// the `Err` variant will contain both the structure and a vector
     /// of errors.
     pub fn try_new(source: String) -> Result<Self, (Self, Vec<ParserError>)> {
-        Ok(Self(InnerFluentResource::new(source)))
+        match InnerFluentResource::try_from(source) {
+            Ok(inner) => Ok(FluentResource(inner)),
+            //XXX: Can't wrap the error AST in InnerFluentResource here!
+            // Err((inner, err)) => Err((FluentResource(inner), err)),
+            Err((inner, err)) => { panic!() }
+        }
     }
 
     /// Returns a reference to the source string that was used
@@ -105,7 +66,7 @@ impl FluentResource {
     /// );
     /// ```
     pub fn source(&self) -> &str {
-        self.0.get_owner().as_str()
+        self.0.borrow_owner().as_str()
     }
 
     /// Returns an iterator over [`entries`](fluent_syntax::ast::Entry) of the [`FluentResource`].
@@ -132,7 +93,7 @@ impl FluentResource {
     /// assert!(matches!(resource.entries().next(), Some(ast::Entry::Message(_))));
     /// ```
     pub fn entries(&self) -> impl Iterator<Item = &ast::Entry<&str>> {
-        self.0.get_or_init_dependent().0.body.iter()
+        self.0.borrow_dependent().body.iter()
     }
 
     /// Returns an [`Entry`](fluent_syntax::ast::Entry) at the
@@ -156,6 +117,6 @@ impl FluentResource {
     /// assert!(matches!(resource.get_entry(0), Some(ast::Entry::Message(_))));
     /// ```
     pub fn get_entry(&self, idx: usize) -> Option<&ast::Entry<&str>> {
-        self.0.get_or_init_dependent().0.body.get(idx)
+        self.0.borrow_dependent().body.get(idx)
     }
 }
