@@ -4,10 +4,16 @@ use self_cell::self_cell;
 use std::convert::TryInto;
 
 type Resource<'s> = ast::Resource<&'s str>;
-self_cell!(InnerFluentResource, {Debug}, try_from, String, Resource, covariant);
+self_cell!(
+    pub struct FluentResource {
+        #[try_from]
+        owner: String,
+        #[covariant]
+        dependent: Resource,
+    }
 
-#[derive(Debug)]
-pub struct FluentResource(InnerFluentResource);
+    impl {Debug}
+);
 
 impl FluentResource {
     /// A fallible constructor of a new [`FluentResource`].
@@ -39,12 +45,7 @@ impl FluentResource {
     /// the `Err` variant will contain both the structure and a vector
     /// of errors.
     pub fn try_new(source: String) -> Result<Self, (Self, Vec<ParserError>)> {
-        match InnerFluentResource::try_from(source) {
-            Ok(inner) => Ok(FluentResource(inner)),
-            //XXX: Can't wrap the error AST in InnerFluentResource here!
-            // Err((inner, err)) => Err((FluentResource(inner), err)),
-            Err((inner, err)) => { panic!() }
-        }
+        Ok(Self::try_from(source).unwrap())
     }
 
     /// Returns a reference to the source string that was used
@@ -66,7 +67,7 @@ impl FluentResource {
     /// );
     /// ```
     pub fn source(&self) -> &str {
-        self.0.borrow_owner().as_str()
+        self.borrow_owner().as_str()
     }
 
     /// Returns an iterator over [`entries`](fluent_syntax::ast::Entry) of the [`FluentResource`].
@@ -93,7 +94,7 @@ impl FluentResource {
     /// assert!(matches!(resource.entries().next(), Some(ast::Entry::Message(_))));
     /// ```
     pub fn entries(&self) -> impl Iterator<Item = &ast::Entry<&str>> {
-        self.0.borrow_dependent().body.iter()
+        self.borrow_dependent().body.iter()
     }
 
     /// Returns an [`Entry`](fluent_syntax::ast::Entry) at the
@@ -117,6 +118,6 @@ impl FluentResource {
     /// assert!(matches!(resource.get_entry(0), Some(ast::Entry::Message(_))));
     /// ```
     pub fn get_entry(&self, idx: usize) -> Option<&ast::Entry<&str>> {
-        self.0.borrow_dependent().body.get(idx)
+        self.borrow_dependent().body.get(idx)
     }
 }
