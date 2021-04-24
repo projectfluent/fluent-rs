@@ -299,14 +299,16 @@ where
 
                 if msg.is_none() {
                     has_missing = true;
-                } else {
-                    if !format_errors.is_empty() {
-                        errors.push(LocalizationError::Resolver {
-                            id: key.id.to_string(),
-                            locale: bundle.locales.get(0).cloned().unwrap(),
-                            errors: format_errors,
-                        });
-                    }
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
+                } else if !format_errors.is_empty() {
+                    errors.push(LocalizationError::Resolver {
+                        id: key.id.to_string(),
+                        locale: bundle.locales.get(0).cloned().unwrap(),
+                        errors: format_errors,
+                    });
                 }
 
                 *cell = msg;
@@ -325,6 +327,7 @@ where
             {
                 errors.push(LocalizationError::MissingMessage {
                     id: key.id.to_string(),
+                    locale: None,
                 });
             }
         }
@@ -337,13 +340,17 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<Cow<'l, str>>> {
-        let mut result: Vec<Option<Cow<'l, str>>> = Vec::with_capacity(keys.len());
-
-        for _ in 0..keys.len() {
-            result.push(None);
+        enum Value<'l> {
+            Value(Cow<'l, str>),
+            MissingValue,
+            None,
         }
 
-        let mut is_complete = false;
+        let mut cells: Vec<Value> = Vec::with_capacity(keys.len());
+
+        for _ in 0..keys.len() {
+            cells.push(Value::None);
+        }
 
         for bundle in cache {
             let bundle = bundle.as_ref().unwrap_or_else(|(bundle, err)| {
@@ -355,13 +362,13 @@ where
 
             for (key, cell) in keys
                 .iter()
-                .zip(&mut result)
-                .filter(|(_, cell)| cell.is_none())
+                .zip(&mut cells)
+                .filter(|(_, cell)| !matches!(cell, Value::Value(_)))
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
                     if let Some(value) = msg.value() {
                         let mut format_errors = vec![];
-                        *cell = Some(bundle.format_pattern(
+                        *cell = Value::Value(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
                             &mut format_errors,
@@ -374,33 +381,46 @@ where
                             });
                         }
                     } else {
+                        *cell = Value::MissingValue;
+                        has_missing = true;
                         errors.push(LocalizationError::MissingValue {
                             id: key.id.to_string(),
+                            locale: Some(bundle.locales[0].clone()),
                         });
                     }
                 } else {
                     has_missing = true;
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
                 }
             }
             if !has_missing {
-                is_complete = true;
                 break;
             }
         }
 
-        if !is_complete {
-            for (key, _) in keys
-                .iter()
-                .zip(&mut result)
-                .filter(|(_, cell)| cell.is_none())
-            {
-                errors.push(LocalizationError::MissingMessage {
-                    id: key.id.to_string(),
-                });
-            }
-        }
-
-        result
+        keys.iter()
+            .zip(cells)
+            .map(|(key, value)| match value {
+                Value::Value(value) => Some(value),
+                Value::MissingValue => {
+                    errors.push(LocalizationError::MissingValue {
+                        id: key.id.to_string(),
+                        locale: None,
+                    });
+                    None
+                }
+                Value::None => {
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: None,
+                    });
+                    None
+                }
+            })
+            .collect()
     }
 
     fn format_value_from_iter<'l>(
@@ -409,6 +429,8 @@ where
         args: Option<&'l FluentArgs>,
         errors: &mut Vec<LocalizationError>,
     ) -> Option<Cow<'l, str>> {
+        let mut found_message = false;
+
         for bundle in cache {
             let bundle = bundle.as_ref().unwrap_or_else(|(bundle, err)| {
                 errors.extend(err.iter().cloned().map(Into::into));
@@ -416,6 +438,7 @@ where
             });
 
             if let Some(msg) = bundle.get_message(id) {
+                found_message = true;
                 if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
@@ -428,12 +451,29 @@ where
                     }
                     return Some(result);
                 } else {
-                    errors.push(LocalizationError::MissingValue { id: id.to_string() });
-                    return None;
+                    errors.push(LocalizationError::MissingValue {
+                        id: id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
                 }
+            } else {
+                errors.push(LocalizationError::MissingMessage {
+                    id: id.to_string(),
+                    locale: Some(bundle.locales[0].clone()),
+                });
             }
         }
-        errors.push(LocalizationError::MissingMessage { id: id.to_string() });
+        if found_message {
+            errors.push(LocalizationError::MissingValue {
+                id: id.to_string(),
+                locale: None,
+            });
+        } else {
+            errors.push(LocalizationError::MissingMessage {
+                id: id.to_string(),
+                locale: None,
+            });
+        }
         None
     }
 }
@@ -476,14 +516,16 @@ where
 
                 if msg.is_none() {
                     has_missing = true;
-                } else {
-                    if !format_errors.is_empty() {
-                        errors.push(LocalizationError::Resolver {
-                            id: key.id.to_string(),
-                            locale: bundle.locales.get(0).cloned().unwrap(),
-                            errors: format_errors,
-                        });
-                    }
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
+                } else if !format_errors.is_empty() {
+                    errors.push(LocalizationError::Resolver {
+                        id: key.id.to_string(),
+                        locale: bundle.locales.get(0).cloned().unwrap(),
+                        errors: format_errors,
+                    });
                 }
 
                 *cell = msg;
@@ -502,6 +544,7 @@ where
             {
                 errors.push(LocalizationError::MissingMessage {
                     id: key.id.to_string(),
+                    locale: None,
                 });
             }
         }
@@ -514,13 +557,17 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<Cow<'l, str>>> {
-        let mut result: Vec<Option<Cow<'l, str>>> = Vec::with_capacity(keys.len());
-
-        for _ in 0..keys.len() {
-            result.push(None);
+        enum Value<'l> {
+            Value(Cow<'l, str>),
+            MissingValue,
+            None,
         }
 
-        let mut is_complete = false;
+        let mut cells: Vec<Value> = Vec::with_capacity(keys.len());
+
+        for _ in 0..keys.len() {
+            cells.push(Value::None);
+        }
 
         use futures::StreamExt;
         let mut bundle_stream = stream.stream();
@@ -531,15 +578,16 @@ where
             });
 
             let mut has_missing = false;
+
             for (key, cell) in keys
                 .iter()
-                .zip(&mut result)
-                .filter(|(_, cell)| cell.is_none())
+                .zip(&mut cells)
+                .filter(|(_, cell)| !matches!(cell, Value::Value(_)))
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
                     if let Some(value) = msg.value() {
                         let mut format_errors = vec![];
-                        *cell = Some(bundle.format_pattern(
+                        *cell = Value::Value(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
                             &mut format_errors,
@@ -552,34 +600,46 @@ where
                             });
                         }
                     } else {
+                        *cell = Value::MissingValue;
+                        has_missing = true;
                         errors.push(LocalizationError::MissingValue {
                             id: key.id.to_string(),
+                            locale: Some(bundle.locales[0].clone()),
                         });
-                        *cell = None;
                     }
                 } else {
                     has_missing = true;
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
                 }
             }
             if !has_missing {
-                is_complete = true;
                 break;
             }
         }
 
-        if !is_complete {
-            for (key, _) in keys
-                .iter()
-                .zip(&mut result)
-                .filter(|(_, cell)| cell.is_none())
-            {
-                errors.push(LocalizationError::MissingMessage {
-                    id: key.id.to_string(),
-                });
-            }
-        }
-
-        result
+        keys.iter()
+            .zip(cells)
+            .map(|(key, value)| match value {
+                Value::Value(value) => Some(value),
+                Value::MissingValue => {
+                    errors.push(LocalizationError::MissingValue {
+                        id: key.id.to_string(),
+                        locale: None,
+                    });
+                    None
+                }
+                Value::None => {
+                    errors.push(LocalizationError::MissingMessage {
+                        id: key.id.to_string(),
+                        locale: None,
+                    });
+                    None
+                }
+            })
+            .collect()
     }
 
     async fn format_value_from_stream<'l>(
@@ -589,6 +649,8 @@ where
         errors: &mut Vec<LocalizationError>,
     ) -> Option<Cow<'l, str>> {
         use futures::StreamExt;
+        let mut found_message = false;
+
         let mut bundle_stream = stream.stream();
         while let Some(bundle) = bundle_stream.next().await {
             let bundle = bundle.as_ref().unwrap_or_else(|(bundle, err)| {
@@ -597,6 +659,7 @@ where
             });
 
             if let Some(msg) = bundle.get_message(id) {
+                found_message = true;
                 if let Some(value) = msg.value() {
                     let mut format_errors = vec![];
                     let result = bundle.format_pattern(value, args, &mut format_errors);
@@ -609,12 +672,29 @@ where
                     }
                     return Some(result);
                 } else {
-                    errors.push(LocalizationError::MissingValue { id: id.to_string() });
-                    return None;
+                    errors.push(LocalizationError::MissingValue {
+                        id: id.to_string(),
+                        locale: Some(bundle.locales[0].clone()),
+                    });
                 }
+            } else {
+                errors.push(LocalizationError::MissingMessage {
+                    id: id.to_string(),
+                    locale: Some(bundle.locales[0].clone()),
+                });
             }
         }
-        errors.push(LocalizationError::MissingMessage { id: id.to_string() });
+        if found_message {
+            errors.push(LocalizationError::MissingValue {
+                id: id.to_string(),
+                locale: None,
+            });
+        } else {
+            errors.push(LocalizationError::MissingMessage {
+                id: id.to_string(),
+                locale: None,
+            });
+        }
         None
     }
 }

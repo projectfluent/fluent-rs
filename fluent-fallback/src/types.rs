@@ -7,6 +7,15 @@ pub struct L10nKey<'l> {
     pub args: Option<FluentArgs<'l>>,
 }
 
+impl<'l> From<&'l str> for L10nKey<'l> {
+    fn from(id: &'l str) -> Self {
+        Self {
+            id: id.into(),
+            args: None,
+        }
+    }
+}
+
 #[derive(Debug)]
 pub struct L10nAttribute<'l> {
     pub name: Cow<'l, str>,

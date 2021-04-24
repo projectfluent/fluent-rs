@@ -14,9 +14,11 @@ pub enum LocalizationError {
     },
     MissingMessage {
         id: String,
+        locale: Option<LanguageIdentifier>,
     },
     MissingValue {
         id: String,
+        locale: Option<LanguageIdentifier>,
     },
     SyncRequestInAsyncMode,
 }
@@ -41,8 +43,24 @@ impl std::fmt::Display for LocalizationError {
                     errors.join(", ")
                 )
             }
-            Self::MissingMessage { id } => write!(f, "[fluent] Missing message: {}", id),
-            Self::MissingValue { id } => write!(f, "[fluent] Missing value in message: {}", id),
+            Self::MissingMessage {
+                id,
+                locale: Some(locale),
+            } => write!(f, "[fluent] Missing message in locale {}: {}", locale, id),
+            Self::MissingMessage { id, locale: None } => {
+                write!(f, "[fluent] Couldn't find a message: {}", id)
+            }
+            Self::MissingValue {
+                id,
+                locale: Some(locale),
+            } => write!(
+                f,
+                "[fluent] Message has no value in locale {}: {}",
+                locale, id
+            ),
+            Self::MissingValue { id, locale: None } => {
+                write!(f, "[fluent] Couldn't find a message with value: {}", id)
+            }
             Self::SyncRequestInAsyncMode => {
                 write!(f, "Triggered synchronous format while in async mode")
             }

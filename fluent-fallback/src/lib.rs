@@ -97,4 +97,5 @@ mod localization;
 mod pin_cell;
 pub mod types;
 
+pub use errors::LocalizationError;
 pub use localization::Localization;
