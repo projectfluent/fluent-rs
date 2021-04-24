@@ -1,6 +1,6 @@
 # Fluent
 
-`fluent-pseudo` is a Rust implementation of the pseudolocalization API for [Project Fluent][], a localization
+`fluent-pseudo` is a Rust implementation of the pseudolocalization API for [Project Fluent](https://projectfluent.org/), a localization
 framework designed to unleash the entire expressive power of natural language
 translations.
 
