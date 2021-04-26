@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.15.1 (April 26, 2021)
+  - Expose `resolver::errors` to allow for `ReferenceKind` matching.
+
 ## fluent-bundle 0.15.0 (February 9, 2021)
   - Document the crate.
   - Update `fluent-syntax` to 0.11.0.
