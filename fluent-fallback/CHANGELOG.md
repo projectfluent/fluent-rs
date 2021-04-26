@@ -4,7 +4,10 @@
 
   - …
 
-## fluent-fallback 0.4.1 (April 9, 2021)
+## fluent-fallback 0.4.3 (April 26, 2021)
+  - Align errors even closer to fluent.js
+
+## fluent-fallback 0.4.2 (April 9, 2021)
   - Align errors closer to fluent.js
 
 ## fluent-fallback 0.4.0 (February 9, 2021)
