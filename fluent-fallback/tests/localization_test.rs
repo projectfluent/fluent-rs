@@ -1,10 +1,14 @@
 use std::borrow::Cow;
 use std::fs;
 
-use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_bundle::{
+    resolver::errors::{ReferenceKind, ResolverError},
+    FluentArgs, FluentBundle, FluentError, FluentResource,
+};
 use fluent_fallback::{
     env::LocalesProvider,
     generator::{BundleGenerator, FluentBundleResult},
+    types::L10nKey,
     Localization, LocalizationError,
 };
 use std::cell::RefCell;
@@ -60,6 +64,7 @@ impl Iterator for BundleIter {
         let locale = self.locales.next()?;
 
         let mut bundle = FluentBundle::new(vec![locale.clone()]);
+        bundle.set_use_isolating(false);
 
         let mut errors = vec![];
 
@@ -393,5 +398,51 @@ fn localization_format_messages_sync_missing_errors() {
                 locale: None
             },
         ]
+    );
+}
+
+#[test]
+fn localization_format_missing_argument_error() {
+    let resource_ids: Vec<String> = vec!["test2.ftl".into()];
+    let locales = Locales::new(vec![langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
+
+    let mut args = FluentArgs::new();
+    args.set("userName", "John");
+    let keys = vec![L10nKey {
+        id: "message-4".into(),
+        args: Some(args),
+    }];
+
+    let msgs = loc.format_messages_sync(&keys, &mut errors).unwrap();
+    assert_eq!(
+        msgs.get(0).unwrap().as_ref().unwrap().value,
+        Some(Cow::Borrowed("Hello, John. [en]"))
+    );
+    assert_eq!(errors.len(), 0);
+
+    let keys = vec![L10nKey {
+        id: "message-4".into(),
+        args: None,
+    }];
+    let msgs = loc.format_messages_sync(&keys, &mut errors).unwrap();
+    assert_eq!(
+        msgs.get(0).unwrap().as_ref().unwrap().value,
+        Some(Cow::Borrowed("Hello, {$userName}. [en]"))
+    );
+    assert_eq!(
+        errors,
+        vec![LocalizationError::Resolver {
+            id: "message-4".to_string(),
+            locale: langid!("en-US"),
+            errors: vec![FluentError::ResolverError(ResolverError::Reference(
+                ReferenceKind::Variable {
+                    id: "userName".to_string(),
+                }
+            ))],
+        },]
     );
 }

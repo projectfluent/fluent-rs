@@ -19,7 +19,7 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 chunky-vec = "0.1"
-fluent-bundle = "0.15"
+fluent-bundle = "0.15.1"
 futures = "0.3"
 once_cell = "1.7"
 async-trait = "0.1"
