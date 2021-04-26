@@ -5,7 +5,7 @@ use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_fallback::{
     env::LocalesProvider,
     generator::{BundleGenerator, FluentBundleResult},
-    Localization,
+    Localization, LocalizationError,
 };
 use std::cell::RefCell;
 use std::rc::Rc;
@@ -142,7 +142,7 @@ fn localization_format() {
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World 3 [en]")));
 
-    assert_eq!(errors.len(), 1);
+    assert_eq!(errors.len(), 4);
 }
 
 #[test]
@@ -167,4 +167,231 @@ fn localization_on_change() {
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
+}
+
+#[test]
+fn localization_format_value_missing_errors() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+
+    let _ = loc
+        .format_value_sync("missing-message", None, &mut errors)
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: None
+            },
+        ]
+    );
+
+    errors.clear();
+
+    let _ = loc
+        .format_value_sync("message-3", None, &mut errors)
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: None
+            },
+        ]
+    );
+}
+
+#[test]
+fn localization_format_value_sync_missing_errors() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+
+    let _ = loc
+        .format_value_sync("missing-message", None, &mut errors)
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: None
+            },
+        ]
+    );
+
+    errors.clear();
+
+    let _ = loc
+        .format_value_sync("message-3", None, &mut errors)
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: None
+            },
+        ]
+    );
+}
+
+#[test]
+fn localization_format_values_sync_missing_errors() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+
+    let _ = loc
+        .format_values_sync(
+            &["missing-message".into(), "missing-message-2".into()],
+            &mut errors,
+        )
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: None
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: None
+            },
+        ]
+    );
+
+    errors.clear();
+
+    let _ = loc
+        .format_values_sync(&["message-3".into()], &mut errors)
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingValue {
+                id: "message-3".to_string(),
+                locale: None
+            },
+        ]
+    );
+}
+
+#[test]
+fn localization_format_messages_sync_missing_errors() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into(), "test2.ftl".into()];
+
+    let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+
+    let _ = loc
+        .format_messages_sync(
+            &["missing-message".into(), "missing-message-2".into()],
+            &mut errors,
+        )
+        .unwrap();
+    assert_eq!(
+        errors,
+        vec![
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: Some(langid!("pl"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: Some(langid!("en-US"))
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message".to_string(),
+                locale: None
+            },
+            LocalizationError::MissingMessage {
+                id: "missing-message-2".to_string(),
+                locale: None
+            },
+        ]
+    );
 }
