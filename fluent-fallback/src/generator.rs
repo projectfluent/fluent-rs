@@ -16,22 +16,15 @@ pub trait BundleStream {
 
 pub trait BundleGenerator {
     type Resource: Borrow<FluentResource>;
+    type LocalesIter: Iterator<Item = LanguageIdentifier>;
     type Iter: Iterator<Item = FluentBundleResult<Self::Resource>>;
     type Stream: Stream<Item = FluentBundleResult<Self::Resource>>;
 
-    fn bundles_iter(
-        &self,
-        _locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-        _res_ids: Vec<String>,
-    ) -> Self::Iter {
+    fn bundles_iter(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Iter {
         unimplemented!();
     }
 
-    fn bundles_stream(
-        &self,
-        _locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-        _res_ids: Vec<String>,
-    ) -> Self::Stream {
+    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
         unimplemented!();
     }
 }

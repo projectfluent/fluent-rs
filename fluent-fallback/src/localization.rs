@@ -45,7 +45,7 @@ where
 
 pub struct Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
     // Replace with `OneCell` once it stabilizes
@@ -59,7 +59,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator + Default,
+    G: BundleGenerator<LocalesIter = P::Iter> + Default,
     P: LocalesProvider + Default,
 {
     pub fn new(res_ids: Vec<String>, sync: bool) -> Self {
@@ -75,7 +75,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
     pub fn with_env(res_ids: Vec<String>, sync: bool, provider: P, generator: G) -> Self {
@@ -200,7 +200,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     G::Iter: BundleIterator,
     P: LocalesProvider,
 {
@@ -212,7 +212,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     G::Stream: BundleStream,
     P: LocalesProvider,
 {
@@ -224,7 +224,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
     fn get_bundles(&self) -> &Bundles<G> {
@@ -480,7 +480,7 @@ where
 
 impl<G, P> Localization<G, P>
 where
-    G: BundleGenerator,
+    G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
     async fn format_messages_from_stream<'l>(

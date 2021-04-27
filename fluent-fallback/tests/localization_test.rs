@@ -45,7 +45,8 @@ impl Locales {
 }
 
 impl LocalesProvider for Locales {
-    fn locales(&self) -> <Vec<LanguageIdentifier> as IntoIterator>::IntoIter {
+    type Iter = <Vec<LanguageIdentifier> as IntoIterator>::IntoIter;
+    fn locales(&self) -> Self::Iter {
         self.inner.locales.borrow().clone().into_iter()
     }
 }
@@ -103,22 +104,15 @@ struct ResourceManager;
 
 impl BundleGenerator for ResourceManager {
     type Resource = FluentResource;
+    type LocalesIter = std::vec::IntoIter<LanguageIdentifier>;
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(
-        &self,
-        locales: std::vec::IntoIter<LanguageIdentifier>,
-        res_ids: Vec<String>,
-    ) -> Self::Iter {
+    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Iter {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(
-        &self,
-        _locales: std::vec::IntoIter<LanguageIdentifier>,
-        _res_ids: Vec<String>,
-    ) -> Self::Stream {
+    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
         todo!()
     }
 }

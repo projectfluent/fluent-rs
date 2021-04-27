@@ -47,7 +47,8 @@ use unic_langid::LanguageIdentifier;
 /// }
 ///
 /// impl LocalesProvider for Env {
-///     fn locales(&self) -> <Vec<LanguageIdentifier> as IntoIterator>::IntoIter {
+///     type Iter = <Vec<LanguageIdentifier> as IntoIterator>::IntoIter;
+///     fn locales(&self) -> Self::Iter {
 ///         self.locales.borrow().clone().into_iter()
 ///     }
 /// }
@@ -71,11 +72,13 @@ use unic_langid::LanguageIdentifier;
 /// // fallback on `en-GB`.
 /// ```
 pub trait LocalesProvider {
-    fn locales(&self) -> <Vec<LanguageIdentifier> as IntoIterator>::IntoIter;
+    type Iter: Iterator<Item = LanguageIdentifier>;
+    fn locales(&self) -> Self::Iter;
 }
 
 impl LocalesProvider for Vec<LanguageIdentifier> {
-    fn locales(&self) -> <Vec<LanguageIdentifier> as IntoIterator>::IntoIter {
+    type Iter = <Vec<LanguageIdentifier> as IntoIterator>::IntoIter;
+    fn locales(&self) -> Self::Iter {
         self.clone().into_iter()
     }
 }

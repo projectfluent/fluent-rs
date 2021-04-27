@@ -216,14 +216,11 @@ impl futures::Stream for BundleIter {
 
 impl BundleGenerator for Bundles {
     type Resource = FluentResource;
+    type LocalesIter = std::vec::IntoIter<LanguageIdentifier>;
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(
-        &self,
-        locales: std::vec::IntoIter<LanguageIdentifier>,
-        res_ids: Vec<String>,
-    ) -> Self::Iter {
+    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Iter {
         BundleIter {
             res_path_scheme: self.res_path_scheme.to_string_lossy().to_string(),
             locales,
