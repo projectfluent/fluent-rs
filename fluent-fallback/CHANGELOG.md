@@ -4,6 +4,10 @@
 
   - …
 
+## fluent-fallback 0.4.4 (May 3, 2021)
+  - Fix waiting from multiple tasks. (#224)
+  - Bind locale iterator generics of `LocalesProvider` and `BundleGenerator`.
+
 ## fluent-fallback 0.4.3 (April 26, 2021)
   - Align errors even closer to fluent.js
 
