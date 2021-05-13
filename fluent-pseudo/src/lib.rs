@@ -119,6 +119,10 @@ mod tests {
         let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true, false);
         assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a> iƞ <b>ḿẏ</b> Ħoouuşee.");
 
+        // Use markers.
+        let x = transform_dom("Hello World within markers", false, false, true);
+        assert_eq!(x, "[Ħeŀŀo Ẇořŀḓ ẇiŧħiƞ ḿařķeřş]");
+
         // Don't touch single character values.
         let x = transform_dom("f", false, true, false);
         assert_eq!(x, "f");
