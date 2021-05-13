@@ -56,6 +56,11 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool)
     let result_range = pos + diff..result.len();
     let transform_sub = transform(&s[range], flipped, elongate);
     result.to_mut().replace_range(result_range, &transform_sub);
+
+    if with_markers {
+        return Cow::from("[") + result + Cow::from("]")
+    }
+
     result
 }
 
