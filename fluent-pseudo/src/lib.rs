@@ -23,7 +23,7 @@ static FLIPPED_CAPS_MAP: &[char] = &[
 static mut RE_EXCLUDED: Option<Regex> = None;
 static mut RE_AZ: Option<Regex> = None;
 
-pub fn transform_dom(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
+pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool) -> Cow<str> {
     // Exclude access-keys and other single-char messages
     if s.len() == 1 {
         return s.into();
@@ -113,14 +113,14 @@ mod tests {
 
     #[test]
     fn dom_test() {
-        let x = transform_dom("Hello <a>World</a>", false, true);
+        let x = transform_dom("Hello <a>World</a>", false, true, false);
         assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a>");
 
-        let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true);
+        let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true, false);
         assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a> iƞ <b>ḿẏ</b> Ħoouuşee.");
 
         // Don't touch single character values.
-        let x = transform_dom("f", false, true);
+        let x = transform_dom("f", false, true, false);
         assert_eq!(x, "f");
     }
 }
