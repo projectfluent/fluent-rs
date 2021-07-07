@@ -115,6 +115,7 @@ fn main() {
         app_locales,
         bundles,
     );
+    let bundles = loc.bundles();
 
     let mut errors = vec![];
 
@@ -124,7 +125,7 @@ fn main() {
                 let mut args = FluentArgs::new();
                 args.set("input", i);
                 args.set("value", collatz(i));
-                let value = loc
+                let value = bundles
                     .format_value_sync("response-msg", Some(&args), &mut errors)
                     .unwrap()
                     .unwrap();
@@ -134,7 +135,7 @@ fn main() {
                 let mut args = FluentArgs::new();
                 args.set("input", input.as_str());
                 args.set("reason", err.to_string());
-                let value = loc
+                let value = bundles
                     .format_value_sync("input-parse-error-msg", Some(&args), &mut errors)
                     .unwrap()
                     .unwrap();
@@ -142,7 +143,7 @@ fn main() {
             }
         },
         None => {
-            let value = loc
+            let value = bundles
                 .format_value_sync("missing-arg-error", None, &mut errors)
                 .unwrap()
                 .unwrap();

@@ -39,9 +39,10 @@
 //!     vec![langid!("en-US")],
 //!     res_mgr,
 //! );
+//! let bundles = loc.bundles();
 //!
 //! let mut errors = vec![];
-//! let value = loc.format_value_sync("hello-world", None, &mut errors)
+//! let value = bundles.format_value_sync("hello-world", None, &mut errors)
 //!     .expect("Failed to format a value");
 //!
 //! assert_eq!(value, Some("Hello World [en]".into()));
@@ -98,4 +99,5 @@ mod pin_cell;
 pub mod types;
 
 pub use errors::LocalizationError;
+pub use localization::Bundles;
 pub use localization::Localization;
