@@ -3,9 +3,11 @@ use crate::env::LocalesProvider;
 use crate::errors::LocalizationError;
 use crate::generator::{BundleGenerator, BundleIterator, BundleStream};
 use crate::types::{L10nAttribute, L10nKey, L10nMessage};
+use chunky_vec::ChunkyVec;
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
-use once_cell::sync::OnceCell;
 use std::borrow::Cow;
+use std::cell::RefCell;
+use std::cell::UnsafeCell;
 
 enum Bundles<G>
 where
@@ -43,18 +45,23 @@ where
     }
 }
 
+struct State {
+    dirty: bool,
+    sync: bool,
+    res_ids: Vec<String>,
+}
+
 pub struct Localization<G, P>
 where
     G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
-    // Replace with `OneCell` once it stabilizes
-    // https://github.com/rust-lang/rust/issues/74465
-    bundles: OnceCell<Bundles<G>>,
+    // XXX: How to make us Drop the `Bundles` once all callers
+    // relying on it complete?
+    bundles: UnsafeCell<ChunkyVec<Bundles<G>>>,
     generator: G,
     provider: P,
-    res_ids: Vec<String>,
-    sync: bool,
+    state: RefCell<State>,
 }
 
 impl<G, P> Localization<G, P>
@@ -64,11 +71,14 @@ where
 {
     pub fn new(res_ids: Vec<String>, sync: bool) -> Self {
         Self {
-            bundles: OnceCell::new(),
+            bundles: Default::default(),
             generator: G::default(),
             provider: P::default(),
-            res_ids,
-            sync,
+            state: RefCell::new(State {
+                dirty: false,
+                sync,
+                res_ids,
+            }),
         }
     }
 }
@@ -80,49 +90,56 @@ where
 {
     pub fn with_env(res_ids: Vec<String>, sync: bool, provider: P, generator: G) -> Self {
         Self {
-            bundles: OnceCell::new(),
+            bundles: Default::default(),
             generator,
             provider,
-            res_ids,
-            sync,
+            state: RefCell::new(State {
+                dirty: false,
+                sync,
+                res_ids,
+            }),
         }
     }
 
     pub fn is_sync(&self) -> bool {
-        self.sync
+        self.state.borrow().sync
     }
 
-    pub fn add_resource_id(&mut self, res_id: String) {
-        self.res_ids.push(res_id);
+    pub fn add_resource_id(&self, res_id: String) {
+        RefCell::borrow_mut(&self.state).res_ids.push(res_id);
         self.on_change();
     }
 
-    pub fn add_resource_ids(&mut self, res_ids: Vec<String>) {
-        self.res_ids.extend(res_ids);
+    pub fn add_resource_ids(&self, res_ids: Vec<String>) {
+        RefCell::borrow_mut(&self.state).res_ids.extend(res_ids);
         self.on_change();
     }
 
-    pub fn remove_resource_id(&mut self, res_id: String) -> usize {
-        self.res_ids.retain(|x| *x != res_id);
+    pub fn remove_resource_id(&self, res_id: String) -> usize {
+        RefCell::borrow_mut(&self.state)
+            .res_ids
+            .retain(|x| *x != res_id);
         self.on_change();
-        self.res_ids.len()
+        RefCell::borrow(&self.state).res_ids.len()
     }
 
-    pub fn remove_resource_ids(&mut self, res_ids: Vec<String>) -> usize {
-        self.res_ids.retain(|x| !res_ids.contains(x));
+    pub fn remove_resource_ids(&self, res_ids: Vec<String>) -> usize {
+        RefCell::borrow_mut(&self.state)
+            .res_ids
+            .retain(|x| !res_ids.contains(x));
         self.on_change();
-        self.res_ids.len()
+        RefCell::borrow(&self.state).res_ids.len()
     }
 
-    pub fn set_async(&mut self) {
-        if self.sync {
-            self.bundles.take();
-            self.sync = false;
+    pub fn set_async(&self) {
+        if self.state.borrow().sync {
+            RefCell::borrow_mut(&self.state).sync = false;
+            self.on_change();
         }
     }
 
-    pub fn on_change(&mut self) {
-        self.bundles.take();
+    pub fn on_change(&self) {
+        RefCell::borrow_mut(&self.state).dirty = true;
     }
 
     pub async fn format_value<'l>(
@@ -228,19 +245,30 @@ where
     P: LocalesProvider,
 {
     fn get_bundles(&self) -> &Bundles<G> {
-        self.bundles.get_or_init(|| {
-            if self.sync {
-                Bundles::Iter(Cache::new(
-                    self.generator
-                        .bundles_iter(self.provider.locales(), self.res_ids.clone()),
-                ))
+        unsafe {
+            let bundles = self.bundles.get();
+            if (*bundles).is_empty() || self.state.borrow().dirty {
+                RefCell::borrow_mut(&self.state).dirty = false;
+                let state = self.state.borrow();
+                let new_iter = {
+                    if state.sync {
+                        Bundles::Iter(Cache::new(
+                            self.generator
+                                .bundles_iter(self.provider.locales(), state.res_ids.clone()),
+                        ))
+                    } else {
+                        Bundles::Stream(AsyncCache::new(
+                            self.generator
+                                .bundles_stream(self.provider.locales(), state.res_ids.clone()),
+                        ))
+                    }
+                };
+                (*bundles).push_get(new_iter)
             } else {
-                Bundles::Stream(AsyncCache::new(
-                    self.generator
-                        .bundles_stream(self.provider.locales(), self.res_ids.clone()),
-                ))
+                let len = (*bundles).len();
+                (*bundles).get(len - 1).unwrap()
             }
-        })
+        }
     }
 
     fn format_message_from_bundle<'l>(

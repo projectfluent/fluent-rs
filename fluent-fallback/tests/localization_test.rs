@@ -93,10 +93,34 @@ impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
 
     fn poll_next(
-        self: std::pin::Pin<&mut Self>,
+        mut self: std::pin::Pin<&mut Self>,
         _cx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Option<Self::Item>> {
-        todo!()
+        if let Some(locale) = self.locales.next() {
+            let mut bundle = FluentBundle::new(vec![locale.clone()]);
+            bundle.set_use_isolating(false);
+
+            let mut errors = vec![];
+            for res_id in &self.res_ids {
+                let full_path = format!("./tests/resources/{}/{}", locale, res_id);
+                let source = fs::read_to_string(full_path).unwrap();
+                let res = match FluentResource::try_new(source) {
+                    Ok(res) => res,
+                    Err((res, err)) => {
+                        errors.extend(err.into_iter().map(Into::into));
+                        res
+                    }
+                };
+                bundle.add_resource(res).unwrap();
+            }
+            if errors.is_empty() {
+                Some(Ok(bundle)).into()
+            } else {
+                Some(Err((bundle, errors))).into()
+            }
+        } else {
+            None.into()
+        }
     }
 }
 
@@ -112,8 +136,8 @@ impl BundleGenerator for ResourceManager {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
-        todo!()
+    fn bundles_stream(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Stream {
+        BundleIter { locales, res_ids }
     }
 }
 
@@ -439,4 +463,20 @@ fn localization_format_missing_argument_error() {
             ))],
         },]
     );
+}
+
+#[tokio::test]
+async fn localization_handle_state_changes_mid_async() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into()];
+    let locales = Locales::new(vec![langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, false, locales, res_mgr);
+
+    let future = loc.format_value("key", None, &mut errors);
+
+    loc.add_resource_id("test2.ftl".to_string());
+
+    future.await;
 }
