@@ -90,6 +90,7 @@
 //! next translation request.
 //!
 //! See [`env::LocalesProvider`] trait for an example of a reactive system implementation.
+mod bundles;
 mod cache;
 pub mod env;
 mod errors;
@@ -98,6 +99,6 @@ mod localization;
 mod pin_cell;
 pub mod types;
 
+pub use bundles::Bundles;
 pub use errors::LocalizationError;
-pub use localization::Bundles;
 pub use localization::Localization;
