@@ -13,19 +13,20 @@ fn localization_format_value() {
         vec!["en-US".parse().unwrap(), "pl".parse().unwrap()],
         res_mgr,
     );
+    let bundles = loc.bundles();
     let mut errors = vec![];
 
-    let value = loc
+    let value = bundles
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World")));
 
-    let value2 = loc
+    let value2 = bundles
         .format_value_sync("new-message", None, &mut errors)
         .unwrap();
     assert_eq!(value2, Some(Cow::Borrowed("Nowa Wiadomość")));
 
-    let value3 = loc
+    let value3 = bundles
         .format_value_sync("missing-message", None, &mut errors)
         .unwrap();
     assert_eq!(value3, None);

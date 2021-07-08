@@ -282,7 +282,7 @@ macro_rules! format_messages_from_inner {
 
         let mut is_complete = false;
 
-        for bundle in $step {
+        while let Some(bundle) = $step {
             let bundle = bundle.as_ref().unwrap_or_else(|(bundle, err)| {
                 $errors.extend(err.iter().cloned().map(Into::into));
                 bundle
