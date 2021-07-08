@@ -93,10 +93,34 @@ impl futures::Stream for BundleIter {
     type Item = FluentBundleResult<FluentResource>;
 
     fn poll_next(
-        self: std::pin::Pin<&mut Self>,
+        mut self: std::pin::Pin<&mut Self>,
         _cx: &mut std::task::Context<'_>,
     ) -> std::task::Poll<Option<Self::Item>> {
-        todo!()
+        if let Some(locale) = self.locales.next() {
+            let mut bundle = FluentBundle::new(vec![locale.clone()]);
+            bundle.set_use_isolating(false);
+
+            let mut errors = vec![];
+            for res_id in &self.res_ids {
+                let full_path = format!("./tests/resources/{}/{}", locale, res_id);
+                let source = fs::read_to_string(full_path).unwrap();
+                let res = match FluentResource::try_new(source) {
+                    Ok(res) => res,
+                    Err((res, err)) => {
+                        errors.extend(err.into_iter().map(Into::into));
+                        res
+                    }
+                };
+                bundle.add_resource(res).unwrap();
+            }
+            if errors.is_empty() {
+                Some(Ok(bundle)).into()
+            } else {
+                Some(Err((bundle, errors))).into()
+            }
+        } else {
+            None.into()
+        }
     }
 }
 
@@ -112,8 +136,8 @@ impl BundleGenerator for ResourceManager {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
-        todo!()
+    fn bundles_stream(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Stream {
+        BundleIter { locales, res_ids }
     }
 }
 
@@ -125,18 +149,19 @@ fn localization_format() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
+    let bundles = loc.bundles();
 
-    let value = loc
+    let value = bundles
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
 
-    let value = loc
+    let value = bundles
         .format_value_sync("missing-message", None, &mut errors)
         .unwrap();
     assert_eq!(value, None);
 
-    let value = loc
+    let value = bundles
         .format_value_sync("hello-world-3", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World 3 [en]")));
@@ -153,8 +178,9 @@ fn localization_on_change() {
     let mut errors = vec![];
 
     let mut loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let bundles = loc.bundles();
 
-    let value = loc
+    let value = bundles
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World [en]")));
@@ -162,7 +188,8 @@ fn localization_on_change() {
     locales.insert(0, langid!("pl"));
     loc.on_change();
 
-    let value = loc
+    let bundles = loc.bundles();
+    let value = bundles
         .format_value_sync("hello-world", None, &mut errors)
         .unwrap();
     assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
@@ -177,8 +204,9 @@ fn localization_format_value_missing_errors() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let bundles = loc.bundles();
 
-    let _ = loc
+    let _ = bundles
         .format_value_sync("missing-message", None, &mut errors)
         .unwrap();
     assert_eq!(
@@ -201,7 +229,7 @@ fn localization_format_value_missing_errors() {
 
     errors.clear();
 
-    let _ = loc
+    let _ = bundles
         .format_value_sync("message-3", None, &mut errors)
         .unwrap();
     assert_eq!(
@@ -232,8 +260,9 @@ fn localization_format_value_sync_missing_errors() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let bundles = loc.bundles();
 
-    let _ = loc
+    let _ = bundles
         .format_value_sync("missing-message", None, &mut errors)
         .unwrap();
     assert_eq!(
@@ -256,7 +285,7 @@ fn localization_format_value_sync_missing_errors() {
 
     errors.clear();
 
-    let _ = loc
+    let _ = bundles
         .format_value_sync("message-3", None, &mut errors)
         .unwrap();
     assert_eq!(
@@ -287,8 +316,9 @@ fn localization_format_values_sync_missing_errors() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let bundles = loc.bundles();
 
-    let _ = loc
+    let _ = bundles
         .format_values_sync(
             &["missing-message".into(), "missing-message-2".into()],
             &mut errors,
@@ -326,7 +356,7 @@ fn localization_format_values_sync_missing_errors() {
 
     errors.clear();
 
-    let _ = loc
+    let _ = bundles
         .format_values_sync(&["message-3".into()], &mut errors)
         .unwrap();
     assert_eq!(
@@ -357,8 +387,9 @@ fn localization_format_messages_sync_missing_errors() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let bundles = loc.bundles();
 
-    let _ = loc
+    let _ = bundles
         .format_messages_sync(
             &["missing-message".into(), "missing-message-2".into()],
             &mut errors,
@@ -403,6 +434,7 @@ fn localization_format_missing_argument_error() {
     let mut errors = vec![];
 
     let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
+    let bundles = loc.bundles();
 
     let mut args = FluentArgs::new();
     args.set("userName", "John");
@@ -411,7 +443,7 @@ fn localization_format_missing_argument_error() {
         args: Some(args),
     }];
 
-    let msgs = loc.format_messages_sync(&keys, &mut errors).unwrap();
+    let msgs = bundles.format_messages_sync(&keys, &mut errors).unwrap();
     assert_eq!(
         msgs.get(0).unwrap().as_ref().unwrap().value,
         Some(Cow::Borrowed("Hello, John. [en]"))
@@ -422,7 +454,7 @@ fn localization_format_missing_argument_error() {
         id: "message-4".into(),
         args: None,
     }];
-    let msgs = loc.format_messages_sync(&keys, &mut errors).unwrap();
+    let msgs = bundles.format_messages_sync(&keys, &mut errors).unwrap();
     assert_eq!(
         msgs.get(0).unwrap().as_ref().unwrap().value,
         Some(Cow::Borrowed("Hello, {$userName}. [en]"))
@@ -439,4 +471,20 @@ fn localization_format_missing_argument_error() {
             ))],
         },]
     );
+}
+
+#[tokio::test]
+async fn localization_handle_state_changes_mid_async() {
+    let resource_ids: Vec<String> = vec!["test.ftl".into()];
+    let locales = Locales::new(vec![langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let mut loc = Localization::with_env(resource_ids, false, locales, res_mgr);
+
+    let bundles = loc.bundles().clone();
+
+    loc.add_resource_id("test2.ftl".to_string());
+
+    bundles.format_value("key", None, &mut errors).await;
 }
