@@ -4,7 +4,7 @@ description = """
 High-level abstraction model for managing localization resources
 and runtime localization lifecycle.
 """
-version = "0.4.4"
+version = "0.5.0"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",

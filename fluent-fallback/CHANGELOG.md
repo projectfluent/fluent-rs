@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.5.0 (Jul 8, 2021)
+  - Separate out `Bundles` for state management.
+
 ## fluent-fallback 0.4.4 (May 3, 2021)
   - Fix waiting from multiple tasks. (#224)
   - Bind locale iterator generics of `LocalesProvider` and `BundleGenerator`.
