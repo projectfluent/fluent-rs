@@ -116,16 +116,14 @@ where
     G: BundleGenerator<LocalesIter = P::Iter>,
     P: LocalesProvider,
 {
-    pub fn bundles(&self) -> Rc<Bundles<G>> {
-        self.bundles
-            .get_or_init(|| {
-                Rc::new(Bundles::new(
-                    self.sync,
-                    self.res_ids.clone(),
-                    &self.generator,
-                    &self.provider,
-                ))
-            })
-            .clone()
+    pub fn bundles(&self) -> &Rc<Bundles<G>> {
+        self.bundles.get_or_init(|| {
+            Rc::new(Bundles::new(
+                self.sync,
+                self.res_ids.clone(),
+                &self.generator,
+                &self.provider,
+            ))
+        })
     }
 }

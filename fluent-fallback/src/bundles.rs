@@ -28,7 +28,7 @@ where
     pub fn prefetch_sync(&self) {
         match &self.0 {
             BundlesInner::Iter(iter) => iter.prefetch(),
-            BundlesInner::Stream(_) => todo!(),
+            BundlesInner::Stream(_) => panic!("Can't prefetch a sync bundle set asynchronously"),
         }
     }
 }
@@ -40,7 +40,7 @@ where
 {
     pub async fn prefetch_async(&self) {
         match &self.0 {
-            BundlesInner::Iter(_) => todo!(),
+            BundlesInner::Iter(_) => panic!("Can't prefetch a async bundle set synchronously"),
             BundlesInner::Stream(stream) => stream.prefetch().await,
         }
     }

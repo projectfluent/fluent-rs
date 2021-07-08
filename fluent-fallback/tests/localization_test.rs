@@ -482,7 +482,7 @@ async fn localization_handle_state_changes_mid_async() {
 
     let mut loc = Localization::with_env(resource_ids, false, locales, res_mgr);
 
-    let bundles = loc.bundles();
+    let bundles = loc.bundles().clone();
 
     loc.add_resource_id("test2.ftl".to_string());
 
