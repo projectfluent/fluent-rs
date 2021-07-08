@@ -1,11 +1,14 @@
-use crate::cache::{AsyncCache, Cache};
-use crate::errors::LocalizationError;
-use crate::generator::{BundleGenerator, BundleIterator, BundleStream};
-use crate::types::{L10nAttribute, L10nKey, L10nMessage};
+use crate::{
+    cache::{AsyncCache, Cache},
+    env::LocalesProvider,
+    errors::LocalizationError,
+    generator::{BundleGenerator, BundleIterator, BundleStream},
+    types::{L10nAttribute, L10nKey, L10nMessage},
+};
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
 use std::borrow::Cow;
 
-pub enum Bundles<G>
+pub enum BundlesInner<G>
 where
     G: BundleGenerator,
 {
@@ -13,15 +16,19 @@ where
     Stream(AsyncCache<G::Stream, G::Resource>),
 }
 
+pub struct Bundles<G>(BundlesInner<G>)
+where
+    G: BundleGenerator;
+
 impl<G> Bundles<G>
 where
     G: BundleGenerator,
     G::Iter: BundleIterator,
 {
     pub fn prefetch_sync(&self) {
-        match self {
-            Self::Iter(iter) => iter.prefetch(),
-            Self::Stream(_) => todo!(),
+        match &self.0 {
+            BundlesInner::Iter(iter) => iter.prefetch(),
+            BundlesInner::Stream(_) => todo!(),
         }
     }
 }
@@ -32,9 +39,9 @@ where
     G::Stream: BundleStream,
 {
     pub async fn prefetch_async(&self) {
-        match self {
-            Self::Iter(_) => todo!(),
-            Self::Stream(stream) => stream.prefetch().await,
+        match &self.0 {
+            BundlesInner::Iter(_) => todo!(),
+            BundlesInner::Stream(stream) => stream.prefetch().await,
         }
     }
 }
@@ -43,15 +50,31 @@ impl<G> Bundles<G>
 where
     G: BundleGenerator,
 {
+    pub fn new<P>(sync: bool, res_ids: Vec<String>, generator: &G, provider: &P) -> Self
+    where
+        G: BundleGenerator<LocalesIter = P::Iter>,
+        P: LocalesProvider,
+    {
+        Self(if sync {
+            BundlesInner::Iter(Cache::new(
+                generator.bundles_iter(provider.locales(), res_ids),
+            ))
+        } else {
+            BundlesInner::Stream(AsyncCache::new(
+                generator.bundles_stream(provider.locales(), res_ids),
+            ))
+        })
+    }
+
     pub async fn format_value<'l>(
         &'l self,
         id: &'l str,
         args: Option<&'l FluentArgs<'_>>,
         errors: &mut Vec<LocalizationError>,
     ) -> Option<Cow<'l, str>> {
-        match self {
-            Bundles::Iter(cache) => Self::format_value_from_iter(cache, id, args, errors),
-            Bundles::Stream(stream) => {
+        match &self.0 {
+            BundlesInner::Iter(cache) => Self::format_value_from_iter(cache, id, args, errors),
+            BundlesInner::Stream(stream) => {
                 Self::format_value_from_stream(stream, id, args, errors).await
             }
         }
@@ -62,9 +85,11 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<Cow<'l, str>>> {
-        match self {
-            Bundles::Iter(cache) => Self::format_values_from_iter(cache, keys, errors),
-            Bundles::Stream(stream) => Self::format_values_from_stream(stream, keys, errors).await,
+        match &self.0 {
+            BundlesInner::Iter(cache) => Self::format_values_from_iter(cache, keys, errors),
+            BundlesInner::Stream(stream) => {
+                Self::format_values_from_stream(stream, keys, errors).await
+            }
         }
     }
 
@@ -73,9 +98,9 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Vec<Option<L10nMessage<'l>>> {
-        match self {
-            Bundles::Iter(cache) => Self::format_messages_from_iter(cache, keys, errors),
-            Bundles::Stream(stream) => {
+        match &self.0 {
+            BundlesInner::Iter(cache) => Self::format_messages_from_iter(cache, keys, errors),
+            BundlesInner::Stream(stream) => {
                 Self::format_messages_from_stream(stream, keys, errors).await
             }
         }
@@ -87,9 +112,9 @@ where
         args: Option<&'l FluentArgs>,
         errors: &mut Vec<LocalizationError>,
     ) -> Result<Option<Cow<'l, str>>, LocalizationError> {
-        match self {
-            Bundles::Iter(cache) => Ok(Self::format_value_from_iter(cache, id, args, errors)),
-            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
+        match &self.0 {
+            BundlesInner::Iter(cache) => Ok(Self::format_value_from_iter(cache, id, args, errors)),
+            BundlesInner::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
     }
 
@@ -98,9 +123,9 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Result<Vec<Option<Cow<'l, str>>>, LocalizationError> {
-        match self {
-            Bundles::Iter(cache) => Ok(Self::format_values_from_iter(cache, keys, errors)),
-            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
+        match &self.0 {
+            BundlesInner::Iter(cache) => Ok(Self::format_values_from_iter(cache, keys, errors)),
+            BundlesInner::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
     }
 
@@ -109,9 +134,9 @@ where
         keys: &'l [L10nKey<'l>],
         errors: &mut Vec<LocalizationError>,
     ) -> Result<Vec<Option<L10nMessage<'l>>>, LocalizationError> {
-        match self {
-            Bundles::Iter(cache) => Ok(Self::format_messages_from_iter(cache, keys, errors)),
-            Bundles::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
+        match &self.0 {
+            BundlesInner::Iter(cache) => Ok(Self::format_messages_from_iter(cache, keys, errors)),
+            BundlesInner::Stream(_) => Err(LocalizationError::SyncRequestInAsyncMode),
         }
     }
 }

@@ -118,19 +118,11 @@ impl BundleGenerator for ResourceManager {
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(
-        &self,
-        locales: Self::LocalesIter,
-        res_ids: Vec<String>,
-    ) -> Self::Iter {
+    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Iter {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(
-        &self,
-        _locales: Self::LocalesIter,
-        _res_ids: Vec<String>,
-    ) -> Self::Stream {
+    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
         todo!()
     }
 }

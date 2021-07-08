@@ -1,7 +1,8 @@
-use crate::bundles::Bundles;
-use crate::cache::{AsyncCache, Cache};
-use crate::env::LocalesProvider;
-use crate::generator::{BundleGenerator, BundleIterator, BundleStream};
+use crate::{
+    bundles::Bundles,
+    env::LocalesProvider,
+    generator::{BundleGenerator, BundleIterator, BundleStream},
+};
 use once_cell::sync::OnceCell;
 use std::rc::Rc;
 
@@ -118,17 +119,12 @@ where
     pub fn bundles(&self) -> Rc<Bundles<G>> {
         self.bundles
             .get_or_init(|| {
-                Rc::new(if self.sync {
-                    Bundles::Iter(Cache::new(
-                        self.generator
-                            .bundles_iter(self.provider.locales(), self.res_ids.clone()),
-                    ))
-                } else {
-                    Bundles::Stream(AsyncCache::new(
-                        self.generator
-                            .bundles_stream(self.provider.locales(), self.res_ids.clone()),
-                    ))
-                })
+                Rc::new(Bundles::new(
+                    self.sync,
+                    self.res_ids.clone(),
+                    &self.generator,
+                    &self.provider,
+                ))
             })
             .clone()
     }
