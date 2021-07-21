@@ -4,8 +4,11 @@
 
   - …
 
+## fluent-pseudo 0.3.1 (July 21, 2021)
+  - Update README to document the API changes in 0.3.0.
+
 ## fluent-pseudo 0.3.0 (July 19, 2021)
-  - Ability to wrap strings in markers.
+  - Breaking change: Add ability to wrap strings in markers.
 
 ## fluent-pseudo 0.2.3 (November 12, 2020)
   - Improve readability of the accented pseudo.

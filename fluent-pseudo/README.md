@@ -18,7 +18,7 @@ use fluent_pseudo::transform;
 
 fn transform_wrapper(s: &str) -> Cow<str> {
     // Not flipped and elongated pseudolocalization.
-    transform(s, false, true)
+    transform(s, false, true, false)
 }
 
 
