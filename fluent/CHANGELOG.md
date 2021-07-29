@@ -4,7 +4,7 @@
 
   - …
 
-## fluent 0.15.1 (July 29, 2021)
+## fluent 0.16.0 (July 29, 2021)
   - Update `fluent-pseudo` to 0.3.
 
 ## fluent 0.15.0 (February 9, 2021)
