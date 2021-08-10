@@ -19,16 +19,6 @@ enum TextElementPosition {
     Continuation,
 }
 
-// This enum allows us to mark pointers in the source which will later become text elements
-// but without slicing them out of the source string. This makes the indentation adjustments
-// cheaper since they'll happen on the pointers, rather than extracted slices.
-#[derive(Debug)]
-enum PatternElementPlaceholders<S> {
-    Placeable(ast::Expression<S>),
-    // (start, end, indent, position)
-    TextElement(usize, usize, usize, TextElementPosition),
-}
-
 // This enum tracks whether the text element is blank or not.
 // This is important to identify text elements which should not be taken into account
 // when calculating common indent.
@@ -43,7 +33,8 @@ where
     S: Slice<'s>,
 {
     pub(super) fn get_pattern(&mut self) -> Result<Option<ast::Pattern<S>>> {
-        let mut elements = vec![];
+        let mut elements: Vec<ast::PatternElement<S>> = vec![];
+        let mut text_positions = vec![];
         let mut last_non_blank = None;
         let mut common_indent = None;
 
@@ -63,7 +54,7 @@ where
                 }
                 let exp = self.get_placeable()?;
                 last_non_blank = Some(elements.len());
-                elements.push(PatternElementPlaceholders::Placeable(exp));
+                elements.push(ast::PatternElement::Placeable { expression: exp });
                 text_element_role = TextElementPosition::Continuation;
             } else {
                 let slice_start = self.ptr;
@@ -83,7 +74,8 @@ where
                         break;
                     }
                 }
-                let (start, end, text_element_type, termination_reason) = self.get_text_slice()?;
+                let start = self.ptr;
+                let (end, text_element_type, termination_reason) = self.get_text_slice()?;
                 if start != end {
                     if text_element_role == TextElementPosition::LineStart
                         && text_element_type == TextElementType::NonBlank
@@ -103,12 +95,12 @@ where
                         if text_element_type == TextElementType::NonBlank {
                             last_non_blank = Some(elements.len());
                         }
-                        elements.push(PatternElementPlaceholders::TextElement(
-                            slice_start,
-                            end,
-                            indent,
-                            text_element_role,
-                        ));
+                        elements.push(ast::PatternElement::TextElement {
+                            value: self.source.slice(start..end),
+                        });
+                        if text_element_role == TextElementPosition::LineStart {
+                            text_positions.push((elements.len(), start, end, indent));
+                        }
                     }
                 }
 
@@ -122,41 +114,33 @@ where
         }
 
         if let Some(last_non_blank) = last_non_blank {
-            let elements = elements
-                .into_iter()
-                .take(last_non_blank + 1)
-                .enumerate()
-                .map(|(i, elem)| match elem {
-                    PatternElementPlaceholders::Placeable(expression) => {
-                        ast::PatternElement::Placeable { expression }
-                    }
-                    PatternElementPlaceholders::TextElement(start, end, indent, role) => {
-                        let start = if role == TextElementPosition::LineStart {
-                            common_indent.map_or_else(
-                                || start + indent,
-                                |common_indent| start + std::cmp::min(indent, common_indent),
-                            )
-                        } else {
-                            start
-                        };
-                        let mut value = self.source.slice(start..end);
-                        if last_non_blank == i {
-                            value.trim();
+            elements.truncate(last_non_blank + 1);
+
+            for (idx, start, end, indent) in text_positions {
+                let new_start = common_indent.map_or_else(
+                    || start + indent,
+                    |common_indent| start + std::cmp::min(indent, common_indent),
+                );
+                if new_start != start {
+                    match elements[idx - 1] {
+                        ast::PatternElement::TextElement { ref mut value } => {
+                            *value = self.source.slice(new_start..end)
                         }
-                        ast::PatternElement::TextElement { value }
+                        _ => unreachable!(),
                     }
-                })
-                .collect();
+                }
+            }
+            if let Some(ast::PatternElement::TextElement { ref mut value }) = elements.last_mut() {
+                (*value).trim()
+            }
+
             return Ok(Some(ast::Pattern { elements }));
         }
 
         Ok(None)
     }
 
-    fn get_text_slice(
-        &mut self,
-    ) -> Result<(usize, usize, TextElementType, TextElementTermination)> {
-        let start_pos = self.ptr;
+    fn get_text_slice(&mut self) -> Result<(usize, TextElementType, TextElementTermination)> {
         let mut text_element_type = TextElementType::Blank;
 
         while let Some(b) = get_current_byte!(self) {
@@ -165,7 +149,6 @@ where
                 b'\n' => {
                     self.ptr += 1;
                     return Ok((
-                        start_pos,
                         self.ptr,
                         text_element_type,
                         TextElementTermination::LineFeed,
@@ -174,7 +157,6 @@ where
                 b'\r' if self.is_byte_at(b'\n', self.ptr + 1) => {
                     self.ptr += 1;
                     return Ok((
-                        start_pos,
                         self.ptr - 1,
                         text_element_type,
                         TextElementTermination::CRLF,
@@ -182,7 +164,6 @@ where
                 }
                 b'{' => {
                     return Ok((
-                        start_pos,
                         self.ptr,
                         text_element_type,
                         TextElementTermination::PlaceableStart,
@@ -197,11 +178,6 @@ where
                 }
             }
         }
-        Ok((
-            start_pos,
-            self.ptr,
-            text_element_type,
-            TextElementTermination::EOF,
-        ))
+        Ok((self.ptr, text_element_type, TextElementTermination::EOF))
     }
 }

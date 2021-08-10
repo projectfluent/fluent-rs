@@ -1,5 +1,5 @@
 use std::ops::Range;
-pub trait Slice<'s>: AsRef<str> + Clone + PartialEq {
+pub trait Slice<'s>: AsRef<str> + Clone + PartialEq + std::fmt::Debug {
     fn slice(&self, range: Range<usize>) -> Self;
     fn trim(&mut self);
 }
