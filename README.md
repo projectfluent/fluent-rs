@@ -4,23 +4,23 @@
 
 The crates perform the following functions:
 
-## fluent [![crates.io](https://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
+## fluent [![crates.io](https://img.shields.io/crates/v/fluent.svg)](https://crates.io/crates/fluent)
 
 Umbrella crate combining crates that are ready to be used in production.
 
-## fluent-syntax [![crates.io](https://meritbadge.herokuapp.com/fluent_syntax)](https://crates.io/crates/fluent_syntax)
+## fluent-syntax [![crates.io](https://img.shields.io/crates/v/fluent_syntax.svg)](https://crates.io/crates/fluent_syntax)
 
 Low level Fluent Syntax AST and parser API.
 
-## fluent-bundle [![crates.io](https://meritbadge.herokuapp.com/fluent_bundle)](https://crates.io/crates/fluent_bundle)
+## fluent-bundle [![crates.io](https://img.shields.io/crates/v/fluent_bundle.svg)](https://crates.io/crates/fluent_bundle)
 
 Implementation of the low-level Fluent Localization System providing localization capabilities for any Rust project.
 
-## fluent-fallback [![crates.io](https://meritbadge.herokuapp.com/fluent_fallback)](https://crates.io/crates/fluent_fallback)
+## fluent-fallback [![crates.io](https://img.shields.io/crates/v/fluent_fallback.svg)](https://crates.io/crates/fluent_fallback)
 
 Implementation of the high-level Fluent Localization System providing localization capabilities for any Rust project.
 
-## fluent-resmgr [![crates.io](https://meritbadge.herokuapp.com/fluent_resmgr)](https://crates.io/crates/fluent_resmgr)
+## fluent-resmgr [![crates.io](https://img.shields.io/crates/v/fluent_resmgr.svg)](https://crates.io/crates/fluent_resmgr)
 
 Resource Manager for localization resources.
 
