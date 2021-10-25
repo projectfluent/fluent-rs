@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-bundle 0.15.2 (October 25, 2021)
+  - Bump `self_cell` to 0.10.
+
 ## fluent-bundle 0.15.1 (April 26, 2021)
   - Expose `resolver::errors` to allow for `ReferenceKind` matching.
 
