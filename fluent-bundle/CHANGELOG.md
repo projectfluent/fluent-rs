@@ -4,6 +4,43 @@
 
   - …
 
+## fluent-bundle 0.14.4 (January 31, 2021)
+  - Expose `FluentResource::source()`.
+  - Update `ouroboros` to 0.8.
+
+## fluent-bundle 0.14.3 (January 24, 2021)
+  - Use the `Parser::parse_runtime` in `FluentResource::try_new`.
+  - Update to `fluent-syntax` 0.10.2.
+
+## fluent-bundle 0.14.2 (January 21, 2021)
+  - Switch to `FxHash` for entry hashing.
+
+## fluent-bundle 0.14.1 (January 12, 2021)
+  - Bump `ouroboros` to 0.7.
+
+## fluent-bundle 0.14.0 (January 3, 2021)
+  - Switch `FluentBundle::new` to take a `Vec<LanguageIdentifier>`.
+  - Switch `rental` to `ouroboros`.
+  - Add `Default` to `FluentArgs`.
+  - Make `FluentError` implement `Error`.
+
+## fluent-bundle 0.13.2 (November 11, 2020)
+  - Re-add `Debug` to `FluentArgs`
+
+## fluent-bundle 0.13.1 (September 24, 2020)
+  - Replace `HashMap` based `FluentMessage` with `Vec` based one.
+  - 0.13.1 brings close to 40% performance improvements over 0.12 on our benchmarks!
+
+## fluent-bundle 0.13.0 (September 24, 2020)
+  - Update to `fluent-syntax` 0.10.
+  - Add `FluentBundle::write_pattern` which can write to pre-allocated buffer.
+  - Get rid of `DisplayableNode` and simplify `FluentValue`.
+  - Reorganize `Resolver` around `impl Write`.
+  - Introduce `FluentArgs` as a struct over `Vec<FluentArg>`.
+  - Introduce `FluentMessage` and `FluentAttributes`.
+  - Make `FluentArgs` accept `Cow<str>` as keys.
+
+
 ## fluent-bundle 0.12.0 (May 6, 2020)
   - Add `Send` to `FluentType::Custom` (#173)
   - Update `intl-pluralrules` to 7.0.

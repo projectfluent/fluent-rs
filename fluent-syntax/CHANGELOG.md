@@ -4,6 +4,32 @@
 
   - …
 
+## fluent-syntax 0.11.0 (February 9, 2021)
+  - Document the crate.
+  - Switch to use `thiserror` for Error annotations.
+  - Add `iai` benchmarks.
+  - Minor updates to AST names.
+  - Introduce `parse`/`parse_runtime` functions instead of `Parser` struct.
+  - Make `ParserError` use `Range`.
+
+## fluent-syntax 0.10.3 (January 31, 2021)
+  - A bunch of microoptimizations driven by the ioi benchmark.
+
+## fluent-syntax 0.10.2 (January 24, 2021)
+  - Add `parse_runtime` method on `Parser` which skips comments.
+  - Fix handling of empty CRLF lines in mutliline patterns.
+
+## fluent-syntax 0.10.1 (January 3, 2021)
+  - Make `ParserError` `Clone`.
+  - Apply `clippy` lints.
+
+## fluent-syntax 0.10.0 (September 24, 2020)
+  - Refactored AST to be generic over S which enables sliced, or owned ASTs.
+  - Simplified the AST to get it closer to reference AST.
+  - Refactored the parser to be composable.
+  - Moved serde derives onto AST nodes behind `serde` optional feature.
+  - Around 8-10% performance improvement on parsing "browser" and "preferences" contexts.
+
 ## fluent-syntax 0.9.3 (March 4, 2020)
   - Move JSON serialization from tests to source code behind the feature flag.
   - Fix a minor syntax issue that caused the parser to recognize a comment ending on EOF as Junk.

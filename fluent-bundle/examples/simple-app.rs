@@ -98,11 +98,12 @@ fn main() {
     );
     let current_locale = resolved_locales
         .get(0)
+        .cloned()
         .expect("At least one locale should match.");
 
     // 5. Create a new Fluent FluentBundle using the
     //    resolved locales.
-    let mut bundle = FluentBundle::new(resolved_locales.clone());
+    let mut bundle = FluentBundle::new(resolved_locales.into_iter().cloned().collect());
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
@@ -130,26 +131,26 @@ fn main() {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = FluentArgs::new();
-                    args.insert("input", FluentValue::from(i));
-                    args.insert("value", FluentValue::from(collatz(i)));
+                    args.set("input", FluentValue::from(i));
+                    args.set("value", FluentValue::from(collatz(i)));
                     // 7.3. Format the message.
                     let mut errors = vec![];
                     let msg = bundle
                         .get_message("response-msg")
                         .expect("Message doesn't exist.");
-                    let pattern = msg.value.expect("Message has no value.");
+                    let pattern = msg.value().expect("Message has no value.");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
-                    args.insert("input", FluentValue::from(input.as_str()));
-                    args.insert("reason", FluentValue::from(err.to_string()));
+                    args.set("input", FluentValue::from(input.as_str()));
+                    args.set("reason", FluentValue::from(err.to_string()));
                     let mut errors = vec![];
                     let msg = bundle
                         .get_message("input-parse-error")
                         .expect("Message doesn't exist.");
-                    let pattern = msg.value.expect("Message has no value.");
+                    let pattern = msg.value().expect("Message has no value.");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
@@ -160,7 +161,7 @@ fn main() {
             let msg = bundle
                 .get_message("missing-arg-error")
                 .expect("Message doesn't exist.");
-            let pattern = msg.value.expect("Message has no value.");
+            let pattern = msg.value().expect("Message has no value.");
             let value = bundle.format_pattern(&pattern, None, &mut errors);
             println!("{}", value);
         }

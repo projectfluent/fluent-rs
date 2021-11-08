@@ -4,8 +4,8 @@
 framework designed to unleash the entire expressive power of natural language
 translations.
 
-[![crates.io](http://meritbadge.herokuapp.com/fluent-pseudo)](https://crates.io/crates/fluent-pseudo)
-[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
+[![crates.io](https://meritbadge.herokuapp.com/fluent-pseudo)](https://crates.io/crates/fluent-pseudo)
+[![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)](https://github.com/projectfluent/fluent-rs/actions?query=branch%3Amaster+workflow%3A%22Build+and+test%22)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
 
 Usage
@@ -28,7 +28,7 @@ fn main() {
         .expect("Could not parse an FTL string.");
 
     let langid_en = langid!("en");
-    let mut bundle = FluentBundle::new(&[langid_en]);
+    let mut bundle = FluentBundle::new(vec![langid_en]);
 
     // Set pseudolocalization
     bundle.set_transform(Some(transform_wrapper));

@@ -4,8 +4,8 @@
 framework designed to unleash the entire expressive power of natural language
 translations.
 
-[![crates.io](http://meritbadge.herokuapp.com/fluent)](https://crates.io/crates/fluent)
-[![Build Status](https://travis-ci.org/projectfluent/fluent-rs.svg?branch=master)](https://travis-ci.org/projectfluent/fluent-rs)
+[![crates.io](https://meritbadge.herokuapp.com/fluent-bundle)](https://crates.io/crates/fluent-bundle)
+[![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)](https://github.com/projectfluent/fluent-rs/actions?query=branch%3Amaster+workflow%3A%22Build+and+test%22)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=master)](https://coveralls.io/github/projectfluent/fluent-rs?branch=master)
 
 Project Fluent keeps simple things simple and makes complex things possible.
@@ -31,7 +31,7 @@ fn main() {
         .expect("Could not parse an FTL string.");
 
     let langid_en = langid!("en");
-    let mut bundle = FluentBundle::new(&[langid_en]);
+    let mut bundle = FluentBundle::new(vec![langid_en]);
 
     bundle.add_resource(&res)
         .expect("Failed to add FTL resources to the bundle.");

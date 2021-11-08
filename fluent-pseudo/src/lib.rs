@@ -3,12 +3,12 @@ use regex::Regex;
 use std::borrow::Cow;
 
 static TRANSFORM_SMALL_MAP: &[char] = &[
-    'ȧ', 'ƀ', 'ƈ', 'ḓ', 'ḗ', 'ƒ', 'ɠ', 'ħ', 'ī', 'ĵ', 'ķ', 'ŀ', 'ḿ', 'ƞ', 'ǿ', 'ƥ', 'ɋ', 'ř', 'ş',
-    'ŧ', 'ŭ', 'ṽ', 'ẇ', 'ẋ', 'ẏ', 'ẑ',
+    'a', 'ƀ', 'ƈ', 'ḓ', 'e', 'ƒ', 'ɠ', 'ħ', 'i', 'ĵ', 'ķ', 'ŀ', 'ḿ', 'ƞ', 'o', 'ƥ', 'ɋ', 'ř', 'ş',
+    'ŧ', 'u', 'ṽ', 'ẇ', 'ẋ', 'ẏ', 'ẑ',
 ];
 static TRANSFORM_CAPS_MAP: &[char] = &[
-    'Ȧ', 'Ɓ', 'Ƈ', 'Ḓ', 'Ḗ', 'Ƒ', 'Ɠ', 'Ħ', 'Ī', 'Ĵ', 'Ķ', 'Ŀ', 'Ḿ', 'Ƞ', 'Ǿ', 'Ƥ', 'Ɋ', 'Ř', 'Ş',
-    'Ŧ', 'Ŭ', 'Ṽ', 'Ẇ', 'Ẋ', 'Ẏ', 'Ẑ',
+    'A', 'Ɓ', 'Ƈ', 'Ḓ', 'E', 'Ƒ', 'Ɠ', 'Ħ', 'I', 'Ĵ', 'Ķ', 'Ŀ', 'Ḿ', 'Ƞ', 'O', 'Ƥ', 'Ɋ', 'Ř', 'Ş',
+    'Ŧ', 'U', 'Ṽ', 'Ẇ', 'Ẋ', 'Ẏ', 'Ẑ',
 ];
 
 static FLIPPED_SMALL_MAP: &[char] = &[
@@ -69,11 +69,12 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
     };
 
     re_az.replace_all(s, |caps: &Captures| {
-        let ch = caps[0].chars().nth(0).unwrap();
+        let ch = caps[0].chars().next().unwrap();
         let cc = ch as u8;
-        if cc >= 97 && cc <= 122 {
+        if (97..=122).contains(&cc) {
             let pos = cc - 97;
             let new_char = small_map[pos as usize];
+            // duplicate "a", "e", "o" and "u" to emulate ~30% longer text
             if elongate && (cc == 97 || cc == 101 || cc == 111 || cc == 117) {
                 let mut s = new_char.to_string();
                 s.push(new_char);
@@ -81,7 +82,7 @@ pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
             } else {
                 new_char.to_string()
             }
-        } else if cc >= 65 && cc <= 90 {
+        } else if (65..=90).contains(&cc) {
             let pos = cc - 65;
             let new_char = caps_map[pos as usize];
             new_char.to_string()
@@ -98,10 +99,10 @@ mod tests {
     #[test]
     fn it_works() {
         let x = transform("Hello World", false, true);
-        assert_eq!(x, "Ħḗḗŀŀǿǿ Ẇǿǿřŀḓ");
+        assert_eq!(x, "Ħeeŀŀoo Ẇoořŀḓ");
 
         let x = transform("Hello World", false, false);
-        assert_eq!(x, "Ħḗŀŀǿ Ẇǿřŀḓ");
+        assert_eq!(x, "Ħeŀŀo Ẇořŀḓ");
 
         let x = transform("Hello World", true, false);
         assert_eq!(x, "Hǝʅʅo Moɹʅp");
@@ -113,10 +114,10 @@ mod tests {
     #[test]
     fn dom_test() {
         let x = transform_dom("Hello <a>World</a>", false, true);
-        assert_eq!(x, "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a>");
+        assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a>");
 
         let x = transform_dom("Hello <a>World</a> in <b>my</b> House.", false, true);
-        assert_eq!(x, "Ħḗḗŀŀǿǿ <a>Ẇǿǿřŀḓ</a> īƞ <b>ḿẏ</b> Ħǿǿŭŭşḗḗ.");
+        assert_eq!(x, "Ħeeŀŀoo <a>Ẇoořŀḓ</a> iƞ <b>ḿẏ</b> Ħoouuşee.");
 
         // Don't touch single character values.
         let x = transform_dom("f", false, true);

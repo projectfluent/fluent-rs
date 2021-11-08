@@ -23,6 +23,7 @@ use fluent_resmgr::resource_manager::ResourceManager;
 use std::env;
 use std::fs;
 use std::io;
+use std::path::PathBuf;
 use std::str::FromStr;
 use unic_langid::LanguageIdentifier;
 
@@ -35,7 +36,10 @@ use unic_langid::LanguageIdentifier;
 fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
     let mut locales = vec![];
 
-    let res_dir = fs::read_dir("./fluent-resmgr/examples/resources/")?;
+    let res_path = PathBuf::from(std::env!("CARGO_MANIFEST_DIR"))
+        .join("examples")
+        .join("resources");
+    let res_dir = fs::read_dir(res_path)?;
     for entry in res_dir {
         if let Ok(entry) = entry {
             let path = entry.path();
@@ -58,7 +62,13 @@ fn main() {
     // 1. Get the command line arguments.
     let args: Vec<String> = env::args().collect();
 
-    let mgr = ResourceManager::new("./fluent-resmgr/examples/resources/{locale}/{res_id}".into());
+    let res_path = PathBuf::from(std::env!("CARGO_MANIFEST_DIR"))
+        .join("examples")
+        .join("resources");
+    let mgr = ResourceManager::new(format!(
+        "{}/{{locale}}/{{res_id}}",
+        res_path.to_str().unwrap()
+    ));
 
     // 2. If the argument length is more than 1,
     //    take the second argument as a comma-separated
@@ -94,24 +104,24 @@ fn main() {
                     // 6.2. Construct a map of arguments
                     //      to format the message.
                     let mut args = FluentArgs::new();
-                    args.insert("input", FluentValue::from(i));
-                    args.insert("value", FluentValue::from(collatz(i)));
+                    args.set("input", FluentValue::from(i));
+                    args.set("value", FluentValue::from(collatz(i)));
                     // 6.3. Format the message.
                     let mut errors = vec![];
                     let msg = bundle.get_message("response-msg").expect("Message exists");
-                    let pattern = msg.value.expect("Message has a value");
+                    let pattern = msg.value().expect("Message has a value");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
                     let mut args = FluentArgs::new();
-                    args.insert("input", FluentValue::from(input.to_string()));
-                    args.insert("reason", FluentValue::from(err.to_string()));
+                    args.set("input", FluentValue::from(input.to_string()));
+                    args.set("reason", FluentValue::from(err.to_string()));
                     let mut errors = vec![];
                     let msg = bundle
                         .get_message("input-parse-error-msg")
                         .expect("Message exists");
-                    let pattern = msg.value.expect("Message has a value");
+                    let pattern = msg.value().expect("Message has a value");
                     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
@@ -122,7 +132,7 @@ fn main() {
             let msg = bundle
                 .get_message("missing-arg-error")
                 .expect("Message exists");
-            let pattern = msg.value.expect("Message has a value");
+            let pattern = msg.value().expect("Message has a value");
             let value = bundle.format_pattern(&pattern, None, &mut errors);
             println!("{}", value);
         }

@@ -1,4 +1,4 @@
-use fluent_bundle::resolve::Scope;
+use fluent_bundle::resolver::Scope;
 use fluent_bundle::types::{
     FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle,
 };
@@ -20,8 +20,8 @@ fn fluent_value_matches() {
     // We'll use `ars` locale since it happens to have all
     // plural rules categories.
     let langid_ars = langid!("ars");
-    let bundle: FluentBundle<FluentResource> = FluentBundle::new(&[langid_ars]);
-    let scope = Scope::new(&bundle, None);
+    let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    let scope = Scope::new(&bundle, None, None);
 
     let string_val = FluentValue::from("string1");
     let string_val_copy = FluentValue::from("string1");
@@ -104,23 +104,23 @@ fn fluent_number_style() {
     let mut fno = FluentNumberOptions::default();
 
     let mut args = FluentArgs::new();
-    args.insert("style", "currency".into());
-    args.insert("currency", "EUR".into());
-    args.insert("currencyDisplay", "code".into());
-    args.insert("useGrouping", "true".into());
-    args.insert("minimumIntegerDigits", 3.into());
-    args.insert("minimumFractionDigits", 3.into());
-    args.insert("maximumFractionDigits", 8.into());
-    args.insert("minimumSignificantDigits", 1.into());
-    args.insert("maximumSignificantDigits", 10.into());
-    args.insert("someRandomOption", 10.into());
+    args.set("style", "currency");
+    args.set("currency", "EUR");
+    args.set("currencyDisplay", "code");
+    args.set("useGrouping", "false");
+    args.set("minimumIntegerDigits", 3);
+    args.set("minimumFractionDigits", 3);
+    args.set("maximumFractionDigits", 8);
+    args.set("minimumSignificantDigits", 1);
+    args.set("maximumSignificantDigits", 10);
+    args.set("someRandomOption", 10);
 
     fno.merge(&args);
 
     assert_eq!(fno.style, FluentNumberStyle::Currency);
     assert_eq!(fno.currency, Some("EUR".to_string()));
     assert_eq!(fno.currency_display, FluentNumberCurrencyDisplayStyle::Code);
-    assert_eq!(fno.use_grouping, true);
+    assert_eq!(fno.use_grouping, false);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
     assert_eq!(num.as_string(), "0.2");

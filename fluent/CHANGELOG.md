@@ -4,6 +4,24 @@
 
   - …
 
+## fluent 0.14.4 (January 31, 2021)
+  - Update `fluent-bundle` to 0.14.4.
+
+## fluent 0.14.3 (January 24, 2021)
+  - Update `fluent-bundle` to 0.14.3.
+
+## fluent 0.14.1 (January 12, 2021)
+  - Update `fluent-bundle` to 0.14.1.
+
+## fluent 0.14.0 (January 3, 2021)
+  - Update `fluent-bundle` to 0.14.0.
+
+## fluent 0.13.1 (September  24, 2020)
+  - Update `fluent-bundle` to 0.13.1.
+
+## fluent 0.13.0 (September 24, 2020)
+  - Update `fluent-bundle` to 0.13.0.
+
 ## fluent 0.12.0 (May 6, 2020)
   - Update `fluent-bundle` to 0.12.0.
   - Update `unic-langid` to 0.9.0.

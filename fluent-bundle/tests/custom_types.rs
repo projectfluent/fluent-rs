@@ -86,8 +86,8 @@ fn fluent_date_time_builtin() {
 
     impl DateTimeOptions {
         pub fn merge(&mut self, input: &FluentArgs) {
-            for (key, value) in input {
-                match *key {
+            for (key, value) in input.iter() {
+                match key {
                     "dateStyle" => self.date_style = value.into(),
                     "timeStyle" => self.time_style = value.into(),
                     _ => {}
@@ -132,7 +132,7 @@ fn fluent_date_time_builtin() {
     }
 
     let lang = langid!("en");
-    let mut bundle = FluentBundle::new(&[lang]);
+    let mut bundle = FluentBundle::new(vec![lang]);
 
     let res = FluentResource::try_new(
         r#"
@@ -153,30 +153,30 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
                     dt.options.merge(named);
                     FluentValue::Custom(Box::new(dt))
                 } else {
-                    FluentValue::None
+                    FluentValue::Error
                 }
             }
             Some(FluentValue::Number(num)) => {
                 let num = num.value as usize;
                 FluentValue::Custom(Box::new(DateTime::new(num, named.into())))
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .unwrap();
 
     let mut errors = vec![];
     let mut args = FluentArgs::new();
-    args.insert(
+    args.set(
         "date",
         FluentValue::Custom(Box::new(DateTime::new(10, DateTimeOptions::default()))),
     );
 
     let msg = bundle.get_message("key-explicit").unwrap();
-    let val = bundle.format_pattern(msg.value.unwrap(), Some(&args), &mut errors);
+    let val = bundle.format_pattern(msg.value().unwrap(), Some(&args), &mut errors);
     assert_eq!(val, "Hello 2020-01-20 12:00 World");
 
     let msg = bundle.get_message("key-ref").unwrap();
-    let val = bundle.format_pattern(msg.value.unwrap(), Some(&args), &mut errors);
+    let val = bundle.format_pattern(msg.value().unwrap(), Some(&args), &mut errors);
     assert_eq!(val, "Hello 2020-01-20 10:00 World");
 }
 
@@ -208,23 +208,23 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
                 num.options.merge(named);
                 FluentValue::Number(num)
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .unwrap();
 
     let mut errors = vec![];
 
     let msg = bundle.get_message("key-num-explicit").unwrap();
-    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    let val = bundle.format_pattern(msg.value().unwrap(), None, &mut errors);
     assert_eq!(val, "Hello 5.00 World");
 
     let msg = bundle.get_message("key-num-implicit").unwrap();
-    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    let val = bundle.format_pattern(msg.value().unwrap(), None, &mut errors);
     assert_eq!(val, "Hello 5.000 World");
 
     bundle.set_formatter(Some(custom_formatter));
 
     let msg = bundle.get_message("key-num-implicit").unwrap();
-    let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+    let val = bundle.format_pattern(msg.value().unwrap(), None, &mut errors);
     assert_eq!(val, "Hello CUSTOM World");
 }

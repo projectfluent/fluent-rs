@@ -4,6 +4,29 @@
 
   - …
 
+## fluent-fallback 0.3.9 (February 3, 2021)
+  - Handle locale management in `Localization`.
+
+## fluent-fallback 0.2.2 (January 16, 2021)
+  - Invalidate bundles on resource list change.
+
+## fluent-fallback 0.2.1 (January 15, 2021)
+  - Add `Localization::is_sync`
+
+## fluent-fallback 0.2.0 (January 12, 2021)
+  - Separate `Sync` and `Async` bundle generators.
+  - Reorganize fallback logic.
+  - Separate out prefetching trait.
+  - Vendor in pin-cell.
+
+## fluent-fallback 0.1.0 (January 3, 2021)
+  - Update `fluent-bundle` to 0.14.
+  - Switch from `elsa` to `chunky-vec`.
+  - Add `Localization::with_generator`.
+  - Add support for Streamed bundles.
+  - Add `LocalizationError`.
+  - Make `L10nKey`, `L10nMessage` and `L10nAttribute` types.
+
 ## fluent-fallback 0.0.4 (May 6, 2020)
   - Update `fluent-bundle` to 0.12.
   - Update `unic-langid` to 0.9.

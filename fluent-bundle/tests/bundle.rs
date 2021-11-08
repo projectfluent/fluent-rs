@@ -9,7 +9,7 @@ fn add_resource_override() {
     let en_us: LanguageIdentifier = "en-US"
         .parse()
         .expect("Failed to parse a language identifier");
-    let mut bundle = FluentBundle::<&FluentResource>::new(&[en_us]);
+    let mut bundle = FluentBundle::new(vec![en_us]);
 
     bundle.add_resource(&res).expect("Failed to add a resource");
 
@@ -20,7 +20,7 @@ fn add_resource_override() {
     let value = bundle
         .get_message("key")
         .expect("Failed to retireve a message")
-        .value
+        .value()
         .expect("Failed to retireve a value of a message");
     assert_eq!(bundle.format_pattern(value, None, &mut errors), "Value");
 
@@ -29,7 +29,7 @@ fn add_resource_override() {
     let value = bundle
         .get_message("key")
         .expect("Failed to retireve a message")
-        .value
+        .value()
         .expect("Failed to retireve a value of a message");
     assert_eq!(bundle.format_pattern(value, None, &mut errors), "Value 2");
 

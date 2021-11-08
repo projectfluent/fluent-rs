@@ -6,17 +6,15 @@ use std::fs;
 use std::iter;
 use std::path::Path;
 
-use fluent_bundle::resolve::ResolverError;
+use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
-use fluent_bundle::{FluentBundle as FluentBundleGeneric, FluentResource, FluentValue};
+use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
 use unic_langid::LanguageIdentifier;
 
 use helpers::*;
-
-type FluentBundle = FluentBundleGeneric<FluentResource>;
 
 fn transform_example(s: &str) -> Cow<str> {
     s.replace("a", "A").into()
@@ -41,7 +39,10 @@ impl Scope {
             .join(" > ")
     }
 
-    fn get_bundles(&self, defaults: &Option<TestDefaults>) -> HashMap<String, FluentBundle> {
+    fn get_bundles(
+        &self,
+        defaults: &Option<TestDefaults>,
+    ) -> HashMap<String, FluentBundle<FluentResource>> {
         let mut bundles = HashMap::new();
 
         let mut available_resources = vec![];
@@ -74,6 +75,7 @@ fn generate_random_hash() -> String {
     let mut rng = thread_rng();
     let chars: String = iter::repeat(())
         .map(|()| rng.sample(Alphanumeric))
+        .map(char::from)
         .take(7)
         .collect();
     chars
@@ -89,7 +91,7 @@ fn create_bundle(
     b: Option<&TestBundle>,
     defaults: &Option<TestDefaults>,
     resources: &Vec<&TestResource>,
-) -> FluentBundle {
+) -> FluentBundle<FluentResource> {
     let mut errors = vec![];
 
     let locales: Vec<LanguageIdentifier> = b
@@ -105,7 +107,7 @@ fn create_bundle(
                 .collect()
         })
         .expect("Failed to calculate locales.");
-    let mut bundle = FluentBundle::new(&locales);
+    let mut bundle = FluentBundle::new(locales);
     let use_isolating = b.and_then(|b| b.use_isolating).or_else(|| {
         defaults
             .as_ref()
@@ -153,7 +155,7 @@ fn create_bundle(
                         .into()
                 }),
                 "IDENTITY" => bundle.add_function(f.as_str(), |args, _name_args| {
-                    args.get(0).cloned().unwrap_or(FluentValue::None)
+                    args.get(0).cloned().unwrap_or(FluentValue::Error)
                 }),
                 "NUMBER" => bundle.add_function(f.as_str(), |args, _name_args| {
                     args.get(0).expect("Argument must be passed").clone()
@@ -167,7 +169,7 @@ fn create_bundle(
     }
     let res_subset = b.and_then(|b| b.resources.as_ref());
 
-    for res in resources.iter() {
+    for res in resources {
         if let Some(res_subset) = res_subset {
             if let Some(ref name) = res.name {
                 if !res_subset.contains(name) {
@@ -250,7 +252,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
         if let Some(expected_missing) = assert.missing {
             let missing = if let Some(ref attr) = assert.attribute {
                 if let Some(msg) = bundle.get_message(&assert.id) {
-                    msg.attributes.contains_key(attr.as_str())
+                    msg.get_attribute(attr.as_str()).is_some()
                 } else {
                     false
                 }
@@ -273,12 +275,14 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                     scope.get_path()
                 ));
                 let val = if let Some(ref attr) = assert.attribute {
-                    msg.attributes.get(attr.as_str()).expect(&format!(
-                        "Failed to retrieve an attribute of a message {}.{}.",
-                        assert.id, attr
-                    ))
+                    msg.get_attribute(attr.as_str())
+                        .expect(&format!(
+                            "Failed to retrieve an attribute of a message {}.{}.",
+                            assert.id, attr
+                        ))
+                        .value()
                 } else {
-                    msg.value.expect(&format!(
+                    msg.value().expect(&format!(
                         "Failed to retrieve a value of a message {}.",
                         assert.id
                     ))
@@ -287,7 +291,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
                     args.iter()
                         .map(|(k, v)| {
-                            let val = match v {
+                            let val: FluentValue = match v {
                                 TestArgumentValue::String(s) => s.as_str().into(),
                                 TestArgumentValue::Number(n) => n.into(),
                             };
@@ -316,9 +320,12 @@ fn test_errors(errors: &[FluentError], reference: Option<&[TestError]>) {
     for (error, reference) in errors.into_iter().zip(reference) {
         match error {
             FluentError::ResolverError(err) => match err {
-                ResolverError::Reference(desc) => {
-                    assert_eq!(reference.desc.as_ref(), Some(desc));
+                ResolverError::Reference(_) => {
+                    assert_eq!(reference.desc.as_ref(), Some(&err.to_string()));
                     assert_eq!(reference.error_type, "Reference");
+                }
+                ResolverError::NoValue(_) => {
+                    assert_eq!(reference.error_type, "NoValue");
                 }
                 ResolverError::Cyclic => {
                     assert_eq!(reference.error_type, "Cyclic");

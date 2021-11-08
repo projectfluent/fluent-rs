@@ -1,5 +1,7 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
+use fluent_fallback::generator::{BundleGenerator, FluentBundleResult};
+use futures::stream::Stream;
 use std::fs;
 use std::io;
 use std::iter;
@@ -44,7 +46,7 @@ impl ResourceManager {
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
     ) -> FluentBundle<&FluentResource> {
-        let mut bundle = FluentBundle::new(&locales);
+        let mut bundle = FluentBundle::new(locales.clone());
         for res_id in &resource_ids {
             let res = self.get_resource(res_id, &locales[0].to_string());
             bundle.add_resource(res).unwrap();
@@ -52,8 +54,8 @@ impl ResourceManager {
         bundle
     }
 
-    pub fn get_bundles<'l>(
-        &'l self,
+    pub fn get_bundles(
+        &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
     ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {
@@ -63,7 +65,7 @@ impl ResourceManager {
         iter::from_fn(move || {
             locales.get(ptr).map(|locale| {
                 ptr += 1;
-                let mut bundle = FluentBundle::new(vec![locale]);
+                let mut bundle = FluentBundle::new(vec![locale.clone()]);
                 for res_id in &resource_ids {
                     let res = res_mgr.get_resource(&res_id, &locale.to_string());
                     bundle.add_resource(res).unwrap();
@@ -71,5 +73,63 @@ impl ResourceManager {
                 bundle
             })
         })
+    }
+}
+
+// Due to limitation of trait, we need a nameable Iterator type.  Due to the
+// lack of GATs, these have to own members instead of taking slices.
+pub struct BundleIter {
+    locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
+    res_ids: Vec<String>,
+}
+
+impl Iterator for BundleIter {
+    type Item = FluentBundleResult<FluentResource>;
+
+    fn next(&mut self) -> Option<Self::Item> {
+        let locale = self.locales.next()?;
+
+        let mut bundle = FluentBundle::new(vec![locale.clone()]);
+
+        for res_id in &self.res_ids {
+            let full_path = format!("./tests/resources/{}/{}", locale, res_id);
+            let source = fs::read_to_string(full_path).unwrap();
+            let res = FluentResource::try_new(source).unwrap();
+            bundle.add_resource(res).unwrap();
+        }
+        Some(Ok(bundle))
+    }
+}
+
+impl Stream for BundleIter {
+    type Item = FluentBundleResult<FluentResource>;
+
+    fn poll_next(
+        self: std::pin::Pin<&mut Self>,
+        _cx: &mut std::task::Context<'_>,
+    ) -> std::task::Poll<Option<Self::Item>> {
+        todo!()
+    }
+}
+
+impl BundleGenerator for ResourceManager {
+    type Resource = FluentResource;
+    type Iter = BundleIter;
+    type Stream = BundleIter;
+
+    fn bundles_iter(
+        &self,
+        locales: std::vec::IntoIter<LanguageIdentifier>,
+        res_ids: Vec<String>,
+    ) -> Self::Iter {
+        BundleIter { locales, res_ids }
+    }
+
+    fn bundles_stream(
+        &self,
+        _locales: std::vec::IntoIter<LanguageIdentifier>,
+        _res_ids: Vec<String>,
+    ) -> Self::Stream {
+        todo!()
     }
 }

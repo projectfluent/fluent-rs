@@ -68,8 +68,8 @@ suites:
             value: "{key5}"
             errors:
               -
-                type: Reference
-                desc: "Unknown message: key5"
+                type: NoValue
+                desc: "No value: key5"
       -
         name: references the variants
         asserts:

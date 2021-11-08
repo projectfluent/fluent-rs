@@ -1,70 +1,64 @@
 {
-    "type": "Resource",
-    "body": [
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-bookmark-window"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Set Home Page"
+              }
+            ]
+          }
         },
         {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "select-bookmark-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Set Home Page"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 32em;"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "select-bookmark-desc"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Choose a Bookmark to be your Home Page. If you choose a folder, the Bookmarks in that folder will be opened in Tabs."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 32em;"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-bookmark-desc"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose a Bookmark to be your Home Page. If you choose a folder, the Bookmarks in that folder will be opened in Tabs."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    }
+  ]
 }

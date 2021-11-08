@@ -30,7 +30,7 @@
 //!     .expect("Failed to parse an FTL string.");
 //!
 //! let langid_en: LanguageIdentifier = "en-US".parse().expect("Parsing failed");
-//! let mut bundle = FluentBundle::new(&[langid_en]);
+//! let mut bundle = FluentBundle::new(vec![langid_en]);
 //!
 //! bundle
 //!     .add_resource(res)
@@ -39,19 +39,19 @@
 //! let msg = bundle.get_message("hello-world")
 //!     .expect("Message doesn't exist.");
 //! let mut errors = vec![];
-//! let pattern = msg.value
+//! let pattern = msg.value()
 //!     .expect("Message has no value.");
 //! let value = bundle.format_pattern(&pattern, None, &mut errors);
 //!
 //! assert_eq!(&value, "Hello, world!");
 //!
 //! let mut args = FluentArgs::new();
-//! args.insert("name", FluentValue::from("John"));
+//! args.set("name", FluentValue::from("John"));
 //!
 //! let msg = bundle.get_message("intro")
 //!     .expect("Message doesn't exist.");
 //! let mut errors = vec![];
-//! let pattern = msg.value.expect("Message has no value.");
+//! let pattern = msg.value().expect("Message has no value.");
 //! let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 //!
 //! // The FSI/PDI isolation marks ensure that the direction of
@@ -100,7 +100,7 @@ macro_rules! fluent_args {
         {
             let mut args: $crate::FluentArgs = $crate::FluentArgs::new();
             $(
-                args.insert($key, $value.into());
+                args.set($key, $value);
             )*
             args
         }

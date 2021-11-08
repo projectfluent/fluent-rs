@@ -1,3102 +1,2714 @@
 {
-    "type": "Resource",
-    "body": [
-        {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Manager"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-tab-mine"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Your Certificates"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-tab-people"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "People"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-tab-servers"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Servers"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-tab-ca"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Authorities"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-mine"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have certificates from these organizations that identify you"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-people"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have certificates on file that identify these people"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-servers"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have certificates on file that identify these servers"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-ca"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have certificates on file that identify these certificate authorities"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-detail-general-tab-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "General"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "G"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-detail-pretty-print-tab-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Details"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "D"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-pending-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Currently verifying certificate…"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-subject-label"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Issued To"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-issuer-label"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Issued By"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-period-of-validity"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Period of Validity"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-fingerprints"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Fingerprints"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Detail"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "buttonlabelaccept"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Close"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "buttonaccesskeyaccept"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "C"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-commonname"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Common Name (CN)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-org"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Organization (O)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-orgunit"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Organizational Unit (OU)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-serial-number"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Serial Number"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-sha-256-fingerprint"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "SHA-256 Fingerprint"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-detail-sha-1-fingerprint"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "SHA1 Fingerprint"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-edit-ca-cert"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Edit CA certificate trust settings"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 48em;"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-edit-cert-edit-trust"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Edit trust settings:"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-edit-cert-trust-ssl"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "This certificate can identify websites."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-edit-cert-trust-email"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "This certificate can identify mail users."
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-delete-cert"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete Certificate"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 48em; height: 24em;"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-name"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Name"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-cert-server"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Server"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-override-lifetime"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Lifetime"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-token-name"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Security Device"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-begins-on"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Begins On"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-begins-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Begins On"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-expires-on"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Expires On"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-expires-label"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Expires On"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-email"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "E-Mail Address"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-serial"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Serial Number"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-view"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "View…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "V"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-edit"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Edit Trust…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "E"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-export"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Export…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "x"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-delete"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "D"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-delete-builtin"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete or Distrust…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "D"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-backup"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Backup…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "B"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-backup-all"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Backup All…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "k"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-restore"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Import…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "m"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-details"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Fields"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "F"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-fields"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Field Value"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "V"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-hierarchy"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Hierarchy"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "H"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "certmgr-add-exception"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Add Exception…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "x"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Add Security Exception"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-extra-button"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Confirm Security Exception"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "C"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-supplemental-warning"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Legitimate banks, stores, and other public sites will not ask you to do this."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-cert-location-url"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Location:"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-cert-location-download"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Get Certificate"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "G"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-cert-status-view-cert"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "View…"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "V"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "exception-mgr-permanent"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Permanently store this exception"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "P"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pk11-bad-password"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The password entered was incorrect."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-decode-err"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Failed to decode the file. Either it is not in PKCS #12 format, has been corrupted, or the password you entered was incorrect."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-unknown-err-restore"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Failed to restore the PKCS #12 file for unknown reasons."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-unknown-err-backup"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Failed to create the PKCS #12 backup file for unknown reasons."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-unknown-err"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The PKCS #12 operation failed for unknown reasons."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-info-no-smartcard-backup"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "It is not possible to back up certificates from a hardware security device such as a smart card."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "pkcs12-dup-data"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The certificate and private key already exist on the security device."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "PKCS#12 file dialogs"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "choose-p12-backup-file-dialog"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "File Name to Backup"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "file-browse-pkcs12-spec"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "PKCS12 Files"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "choose-p12-restore-file-dialog"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Certificate File to Import"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Import certificate(s) file dialog"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "file-browse-certificate-spec"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Certificate Files"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "import-ca-certs-prompt"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Select File containing CA certificate(s) to import"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "import-email-cert-prompt"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Select File containing somebody’s Email certificate to import"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "For editing certificates trust"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "edit-trust-ca"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The certificate “"
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "certName"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "” represents a Certificate Authority."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "Variables:\n  $certName: the name of certificate"
-            }
-        },
-        {
-            "type": "GroupComment",
-            "content": "For Deleting Certificates"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-user-cert-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete your Certificates"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-user-cert-confirm"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Are you sure you want to delete these certificates?"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-user-cert-impact"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "If you delete one of your own certificates, you can no longer use it to identify yourself."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ssl-cert-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete Server Certificate Exceptions"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ssl-cert-confirm"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Are you sure you want to delete these server exceptions?"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ssl-cert-impact"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "If you delete a server exception, you restore the usual security checks for that server and require it uses a valid certificate."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ca-cert-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete or Distrust CA Certificates"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ca-cert-confirm"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You have requested to delete these CA certificates. For built-in certificates all trust will be removed, which has the same effect. Are you sure you want to delete or distrust?"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-ca-cert-impact"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "If you delete or distrust a certificate authority (CA) certificate, this application will no longer trust any certificates issued by that CA."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-email-cert-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Delete E-Mail Certificates"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-email-cert-confirm"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Are you sure you want to delete these people’s e-mail certificates?"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "delete-email-cert-impact"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "If you delete a person’s e-mail certificate, you will no longer be able to send encrypted e-mail to that person."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-with-serial"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate with serial number: "
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "VariableReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "serialNumber"
-                                    }
-                                }
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Used for semi-uniquely representing a cert.\n\nVariables:\n  $serialNumber : the serial number of the cert in AA:BB:CC hex format."
-            }
-        },
-        {
-            "type": "GroupComment",
-            "content": "Cert Viewer"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-viewer-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Certificate Viewer: “"
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "VariableReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "certName"
-                                    }
-                                }
-                            },
-                            {
-                                "type": "TextElement",
-                                "value": "”"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Title used for the Certificate Viewer.\n\nVariables:\n  $certificate : a string representative of the certificate being viewed."
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "not-present"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "<Not Part Of Certificate>"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-verified"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This certificate has been verified for the following uses:"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "Cert verification"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "verify-ssl-client"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "SSL Client Certificate"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": {
-                "type": "Comment",
-                "content": "Add usage"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "verify-ssl-server"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "SSL Server Certificate"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "verify-ssl-ca"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "SSL Certificate Authority"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "verify-email-signer"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Email Signer Certificate"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "verify-email-recip"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "value"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Email Recipient Certificate"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-cert-revoked"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because it has been revoked."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "Cert verification"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-cert-expired"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because it has expired."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-cert-not-trusted"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because it is not trusted."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-issuer-not-trusted"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because the issuer is not trusted."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-issuer-unknown"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because the issuer is unknown."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-ca-invalid"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because the CA certificate is invalid."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified_algorithm-disabled"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate because it was signed using a signature algorithm that was disabled because that algorithm is not secure."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-not-verified-unknown"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Could not verify this certificate for unknown reasons."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Add Security Exception dialog"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-branded-warning"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You are about to override how "
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " identifies this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-invalid-header"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This site attempts to identify itself with invalid information."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-domain-mismatch-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Wrong Site"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-domain-mismatch-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The certificate belongs to a different site, which could mean that someone is trying to impersonate this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-expired-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Outdated Information"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-expired-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The certificate is not currently valid. It may have been stolen or lost, and could be used by someone to impersonate this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-unverified-or-bad-signature-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Unknown Identity"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-unverified-or-bad-signature-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "The certificate is not trusted because it hasn’t been verified as issued by a trusted authority using a secure signature."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-valid-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Valid Certificate"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-valid-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "This site provides valid, verified identification.  There is no need to add an exception."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-checking-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Checking Information"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-checking-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Attempting to identify this site…"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-no-cert-short"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "No Information Available"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "add-exception-no-cert-long"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Unable to obtain identification status for this site."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "GroupComment",
-            "content": "Certificate export \"Save as\" and error dialogs"
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "save-cert-as"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Save Certificate To File"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-format-base64"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "X.509 Certificate (PEM)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-format-base64-chain"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "X.509 Certificate with chain (PEM)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-format-der"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "X.509 Certificate (DER)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-format-pkcs7"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "X.509 Certificate (PKCS#7)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "cert-format-pkcs7-chain"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "X.509 Certificate with chain (PKCS#7)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "write-file-failure"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "File Error"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Manager"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-mine"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Your Certificates"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-people"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "People"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-servers"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Servers"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-ca"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Authorities"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-mine"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates from these organizations that identify you"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-people"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these people"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-servers"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these servers"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-ca"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these certificate authorities"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-detail-general-tab-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "General"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "G"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-detail-pretty-print-tab-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Details"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-pending-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Currently verifying certificate…"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-subject-label"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Issued To"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-issuer-label"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Issued By"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-period-of-validity"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Period of Validity"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-fingerprints"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Fingerprints"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Detail"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "buttonlabelaccept"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Close"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "buttonaccesskeyaccept"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-commonname"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Common Name (CN)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-org"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Organization (O)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-orgunit"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Organizational Unit (OU)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-serial-number"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Serial Number"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-sha-256-fingerprint"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "SHA-256 Fingerprint"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-sha-1-fingerprint"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "SHA1 Fingerprint"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-ca-cert"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit CA certificate trust settings"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 48em;"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-edit-trust"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Edit trust settings:"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-trust-ssl"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This certificate can identify websites."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-trust-email"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This certificate can identify mail users."
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete-cert"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete Certificate"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 48em; height: 24em;"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-name"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Name"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-server"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Server"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-override-lifetime"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Lifetime"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-token-name"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Security Device"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-begins-on"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Begins On"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-begins-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Begins On"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-expires-on"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Expires On"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-expires-label"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Expires On"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-email"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "E-Mail Address"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-serial"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Serial Number"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-view"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit Trust…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "E"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-export"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Export…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "x"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete-builtin"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete or Distrust…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-backup"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Backup…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-backup-all"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Backup All…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "k"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-restore"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Import…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-details"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Fields"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-fields"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Field Value"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-hierarchy"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Hierarchy"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "H"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-add-exception"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add Exception…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "x"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add Security Exception"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-extra-button"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Confirm Security Exception"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-supplemental-warning"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Legitimate banks, stores, and other public sites will not ask you to do this."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-location-url"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Location:"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-location-download"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Get Certificate"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "G"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-status-view-cert"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View…"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-permanent"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Permanently store this exception"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pk11-bad-password"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The password entered was incorrect."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-decode-err"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to decode the file. Either it is not in PKCS #12 format, has been corrupted, or the password you entered was incorrect."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err-restore"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to restore the PKCS #12 file for unknown reasons."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err-backup"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to create the PKCS #12 backup file for unknown reasons."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The PKCS #12 operation failed for unknown reasons."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-info-no-smartcard-backup"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "It is not possible to back up certificates from a hardware security device such as a smart card."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-dup-data"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate and private key already exist on the security device."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "PKCS#12 file dialogs"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "choose-p12-backup-file-dialog"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "File Name to Backup"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "file-browse-pkcs12-spec"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "PKCS12 Files"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "choose-p12-restore-file-dialog"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Certificate File to Import"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Import certificate(s) file dialog"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "file-browse-certificate-spec"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Certificate Files"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "import-ca-certs-prompt"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Select File containing CA certificate(s) to import"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "import-email-cert-prompt"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Select File containing somebody’s Email certificate to import"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "For editing certificates trust"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "edit-trust-ca"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate “"
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "certName"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "” represents a Certificate Authority."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Variables:",
+          "  $certName: the name of certificate"
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "For Deleting Certificates"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete your Certificates"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-confirm"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these certificates?"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-impact"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete one of your own certificates, you can no longer use it to identify yourself."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete Server Certificate Exceptions"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-confirm"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these server exceptions?"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-impact"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete a server exception, you restore the usual security checks for that server and require it uses a valid certificate."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete or Distrust CA Certificates"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-confirm"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have requested to delete these CA certificates. For built-in certificates all trust will be removed, which has the same effect. Are you sure you want to delete or distrust?"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-impact"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete or distrust a certificate authority (CA) certificate, this application will no longer trust any certificates issued by that CA."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete E-Mail Certificates"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-confirm"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these people’s e-mail certificates?"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-impact"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete a person’s e-mail certificate, you will no longer be able to send encrypted e-mail to that person."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-with-serial"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate with serial number: "
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "VariableReference",
+                  "id": {
+                    "name": "serialNumber"
+                  }
+                }
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Used for semi-uniquely representing a cert.",
+          "",
+          "Variables:",
+          "  $serialNumber : the serial number of the cert in AA:BB:CC hex format."
+        ]
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Cert Viewer"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-viewer-title"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Viewer: “"
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "VariableReference",
+                  "id": {
+                    "name": "certName"
+                  }
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "”"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Title used for the Certificate Viewer.",
+          "",
+          "Variables:",
+          "  $certificate : a string representative of the certificate being viewed."
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "not-present"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "<Not Part Of Certificate>"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-verified"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This certificate has been verified for the following uses:"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Cert verification"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-client"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Client Certificate"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Add usage"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-server"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Server Certificate"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-ca"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Certificate Authority"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-email-signer"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Signer Certificate"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-email-recip"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Recipient Certificate"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-revoked"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it has been revoked."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Cert verification"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-expired"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it has expired."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-not-trusted"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it is not trusted."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-issuer-not-trusted"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the issuer is not trusted."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-issuer-unknown"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the issuer is unknown."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-ca-invalid"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the CA certificate is invalid."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified_algorithm-disabled"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it was signed using a signature algorithm that was disabled because that algorithm is not secure."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-unknown"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate for unknown reasons."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Add Security Exception dialog"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-branded-warning"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are about to override how "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " identifies this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-invalid-header"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This site attempts to identify itself with invalid information."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-domain-mismatch-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Wrong Site"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-domain-mismatch-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate belongs to a different site, which could mean that someone is trying to impersonate this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-expired-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Outdated Information"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-expired-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate is not currently valid. It may have been stolen or lost, and could be used by someone to impersonate this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-unverified-or-bad-signature-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unknown Identity"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-unverified-or-bad-signature-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate is not trusted because it hasn’t been verified as issued by a trusted authority using a secure signature."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-valid-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Valid Certificate"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-valid-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This site provides valid, verified identification.  There is no need to add an exception."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-checking-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Checking Information"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-checking-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Attempting to identify this site…"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-no-cert-short"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "No Information Available"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-no-cert-long"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to obtain identification status for this site."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Certificate export \"Save as\" and error dialogs"
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "save-cert-as"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Save Certificate To File"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-base64"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (PEM)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-base64-chain"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate with chain (PEM)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-der"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (DER)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-pkcs7"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (PKCS#7)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-pkcs7-chain"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate with chain (PKCS#7)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "write-file-failure"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "File Error"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    }
+  ]
 }

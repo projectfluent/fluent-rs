@@ -30,7 +30,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
-    let mut bundle = FluentBundle::new(&[lang]);
+    let mut bundle = FluentBundle::new(vec![lang]);
     bundle
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
@@ -44,7 +44,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
                     num.options.merge(named);
                     FluentValue::Number(num)
                 }
-                _ => FluentValue::None,
+                _ => FluentValue::Error,
             }
         })
         .expect("Failed to add a function.");
@@ -58,7 +58,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an implicitly encoded number: 5.");
     println!("{}", value);
@@ -71,7 +71,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an implicitly encoded number: CUSTOM(5).");
     println!("{}", value);
@@ -81,7 +81,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let value = bundle.format_pattern(&pattern, None, &mut errors);
     assert_eq!(value, "Here is an explicitly encoded number: CUSTOM(5).");
     println!("{}", value);
@@ -89,9 +89,9 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-implicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
-    args.insert("num", FluentValue::from(-15));
+    args.set("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
     assert_eq!(
         value,
@@ -102,9 +102,9 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
-    args.insert("num", FluentValue::from(-15));
+    args.set("num", FluentValue::from(-15));
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
     assert_eq!(
         value,
@@ -118,7 +118,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     let msg = bundle
         .get_message("key-var-explicit")
         .expect("Message doesn't exist.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut args = FluentArgs::new();
     let num = FluentNumber::new(
         25.2,
@@ -128,7 +128,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
             ..Default::default()
         },
     );
-    args.insert("num", num.into());
+    args.set("num", num);
     let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
 
     // Notice, that since we specificed minimum and maximum fraction digits options

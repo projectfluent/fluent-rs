@@ -68,8 +68,8 @@ impl DateTimeOptions {
     // If you want to limit which options the localizer can override,
     // here's the right place to do it.
     pub fn merge(&mut self, input: &FluentArgs) {
-        for (key, value) in input {
-            match *key {
+        for (key, value) in input.iter() {
+            match key {
                 "dateStyle" => self.date_style = value.into(),
                 "timeStyle" => self.time_style = value.into(),
                 _ => {}
@@ -159,7 +159,7 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
-    let mut bundle = FluentBundle::new(&[lang]);
+    let mut bundle = FluentBundle::new(vec![lang]);
     bundle
         .add_resource(res)
         .expect("Failed to add FTL resources to the bundle.");
@@ -171,7 +171,7 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
                 let options = named.into();
                 FluentValue::Custom(Box::new(DateTime::new(epoch, options)))
             }
-            _ => FluentValue::None,
+            _ => FluentValue::Error,
         })
         .expect("Failed to add a function.");
     bundle.set_use_isolating(false);
@@ -179,12 +179,12 @@ key-date = Today is { DATETIME($epoch, dateStyle: "long", timeStyle: "short") }
     let msg = bundle
         .get_message("key-date")
         .expect("Failed to retrieve the message.");
-    let pattern = msg.value.expect("Message has no value.");
+    let pattern = msg.value().expect("Message has no value.");
     let mut errors = vec![];
 
     let mut args = FluentArgs::new();
     let epoch: u64 = 1580127760093;
-    args.insert("epoch", epoch.into());
+    args.set("epoch", epoch);
     let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     println!("{}", value);
 }

@@ -1,69 +1,70 @@
 {
-    "type": "Resource",
-    "body": [
-        {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "Term",
-            "id": {
-                "type": "Identifier",
-                "name": "sync-brand-short-name"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Sync"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Term",
-            "id": {
-                "type": "Identifier",
-                "name": "sync-brand-name"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Firefox Sync"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "“Sync” can be localized, “Firefox” must be treated as a brand,\nand kept in English."
-            }
-        },
-        {
-            "type": "Term",
-            "id": {
-                "type": "Identifier",
-                "name": "fxaccount-brand-name"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Firefox Account"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "“Account” can be localized, “Firefox” must be treated as a brand,\nand kept in English."
-            }
-        }
-    ]
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "sync-brand-short-name"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Sync"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "sync-brand-name"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Sync"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "“Sync” can be localized, “Firefox” must be treated as a brand,",
+          "and kept in English."
+        ]
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "fxaccount-brand-name"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Account"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "“Account” can be localized, “Firefox” must be treated as a brand,",
+          "and kept in English."
+        ]
+      }
+    }
+  ]
 }

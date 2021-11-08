@@ -4,7 +4,7 @@ description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.12.0"
+version = "0.14.4"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -20,10 +20,12 @@ include = [
 	"src/**/*",
 	"benches/*.rs",
 	"Cargo.toml",
-	"README.md"
+	"README.md",
+	"LICENSE-APACHE",
+	"LICENSE-MIT"
 ]
 
 [dependencies]
-fluent-bundle = { version = "0.12", path = "../fluent-bundle" }
+fluent-bundle = { version = "0.14.4", path = "../fluent-bundle" }
 unic-langid = "0.9"
 fluent-pseudo = { version = "0.2", optional = true }

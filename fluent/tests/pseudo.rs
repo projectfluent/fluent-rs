@@ -17,7 +17,7 @@ fn test_pseudo() {
     {
         let msg = bundle.get_message("key").unwrap();
         let mut errors = vec![];
-        let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+        let val = bundle.format_pattern(msg.value().unwrap(), None, &mut errors);
 
         assert_eq!(val, "Hello World");
     }
@@ -27,8 +27,8 @@ fn test_pseudo() {
     {
         let msg = bundle.get_message("key").unwrap();
         let mut errors = vec![];
-        let val = bundle.format_pattern(msg.value.unwrap(), None, &mut errors);
+        let val = bundle.format_pattern(msg.value().unwrap(), None, &mut errors);
 
-        assert_eq!(val, "Ħḗḗŀŀǿǿ Ẇǿǿřŀḓ");
+        assert_eq!(val, "Ħeeŀŀoo Ẇoořŀḓ");
     }
 }

@@ -1,342 +1,305 @@
 {
-    "type": "Resource",
-    "body": [
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-window"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block Lists"
+              }
+            ]
+          }
         },
         {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-window"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Block Lists"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "style"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "width: 55em"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-description"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Choose the list "
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " uses to block online trackers. Lists provided by <a data-l10n-name=\"disconnect-link\" title=\"Disconnect\">Disconnect</a>."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-close-key"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "key"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "w"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-treehead-list"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "List"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-button-cancel"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Cancel"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "C"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-button-ok"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Save Changes"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "S"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-item-list-template"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "listName"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " "
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "description"
-                            }
-                        }
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "This template constructs the name of the block list in the block lists dialog.\nIt combines the list name and description.\ne.g. \"Standard (Recommended). This list does a pretty good job.\"\n\nVariables:\n  $listName {string, \"Standard (Recommended).\"} - List name.\n  $description {string, \"This list does a pretty good job.\"} - Description of the list."
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-item-moz-std-listName"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Level 1 block list (Recommended)."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-item-moz-std-description"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Allows some trackers so fewer websites break."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-item-moz-full-listName"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Level 2 block list."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "blocklist-item-moz-full-description"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Blocks all detected trackers. Some websites or content may not load properly."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
+          "id": {
+            "name": "style"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 55em"
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-description"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose the list "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " uses to block online trackers. Lists provided by <a data-l10n-name=\"disconnect-link\" title=\"Disconnect\">Disconnect</a>."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-close-key"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-treehead-list"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "List"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-button-cancel"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cancel"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-button-ok"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Changes"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-list-template"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "listName"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " "
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "description"
+              }
+            }
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This template constructs the name of the block list in the block lists dialog.",
+          "It combines the list name and description.",
+          "e.g. \"Standard (Recommended). This list does a pretty good job.\"",
+          "",
+          "Variables:",
+          "  $listName {string, \"Standard (Recommended).\"} - List name.",
+          "  $description {string, \"This list does a pretty good job.\"} - Description of the list."
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-std-listName"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Level 1 block list (Recommended)."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-std-description"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Allows some trackers so fewer websites break."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-full-listName"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Level 2 block list."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-full-description"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Blocks all detected trackers. Some websites or content may not load properly."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    }
+  ]
 }

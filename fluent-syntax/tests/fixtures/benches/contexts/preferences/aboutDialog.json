@@ -1,703 +1,627 @@
 {
-    "type": "Resource",
-    "body": [
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ]
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-title"
+      },
+      "value": null,
+      "attributes": [
         {
-            "type": "Comment",
-            "content": "This Source Code Form is subject to the terms of the Mozilla Public\nLicense, v. 2.0. If a copy of the MPL was not distributed with this\nfile, You can obtain one at http://mozilla.org/MPL/2.0/."
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "aboutDialog-title"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "title"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "About "
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "TermReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "brand-full-name"
-                                    },
-                                    "attribute": null,
-                                    "arguments": null
-                                }
-                            }
-                        ]
-                    }
+          "id": {
+            "name": "title"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "About "
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "TermReference",
+                  "id": {
+                    "name": "brand-full-name"
+                  },
+                  "attribute": null,
+                  "arguments": null
                 }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "releaseNotes-link"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "What’s new"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-checkForUpdatesButton"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Check for updates"
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "C"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-updateButton"
-            },
-            "value": null,
-            "attributes": [
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "label"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "Restart to update "
-                            },
-                            {
-                                "type": "Placeable",
-                                "expression": {
-                                    "type": "InlineExpression",
-                                    "type": "TermReference",
-                                    "id": {
-                                        "type": "Identifier",
-                                        "name": "brand-shorter-name"
-                                    },
-                                    "attribute": null,
-                                    "arguments": null
-                                }
-                            }
-                        ]
-                    }
-                },
-                {
-                    "type": "Attribute",
-                    "id": {
-                        "type": "Identifier",
-                        "name": "accesskey"
-                    },
-                    "value": {
-                        "type": "Pattern",
-                        "elements": [
-                            {
-                                "type": "TextElement",
-                                "value": "R"
-                            }
-                        ]
-                    }
-                }
-            ],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-checkingForUpdates"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Checking for updates…"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-downloading"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "<img data-l10n-name=\"icon\"/>Downloading update — <label data-l10n-name=\"download-status\"/>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-applying"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Applying update…"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-failed"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Update failed. <label data-l10n-name=\"failed-link\">Download the latest version</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-failed-main"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Update failed. <a data-l10n-name=\"failed-link-main\">Download the latest version</a>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-adminDisabled"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Updates disabled by your system administrator"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-noUpdatesFound"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " is up to date"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-otherInstanceHandlingUpdates"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " is being updated by another instance"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-manual"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Updates available at <label data-l10n-name=\"manual-link\"/>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-unsupported"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You can not perform further updates on this system. <label data-l10n-name=\"unsupported-link\">Learn more</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "update-restarting"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Restarting…"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "channel-description"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "You are currently on the <label data-l10n-name=\"current-channel\"></label> update channel."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "warningDesc-version"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " is experimental and may be unstable."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "community-exp"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "<label data-l10n-name=\"community-exp-mozillaLink\">"
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "vendor-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "</label> is a <label data-l10n-name=\"community-exp-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "community-2"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "brand-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " is designed by <label data-l10n-name=\"community-mozillaLink\">"
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "TermReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "vendor-short-name"
-                            },
-                            "attribute": null,
-                            "arguments": null
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "</label>, a <label data-l10n-name=\"community-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all."
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "helpus"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Want to help? <label data-l10n-name=\"helpus-donateLink\">Make a donation</label> or <label data-l10n-name=\"helpus-getInvolvedLink\">get involved!</label>"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bottomLinks-license"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Licensing Information"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bottomLinks-rights"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "End-User Rights"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "bottomLinks-privacy"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "TextElement",
-                        "value": "Privacy Policy"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": null
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "aboutDialog-version"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "version"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " ("
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "bits"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "-bit)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "Example of resulting string: 66.0.1 (64-bit)\nVariables:\n  $version (String): version of Firefox, e.g. 66.0.1\n  $bits (Number): bits of the architecture (32 or 64)"
-            }
-        },
-        {
-            "type": "Message",
-            "id": {
-                "type": "Identifier",
-                "name": "aboutDialog-version-nightly"
-            },
-            "value": {
-                "type": "Pattern",
-                "elements": [
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "version"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": " ("
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "isodate"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": ") ("
-                    },
-                    {
-                        "type": "Placeable",
-                        "expression": {
-                            "type": "InlineExpression",
-                            "type": "VariableReference",
-                            "id": {
-                                "type": "Identifier",
-                                "name": "bits"
-                            }
-                        }
-                    },
-                    {
-                        "type": "TextElement",
-                        "value": "-bit)"
-                    }
-                ]
-            },
-            "attributes": [],
-            "comment": {
-                "type": "Comment",
-                "content": "Example of resulting string: 66.0a1 (2019-01-16) (64-bit)\nVariables:\n  $version (String): version of Firefox for Nightly builds, e.g. 66.0a1\n  $isodate (String): date in ISO format, e.g. 2019-01-16\n  $bits (Number): bits of the architecture (32 or 64)"
-            }
+              }
+            ]
+          }
         }
-    ]
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "releaseNotes-link"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "What’s new"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-checkForUpdatesButton"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Check for updates"
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-updateButton"
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Restart to update "
+              },
+              {
+                "type": "Placeable",
+                "expression": {
+                  "type": "TermReference",
+                  "id": {
+                    "name": "brand-shorter-name"
+                  },
+                  "attribute": null,
+                  "arguments": null
+                }
+              }
+            ]
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey"
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R"
+              }
+            ]
+          }
+        }
+      ],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-checkingForUpdates"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Checking for updates…"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-downloading"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "<img data-l10n-name=\"icon\"/>Downloading update — <label data-l10n-name=\"download-status\"/>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-applying"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Applying update…"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-failed"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update failed. <label data-l10n-name=\"failed-link\">Download the latest version</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-failed-main"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update failed. <a data-l10n-name=\"failed-link-main\">Download the latest version</a>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-adminDisabled"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Updates disabled by your system administrator"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-noUpdatesFound"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is up to date"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-otherInstanceHandlingUpdates"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is being updated by another instance"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-manual"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Updates available at <label data-l10n-name=\"manual-link\"/>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-unsupported"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can not perform further updates on this system. <label data-l10n-name=\"unsupported-link\">Learn more</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-restarting"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Restarting…"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "channel-description"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are currently on the <label data-l10n-name=\"current-channel\"></label> update channel."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "warningDesc-version"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is experimental and may be unstable."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "community-exp"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "<label data-l10n-name=\"community-exp-mozillaLink\">"
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "vendor-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "</label> is a <label data-l10n-name=\"community-exp-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "community-2"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "brand-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is designed by <label data-l10n-name=\"community-mozillaLink\">"
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "TermReference",
+              "id": {
+                "name": "vendor-short-name"
+              },
+              "attribute": null,
+              "arguments": null
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "</label>, a <label data-l10n-name=\"community-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all."
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "helpus"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Want to help? <label data-l10n-name=\"helpus-donateLink\">Make a donation</label> or <label data-l10n-name=\"helpus-getInvolvedLink\">get involved!</label>"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-license"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Licensing Information"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-rights"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "End-User Rights"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-privacy"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Privacy Policy"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": null
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-version"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "version"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " ("
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "bits"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "-bit)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Example of resulting string: 66.0.1 (64-bit)",
+          "Variables:",
+          "  $version (String): version of Firefox, e.g. 66.0.1",
+          "  $bits (Number): bits of the architecture (32 or 64)"
+        ]
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-version-nightly"
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "version"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " ("
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "isodate"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": ") ("
+          },
+          {
+            "type": "Placeable",
+            "expression": {
+              "type": "VariableReference",
+              "id": {
+                "name": "bits"
+              }
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "-bit)"
+          }
+        ]
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Example of resulting string: 66.0a1 (2019-01-16) (64-bit)",
+          "Variables:",
+          "  $version (String): version of Firefox for Nightly builds, e.g. 66.0a1",
+          "  $isodate (String): date in ISO format, e.g. 2019-01-16",
+          "  $bits (Number): bits of the architecture (32 or 64)"
+        ]
+      }
+    }
+  ]
 }
