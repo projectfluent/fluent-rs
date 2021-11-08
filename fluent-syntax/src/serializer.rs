@@ -1,11 +1,11 @@
 use crate::ast::*;
 use std::fmt::{self, Error, Write};
 
-pub fn serialize(resource: &Resource<'_>) -> String {
+pub fn serialize(resource: &Resource<&str>) -> String {
     serialize_with_options(resource, Options::default())
 }
 
-pub fn serialize_with_options(resource: &Resource<'_>, options: Options) -> String {
+pub fn serialize_with_options(resource: &Resource<&str>, options: Options) -> String {
     let mut ser = Serializer::new(options);
 
     ser.serialize_resource(resource)
@@ -30,12 +30,18 @@ impl Serializer {
         }
     }
 
-    pub fn serialize_resource(&mut self, res: &Resource<'_>) -> Result<(), Error> {
+    pub fn serialize_resource(&mut self, res: &Resource<&str>) -> Result<(), Error> {
         for entry in &res.body {
             match entry {
-                ResourceEntry::Entry(entry) => self.serialize_entry(entry)?,
-                ResourceEntry::Junk(junk) if self.options.with_junk => self.serialize_junk(junk)?,
-                ResourceEntry::Junk(_) => continue,
+                Entry::Message(msg) => self.serialize_message(msg)?,
+                Entry::Term(term) => self.serialize_term(term)?,
+                Entry::Comment(comment) => self.serialize_free_comment(comment, "#")?,
+                Entry::GroupComment(comment) => self.serialize_free_comment(comment, "##")?,
+                Entry::ResourceComment(comment) => self.serialize_free_comment(comment, "###")?,
+                Entry::Junk { content } if self.options.with_junk => {
+                    self.serialize_junk(content)?
+                }
+                Entry::Junk { .. } => continue,
             }
 
             self.state.has_entries = true;
@@ -48,34 +54,26 @@ impl Serializer {
         self.writer.buffer
     }
 
-    fn serialize_entry(&mut self, entry: &Entry<'_>) -> Result<(), Error> {
-        match entry {
-            Entry::Message(msg) => self.serialize_message(msg),
-            Entry::Comment(comment) => {
-                if self.state.has_entries {
-                    self.writer.newline();
-                }
-
-                self.serialize_comment(comment)?;
-                self.writer.newline();
-                Ok(())
-            }
-            Entry::Term(term) => self.serialize_term(term),
-        }
-    }
-
     fn serialize_junk(&mut self, junk: &str) -> Result<(), Error> {
         self.writer.write_literal(junk)
     }
 
-    fn serialize_comment(&mut self, comment: &Comment<'_>) -> Result<(), Error> {
-        let (prefix, lines) = match comment {
-            Comment::Comment { content } => ("#", content),
-            Comment::GroupComment { content } => ("##", content),
-            Comment::ResourceComment { content } => ("###", content),
-        };
+    fn serialize_free_comment(
+        &mut self,
+        comment: &Comment<&str>,
+        prefix: &str,
+    ) -> Result<(), Error> {
+        if self.state.has_entries {
+            self.writer.newline();
+        }
+        self.serialize_comment(comment, prefix)?;
+        self.writer.newline();
 
-        for line in lines {
+        Ok(())
+    }
+
+    fn serialize_comment(&mut self, comment: &Comment<&str>, prefix: &str) -> Result<(), Error> {
+        for line in &comment.content {
             self.writer.write_literal(prefix)?;
 
             if !line.trim().is_empty() {
@@ -89,9 +87,9 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_message(&mut self, msg: &Message<'_>) -> Result<(), Error> {
+    fn serialize_message(&mut self, msg: &Message<&str>) -> Result<(), Error> {
         if let Some(comment) = msg.comment.as_ref() {
-            self.serialize_comment(comment)?;
+            self.serialize_comment(comment, "#")?;
         }
 
         self.writer.write_literal(&msg.id.name)?;
@@ -107,9 +105,9 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_term(&mut self, term: &Term<'_>) -> Result<(), Error> {
+    fn serialize_term(&mut self, term: &Term<&str>) -> Result<(), Error> {
         if let Some(comment) = term.comment.as_ref() {
-            self.serialize_comment(comment)?;
+            self.serialize_comment(comment, "#")?;
         }
 
         self.writer.write_literal("-")?;
@@ -124,10 +122,10 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_pattern(&mut self, pattern: &Pattern<'_>) -> Result<(), Error> {
+    fn serialize_pattern(&mut self, pattern: &Pattern<&str>) -> Result<(), Error> {
         let start_on_newline = pattern.elements.iter().any(|elem| match elem {
-            PatternElement::TextElement(text) => text.contains("\n"),
-            PatternElement::Placeable(expr) => is_select_expr(expr),
+            PatternElement::TextElement { value } => value.contains("\n"),
+            PatternElement::Placeable { expression } => is_select_expr(expression),
         });
 
         if start_on_newline {
@@ -148,7 +146,7 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_attributes(&mut self, attrs: &[Attribute<'_>]) -> Result<(), Error> {
+    fn serialize_attributes(&mut self, attrs: &[Attribute<&str>]) -> Result<(), Error> {
         if attrs.is_empty() {
             return Ok(());
         }
@@ -165,7 +163,7 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_attribute(&mut self, attr: &Attribute<'_>) -> Result<(), Error> {
+    fn serialize_attribute(&mut self, attr: &Attribute<&str>) -> Result<(), Error> {
         self.writer.write_literal(".")?;
         self.writer.write_literal(&attr.id.name)?;
         self.writer.write_literal(" =")?;
@@ -175,46 +173,46 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_element(&mut self, elem: &PatternElement<'_>) -> Result<(), Error> {
+    fn serialize_element(&mut self, elem: &PatternElement<&str>) -> Result<(), Error> {
         match elem {
-            PatternElement::TextElement(text) => self.writer.write_literal(text),
-            PatternElement::Placeable(Expression::InlineExpression(
-                InlineExpression::Placeable { expression },
-            )) => {
-                // A placeable inside a placeable is a special case because we
-                // don't want the braces to look silly (e.g. "{ { Foo() } }").
-                self.writer.write_literal("{{ ")?;
-                self.serialize_expression(expression)?;
-                self.writer.write_literal(" }}")?;
-                Ok(())
-            }
-            PatternElement::Placeable(expr @ Expression::SelectExpression { .. }) => {
-                // select adds its own newline and indent, emit the brace
-                // *without* a space so we don't get 5 spaces instead of 4
-                self.writer.write_literal("{ ")?;
-                self.serialize_expression(expr)?;
-                self.writer.write_literal("}")?;
-                Ok(())
-            }
-            PatternElement::Placeable(expr) => {
-                self.writer.write_literal("{ ")?;
-                self.serialize_expression(expr)?;
-                self.writer.write_literal(" }")?;
-                Ok(())
-            }
+            PatternElement::TextElement { value } => self.writer.write_literal(value),
+            PatternElement::Placeable { expression } => match expression {
+                Expression::Inline(InlineExpression::Placeable { expression }) => {
+                    // A placeable inside a placeable is a special case because we
+                    // don't want the braces to look silly (e.g. "{ { Foo() } }").
+                    self.writer.write_literal("{{ ")?;
+                    self.serialize_expression(expression)?;
+                    self.writer.write_literal(" }}")?;
+                    Ok(())
+                }
+                Expression::Select { .. } => {
+                    // select adds its own newline and indent, emit the brace
+                    // *without* a space so we don't get 5 spaces instead of 4
+                    self.writer.write_literal("{ ")?;
+                    self.serialize_expression(expression)?;
+                    self.writer.write_literal("}")?;
+                    Ok(())
+                }
+                Expression::Inline(_) => {
+                    self.writer.write_literal("{ ")?;
+                    self.serialize_expression(expression)?;
+                    self.writer.write_literal(" }")?;
+                    Ok(())
+                }
+            },
         }
     }
 
-    fn serialize_expression(&mut self, expr: &Expression<'_>) -> Result<(), Error> {
+    fn serialize_expression(&mut self, expr: &Expression<&str>) -> Result<(), Error> {
         match expr {
-            Expression::InlineExpression(inline) => self.serialize_inline_expression(inline),
-            Expression::SelectExpression { selector, variants } => {
+            Expression::Inline(inline) => self.serialize_inline_expression(inline),
+            Expression::Select { selector, variants } => {
                 self.serialize_select_expression(selector, variants)
             }
         }
     }
 
-    fn serialize_inline_expression(&mut self, expr: &InlineExpression<'_>) -> Result<(), Error> {
+    fn serialize_inline_expression(&mut self, expr: &InlineExpression<&str>) -> Result<(), Error> {
         match expr {
             InlineExpression::StringLiteral { value } => {
                 self.writer.write_literal("\"")?;
@@ -232,10 +230,8 @@ impl Serializer {
             }
             InlineExpression::FunctionReference { id, arguments } => {
                 self.writer.write_literal(&id.name)?;
+                self.serialize_call_arguments(arguments)?;
 
-                if let Some(args) = arguments.as_ref() {
-                    self.serialize_call_arguments(args)?;
-                }
                 Ok(())
             }
             InlineExpression::MessageReference { id, attribute } => {
@@ -278,8 +274,8 @@ impl Serializer {
 
     fn serialize_select_expression(
         &mut self,
-        selector: &InlineExpression<'_>,
-        variants: &[Variant<'_>],
+        selector: &InlineExpression<&str>,
+        variants: &[Variant<&str>],
     ) -> Result<(), Error> {
         self.serialize_inline_expression(selector)?;
         self.writer.write_literal(" ->")?;
@@ -296,7 +292,7 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_variant(&mut self, variant: &Variant<'_>) -> Result<(), Error> {
+    fn serialize_variant(&mut self, variant: &Variant<&str>) -> Result<(), Error> {
         if variant.default {
             self.writer.write_literal("*")?;
         }
@@ -309,7 +305,7 @@ impl Serializer {
         Ok(())
     }
 
-    fn serialize_variant_key(&mut self, key: &VariantKey<'_>) -> Result<(), Error> {
+    fn serialize_variant_key(&mut self, key: &VariantKey<&str>) -> Result<(), Error> {
         match key {
             VariantKey::NumberLiteral { value } | VariantKey::Identifier { name: value } => {
                 self.writer.write_literal(value)
@@ -317,7 +313,7 @@ impl Serializer {
         }
     }
 
-    fn serialize_call_arguments(&mut self, args: &CallArguments<'_>) -> Result<(), Error> {
+    fn serialize_call_arguments(&mut self, args: &CallArguments<&str>) -> Result<(), Error> {
         let mut argument_written = false;
 
         self.writer.write_literal("(")?;
@@ -347,13 +343,13 @@ impl Serializer {
     }
 }
 
-fn is_select_expr(expr: &Expression) -> bool {
+fn is_select_expr(expr: &Expression<&str>) -> bool {
     match expr {
-        Expression::SelectExpression { .. } => true,
-        Expression::InlineExpression(InlineExpression::Placeable { expression }) => {
+        Expression::Select { .. } => true,
+        Expression::Inline(InlineExpression::Placeable { expression }) => {
             is_select_expr(&*expression)
         }
-        Expression::InlineExpression(_) => false,
+        Expression::Inline(_) => false,
     }
 }
 
@@ -449,7 +445,7 @@ mod serialize_resource_tests {
                 let input_without_tabs = $text.replace("\t", "    ");
                 let should_be_without_tabs = $should_be.replace("\t", "    ");
 
-                let resource = crate::parser::parse(&input_without_tabs).unwrap();
+                let resource = crate::parser::parse(input_without_tabs.as_str()).unwrap();
                 let got = serialize(&resource);
 
                 assert_eq!(got, should_be_without_tabs);
@@ -625,20 +621,20 @@ mod serialize_expression_tests {
             fn $name() {
                 let input_without_tabs = $input.replace("\t", "    ");
                 let src = format!("foo = {{ {} }}", input_without_tabs);
-                let resource = crate::parser::parse(&src).unwrap();
+                let resource = crate::parser::parse(src.as_str()).unwrap();
 
                 // extract the first expression from the value of the first
                 // message
                 assert_eq!(resource.body.len(), 1);
                 let first_item = &resource.body[0];
                 let message = match first_item {
-                    ResourceEntry::Entry(Entry::Message(msg)) => msg,
+                    Entry::Message(msg) => msg,
                     other => panic!("Expected a message but found {:#?}", other),
                 };
                 let value = message.value.as_ref().expect("The message has a value");
                 assert_eq!(value.elements.len(), 1);
                 let expr = match &value.elements[0] {
-                    PatternElement::Placeable(expr) => expr,
+                    PatternElement::Placeable { expression } => expression,
                     other => panic!("Expected a single expression but found {:#?}", other),
                 };
 
@@ -673,20 +669,20 @@ mod serialize_variant_key_tests {
             fn $name() {
                 let input_without_tabs = $input.replace("\t", "    ");
                 let src = format!("foo = {{ {}\n }}", input_without_tabs);
-                let resource = crate::parser::parse(&src).unwrap();
+                let resource = crate::parser::parse(src.as_str()).unwrap();
 
                 // extract variant from the first expression from the value of
                 // the first message
                 assert_eq!(resource.body.len(), 1);
                 let first_item = &resource.body[0];
                 let message = match first_item {
-                    ResourceEntry::Entry(Entry::Message(msg)) => msg,
+                    Entry::Message(msg) => msg,
                     other => panic!("Expected a message but found {:#?}", other),
                 };
                 let value = message.value.as_ref().expect("The message has a value");
                 assert_eq!(value.elements.len(), 1);
                 let variants = match &value.elements[0] {
-                    PatternElement::Placeable(Expression::SelectExpression { variants, .. }) => variants,
+                    PatternElement::Placeable { expression: Expression::Select { variants, .. } } => variants,
                     other => panic!("Expected a single select expression but found {:#?}", other),
                 };
 
