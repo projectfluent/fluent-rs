@@ -294,7 +294,7 @@ impl Serializer {
 
     fn serialize_variant(&mut self, variant: &Variant<&str>) -> Result<(), Error> {
         if variant.default {
-            self.writer.write_literal("*")?;
+            self.writer.write_char_into_indent('*');
         }
 
         self.writer.write_literal("[")?;
@@ -403,6 +403,14 @@ impl TextWriter {
 
         write!(self.buffer, "{}", item)
     }
+
+    fn write_char_into_indent(&mut self, ch: char) {
+        if self.buffer.ends_with("\n") {
+            self.write_indent();
+        }
+        self.buffer.pop();
+        self.buffer.push(ch);
+    }
 }
 
 #[cfg(test)]
@@ -508,53 +516,53 @@ mod serialize_resource_tests {
     );
     round_trip_test!(
         select_expression,
-        "foo =\n\t{ $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         multiline_variant,
-        "foo =\n\t{ $sel ->\n\t\t*[a]\n\t\t\tAAA\n\t\t\tBBBB\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t   *[a]\n\t\t\tAAA\n\t\t\tBBBB\n\t}\n",
     );
     round_trip_test!(
         multiline_variant_with_first_line_inline,
-        "foo =\n\t{ $sel ->\n\t\t*[a] AAA\n\t\tBBB\n\t}\n",
-        "foo =\n\t{ $sel ->\n\t\t*[a]\n\t\t\tAAA\n\t\t\tBBB\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t   *[a] AAA\n\t\tBBB\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t   *[a]\n\t\t\tAAA\n\t\t\tBBB\n\t}\n",
     );
     round_trip_test!(
         variant_key_number,
-        "foo =\n\t{ $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\t{ $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_block_value,
-        "foo =\n\tFoo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\tFoo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_inline_value,
-        "foo = Foo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
-        "foo =\n\tFoo { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo = Foo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\tFoo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         select_expression_in_multiline_value,
-        "foo =\n\tFoo\n\tBar { $sel ->\n\t\t*[a] A\n\t\t[b] B\n\t}\n",
+        "foo =\n\tFoo\n\tBar { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
     );
     round_trip_test!(
         nested_select_expression,
-        "foo =\n\t{ $a ->\n\t\t*[a]\n\t\t\t{ $b ->\n\t\t\t\t*[b] Foo\n\t\t\t}\n\t}\n",
+        "foo =\n\t{ $a ->\n\t   *[a]\n\t\t\t{ $b ->\n\t\t\t   *[b] Foo\n\t\t\t}\n\t}\n",
     );
     round_trip_test!(
         selector_external_argument,
-        "foo =\n\t{ $bar ->\n\t\t*[a] A\n\t}\n",
+        "foo =\n\t{ $bar ->\n\t   *[a] A\n\t}\n",
     );
     round_trip_test!(
         selector_number_expression,
-        "foo =\n\t{ 1 ->\n\t\t*[a] A\n\t}\n",
+        "foo =\n\t{ 1 ->\n\t   *[a] A\n\t}\n",
     );
     round_trip_test!(
         selector_string_expression,
-        "foo =\n\t{ \"bar\" ->\n\t\t*[a] A\n\t}\n",
+        "foo =\n\t{ \"bar\" ->\n\t   *[a] A\n\t}\n",
     );
     round_trip_test!(
         selector_attribute_expression,
-        "foo =\n\t{ -bar.baz ->\n\t\t*[a] A\n\t}\n",
+        "foo =\n\t{ -bar.baz ->\n\t   *[a] A\n\t}\n",
     );
     round_trip_test!(call_expression, "foo = { FOO() }\n",);
     round_trip_test!(
@@ -655,7 +663,7 @@ mod serialize_expression_tests {
     expression_test!(external_arguemnt, "$ext");
     expression_test!(attribute_expression, "msg.attr");
     expression_test!(call_expression, "BUILTIN(3.14, kwarg: \"value\")");
-    expression_test!(select_expression, "$num ->\n\t*[one] One\n");
+    expression_test!(select_expression, "$num ->\n   *[one] One\n");
 }
 
 #[cfg(test)]
@@ -705,10 +713,10 @@ mod serialize_variant_key_tests {
         };
     }
 
-    variant_key_test!(identifiers, "$num ->\n\t[one] One\n\t*[other] Other" => "one", "other");
+    variant_key_test!(identifiers, "$num ->\n\t[one] One\n   *[other] Other" => "one", "other");
     variant_key_test!(
         number_literals,
-        "$num ->\n\t[-123456789] Minus a lot\n\t[0] Zero\n\t*[3.14] Pi\n\t[007] James"
+        "$num ->\n\t[-123456789] Minus a lot\n\t[0] Zero\n   *[3.14] Pi\n\t[007] James"
         => "-123456789", "0", "3.14", "007",
     );
 }
