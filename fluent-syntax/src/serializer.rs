@@ -398,7 +398,7 @@ impl TextWriter {
 
             // we've just added indentation, so we don't care about leading
             // spaces
-            item = item.trim_start();
+            item = item.trim_start_matches(' ');
         }
 
         write!(self.buffer, "{}", item)
