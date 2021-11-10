@@ -92,7 +92,7 @@ impl Serializer {
             self.serialize_comment(comment, "#")?;
         }
 
-        self.writer.write_literal(&msg.id.name)?;
+        self.writer.write_literal(msg.id.name)?;
         self.writer.write_literal(" =")?;
 
         if let Some(value) = msg.value.as_ref() {
@@ -111,7 +111,7 @@ impl Serializer {
         }
 
         self.writer.write_literal("-")?;
-        self.writer.write_literal(&term.id.name)?;
+        self.writer.write_literal(term.id.name)?;
         self.writer.write_literal(" =")?;
         self.serialize_pattern(&term.value)?;
 
@@ -124,7 +124,7 @@ impl Serializer {
 
     fn serialize_pattern(&mut self, pattern: &Pattern<&str>) -> Result<(), Error> {
         let start_on_newline = pattern.elements.iter().any(|elem| match elem {
-            PatternElement::TextElement { value } => value.contains("\n"),
+            PatternElement::TextElement { value } => value.contains('\n'),
             PatternElement::Placeable { expression } => is_select_expr(expression),
         });
 
@@ -165,7 +165,7 @@ impl Serializer {
 
     fn serialize_attribute(&mut self, attr: &Attribute<&str>) -> Result<(), Error> {
         self.writer.write_literal(".")?;
-        self.writer.write_literal(&attr.id.name)?;
+        self.writer.write_literal(attr.id.name)?;
         self.writer.write_literal(" =")?;
 
         self.serialize_pattern(&attr.value)?;
@@ -229,17 +229,17 @@ impl Serializer {
                 Ok(())
             }
             InlineExpression::FunctionReference { id, arguments } => {
-                self.writer.write_literal(&id.name)?;
+                self.writer.write_literal(id.name)?;
                 self.serialize_call_arguments(arguments)?;
 
                 Ok(())
             }
             InlineExpression::MessageReference { id, attribute } => {
-                self.writer.write_literal(&id.name)?;
+                self.writer.write_literal(id.name)?;
 
                 if let Some(attr) = attribute.as_ref() {
                     self.writer.write_literal(".")?;
-                    self.writer.write_literal(&attr.name)?;
+                    self.writer.write_literal(attr.name)?;
                 }
 
                 Ok(())
@@ -250,11 +250,11 @@ impl Serializer {
                 arguments,
             } => {
                 self.writer.write_literal("-")?;
-                self.writer.write_literal(&id.name)?;
+                self.writer.write_literal(id.name)?;
 
                 if let Some(attr) = attribute.as_ref() {
                     self.writer.write_literal(".")?;
-                    self.writer.write_literal(&attr.name)?;
+                    self.writer.write_literal(attr.name)?;
                 }
                 if let Some(args) = arguments.as_ref() {
                     self.serialize_call_arguments(args)?;
@@ -332,7 +332,7 @@ impl Serializer {
                 self.writer.write_literal(", ")?;
             }
 
-            self.writer.write_literal(&named.name.name)?;
+            self.writer.write_literal(named.name.name)?;
             self.writer.write_literal(": ")?;
             self.serialize_inline_expression(&named.value)?;
             argument_written = true;
@@ -388,11 +388,11 @@ impl TextWriter {
     }
 
     fn newline(&mut self) {
-        self.buffer.push_str("\n");
+        self.buffer.push('\n');
     }
 
     fn write_literal(&mut self, mut item: &str) -> fmt::Result {
-        if self.buffer.ends_with("\n") {
+        if self.buffer.ends_with('\n') {
             // we've just added a newline, make sure it's properly indented
             self.write_indent();
 
@@ -405,7 +405,7 @@ impl TextWriter {
     }
 
     fn write_char_into_indent(&mut self, ch: char) {
-        if self.buffer.ends_with("\n") {
+        if self.buffer.ends_with('\n') {
             self.write_indent();
         }
         self.buffer.pop();
