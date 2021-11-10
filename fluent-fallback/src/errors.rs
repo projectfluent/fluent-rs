@@ -1,46 +1,66 @@
 use fluent_bundle::FluentError;
 use std::error::Error;
+use unic_langid::LanguageIdentifier;
 
 #[derive(Debug, PartialEq)]
 pub enum LocalizationError {
     Bundle {
-        id: Option<String>,
         error: FluentError,
+    },
+    Resolver {
+        id: String,
+        locale: LanguageIdentifier,
+        errors: Vec<FluentError>,
     },
     MissingMessage {
         id: String,
+        locale: Option<LanguageIdentifier>,
     },
     MissingValue {
         id: String,
+        locale: Option<LanguageIdentifier>,
     },
     SyncRequestInAsyncMode,
 }
 
-impl<I: ToString> From<(I, FluentError)> for LocalizationError {
-    fn from(pieces: (I, FluentError)) -> Self {
-        Self::Bundle {
-            id: Some(pieces.0.to_string()),
-            error: pieces.1,
-        }
-    }
-}
-
 impl From<FluentError> for LocalizationError {
     fn from(error: FluentError) -> Self {
-        Self::Bundle { id: None, error }
+        Self::Bundle { error }
     }
 }
 
 impl std::fmt::Display for LocalizationError {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {
-            Self::Bundle {
-                id: Some(id),
-                error,
-            } => write!(f, "Bundle {} error: {}", id, error),
-            Self::Bundle { id: None, error } => write!(f, "Bundle error: {}", error),
-            Self::MissingMessage { id } => write!(f, "Missing message: {}", id),
-            Self::MissingValue { id } => write!(f, "Missing value in message: {}", id),
+            Self::Bundle { error } => write!(f, "[fluent][bundle] error: {}", error),
+            Self::Resolver { id, locale, errors } => {
+                let errors: Vec<String> = errors.iter().map(|err| err.to_string()).collect();
+                write!(
+                    f,
+                    "[fluent][resolver] errors in {}/{}: {}",
+                    locale.to_string(),
+                    id,
+                    errors.join(", ")
+                )
+            }
+            Self::MissingMessage {
+                id,
+                locale: Some(locale),
+            } => write!(f, "[fluent] Missing message in locale {}: {}", locale, id),
+            Self::MissingMessage { id, locale: None } => {
+                write!(f, "[fluent] Couldn't find a message: {}", id)
+            }
+            Self::MissingValue {
+                id,
+                locale: Some(locale),
+            } => write!(
+                f,
+                "[fluent] Message has no value in locale {}: {}",
+                locale, id
+            ),
+            Self::MissingValue { id, locale: None } => {
+                write!(f, "[fluent] Couldn't find a message with value: {}", id)
+            }
             Self::SyncRequestInAsyncMode => {
                 write!(f, "Triggered synchronous format while in async mode")
             }

@@ -114,22 +114,15 @@ impl Stream for BundleIter {
 
 impl BundleGenerator for ResourceManager {
     type Resource = FluentResource;
+    type LocalesIter = std::vec::IntoIter<LanguageIdentifier>;
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(
-        &self,
-        locales: std::vec::IntoIter<LanguageIdentifier>,
-        res_ids: Vec<String>,
-    ) -> Self::Iter {
+    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Iter {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(
-        &self,
-        _locales: std::vec::IntoIter<LanguageIdentifier>,
-        _res_ids: Vec<String>,
-    ) -> Self::Stream {
+    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
         todo!()
     }
 }

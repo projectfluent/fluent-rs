@@ -4,6 +4,12 @@
 
   - …
 
+## fluent 0.16.0 (July 29, 2021)
+  - Update `fluent-pseudo` to 0.3.
+
+## fluent 0.15.0 (February 9, 2021)
+  - Update `fluent-bundle` to 0.15.0.
+
 ## fluent 0.14.4 (January 31, 2021)
   - Update `fluent-bundle` to 0.14.4.
 

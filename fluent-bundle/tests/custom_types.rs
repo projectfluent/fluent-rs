@@ -11,7 +11,7 @@ fn fluent_custom_type() {
     #[derive(Debug, PartialEq)]
     struct DateTime {
         epoch: usize,
-    };
+    }
 
     impl DateTime {
         pub fn new(epoch: usize) -> Self {
@@ -108,7 +108,7 @@ fn fluent_date_time_builtin() {
     struct DateTime {
         epoch: usize,
         options: DateTimeOptions,
-    };
+    }
 
     impl DateTime {
         pub fn new(epoch: usize, options: DateTimeOptions) -> Self {

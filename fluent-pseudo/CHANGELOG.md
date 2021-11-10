@@ -4,6 +4,12 @@
 
   - …
 
+## fluent-pseudo 0.3.1 (July 21, 2021)
+  - Update README to document the API changes in 0.3.0.
+
+## fluent-pseudo 0.3.0 (July 19, 2021)
+  - Breaking change: Add ability to wrap strings in markers.
+
 ## fluent-pseudo 0.2.3 (November 12, 2020)
   - Improve readability of the accented pseudo.
 
@@ -17,6 +23,5 @@
   - Update `regex` to 1.3.
 
 ## fluent-pseudo 0.0.1 (August 1, 2019)
-
   - This is the first release to be listed in the CHANGELOG.
   - Basic support for pseudo-localization matching the fluent.js capabilities.

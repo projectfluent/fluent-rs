@@ -4,6 +4,7 @@ use std::{
     pin::Pin,
     task::Context,
     task::Poll,
+    task::Waker,
 };
 
 use crate::generator::{BundleIterator, BundleStream};
@@ -127,6 +128,9 @@ where
 {
     stream: PinCell<S>,
     items: UnsafeCell<ChunkyVec<S::Item>>,
+    // TODO: Should probably be an SmallVec<[Waker; 1]> or something? I guess
+    // multiple pending wakes are not really all that common.
+    pending_wakes: RefCell<Vec<Waker>>,
     res: std::marker::PhantomData<R>,
 }
 
@@ -138,6 +142,7 @@ where
         Self {
             stream: PinCell::new(stream),
             items: Default::default(),
+            pending_wakes: Default::default(),
             res: std::marker::PhantomData,
         }
     }
@@ -191,7 +196,16 @@ where
     // Helper function that gets the next value from wrapped stream.
     fn poll_next_item(&self, cx: &mut Context<'_>) -> Poll<Option<S::Item>> {
         let pin = unsafe { Pin::new_unchecked(&self.stream) };
-        PinMut::as_mut(&mut pin.borrow_mut()).poll_next(cx)
+        let poll = PinMut::as_mut(&mut pin.borrow_mut()).poll_next(cx);
+        if poll.is_ready() {
+            let wakers = std::mem::take(&mut *self.pending_wakes.borrow_mut());
+            for waker in wakers {
+                waker.wake();
+            }
+        } else {
+            self.pending_wakes.borrow_mut().push(cx.waker().clone());
+        }
+        poll
     }
 }
 
