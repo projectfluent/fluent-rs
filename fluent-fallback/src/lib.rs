@@ -32,8 +32,8 @@
 //!
 //! let loc = Localization::with_env(
 //!     vec![
-//!         "test.ftl".to_string(),
-//!         "test2.ftl".to_string()
+//!         "test.ftl".into(),
+//!         "test2.ftl".into()
 //!     ],
 //!     true,
 //!     vec![langid!("en-US")],

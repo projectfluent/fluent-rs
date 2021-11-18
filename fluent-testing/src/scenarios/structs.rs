@@ -1,3 +1,5 @@
+use fluent_fallback::types::ResourceId;
+
 pub struct FileSource {
     pub name: String,
     pub locales: Vec<String>,
@@ -27,6 +29,7 @@ impl FileSource {
     }
 }
 
+#[derive(Debug)]
 pub struct L10nAttribute {
     pub name: String,
     pub value: String,
@@ -41,6 +44,7 @@ impl L10nAttribute {
     }
 }
 
+#[derive(Debug)]
 pub struct L10nMessage {
     pub value: Option<String>,
     pub attributes: Option<Vec<L10nAttribute>>,
@@ -63,6 +67,8 @@ impl From<&str> for L10nMessage {
         }
     }
 }
+
+#[derive(Debug)]
 pub struct L10nArgument {
     pub id: String,
     pub value: String,
@@ -77,6 +83,7 @@ impl L10nArgument {
     }
 }
 
+#[derive(Debug)]
 pub struct L10nKey {
     pub id: String,
     pub args: Option<Vec<L10nArgument>>,
@@ -100,9 +107,66 @@ impl From<&str> for L10nKey {
     }
 }
 
+#[derive(Clone, Copy, Debug)]
+pub enum ExceptionalContext {
+    /// There is no exceptional context for this query (happy path).
+    None,
+    /// A value is missing from a resource and should cause a fallback.
+    ValueMissingFromResource,
+    /// A value is missing from all resources in all locales.
+    ValueMissingFromAllResources,
+    /// An optional resource is missing from the top locale.
+    OptionalResourceMissingFromLocale,
+    /// An optional resource is missing from all locales.
+    OptionalResourceMissingFromAllLocales,
+    /// A required resource is missing from the top locale.
+    RequiredResourceMissingFromLocale,
+    /// A required resource is missing from all locales.
+    RequiredResourceMissingFromAllLocales,
+}
+
+impl ExceptionalContext {
+    /// This is a query for a value in a missing required resource.
+    pub fn missing_required_resource(self) -> bool {
+        matches!(
+            self,
+            Self::RequiredResourceMissingFromLocale | Self::RequiredResourceMissingFromAllLocales,
+        )
+    }
+
+    /// This query should cause a format error to be appended to the errors Vec.
+    pub fn causes_reported_format_error(self) -> bool {
+        matches!(
+            self,
+            Self::ValueMissingFromResource
+                | Self::ValueMissingFromAllResources
+                | Self::OptionalResourceMissingFromLocale
+                | Self::OptionalResourceMissingFromAllLocales
+                | Self::RequiredResourceMissingFromAllLocales,
+        )
+    }
+
+    /// This query should cause a failed value lookup.
+    pub fn causes_failed_value_lookup(self) -> bool {
+        matches!(
+            self,
+            Self::ValueMissingFromAllResources
+                | Self::OptionalResourceMissingFromAllLocales
+                | Self::RequiredResourceMissingFromAllLocales,
+        )
+    }
+
+    /// This query should result in no bundles being generated.
+    pub fn blocks_bundle_generation(self) -> bool {
+        matches!(self, Self::RequiredResourceMissingFromAllLocales,)
+    }
+}
+
+#[derive(Debug)]
 pub struct Query {
     pub input: L10nKey,
     pub output: Option<L10nMessage>,
+    pub exceptional_context: ExceptionalContext,
 }
 
 impl Query {
@@ -110,6 +174,7 @@ impl Query {
         Self {
             input: input.into(),
             output,
+            exceptional_context: ExceptionalContext::None,
         }
     }
 }
@@ -119,6 +184,17 @@ impl From<(&str, &str)> for Query {
         Self {
             input: i.0.into(),
             output: Some(i.1.into()),
+            exceptional_context: ExceptionalContext::None,
+        }
+    }
+}
+
+impl From<(&str, &str, ExceptionalContext)> for Query {
+    fn from(i: (&str, &str, ExceptionalContext)) -> Self {
+        Self {
+            input: i.0.into(),
+            output: Some(i.1.into()),
+            exceptional_context: i.2,
         }
     }
 }
@@ -128,6 +204,7 @@ impl From<(&str, L10nMessage)> for Query {
         Self {
             input: i.0.into(),
             output: Some(i.1),
+            exceptional_context: ExceptionalContext::None,
         }
     }
 }
@@ -137,6 +214,7 @@ impl From<(L10nKey, L10nMessage)> for Query {
         Self {
             input: i.0,
             output: Some(i.1),
+            exceptional_context: ExceptionalContext::None,
         }
     }
 }
@@ -146,6 +224,7 @@ impl From<&str> for Query {
         Self {
             input: i.into(),
             output: None,
+            exceptional_context: ExceptionalContext::None,
         }
     }
 }
@@ -155,6 +234,7 @@ impl From<L10nKey> for Query {
         Self {
             input: key,
             output: None,
+            exceptional_context: ExceptionalContext::None,
         }
     }
 }
@@ -185,26 +265,26 @@ pub struct Scenario {
     pub name: String,
     pub file_sources: Vec<FileSource>,
     pub locales: Vec<String>,
-    pub res_ids: Vec<String>,
+    pub res_ids: Vec<ResourceId>,
     pub queries: Queries,
 }
 
 impl Scenario {
-    pub fn new<S: ToString, Q: Into<Queries>>(
+    pub fn new<S: ToString, R: Into<ResourceId>, Q: Into<Queries>>(
         name: S,
         file_sources: Vec<FileSource>,
         locales: Vec<S>,
-        res_ids: Vec<S>,
+        res_ids: Vec<R>,
         queries: Q,
     ) -> Self {
         Self {
             name: name.to_string(),
             file_sources,
             locales: locales
-                .iter()
+                .into_iter()
                 .map(|l| l.to_string().parse().unwrap())
                 .collect(),
-            res_ids: res_ids.iter().map(|id| id.to_string()).collect(),
+            res_ids: res_ids.into_iter().map(|id| id.into()).collect(),
             queries: queries.into(),
         }
     }

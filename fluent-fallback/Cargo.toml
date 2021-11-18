@@ -4,7 +4,7 @@ description = """
 High-level abstraction model for managing localization resources
 and runtime localization lifecycle.
 """
-version = "0.5.0"
+version = "0.5.1"
 edition = "2018"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
@@ -19,7 +19,7 @@ categories = ["localization", "internationalization"]
 
 [dependencies]
 chunky-vec = "0.1"
-fluent-bundle = "0.15.1"
+fluent-bundle = { path = "../fluent-bundle" }
 futures = "0.3"
 async-trait = "0.1"
 unic-langid = { version = "0.9" }
