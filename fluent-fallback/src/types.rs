@@ -72,6 +72,13 @@ pub struct ResourceId {
 }
 
 impl ResourceId {
+    pub fn new<S: Into<String>>(value: S, resource_type: ResourceType) -> Self {
+        Self {
+            value: value.into(),
+            resource_type,
+        }
+    }
+
     /// Returns [`true`] if the resource has [`ResourceType::Required`],
     /// otherwise returns [`false`].
     pub fn is_required(&self) -> bool {
@@ -128,10 +135,7 @@ pub trait ToResourceId {
 }
 
 impl<S: Into<String>> ToResourceId for S {
-    fn to_resource_id(self, fallback_strategy: ResourceType) -> ResourceId {
-        ResourceId {
-            value: self.into(),
-            resource_type: fallback_strategy,
-        }
+    fn to_resource_id(self, resource_type: ResourceType) -> ResourceId {
+        ResourceId::new(self.into(), resource_type)
     }
 }
