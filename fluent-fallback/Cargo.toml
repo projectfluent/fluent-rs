@@ -28,5 +28,5 @@ once_cell = "1.8"
 [dev-dependencies]
 fluent-langneg = "0.13"
 unic-langid = { version = "0.9", features = ["macros"] }
-fluent-resmgr = { version = "0.0.5", path = "../fluent-resmgr" }
+fluent-resmgr = { path = "../fluent-resmgr" }
 tokio = { version = "1.0", features = ["rt-multi-thread", "macros"] }
