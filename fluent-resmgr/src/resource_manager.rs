@@ -1,6 +1,9 @@
 use elsa::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
-use fluent_fallback::generator::{BundleGenerator, FluentBundleResult};
+use fluent_fallback::{
+    generator::{BundleGenerator, FluentBundleResult},
+    types::ResourceId,
+};
 use futures::stream::Stream;
 use std::fs;
 use std::io;
@@ -80,7 +83,7 @@ impl ResourceManager {
 // lack of GATs, these have to own members instead of taking slices.
 pub struct BundleIter {
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-    res_ids: Vec<String>,
+    res_ids: Vec<ResourceId>,
 }
 
 impl Iterator for BundleIter {
@@ -118,11 +121,15 @@ impl BundleGenerator for ResourceManager {
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<String>) -> Self::Iter {
+    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<ResourceId>) -> Self::Iter {
         BundleIter { locales, res_ids }
     }
 
-    fn bundles_stream(&self, _locales: Self::LocalesIter, _res_ids: Vec<String>) -> Self::Stream {
+    fn bundles_stream(
+        &self,
+        _locales: Self::LocalesIter,
+        _res_ids: Vec<ResourceId>,
+    ) -> Self::Stream {
         todo!()
     }
 }
