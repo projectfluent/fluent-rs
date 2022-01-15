@@ -5,7 +5,7 @@ A collection of command line interface programs
 for Fluent Localization System.
 """
 version = "0.0.1"
-edition = "2018"
+edition = "2021"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Staś Małolepszy <stas@mozilla.com>"
