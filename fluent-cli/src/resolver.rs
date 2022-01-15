@@ -22,7 +22,11 @@ fn resolve(s: String) -> String {
 
     let mut errors = vec![];
     let value = bundle
-        .format_pattern(msg.value.expect("Message has no value"), None, &mut errors)
+        .format_pattern(
+            msg.value().expect("Message has no value"),
+            None,
+            &mut errors,
+        )
         .into();
     let output = Output {
         value,
@@ -36,7 +40,7 @@ fn main() {
     let stdin = io::stdin();
     for line in stdin.lock().lines() {
         input.push_str(&line.unwrap());
-        input.push_str("\n");
+        input.push('\n');
     }
     let result = resolve(input);
     println!("{}", result);

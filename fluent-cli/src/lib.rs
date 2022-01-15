@@ -22,7 +22,7 @@ fn print_entries_resource(res: &Resource<&str>) {
 }
 
 pub fn parse_file(input: &str, silent: bool) {
-    let source = read_file(&input).expect("Read file failed");
+    let source = read_file(input).expect("Read file failed");
 
     let res = parse(source.as_str());
 
@@ -96,5 +96,5 @@ fn get_line_num(source: &str, pos: usize) -> usize {
 }
 
 fn get_error_info(kind: ErrorKind) -> (String, String) {
-    (format!("E0000"), kind.to_string())
+    ("E0000".to_string(), kind.to_string())
 }
