@@ -70,7 +70,7 @@ impl ResourceManager {
                 ptr += 1;
                 let mut bundle = FluentBundle::new(vec![locale.clone()]);
                 for res_id in &resource_ids {
-                    let res = res_mgr.get_resource(&res_id, &locale.to_string());
+                    let res = res_mgr.get_resource(res_id, &locale.to_string());
                     bundle.add_resource(res).unwrap();
                 }
                 bundle
