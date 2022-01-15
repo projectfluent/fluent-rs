@@ -50,7 +50,7 @@ impl IntlLangMemoizer {
                 entry.insert(val)
             }
         };
-        Ok(cb(&e))
+        Ok(cb(e))
     }
 }
 
