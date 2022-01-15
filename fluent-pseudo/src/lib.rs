@@ -45,7 +45,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool)
         let range = pos..capture.start();
         let result_range = pos + diff..capture.start() + diff;
         let sub = &s[range.clone()];
-        let transform_sub = transform(&sub, false, true);
+        let transform_sub = transform(sub, false, true);
         diff += transform_sub.len() - sub_len;
         result
             .to_mut()
@@ -58,7 +58,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool)
     result.to_mut().replace_range(result_range, &transform_sub);
 
     if with_markers {
-        return Cow::from("[") + result + "]"
+        return Cow::from("[") + result + "]";
     }
 
     result
