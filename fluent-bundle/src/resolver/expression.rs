@@ -60,7 +60,7 @@ impl<'p> WriteValue for ast::Expression<&'p str> {
     {
         match self {
             Self::Inline(exp) => exp.write_error(w),
-            Self::Select { .. } => unreachable!(),
+            Self::Select { selector, .. } => selector.write_error(w),
         }
     }
 }
