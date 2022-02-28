@@ -9,7 +9,7 @@ natural languages like gender, plurals, conjugations, and others.
 
 [Documentation][]
 
-[Project Fluent]: http://projectfluent.org
+[Project Fluent]: https://projectfluent.org
 [Documentation]: https://docs.rs/fluent/
 
 Status
