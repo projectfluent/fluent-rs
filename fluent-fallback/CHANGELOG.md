@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-fallback 0.6.0 (Dec 17, 2021)
+  - Add `ResourceId` struct which allows fluent resources to be optional.
+
 ## fluent-fallback 0.5.0 (Jul 8, 2021)
   - Separate out `Bundles` for state management.
 
