@@ -189,6 +189,12 @@ impl<'source> From<String> for FluentValue<'source> {
     }
 }
 
+impl<'source> From<&'source String> for FluentValue<'source> {
+    fn from(s: &'source String) -> Self {
+        FluentValue::String(s.into())
+    }
+}
+
 impl<'source> From<&'source str> for FluentValue<'source> {
     fn from(s: &'source str) -> Self {
         FluentValue::String(s.into())
