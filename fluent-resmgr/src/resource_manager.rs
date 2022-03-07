@@ -1,4 +1,7 @@
-use elsa::FrozenMap;
+#[cfg(not(feature = "sync"))]
+use elsa::map::FrozenMap;
+#[cfg(feature = "sync")]
+use elsa::sync::FrozenMap;
 use fluent_bundle::{FluentBundle, FluentResource};
 use fluent_fallback::{
     generator::{BundleGenerator, FluentBundleResult},

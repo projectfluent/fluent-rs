@@ -6,15 +6,15 @@ Resource manager for Fluent localization resources.
 version = "0.0.5"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
-    "Staś Małolepszy <stas@mozilla.com>"
+    "Staś Małolepszy <stas@mozilla.com>",
 ]
 edition = "2021"
 homepage = "http://www.projectfluent.org"
 license = "Apache-2.0/MIT"
 repository = "https://github.com/projectfluent/fluent-rs"
 readme = "README.md"
-keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
-categories = ["localization", "internationalization"]
+keywords = [ "localization", "l10n", "i18n", "intl", "internationalization" ]
+categories = [ "localization", "internationalization" ]
 
 [dependencies]
 fluent-bundle = { version = "0.15.2", path = "../fluent-bundle" }
@@ -24,5 +24,8 @@ elsa = "1.5"
 futures = "0.3"
 
 [dev-dependencies]
-unic-langid = { version = "0.9", features = ["macros"]}
+unic-langid = { version = "0.9", features = [ "macros" ] }
 fluent-langneg = "0.13"
+
+[features]
+sync = []
