@@ -413,6 +413,11 @@ impl TextWriter {
     }
 
     fn newline(&mut self) {
+        if self.buffer.ends_with('\r') {
+            // handle rare edge case, where the trailing `\r` would get confused
+            // as part of the line ending
+            self.buffer.push('\r');
+        }
         self.buffer.push('\n');
     }
 
