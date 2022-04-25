@@ -131,10 +131,7 @@ impl Serializer {
     }
 
     fn serialize_pattern<'s, S: Slice<'s>>(&mut self, pattern: &Pattern<S>) -> Result<(), Error> {
-        let start_on_newline = pattern.elements.iter().any(|elem| match elem {
-            PatternElement::TextElement { value } => value.as_ref().contains('\n'),
-            PatternElement::Placeable { expression } => is_select_expr(expression),
-        });
+        let start_on_newline = pattern.starts_on_new_line();
 
         if start_on_newline {
             self.writer.newline();
@@ -366,6 +363,27 @@ impl Serializer {
 
         self.writer.write_literal(")")?;
         Ok(())
+    }
+}
+
+impl<'s, S: Slice<'s>> Pattern<S> {
+    fn starts_on_new_line(&self) -> bool {
+        !self.has_leading_text_dot() && self.is_multiline()
+    }
+
+    fn is_multiline(&self) -> bool {
+        self.elements.iter().any(|elem| match elem {
+            PatternElement::TextElement { value } => value.as_ref().contains('\n'),
+            PatternElement::Placeable { expression } => is_select_expr(expression),
+        })
+    }
+
+    fn has_leading_text_dot(&self) -> bool {
+        if let Some(PatternElement::TextElement { value }) = self.elements.get(0) {
+            value.as_ref().starts_with('.')
+        } else {
+            false
+        }
     }
 }
 
