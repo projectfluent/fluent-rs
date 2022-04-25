@@ -41,13 +41,14 @@ impl Serializer {
                 Entry::Comment(comment) => self.serialize_free_comment(comment, "#")?,
                 Entry::GroupComment(comment) => self.serialize_free_comment(comment, "##")?,
                 Entry::ResourceComment(comment) => self.serialize_free_comment(comment, "###")?,
-                Entry::Junk { content } if self.options.with_junk => {
-                    self.serialize_junk(content.as_ref())?
+                Entry::Junk { content } => {
+                    if self.options.with_junk {
+                        self.serialize_junk(content.as_ref())?
+                    }
                 }
-                Entry::Junk { .. } => continue,
-            }
+            };
 
-            self.state.has_entries = true;
+            self.state.wrote_non_junk_entry = !matches!(entry, Entry::Junk { .. });
         }
 
         Ok(())
@@ -66,7 +67,7 @@ impl Serializer {
         comment: &Comment<S>,
         prefix: &str,
     ) -> Result<(), Error> {
-        if self.state.has_entries {
+        if self.state.wrote_non_junk_entry {
             self.writer.newline();
         }
         self.serialize_comment(comment, prefix)?;
@@ -385,7 +386,7 @@ pub struct Options {
 
 #[derive(Debug, Default, PartialEq)]
 struct State {
-    has_entries: bool,
+    wrote_non_junk_entry: bool,
 }
 
 #[derive(Debug, Clone, Default)]
