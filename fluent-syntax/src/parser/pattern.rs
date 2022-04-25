@@ -174,8 +174,8 @@ where
                 b'\r' if self.is_byte_at(b'\n', self.ptr + 1) => {
                     self.ptr += 1;
                     return Ok((
-                        start_pos,
-                        self.ptr - 1,
+                        start_pos + 1,
+                        self.ptr,
                         text_element_type,
                         TextElementTermination::Crlf,
                     ));
