@@ -440,14 +440,10 @@ impl TextWriter {
         self.buffer.push('\n');
     }
 
-    fn write_literal(&mut self, mut item: &str) -> fmt::Result {
+    fn write_literal(&mut self, item: &str) -> fmt::Result {
         if self.buffer.ends_with('\n') {
             // we've just added a newline, make sure it's properly indented
             self.write_indent();
-
-            // we've just added indentation, so we don't care about leading
-            // spaces
-            item = item.trim_start_matches(' ');
         }
 
         write!(self.buffer, "{}", item)
