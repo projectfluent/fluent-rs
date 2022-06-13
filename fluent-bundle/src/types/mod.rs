@@ -61,10 +61,10 @@ impl<T: Any + PartialEq> AnyEq for T {
 
 /// The `FluentValue` enum represents values which can be formatted to a String.
 ///
-/// Those values are either passed as arguments to [`FluentBundle::format_pattern`][] or
+/// Those values are either passed as arguments to [`FluentBundle::format_pattern`] or
 /// produced by functions, or generated in the process of pattern resolution.
 ///
-/// [`FluentBundle::format_pattern`]: ../bundle/struct.FluentBundle.html#method.format_pattern
+/// [`FluentBundle::format_pattern`]: crate::bundle::FluentBundle::format_pattern
 #[derive(Debug)]
 pub enum FluentValue<'source> {
     String(Cow<'source, str>),
