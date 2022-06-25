@@ -9,6 +9,28 @@ use crate::args::FluentArgs;
 use crate::types::FluentValue;
 
 #[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum FluentNumberKind {
+    Cardinal,
+    Ordinal,
+}
+
+impl std::default::Default for FluentNumberKind {
+    fn default() -> Self {
+        Self::Cardinal
+    }
+}
+
+impl From<&str> for FluentNumberKind {
+    fn from(input: &str) -> Self {
+        match input {
+            "cardinal" => Self::Cardinal,
+            "ordinal" => Self::Ordinal,
+            _ => Self::default(),
+        }
+    }
+}
+
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
 pub enum FluentNumberStyle {
     Decimal,
     Currency,
@@ -58,6 +80,7 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
+    pub kind: FluentNumberKind,
     pub style: FluentNumberStyle,
     pub currency: Option<String>,
     pub currency_display: FluentNumberCurrencyDisplayStyle,
@@ -72,6 +95,7 @@ pub struct FluentNumberOptions {
 impl Default for FluentNumberOptions {
     fn default() -> Self {
         Self {
+            kind: Default::default(),
             style: Default::default(),
             currency: None,
             currency_display: Default::default(),

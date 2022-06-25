@@ -131,13 +131,16 @@ impl<'source> FluentValue<'source> {
                     "other" => PluralCategory::OTHER,
                     _ => return false,
                 };
+                let kind = match b.options.kind {
+                    FluentNumberKind::Cardinal => PluralRuleType::CARDINAL,
+                    FluentNumberKind::Ordinal => PluralRuleType::ORDINAL,
+                };
                 scope
                     .bundle
                     .intls
-                    .with_try_get_threadsafe::<PluralRules, _, _>(
-                        (PluralRuleType::CARDINAL,),
-                        |pr| pr.0.select(b) == Ok(cat),
-                    )
+                    .with_try_get_threadsafe::<PluralRules, _, _>((kind,), |pr| {
+                        pr.0.select(b) == Ok(cat)
+                    })
                     .unwrap()
             }
             _ => false,
