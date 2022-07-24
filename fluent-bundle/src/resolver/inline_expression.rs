@@ -171,6 +171,19 @@ impl<'p> ResolveValue for ast::InlineExpression<&'p str> {
                     FluentValue::Error
                 }
             }
+            Self::FunctionReference { id, arguments } => {
+                let (resolved_positional_args, resolved_named_args) =
+                    scope.get_arguments(Some(arguments));
+
+                let func = scope.bundle.get_entry_function(id.name);
+
+                if let Some(func) = func {
+                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    result
+                } else {
+                    FluentValue::Error
+                }
+            }
             _ => {
                 let mut result = String::new();
                 self.write(&mut result, scope).expect("Failed to write");
