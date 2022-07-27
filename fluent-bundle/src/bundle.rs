@@ -482,10 +482,10 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// assert_eq!(result, "Hello World!");
     /// ```
-    pub fn format_pattern<'bundle>(
+    pub fn format_pattern<'bundle, 'args>(
         &'bundle self,
-        pattern: &'bundle ast::Pattern<&str>,
-        args: Option<&'bundle FluentArgs>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        args: Option<&'args FluentArgs>,
         errors: &mut Vec<FluentError>,
     ) -> Cow<'bundle, str>
     where

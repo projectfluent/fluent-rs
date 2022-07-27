@@ -11,11 +11,11 @@ use crate::resolver::{ResolveValue, ResolverError};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-impl<'p> WriteValue for ast::Expression<&'p str> {
-    fn write<'scope, 'errors, W, R, M>(
-        &'scope self,
+impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
+    fn write<'ast, 'args, 'errors, W, R, M>(
+        &'ast self,
         w: &mut W,
-        scope: &mut Scope<'scope, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
     ) -> fmt::Result
     where
         W: fmt::Write,
