@@ -86,13 +86,13 @@ pub use fluent_bundle::*;
 ///
 /// let mut args = fluent_args![
 ///     "name" => "John",
-///     "emailCount" => 5
+///     "emailCount" => 5,
 /// ];
 ///
 /// ```
 #[macro_export]
 macro_rules! fluent_args {
-    ( $($key:expr => $value:expr),* ) => {
+    ( $($key:expr => $value:expr),* $(,)? ) => {
         {
             let mut args: $crate::FluentArgs = $crate::FluentArgs::new();
             $(
