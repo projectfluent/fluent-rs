@@ -7,7 +7,7 @@ fn test_fluent_args() {
     let args = fluent_args![
         "name" => "John",
         "emailCount" => 5,
-        "customValue" => FluentValue::from("My Value")
+        "customValue" => FluentValue::from("My Value"),
     ];
     assert_eq!(
         args.get("name"),
