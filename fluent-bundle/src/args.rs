@@ -74,11 +74,10 @@ impl<'args> FluentArgs<'args> {
         V: Into<FluentValue<'args>>,
     {
         let key = key.into();
-        let idx = match self.0.binary_search_by_key(&&key, |(k, _)| k) {
-            Ok(idx) => idx,
-            Err(idx) => idx,
+        match self.0.binary_search_by_key(&&key, |(k, _)| k) {
+            Ok(idx) => self.0[idx] = (key, value.into()),
+            Err(idx) => self.0.insert(idx, (key, value.into())),
         };
-        self.0.insert(idx, (key, value.into()));
     }
 
     pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
@@ -116,5 +115,22 @@ impl<'args> IntoIterator for FluentArgs<'args> {
 
     fn into_iter(self) -> Self::IntoIter {
         self.0.into_iter()
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn replace_existing_argument() {
+        let mut args = FluentArgs::new();
+        args.set("variable", "first value");
+        args.set("variable", "second value");
+        assert_eq!(args.0.len(), 1);
+        assert_eq!(
+            args.get("variable").unwrap(),
+            &FluentValue::from("second value")
+        );
     }
 }
