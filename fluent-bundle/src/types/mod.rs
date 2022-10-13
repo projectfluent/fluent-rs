@@ -206,3 +206,15 @@ impl<'source> From<Cow<'source, str>> for FluentValue<'source> {
         FluentValue::String(s)
     }
 }
+
+impl<'source, T> From<Option<T>> for FluentValue<'source>
+where
+    T: Into<FluentValue<'source>>,
+{
+    fn from(s: Option<T>) -> Self {
+        match s {
+            Some(v) => v.into(),
+            None => FluentValue::None,
+        }
+    }
+}
