@@ -221,8 +221,8 @@ impl<'source, T> From<Option<T>> for FluentValue<'source>
 where
     T: Into<FluentValue<'source>>,
 {
-    fn from(s: Option<T>) -> Self {
-        match s {
+    fn from(v: Option<T>) -> Self {
+        match v {
             Some(v) => v.into(),
             None => FluentValue::None,
         }
