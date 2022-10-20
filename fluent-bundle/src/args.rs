@@ -3,9 +3,17 @@ use std::iter::FromIterator;
 
 use crate::types::FluentValue;
 
-/// A map of arguments passed from the code to
-/// the localization to be used for message
-/// formatting.
+/// Fluent messages can use arguments in order to programmatically add values to a
+/// translated string. For instance, in a localized application you may wish to display
+/// a user's email count. This could be done with the following message.
+///
+/// `msg-key = Hello, { $user }. You have { $emailCount } messages.`
+///
+/// Here `$user` and `$emailCount` are the arguments, which can be filled with values.
+///
+/// The [`FluentArgs`] struct is the map from the argument name (for example `$user`) to
+/// the argument value (for example "John".) The logic to apply these to write these
+/// to messages is elsewhere, this struct just stores the value.
 ///
 /// # Example
 ///
@@ -48,14 +56,17 @@ use crate::types::FluentValue;
 pub struct FluentArgs<'args>(Vec<(Cow<'args, str>, FluentValue<'args>)>);
 
 impl<'args> FluentArgs<'args> {
+    /// Creates a new empty argument map.
     pub fn new() -> Self {
         Self::default()
     }
 
+    /// Pre-allocates capacity for arguments.
     pub fn with_capacity(capacity: usize) -> Self {
         Self(Vec::with_capacity(capacity))
     }
 
+    /// Gets the [`FluentValue`] at the `key` if it exists.
     pub fn get<K>(&self, key: K) -> Option<&FluentValue<'args>>
     where
         K: Into<Cow<'args, str>>,
@@ -68,6 +79,7 @@ impl<'args> FluentArgs<'args> {
         }
     }
 
+    /// Sets the key value pair.
     pub fn set<K, V>(&mut self, key: K, value: V)
     where
         K: Into<Cow<'args, str>>,
@@ -80,6 +92,7 @@ impl<'args> FluentArgs<'args> {
         };
     }
 
+    /// Iterate over a tuple of the key an [`FluentValue`].
     pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
         self.0.iter().map(|(k, v)| (k.as_ref(), v))
     }
