@@ -6,7 +6,7 @@ use crate::queries;
 /// effect on the ability to generate a bundle and look up other present values.
 pub fn get_scenario() -> Scenario {
     Scenario::new(
-        "empty",
+        "empty_resource_all_locales",
         vec![
             FileSource::new("browser", "browser/{locale}/", vec!["en-US", "pl"]),
             FileSource::new("empty", "empty-resource/{locale}/", vec!["en-US", "pl"]),

@@ -6,7 +6,7 @@ use crate::queries;
 /// only for that value.
 pub fn get_scenario() -> Scenario {
     Scenario::new(
-        "empty",
+        "empty_resource_one_locale",
         vec![
             FileSource::new("browser", "browser/{locale}/", vec!["en-US", "pl"]),
             FileSource::new("empty", "empty-resource/{locale}/", vec!["en-US", "pl"]),
