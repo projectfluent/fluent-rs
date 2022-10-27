@@ -1438,9 +1438,22 @@ pub enum InlineExpression<S> {
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(untagged))]
 pub enum Expression<S> {
+    /// A select expression such as:
+    /// ```ftl
+    /// key = { $var ->
+    ///     [key1] Value 1
+    ///    *[other] Value 2
+    /// }
+    /// ```
     Select {
         selector: InlineExpression<S>,
         variants: Vec<Variant<S>>,
     },
+
+    /// An inline expression such as `${ username }`:
+    ///
+    /// ```ftl
+    /// hello-user = Hello ${ username }
+    /// ```
     Inline(InlineExpression<S>),
 }

@@ -49,12 +49,11 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         }
     }
 
-    // This method allows us to lazily add Pattern on the stack,
-    // only if the Pattern::resolve has been called on an empty stack.
-    //
-    // This is the case when pattern is called from Bundle and it
-    // allows us to fast-path simple resolutions, and only use the stack
-    // for placeables.
+    /// This method allows us to lazily add Pattern on the stack, only if the
+    /// Pattern::resolve has been called on an empty stack.
+    ///
+    /// This is the case when pattern is called from Bundle and it allows us to fast-path
+    /// simple resolutions, and only use the stack for placeables.
     pub fn maybe_track<W>(
         &mut self,
         w: &mut W,
