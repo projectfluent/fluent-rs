@@ -22,7 +22,7 @@ pub trait Memoizable {
     /// Any errors that can occur during the construction process.
     type Error;
 
-    /// Construct a formatter. This maps the [`Self::Args`] type to the actual construcor
+    /// Construct a formatter. This maps the [`Self::Args`] type to the actual constructor
     /// for an intl formatter.
     fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error>
     where
