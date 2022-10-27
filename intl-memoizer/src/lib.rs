@@ -189,7 +189,7 @@ impl IntlLangMemoizer {
         }
     }
 
-    /// `with_try_get` means `with` an international formatter, `try` and `get` a result.
+    /// `with_try_get` means `with` an internationalization formatter, `try` and `get` a result.
     /// The (potentially expensive) constructor for the formatter (such as PluralRules or
     /// DateTimeFormat) will be memoized and only constructed once for a given
     /// `construct_args`. After that the format operation can be run multiple times
