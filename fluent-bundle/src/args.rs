@@ -123,14 +123,25 @@ mod tests {
     use super::*;
 
     #[test]
-    fn replace_existing_argument() {
+    fn replace_existing_arguments() {
         let mut args = FluentArgs::new();
-        args.set("variable", "first value");
-        args.set("variable", "second value");
-        assert_eq!(args.0.len(), 1);
+
+        args.set("name", "John");
+        args.set("emailCount", 5);
+        assert_eq!(args.0.len(), 2);
         assert_eq!(
-            args.get("variable").unwrap(),
-            &FluentValue::from("second value")
+            args.get("name"),
+            Some(&FluentValue::String(Cow::Borrowed("John")))
         );
+        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number(5)));
+
+        args.set("name", "Jane");
+        args.set("emailCount", 7);
+        assert_eq!(args.0.len(), 2);
+        assert_eq!(
+            args.get("name"),
+            Some(&FluentValue::String(Cow::Borrowed("Jane")))
+        );
+        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number(7)));
     }
 }
