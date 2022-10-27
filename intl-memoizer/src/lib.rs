@@ -19,7 +19,7 @@ pub trait Memoizable {
     /// Type of the arguments that are used to construct the formatter.
     type Args: 'static + Eq + Hash + Clone;
 
-    /// Any errors that can occur during the construction process.
+    /// Type of any errors that can occur during the construction process.
     type Error;
 
     /// Construct a formatter. This maps the [`Self::Args`] type to the actual constructor
