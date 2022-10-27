@@ -186,10 +186,7 @@ impl<'source> FluentValue<'source> {
         match self {
             FluentValue::String(str) => FluentValue::String(Cow::from(str.to_string())),
             FluentValue::Number(s) => FluentValue::Number(s.clone()),
-            FluentValue::Custom(s) => {
-                let new_value: Box<dyn FluentType + Send> = s.duplicate();
-                FluentValue::Custom(new_value)
-            }
+            FluentValue::Custom(s) => FluentValue::Custom(s.duplicate()),
             FluentValue::Error => FluentValue::Error,
             FluentValue::None => FluentValue::None,
         }
