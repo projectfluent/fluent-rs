@@ -181,6 +181,16 @@ impl<'source> FluentValue<'source> {
             FluentValue::None => "".into(),
         }
     }
+
+    pub fn into_owned<'a>(&self) -> FluentValue<'a> {
+        match self {
+            FluentValue::String(str) => FluentValue::String(Cow::from(str.to_string())),
+            FluentValue::Number(s) => FluentValue::Number(s.clone()),
+            FluentValue::Custom(s) => FluentValue::Custom(s.duplicate()),
+            FluentValue::Error => FluentValue::Error,
+            FluentValue::None => FluentValue::None,
+        }
+    }
 }
 
 impl<'source> From<String> for FluentValue<'source> {

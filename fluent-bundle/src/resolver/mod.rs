@@ -15,21 +15,21 @@ use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
 // Converts an AST node to a `FluentValue`.
-pub(crate) trait ResolveValue {
-    fn resolve<'source, 'errors, R, M>(
-        &'source self,
-        scope: &mut Scope<'source, 'errors, R, M>,
-    ) -> FluentValue<'source>
+pub(crate) trait ResolveValue<'bundle> {
+    fn resolve<'ast, 'args, 'errors, R, M>(
+        &'ast self,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+    ) -> FluentValue<'bundle>
     where
         R: Borrow<FluentResource>,
         M: MemoizerKind;
 }
 
-pub(crate) trait WriteValue {
-    fn write<'source, 'errors, W, R, M>(
-        &'source self,
+pub(crate) trait WriteValue<'bundle> {
+    fn write<'ast, 'args, 'errors, W, R, M>(
+        &'ast self,
         w: &mut W,
-        scope: &mut Scope<'source, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
     ) -> fmt::Result
     where
         W: fmt::Write,
