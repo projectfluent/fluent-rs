@@ -16,7 +16,7 @@ pub mod concurrent;
 /// The trait that needs to be implemented for each intl formatter that needs to be
 /// memoized.
 pub trait Memoizable {
-    /// The arguments that are used to construct the formatter.
+    /// Type of the arguments that are used to construct the formatter.
     type Args: 'static + Eq + Hash + Clone;
 
     /// Any errors that can occur during the construction process.
