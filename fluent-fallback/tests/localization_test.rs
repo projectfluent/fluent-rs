@@ -488,3 +488,23 @@ async fn localization_handle_state_changes_mid_async() {
 
     bundles.format_value("key", None, &mut errors).await;
 }
+
+#[test]
+#[should_panic]
+fn localization_duplicate_resources() {
+    let resource_ids: Vec<ResourceId> =
+        vec!["test.ftl".into(), "test2.ftl".into(), "test2.ftl".into()];
+    let locales = Locales::new(vec![langid!("pl"), langid!("en-US")]);
+    let res_mgr = ResourceManager;
+    let mut errors = vec![];
+
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
+    let bundles = loc.bundles();
+
+    let value = bundles
+        .format_value_sync("hello-world", None, &mut errors)
+        .unwrap();
+    assert_eq!(value, Some(Cow::Borrowed("Hello World [pl]")));
+
+    assert_eq!(errors.len(), 0, "There were no errors");
+}
