@@ -6,6 +6,7 @@ use crate::{
     types::{L10nAttribute, L10nKey, L10nMessage, ResourceId},
 };
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
+use rustc_hash::FxHashSet;
 use std::borrow::Cow;
 
 pub enum BundlesInner<G>
@@ -50,7 +51,7 @@ impl<G> Bundles<G>
 where
     G: BundleGenerator,
 {
-    pub fn new<P>(sync: bool, res_ids: Vec<ResourceId>, generator: &G, provider: &P) -> Self
+    pub fn new<P>(sync: bool, res_ids: FxHashSet<ResourceId>, generator: &G, provider: &P) -> Self
     where
         G: BundleGenerator<LocalesIter = P::Iter>,
         P: LocalesProvider,

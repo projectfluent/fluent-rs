@@ -22,6 +22,7 @@ fluent-fallback = { version = "0.6.0", path = "../fluent-fallback" }
 unic-langid = "0.9"
 elsa = "1.5"
 futures = "0.3"
+rustc-hash = "1"
 
 [dev-dependencies]
 unic-langid = { version = "0.9", features = ["macros"]}
