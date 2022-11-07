@@ -5,9 +5,9 @@ use crate::ast;
 #[derive(Debug, PartialEq)]
 enum TextElementTermination {
     LineFeed,
-    CRLF,
+    Crlf,
     PlaceableStart,
-    EOF,
+    Eof,
 }
 
 // This enum tracks the placement of the text element in the pattern, which is needed for
@@ -114,9 +114,9 @@ where
 
                 text_element_role = match termination_reason {
                     TextElementTermination::LineFeed => TextElementPosition::LineStart,
-                    TextElementTermination::CRLF => TextElementPosition::LineStart,
+                    TextElementTermination::Crlf => TextElementPosition::LineStart,
                     TextElementTermination::PlaceableStart => TextElementPosition::Continuation,
-                    TextElementTermination::EOF => TextElementPosition::Continuation,
+                    TextElementTermination::Eof => TextElementPosition::Continuation,
                 };
             }
         }
@@ -177,7 +177,7 @@ where
                         start_pos,
                         self.ptr - 1,
                         text_element_type,
-                        TextElementTermination::CRLF,
+                        TextElementTermination::Crlf,
                     ));
                 }
                 b'{' => {
@@ -201,7 +201,7 @@ where
             start_pos,
             self.ptr,
             text_element_type,
-            TextElementTermination::EOF,
+            TextElementTermination::Eof,
         ))
     }
 }

@@ -3,7 +3,7 @@ use crate::{
     env::LocalesProvider,
     errors::LocalizationError,
     generator::{BundleGenerator, BundleIterator, BundleStream},
-    types::{L10nAttribute, L10nKey, L10nMessage},
+    types::{L10nAttribute, L10nKey, L10nMessage, ResourceId},
 };
 use fluent_bundle::{FluentArgs, FluentBundle, FluentError};
 use std::borrow::Cow;
@@ -50,7 +50,7 @@ impl<G> Bundles<G>
 where
     G: BundleGenerator,
 {
-    pub fn new<P>(sync: bool, res_ids: Vec<String>, generator: &G, provider: &P) -> Self
+    pub fn new<P>(sync: bool, res_ids: Vec<ResourceId>, generator: &G, provider: &P) -> Self
     where
         G: BundleGenerator<LocalesIter = P::Iter>,
         P: LocalesProvider,
@@ -194,8 +194,8 @@ macro_rules! format_value_from_inner {
 
 #[derive(Clone)]
 enum Value<'l> {
-    Value(Cow<'l, str>),
-    MissingValue,
+    Present(Cow<'l, str>),
+    Missing,
     None,
 }
 
@@ -214,12 +214,12 @@ macro_rules! format_values_from_inner {
             for (key, cell) in $keys
                 .iter()
                 .zip(&mut cells)
-                .filter(|(_, cell)| !matches!(cell, Value::Value(_)))
+                .filter(|(_, cell)| !matches!(cell, Value::Present(_)))
             {
                 if let Some(msg) = bundle.get_message(&key.id) {
                     if let Some(value) = msg.value() {
                         let mut format_errors = vec![];
-                        *cell = Value::Value(bundle.format_pattern(
+                        *cell = Value::Present(bundle.format_pattern(
                             value,
                             key.args.as_ref(),
                             &mut format_errors,
@@ -232,7 +232,7 @@ macro_rules! format_values_from_inner {
                             });
                         }
                     } else {
-                        *cell = Value::MissingValue;
+                        *cell = Value::Missing;
                         has_missing = true;
                         $errors.push(LocalizationError::MissingValue {
                             id: key.id.to_string(),
@@ -256,8 +256,8 @@ macro_rules! format_values_from_inner {
             .iter()
             .zip(cells)
             .map(|(key, value)| match value {
-                Value::Value(value) => Some(value),
-                Value::MissingValue => {
+                Value::Present(value) => Some(value),
+                Value::Missing => {
                     $errors.push(LocalizationError::MissingValue {
                         id: key.id.to_string(),
                         locale: None,

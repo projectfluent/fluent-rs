@@ -5,7 +5,7 @@ A memoizer specifically tailored for storing lazy-initialized
 intl formatters.
 """
 version = "0.5.1"
-edition = "2018"
+edition = "2021"
 authors = [
     "Zibi Braniecki <gandalf@mozilla.com>",
     "Manish Goregaokar <manishsmail@gmail.com>"
@@ -26,7 +26,7 @@ include = [
 ]
 
 [dependencies]
-type-map = "0.4"
+type-map = "0.5"
 unic-langid = "0.9"
 
 [dev-dependencies]

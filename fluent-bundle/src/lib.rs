@@ -3,7 +3,7 @@
 //! `fluent-bundle` is a mid-level component of the [Fluent Localization
 //! System](https://www.projectfluent.org).
 //!
-//! The crate builds on top of the low level [`fluent-syntax`](../fluent-syntax) package, and provides
+//! The crate builds on top of the low level [`fluent-syntax`](https://crates.io/crates/fluent-syntax) package, and provides
 //! foundational types and structures required for executing localization at runtime.
 //!
 //! There are four core concepts to understand Fluent runtime:

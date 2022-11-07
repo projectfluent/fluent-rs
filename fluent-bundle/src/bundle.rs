@@ -130,7 +130,9 @@ use crate::types::FluentValue;
 /// As you may have noticed, [`fluent_bundle::FluentBundle`](crate::FluentBundle) is a specialization of [`fluent_bundle::bundle::FluentBundle`](crate::bundle::FluentBundle)
 /// which works with an [`IntlLangMemoizer`] over [`RefCell`](std::cell::RefCell).
 /// In scenarios where the memoizer must work concurrently, there's an implementation of
-/// [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer) that uses [`Mutex`](std::sync::Mutex) and there's [`FluentBundle::new_concurrent`] which works with that.
+/// [`IntlLangMemoizer`][concurrent::IntlLangMemoizer] that uses [`Mutex`](std::sync::Mutex) and there's [`FluentBundle::new_concurrent`] which works with that.
+///
+/// [concurrent::IntlLangMemoizer]: https://docs.rs/intl-memoizer/latest/intl_memoizer/concurrent/struct.IntlLangMemoizer.html
 pub struct FluentBundle<R, M> {
     pub locales: Vec<LanguageIdentifier>,
     pub(crate) resources: Vec<R>,
@@ -480,10 +482,10 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// assert_eq!(result, "Hello World!");
     /// ```
-    pub fn format_pattern<'bundle>(
+    pub fn format_pattern<'bundle, 'args>(
         &'bundle self,
-        pattern: &'bundle ast::Pattern<&str>,
-        args: Option<&'bundle FluentArgs>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        args: Option<&'args FluentArgs>,
         errors: &mut Vec<FluentError>,
     ) -> Cow<'bundle, str>
     where
