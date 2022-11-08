@@ -599,14 +599,14 @@ mod test {
 
     #[test]
     fn change_id() {
-        let mut ast = parse("foo = bar\n").unwrap();
+        let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         ast.body[0].as_message().id.name = "baz";
         assert_eq!(serialize(&ast), "baz = bar\n");
     }
 
     #[test]
     fn change_value() {
-        let mut ast = parse("foo = bar\n").unwrap();
+        let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         *ast.body[0].as_message().as_pattern().elements[0].as_text() = "baz";
         assert_eq!("foo = baz\n", serialize(&ast));
     }
@@ -619,7 +619,7 @@ mod test {
             "       *[other] { $num } bars\n",
             "    }\n"
         );
-        let mut ast = parse(message).unwrap();
+        let mut ast = parse(message).expect("failed to parse ftl resource");
 
         let one_variant = Variant {
             key: VariantKey::Identifier { name: "one" },
@@ -652,7 +652,7 @@ mod test {
 
     #[test]
     fn change_variable_reference() {
-        let mut ast = parse("foo = { $bar }\n").unwrap();
+        let mut ast = parse("foo = { $bar }\n").expect("failed to parse ftl resource");
         ast.body[0].as_message().as_pattern().elements[0]
             .as_expression()
             .as_inline_variable_id()
@@ -662,35 +662,35 @@ mod test {
 
     #[test]
     fn remove_message() {
-        let mut ast = parse("foo = bar\nbaz = qux\n").unwrap();
+        let mut ast = parse("foo = bar\nbaz = qux\n").expect("failed to parse ftl resource");
         ast.body.pop();
         assert_eq!("foo = bar\n", serialize(&ast));
     }
 
     #[test]
     fn add_message_at_top() {
-        let mut ast = parse("foo = bar\n").unwrap();
+        let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         ast.body.insert(0, text_message!("baz", "qux"));
         assert_eq!("baz = qux\nfoo = bar\n", serialize(&ast));
     }
 
     #[test]
     fn add_message_at_end() {
-        let mut ast = parse("foo = bar\n").unwrap();
+        let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         ast.body.push(text_message!("baz", "qux"));
         assert_eq!("foo = bar\nbaz = qux\n", serialize(&ast));
     }
 
     #[test]
     fn add_message_in_between() {
-        let mut ast = parse("foo = bar\nbaz = qux\n").unwrap();
+        let mut ast = parse("foo = bar\nbaz = qux\n").expect("failed to parse ftl resource");
         ast.body.insert(1, text_message!("hello", "there"));
         assert_eq!("foo = bar\nhello = there\nbaz = qux\n", serialize(&ast));
     }
 
     #[test]
     fn add_message_comment() {
-        let mut ast = parse("foo = bar\n").unwrap();
+        let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         ast.body[0].as_message().comment.replace(Comment {
             content: vec!["great message!"],
         });
@@ -699,15 +699,20 @@ mod test {
 
     #[test]
     fn remove_message_comment() {
-        let mut ast = parse("# great message!\nfoo = bar\n").unwrap();
+        let mut ast = parse("# great message!\nfoo = bar\n").expect("failed to parse ftl resource");
         ast.body[0].as_message().comment.take();
         assert_eq!("foo = bar\n", serialize(&ast));
     }
 
     #[test]
     fn edit_message_comment() {
-        let mut ast = parse("# great message!\nfoo = bar\n").unwrap();
-        ast.body[0].as_message().comment.as_mut().unwrap().content[0] = "very original";
+        let mut ast = parse("# great message!\nfoo = bar\n").expect("failed to parse ftl resource");
+        ast.body[0]
+            .as_message()
+            .comment
+            .as_mut()
+            .expect("comment is missing")
+            .content[0] = "very original";
         assert_eq!("# very original\nfoo = bar\n", serialize(&ast));
     }
 }
