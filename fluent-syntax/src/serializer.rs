@@ -1,10 +1,59 @@
+//! Fluent Translation List serialization utilities
+//!
+//! This modules provides a way to serialize an abstract syntax tree representing a
+//! Fluent Translation List. Use cases include normalization and programmatical
+//! manipulation of a Fluent Translation List.
+//!
+//! # Example
+//!
+//! ```
+//! use fluent_syntax::parser;
+//! use fluent_syntax::serializer;
+//!
+//! let ftl = r#"# This is a message comment
+//! hello-world = Hello World!
+//! "#;
+//!
+//! let resource = parser::parse(ftl).expect("Failed to parse an FTL resource.");
+//!
+//! let serialzed = serializer::serialize(&resource);
+//!
+//! assert_eq!(ftl, serialzed);
+//! ```
+
 use crate::{ast::*, parser::Slice};
 use std::fmt::{self, Error, Write};
 
+/// Serializes an abstract syntax tree representing a Fluent Translation List into a
+/// String.
+///
+/// # Example
+///
+/// ```
+/// use fluent_syntax::parser;
+/// use fluent_syntax::serializer;
+///
+/// let ftl = r#"
+/// unnormalized-message=This message has
+///   abnormal spacing and indentation"#;
+///
+/// let resource = parser::parse(ftl).expect("Failed to parse an FTL resource.");
+///
+/// let serialzed = serializer::serialize(&resource);
+///
+/// let expected = r#"unnormalized-message =
+///     This message has
+///     abnormal spacing and indentation
+/// "#;
+///
+/// assert_eq!(expected, serialzed);
+/// ```
 pub fn serialize<'s, S: Slice<'s>>(resource: &Resource<S>) -> String {
     serialize_with_options(resource, Options::default())
 }
 
+/// Serializes an abstract syntax tree representing a Fluent Translation List into a
+/// String accepting custom options.
 pub fn serialize_with_options<'s, S: Slice<'s>>(
     resource: &Resource<S>,
     options: Options,
@@ -18,14 +67,14 @@ pub fn serialize_with_options<'s, S: Slice<'s>>(
 }
 
 #[derive(Debug)]
-pub struct Serializer {
+struct Serializer {
     writer: TextWriter,
     options: Options,
     state: State,
 }
 
 impl Serializer {
-    pub fn new(options: Options) -> Self {
+    fn new(options: Options) -> Self {
         Serializer {
             writer: TextWriter::default(),
             options,
@@ -33,7 +82,7 @@ impl Serializer {
         }
     }
 
-    pub fn serialize_resource<'s, S: Slice<'s>>(&mut self, res: &Resource<S>) -> Result<(), Error> {
+    fn serialize_resource<'s, S: Slice<'s>>(&mut self, res: &Resource<S>) -> Result<(), Error> {
         for entry in &res.body {
             match entry {
                 Entry::Message(msg) => self.serialize_message(msg)?,
@@ -54,7 +103,7 @@ impl Serializer {
         Ok(())
     }
 
-    pub fn into_serialized_text(self) -> String {
+    fn into_serialized_text(self) -> String {
         self.writer.buffer
     }
 
@@ -397,8 +446,10 @@ fn is_select_expr<'s, S: Slice<'s>>(expr: &Expression<S>) -> bool {
     }
 }
 
+/// Options for serializing an abstract syntax tree.
 #[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
 pub struct Options {
+    /// Whether invalid text fragments should be serialized, too.
     pub with_junk: bool,
 }
 
