@@ -459,8 +459,9 @@ impl TextWriter {
 }
 
 #[cfg(test)]
-mod serialize_resource_tests {
+mod test {
     use super::*;
+    use crate::parser::parse;
 
     #[test]
     fn write_something_then_indent() -> fmt::Result {
@@ -486,282 +487,176 @@ mod serialize_resource_tests {
         Ok(())
     }
 
-    macro_rules! round_trip_test {
-        ($name:ident, $text:expr $(,)?) => {
-            round_trip_test!($name, $text, $text);
-        };
-        ($name:ident, $text:expr, $should_be:expr $(,)?) => {
-            #[test]
-            fn $name() {
-                // Note: We add tabs to the input so it's easier to recognise
-                // indentation
-                let input_without_tabs = $text.replace("\t", "    ");
-                let should_be_without_tabs = $should_be.replace("\t", "    ");
-
-                let resource = crate::parser::parse(input_without_tabs.as_str()).unwrap();
-                let got = serialize(&resource);
-
-                assert_eq!(got, should_be_without_tabs);
-            }
+    macro_rules! text_message {
+        ($name:expr, $value:expr) => {
+            Entry::Message(Message {
+                id: Identifier { name: $name },
+                value: Some(Pattern {
+                    elements: vec![PatternElement::TextElement { value: $value }],
+                }),
+                attributes: vec![],
+                comment: None,
+            })
         };
     }
 
-    round_trip_test!(simple_message_without_eol, "foo = Foo", "foo = Foo\n");
-    round_trip_test!(simple_message, "foo = Foo\n");
-    round_trip_test!(two_simple_messages, "foo = Foo\nbar = Bar\n");
-    round_trip_test!(block_multiline_message, "foo =\n    Foo\n    Bar\n");
-    round_trip_test!(
-        inline_multiline_message,
-        "foo = Foo\n    Bar\n",
-        "foo =\n    Foo\n    Bar\n",
-    );
-    round_trip_test!(message_reference, "foo = Foo { bar }\n");
-    round_trip_test!(term_reference, "foo = Foo { -bar }\n");
-    round_trip_test!(external_reference, "foo = Foo { $bar }\n");
-    round_trip_test!(number_element, "foo = Foo { 1 }\n");
-    round_trip_test!(string_element, "foo = Foo { \"bar\" }\n");
-    round_trip_test!(attribute_expression, "foo = Foo { bar.baz }\n");
-    round_trip_test!(
-        resource_comment,
-        "### A multiline\n### resource comment.\n\nfoo = Foo\n",
-    );
-    round_trip_test!(
-        message_comment,
-        "# A multiline\n# message comment.\nfoo = Foo\n",
-    );
-    round_trip_test!(
-        dont_prefix_a_subsequent_entry_comment_with_a_newline,
-        "first = Firstsubsequent_ Comment\nfoo = Foo\n",
-    );
-    round_trip_test!(
-        group_comment,
-        "## Comment Header\n##\n## A multiline\n## group comment.\n\nfoo = Foo\n",
-    );
-    round_trip_test!(
-        standalone_comment,
-        "foo = Foo\n\n# A Standalone Comment\n\nbar = Bar\n",
-    );
-    round_trip_test!(multiline_with_placeable, "foo =\n\tFoo { bar }\n\tBaz\n",);
-    round_trip_test!(attribute, "foo =\n\t.attr = Foo Attr\n");
-    round_trip_test!(
-        multiline_attribute,
-        "foo =\n\t.attr =\n\t\tFoo Attr\n\t\tContinued\n",
-    );
-    round_trip_test!(
-        two_attributes,
-        "foo =\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
-    );
-    round_trip_test!(
-        value_and_attributes,
-        "foo = Foo Value\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
-    );
-    round_trip_test!(
-        multiline_value_and_attributes,
-        "foo =\n\tFoo Value\n\tContinued\n\t.attr-a = Foo Attr A\n\t.attr-b = Foo Attr B\n",
-    );
-    round_trip_test!(
-        select_expression,
-        "foo =\n\t{ $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-    );
-    round_trip_test!(
-        multiline_variant,
-        "foo =\n\t{ $sel ->\n\t   *[a]\n\t\t\tAAA\n\t\t\tBBBB\n\t}\n",
-    );
-    round_trip_test!(
-        multiline_variant_with_first_line_inline,
-        "foo =\n\t{ $sel ->\n\t   *[a] AAA\n\t\tBBB\n\t}\n",
-        "foo =\n\t{ $sel ->\n\t   *[a]\n\t\t\tAAA\n\t\t\tBBB\n\t}\n",
-    );
-    round_trip_test!(
-        variant_key_number,
-        "foo =\n\t{ $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-    );
-    round_trip_test!(
-        select_expression_in_block_value,
-        "foo =\n\tFoo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-    );
-    round_trip_test!(
-        select_expression_in_inline_value,
-        "foo = Foo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-        "foo =\n\tFoo { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-    );
-    round_trip_test!(
-        select_expression_in_multiline_value,
-        "foo =\n\tFoo\n\tBar { $sel ->\n\t   *[a] A\n\t\t[b] B\n\t}\n",
-    );
-    round_trip_test!(
-        nested_select_expression,
-        "foo =\n\t{ $a ->\n\t   *[a]\n\t\t\t{ $b ->\n\t\t\t   *[b] Foo\n\t\t\t}\n\t}\n",
-    );
-    round_trip_test!(
-        selector_external_argument,
-        "foo =\n\t{ $bar ->\n\t   *[a] A\n\t}\n",
-    );
-    round_trip_test!(
-        selector_number_expression,
-        "foo =\n\t{ 1 ->\n\t   *[a] A\n\t}\n",
-    );
-    round_trip_test!(
-        selector_string_expression,
-        "foo =\n\t{ \"bar\" ->\n\t   *[a] A\n\t}\n",
-    );
-    round_trip_test!(
-        selector_attribute_expression,
-        "foo =\n\t{ -bar.baz ->\n\t   *[a] A\n\t}\n",
-    );
-    round_trip_test!(call_expression, "foo = { FOO() }\n",);
-    round_trip_test!(
-        call_expression_with_string_expression,
-        "foo = { FOO(\"bar\") }\n",
-    );
-    round_trip_test!(call_expression_with_number_expression, "foo = { FOO(1) }\n",);
-    round_trip_test!(
-        call_expression_with_message_reference,
-        "foo = { FOO(bar) }\n",
-    );
-    round_trip_test!(
-        call_expression_with_external_argument,
-        "foo = { FOO($bar) }\n",
-    );
-    round_trip_test!(
-        call_expression_with_number_named_argument,
-        "foo = { FOO(bar: 1) }\n",
-    );
-    round_trip_test!(
-        call_expression_with_string_named_argument,
-        "foo = { FOO(bar: \"bar\") }\n",
-    );
-    round_trip_test!(
-        call_expression_with_two_positional_arguments,
-        "foo = { FOO(bar, baz) }\n",
-    );
-    round_trip_test!(
-        call_expression_with_positional_and_named_arguments,
-        "foo = { FOO(bar, 1, baz: \"baz\") }\n",
-    );
-    round_trip_test!(macro_call, "foo = { -term() }\n",);
-    round_trip_test!(nested_placeables, "foo = {{ FOO() }}\n",);
-    round_trip_test!(backslash_in_text_element, "foo = \\{ placeable }\n",);
-    round_trip_test!(
-        excaped_special_char_in_string_literal,
-        "foo = { \"Escaped \\\" quote\" }\n",
-    );
-    round_trip_test!(unicode_escape_sequence, "foo = { \"\\u0065\" }\n",);
-
-    // Serialize padding around comments
-
-    round_trip_test!(
-        standalone_comment_has_not_padding_when_first,
-        "# Comment A\n\nfoo = Foo\n\n# Comment B\n\nbar = Bar\n"
-    );
-    round_trip_test!(
-        group_comment_has_not_padding_when_first,
-        "## Group A\n\nfoo = Foo\n\n## Group B\n\nbar = Bar\n"
-    );
-    round_trip_test!(
-        resource_comment_has_not_padding_when_first,
-        "### Resource Comment A\n\nfoo = Foo\n\n### Resource Comment B\n\nbar = Bar\n"
-    );
-}
-
-#[cfg(test)]
-mod serialize_expression_tests {
-    use super::*;
-
-    macro_rules! expression_test {
-        ($name:ident, $input:expr) => {
-            #[test]
-            fn $name() {
-                let input_without_tabs = $input.replace("\t", "    ");
-                let src = format!("foo = {{ {} }}", input_without_tabs);
-                let resource = crate::parser::parse(src.as_str()).unwrap();
-
-                // extract the first expression from the value of the first
-                // message
-                assert_eq!(resource.body.len(), 1);
-                let first_item = &resource.body[0];
-                let message = match first_item {
-                    Entry::Message(msg) => msg,
-                    other => panic!("Expected a message but found {:#?}", other),
-                };
-                let value = message.value.as_ref().expect("The message has a value");
-                assert_eq!(value.elements.len(), 1);
-                let expr = match &value.elements[0] {
-                    PatternElement::Placeable { expression } => expression,
-                    other => panic!("Expected a single expression but found {:#?}", other),
-                };
-
-                // we've finally extracted the first expression, now we can
-                // actually serialize it and finish the test
-                let mut serializer = Serializer::new(Options::default());
-                serializer.serialize_expression(expr).unwrap();
-                let got = serializer.into_serialized_text();
-
-                assert_eq!(got, input_without_tabs);
+    impl<'a> Entry<&'a str> {
+        fn as_message(&mut self) -> &mut Message<&'a str> {
+            match self {
+                Self::Message(msg) => msg,
+                _ => panic!("Expected Message"),
             }
-        };
+        }
     }
 
-    expression_test!(string_expression, "\"str\"");
-    expression_test!(number_expression, "3");
-    expression_test!(message_reference, "msg");
-    expression_test!(external_arguemnt, "$ext");
-    expression_test!(attribute_expression, "msg.attr");
-    expression_test!(call_expression, "BUILTIN(3.14, kwarg: \"value\")");
-    expression_test!(select_expression, "$num ->\n   *[one] One\n");
-}
-
-#[cfg(test)]
-mod serialize_variant_key_tests {
-    use super::*;
-
-    macro_rules! variant_key_test {
-        ($name:ident, $input:expr => $( $keys:expr ),+ $(,)?) => {
-            #[test]
-            #[allow(unused_assignments)]
-            fn $name() {
-                let input_without_tabs = $input.replace("\t", "    ");
-                let src = format!("foo = {{ {}\n }}", input_without_tabs);
-                let resource = crate::parser::parse(src.as_str()).unwrap();
-
-                // extract variant from the first expression from the value of
-                // the first message
-                assert_eq!(resource.body.len(), 1);
-                let first_item = &resource.body[0];
-                let message = match first_item {
-                    Entry::Message(msg) => msg,
-                    other => panic!("Expected a message but found {:#?}", other),
-                };
-                let value = message.value.as_ref().expect("The message has a value");
-                assert_eq!(value.elements.len(), 1);
-                let variants = match &value.elements[0] {
-                    PatternElement::Placeable { expression: Expression::Select { variants, .. } } => variants,
-                    other => panic!("Expected a single select expression but found {:#?}", other),
-                };
-
-                let mut ix = 0;
-
-                $(
-                    let variant_key = &variants[ix].key;
-
-                    // we've finally extracted the variant key, now we can
-                    // actually serialize it and finish the test
-                    let mut serializer = Serializer::new(Options::default());
-                    serializer.serialize_variant_key(variant_key).unwrap();
-                    let got = serializer.into_serialized_text();
-
-                    assert_eq!(got, $keys);
-
-                    ix += 1;
-                )*
-            }
-        };
+    impl<'a> Message<&'a str> {
+        fn as_pattern(&mut self) -> &mut Pattern<&'a str> {
+            self.value.as_mut().expect("Expected Pattern")
+        }
     }
 
-    variant_key_test!(identifiers, "$num ->\n\t[one] One\n   *[other] Other" => "one", "other");
-    variant_key_test!(
-        number_literals,
-        "$num ->\n\t[-123456789] Minus a lot\n\t[0] Zero\n   *[3.14] Pi\n\t[007] James"
-        => "-123456789", "0", "3.14", "007",
-    );
+    impl<'a> PatternElement<&'a str> {
+        fn as_text(&mut self) -> &mut &'a str {
+            match self {
+                Self::TextElement { value } => value,
+                _ => panic!("Expected TextElement"),
+            }
+        }
+
+        fn as_expression(&mut self) -> &mut Expression<&'a str> {
+            match self {
+                Self::Placeable { expression } => expression,
+                _ => panic!("Expected Placeable"),
+            }
+        }
+    }
+
+    impl<'a> Expression<&'a str> {
+        fn as_variants(&mut self) -> &mut Vec<Variant<&'a str>> {
+            match self {
+                Self::Select { variants, .. } => variants,
+                _ => panic!("Expected Select"),
+            }
+        }
+        fn as_inline_variable_id(&mut self) -> &mut Identifier<&'a str> {
+            match self {
+                Self::Inline(InlineExpression::VariableReference { id }) => id,
+                _ => panic!("Expected Inline"),
+            }
+        }
+    }
+
+    #[test]
+    fn change_id() {
+        let mut ast = parse("foo = bar\n").unwrap();
+        ast.body[0].as_message().id.name = "baz";
+        assert_eq!(serialize(&ast), "baz = bar\n");
+    }
+
+    #[test]
+    fn change_value() {
+        let mut ast = parse("foo = bar\n").unwrap();
+        *ast.body[0].as_message().as_pattern().elements[0].as_text() = "baz";
+        assert_eq!("foo = baz\n", serialize(&ast));
+    }
+
+    #[test]
+    fn add_expression_variant() {
+        let message = concat!(
+            "foo =\n",
+            "    { $num ->\n",
+            "       *[other] { $num } bars\n",
+            "    }\n"
+        );
+        let mut ast = parse(message).unwrap();
+
+        let one_variant = Variant {
+            key: VariantKey::Identifier { name: "one" },
+            value: Pattern {
+                elements: vec![
+                    PatternElement::Placeable {
+                        expression: Expression::Inline(InlineExpression::VariableReference {
+                            id: Identifier { name: "num" },
+                        }),
+                    },
+                    PatternElement::TextElement { value: " bar" },
+                ],
+            },
+            default: false,
+        };
+        ast.body[0].as_message().as_pattern().elements[0]
+            .as_expression()
+            .as_variants()
+            .insert(0, one_variant);
+
+        let expected = concat!(
+            "foo =\n",
+            "    { $num ->\n",
+            "        [one] { $num } bar\n",
+            "       *[other] { $num } bars\n",
+            "    }\n"
+        );
+        assert_eq!(serialize(&ast), expected);
+    }
+
+    #[test]
+    fn change_variable_reference() {
+        let mut ast = parse("foo = { $bar }\n").unwrap();
+        ast.body[0].as_message().as_pattern().elements[0]
+            .as_expression()
+            .as_inline_variable_id()
+            .name = "qux";
+        assert_eq!("foo = { $qux }\n", serialize(&ast));
+    }
+
+    #[test]
+    fn remove_message() {
+        let mut ast = parse("foo = bar\nbaz = qux\n").unwrap();
+        ast.body.pop();
+        assert_eq!("foo = bar\n", serialize(&ast));
+    }
+
+    #[test]
+    fn add_message_at_top() {
+        let mut ast = parse("foo = bar\n").unwrap();
+        ast.body.insert(0, text_message!("baz", "qux"));
+        assert_eq!("baz = qux\nfoo = bar\n", serialize(&ast));
+    }
+
+    #[test]
+    fn add_message_at_end() {
+        let mut ast = parse("foo = bar\n").unwrap();
+        ast.body.push(text_message!("baz", "qux"));
+        assert_eq!("foo = bar\nbaz = qux\n", serialize(&ast));
+    }
+
+    #[test]
+    fn add_message_in_between() {
+        let mut ast = parse("foo = bar\nbaz = qux\n").unwrap();
+        ast.body.insert(1, text_message!("hello", "there"));
+        assert_eq!("foo = bar\nhello = there\nbaz = qux\n", serialize(&ast));
+    }
+
+    #[test]
+    fn add_message_comment() {
+        let mut ast = parse("foo = bar\n").unwrap();
+        ast.body[0].as_message().comment.replace(Comment {
+            content: vec!["great message!"],
+        });
+        assert_eq!("# great message!\nfoo = bar\n", serialize(&ast));
+    }
+
+    #[test]
+    fn remove_message_comment() {
+        let mut ast = parse("# great message!\nfoo = bar\n").unwrap();
+        ast.body[0].as_message().comment.take();
+        assert_eq!("foo = bar\n", serialize(&ast));
+    }
+
+    #[test]
+    fn edit_message_comment() {
+        let mut ast = parse("# great message!\nfoo = bar\n").unwrap();
+        ast.body[0].as_message().comment.as_mut().unwrap().content[0] = "very original";
+        assert_eq!("# very original\nfoo = bar\n", serialize(&ast));
+    }
 }
