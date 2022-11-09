@@ -9,8 +9,11 @@ use fluent_syntax::serializer::{serialize, serialize_with_options, Options};
 
 /// List of files that currently do not roundtrip correctly.
 ///
-/// - `multiline_values.ftl`: `key12` is parsed differently if indented.
-const IGNORE_LIST: [&str; 1] = ["multiline_values.ftl"];
+/// - `multiline_values.ftl`: https://github.com/projectfluent/fluent-rs/issues/286
+/// - `crlf.ftl`: Parsing `foo =\r\n    bar\r\n    baz\r\n` results in a TextElement "bar" and a TextElement "\n",
+///   whereas parsing `foo =\n    bar\n    baz\n` results in a single TextElement "bar\n". That means resources with
+///   text separated by CRLF do not roundtrip correctly.
+const IGNORE_LIST: [&str; 2] = ["crlf.ftl", "multiline_values.ftl"];
 
 fn is_ignored(path: &Path) -> bool {
     path.file_name()
