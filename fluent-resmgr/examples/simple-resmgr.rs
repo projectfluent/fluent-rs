@@ -90,10 +90,12 @@ fn main() {
     );
 
     // 5. Get a bundle for given paths and locales.
-    let bundle = mgr.get_bundle(
-        resolved_locales.into_iter().map(|s| s.to_owned()).collect(),
-        resources,
-    );
+    let bundle = mgr
+        .get_bundle(
+            resolved_locales.into_iter().map(|s| s.to_owned()).collect(),
+            resources,
+        )
+        .expect("Could not get bundle");
 
     // 6. Check if the input is provided.
     match args.get(1) {

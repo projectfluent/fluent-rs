@@ -8,7 +8,7 @@ use futures::stream::Stream;
 use rustc_hash::FxHashSet;
 use std::fs;
 use std::io;
-use std::iter;
+use thiserror::Error;
 use unic_langid::LanguageIdentifier;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
@@ -48,21 +48,25 @@ impl ResourceManager {
 
     /// Returns a [`FluentResource`], by either reading the file and loading it into
     /// memory, or retrieving it from an in-memory cache.
-    fn get_resource(&self, resource_id: &str, locale: &str) -> &FluentResource {
+    fn get_resource(
+        &self,
+        res_id: &str,
+        locale: &str,
+    ) -> Result<&FluentResource, ResourceManagerError> {
         let path = self
             .path_scheme
             .replace("{locale}", locale)
-            .replace("{res_id}", resource_id);
-        if let Some(res) = self.resources.get(&path) {
+            .replace("{res_id}", res_id);
+        Ok(if let Some(res) = self.resources.get(&path) {
             res
         } else {
-            let string = read_file(&path).unwrap();
+            let string = read_file(&path)?;
             let res = match FluentResource::try_new(string) {
                 Ok(res) => res,
                 Err((res, _err)) => res,
             };
             self.resources.insert(path.to_string(), Box::new(res))
-        }
+        })
     }
 
     /// Gets a [`FluentBundle`] from a list of resources. The bundle will only contain the
@@ -74,14 +78,27 @@ impl ResourceManager {
         &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
-    ) -> FluentBundle<&FluentResource> {
+    ) -> Result<FluentBundle<&FluentResource>, Vec<ResourceManagerError>> {
+        let mut errors: Vec<ResourceManagerError> = vec![];
         let mut bundle = FluentBundle::new(locales.clone());
-        for res_id in &resource_ids {
-            println!("res_id {:?}", res_id);
-            let res = self.get_resource(res_id, &locales[0].to_string());
-            bundle.add_resource(res).unwrap();
+
+        resource_ids.iter().for_each(|res_id| {
+            self.get_resource(res_id, &locales[0].to_string())
+                .map_err(|err| errors.push(err))
+                .and_then(|res| {
+                    bundle.add_resource(res).map_err(|errs| {
+                        errs.into_iter()
+                            .for_each(|err| errors.push(ResourceManagerError::Fluent(err)))
+                    })
+                })
+                .unwrap();
+        });
+
+        if errors.iter().len() > 0 {
+            Err(errors)
+        } else {
+            Ok(bundle)
         }
-        bundle
     }
 
     /// Returns an iterator for a [`FluentBundle`] for each locale provided. Each
@@ -92,22 +109,53 @@ impl ResourceManager {
         &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
-    ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {
-        let res_mgr = self;
-        let mut idx = 0;
+        // <<<<<<< HEAD
+        //     ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {
+        //         let res_mgr = self;
+        //         let mut idx = 0;
+        //
+        //         iter::from_fn(move || {
+        //             locales.get(idx).map(|locale| {
+        //                 idx += 1;
+        //                 let mut bundle = FluentBundle::new(vec![locale.clone()]);
+        //                 for resource_id in &resource_ids {
+        //                     let resource = res_mgr.get_resource(resource_id, &locale.to_string());
+        //                     bundle.add_resource(resource).unwrap();
+        //                 }
+        //                 bundle
+        //             })
+        //         })
+        // =======
+    ) -> Result<impl Iterator<Item = FluentBundle<&FluentResource>>, Vec<ResourceManagerError>>
+    {
+        let mut ptr = 0;
+        let mut errors: Vec<ResourceManagerError> = vec![];
+        let mut res = vec![];
 
-        iter::from_fn(move || {
-            locales.get(idx).map(|locale| {
-                idx += 1;
-                let mut bundle = FluentBundle::new(vec![locale.clone()]);
-                for resource_id in &resource_ids {
-                    let resource = res_mgr.get_resource(resource_id, &locale.to_string());
-                    bundle.add_resource(resource).unwrap();
-                }
-                bundle
-            })
-        })
+        while let Some(locale) = locales.get(ptr) {
+            ptr += 1;
+
+            match self.get_bundle(vec![locale.clone()], resource_ids.clone()) {
+                Ok(bundle) => res.push(bundle),
+                Err(mut errs) => errors.append(&mut errs),
+            };
+        }
+
+        if errors.iter().len() > 0 {
+            Err(errors)
+        } else {
+            Ok(res.into_iter())
+        }
     }
+}
+
+#[derive(Error, Debug)]
+pub enum ResourceManagerError {
+    #[error("{0}")]
+    Io(#[from] std::io::Error),
+
+    #[error("{0}")]
+    Fluent(#[from] fluent_bundle::FluentError),
 }
 
 // Due to limitation of trait, we need a nameable Iterator type.  Due to the

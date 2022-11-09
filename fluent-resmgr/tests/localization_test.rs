@@ -36,7 +36,9 @@ fn localization_format_value() {
 fn resmgr_get_bundle() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
-    let bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()]);
+    let bundle = res_mgr
+        .get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()])
+        .expect("Could not get bundle");
 
     let mut errors = vec![];
     let msg = bundle.get_message("hello-world").expect("Message exists");
