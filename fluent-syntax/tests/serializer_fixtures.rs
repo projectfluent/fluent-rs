@@ -10,12 +10,12 @@ use fluent_syntax::serializer::{serialize, serialize_with_options, Options};
 /// List of files that currently do not roundtrip correctly.
 ///
 /// - `multiline_values.ftl`: `key12` is parsed differently if indented.
-const BLACKLIST: [&str; 1] = ["multiline_values.ftl"];
+const IGNORE_LIST: [&str; 1] = ["multiline_values.ftl"];
 
-fn is_blacklisted(path: &Path) -> bool {
+fn is_ignored(path: &Path) -> bool {
     path.file_name()
         .and_then(OsStr::to_str)
-        .map(|s| BLACKLIST.contains(&s))
+        .map(|s| IGNORE_LIST.contains(&s))
         .unwrap_or_default()
 }
 
@@ -48,7 +48,7 @@ fn roundtrip_normalized_fixtures() {
 fn roundtrip_unnormalized_fixtures() {
     for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
         let path = entry.expect("Error while getting an entry");
-        if is_blacklisted(&path) {
+        if is_ignored(&path) {
             continue;
         }
 
