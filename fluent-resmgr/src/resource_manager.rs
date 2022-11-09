@@ -5,6 +5,7 @@ use fluent_fallback::{
     types::ResourceId,
 };
 use futures::stream::Stream;
+use rustc_hash::FxHashSet;
 use std::fs;
 use std::io;
 use std::iter;
@@ -83,7 +84,7 @@ impl ResourceManager {
 // lack of GATs, these have to own members instead of taking slices.
 pub struct BundleIter {
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
-    res_ids: Vec<ResourceId>,
+    res_ids: FxHashSet<ResourceId>,
 }
 
 impl Iterator for BundleIter {
@@ -94,7 +95,7 @@ impl Iterator for BundleIter {
 
         let mut bundle = FluentBundle::new(vec![locale.clone()]);
 
-        for res_id in &self.res_ids {
+        for res_id in self.res_ids.iter() {
             let full_path = format!("./tests/resources/{}/{}", locale, res_id);
             let source = fs::read_to_string(full_path).unwrap();
             let res = FluentResource::try_new(source).unwrap();
@@ -121,14 +122,18 @@ impl BundleGenerator for ResourceManager {
     type Iter = BundleIter;
     type Stream = BundleIter;
 
-    fn bundles_iter(&self, locales: Self::LocalesIter, res_ids: Vec<ResourceId>) -> Self::Iter {
+    fn bundles_iter(
+        &self,
+        locales: Self::LocalesIter,
+        res_ids: FxHashSet<ResourceId>,
+    ) -> Self::Iter {
         BundleIter { locales, res_ids }
     }
 
     fn bundles_stream(
         &self,
         _locales: Self::LocalesIter,
-        _res_ids: Vec<ResourceId>,
+        _res_ids: FxHashSet<ResourceId>,
     ) -> Self::Stream {
         todo!()
     }
