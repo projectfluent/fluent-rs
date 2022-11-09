@@ -16,9 +16,9 @@
 //!
 //! let resource = parser::parse(ftl).expect("Failed to parse an FTL resource.");
 //!
-//! let serialzed = serializer::serialize(&resource);
+//! let serialized = serializer::serialize(&resource);
 //!
-//! assert_eq!(ftl, serialzed);
+//! assert_eq!(ftl, serialized);
 //! ```
 
 use crate::{ast::*, parser::Slice};
@@ -39,14 +39,14 @@ use std::fmt::Write;
 ///
 /// let resource = parser::parse(ftl).expect("Failed to parse an FTL resource.");
 ///
-/// let serialzed = serializer::serialize(&resource);
+/// let serialized = serializer::serialize(&resource);
 ///
 /// let expected = r#"unnormalized-message =
 ///     This message has
 ///     abnormal spacing and indentation
 /// "#;
 ///
-/// assert_eq!(expected, serialzed);
+/// assert_eq!(expected, serialized);
 /// ```
 pub fn serialize<'s, S: Slice<'s>>(resource: &Resource<S>) -> String {
     serialize_with_options(resource, Options::default())
