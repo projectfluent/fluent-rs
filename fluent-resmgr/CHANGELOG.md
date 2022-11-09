@@ -4,6 +4,9 @@
 
   - …
 
+## fluent-resmgr 0.0.6 (Nov 9, 2022)
+  - Update `fluent-fallback` to 0.7.0.
+
 ## fluent-resmgr 0.0.5 (Dec 17, 2021)
   - Update `fluent-fallback` to 0.6.0.
 
