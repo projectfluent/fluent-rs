@@ -1,7 +1,7 @@
 # Changelog
 
 ## Unreleased
-
+  - Add module `serializer`.
   - …
 
 ## fluent-syntax 0.11.0 (February 9, 2021)
