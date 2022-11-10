@@ -1,0 +1,11 @@
+call-expression = { FOO() }
+call-expression-with-string-expression = { FOO("bar") }
+call-expression-with-number-expression = { FOO(1) }
+call-expression-with-message-reference = { FOO(bar) }
+call-expression-with-external-argument = { FOO($bar) }
+call-expression-with-number-named-argument = { FOO(bar: 1) }
+call-expression-with-string-named-argument = { FOO(bar: "bar") }
+call-expression-with-two-positional-arguments = { FOO(bar, baz) }
+call-expression-with-positional-and-named-arguments = { FOO(bar, 1, baz: "baz") }
+macro-call = { -term() }
+nested-placeables = {{ FOO() }}
