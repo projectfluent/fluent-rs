@@ -149,11 +149,14 @@ impl ResourceManager {
     }
 }
 
+/// Errors generated during the process of retrieving the localization resources
 #[derive(Error, Debug)]
 pub enum ResourceManagerError {
+    /// Error while reading the resource file
     #[error("{0}")]
     Io(#[from] std::io::Error),
 
+    /// Error while trying to add a resource to the bundle
     #[error("{0}")]
     Fluent(#[from] fluent_bundle::FluentError),
 }
