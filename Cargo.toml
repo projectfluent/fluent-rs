@@ -13,3 +13,6 @@ members = [
 exclude = [
     "fluent-cli",
 ]
+
+[workspace.dependencies]
+thiserror = "1.0"
