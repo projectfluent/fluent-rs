@@ -1,0 +1,20 @@
+name: Rustfmt
+
+on:
+  # Triggers the workflow on push request events but only for the master branch
+  push:
+    branches: [ master ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: actions-rs/toolchain@v1
+        with:
+            toolchain: stable
+            components: rustfmt
+            override: true
+      - uses: mbrobbel/rustfmt-check@master
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
