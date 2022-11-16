@@ -3,7 +3,7 @@ name: Rustfmt
 on:
   # Triggers the workflow on push request events but only for the master branch
   push:
-    branches: [ master ]
+    branches: [ main ]
 
 jobs:
   format:
