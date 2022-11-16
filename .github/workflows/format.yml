@@ -1,0 +1,21 @@
+name: Rustfmt
+
+on:
+  # Triggers the workflow on push request events but only for the master branch
+  push:
+    branches: [ main ]
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Toolchain setup
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: nightly
+          override: true
+          components: rustfmt
+
+      - uses: actions/checkout@v2
+      - name: Run rustfmt
+        run: cargo fmt --check
