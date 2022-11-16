@@ -1,0 +1,63 @@
+[tasks.clean]
+command = "cargo"
+args = ["clean"]
+workspace = false
+
+[tasks.install-grcov]
+command = "cargo"
+args = ["install", "grcov"]
+workspace = false
+
+[tasks.install-llvm]
+command = "rustup"
+args = ["component", "add", "llvm-tools-preview"]
+workspace = false
+
+# This actually runs the tests and generates the .profraw file.
+[tasks.coverage-run-tests]
+workspace = false
+command = "cargo"
+args = ["test", "--all-features"]
+# toolchain = "nightly"
+env = { RUSTFLAGS = "-Cinstrument-coverage", RUSTDOCFLAGS = "-Cinstrument-coverage", LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw" }
+
+# After generating the .profraw, this step creates the html report.
+# Important! Keep in grcov flags in sync with Makefile.internal.toml.
+[tasks.coverage-run-grcov]
+workspace = false
+command = "grcov"
+args = [
+  ".",
+  "--binary-path", "target/debug/deps/",
+  "--source-dir", ".",
+  "--branch", # Enables parsing branch coverage information
+  "--ignore-not-existing",
+  "--ignore",        "fluent-testing/*", # Test-only fixtures.
+  "--ignore",        "fluent-syntax/src/bin/*", # Small binary utility that doesn't require testing.
+  "--output-type",   "html",
+  "--output-path",   "coverage",
+  "--excl-start",    "^#\\[cfg\\(test\\)\\]|^// coverage\\(off\\)",
+  "--excl-br-start", "^#\\[cfg\\(test\\)\\]|^// coverage\\(off\\)",
+  "--excl-stop",     "^// coverage\\(on\\)",
+  "--excl-br-stop",  "^// coverage\\(on\\)",
+  "--excl-line",     "\\#\\[derive\\(|// cov\\(skip\\)",
+  "--excl-br-line",  "\\#\\[derive\\(|// cov\\(skip\\)",
+]
+env = { LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw" }
+
+# Cleans up all of the .profraw files left over after running -C instrument-coverage
+[tasks.coverage-clean-profraw]
+workspace = false
+command = "find"
+args = [
+  ".",
+  "-name", "*.profraw",
+  "-maxdepth", "2",
+  "-delete"
+]
+
+# Notify the user the report is ready.
+[tasks.coverage-notify-completed]
+workspace = false
+command = "echo"
+args = ["\nThe coverage report is ready:\n./coverage\n"]
