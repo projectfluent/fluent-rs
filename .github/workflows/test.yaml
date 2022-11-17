@@ -52,7 +52,25 @@ jobs:
           RUSTFLAGS: '-Zinstrument-coverage'
       - name: Run grcov
         if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
-        run: grcov . --binary-path target/debug/deps/ -s . -t lcov --branch --ignore-not-existing --ignore '../**' --ignore '/*' -o coverage.lcov
+        # Important! Keep in grcov flags in sync with Makefile.internal.toml.
+        run: >
+          grcov .
+          --binary-path target/debug/deps/
+          --source-dir  .
+          --branch
+          --ignore-not-existing
+          --ignore        '../**'
+          --ignore        '/*'
+          --ignore        'fluent-testing/*'
+          --ignore        'fluent-syntax/src/bin/*'
+          --output-type   'lcov'
+          --output-path   'coverage.lcov'
+          --excl-start    '^#\[cfg\(test\)\]|^// coverage\(off\)'
+          --excl-br-start '^#\[cfg\(test\)\]|^// coverage\(off\)'
+          --excl-stop     '^// coverage\(on\)'
+          --excl-br-stop  '^// coverage\(on\)'
+          --excl-line     '\#\[derive\(|// cov\(skip\)'
+          --excl-br-line  '\#\[derive\(|// cov\(skip\)'
       - name: Coveralls upload
         if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
         uses: coverallsapp/github-action@master
