@@ -212,7 +212,7 @@ fn localization_format_value_missing_errors() {
     let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
     let bundles = loc.bundles();
 
     let _ = bundles
@@ -268,7 +268,7 @@ fn localization_format_value_sync_missing_errors() {
     let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
     let bundles = loc.bundles();
 
     let _ = bundles
@@ -324,7 +324,7 @@ fn localization_format_values_sync_missing_errors() {
     let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
     let bundles = loc.bundles();
 
     let _ = bundles
@@ -395,7 +395,7 @@ fn localization_format_messages_sync_missing_errors() {
     let res_mgr = ResourceManager;
     let mut errors = vec![];
 
-    let loc = Localization::with_env(resource_ids, true, locales.clone(), res_mgr);
+    let loc = Localization::with_env(resource_ids, true, locales, res_mgr);
     let bundles = loc.bundles();
 
     let _ = bundles

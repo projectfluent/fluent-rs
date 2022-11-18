@@ -8,9 +8,7 @@ fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     match name {
         "preferences" => {
             bundle
-                .add_function("PLATFORM", |_args, _named_args| {
-                    return "linux".into();
-                })
+                .add_function("PLATFORM", |_args, _named_args| "linux".into())
                 .expect("Failed to add a function to the bundle.");
         }
         _ => {}
@@ -71,7 +69,7 @@ fn iai_resolve_preferences() {
                     .expect("Failed to write a pattern.");
                 s.clear();
             }
-            assert!(errors.len() == 0, "Resolver errors: {:#?}", errors);
+            assert!(errors.is_empty(), "Resolver errors: {:#?}", errors);
         }
     }
 }

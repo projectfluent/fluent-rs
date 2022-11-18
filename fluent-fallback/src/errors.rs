@@ -2,7 +2,7 @@ use fluent_bundle::FluentError;
 use std::error::Error;
 use unic_langid::LanguageIdentifier;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Eq)]
 pub enum LocalizationError {
     Bundle {
         error: FluentError,
