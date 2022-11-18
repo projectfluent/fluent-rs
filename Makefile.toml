@@ -1,0 +1,34 @@
+# This file includes all of the documented and runnable commands.
+# See the Makefile.internal.toml for the internal implementation details of the commands.
+
+# Command implementation details:
+extend = "./Makefile.internal.toml"
+
+[env]
+CARGO_MAKE_EXTEND_WORKSPACE_MAKEFILE = true
+
+# Run all of the tests in all of the packages.
+[tasks.test]
+command = "cargo"
+args = ["test", "--all-features"]
+
+# Installs any tools needed for running commands, like for code coverage.
+[tasks.install-tools]
+workspace = false
+dependencies = [
+  "install-grcov",
+  "install-llvm"
+]
+
+# Create a local test coverage report that outputs as html to ./coverage
+# You may need to run `cargo make install-tools` first and make sure that
+# the llvm tools are on your path.
+[tasks.coverage]
+workspace = false
+dependencies = [
+  "clean",
+  "coverage-run-tests",
+  "coverage-run-grcov",
+  "coverage-clean-profraw",
+  "coverage-notify-completed"
+]
