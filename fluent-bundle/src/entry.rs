@@ -35,7 +35,7 @@ pub trait GetEntry {
     fn get_entry_function(&self, id: &str) -> Option<&FluentFunction>;
 }
 
-impl<'bundle, R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
+impl<R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
     fn get_entry_message(&self, id: &str) -> Option<&ast::Message<&str>> {
         self.entries.get(id).and_then(|ref entry| match entry {
             Entry::Message((resource_idx, entry_idx)) => {

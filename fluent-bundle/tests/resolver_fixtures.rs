@@ -17,7 +17,7 @@ use unic_langid::LanguageIdentifier;
 use helpers::*;
 
 fn transform_example(s: &str) -> Cow<str> {
-    s.replace("a", "A").into()
+    s.replace('a', "A").into()
 }
 
 #[derive(Clone)]
@@ -57,15 +57,15 @@ impl Scope {
                     .name
                     .as_ref()
                     .cloned()
-                    .unwrap_or_else(|| generate_random_hash());
-                let bundle = create_bundle(Some(b), &defaults, &available_resources);
+                    .unwrap_or_else(generate_random_hash);
+                let bundle = create_bundle(Some(b), defaults, &available_resources);
                 bundles.insert(name, bundle);
             }
         }
         if bundles.is_empty() {
             let bundle = create_bundle(None, defaults, &available_resources);
             let name = generate_random_hash();
-            bundles.insert(name.clone(), bundle);
+            bundles.insert(name, bundle);
         }
         bundles
     }
@@ -83,7 +83,7 @@ fn generate_random_hash() -> String {
 
 fn test_fixture(fixture: &TestFixture, defaults: &Option<TestDefaults>) {
     for suite in &fixture.suites {
-        test_suite(&suite, defaults, Scope(vec![]));
+        test_suite(suite, defaults, Scope(vec![]));
     }
 }
 
@@ -102,7 +102,7 @@ fn create_bundle(
                 .and_then(|defaults| defaults.bundle.locales.as_ref())
         })
         .map(|locs| {
-            locs.into_iter()
+            locs.iter()
                 .map(|s| s.parse().expect("Parsing failed."))
                 .collect()
         })
@@ -137,7 +137,7 @@ fn create_bundle(
                 "CONCAT" => bundle.add_function(f.as_str(), |args, _name_args| {
                     args.iter()
                         .fold(String::new(), |acc, x| match x {
-                            FluentValue::String(s) => acc + &s.to_string(),
+                            FluentValue::String(s) => acc + s,
                             FluentValue::Number(n) => acc + &n.value.to_string(),
                             _ => acc,
                         })
@@ -267,49 +267,50 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 assert.id,
                 scope.get_path()
             );
-        } else {
-            if let Some(ref expected_value) = assert.value {
-                let msg = bundle.get_message(&assert.id).expect(&format!(
+        } else if let Some(ref expected_value) = assert.value {
+            let msg = bundle.get_message(&assert.id).unwrap_or_else(|| {
+                panic!(
                     "Failed to retrieve message `{}` in {}.",
                     &assert.id,
                     scope.get_path()
-                ));
-                let val = if let Some(ref attr) = assert.attribute {
-                    msg.get_attribute(attr.as_str())
-                        .expect(&format!(
+                )
+            });
+            let val = if let Some(ref attr) = assert.attribute {
+                msg.get_attribute(attr.as_str())
+                    .unwrap_or_else(|| {
+                        panic!(
                             "Failed to retrieve an attribute of a message {}.{}.",
                             assert.id, attr
-                        ))
-                        .value()
-                } else {
-                    msg.value().expect(&format!(
-                        "Failed to retrieve a value of a message {}.",
-                        assert.id
-                    ))
-                };
-
-                let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
-                    args.iter()
-                        .map(|(k, v)| {
-                            let val: FluentValue = match v {
-                                TestArgumentValue::String(s) => s.as_str().into(),
-                                TestArgumentValue::Number(n) => n.into(),
-                            };
-                            (k.as_str(), val)
-                        })
-                        .collect()
-                });
-                let value = bundle.format_pattern(&val, args.as_ref(), &mut errors);
-                assert_eq!(
-                    &value,
-                    expected_value,
-                    "Values don't match in {}",
-                    scope.get_path()
-                );
-                test_errors(&errors, Some(&assert.errors));
+                        )
+                    })
+                    .value()
             } else {
-                panic!("Value field expected.");
-            }
+                msg.value().unwrap_or_else(|| {
+                    panic!("Failed to retrieve a value of a message {}.", assert.id)
+                })
+            };
+
+            let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
+                args.iter()
+                    .map(|(k, v)| {
+                        let val: FluentValue = match v {
+                            TestArgumentValue::String(s) => s.as_str().into(),
+                            TestArgumentValue::Number(n) => n.into(),
+                        };
+                        (k.as_str(), val)
+                    })
+                    .collect()
+            });
+            let value = bundle.format_pattern(val, args.as_ref(), &mut errors);
+            assert_eq!(
+                &value,
+                expected_value,
+                "Values don't match in {}",
+                scope.get_path()
+            );
+            test_errors(&errors, Some(&assert.errors));
+        } else {
+            panic!("Value field expected.");
         }
     }
 }
@@ -317,7 +318,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
 fn test_errors(errors: &[FluentError], reference: Option<&[TestError]>) {
     let reference = reference.unwrap_or(&[]);
     assert_eq!(errors.len(), reference.len());
-    for (error, reference) in errors.into_iter().zip(reference) {
+    for (error, reference) in errors.iter().zip(reference) {
         match error {
             FluentError::ResolverError(err) => match err {
                 ResolverError::Reference(_) => {
