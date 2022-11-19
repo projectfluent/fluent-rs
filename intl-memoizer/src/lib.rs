@@ -399,7 +399,7 @@ mod tests {
         }
 
         {
-            let en_memoizer = memoizer.get_for_lang(lang.clone());
+            let en_memoizer = memoizer.get_for_lang(lang);
 
             let result = en_memoizer
                 .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))

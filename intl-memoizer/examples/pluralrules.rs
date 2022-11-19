@@ -22,7 +22,7 @@ fn main() {
     let mut memoizer = IntlMemoizer::default();
 
     let lang: LanguageIdentifier = "en".parse().unwrap();
-    let lang_memoizer = memoizer.get_for_lang(lang.clone());
+    let lang_memoizer = memoizer.get_for_lang(lang);
     let result = lang_memoizer
         .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |pr| pr.0.select(5))
         .unwrap();

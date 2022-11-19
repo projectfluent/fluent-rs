@@ -63,7 +63,7 @@ liked-count2 = { NUMBER($num) ->
 
     let mut errors = vec![];
     let pattern = msg.value().expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     assert_eq!("\u{2068}1\u{2069} people liked your message", &value);
 
     // 3. Example with passing number, but without NUMBER call
@@ -75,7 +75,7 @@ liked-count2 = { NUMBER($num) ->
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value().expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     assert_eq!("One person liked your message", &value);
 
     // 4. Example with NUMBER call
@@ -87,7 +87,7 @@ liked-count2 = { NUMBER($num) ->
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value().expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     assert_eq!("One person liked your message", &value);
 
     // 5. Example with NUMBER call from number
@@ -99,6 +99,6 @@ liked-count2 = { NUMBER($num) ->
         .expect("Message doesn't exist.");
     let mut errors = vec![];
     let pattern = msg.value().expect("Message has no value.");
-    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
     assert_eq!("One person liked your message", &value);
 }

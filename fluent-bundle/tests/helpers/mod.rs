@@ -88,7 +88,7 @@ pub fn get_defaults(path: &str) -> Result<TestDefaults, io::Error> {
     Ok(serde_yaml::from_str(&s).expect("Parsing YAML failed."))
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct TestBundle {
     pub name: Option<String>,
@@ -102,7 +102,7 @@ pub struct TestBundle {
     pub errors: Vec<TestError>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct TestResource {
     pub name: Option<String>,
@@ -120,7 +120,7 @@ pub struct TestSetup {
     pub resources: Vec<TestResource>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct TestError {
     #[serde(rename = "type")]
@@ -186,7 +186,7 @@ pub struct TestFixture {
     pub suites: Vec<TestSuite>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct BundleDefaults {
     #[serde(rename = "useIsolating")]
@@ -195,7 +195,7 @@ pub struct BundleDefaults {
     pub locales: Option<Vec<String>>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
 #[serde(deny_unknown_fields)]
 pub struct TestDefaults {
     pub bundle: BundleDefaults,

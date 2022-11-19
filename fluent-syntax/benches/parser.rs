@@ -35,7 +35,7 @@ fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<String>> {
             .collect::<Vec<_>>();
         ftl_strings.insert(*test, strings);
     }
-    return ftl_strings;
+    ftl_strings
 }
 
 fn parse_bench(c: &mut Criterion) {
