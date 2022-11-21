@@ -215,11 +215,11 @@ mod test {
         let _bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["nonexistent.ftl".into()]);
     }
 
-    // TODO - Syntax errors should be surfaced.
+    // TODO - Syntax errors should be surfaced. This test has an invalid resource that
+    // should fail, but currently isn't.
     // https://github.com/projectfluent/fluent-rs/issues/280
     #[test]
     fn get_bundle_ignores_errors() {
-        // Note that this is the behavior at the time of the writing of this test.
         let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
         let bundle = res_mgr.get_bundle(
             vec![langid!("en-US")],
@@ -231,13 +231,13 @@ mod test {
         let pattern = msg.value().expect("Message has a value");
         let value = bundle.format_pattern(&pattern, None, &mut errors);
         assert_eq!(value, "Hello World");
+        assert!(errors.is_empty());
 
         let mut errors = vec![];
         let msg = bundle.get_message("valid-message").expect("Message exists");
         let pattern = msg.value().expect("Message has a value");
         let value = bundle.format_pattern(&pattern, None, &mut errors);
         assert_eq!(value, "This is a valid message");
-
-        // Syntax errors are not surfaced.
+        assert!(errors.is_empty());
     }
 }
