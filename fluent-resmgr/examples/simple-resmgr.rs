@@ -79,7 +79,7 @@ fn main() {
             .collect()
     });
 
-    // 3. Negotiate it against the avialable ones
+    // 3. Negotiate it against the available ones
     let default_locale: LanguageIdentifier = "en-US".parse().expect("Parsing failed.");
     let available = get_available_locales().expect("Retrieving available locales failed.");
     let resolved_locales = negotiate_languages(
