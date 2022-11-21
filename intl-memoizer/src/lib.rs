@@ -432,22 +432,4 @@ mod tests {
             assert_eq!(result, Ok(PluralCategory::OTHER));
         }
     }
-
-    #[test]
-    fn test_debug_concurrent() {
-        let memoizer = concurrent::IntlLangMemoizer::new("en".parse().unwrap());
-        assert!(
-            format!("{:?}", memoizer).starts_with("IntlLangMemoizer"),
-            "The memoizer debug prints."
-        );
-    }
-
-    #[test]
-    fn test_debug_single_thread() {
-        let memoizer = IntlLangMemoizer::new("en".parse().unwrap());
-        assert!(
-            format!("{:?}", memoizer).starts_with("IntlLangMemoizer"),
-            "The memoizer debug prints."
-        );
-    }
 }
