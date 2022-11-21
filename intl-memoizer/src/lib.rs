@@ -355,6 +355,7 @@ mod tests {
     use super::*;
     use fluent_langneg::{negotiate_languages, NegotiationStrategy};
     use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
+    use std::{sync::Arc, thread};
 
     struct PluralRules(pub IntlPluralRules);
 
@@ -385,7 +386,7 @@ mod tests {
     }
 
     #[test]
-    fn it_works() {
+    fn test_single_thread() {
         let lang: LanguageIdentifier = "en".parse().unwrap();
 
         let mut memoizer = IntlMemoizer::default();
@@ -404,6 +405,30 @@ mod tests {
             let result = en_memoizer
                 .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
                 .unwrap();
+            assert_eq!(result, Ok(PluralCategory::OTHER));
+        }
+    }
+
+    #[test]
+    fn test_concurrent() {
+        let lang: LanguageIdentifier = "en".parse().unwrap();
+        let memoizer = Arc::new(concurrent::IntlLangMemoizer::new(lang));
+        let mut threads = vec![];
+
+        // Spawn four threads that all use the PluralRules.
+        for _ in 0..4 {
+            let memoizer = Arc::clone(&memoizer);
+            threads.push(thread::spawn(move || {
+                memoizer
+                    .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| {
+                        cb.0.select(5)
+                    })
+                    .expect("Failed to get a PluralRules result.")
+            }));
+        }
+
+        for thread in threads.drain(..) {
+            let result = thread.join().expect("Failed to join thread.");
             assert_eq!(result, Ok(PluralCategory::OTHER));
         }
     }
