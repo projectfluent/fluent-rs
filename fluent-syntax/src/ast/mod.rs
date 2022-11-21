@@ -584,7 +584,7 @@ pub struct Attribute<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Identifier<S> {
     pub name: S,
@@ -752,7 +752,7 @@ pub struct Variant<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum VariantKey<S> {
@@ -798,7 +798,7 @@ pub enum VariantKey<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Debug, PartialEq, Eq, Clone)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(from = "helper::CommentDef<S>"))]
 pub struct Comment<S> {

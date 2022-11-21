@@ -133,7 +133,7 @@ fn fluent_number_style() {
     let num = FluentNumber::new(0.2, opts.clone());
     assert_eq!(num.as_string(), "0.200");
 
-    let num = FluentNumber::new(2.0, opts.clone());
+    let num = FluentNumber::new(2.0, opts);
     assert_eq!(num.as_string(), "2.000");
 }
 

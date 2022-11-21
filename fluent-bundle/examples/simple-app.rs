@@ -69,7 +69,7 @@ fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
             }
         }
     }
-    return Ok(locales);
+    Ok(locales)
 }
 
 static L10N_RESOURCES: &[&str] = &["simple.ftl"];
@@ -82,7 +82,7 @@ fn main() {
     //    take the second argument as a comma-separated
     //    list of requested locales.
     let requested = args.get(2).map_or(vec![], |arg| {
-        arg.split(",")
+        arg.split(',')
             .map(|s| -> LanguageIdentifier { s.parse().expect("Parsing locale failed.") })
             .collect()
     });
@@ -126,7 +126,7 @@ fn main() {
     match args.get(1) {
         Some(input) => {
             // 7.1. Cast it to a number.
-            match isize::from_str(&input) {
+            match isize::from_str(input) {
                 Ok(i) => {
                     // 7.2. Construct a map of arguments
                     //      to format the message.
@@ -139,7 +139,7 @@ fn main() {
                         .get_message("response-msg")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value().expect("Message has no value.");
-                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+                    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
                 Err(err) => {
@@ -151,7 +151,7 @@ fn main() {
                         .get_message("input-parse-error")
                         .expect("Message doesn't exist.");
                     let pattern = msg.value().expect("Message has no value.");
-                    let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+                    let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
                     println!("{}", value);
                 }
             }
@@ -162,7 +162,7 @@ fn main() {
                 .get_message("missing-arg-error")
                 .expect("Message doesn't exist.");
             let pattern = msg.value().expect("Message has no value.");
-            let value = bundle.format_pattern(&pattern, None, &mut errors);
+            let value = bundle.format_pattern(pattern, None, &mut errors);
             println!("{}", value);
         }
     }
