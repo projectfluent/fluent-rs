@@ -83,15 +83,15 @@ impl ResourceManager {
         let mut bundle = FluentBundle::new(locales.clone());
 
         resource_ids.iter().for_each(|res_id| {
-            self.get_resource(res_id, &locales[0].to_string())
+            let _ = self
+                .get_resource(res_id, &locales[0].to_string())
                 .map_err(|err| errors.push(err))
                 .and_then(|res| {
                     bundle.add_resource(res).map_err(|errs| {
                         errs.into_iter()
                             .for_each(|err| errors.push(ResourceManagerError::Fluent(err)))
                     })
-                })
-                .unwrap();
+                });
         });
 
         if errors.iter().len() > 0 {
@@ -109,23 +109,6 @@ impl ResourceManager {
         &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
-        // <<<<<<< HEAD
-        //     ) -> impl Iterator<Item = FluentBundle<&FluentResource>> {
-        //         let res_mgr = self;
-        //         let mut idx = 0;
-        //
-        //         iter::from_fn(move || {
-        //             locales.get(idx).map(|locale| {
-        //                 idx += 1;
-        //                 let mut bundle = FluentBundle::new(vec![locale.clone()]);
-        //                 for resource_id in &resource_ids {
-        //                     let resource = res_mgr.get_resource(resource_id, &locale.to_string());
-        //                     bundle.add_resource(resource).unwrap();
-        //                 }
-        //                 bundle
-        //             })
-        //         })
-        // =======
     ) -> Result<impl Iterator<Item = FluentBundle<&FluentResource>>, Vec<ResourceManagerError>>
     {
         let mut ptr = 0;
@@ -235,10 +218,14 @@ mod test {
         let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
         let _bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()]);
-        let res_1 = res_mgr.get_resource("test.ftl", "en-US");
+        let res_1 = res_mgr
+            .get_resource("test.ftl", "en-US")
+            .expect("Could not get resource");
 
         let _bundle2 = res_mgr.get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()]);
-        let res_2 = res_mgr.get_resource("test.ftl", "en-US");
+        let res_2 = res_mgr
+            .get_resource("test.ftl", "en-US")
+            .expect("Could not get resource");
 
         assert!(
             std::ptr::eq(res_1, res_2),
@@ -246,24 +233,22 @@ mod test {
         );
     }
 
-    // TODO - This API should return a Result instead.
-    // https://github.com/projectfluent/fluent-rs/issues/278
     #[test]
-    #[should_panic]
     fn get_resource_error() {
         let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
         let _bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["test.ftl".into()]);
-        res_mgr.get_resource("nonexistent.ftl", "en-US");
+        let res = res_mgr.get_resource("nonexistent.ftl", "en-US");
+
+        assert!(res.is_err());
     }
 
-    // TODO - This API should return a Result instead.
-    // https://github.com/projectfluent/fluent-rs/issues/278
     #[test]
-    #[should_panic]
     fn get_bundle_error() {
         let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
-        let _bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["nonexistent.ftl".into()]);
+        let bundle = res_mgr.get_bundle(vec![langid!("en-US")], vec!["nonexistent.ftl".into()]);
+
+        assert!(bundle.is_err());
     }
 
     // TODO - Syntax errors should be surfaced. This test has an invalid resource that
@@ -272,22 +257,24 @@ mod test {
     #[test]
     fn get_bundle_ignores_errors() {
         let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
-        let bundle = res_mgr.get_bundle(
-            vec![langid!("en-US")],
-            vec!["test.ftl".into(), "invalid.ftl".into()],
-        );
+        let bundle = res_mgr
+            .get_bundle(
+                vec![langid!("en-US")],
+                vec!["test.ftl".into(), "invalid.ftl".into()],
+            )
+            .expect("Could not retrieve bundle");
 
         let mut errors = vec![];
         let msg = bundle.get_message("hello-world").expect("Message exists");
         let pattern = msg.value().expect("Message has a value");
-        let value = bundle.format_pattern(&pattern, None, &mut errors);
+        let value = bundle.format_pattern(pattern, None, &mut errors);
         assert_eq!(value, "Hello World");
         assert!(errors.is_empty());
 
         let mut errors = vec![];
         let msg = bundle.get_message("valid-message").expect("Message exists");
         let pattern = msg.value().expect("Message has a value");
-        let value = bundle.format_pattern(&pattern, None, &mut errors);
+        let value = bundle.format_pattern(pattern, None, &mut errors);
         assert_eq!(value, "This is a valid message");
         assert!(errors.is_empty());
     }
