@@ -26,22 +26,22 @@ include = [
 ]
 
 [dependencies]
-fluent-langneg = "0.13"
-fluent-syntax = { version = "0.11", path = "../fluent-syntax" }
-intl_pluralrules = "7.0.1"
+fluent-langneg.workspace = true
+fluent-syntax.workspace = true
+intl_pluralrules.workspace = true
+rustc-hash.workspace = true
+unic-langid.workspace = true
 intl-memoizer = { version = "0.5", path = "../intl-memoizer" }
-rustc-hash = "1"
 self_cell = "0.10"
 smallvec = "1"
-unic-langid = "0.9"
 
 [dev-dependencies]
-criterion = "0.3"
-iai = "0.1"
-serde = { version = "1.0", features = ["derive"] }
-serde_yaml = "0.8"
+criterion.workspace = true
+iai.workspace = true
+serde.workspace = true
+unic-langid = { workspace = true, features = ["macros"] }
 rand = "0.8"
-unic-langid = { version = "0.9", features = ["macros"] }
+serde_yaml = "0.8"
 
 [features]
 default = []

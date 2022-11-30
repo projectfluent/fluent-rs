@@ -26,9 +26,9 @@ include = [
 ]
 
 [dependencies]
+unic-langid.workspace = true
 type-map = "0.5"
-unic-langid = "0.9"
 
 [dev-dependencies]
-intl_pluralrules = "7.0.1"
-fluent-langneg = "0.13"
+intl_pluralrules.workspace = true
+fluent-langneg.workspace = true

@@ -26,6 +26,6 @@ include = [
 ]
 
 [dependencies]
-fluent-bundle = { version = "0.15", path = "../fluent-bundle" }
-unic-langid = "0.9"
+fluent-bundle.workspace = true
+unic-langid.workspace = true
 fluent-pseudo = { version = "0.3", optional = true }
