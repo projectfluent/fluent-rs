@@ -6,8 +6,8 @@ use fluent_fallback::{
 };
 use futures::stream::Stream;
 use rustc_hash::FxHashSet;
-use std::fs;
 use std::io;
+use std::{fs, iter};
 use thiserror::Error;
 use unic_langid::LanguageIdentifier;
 
@@ -57,15 +57,14 @@ impl ResourceManager {
             .path_scheme
             .replace("{locale}", locale)
             .replace("{res_id}", res_id);
-        Ok(if let Some(res) = self.resources.get(&path) {
-            res
+        Ok(if let Some(resource) = self.resources.get(&path) {
+            resource
         } else {
-            let string = read_file(&path)?;
-            let res = match FluentResource::try_new(string) {
-                Ok(res) => res,
-                Err((res, _err)) => res,
+            let resource = match FluentResource::try_new(read_file(&path)?) {
+                Ok(resource) => resource,
+                Err((resource, _err)) => resource,
             };
-            self.resources.insert(path.to_string(), Box::new(res))
+            self.resources.insert(path.to_string(), Box::new(resource))
         })
     }
 
@@ -81,20 +80,21 @@ impl ResourceManager {
     ) -> Result<FluentBundle<&FluentResource>, Vec<ResourceManagerError>> {
         let mut errors: Vec<ResourceManagerError> = vec![];
         let mut bundle = FluentBundle::new(locales.clone());
+        let locale = &locales[0];
 
-        resource_ids.iter().for_each(|res_id| {
-            let _ = self
-                .get_resource(res_id, &locales[0].to_string())
-                .map_err(|err| errors.push(err))
-                .and_then(|res| {
-                    bundle.add_resource(res).map_err(|errs| {
+        for resource_id in &resource_ids {
+            match self.get_resource(resource_id, &locale.to_string()) {
+                Ok(resource) => {
+                    if let Err(errs) = bundle.add_resource(resource) {
                         errs.into_iter()
-                            .for_each(|err| errors.push(ResourceManagerError::Fluent(err)))
-                    })
-                });
-        });
+                            .for_each(|error| errors.push(ResourceManagerError::Fluent(error)))
+                    }
+                }
+                Err(error) => errors.push(error),
+            };
+        }
 
-        if errors.iter().len() > 0 {
+        if !errors.is_empty() {
             Err(errors)
         } else {
             Ok(bundle)
@@ -109,26 +109,36 @@ impl ResourceManager {
         &self,
         locales: Vec<LanguageIdentifier>,
         resource_ids: Vec<String>,
-    ) -> Result<impl Iterator<Item = FluentBundle<&FluentResource>>, Vec<ResourceManagerError>>
+    ) -> impl Iterator<Item = Result<FluentBundle<&FluentResource>, Vec<ResourceManagerError>>>
     {
-        let mut ptr = 0;
-        let mut errors: Vec<ResourceManagerError> = vec![];
-        let mut res = vec![];
+        let mut idx = 0;
 
-        while let Some(locale) = locales.get(ptr) {
-            ptr += 1;
+        iter::from_fn(move || {
+            locales.get(idx).map(|locale| {
+                idx += 1;
+                let mut errors: Vec<ResourceManagerError> = vec![];
+                let mut bundle = FluentBundle::new(vec![locale.clone()]);
 
-            match self.get_bundle(vec![locale.clone()], resource_ids.clone()) {
-                Ok(bundle) => res.push(bundle),
-                Err(mut errs) => errors.append(&mut errs),
-            };
-        }
+                for resource_id in &resource_ids {
+                    match self.get_resource(resource_id, &locale.to_string()) {
+                        Ok(resource) => {
+                            if let Err(errs) = bundle.add_resource(resource) {
+                                errs.into_iter().for_each(|error| {
+                                    errors.push(ResourceManagerError::Fluent(error))
+                                })
+                            }
+                        }
+                        Err(error) => errors.push(error),
+                    }
+                }
 
-        if errors.iter().len() > 0 {
-            Err(errors)
-        } else {
-            Ok(res.into_iter())
-        }
+                if !errors.is_empty() {
+                    Err(errors)
+                } else {
+                    Ok(bundle)
+                }
+            })
+        })
     }
 }
 

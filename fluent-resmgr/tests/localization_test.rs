@@ -52,12 +52,13 @@ fn resmgr_get_bundles() {
     let res_mgr = ResourceManager::new("./tests/resources/{locale}/{res_id}".into());
 
     let locales = vec![langid!("en-US"), langid!("pl")];
-    let mut bundles_iter = res_mgr
-        .get_bundles(locales, vec!["test.ftl".into()])
-        .expect("Could not retrieve bundles");
+    let mut bundles_iter = res_mgr.get_bundles(locales, vec!["test.ftl".into()]);
 
     {
-        let bundle = bundles_iter.next().expect("Failed to get en-US bundle.");
+        let bundle = bundles_iter
+            .next()
+            .unwrap()
+            .expect("Failed to get en-US bundle.");
 
         let mut errors = vec![];
         let msg = bundle.get_message("hello-world").expect("Message exists");
@@ -67,7 +68,10 @@ fn resmgr_get_bundles() {
     }
 
     {
-        let bundle = bundles_iter.next().expect("Failed to get pl bundle.");
+        let bundle = bundles_iter
+            .next()
+            .unwrap()
+            .expect("Failed to get pl bundle.");
 
         let mut errors = vec![];
         let msg = bundle.get_message("hello-world").expect("Witaj Świecie");
