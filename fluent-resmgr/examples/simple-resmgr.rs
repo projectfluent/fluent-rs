@@ -40,15 +40,13 @@ fn get_available_locales() -> Result<Vec<LanguageIdentifier>, io::Error> {
         .join("examples")
         .join("resources");
     let res_dir = fs::read_dir(res_path)?;
-    for entry in res_dir {
-        if let Ok(entry) = entry {
-            let path = entry.path();
-            if path.is_dir() {
-                if let Some(name) = path.file_name() {
-                    if let Some(name) = name.to_str() {
-                        let langid: LanguageIdentifier = name.parse().expect("Parsing failed.");
-                        locales.push(langid);
-                    }
+    for entry in res_dir.flatten() {
+        let path = entry.path();
+        if path.is_dir() {
+            if let Some(name) = path.file_name() {
+                if let Some(name) = name.to_str() {
+                    let langid: LanguageIdentifier = name.parse().expect("Parsing failed.");
+                    locales.push(langid);
                 }
             }
         }
