@@ -50,13 +50,13 @@ impl ResourceManager {
     /// memory, or retrieving it from an in-memory cache.
     fn get_resource(
         &self,
-        res_id: &str,
+        resource_id: &str,
         locale: &str,
     ) -> Result<&FluentResource, ResourceManagerError> {
         let path = self
             .path_scheme
             .replace("{locale}", locale)
-            .replace("{res_id}", res_id);
+            .replace("{res_id}", resource_id);
         Ok(if let Some(resource) = self.resources.get(&path) {
             resource
         } else {
@@ -86,18 +86,19 @@ impl ResourceManager {
             match self.get_resource(resource_id, &locale.to_string()) {
                 Ok(resource) => {
                     if let Err(errs) = bundle.add_resource(resource) {
-                        errs.into_iter()
-                            .for_each(|error| errors.push(ResourceManagerError::Fluent(error)))
+                        for error in errs {
+                            errors.push(ResourceManagerError::Fluent(error));
+                        }
                     }
                 }
                 Err(error) => errors.push(error),
             };
         }
 
-        if !errors.is_empty() {
-            Err(errors)
-        } else {
+        if errors.is_empty() {
             Ok(bundle)
+        } else {
+            Err(errors)
         }
     }
 
@@ -123,9 +124,9 @@ impl ResourceManager {
                     match self.get_resource(resource_id, &locale.to_string()) {
                         Ok(resource) => {
                             if let Err(errs) = bundle.add_resource(resource) {
-                                errs.into_iter().for_each(|error| {
+                                for error in errs {
                                     errors.push(ResourceManagerError::Fluent(error))
-                                })
+                                }
                             }
                         }
                         Err(error) => errors.push(error),
