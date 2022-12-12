@@ -31,7 +31,7 @@ fluent-syntax.workspace = true
 intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
-intl-memoizer = { version = "0.5", path = "../intl-memoizer" }
+intl-memoizer = { path = "../intl-memoizer" }
 self_cell = "0.10"
 smallvec = "1"
 
