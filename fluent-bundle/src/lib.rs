@@ -116,10 +116,10 @@ pub use args::FluentArgs;
 /// non-concurrent [`IntlLangMemoizer`](intl_memoizer::IntlLangMemoizer).
 ///
 /// This is the basic variant of the [`FluentBundle`](crate::bundle::FluentBundle).
-///
-/// The concurrent specialization, can be constructed with
-/// [`FluentBundle::new_concurrent`](crate::bundle::FluentBundle::new_concurrent).
 pub type FluentBundle<R> = bundle::FluentBundle<R, intl_memoizer::IntlLangMemoizer>;
+/// Specialized [`FluentBundleConcurrent`](crate::concurrent::FluentBundle) over
+/// concurrent [`IntlLangMemoizer`](intl_memoizer::IntlLangMemoizer).
+pub type FluentBundleConcurrent<R> = concurrent::FluentBundle<R, concurrent::IntlLangMemoizer>;
 pub use errors::FluentError;
 pub use message::{FluentAttribute, FluentMessage};
 pub use resource::FluentResource;

@@ -1,8 +1,8 @@
-use intl_memoizer::{concurrent::IntlLangMemoizer, Memoizable};
+pub use intl_memoizer::{concurrent::IntlLangMemoizer, Memoizable};
 use rustc_hash::FxHashMap;
 use unic_langid::LanguageIdentifier;
 
-use crate::bundle::FluentBundle;
+pub use crate::bundle::FluentBundle;
 use crate::memoizer::MemoizerKind;
 use crate::types::FluentType;
 
