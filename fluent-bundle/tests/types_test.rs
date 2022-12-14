@@ -123,7 +123,7 @@ fn fluent_number_style() {
     assert!(!fno.use_grouping);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
-    assert_eq!(num.as_string(), "0.2");
+    assert_eq!(num.as_string_basic(), "0.2");
 
     let opts = FluentNumberOptions {
         minimum_fraction_digits: Some(3),
@@ -131,10 +131,10 @@ fn fluent_number_style() {
     };
 
     let num = FluentNumber::new(0.2, opts.clone());
-    assert_eq!(num.as_string(), "0.200");
+    assert_eq!(num.as_string_basic(), "0.200");
 
     let num = FluentNumber::new(2.0, opts);
-    assert_eq!(num.as_string(), "2.000");
+    assert_eq!(num.as_string_basic(), "2.000");
 }
 
 #[test]

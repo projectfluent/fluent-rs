@@ -39,6 +39,7 @@ impl<R> FluentBundle<R> {
             use_isolating: true,
             transform: None,
             formatter: None,
+            icu_data_provider: None,
         }
     }
 }

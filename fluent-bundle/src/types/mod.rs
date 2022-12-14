@@ -229,7 +229,7 @@ impl<'source> FluentValue<'source> {
         }
         match self {
             FluentValue::String(s) => w.write_str(s),
-            FluentValue::Number(n) => w.write_str(&n.as_string()),
+            FluentValue::Number(n) => w.write_str(&n.as_string(scope.bundle)),
             FluentValue::Custom(s) => w.write_str(&scope.bundle.intls.stringify_value(&**s)),
             FluentValue::Error => Ok(()),
             FluentValue::None => Ok(()),
@@ -251,7 +251,7 @@ impl<'source> FluentValue<'source> {
         }
         match self {
             FluentValue::String(s) => s.clone(),
-            FluentValue::Number(n) => n.as_string(),
+            FluentValue::Number(n) => n.as_string(scope.bundle),
             FluentValue::Custom(s) => scope.bundle.intls.stringify_value(&**s),
             FluentValue::Error => "".into(),
             FluentValue::None => "".into(),
