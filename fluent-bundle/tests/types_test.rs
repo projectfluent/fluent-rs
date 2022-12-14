@@ -1,6 +1,6 @@
 use fluent_bundle::resolver::Scope;
 use fluent_bundle::types::{
-    FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle,
+    FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle, FluentNumberUseGrouping,
 };
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
@@ -120,7 +120,7 @@ fn fluent_number_style() {
     assert_eq!(fno.style, FluentNumberStyle::Currency);
     assert_eq!(fno.currency, Some("EUR".to_string()));
     assert_eq!(fno.currency_display, FluentNumberCurrencyDisplayStyle::Code);
-    assert!(!fno.use_grouping);
+    assert_eq!(fno.use_grouping, FluentNumberUseGrouping::False);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
     assert_eq!(num.as_string_basic(), "0.2");

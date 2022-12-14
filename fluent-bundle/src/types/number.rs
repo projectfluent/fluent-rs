@@ -73,35 +73,32 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
     }
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum FluentNumberUseGrouping {
+    Auto,
+    False,
+    Always,
+    Min2,
+}
+
+impl Default for FluentNumberUseGrouping {
+    fn default() -> Self {
+        Self::Auto
+    }
+}
+
+#[derive(Default, Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
     pub r#type: FluentNumberType,
     pub style: FluentNumberStyle,
     pub currency: Option<String>,
     pub currency_display: FluentNumberCurrencyDisplayStyle,
-    pub use_grouping: bool,
+    pub use_grouping: FluentNumberUseGrouping,
     pub minimum_integer_digits: Option<usize>,
     pub minimum_fraction_digits: Option<usize>,
     pub maximum_fraction_digits: Option<usize>,
     pub minimum_significant_digits: Option<usize>,
     pub maximum_significant_digits: Option<usize>,
-}
-
-impl Default for FluentNumberOptions {
-    fn default() -> Self {
-        Self {
-            r#type: Default::default(),
-            style: Default::default(),
-            currency: None,
-            currency_display: Default::default(),
-            use_grouping: true,
-            minimum_integer_digits: None,
-            minimum_fraction_digits: None,
-            maximum_fraction_digits: None,
-            minimum_significant_digits: None,
-            maximum_significant_digits: None,
-        }
-    }
 }
 
 impl FluentNumberOptions {
@@ -121,7 +118,12 @@ impl FluentNumberOptions {
                     self.currency_display = n.as_ref().into();
                 }
                 ("useGrouping", FluentValue::String(n)) => {
-                    self.use_grouping = n != "false";
+                    self.use_grouping = match n.as_ref() {
+                        "false" => FluentNumberUseGrouping::False,
+                        "always" => FluentNumberUseGrouping::Always,
+                        "min2" => FluentNumberUseGrouping::Min2,
+                        _ => FluentNumberUseGrouping::Auto,
+                    }
                 }
                 ("minimumIntegerDigits", FluentValue::Number(n)) => {
                     self.minimum_integer_digits = Some(n.into());
@@ -278,9 +280,9 @@ from_num!(f32 f64);
 
 pub type NumberFormatProvider = Box<dyn DataProvider<DecimalSymbolsV1Marker>>;
 
-#[derive(Debug, Eq, PartialEq, Clone, Default, Hash)]
+#[derive(Clone, Hash, PartialEq, Eq)]
 struct FormatterOptions {
-    use_grouping: bool,
+    use_grouping: FluentNumberUseGrouping,
 }
 
 struct NumberFormatter(FixedDecimalFormatter);
@@ -306,8 +308,10 @@ impl Memoizable for NumberFormatter {
 
         let mut options: FixedDecimalFormatterOptions = Default::default();
         options.grouping_strategy = match args.0.use_grouping {
-            true => GroupingStrategy::Always,
-            false => GroupingStrategy::Auto,
+            FluentNumberUseGrouping::Auto => GroupingStrategy::Auto,
+            FluentNumberUseGrouping::False => GroupingStrategy::Never,
+            FluentNumberUseGrouping::Always => GroupingStrategy::Always,
+            FluentNumberUseGrouping::Min2 => GroupingStrategy::Min2,
         };
 
         let inner = FixedDecimalFormatter::try_new_with_any_provider(

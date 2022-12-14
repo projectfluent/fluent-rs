@@ -273,7 +273,7 @@ impl<'source> FluentValue<'source> {
         }
         match self {
             FluentValue::String(s) => s,
-            FluentValue::Number(n) => n.as_string(),
+            FluentValue::Number(n) => n.as_string(scope.bundle),
             FluentValue::Custom(s) => scope.bundle.intls.stringify_value(s.as_ref()),
             FluentValue::Error => "".into(),
             FluentValue::None => "".into(),
