@@ -206,7 +206,7 @@ impl<'source> FluentValue<'source> {
                 scope
                     .bundle
                     .intls
-                    .with_try_get_threadsafe::<PluralRules, _, _>((r#type,), |pr| {
+                    .with_try_get_threadsafe::<PluralRules, _, _>((r#type,), &(), |pr| {
                         pr.0.select(b) == Ok(cat)
                     })
                     .unwrap()

@@ -13,7 +13,12 @@ impl PluralRules {
 impl Memoizable for PluralRules {
     type Args = (PluralRuleType,);
     type Error = &'static str;
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+    type DataProvider = ();
+    fn construct(
+        lang: LanguageIdentifier,
+        args: Self::Args,
+        _: &Self::DataProvider,
+    ) -> Result<Self, Self::Error> {
         Self::new(lang, args.0)
     }
 }
@@ -24,7 +29,7 @@ fn main() {
     let lang: LanguageIdentifier = "en".parse().unwrap();
     let lang_memoizer = memoizer.get_for_lang(lang);
     let result = lang_memoizer
-        .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |pr| pr.0.select(5))
+        .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), &(), |pr| pr.0.select(5))
         .unwrap();
 
     assert_eq!(result, Ok(PluralCategory::OTHER));

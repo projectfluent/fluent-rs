@@ -51,14 +51,19 @@ impl MemoizerKind for IntlLangMemoizer {
         Self::new(lang)
     }
 
-    fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    fn with_try_get_threadsafe<I, R, U>(
+        &self,
+        args: I::Args,
+        data_provider: &I::DataProvider,
+        cb: U,
+    ) -> Result<R, I::Error>
     where
         Self: Sized,
         I: Memoizable + Send + Sync + 'static,
         I::Args: Send + Sync + 'static,
         U: FnOnce(&I) -> R,
     {
-        self.with_try_get(args, cb)
+        self.with_try_get(args, data_provider, cb)
     }
 
     fn stringify_value(&self, value: &dyn FluentType) -> std::borrow::Cow<'static, str> {

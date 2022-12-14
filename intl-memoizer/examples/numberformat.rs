@@ -28,7 +28,12 @@ impl NumberFormat {
 impl Memoizable for NumberFormat {
     type Args = (NumberFormatOptions,);
     type Error = ();
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+    type DataProvider = ();
+    fn construct(
+        lang: LanguageIdentifier,
+        args: Self::Args,
+        _: &Self::DataProvider,
+    ) -> Result<Self, Self::Error> {
         Self::new(lang, args.0)
     }
 }
@@ -45,7 +50,7 @@ fn main() {
             maximum_fraction_digits: 5,
         };
         let result = lang_memoizer
-            .with_try_get::<NumberFormat, _, _>((options,), |nf| nf.format(2))
+            .with_try_get::<NumberFormat, _, _>((options,), &(), |nf| nf.format(2))
             .unwrap();
 
         assert_eq!(&result, "en-US: 2, MFD: 3");
@@ -57,7 +62,7 @@ fn main() {
             maximum_fraction_digits: 5,
         };
         let result = lang_memoizer
-            .with_try_get::<NumberFormat, _, _>((options,), |nf| nf.format(1))
+            .with_try_get::<NumberFormat, _, _>((options,), &(), |nf| nf.format(1))
             .unwrap();
         assert_eq!(&result, "en-US: 1, MFD: 3");
     }
@@ -70,7 +75,7 @@ fn main() {
             maximum_fraction_digits: 5,
         };
         let result = lang_memoizer
-            .with_try_get::<NumberFormat, _, _>((options,), |nf| nf.format(7))
+            .with_try_get::<NumberFormat, _, _>((options,), &(), |nf| nf.format(7))
             .unwrap();
 
         assert_eq!(&result, "en-US: 7, MFD: 3");
