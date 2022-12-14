@@ -494,7 +494,7 @@ impl<R, M> FluentBundle<R, M> {
     {
         let mut scope = Scope::new(self, args, Some(errors));
         let value = pattern.resolve(&mut scope);
-        value.as_string(&scope)
+        value.into_string(&scope)
     }
 
     /// Makes the provided rust function available to messages with the name `id`. See

@@ -253,6 +253,25 @@ impl<'source> FluentValue<'source> {
         }
     }
 
+    /// Converts the [`FluentValue`] to a string.
+    pub fn into_string<R: Borrow<FluentResource>, M>(self, scope: &Scope<R, M>) -> Cow<'source, str>
+    where
+        M: MemoizerKind,
+    {
+        if let Some(formatter) = &scope.bundle.formatter {
+            if let Some(val) = formatter(&self, &scope.bundle.intls) {
+                return val.into();
+            }
+        }
+        match self {
+            FluentValue::String(s) => s,
+            FluentValue::Number(n) => n.as_string(),
+            FluentValue::Custom(s) => scope.bundle.intls.stringify_value(s.as_ref()),
+            FluentValue::Error => "".into(),
+            FluentValue::None => "".into(),
+        }
+    }
+
     pub fn into_owned<'a>(&self) -> FluentValue<'a> {
         match self {
             FluentValue::String(str) => FluentValue::String(Cow::from(str.to_string())),
