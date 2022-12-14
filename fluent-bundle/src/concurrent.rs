@@ -31,6 +31,7 @@ impl<R> FluentBundle<R, IntlLangMemoizer> {
             use_isolating: true,
             transform: None,
             formatter: None,
+            icu_data_provider: None,
         }
     }
 }
