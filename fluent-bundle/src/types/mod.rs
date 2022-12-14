@@ -205,6 +205,7 @@ impl<'source> FluentValue<'source> {
                     .intls
                     .with_try_get_threadsafe::<PluralRules, _, _>(
                         (PluralRuleType::CARDINAL,),
+                        &(),
                         |pr| pr.0.select(b) == Ok(cat),
                     )
                     .unwrap()
