@@ -1,4 +1,7 @@
 
+# Term Comment
+# with a blank last line.
+#
 key01 = Value 01
 key02 =
 
