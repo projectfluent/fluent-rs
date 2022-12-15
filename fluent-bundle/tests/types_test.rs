@@ -126,7 +126,7 @@ fn fluent_number_style() {
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
     assert_eq!(num.as_string_basic(), "0.2");
 
-    let opts = FluentNumberOptions {
+    let mut opts = FluentNumberOptions {
         minimum_fraction_digits: Some(3),
         ..Default::default()
     };
@@ -134,8 +134,26 @@ fn fluent_number_style() {
     let num = FluentNumber::new(0.2, opts.clone());
     assert_eq!(num.as_string_basic(), "0.200");
 
-    let num = FluentNumber::new(2.0, opts);
+    let num = FluentNumber::new(2.0, opts.clone());
     assert_eq!(num.as_string_basic(), "2.000");
+
+    opts.minimum_integer_digits = Some(3);
+    opts.minimum_fraction_digits = None;
+
+    let num = FluentNumber::new(2.0, opts.clone());
+    assert_eq!(num.as_string_basic(), "002");
+
+    let num = FluentNumber::new(0.2, opts.clone());
+    assert_eq!(num.as_string_basic(), "000.2");
+
+    opts.minimum_integer_digits = None;
+    opts.maximum_significant_digits = Some(4);
+
+    let num = FluentNumber::new(12345.0, opts.clone());
+    assert_eq!(num.as_string_basic(), "12340");
+
+    let num = FluentNumber::new(1.2345, opts);
+    assert_eq!(num.as_string_basic(), "1.234");
 }
 
 #[test]
