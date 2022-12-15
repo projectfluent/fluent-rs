@@ -551,6 +551,10 @@ impl<R, M> FluentBundle<R, M> {
             }),
         }
     }
+
+    pub fn set_icu_data_provider(&mut self, provider: IcuDataProvider) {
+        self.icu_data_provider = Some(provider);
+    }
 }
 
 impl<R> Default for FluentBundle<R, IntlLangMemoizer> {
