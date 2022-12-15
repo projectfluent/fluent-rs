@@ -1,6 +1,7 @@
 use fluent_bundle::resolver::Scope;
 use fluent_bundle::types::{
-    FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle, FluentNumberUseGrouping,
+    FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle,
+    FluentNumberUseGrouping,
 };
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
@@ -153,4 +154,25 @@ fn fluent_number_to_operands() {
             t: 81,
         }
     );
+}
+
+#[test]
+fn fluent_number_grouping() {
+    let langid_ars = langid!("ccp");
+    let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    bundle.set_icu_data_provider(Box::new(icu_testdata::any_no_fallback()));
+
+    let mut number = FluentNumber::from(1234567890.1234567);
+
+    number.options.use_grouping = FluentNumberUseGrouping::False;
+    let no_grouping = number.as_string(&bundle);
+    assert_eq!(no_grouping, "𑄷𑄸𑄹𑄺𑄻𑄼𑄽𑄾𑄿𑄶.𑄷𑄸𑄹𑄺𑄻𑄼𑄽");
+
+    number.options.use_grouping = FluentNumberUseGrouping::Min2;
+    let long = number.as_string(&bundle);
+    assert_eq!(long, "𑄷,𑄸𑄹,𑄺𑄻,𑄼𑄽,𑄾𑄿𑄶.𑄷𑄸𑄹𑄺𑄻𑄼𑄽");
+
+    number.value = -1234.0;
+    let short = number.as_string(&bundle);
+    assert_eq!(short, "-𑄷𑄸𑄹𑄺");
 }

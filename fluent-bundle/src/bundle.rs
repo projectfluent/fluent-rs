@@ -552,6 +552,10 @@ impl<R, M> FluentBundle<R, M> {
         }
     }
 
+    pub fn set_icu_data_provider(&mut self, provider: IcuDataProvider) {
+        self.icu_data_provider = Some(provider);
+    }
+
     /// Adds the builtin functions described in the [FTL syntax guide] to the bundle, making them
     /// available in messages.
     ///
