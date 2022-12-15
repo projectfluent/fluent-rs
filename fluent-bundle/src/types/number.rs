@@ -178,11 +178,19 @@ impl FluentNumber {
     }
 
     fn as_fixed_decimal(&self) -> FixedDecimal {
-        let mut fixed_decimal =
-            FixedDecimal::try_from_f64(self.value, DoublePrecision::Floating).unwrap();
+        let precision = if let Some(maxsd) = self.options.maximum_significant_digits {
+            DoublePrecision::SignificantDigits(maxsd as u8)
+        } else {
+            DoublePrecision::Floating
+        };
+
+        let mut fixed_decimal = FixedDecimal::try_from_f64(self.value, precision).unwrap();
 
         if let Some(minfd) = self.options.minimum_fraction_digits {
             fixed_decimal.pad_end(-(minfd as i16));
+        }
+        if let Some(minid) = self.options.minimum_integer_digits {
+            fixed_decimal.pad_start(minid as i16);
         }
         fixed_decimal
     }
