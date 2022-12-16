@@ -146,6 +146,11 @@ impl<'bundle, 'ast, 'args, 'errors, R, M, Args: ArgumentResolver<'args>>
     }
 }
 
+/// Determines how to retrieve argument values when resolving fluent messages.
+/// This trait can be used to implement an alternative to [`FluentArgs`].
+///
+/// One example usage is for argument type safety that [`FluentArgs`] can't provide due to its
+/// flexible nature. See `fluent-bundle/examples/typesafe_messages.rs` for an example of this.
 pub trait ArgumentResolver<'a>: Copy {
     fn resolve(self, name: &str) -> Option<Cow<FluentValue<'a>>>;
 }
