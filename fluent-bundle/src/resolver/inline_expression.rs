@@ -1,4 +1,4 @@
-use super::scope::Scope;
+use super::scope::{ArgumentResolver, Scope};
 use super::{ResolveValue, ResolverError, WriteValue};
 
 use std::borrow::Borrow;
@@ -13,15 +13,16 @@ use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
 impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
-    fn write<'ast, 'args, 'errors, W, R, M>(
+    fn write<'ast, 'args, 'errors, W, R, M, Args>(
         &'ast self,
         w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        Args: ArgumentResolver<'args>,
     {
         match self {
             Self::StringLiteral { value } => unescape_unicode(w, value),
@@ -100,9 +101,15 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 }
             }
             Self::VariableReference { id } => {
-                let args = scope.local_args.as_ref().or(scope.args);
+                let resolved_arg;
+                let opt_arg = if let Some(args) = scope.local_args.as_ref() {
+                    args.get(id.name)
+                } else {
+                    resolved_arg = scope.args.resolve(id.name);
+                    resolved_arg.as_ref().map(|it| it.as_ref())
+                };
 
-                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
+                if let Some(arg) = opt_arg {
                     arg.write(w, scope)
                 } else {
                     if scope.local_args.is_none() {
@@ -148,13 +155,14 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
 }
 
 impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
-    fn resolve<'ast, 'args, 'errors, R, M>(
+    fn resolve<'ast, 'args, 'errors, R, M, Args>(
         &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> FluentValue<'bundle>
     where
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        Args: ArgumentResolver<'args>,
     {
         match self {
             Self::StringLiteral { value } => unescape_unicode_to_string(value).into(),
@@ -164,8 +172,8 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     if let Some(arg) = local_args.get(id.name) {
                         return arg.clone();
                     }
-                } else if let Some(arg) = scope.args.and_then(|args| args.get(id.name)) {
-                    return arg.into_owned();
+                } else if let Some(arg) = scope.args.resolve(id.name) {
+                    return arg.as_ref().into_owned();
                 }
 
                 if scope.local_args.is_none() {

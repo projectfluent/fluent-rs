@@ -10,7 +10,7 @@ mod pattern;
 mod scope;
 
 pub use errors::ResolverError;
-pub use scope::Scope;
+pub use scope::{ArgumentResolver, Scope};
 
 use std::borrow::Borrow;
 use std::fmt;
@@ -22,27 +22,29 @@ use crate::types::FluentValue;
 /// Resolves an AST node to a [`FluentValue`].
 pub(crate) trait ResolveValue<'bundle> {
     /// Resolves an AST node to a [`FluentValue`].
-    fn resolve<'ast, 'args, 'errors, R, M>(
+    fn resolve<'ast, 'args, 'errors, R, M, Args>(
         &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> FluentValue<'bundle>
     where
         R: Borrow<FluentResource>,
-        M: MemoizerKind;
+        M: MemoizerKind,
+        Args: ArgumentResolver<'args>;
 }
 
 /// Resolves an AST node to a string that is written to source `W`.
 pub(crate) trait WriteValue<'bundle> {
     /// Resolves an AST node to a string that is written to source `W`.
-    fn write<'ast, 'args, 'errors, W, R, M>(
+    fn write<'ast, 'args, 'errors, W, R, M, Args>(
         &'ast self,
         w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
-        M: MemoizerKind;
+        M: MemoizerKind,
+        Args: ArgumentResolver<'args>;
 
     /// Writes error information to `W`. This can be used to add FTL errors inline
     /// to a message.
