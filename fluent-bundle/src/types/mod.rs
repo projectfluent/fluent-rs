@@ -157,12 +157,13 @@ impl<'source> FluentValue<'source> {
     ///
     /// ```
     /// use fluent_bundle::resolver::Scope;
-    /// use fluent_bundle::{types::FluentValue, FluentBundle, FluentResource};
+    /// use fluent_bundle::{types::FluentValue, FluentArgs, FluentBundle, FluentResource};
     /// use unic_langid::langid;
     ///
     /// let langid_ars = langid!("en");
     /// let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
-    /// let scope = Scope::new(&bundle, None, None);
+    /// let argument_resolver: Option<&FluentArgs> = None;
+    /// let scope = Scope::new(&bundle, argument_resolver, None);
     ///
     /// // Matching examples:
     /// assert!(FluentValue::try_number("2").matches(&FluentValue::try_number("2"), &scope));
@@ -177,10 +178,10 @@ impl<'source> FluentValue<'source> {
     /// assert!(!FluentValue::from("fluent").matches(&FluentValue::from("not fluent"), &scope));
     /// assert!(!FluentValue::from("two").matches(&FluentValue::try_number("100"), &scope),);
     /// ```
-    pub fn matches<R: Borrow<FluentResource>, M>(
+    pub fn matches<R: Borrow<FluentResource>, M, Args>(
         &self,
         other: &FluentValue,
-        scope: &Scope<R, M>,
+        scope: &Scope<R, M, Args>,
     ) -> bool
     where
         M: MemoizerKind,
@@ -214,7 +215,7 @@ impl<'source> FluentValue<'source> {
     }
 
     /// Write out a string version of the [`FluentValue`] to `W`.
-    pub fn write<W, R, M>(&self, w: &mut W, scope: &Scope<R, M>) -> fmt::Result
+    pub fn write<W, R, M, Args>(&self, w: &mut W, scope: &Scope<R, M, Args>) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
@@ -235,7 +236,10 @@ impl<'source> FluentValue<'source> {
     }
 
     /// Converts the [`FluentValue`] to a string.
-    pub fn as_string<R: Borrow<FluentResource>, M>(&self, scope: &Scope<R, M>) -> Cow<'source, str>
+    pub fn as_string<R: Borrow<FluentResource>, M, Args>(
+        &self,
+        scope: &Scope<R, M, Args>,
+    ) -> Cow<'source, str>
     where
         M: MemoizerKind,
     {

@@ -122,6 +122,7 @@ pub use args::FluentArgs;
 pub type FluentBundle<R> = bundle::FluentBundle<R, intl_memoizer::IntlLangMemoizer>;
 pub use errors::FluentError;
 pub use message::{FluentAttribute, FluentMessage};
+pub use resolver::ArgumentResolver;
 pub use resource::FluentResource;
 #[doc(inline)]
 pub use types::FluentValue;
