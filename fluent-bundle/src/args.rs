@@ -1,4 +1,3 @@
-use std::borrow::Cow;
 use std::iter::FromIterator;
 
 use crate::types::FluentValue;
@@ -53,7 +52,7 @@ use crate::types::FluentValue;
 /// );
 /// ```
 #[derive(Debug, Default)]
-pub struct FluentArgs<'args>(Vec<(Cow<'args, str>, FluentValue<'args>)>);
+pub struct FluentArgs<'args>(Vec<(&'args str, FluentValue<'args>)>);
 
 impl<'args> FluentArgs<'args> {
     /// Creates a new empty argument map.
@@ -67,12 +66,8 @@ impl<'args> FluentArgs<'args> {
     }
 
     /// Gets the [`FluentValue`] at the `key` if it exists.
-    pub fn get<K>(&self, key: K) -> Option<&FluentValue<'args>>
-    where
-        K: Into<Cow<'args, str>>,
-    {
-        let key = key.into();
-        if let Ok(idx) = self.0.binary_search_by_key(&&key, |(k, _)| k) {
+    pub fn get<'s>(&'s self, key: &str) -> Option<&'s FluentValue<'args>> {
+        if let Ok(idx) = self.0.binary_search_by_key(&key, |(k, _)| k) {
             Some(&self.0[idx].1)
         } else {
             None
@@ -80,32 +75,33 @@ impl<'args> FluentArgs<'args> {
     }
 
     /// Sets the key value pair.
-    pub fn set<K, V>(&mut self, key: K, value: V)
+    pub fn set<V>(&mut self, key: &'args str, value: V)
     where
-        K: Into<Cow<'args, str>>,
         V: Into<FluentValue<'args>>,
     {
-        let key = key.into();
+        self.set_inner(key, value.into());
+    }
+
+    fn set_inner(&mut self, key: &'args str, value: FluentValue<'args>) {
         match self.0.binary_search_by_key(&&key, |(k, _)| k) {
-            Ok(idx) => self.0[idx] = (key, value.into()),
-            Err(idx) => self.0.insert(idx, (key, value.into())),
+            Ok(idx) => self.0[idx] = (key, value),
+            Err(idx) => self.0.insert(idx, (key, value)),
         };
     }
 
     /// Iterate over a tuple of the key an [`FluentValue`].
-    pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
-        self.0.iter().map(|(k, v)| (k.as_ref(), v))
+    pub fn iter(&self) -> impl Iterator<Item = (&'args str, &FluentValue<'args>)> {
+        self.0.iter().map(|(k, v)| (*k, v))
     }
 }
 
-impl<'args, K, V> FromIterator<(K, V)> for FluentArgs<'args>
+impl<'args, V> FromIterator<(&'args str, V)> for FluentArgs<'args>
 where
-    K: Into<Cow<'args, str>>,
     V: Into<FluentValue<'args>>,
 {
     fn from_iter<I>(iter: I) -> Self
     where
-        I: IntoIterator<Item = (K, V)>,
+        I: IntoIterator<Item = (&'args str, V)>,
     {
         let iter = iter.into_iter();
         let mut args = if let Some(size) = iter.size_hint().1 {
@@ -123,7 +119,7 @@ where
 }
 
 impl<'args> IntoIterator for FluentArgs<'args> {
-    type Item = (Cow<'args, str>, FluentValue<'args>);
+    type Item = (&'args str, FluentValue<'args>);
     type IntoIter = std::vec::IntoIter<Self::Item>;
 
     fn into_iter(self) -> Self::IntoIter {
@@ -133,6 +129,8 @@ impl<'args> IntoIterator for FluentArgs<'args> {
 
 #[cfg(test)]
 mod tests {
+    use std::borrow::Cow;
+
     use super::*;
 
     #[test]
