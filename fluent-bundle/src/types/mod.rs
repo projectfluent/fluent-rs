@@ -235,6 +235,9 @@ impl<'source> FluentValue<'source> {
     }
 
     /// Converts the [`FluentValue`] to a string.
+    ///
+    /// Clones inner values when owned, borrowed data is not cloned.
+    /// Prefer using [`FluentValue::into_string()`] when possible.
     pub fn as_string<R: Borrow<FluentResource>, M>(&self, scope: &Scope<R, M>) -> Cow<'source, str>
     where
         M: MemoizerKind,
@@ -254,6 +257,9 @@ impl<'source> FluentValue<'source> {
     }
 
     /// Converts the [`FluentValue`] to a string.
+    ///
+    /// Takes self by-value to be able to skip expensive clones.
+    /// Prefer this method over [`FluentValue::as_string()`] when possible.
     pub fn into_string<R: Borrow<FluentResource>, M>(self, scope: &Scope<R, M>) -> Cow<'source, str>
     where
         M: MemoizerKind,
