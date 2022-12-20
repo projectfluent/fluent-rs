@@ -27,7 +27,7 @@ fn parse_fixtures_compare() {
 
         let reference_path = path.replace(".ftl", ".json");
         let reference_file = read_file(&reference_path, true).unwrap();
-        let ftl_file = read_file(&path, false).unwrap();
+        let ftl_file = read_file(path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
         let target_ast = match parse(ftl_file) {
@@ -72,7 +72,7 @@ fn parse_bench_fixtures() {
             file_name.replace(".ftl", ".json")
         );
         let reference_file = read_file(&reference_path, true).unwrap();
-        let ftl_file = read_file(&path, false).unwrap();
+        let ftl_file = read_file(path, false).unwrap();
 
         println!("Parsing: {:#?}", path);
         let target_ast = match parse(ftl_file) {
@@ -106,7 +106,7 @@ fn parse_bench_fixtures() {
                 file_name.replace(".ftl", ".json")
             );
             let reference_file = read_file(&reference_path, true).unwrap();
-            let ftl_file = read_file(&path, false).unwrap();
+            let ftl_file = read_file(path, false).unwrap();
 
             println!("Parsing: {:#?}", path);
             let target_ast = match parse(ftl_file.clone()) {

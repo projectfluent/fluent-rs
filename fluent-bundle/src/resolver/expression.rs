@@ -64,3 +64,45 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
         }
     }
 }
+
+impl<'bundle> ResolveValue<'bundle> for ast::Expression<&'bundle str> {
+    fn resolve<'ast, 'args, 'errors, R, M>(
+        &'ast self,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+    ) -> FluentValue<'bundle>
+    where
+        R: Borrow<FluentResource>,
+        M: MemoizerKind,
+    {
+        match self {
+            Self::Inline(exp) => exp.resolve(scope),
+            Self::Select { selector, variants } => {
+                let selector = selector.resolve(scope);
+                match selector {
+                    FluentValue::String(_) | FluentValue::Number(_) => {
+                        for variant in variants {
+                            let key = match variant.key {
+                                ast::VariantKey::Identifier { name } => name.into(),
+                                ast::VariantKey::NumberLiteral { value } => {
+                                    FluentValue::try_number(value)
+                                }
+                            };
+                            if key.matches(&selector, scope) {
+                                return variant.value.resolve(scope);
+                            }
+                        }
+                    }
+                    _ => {}
+                }
+
+                for variant in variants {
+                    if variant.default {
+                        return variant.value.resolve(scope);
+                    }
+                }
+                scope.add_error(ResolverError::MissingDefault);
+                FluentValue::Error
+            }
+        }
+    }
+}
