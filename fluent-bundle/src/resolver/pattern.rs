@@ -1,4 +1,4 @@
-use super::scope::Scope;
+use super::scope::{ArgumentResolver, Scope};
 use super::{ResolverError, WriteValue};
 
 use std::borrow::Borrow;
@@ -14,15 +14,16 @@ use crate::types::FluentValue;
 const MAX_PLACEABLES: u8 = 100;
 
 impl<'bundle> WriteValue<'bundle> for ast::Pattern<&'bundle str> {
-    fn write<'ast, 'args, 'errors, W, R, M>(
+    fn write<'ast, 'args, 'errors, W, R, M, Args>(
         &'ast self,
         w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        Args: ArgumentResolver<'args>,
     {
         let len = self.elements.len();
 
@@ -81,13 +82,14 @@ impl<'bundle> WriteValue<'bundle> for ast::Pattern<&'bundle str> {
 }
 
 impl<'bundle> ResolveValue<'bundle> for ast::Pattern<&'bundle str> {
-    fn resolve<'ast, 'args, 'errors, R, M>(
+    fn resolve<'ast, 'args, 'errors, R, M, Args>(
         &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> FluentValue<'bundle>
     where
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        Args: ArgumentResolver<'args>,
     {
         let len = self.elements.len();
 
