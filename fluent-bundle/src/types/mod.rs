@@ -235,6 +235,9 @@ impl<'source> FluentValue<'source> {
     }
 
     /// Converts the [`FluentValue`] to a string.
+    ///
+    /// Clones inner values when owned, borrowed data is not cloned.
+    /// Prefer using [`FluentValue::into_string()`] when possible.
     pub fn as_string<R: Borrow<FluentResource>, M>(&self, scope: &Scope<R, M>) -> Cow<'source, str>
     where
         M: MemoizerKind,
@@ -248,6 +251,28 @@ impl<'source> FluentValue<'source> {
             FluentValue::String(s) => s.clone(),
             FluentValue::Number(n) => n.as_string(),
             FluentValue::Custom(s) => scope.bundle.intls.stringify_value(&**s),
+            FluentValue::Error => "".into(),
+            FluentValue::None => "".into(),
+        }
+    }
+
+    /// Converts the [`FluentValue`] to a string.
+    ///
+    /// Takes self by-value to be able to skip expensive clones.
+    /// Prefer this method over [`FluentValue::as_string()`] when possible.
+    pub fn into_string<R: Borrow<FluentResource>, M>(self, scope: &Scope<R, M>) -> Cow<'source, str>
+    where
+        M: MemoizerKind,
+    {
+        if let Some(formatter) = &scope.bundle.formatter {
+            if let Some(val) = formatter(&self, &scope.bundle.intls) {
+                return val.into();
+            }
+        }
+        match self {
+            FluentValue::String(s) => s,
+            FluentValue::Number(n) => n.as_string(),
+            FluentValue::Custom(s) => scope.bundle.intls.stringify_value(s.as_ref()),
             FluentValue::Error => "".into(),
             FluentValue::None => "".into(),
         }

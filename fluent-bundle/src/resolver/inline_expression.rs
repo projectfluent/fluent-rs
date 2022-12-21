@@ -93,7 +93,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     if let FluentValue::Error = result {
                         self.write_error(w)
                     } else {
-                        w.write_str(&result.as_string(scope))
+                        w.write_str(&result.into_string(scope))
                     }
                 } else {
                     scope.write_ref_error(w, self)
