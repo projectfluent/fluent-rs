@@ -146,7 +146,7 @@ mod tests {
             args.get("name"),
             Some(&FluentValue::String(Cow::Borrowed("John")))
         );
-        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number(5)));
+        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number("5")));
 
         args.set("name", "Jane");
         args.set("emailCount", 7);
@@ -155,6 +155,6 @@ mod tests {
             args.get("name"),
             Some(&FluentValue::String(Cow::Borrowed("Jane")))
         );
-        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number(7)));
+        assert_eq!(args.get("emailCount"), Some(&FluentValue::try_number("7")));
     }
 }

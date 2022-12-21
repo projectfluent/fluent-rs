@@ -53,7 +53,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     scope.write_ref_error(w, self)
                 }
             }
-            Self::NumberLiteral { value } => FluentValue::try_number(*value).write(w, scope),
+            Self::NumberLiteral { value } => FluentValue::try_number(value).write(w, scope),
             Self::TermReference {
                 id,
                 attribute,
@@ -158,7 +158,7 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
     {
         match self {
             Self::StringLiteral { value } => unescape_unicode_to_string(value).into(),
-            Self::NumberLiteral { value } => FluentValue::try_number(*value),
+            Self::NumberLiteral { value } => FluentValue::try_number(value),
             Self::VariableReference { id } => {
                 if let Some(local_args) = &scope.local_args {
                     if let Some(arg) = local_args.get(id.name) {

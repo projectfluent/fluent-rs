@@ -247,6 +247,6 @@ mod tests {
         let x = 1i16;
         let y = &x;
         let z: FluentValue = y.into();
-        assert_eq!(z, FluentValue::try_number(1));
+        assert_eq!(z, FluentValue::try_number("1"));
     }
 }
