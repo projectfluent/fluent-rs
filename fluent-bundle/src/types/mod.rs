@@ -142,12 +142,11 @@ impl<'source> FluentValue<'source> {
     ///     FluentValue::String("A string".into())
     /// );
     /// ```
-    pub fn try_number<S: ToString>(value: S) -> Self {
-        let string = value.to_string();
-        if let Ok(number) = FluentNumber::from_str(&string) {
+    pub fn try_number(value: &'source str) -> Self {
+        if let Ok(number) = FluentNumber::from_str(value) {
             number.into()
         } else {
-            string.into()
+            value.into()
         }
     }
 
