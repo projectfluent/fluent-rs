@@ -27,9 +27,9 @@ pub trait WriteOrResolveContext<'bundle> {
     type Result;
 
     fn unescape(&mut self, s: &'bundle str) -> Self::Result;
-    fn value<'ast, 'args, 'errors, R, M>(
+    fn value<'other, R, M>(
         &mut self,
-        scope: &Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &Scope<'bundle, 'other, R, M>,
         value: Cow<FluentValue<'bundle>>,
     ) -> Self::Result
     where
@@ -37,10 +37,10 @@ pub trait WriteOrResolveContext<'bundle> {
         M: MemoizerKind;
 
     fn error<E: WriteOrResolve<'bundle>>(&mut self, exp: &E, is_ref: bool) -> Self::Result;
-    fn resolve_pattern<'ast, 'args, 'errors, R, M>(
+    fn resolve_pattern<'other, R, M>(
         &mut self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-        pattern: &'ast ast::Pattern<&'bundle str>,
+        scope: &mut Scope<'bundle, 'other, R, M>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
     ) -> Self::Result
     where
         R: Borrow<FluentResource>,
@@ -58,9 +58,9 @@ where
         unescape_unicode(self, s)
     }
 
-    fn value<'ast, 'args, 'errors, R, M>(
+    fn value<'other, R, M>(
         &mut self,
-        scope: &Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &Scope<'bundle, 'other, R, M>,
         value: Cow<FluentValue<'bundle>>,
     ) -> Self::Result
     where
@@ -86,10 +86,10 @@ where
         Ok(())
     }
 
-    fn resolve_pattern<'ast, 'args, 'errors, R, M>(
+    fn resolve_pattern<'other, R, M>(
         &mut self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-        pattern: &'ast ast::Pattern<&'bundle str>,
+        scope: &mut Scope<'bundle, 'other, R, M>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
     ) -> Self::Result
     where
         R: Borrow<FluentResource>,
@@ -109,9 +109,9 @@ impl<'bundle> WriteOrResolveContext<'bundle> for ResolveContext {
         unescape_unicode_to_string(s).into()
     }
 
-    fn value<'ast, 'args, 'errors, R, M>(
+    fn value<'other, R, M>(
         &mut self,
-        _scope: &Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        _scope: &Scope<'bundle, 'other, R, M>,
         value: Cow<FluentValue<'bundle>>,
     ) -> Self::Result
     where
@@ -125,10 +125,10 @@ impl<'bundle> WriteOrResolveContext<'bundle> for ResolveContext {
         FluentValue::Error
     }
 
-    fn resolve_pattern<'ast, 'args, 'errors, R, M>(
+    fn resolve_pattern<'other, R, M>(
         &mut self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-        pattern: &'ast ast::Pattern<&'bundle str>,
+        scope: &mut Scope<'bundle, 'other, R, M>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
     ) -> Self::Result
     where
         R: Borrow<FluentResource>,
@@ -139,9 +139,9 @@ impl<'bundle> WriteOrResolveContext<'bundle> for ResolveContext {
 }
 
 pub trait WriteOrResolve<'bundle> {
-    fn write_or_resolve<'ast, 'args, 'errors, R, M, T>(
-        &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+    fn write_or_resolve<'other, R, M, T>(
+        &'bundle self,
+        scope: &mut Scope<'bundle, 'other, R, M>,
         context: &mut T,
     ) -> T::Result
     where

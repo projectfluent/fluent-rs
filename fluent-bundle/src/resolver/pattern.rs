@@ -12,10 +12,10 @@ use crate::types::FluentValue;
 
 const MAX_PLACEABLES: u8 = 100;
 
-pub fn write_pattern<'bundle, 'ast, 'args, 'errors, W, R, M>(
-    pattern: &'ast ast::Pattern<&'bundle str>,
+pub fn write_pattern<'bundle, W, R, M>(
+    pattern: &'bundle ast::Pattern<&'bundle str>,
     w: &mut W,
-    scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+    scope: &mut Scope<'bundle, '_, R, M>,
 ) -> fmt::Result
 where
     W: fmt::Write,
@@ -66,9 +66,9 @@ where
     Ok(())
 }
 
-pub fn resolve_pattern<'bundle, 'ast, 'args, 'errors, R, M>(
-    pattern: &'ast ast::Pattern<&'bundle str>,
-    scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+pub fn resolve_pattern<'bundle, R, M>(
+    pattern: &'bundle ast::Pattern<&'bundle str>,
+    scope: &mut Scope<'bundle, '_, R, M>,
 ) -> FluentValue<'bundle>
 where
     R: Borrow<FluentResource>,

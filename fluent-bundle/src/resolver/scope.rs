@@ -8,29 +8,29 @@ use std::borrow::Borrow;
 use super::{ResolveContext, ResolverError, WriteOrResolve, WriteOrResolveContext};
 
 /// State for a single `WriteOrResolve::write_or_resolve` call.
-pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
+pub struct Scope<'bundle, 'other, R, M> {
     /// The current `FluentBundle` instance.
     pub bundle: &'bundle FluentBundle<R, M>,
     /// The current arguments passed by the developer.
-    pub(super) args: Option<&'args FluentArgs<'args>>,
+    pub(super) args: Option<&'other FluentArgs<'other>>,
     /// Local args
     pub(super) local_args: Option<FluentArgs<'bundle>>,
     /// The running count of resolved placeables. Used to detect the Billion
     /// Laughs and Quadratic Blowup attacks.
     pub(super) placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'ast ast::Pattern<&'bundle str>; 2]>,
+    travelled: smallvec::SmallVec<[&'bundle ast::Pattern<&'bundle str>; 2]>,
     /// Track errors accumulated during resolving.
-    pub errors: Option<&'errors mut Vec<FluentError>>,
+    pub errors: Option<&'other mut Vec<FluentError>>,
     /// Makes the resolver bail.
     pub dirty: bool,
 }
 
-impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R, M> {
+impl<'bundle, 'other, R, M> Scope<'bundle, 'other, R, M> {
     pub fn new(
         bundle: &'bundle FluentBundle<R, M>,
-        args: Option<&'args FluentArgs>,
-        errors: Option<&'errors mut Vec<FluentError>>,
+        args: Option<&'other FluentArgs>,
+        errors: Option<&'other mut Vec<FluentError>>,
     ) -> Self {
         Scope {
             bundle,
@@ -57,8 +57,8 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
     pub fn maybe_track<T>(
         &mut self,
         context: &mut T,
-        pattern: &'ast ast::Pattern<&'bundle str>,
-        exp: &'ast ast::Expression<&'bundle str>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        exp: &'bundle ast::Expression<&'bundle str>,
     ) -> T::Result
     where
         R: Borrow<FluentResource>,
@@ -79,8 +79,8 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
     pub fn track<T>(
         &mut self,
         context: &mut T,
-        pattern: &'ast ast::Pattern<&'bundle str>,
-        exp: &'ast ast::InlineExpression<&'bundle str>,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        exp: &'bundle ast::InlineExpression<&'bundle str>,
     ) -> T::Result
     where
         R: Borrow<FluentResource>,
@@ -100,7 +100,7 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
 
     pub fn get_arguments(
         &mut self,
-        arguments: Option<&'ast ast::CallArguments<&'bundle str>>,
+        arguments: Option<&'bundle ast::CallArguments<&'bundle str>>,
     ) -> (Vec<FluentValue<'bundle>>, FluentArgs<'bundle>)
     where
         R: Borrow<FluentResource>,

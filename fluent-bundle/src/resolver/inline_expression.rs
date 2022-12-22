@@ -10,9 +10,9 @@ use std::borrow::{Borrow, Cow};
 use std::fmt;
 
 impl<'bundle> WriteOrResolve<'bundle> for ast::InlineExpression<&'bundle str> {
-    fn write_or_resolve<'ast, 'args, 'errors, R, M, T>(
-        &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+    fn write_or_resolve<'other, R, M, T>(
+        &'bundle self,
+        scope: &mut Scope<'bundle, 'other, R, M>,
         context: &mut T,
     ) -> T::Result
     where
