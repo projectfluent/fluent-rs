@@ -16,9 +16,7 @@ fn main() {
 
     // Test for a simple function that returns a string
     bundle
-        .add_function("HELLO", |_args, _named_args| {
-            "I'm a function!".into()
-        })
+        .add_function("HELLO", |_args, _named_args| "I'm a function!".into())
         .expect("Failed to add a function to the bundle.");
 
     // Test for a function that accepts unnamed positional arguments

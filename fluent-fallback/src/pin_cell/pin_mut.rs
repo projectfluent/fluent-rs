@@ -13,7 +13,7 @@ impl<'a, T: ?Sized> Deref for PinMut<'a, T> {
     type Target = T;
 
     fn deref(&self) -> &T {
-        &*self.inner
+        &self.inner
     }
 }
 
