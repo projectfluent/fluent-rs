@@ -25,6 +25,7 @@ unic-langid.workspace = true
 async-trait = "0.1"
 chunky-vec = "0.1"
 once_cell = "1.9"
+pin-cell = "0.2"
 
 [dev-dependencies]
 fluent-langneg.workspace = true
