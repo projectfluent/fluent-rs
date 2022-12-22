@@ -268,17 +268,26 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 scope.get_path()
             );
         } else if let Some(ref expected_value) = assert.value {
-            let msg = bundle.get_message(&assert.id).unwrap_or_else(|| panic!("Failed to retrieve message `{}` in {}.",
-                &assert.id,
-                scope.get_path()));
+            let msg = bundle.get_message(&assert.id).unwrap_or_else(|| {
+                panic!(
+                    "Failed to retrieve message `{}` in {}.",
+                    &assert.id,
+                    scope.get_path()
+                )
+            });
             let val = if let Some(ref attr) = assert.attribute {
                 msg.get_attribute(attr.as_str())
-                    .unwrap_or_else(|| panic!("Failed to retrieve an attribute of a message {}.{}.",
-                        assert.id, attr))
+                    .unwrap_or_else(|| {
+                        panic!(
+                            "Failed to retrieve an attribute of a message {}.{}.",
+                            assert.id, attr
+                        )
+                    })
                     .value()
             } else {
-                msg.value().unwrap_or_else(|| panic!("Failed to retrieve a value of a message {}.",
-                    assert.id))
+                msg.value().unwrap_or_else(|| {
+                    panic!("Failed to retrieve a value of a message {}.", assert.id)
+                })
             };
 
             let args: Option<FluentArgs> = assert.args.as_ref().map(|args| {
