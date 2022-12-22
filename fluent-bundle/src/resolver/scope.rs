@@ -7,7 +7,7 @@ use std::borrow::Borrow;
 
 use super::{ResolveContext, ResolverError, WriteOrResolve, WriteOrResolveContext};
 
-/// State for a single `ResolveValue::to_value` call.
+/// State for a single `WriteOrResolve::write_or_resolve` call.
 pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
     /// The current `FluentBundle` instance.
     pub bundle: &'bundle FluentBundle<R, M>,

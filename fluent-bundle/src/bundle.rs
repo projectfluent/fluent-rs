@@ -21,7 +21,8 @@ use crate::entry::GetEntry;
 use crate::errors::{EntryKind, FluentError};
 use crate::memoizer::MemoizerKind;
 use crate::message::FluentMessage;
-use crate::resolver::{ResolveValue, Scope, WriteValue};
+use crate::resolver::pattern::{resolve_pattern, write_pattern};
+use crate::resolver::Scope;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -450,7 +451,7 @@ impl<R, M> FluentBundle<R, M> {
         M: MemoizerKind,
     {
         let mut scope = Scope::new(self, args, Some(errors));
-        pattern.write(w, &mut scope)
+        write_pattern(pattern, w, &mut scope)
     }
 
     /// Formats a pattern which comes from a `FluentMessage`.
@@ -493,7 +494,7 @@ impl<R, M> FluentBundle<R, M> {
         M: MemoizerKind,
     {
         let mut scope = Scope::new(self, args, Some(errors));
-        let value = pattern.resolve(&mut scope);
+        let value = resolve_pattern(pattern, &mut scope);
         value.into_string(&scope)
     }
 

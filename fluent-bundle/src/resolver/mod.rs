@@ -1,12 +1,12 @@
 //! The `resolver` module contains the definitions and implementations for the internal
-//! `ResolveValue` and `WriteValue` traits. The former converts AST nodes to a
-//! [`FluentValue`], and the latter converts them to a string that is written to an
-//! implementor of the [`std::fmt::Write`] trait.
+//! `WriteOrResolve` and `WriteOrResolveContext` traits.
+//! There is an implementation that resolves AST nodes to a [`FluentValue`], and one
+//! that writes to an implementor of the [`std::fmt::Write`] trait.
 
 pub mod errors;
 mod expression;
 mod inline_expression;
-pub mod pattern;
+pub(crate) mod pattern;
 mod scope;
 
 pub use errors::ResolverError;
@@ -21,31 +21,7 @@ use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-/// Resolves an AST node to a [`FluentValue`].
-pub(crate) trait ResolveValue<'bundle> {
-    /// Resolves an AST node to a [`FluentValue`].
-    fn resolve<'ast, 'args, 'errors, R, M>(
-        &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-    ) -> FluentValue<'bundle>
-    where
-        R: Borrow<FluentResource>,
-        M: MemoizerKind;
-}
-
-/// Resolves an AST node to a string that is written to source `W`.
-pub(crate) trait WriteValue<'bundle> {
-    /// Resolves an AST node to a string that is written to source `W`.
-    fn write<'ast, 'args, 'errors, W, R, M>(
-        &'ast self,
-        w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-    ) -> fmt::Result
-    where
-        W: fmt::Write,
-        R: Borrow<FluentResource>,
-        M: MemoizerKind;
-}
+use self::pattern::{resolve_pattern, write_pattern};
 
 pub trait WriteOrResolveContext<'bundle> {
     type Result;
@@ -71,6 +47,7 @@ pub trait WriteOrResolveContext<'bundle> {
         M: MemoizerKind;
 }
 
+/// Resolves an AST node to a string that is written to source `W`.
 impl<'bundle, W> WriteOrResolveContext<'bundle> for W
 where
     W: fmt::Write,
@@ -118,10 +95,11 @@ where
         R: Borrow<FluentResource>,
         M: MemoizerKind,
     {
-        pattern.write(self, scope)
+        write_pattern(pattern, self, scope)
     }
 }
 
+/// Resolves an AST node to a [`FluentValue`].
 struct ResolveContext;
 
 impl<'bundle> WriteOrResolveContext<'bundle> for ResolveContext {
@@ -156,7 +134,7 @@ impl<'bundle> WriteOrResolveContext<'bundle> for ResolveContext {
         R: Borrow<FluentResource>,
         M: MemoizerKind,
     {
-        pattern.resolve(scope)
+        resolve_pattern(pattern, scope)
     }
 }
 
