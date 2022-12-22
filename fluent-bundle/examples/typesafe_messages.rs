@@ -1,3 +1,13 @@
+// This is an example of an application which adds a custom argument resolver
+// to add type safety.
+// See the external_arguments example if you are not yet familiar with fluent arguments.
+//
+// The goal is that we prevent bugs caused by mixing up arguments that belong
+// to different messages.
+// We can achieve this by defining structs for each message that encode the
+// argument types with the corresponding message ID, and then hooking into
+// fluent's resolver using a custom fluent_bundle::ArgumentResolver implementation.
+
 use std::borrow::Cow;
 
 use fluent_bundle::{ArgumentResolver, FluentBundle, FluentError, FluentResource, FluentValue};
@@ -98,6 +108,8 @@ trait Message<'a> {
     fn get_arg(&self, name: &str) -> Option<FluentValue<'a>>;
 }
 
+// by using &dyn, we prevent monomorphization for each Message struct
+// this keeps binary code size in check
 impl<'a, 'b> ArgumentResolver<'a> for &'a dyn Message<'b> {
     fn resolve(self, name: &str) -> Option<Cow<FluentValue<'a>>> {
         let arg = self.get_arg(name)?;
@@ -105,6 +117,7 @@ impl<'a, 'b> ArgumentResolver<'a> for &'a dyn Message<'b> {
     }
 }
 
+// allows for method syntax, i.e. bundle.format_message(...)
 trait CustomizedBundle {
     fn format_message<'b>(
         &'b self,
