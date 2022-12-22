@@ -71,13 +71,6 @@ impl<'bundle> WriteValue<'bundle> for ast::Pattern<&'bundle str> {
         }
         Ok(())
     }
-
-    fn write_error<W>(&self, _w: &mut W) -> fmt::Result
-    where
-        W: fmt::Write,
-    {
-        unreachable!()
-    }
 }
 
 impl<'bundle> ResolveValue<'bundle> for ast::Pattern<&'bundle str> {

@@ -1,11 +1,11 @@
 use crate::bundle::FluentBundle;
 use crate::memoizer::MemoizerKind;
-use crate::resolver::{ResolveValue, ResolverError, WriteValue};
 use crate::types::FluentValue;
 use crate::{FluentArgs, FluentError, FluentResource};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
-use std::fmt;
+
+use super::{ResolveContext, ResolverError, WriteOrResolve, WriteOrResolveContext};
 
 /// State for a single `ResolveValue::to_value` call.
 pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
@@ -54,66 +54,48 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
     ///
     /// This is the case when pattern is called from Bundle and it allows us to fast-path
     /// simple resolutions, and only use the stack for placeables.
-    pub fn maybe_track<W>(
+    pub fn maybe_track<T>(
         &mut self,
-        w: &mut W,
+        context: &mut T,
         pattern: &'ast ast::Pattern<&'bundle str>,
         exp: &'ast ast::Expression<&'bundle str>,
-    ) -> fmt::Result
+    ) -> T::Result
     where
         R: Borrow<FluentResource>,
-        W: fmt::Write,
         M: MemoizerKind,
+        T: WriteOrResolveContext<'bundle>,
     {
         if self.travelled.is_empty() {
             self.travelled.push(pattern);
         }
-        exp.write(w, self)?;
+        let res = exp.write_or_resolve(self, context);
         if self.dirty {
-            w.write_char('{')?;
-            exp.write_error(w)?;
-            w.write_char('}')
+            context.error(exp, true)
         } else {
-            Ok(())
+            res
         }
     }
 
-    pub fn track<W>(
+    pub fn track<T>(
         &mut self,
-        w: &mut W,
+        context: &mut T,
         pattern: &'ast ast::Pattern<&'bundle str>,
         exp: &'ast ast::InlineExpression<&'bundle str>,
-    ) -> fmt::Result
+    ) -> T::Result
     where
         R: Borrow<FluentResource>,
-        W: fmt::Write,
         M: MemoizerKind,
+        T: WriteOrResolveContext<'bundle>,
     {
         if self.travelled.contains(&pattern) {
             self.add_error(ResolverError::Cyclic);
-            w.write_char('{')?;
-            exp.write_error(w)?;
-            w.write_char('}')
+            context.error(exp, true)
         } else {
             self.travelled.push(pattern);
-            let result = pattern.write(w, self);
+            let result = context.resolve_pattern(self, pattern);
             self.travelled.pop();
             result
         }
-    }
-
-    pub fn write_ref_error<W>(
-        &mut self,
-        w: &mut W,
-        exp: &ast::InlineExpression<&str>,
-    ) -> fmt::Result
-    where
-        W: fmt::Write,
-    {
-        self.add_error(exp.into());
-        w.write_char('{')?;
-        exp.write_error(w)?;
-        w.write_char('}')
     }
 
     pub fn get_arguments(
@@ -125,11 +107,19 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         M: MemoizerKind,
     {
         if let Some(ast::CallArguments { positional, named }) = arguments {
-            let positional = positional.iter().map(|expr| expr.resolve(self)).collect();
+            let positional = positional
+                .iter()
+                .map(|expr| expr.write_or_resolve(self, &mut ResolveContext))
+                .collect();
 
             let named = named
                 .iter()
-                .map(|arg| (arg.name.name, arg.value.resolve(self)))
+                .map(|arg| {
+                    (
+                        arg.name.name,
+                        arg.value.write_or_resolve(self, &mut ResolveContext),
+                    )
+                })
                 .collect();
 
             (positional, named)
