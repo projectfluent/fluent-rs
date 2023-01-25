@@ -109,6 +109,7 @@ mod message;
 #[doc(hidden)]
 pub mod resolver;
 mod resource;
+mod term;
 pub mod types;
 
 pub use args::FluentArgs;

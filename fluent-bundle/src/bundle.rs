@@ -23,6 +23,7 @@ use crate::memoizer::MemoizerKind;
 use crate::message::FluentMessage;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
+use crate::term::FluentTerm;
 use crate::types::FluentValue;
 
 /// A collection of localization messages for a single locale, which are meant
@@ -378,6 +379,13 @@ impl<R, M> FluentBundle<R, M> {
         self.get_entry_message(id).is_some()
     }
 
+    pub fn has_term(&self, id: &str) -> bool
+    where
+        R: Borrow<FluentResource>,
+    {
+        self.get_entry_term(id).is_some()
+    }
+
     /// Retrieves a `FluentMessage` from a bundle.
     ///
     /// # Examples
@@ -404,6 +412,13 @@ impl<R, M> FluentBundle<R, M> {
         R: Borrow<FluentResource>,
     {
         self.get_entry_message(id).map(Into::into)
+    }
+
+    pub fn get_term<'l>(&'l self, id: &str) -> Option<FluentTerm<'l>>
+    where
+        R: Borrow<FluentResource>,
+    {
+        self.get_entry_term(id).map(Into::into)
     }
 
     /// Writes a formatted pattern which comes from a `FluentMessage`.
