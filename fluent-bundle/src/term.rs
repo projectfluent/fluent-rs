@@ -8,8 +8,8 @@ pub struct FluentTerm<'t> {
 }
 
 impl<'t> FluentTerm<'t> {
-    pub fn value(&self) -> Option<&'t ast::Pattern<&'t str>> {
-        self.node.value.as_ref()
+    pub fn value(&self) -> &'t ast::Pattern<&'t str> {
+        &self.node.value
     }
 
     pub fn attributes(&self) -> impl Iterator<Item = FluentAttribute<'t>> {
