@@ -100,7 +100,7 @@
 //! matures and higher level APIs are being developed.
 mod args;
 pub mod bundle;
-mod concurrent;
+pub mod concurrent;
 mod entry;
 mod errors;
 #[doc(hidden)]
@@ -118,8 +118,8 @@ pub use args::FluentArgs;
 ///
 /// This is the basic variant of the [`FluentBundle`](crate::bundle::FluentBundle).
 ///
-/// The concurrent specialization, can be constructed with
-/// [`FluentBundle::new_concurrent`](crate::bundle::FluentBundle::new_concurrent).
+/// The concurrent specialization can be constructed with
+/// [`FluentBundle::new_concurrent`](crate::concurrent::FluentBundle::new_concurrent).
 pub type FluentBundle<R> = bundle::FluentBundle<R, intl_memoizer::IntlLangMemoizer>;
 pub use errors::FluentError;
 pub use message::{FluentAttribute, FluentMessage};
