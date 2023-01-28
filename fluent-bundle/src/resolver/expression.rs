@@ -7,7 +7,7 @@ use std::fmt;
 use fluent_syntax::ast;
 
 use crate::memoizer::MemoizerKind;
-use crate::resolver::{ResolveValue, ResolverError};
+use crate::resolver::ResolveValue;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
@@ -43,13 +43,12 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
                     _ => {}
                 }
 
-                for variant in variants {
-                    if variant.default {
-                        return variant.value.write(w, scope);
-                    }
-                }
-                scope.add_error(ResolverError::MissingDefault);
-                Ok(())
+                variants
+                    .iter()
+                    .find(|variant| variant.default)
+                    .expect("select expressions have a default variant")
+                    .value
+                    .write(w, scope)
             }
         }
     }
@@ -95,13 +94,12 @@ impl<'bundle> ResolveValue<'bundle> for ast::Expression<&'bundle str> {
                     _ => {}
                 }
 
-                for variant in variants {
-                    if variant.default {
-                        return variant.value.resolve(scope);
-                    }
-                }
-                scope.add_error(ResolverError::MissingDefault);
-                FluentValue::Error
+                variants
+                    .iter()
+                    .find(|variant| variant.default)
+                    .expect("select expressions have a default variant")
+                    .value
+                    .resolve(scope)
             }
         }
     }

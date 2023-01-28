@@ -53,7 +53,6 @@ where
 pub enum ResolverError {
     Reference(ReferenceKind),
     NoValue(String),
-    MissingDefault,
     Cyclic,
     TooManyPlaceables,
 }
@@ -82,7 +81,6 @@ impl std::fmt::Display for ResolverError {
                 ReferenceKind::Variable { id } => write!(f, "Unknown variable: ${}", id),
             },
             Self::NoValue(id) => write!(f, "No value: {}", id),
-            Self::MissingDefault => f.write_str("No default"),
             Self::Cyclic => f.write_str("Cyclical dependency detected"),
             Self::TooManyPlaceables => f.write_str("Too many placeables"),
         }
