@@ -91,8 +91,8 @@ impl<'bundle> ResolveValue<'bundle> for ast::Pattern<&'bundle str> {
     {
         let len = self.elements.len();
 
-        // more than 1 element means concatenation, which is more efficient to write to a String
-        // 1 element often means just a message reference that can be passed back as a Cow::Borrowed
+        // If there is only 1 element, then it is more efficient to attempt to resolve as a message
+        // reference that can be passed back as a Cow::Borrowed rather than writing a new String.
         if len == 1 {
             match &self.elements[0] {
                 &ast::PatternElement::TextElement { value } => {

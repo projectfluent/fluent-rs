@@ -78,6 +78,10 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         }
     }
 
+    /// Cyclic pattern reference detection used in expression resolvers.
+    ///
+    /// Writes an error as soon as an identical pattern is encountered more than once,
+    /// which would lead to an infinite loop.
     pub fn track<W>(
         &mut self,
         w: &mut W,
