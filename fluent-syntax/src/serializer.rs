@@ -118,7 +118,11 @@ impl Serializer {
         for line in &comment.content {
             self.writer.write_literal(prefix);
 
-            if !line.as_ref().trim().is_empty() {
+            if !line
+                .as_ref()
+                .trim_matches(|c| c == ' ' || c == '\r' || c == '\n')
+                .is_empty()
+            {
                 self.writer.write_literal(" ");
                 self.writer.write_literal(line.as_ref());
             }

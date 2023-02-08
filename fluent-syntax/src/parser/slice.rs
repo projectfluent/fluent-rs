@@ -10,7 +10,9 @@ impl<'s> Slice<'s> for String {
     }
 
     fn trim(&mut self) {
-        *self = self.trim_end().to_string();
+        *self = self
+            .trim_end_matches(|c| c == ' ' || c == '\r' || c == '\n')
+            .to_string();
     }
 }
 
@@ -20,6 +22,6 @@ impl<'s> Slice<'s> for &'s str {
     }
 
     fn trim(&mut self) {
-        *self = self.trim_end();
+        *self = self.trim_end_matches(|c| c == ' ' || c == '\r' || c == '\n');
     }
 }
