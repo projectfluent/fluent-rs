@@ -21,7 +21,7 @@
 //! assert_eq!(ftl, serialized);
 //! ```
 
-use crate::{ast::*, parser::Slice};
+use crate::{ast::*, parser::Slice, parser::matches_fluent_ws};
 use std::fmt::Write;
 
 /// Serializes an abstract syntax tree representing a Fluent Translation List into a
@@ -118,7 +118,11 @@ impl Serializer {
         for line in &comment.content {
             self.writer.write_literal(prefix);
 
-            if !line.as_ref().trim().is_empty() {
+            if !line
+                .as_ref()
+                .trim_matches(matches_fluent_ws)
+                .is_empty()
+            {
                 self.writer.write_literal(" ");
                 self.writer.write_literal(line.as_ref());
             }

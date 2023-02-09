@@ -12,3 +12,10 @@ key03 =
 key04 =
     This line is indented by 4 spaces,
 	whereas this line by 1 tab.
+
+# OK (value is a single tab)
+key05 = 	
+
+# OK (attribute value is two tabs)
+key06 =
+  .attr = 		

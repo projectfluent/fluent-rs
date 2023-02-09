@@ -64,7 +64,58 @@
         {
             "type": "Junk",
             "annotations": [],
-            "content": "\twhereas this line by 1 tab.\n"
+            "content": "\twhereas this line by 1 tab.\n\n"
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "key05"
+            },
+            "value": {
+                "type": "Pattern",
+                "elements": [
+                    {
+                        "type": "TextElement",
+                        "value": "\t"
+                    }
+                ]
+            },
+            "attributes": [],
+            "comment": {
+                "type": "Comment",
+                "content": "OK (value is a single tab)"
+            }
+        },
+        {
+            "type": "Message",
+            "id": {
+                "type": "Identifier",
+                "name": "key06"
+            },
+            "value": null,
+            "attributes": [
+                {
+                    "type": "Attribute",
+                    "id": {
+                        "type": "Identifier",
+                        "name": "attr"
+                    },
+                    "value": {
+                        "type": "Pattern",
+                        "elements": [
+                            {
+                                "type": "TextElement",
+                                "value": "\t\t"
+                            }
+                        ]
+                    }
+                }
+            ],
+            "comment": {
+                "type": "Comment",
+                "content": "OK (attribute value is two tabs)"
+            }
         }
     ]
 }

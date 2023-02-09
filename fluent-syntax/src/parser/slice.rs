@@ -1,4 +1,9 @@
 use std::ops::Range;
+
+pub(crate) fn matches_fluent_ws(c: char) -> bool {
+    c == ' ' || c == '\r' || c == '\n'
+}
+
 pub trait Slice<'s>: AsRef<str> + Clone + PartialEq {
     fn slice(&self, range: Range<usize>) -> Self;
     fn trim(&mut self);
@@ -10,7 +15,7 @@ impl<'s> Slice<'s> for String {
     }
 
     fn trim(&mut self) {
-        *self = self.trim_end().to_string();
+        *self = self.trim_end_matches(matches_fluent_ws).to_string();
     }
 }
 
@@ -20,6 +25,6 @@ impl<'s> Slice<'s> for &'s str {
     }
 
     fn trim(&mut self) {
-        *self = self.trim_end();
+        *self = self.trim_end_matches(matches_fluent_ws);
     }
 }
