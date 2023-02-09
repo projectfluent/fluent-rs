@@ -1,6 +1,6 @@
 use std::ops::Range;
 
-pub fn matches_fluent_ws(c: char) -> bool {
+pub(crate) fn matches_fluent_ws(c: char) -> bool {
     c == ' ' || c == '\r' || c == '\n'
 }
 
