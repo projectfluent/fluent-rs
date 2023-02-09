@@ -21,7 +21,7 @@
 //! assert_eq!(ftl, serialized);
 //! ```
 
-use crate::{ast::*, parser::Slice};
+use crate::{ast::*, parser::Slice, parser::matches_fluent_ws};
 use std::fmt::Write;
 
 /// Serializes an abstract syntax tree representing a Fluent Translation List into a
@@ -120,7 +120,7 @@ impl Serializer {
 
             if !line
                 .as_ref()
-                .trim_matches(|c| c == ' ' || c == '\r' || c == '\n')
+                .trim_matches(matches_fluent_ws)
                 .is_empty()
             {
                 self.writer.write_literal(" ");

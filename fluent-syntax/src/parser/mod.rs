@@ -80,6 +80,7 @@ mod slice;
 use crate::ast;
 pub use errors::{ErrorKind, ParserError};
 pub use slice::Slice;
+pub use slice::matches_fluent_ws;
 
 /// Parser result always returns an AST representation of the input,
 /// and if parsing errors were encountered, a list of [`ParserError`] elements
