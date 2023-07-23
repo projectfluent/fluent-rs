@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-  - …
+  - Bump `serde_yaml` to 0.9.
 
 ## fluent-bundle 0.15.2 (October 25, 2021)
   - Bump `self_cell` to 0.10.
