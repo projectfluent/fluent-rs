@@ -32,7 +32,7 @@ liked-count2 = { NUMBER($num) ->
                 FluentValue::Number(num)
             }
             Some(FluentValue::String(s)) => {
-                let num: f64 = if let Ok(n) = s.to_owned().parse() {
+                let num: f64 = if let Ok(n) = s.clone().parse() {
                     n
                 } else {
                     return FluentValue::Error;
