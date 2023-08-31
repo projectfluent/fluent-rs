@@ -242,7 +242,7 @@ fn test_test(test: &Test, defaults: &Option<TestDefaults>, mut scope: Scope) {
                 .get(bundle_name)
                 .expect("Failed to retrieve bundle.")
         } else if bundles.len() == 1 {
-            let name = bundles.keys().into_iter().last().unwrap();
+            let name = bundles.keys().last().unwrap();
             bundles.get(name).expect("Failed to retrieve bundle.")
         } else {
             panic!();
