@@ -40,9 +40,9 @@ fn fluent_custom_type() {
 
     let sv = FluentValue::from("foo");
 
-    assert_eq!(dt == dt2, true);
-    assert_eq!(dt == dt3, false);
-    assert_eq!(dt == sv, false);
+    assert!(dt == dt2);
+    assert!(dt != dt3);
+    assert!(dt != sv);
 }
 
 #[test]

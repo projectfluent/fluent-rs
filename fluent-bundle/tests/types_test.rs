@@ -31,15 +31,15 @@ fn fluent_value_matches() {
     let number_val_copy = FluentValue::from(-23.5);
     let number_val2 = FluentValue::from(23.5);
 
-    assert_eq!(string_val.matches(&string_val_copy, &scope), true);
-    assert_eq!(string_val.matches(&string_val2, &scope), false);
+    assert!(string_val.matches(&string_val_copy, &scope));
+    assert!(!string_val.matches(&string_val2, &scope));
 
-    assert_eq!(number_val.matches(&number_val_copy, &scope), true);
-    assert_eq!(number_val.matches(&number_val2, &scope), false);
+    assert!(number_val.matches(&number_val_copy, &scope));
+    assert!(!number_val.matches(&number_val2, &scope));
 
-    assert_eq!(string_val2.matches(&number_val2, &scope), false);
+    assert!(!string_val2.matches(&number_val2, &scope));
 
-    assert_eq!(string_val2.matches(&number_val2, &scope), false);
+    assert!(!string_val2.matches(&number_val2, &scope));
 
     let string_cat_zero = FluentValue::from("zero");
     let string_cat_one = FluentValue::from("one");
@@ -55,15 +55,15 @@ fn fluent_value_matches() {
     let number_cat_many = 11.into();
     let number_cat_other = 101.into();
 
-    assert_eq!(string_cat_zero.matches(&number_cat_zero, &scope), true);
-    assert_eq!(string_cat_one.matches(&number_cat_one, &scope), true);
-    assert_eq!(string_cat_two.matches(&number_cat_two, &scope), true);
-    assert_eq!(string_cat_few.matches(&number_cat_few, &scope), true);
-    assert_eq!(string_cat_many.matches(&number_cat_many, &scope), true);
-    assert_eq!(string_cat_other.matches(&number_cat_other, &scope), true);
-    assert_eq!(string_cat_other.matches(&number_cat_one, &scope), false);
+    assert!(string_cat_zero.matches(&number_cat_zero, &scope));
+    assert!(string_cat_one.matches(&number_cat_one, &scope));
+    assert!(string_cat_two.matches(&number_cat_two, &scope));
+    assert!(string_cat_few.matches(&number_cat_few, &scope));
+    assert!(string_cat_many.matches(&number_cat_many, &scope));
+    assert!(string_cat_other.matches(&number_cat_other, &scope));
+    assert!(!string_cat_other.matches(&number_cat_one, &scope));
 
-    assert_eq!(string_val2.matches(&number_cat_one, &scope), false);
+    assert!(!string_val2.matches(&number_cat_one, &scope));
 }
 
 #[test]
@@ -120,7 +120,7 @@ fn fluent_number_style() {
     assert_eq!(fno.style, FluentNumberStyle::Currency);
     assert_eq!(fno.currency, Some("EUR".to_string()));
     assert_eq!(fno.currency_display, FluentNumberCurrencyDisplayStyle::Code);
-    assert_eq!(fno.use_grouping, false);
+    assert!(!fno.use_grouping);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
     assert_eq!(num.as_string(), "0.2");
