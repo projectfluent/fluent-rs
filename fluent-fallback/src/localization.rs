@@ -34,7 +34,7 @@ where
             generator: G::default(),
             provider: P::default(),
             sync,
-            res_ids: FxHashSet::from_iter(res_ids.into_iter()),
+            res_ids: FxHashSet::from_iter(res_ids),
         }
     }
 }
@@ -53,7 +53,7 @@ where
             generator,
             provider,
             sync,
-            res_ids: FxHashSet::from_iter(res_ids.into_iter()),
+            res_ids: FxHashSet::from_iter(res_ids),
         }
     }
 
