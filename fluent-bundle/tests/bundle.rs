@@ -55,14 +55,8 @@ fn borrowed_plain_message() {
         bundle.format_pattern(value, None, &mut errors)
     };
 
-    fn is_borrowed(cow: Cow<'_, str>) -> bool {
-        match cow {
-            Cow::Borrowed(_) => true,
-            _ => false,
-        }
-    }
     assert_eq!(formatted_pattern, "Value");
-    assert!(is_borrowed(formatted_pattern));
+    assert!(matches!(formatted_pattern, Cow::Borrowed(_)));
 }
 
 #[test]
