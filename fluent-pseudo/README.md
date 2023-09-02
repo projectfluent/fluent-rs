@@ -5,7 +5,7 @@ framework designed to unleash the entire expressive power of natural language
 translations.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-pseudo.svg)](https://crates.io/crates/fluent-pseudo)
-[![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)](https://github.com/projectfluent/fluent-rs/actions?query=branch%3Amain+workflow%3A%22Build+and+test%22)
+[![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
 Usage
