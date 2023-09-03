@@ -39,7 +39,7 @@ Now we need to upgrade all the dependencies to `fluent-rs` in the Firefox codeba
 - [Search for all references](https://searchfox.org/mozilla-central/search?q=%5E%28fluent%28-%5Cw%2B%29%3F%7Cintl-memoizer%29+%3D+%22.*%22&path=&case=false&regexp=true)
 - Update all the references to our local packages by using `{ path = "..." }` in the `Cargo.toml` file of the impacted packages.
 
-### Exemple
+### Example
 
 If both `fluent-rs` and `mozilla_unified` directories are on the same root directory, you can update the `fluent-fallback` entry from `fluent-fallback = "0.7.0"` to `fluent-fallback = { path = "../../../../../fluent-rs/fluent-fallback" }` in the `mozilla-unified/intl/l10n/rust/l10nregistry-ffi/Cargo.toml` file.
 

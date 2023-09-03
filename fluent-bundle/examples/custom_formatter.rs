@@ -131,7 +131,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
     args.set("num", num);
     let value = bundle.format_pattern(pattern, Some(&args), &mut errors);
 
-    // Notice, that since we specificed minimum and maximum fraction digits options
+    // Notice, that since we specified minimum and maximum fraction digits options
     // to be 1 and 8 when construction the argument, and then the minimum fraction
     // digits option has been overridden in the localization the formatter
     // will received options:

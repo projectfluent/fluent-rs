@@ -7,7 +7,7 @@
 //! Literals`](super::ast::InlineExpression::StringLiteral).
 //!
 //! Four byte sequences are encoded with `\u` and six byte
-//! sqeuences using `\U`.
+//! sequences using `\U`.
 //! ## Example
 //!
 //! ```

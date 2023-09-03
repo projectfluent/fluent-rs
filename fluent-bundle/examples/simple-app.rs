@@ -107,7 +107,7 @@ fn main() {
 
     // 6. Load the localization resource
     for path in L10N_RESOURCES {
-        let mut full_path = env::current_dir().expect("Failed to retireve current dir.");
+        let mut full_path = env::current_dir().expect("Failed to retrieve current dir.");
         if full_path.to_string_lossy().ends_with("fluent-rs") {
             full_path.push("fluent-bundle");
         }
