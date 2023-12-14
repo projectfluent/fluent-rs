@@ -10,7 +10,7 @@ use std::rc::Rc;
 
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
-use unic_langid::langid;
+use icu_locid::langid;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     let mut f = File::open(path)?;

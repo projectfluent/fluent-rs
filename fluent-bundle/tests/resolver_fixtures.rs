@@ -10,9 +10,9 @@ use fluent_bundle::resolver::ResolverError;
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentError;
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
+use icu_locid::LanguageIdentifier;
 use rand::distributions::Alphanumeric;
 use rand::{thread_rng, Rng};
-use unic_langid::LanguageIdentifier;
 
 use helpers::*;
 

@@ -14,7 +14,7 @@ use fluent_fallback::{
 use rustc_hash::FxHashSet;
 use std::cell::RefCell;
 use std::rc::Rc;
-use unic_langid::{langid, LanguageIdentifier};
+use icu_locid::{langid, LanguageIdentifier};
 
 struct InnerLocales {
     locales: RefCell<Vec<LanguageIdentifier>>,

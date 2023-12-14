@@ -1,5 +1,5 @@
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::{IntlMemoizer, Memoizable};
-use unic_langid::LanguageIdentifier;
 
 #[derive(Clone, Hash, PartialEq, Eq)]
 struct NumberFormatOptions {

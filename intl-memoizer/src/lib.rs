@@ -4,12 +4,12 @@
 //!
 //! The [IntlMemoizer] is the main struct that creates a per-locale [IntlLangMemoizer].
 
+use icu_locid::LanguageIdentifier;
 use std::cell::RefCell;
 use std::collections::hash_map::Entry;
 use std::collections::HashMap;
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
-use unic_langid::LanguageIdentifier;
 
 pub mod concurrent;
 
@@ -47,7 +47,7 @@ pub trait Memoizable {
 ///
 /// ```
 /// use intl_memoizer::{IntlLangMemoizer, Memoizable};
-/// use unic_langid::LanguageIdentifier;
+/// use icu_locid::LanguageIdentifier;
 ///
 /// // Create a static counter so that we can demonstrate the side effects of when
 /// // the memoizer re-constructs an API.
@@ -249,7 +249,7 @@ impl IntlLangMemoizer {
 ///
 /// ```
 /// # use intl_memoizer::{IntlMemoizer, IntlLangMemoizer, Memoizable};
-/// # use unic_langid::LanguageIdentifier;
+/// # use icu_locid::LanguageIdentifier;
 /// # use std::rc::Rc;
 /// #
 /// # struct ExampleFormatter {
@@ -353,9 +353,7 @@ impl IntlMemoizer {
 #[cfg(test)]
 mod tests {
     use super::*;
-    use fluent_langneg::{negotiate_languages, NegotiationStrategy};
-    use intl_pluralrules::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
-    use std::{sync::Arc, thread};
+    use icu_plurals::{PluralCategory, PluralRuleType, PluralRules as IntlPluralRules};
 
     struct PluralRules(pub IntlPluralRules);
 
@@ -364,16 +362,12 @@ mod tests {
             lang: LanguageIdentifier,
             pr_type: PluralRuleType,
         ) -> Result<Self, &'static str> {
-            let default_lang: LanguageIdentifier = "en".parse().unwrap();
-            let pr_lang = negotiate_languages(
-                &[lang],
-                &IntlPluralRules::get_locales(pr_type),
-                Some(&default_lang),
-                NegotiationStrategy::Lookup,
-            )[0]
-            .clone();
-
-            Ok(Self(IntlPluralRules::create(pr_lang, pr_type)?))
+            let inner = match pr_type {
+                PluralRuleType::Cardinal => IntlPluralRules::try_new_cardinal(&lang.into()),
+                PluralRuleType::Ordinal => IntlPluralRules::try_new_ordinal(&lang.into()),
+                _ => todo!(),
+            };
+            Ok(Self(inner.unwrap()))
         }
     }
 
@@ -394,23 +388,30 @@ mod tests {
             let en_memoizer = memoizer.get_for_lang(lang.clone());
 
             let result = en_memoizer
-                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::Cardinal,), |cb| {
+                    cb.0.category_for(5)
+                })
                 .unwrap();
-            assert_eq!(result, Ok(PluralCategory::OTHER));
+            assert_eq!(result, PluralCategory::Other);
         }
 
         {
             let en_memoizer = memoizer.get_for_lang(lang);
 
             let result = en_memoizer
-                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::Cardinal,), |cb| {
+                    cb.0.category_for(5)
+                })
                 .unwrap();
-            assert_eq!(result, Ok(PluralCategory::OTHER));
+            assert_eq!(result, PluralCategory::Other);
         }
     }
 
+    #[cfg(feature = "sync")]
     #[test]
     fn test_concurrent() {
+        use std::{sync::Arc, thread};
+
         let lang: LanguageIdentifier = "en".parse().unwrap();
         let memoizer = Arc::new(concurrent::IntlLangMemoizer::new(lang));
         let mut threads = vec![];
@@ -420,8 +421,8 @@ mod tests {
             let memoizer = Arc::clone(&memoizer);
             threads.push(thread::spawn(move || {
                 memoizer
-                    .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| {
-                        cb.0.select(5)
+                    .with_try_get::<PluralRules, _, _>((PluralRuleType::Cardinal,), |cb| {
+                        cb.0.category_for(5)
                     })
                     .expect("Failed to get a PluralRules result.")
             }));
@@ -429,7 +430,7 @@ mod tests {
 
         for thread in threads.drain(..) {
             let result = thread.join().expect("Failed to join thread.");
-            assert_eq!(result, Ok(PluralCategory::OTHER));
+            assert_eq!(result, PluralCategory::Other);
         }
     }
 }

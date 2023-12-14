@@ -1,9 +1,8 @@
 use std::borrow::Cow;
-use std::convert::TryInto;
 use std::default::Default;
 use std::str::FromStr;
 
-use intl_pluralrules::operands::PluralOperands;
+use icu_plurals::PluralOperands;
 
 use crate::args::FluentArgs;
 use crate::types::FluentValue;
@@ -219,18 +218,12 @@ macro_rules! from_num {
 
 impl From<&FluentNumber> for PluralOperands {
     fn from(input: &FluentNumber) -> Self {
-        let mut operands: Self = input
-            .value
-            .try_into()
-            .expect("Failed to generate operands out of FluentNumber");
+        use fixed_decimal::{FixedDecimal, FloatPrecision};
+        let mut fd = FixedDecimal::try_from_f64(input.value, FloatPrecision::Floating).unwrap();
         if let Some(mfd) = input.options.minimum_fraction_digits {
-            if mfd > operands.v {
-                operands.f *= 10_u64.pow(mfd as u32 - operands.v as u32);
-                operands.v = mfd;
-            }
+            fd.pad_end(-(mfd as i16));
         }
-        // XXX: Add support for other options.
-        operands
+        (&fd).into()
     }
 }
 
