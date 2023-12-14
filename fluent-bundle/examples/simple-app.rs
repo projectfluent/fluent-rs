@@ -19,6 +19,7 @@
 //! default one.
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
+use icu_locid::{langid, LanguageIdentifier};
 use std::env;
 use std::fs;
 use std::fs::File;
@@ -26,7 +27,6 @@ use std::io;
 use std::io::prelude::*;
 use std::path::Path;
 use std::str::FromStr;
-use unic_langid::{langid, LanguageIdentifier};
 
 /// We need a generic file read helper function to
 /// read the localization resource file.

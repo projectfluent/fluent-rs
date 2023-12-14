@@ -24,9 +24,14 @@ include = [
 ]
 
 [dependencies]
-unic-langid.workspace = true
+icu_locid.workspace = true
+icu_plurals.workspace = true
+icu_provider.workspace = true
 type-map = "0.5"
 
 [dev-dependencies]
-intl_pluralrules.workspace = true
 fluent-langneg.workspace = true
+
+[features]
+default = []
+sync = ["icu_provider/sync"]

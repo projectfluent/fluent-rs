@@ -28,8 +28,8 @@ use fluent_fallback::{
 };
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 
+use icu_locid::{langid, LanguageIdentifier};
 use rustc_hash::FxHashSet;
-use unic_langid::{langid, LanguageIdentifier};
 
 /// This helper struct holds the scheme for converting
 /// resource paths into full paths. It is used to customise

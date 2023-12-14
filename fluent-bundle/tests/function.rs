@@ -1,5 +1,6 @@
 use fluent_bundle::types::FluentNumber;
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
+use icu_locid::langid;
 
 #[test]
 fn test_function_resolve() {
@@ -21,7 +22,7 @@ liked-count2 = { NUMBER($num) ->
     );
 
     let res = FluentResource::try_new(ftl_string).expect("Could not parse an FTL string.");
-    let mut bundle = FluentBundle::default();
+    let mut bundle = FluentBundle::new(vec![langid!("en")]);
 
     bundle
         .add_function("NUMBER", |positional, named| match positional.first() {

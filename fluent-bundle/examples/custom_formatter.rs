@@ -2,7 +2,7 @@
 // to format selected types of values.
 //
 // This allows users to plug their own number formatter to Fluent.
-use unic_langid::LanguageIdentifier;
+use icu_locid::LanguageIdentifier;
 
 use fluent_bundle::memoizer::MemoizerKind;
 use fluent_bundle::types::{FluentNumber, FluentNumberOptions};

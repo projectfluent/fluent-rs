@@ -4,7 +4,7 @@ use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use fluent_bundle::FluentValue;
-use unic_langid::langid;
+use icu_locid::langid;
 
 #[test]
 fn fluent_custom_type() {

@@ -22,7 +22,7 @@ use std::borrow::{Borrow, Cow};
 use std::fmt;
 use std::str::FromStr;
 
-use intl_pluralrules::{PluralCategory, PluralRuleType};
+use icu_plurals::{PluralCategory, PluralRuleType};
 
 use crate::memoizer::MemoizerKind;
 use crate::resolver::Scope;
@@ -157,10 +157,10 @@ impl<'source> FluentValue<'source> {
     /// ```
     /// use fluent_bundle::resolver::Scope;
     /// use fluent_bundle::{types::FluentValue, FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
-    /// let langid_ars = langid!("en");
-    /// let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    /// let langid_en = langid!("en");
+    /// let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_en]);
     /// let scope = Scope::new(&bundle, None, None);
     ///
     /// // Matching examples:
@@ -189,12 +189,12 @@ impl<'source> FluentValue<'source> {
             (FluentValue::Number(a), FluentValue::Number(b)) => a == b,
             (FluentValue::String(a), FluentValue::Number(b)) => {
                 let cat = match a.as_ref() {
-                    "zero" => PluralCategory::ZERO,
-                    "one" => PluralCategory::ONE,
-                    "two" => PluralCategory::TWO,
-                    "few" => PluralCategory::FEW,
-                    "many" => PluralCategory::MANY,
-                    "other" => PluralCategory::OTHER,
+                    "zero" => PluralCategory::Zero,
+                    "one" => PluralCategory::One,
+                    "two" => PluralCategory::Two,
+                    "few" => PluralCategory::Few,
+                    "many" => PluralCategory::Many,
+                    "other" => PluralCategory::Other,
                     _ => return false,
                 };
                 // This string matches a plural rule keyword. Check if the number
@@ -206,9 +206,10 @@ impl<'source> FluentValue<'source> {
                 scope
                     .bundle
                     .intls
-                    .with_try_get_threadsafe::<PluralRules, _, _>((r#type,), |pr| {
-                        pr.0.select(b) == Ok(cat)
-                    })
+                    .with_try_get_threadsafe::<PluralRules, _, _>(
+                        (PluralRuleType::Cardinal,),
+                        |pr| pr.0.category_for(b) == cat,
+                    )
                     .unwrap()
             }
             _ => false,

@@ -1,6 +1,6 @@
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource};
+use icu_locid::langid;
 use std::borrow::Cow;
-use unic_langid::langid;
 
 #[test]
 fn add_resource_override() {

@@ -1,6 +1,6 @@
 use crate::types::FluentType;
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::Memoizable;
-use unic_langid::LanguageIdentifier;
 
 /// This trait contains thread-safe methods which extend [`intl_memoizer::IntlLangMemoizer`].
 /// It is used as the generic bound in this crate when a memoizer is needed.

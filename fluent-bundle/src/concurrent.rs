@@ -1,6 +1,6 @@
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::{concurrent::IntlLangMemoizer, Memoizable};
 use rustc_hash::FxHashMap;
-use unic_langid::LanguageIdentifier;
 
 use crate::memoizer::MemoizerKind;
 use crate::types::FluentType;
@@ -23,7 +23,7 @@ impl<R> FluentBundle<R> {
     /// ```
     /// use fluent_bundle::concurrent::FluentBundle;
     /// use fluent_bundle::FluentResource;
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let langid_en = langid!("en-US");
     /// let mut bundle: FluentBundle<FluentResource> =

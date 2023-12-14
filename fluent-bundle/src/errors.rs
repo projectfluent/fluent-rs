@@ -33,7 +33,7 @@ pub enum FluentError {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("intro = Welcome, { $name }.");
     /// let res1 = FluentResource::try_new(ftl_string)

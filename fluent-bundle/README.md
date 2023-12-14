@@ -23,7 +23,7 @@ Usage
 
 ```rust
 use fluent_bundle::{FluentBundle, FluentResource};
-use unic_langid::langid;
+use icu_locid::langid;
 
 fn main() {
     let ftl_string = "hello-world = Hello, world!".to_owned();
