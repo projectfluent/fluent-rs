@@ -45,8 +45,8 @@ rand = "0.8"
 serde_yaml = "0.8"
 
 [features]
-default = ["icu_provider/sync"]
-sync = ["icu_provider/sync"]
+default = []
+sync = ["intl-memoizer/sync", "icu_provider/sync"]
 all-benchmarks = []
 
 [[bench]]

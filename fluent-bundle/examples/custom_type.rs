@@ -112,6 +112,8 @@ impl FluentType for DateTime {
             })
             .expect("Failed to format a date.")
     }
+
+    #[cfg(feature = "sync")]
     fn as_string_threadsafe(
         &self,
         _: &intl_memoizer::concurrent::IntlLangMemoizer,

@@ -100,6 +100,7 @@
 //! matures and higher level APIs are being developed.
 mod args;
 pub mod bundle;
+#[cfg(feature = "sync")]
 pub mod concurrent;
 mod entry;
 mod errors;

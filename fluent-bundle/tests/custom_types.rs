@@ -26,6 +26,8 @@ fn fluent_custom_type() {
         fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
             format!("{}", self.epoch).into()
         }
+
+        #[cfg(feature = "sync")]
         fn as_string_threadsafe(
             &self,
             _: &intl_memoizer::concurrent::IntlLangMemoizer,
@@ -123,6 +125,8 @@ fn fluent_date_time_builtin() {
         fn as_string(&self, _: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
             format!("2020-01-20 {}:00", self.epoch).into()
         }
+
+        #[cfg(feature = "sync")]
         fn as_string_threadsafe(
             &self,
             _intls: &intl_memoizer::concurrent::IntlLangMemoizer,
