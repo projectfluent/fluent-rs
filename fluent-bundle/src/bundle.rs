@@ -653,11 +653,23 @@ impl crate::memoizer::MemoizerKind for IntlLangMemoizer {
         Self::new(lang)
     }
 
+    #[cfg(feature = "sync")]
     fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
     where
         Self: Sized,
         I: intl_memoizer::Memoizable + Send + Sync + 'static,
         I::Args: Send + Sync + 'static,
+        U: FnOnce(&I) -> R,
+    {
+        self.with_try_get(args, cb)
+    }
+
+    #[cfg(not(feature = "sync"))]
+    fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    where
+        Self: Sized,
+        I: intl_memoizer::Memoizable + 'static,
+        I::Args: 'static,
         U: FnOnce(&I) -> R,
     {
         self.with_try_get(args, cb)

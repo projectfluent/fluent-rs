@@ -41,6 +41,7 @@ pub trait FluentType: fmt::Debug + AnyEq + 'static {
     /// Convert the custom type into a string value, for instance a custom `DateTime`
     /// type could return "Oct. 27, 2022". This operation is provided the threadsafe
     /// [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer).
+    #[cfg(feature = "sync")]
     fn as_string_threadsafe(
         &self,
         intls: &intl_memoizer::concurrent::IntlLangMemoizer,
@@ -203,14 +204,25 @@ impl<'source> FluentValue<'source> {
                     FluentNumberType::Cardinal => PluralRuleType::CARDINAL,
                     FluentNumberType::Ordinal => PluralRuleType::ORDINAL,
                 };
-                scope
+                #[cfg(feature = "sync")]
+                let result = scope
                     .bundle
                     .intls
                     .with_try_get_threadsafe::<PluralRules, _, _>(
                         (PluralRuleType::Cardinal,),
                         |pr| pr.0.category_for(b) == cat,
                     )
-                    .unwrap()
+                    .unwrap();
+
+                #[cfg(not(feature = "sync"))]
+                let result = scope
+                    .bundle
+                    .intls
+                    .with_try_get::<PluralRules, _, _>((PluralRuleType::Cardinal,), |pr| {
+                        pr.0.category_for(b) == cat
+                    })
+                    .unwrap();
+                result
             }
             _ => false,
         }

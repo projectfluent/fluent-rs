@@ -11,6 +11,7 @@ use std::collections::HashMap;
 use std::hash::Hash;
 use std::rc::{Rc, Weak};
 
+#[cfg(feature = "sync")]
 pub mod concurrent;
 
 /// The trait that needs to be implemented for each intl formatter that needs to be

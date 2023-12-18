@@ -101,6 +101,7 @@
 mod args;
 pub mod builtins;
 pub mod bundle;
+#[cfg(feature = "sync")]
 pub mod concurrent;
 mod entry;
 mod errors;
