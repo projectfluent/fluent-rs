@@ -1,6 +1,6 @@
 use fluent_bundle::FluentError;
 use std::error::Error;
-use unic_langid::LanguageIdentifier;
+use icu_locid::LanguageIdentifier;
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum LocalizationError {

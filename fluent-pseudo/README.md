@@ -13,7 +13,7 @@ Usage
 
 ```rust
 use fluent_bundle::{FluentBundle, FluentResource};
-use unic_langid::langid;
+use icu_locid::langid;
 use fluent_pseudo::transform;
 
 fn transform_wrapper(s: &str) -> Cow<str> {

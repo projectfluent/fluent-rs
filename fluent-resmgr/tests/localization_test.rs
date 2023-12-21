@@ -1,7 +1,7 @@
 use fluent_fallback::Localization;
 use fluent_resmgr::resource_manager::ResourceManager;
 use std::borrow::Cow;
-use unic_langid::langid;
+use icu_locid::langid;
 
 #[test]
 fn localization_format_value() {

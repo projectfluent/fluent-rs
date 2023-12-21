@@ -9,7 +9,7 @@ use rustc_hash::FxHashSet;
 use std::io;
 use std::{fs, iter};
 use thiserror::Error;
-use unic_langid::LanguageIdentifier;
+use icu_locid::LanguageIdentifier;
 
 fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
@@ -222,7 +222,7 @@ impl BundleGenerator for ResourceManager {
 #[cfg(test)]
 mod test {
     use super::*;
-    use unic_langid::langid;
+    use icu_locid::langid;
 
     #[test]
     fn caching() {
