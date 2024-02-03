@@ -1,7 +1,7 @@
 //! Fluent Translation List serialization utilities
 //!
 //! This modules provides a way to serialize an abstract syntax tree representing a
-//! Fluent Translation List. Use cases include normalization and programmatical
+//! Fluent Translation List. Use cases include normalization and programmatic
 //! manipulation of a Fluent Translation List.
 //!
 //! # Example

@@ -1,5 +1,5 @@
 //! This crate contains a memoizer for internationalization formatters. Often it is
-//! expensive (in terms of performance and memory) to constuct a formatter, but then
+//! expensive (in terms of performance and memory) to construct a formatter, but then
 //! relatively cheap to run the format operation.
 //!
 //! The [IntlMemoizer] is the main struct that creates a per-locale [IntlLangMemoizer].
@@ -289,7 +289,7 @@ impl IntlLangMemoizer {
 /// let construct_args = (String::from("prefix:"),);
 /// let message = "The format operation will run";
 ///
-/// // Use the `ExampleFormater` from the `IntlLangMemoizer` example. It returns a
+/// // Use the `ExampleFormatter` from the `IntlLangMemoizer` example. It returns a
 /// // string that demonstrates the configuration of the formatter. This step will
 /// // construct a new formatter if needed, and run the format operation.
 /// //

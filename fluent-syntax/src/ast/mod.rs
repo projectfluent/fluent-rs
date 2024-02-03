@@ -78,7 +78,7 @@
 //!
 //! ## Errors
 //!
-//! Fluent AST preserves blocks containing invaid syntax as [`Entry::Junk`].
+//! Fluent AST preserves blocks containing invalid syntax as [`Entry::Junk`].
 //!
 //! ## White space
 //!

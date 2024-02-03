@@ -336,7 +336,7 @@ impl<R, M> FluentBundle<R, M> {
     /// be called on all textual fragments of the pattern
     /// during formatting.
     ///
-    /// This is currently primarly used for pseudolocalization,
+    /// This is currently primarily used for pseudolocalization,
     /// and `fluent-pseudo` crate provides a function
     /// that can be passed here.
     pub fn set_transform(&mut self, func: Option<fn(&str) -> Cow<str>>) {

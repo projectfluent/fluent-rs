@@ -48,7 +48,7 @@
 //! assert_eq!(value, Some("Hello World [en]".into()));
 //! ```
 //!
-//! The above example is far from the ergonomical API style the Fluent project
+//! The above example is far from the ergonomic API style the Fluent project
 //! is aiming for, but it represents the full scope of functionality intended
 //! for the model.
 //!
@@ -96,7 +96,7 @@
 //! As a long lived structure, the [`Localization`] is intended to handle runtime locale
 //! management.
 //!
-//! In the example above, [`Vec<LagnuageIdentifier>`](unic_langid::LanguageIdentifier)
+//! In the example above, [`Vec<LanguageIdentifier>`](unic_langid::LanguageIdentifier)
 //! provides a static list of locales that the [`Localization`] handles, but that's just the
 //! simplest implementation of the [`env::LocalesProvider`], and one can implement
 //! a much more sophisticated one that reacts to user or environment driven changes, and
