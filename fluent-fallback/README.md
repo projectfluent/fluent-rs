@@ -9,7 +9,7 @@ the corresponding UI, reacting to events such as locale changes, resource update
 The API can be used directly, or can serve as an example of state manager for `fluent-bundle` and `fluent-resmgr`. 
 
 [![crates.io](https://img.shields.io/crates/v/fluent-fallback.svg)](https://crates.io/crates/fluent-fallback)
-[![Build and test](https://github.com/projectfluent/fluent-rs/workflows/Build%20and%20test/badge.svg)](https://github.com/projectfluent/fluent-rs/actions?query=branch%3Amain+workflow%3A%22Build+and+test%22)
+[![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
 Project Fluent keeps simple things simple and makes complex things possible.
