@@ -61,7 +61,7 @@
 //!
 //! Resource identifiers can refer to resources that are either required or optional.
 //! In the above example, `"test.ftl"` is a required resource (the default using `.into()`),
-//! and `"test2.ftl" is an optional resource, which you can create via the
+//! and `"test2.ftl"` is an optional resource, which you can create via the
 //! [`ToResourceId`](fluent_fallback::types::ToResourceId) trait.
 //!
 //! A required resource must be present in order for the a bundle to be considered valid.
