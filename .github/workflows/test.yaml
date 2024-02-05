@@ -38,10 +38,9 @@ jobs:
           path: ~/.cargo/bin
           key: ${{ runner.os }}-cargo-bin-${{ hashFiles('**/Cargo.lock') }}
       - name: Toolchain setup
-        uses: actions-rs/toolchain@v1
+        uses: dtolnay/rust-toolchain@master
         with:
           toolchain: nightly
-          override: true
           components: llvm-tools-preview
       - name: Install grcov
         if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
