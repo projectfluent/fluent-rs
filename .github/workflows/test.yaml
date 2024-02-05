@@ -72,7 +72,7 @@ jobs:
           --excl-br-line  '\#\[derive\(|// cov\(skip\)'
       - name: Coveralls upload
         if: matrix.rust-version == 'nightly' && matrix.cargo-args == '--all-features'
-        uses: coverallsapp/github-action@master
+        uses: coverallsapp/github-action@v2
         with:
           github-token: ${{ secrets.GITHUB_TOKEN }}
           path-to-lcov: coverage.lcov
