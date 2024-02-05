@@ -6,7 +6,7 @@ The `Localization` struct encapsulates a persistant localization context providi
 language fallbacking. The instance remains available throughout the whole life cycle of
 the corresponding UI, reacting to events such as locale changes, resource updates etc.
 
-The API can be used directly, or can serve as an example of state manager for `fluent-bundle` and `fluent-resmgr`. 
+The API can be used directly, or can serve as an example of state manager for `fluent-bundle` and `fluent-resmgr`.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-fallback.svg)](https://crates.io/crates/fluent-fallback)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
@@ -99,4 +99,4 @@ a project to contribute to, please do get in touch on the mailing list and the
 IRC channel.
 
  - Discourse: https://discourse.mozilla.org/c/fluent
- - IRC channel: [irc://irc.mozilla.org/l20n](irc://irc.mozilla.org/l20n)
+ - Matrix channel: <a href="https://chat.mozilla.org/#/room/#fluent:mozilla.org">#fluent:mozilla.org</a>

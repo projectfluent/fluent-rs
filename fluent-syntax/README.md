@@ -60,4 +60,4 @@ trying to make your app localizable and multilingual, or a hacker looking for
 a project to contribute to, please do get in touch on discourse and the IRC channel.
 
  - Discourse: https://discourse.mozilla.org/c/fluent
- - IRC channel: [irc://irc.mozilla.org/l20n](irc://irc.mozilla.org/l20n)
+ - Matrix channel: <a href="https://chat.mozilla.org/#/room/#fluent:mozilla.org">#fluent:mozilla.org</a>
