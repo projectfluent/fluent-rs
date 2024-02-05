@@ -6,7 +6,7 @@ use crate::memoizer::MemoizerKind;
 use crate::types::FluentType;
 
 /// Specialized [`FluentBundle`](crate::bundle::FluentBundle) over
-/// concurrent [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer).
+/// concurrent [`IntlLangMemoizer`].
 ///
 /// A concurrent `FluentBundle` can be constructed with the
 /// [`FluentBundle::new_concurrent`] method.
