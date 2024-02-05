@@ -150,11 +150,11 @@ impl<R, M> FluentBundle<R, M> {
     /// existing key in the bundle, the new entry will be ignored and a
     /// `FluentError::Overriding` will be added to the result.
     ///
-    /// The method can take any type that can be borrowed to `FluentResource`:
-    ///   - FluentResource
-    ///   - &FluentResource
-    ///   - Rc<FluentResource>
-    ///   - Arc<FluentResurce>
+    /// The method can take any type that can be borrowed to [`FluentResource`]:
+    ///   - `FluentResource`
+    ///   - `&FluentResource`
+    ///   - `Rc<FluentResource>`
+    ///   - `Arc<FluentResource>`
     ///
     /// This allows the user to introduce custom resource management and share
     /// resources between instances of `FluentBundle`.
@@ -240,11 +240,11 @@ impl<R, M> FluentBundle<R, M> {
     /// If any entry in the resource uses the same identifier as an already
     /// existing key in the bundle, the entry will override the previous one.
     ///
-    /// The method can take any type that can be borrowed as FluentResource:
-    ///   - FluentResource
-    ///   - &FluentResource
-    ///   - Rc<FluentResource>
-    ///   - Arc<FluentResurce>
+    /// The method can take any type that can be borrowed as [`FluentResource`]:
+    ///   - `FluentResource`
+    ///   - `&FluentResource`
+    ///   - `Rc<FluentResource>`
+    ///   - `Arc<FluentResource>`
     ///
     /// This allows the user to introduce custom resource management and share
     /// resources between instances of `FluentBundle`.
