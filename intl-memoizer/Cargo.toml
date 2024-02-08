@@ -37,6 +37,9 @@ icu_datetime = {version = "1.4", features = ["serde"]}
 icu_calendar = "1.4"
 icu_decimal = "1.4"
 icu_provider_blob = "1.4"
+icu_collator = "1.4"
+fixed_decimal = "0.5"
+icu_list = { version = "1.4", features = ["serde"]}
 
 [features]
 default = []
