@@ -43,6 +43,6 @@ impl<'dp, DP> IntlLangMemoizer<'dp, DP> {
                         .expect("FOO"),
                 )
             });
-        Ok(callback(&e))
+        Ok(callback(e))
     }
 }
