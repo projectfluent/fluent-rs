@@ -6,7 +6,7 @@ Pseudolocalization transformation API for use with Project Fluent API.
 version = "0.3.1"
 edition = "2021"
 authors = [
-    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Zibi Braniecki <zibi@unicode.org>",
     "Staś Małolepszy <stas@mozilla.com>"
 ]
 homepage = "http://www.projectfluent.org"

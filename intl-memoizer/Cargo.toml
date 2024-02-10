@@ -7,7 +7,7 @@ intl formatters.
 version = "0.5.1"
 edition = "2021"
 authors = [
-    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Zibi Braniecki <zibi@unicode.org>",
     "Manish Goregaokar <manishsmail@gmail.com>"
 ]
 homepage = "http://www.projectfluent.org"

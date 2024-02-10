@@ -56,7 +56,7 @@ assert_eq!(text, "2.000");
 Get Involved
 ------------
 
-`fluent-rs` is open-source, licensed under the Apache License, Version 2.0.  We
+`fluent-rs` is open-source, licensed under both the Apache 2.0 and MIT licenses.  We
 encourage everyone to take a look at our code and we'll listen to your
 feedback.
 

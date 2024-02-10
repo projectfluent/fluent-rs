@@ -5,7 +5,7 @@ Resource manager for Fluent localization resources.
 """
 version = "0.0.6"
 authors = [
-    "Zibi Braniecki <gandalf@mozilla.com>",
+    "Zibi Braniecki <zibi@unicode.org>",
     "Staś Małolepszy <stas@mozilla.com>"
 ]
 edition = "2021"
