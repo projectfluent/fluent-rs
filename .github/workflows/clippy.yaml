@@ -1,0 +1,22 @@
+name: Clippy
+
+on:
+  pull_request:
+    branches: [ main ]
+  push:
+    branches: [ main ]
+
+
+jobs:
+  lints:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Setup Rust toolchain and cache
+        uses: actions-rust-lang/setup-rust-toolchain@v1.5.0
+        with:
+          rustflags: ""
+
+      - name: Clippy
+        run: cargo clippy -- --all-features -Dwarnings
