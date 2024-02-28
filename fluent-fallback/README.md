@@ -2,7 +2,7 @@
 
 `fluent-fallback` is a Rust implementation of the [Project Fluent][] higher level API.
 
-The `Localization` struct encapsulates a persistant localization context providing
+The `Localization` struct encapsulates a persistent localization context providing
 language fallbacking. The instance remains available throughout the whole life cycle of
 the corresponding UI, reacting to events such as locale changes, resource updates etc.
 
