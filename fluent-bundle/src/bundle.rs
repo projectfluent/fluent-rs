@@ -577,7 +577,7 @@ impl<R> FluentBundle<R, IntlLangMemoizer> {
     ///
     /// This will panic if no formatters can be found for the locales.
     pub fn new(locales: Vec<LanguageIdentifier>) -> Self {
-        let first_locale = locales.get(0).cloned().unwrap_or_default();
+        let first_locale = locales.first().cloned().unwrap_or_default();
         Self {
             locales,
             resources: vec![],

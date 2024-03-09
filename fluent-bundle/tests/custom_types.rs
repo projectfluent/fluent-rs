@@ -146,7 +146,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
     bundle.set_use_isolating(false);
 
     bundle
-        .add_function("DATETIME", |positional, named| match positional.get(0) {
+        .add_function("DATETIME", |positional, named| match positional.first() {
             Some(FluentValue::Custom(custom)) => {
                 if let Some(that) = custom.as_ref().as_any().downcast_ref::<DateTime>() {
                     let mut dt = that.clone();
@@ -202,7 +202,7 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
     bundle.set_use_isolating(false);
 
     bundle
-        .add_function("NUMBER", |positional, named| match positional.get(0) {
+        .add_function("NUMBER", |positional, named| match positional.first() {
             Some(FluentValue::Number(n)) => {
                 let mut num = n.clone();
                 num.options.merge(named);

@@ -30,7 +30,7 @@ impl<R> FluentBundle<R> {
     ///     FluentBundle::new_concurrent(vec![langid_en]);
     /// ```
     pub fn new_concurrent(locales: Vec<LanguageIdentifier>) -> Self {
-        let first_locale = locales.get(0).cloned().unwrap_or_default();
+        let first_locale = locales.first().cloned().unwrap_or_default();
         Self {
             locales,
             resources: vec![],

@@ -454,7 +454,7 @@ fn localization_format_missing_argument_error() {
 
     let msgs = bundles.format_messages_sync(&keys, &mut errors).unwrap();
     assert_eq!(
-        msgs.get(0).unwrap().as_ref().unwrap().value,
+        msgs.first().unwrap().as_ref().unwrap().value,
         Some(Cow::Borrowed("Hello, John. [en]"))
     );
     assert_eq!(errors.len(), 0);
@@ -465,7 +465,7 @@ fn localization_format_missing_argument_error() {
     }];
     let msgs = bundles.format_messages_sync(&keys, &mut errors).unwrap();
     assert_eq!(
-        msgs.get(0).unwrap().as_ref().unwrap().value,
+        msgs.first().unwrap().as_ref().unwrap().value,
         Some(Cow::Borrowed("Hello, {$userName}. [en]"))
     );
     assert_eq!(

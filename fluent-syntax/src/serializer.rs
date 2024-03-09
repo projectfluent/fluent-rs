@@ -367,7 +367,7 @@ impl<'s, S: Slice<'s>> Pattern<S> {
     }
 
     fn has_leading_text_dot(&self) -> bool {
-        if let Some(PatternElement::TextElement { value }) = self.elements.get(0) {
+        if let Some(PatternElement::TextElement { value }) = self.elements.first() {
             value.as_ref().starts_with('.')
         } else {
             false

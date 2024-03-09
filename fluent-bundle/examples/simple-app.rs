@@ -95,7 +95,7 @@ fn main() {
         NegotiationStrategy::Filtering,
     );
     let current_locale = resolved_locales
-        .get(0)
+        .first()
         .cloned()
         .expect("At least one locale should match.");
 

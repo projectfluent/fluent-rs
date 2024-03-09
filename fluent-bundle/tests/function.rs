@@ -24,7 +24,7 @@ liked-count2 = { NUMBER($num) ->
     let mut bundle = FluentBundle::default();
 
     bundle
-        .add_function("NUMBER", |positional, named| match positional.get(0) {
+        .add_function("NUMBER", |positional, named| match positional.first() {
             Some(FluentValue::Number(n)) => {
                 let mut num = n.clone();
                 num.options.merge(named);
