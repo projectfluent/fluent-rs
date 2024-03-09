@@ -155,10 +155,10 @@ fn create_bundle(
                         .into()
                 }),
                 "IDENTITY" => bundle.add_function(f.as_str(), |args, _name_args| {
-                    args.get(0).cloned().unwrap_or(FluentValue::Error)
+                    args.first().cloned().unwrap_or(FluentValue::Error)
                 }),
                 "NUMBER" => bundle.add_function(f.as_str(), |args, _name_args| {
-                    args.get(0).expect("Argument must be passed").clone()
+                    args.first().expect("Argument must be passed").clone()
                 }),
                 _ => unimplemented!("No such function."),
             };

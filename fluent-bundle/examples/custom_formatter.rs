@@ -36,7 +36,7 @@ key-var-with-arg = Here is a variable formatted with an argument { NUMBER($num, 
         .expect("Failed to add FTL resources to the bundle.");
     bundle
         .add_function("NUMBER", |positional, named| {
-            match positional.get(0) {
+            match positional.first() {
                 Some(FluentValue::Number(n)) => {
                     let mut num = n.clone();
                     // This allows us to merge the arguments provided
