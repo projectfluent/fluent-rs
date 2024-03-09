@@ -4,7 +4,8 @@ description = """
 Parser/Serializer tools for Fluent Syntax.
 """
 version = "0.11.1"
-edition = "2021"
+edition.workspace = true
+rust-version = "1.64.0"
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
     "Staś Małolepszy <stas@mozilla.com>"

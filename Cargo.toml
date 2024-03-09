@@ -13,6 +13,10 @@ members = [
 
 exclude = ["fluent-cli"]
 
+[workspace.package]
+edition = "2021"
+rust-version = "1.67.0"
+
 [workspace.dependencies]
 criterion = "0.5"
 fluent-langneg = "0.13"

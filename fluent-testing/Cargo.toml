@@ -4,11 +4,12 @@ description = """
 A collection of mock scenarios for testing fluent-rs components.
 """
 version = "0.0.4"
+edition.workspace = true
+rust-version.workspace = true
 authors = [
     "Zibi Braniecki <zibi@braniecki.net>",
     "Erik Nordin <enordin@mozilla.com>"
 ]
-edition = "2021"
 homepage = "https://www.projectfluent.org"
 license = "Apache-2.0 OR MIT"
 repository = "https://github.com/projectfluent/fluent-rs"

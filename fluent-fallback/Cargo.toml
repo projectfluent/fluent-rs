@@ -5,7 +5,8 @@ High-level abstraction model for managing localization resources
 and runtime localization lifecycle.
 """
 version = "0.7.1"
-edition = "2021"
+edition.workspace = true
+rust-version.workspace = true
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
     "Staś Małolepszy <stas@mozilla.com>"
