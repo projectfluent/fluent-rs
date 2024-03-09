@@ -40,9 +40,9 @@ fn fluent_custom_type() {
 
     let sv = FluentValue::from("foo");
 
-    assert_eq!(dt == dt2, true);
-    assert_eq!(dt == dt3, false);
-    assert_eq!(dt == sv, false);
+    assert!(dt == dt2);
+    assert!(dt != dt3);
+    assert!(dt != sv);
 }
 
 #[test]
@@ -146,7 +146,7 @@ key-ref = Hello { DATETIME($date, dateStyle: "full") } World
     bundle.set_use_isolating(false);
 
     bundle
-        .add_function("DATETIME", |positional, named| match positional.get(0) {
+        .add_function("DATETIME", |positional, named| match positional.first() {
             Some(FluentValue::Custom(custom)) => {
                 if let Some(that) = custom.as_ref().as_any().downcast_ref::<DateTime>() {
                     let mut dt = that.clone();
@@ -202,7 +202,7 @@ key-num-explicit = Hello { NUMBER(5, minimumFractionDigits: 2) } World
     bundle.set_use_isolating(false);
 
     bundle
-        .add_function("NUMBER", |positional, named| match positional.get(0) {
+        .add_function("NUMBER", |positional, named| match positional.first() {
             Some(FluentValue::Number(n)) => {
                 let mut num = n.clone();
                 num.options.merge(named);

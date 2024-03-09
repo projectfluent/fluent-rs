@@ -22,7 +22,7 @@ fn main() {
     // Test for a function that accepts unnamed positional arguments
     bundle
         .add_function("MEANING_OF_LIFE", |args, _named_args| {
-            if let Some(arg0) = args.get(0) {
+            if let Some(arg0) = args.first() {
                 if *arg0 == 42.into() {
                     return "The answer to life, the universe, and everything".into();
                 }
