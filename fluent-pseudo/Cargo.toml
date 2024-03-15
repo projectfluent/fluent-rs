@@ -3,7 +3,7 @@ name = "fluent-pseudo"
 description = """
 Pseudolocalization transformation API for use with Project Fluent API.
 """
-version = "0.3.1"
+version = "0.3.2"
 edition = "2021"
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
