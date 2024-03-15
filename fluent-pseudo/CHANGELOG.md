@@ -4,6 +4,14 @@
 
   - …
 
+## fluent-pseudo 0.3.2 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Allow optional resources, adds `ResourceId` struct
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
+
 ## fluent-pseudo 0.3.1 (July 21, 2021)
   - Update README to document the API changes in 0.3.0.
 

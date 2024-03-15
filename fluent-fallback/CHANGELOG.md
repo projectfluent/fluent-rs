@@ -4,6 +4,14 @@
 
   - …
 
+## fluent-fallback 0.7.1 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Migrate to `pin_cell` crate
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
+
 ## fluent-fallback 0.7.0 (Nov 9, 2022)
   - The `ResourceId`s are now stored as a `HashSet` rather than as a Vec. Adding a
     duplicate `ResourceId` is now a noop.

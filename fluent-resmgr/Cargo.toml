@@ -3,7 +3,7 @@ name = "fluent-resmgr"
 description = """
 Resource manager for Fluent localization resources.
 """
-version = "0.0.6"
+version = "0.0.7"
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
     "Staś Małolepszy <stas@mozilla.com>"

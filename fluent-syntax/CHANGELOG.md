@@ -4,6 +4,16 @@
   - Add module `serializer`.
   - …
 
+## fluent-syntax 0.11.1 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Create generic ftl serializer `fluent_syntax::serializer`
+  - Fix crash when parsing multiline CRLF comment
+  - Treat tab as text, not whitespace, adds `parser::matches_fluent_ws` function
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
+
 ## fluent-syntax 0.11.0 (February 9, 2021)
   - Document the crate.
   - Switch to use `thiserror` for Error annotations.

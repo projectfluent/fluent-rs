@@ -3,7 +3,7 @@ name = "fluent-testing"
 description = """
 A collection of mock scenarios for testing fluent-rs components.
 """
-version = "0.0.3"
+version = "0.0.4"
 authors = [
     "Zibi Braniecki <zibi@braniecki.net>",
     "Erik Nordin <enordin@mozilla.com>"
