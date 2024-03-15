@@ -14,12 +14,12 @@ categories.workspace = true
 keywords.workspace = true
 readme = "README.md"
 include = [
-	"src/**/*",
-	"benches/*.rs",
-	"Cargo.toml",
-	"README.md",
-	"LICENSE-APACHE",
-	"LICENSE-MIT"
+  "src/**/*",
+  "benches/*.rs",
+  "Cargo.toml",
+  "README.md",
+  "LICENSE-APACHE",
+  "LICENSE-MIT"
 ]
 
 [dependencies]
