@@ -6,16 +6,13 @@ A collection of mock scenarios for testing fluent-rs components.
 version = "0.0.4"
 edition.workspace = true
 rust-version.workspace = true
-authors = [
-    "Zibi Braniecki <zibi@braniecki.net>",
-    "Erik Nordin <enordin@mozilla.com>"
-]
-homepage = "https://www.projectfluent.org"
-license = "Apache-2.0 OR MIT"
-repository = "https://github.com/projectfluent/fluent-rs"
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+authors.workspace = true
+categories.workspace = true
+keywords.workspace = true
 readme = "README.md"
-keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
-categories = ["localization", "internationalization"]
 include = [
 	"src/**/*",
 	"resources/**/*",

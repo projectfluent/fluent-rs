@@ -7,16 +7,13 @@ and runtime localization lifecycle.
 version = "0.7.1"
 edition.workspace = true
 rust-version.workspace = true
-authors = [
-    "Zibi Braniecki <zibi@unicode.org>",
-    "Staś Małolepszy <stas@mozilla.com>"
-]
-homepage = "http://www.projectfluent.org"
-license = "Apache-2.0 OR MIT"
-repository = "https://github.com/projectfluent/fluent-rs"
+homepage.workspace = true
+repository.workspace = true
+license.workspace = true
+authors.workspace = true
+categories.workspace = true
+keywords.workspace = true
 readme = "README.md"
-keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
-categories = ["localization", "internationalization"]
 
 [dependencies]
 fluent-bundle.workspace = true
