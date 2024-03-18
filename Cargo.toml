@@ -20,6 +20,8 @@ homepage = "https://www.projectfluent.org"
 repository = "https://github.com/projectfluent/fluent-rs"
 license = "Apache-2.0 OR MIT"
 authors = [
+  "Caleb Maclennan <caleb@alerque.com>",
+  "Bruce Mitchener <bruce.mitchener@gmail.com",
   "Zibi Braniecki <zibi@unicode.org>",
   "Staś Małolepszy <stas@mozilla.com>",
 ]
