@@ -23,7 +23,7 @@ futures.workspace = true
 rustc-hash.workspace = true
 thiserror.workspace = true
 unic-langid.workspace = true
-elsa = "1.5"
+elsa = "1.10"
 
 [dev-dependencies]
 fluent-langneg.workspace = true
