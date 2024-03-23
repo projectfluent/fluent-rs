@@ -16,7 +16,7 @@ exclude = [
 ]
 
 [workspace.dependencies]
-criterion = "0.3"
+criterion = "0.5"
 fluent-langneg = "0.13"
 futures = "0.3"
 iai = "0.1"
