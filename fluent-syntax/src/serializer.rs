@@ -89,7 +89,7 @@ impl Serializer {
                 Entry::ResourceComment(comment) => self.serialize_free_comment(comment, "###"),
                 Entry::Junk { content } => {
                     if self.options.with_junk {
-                        self.serialize_junk(content.as_ref())
+                        self.serialize_junk(content.as_ref());
                     }
                 }
             };
@@ -103,7 +103,7 @@ impl Serializer {
     }
 
     fn serialize_junk(&mut self, junk: &str) {
-        self.writer.write_literal(junk)
+        self.writer.write_literal(junk);
     }
 
     fn serialize_free_comment<'s, S: Slice<'s>>(&mut self, comment: &Comment<S>, prefix: &str) {
@@ -232,7 +232,7 @@ impl Serializer {
         match expr {
             Expression::Inline(inline) => self.serialize_inline_expression(inline),
             Expression::Select { selector, variants } => {
-                self.serialize_select_expression(selector, variants)
+                self.serialize_select_expression(selector, variants);
             }
         }
     }
@@ -320,7 +320,7 @@ impl Serializer {
     fn serialize_variant_key<'s, S: Slice<'s>>(&mut self, key: &VariantKey<S>) {
         match key {
             VariantKey::NumberLiteral { value } | VariantKey::Identifier { name: value } => {
-                self.writer.write_literal(value.as_ref())
+                self.writer.write_literal(value.as_ref());
             }
         }
     }

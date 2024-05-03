@@ -193,7 +193,7 @@ where
                 }
                 _ => {
                     text_element_type = TextElementType::NonBlank;
-                    self.ptr += 1
+                    self.ptr += 1;
                 }
             }
         }

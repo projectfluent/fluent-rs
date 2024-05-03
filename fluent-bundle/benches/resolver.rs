@@ -103,7 +103,7 @@ fn resolver_bench(c: &mut Criterion) {
                     .add_resource(res.clone())
                     .expect("Couldn't add FluentResource to the FluentBundle");
                 add_functions(name, &mut bundle);
-            })
+            });
         });
     }
     group.finish();
@@ -130,7 +130,7 @@ fn resolver_bench(c: &mut Criterion) {
                     }
                     assert!(errors.is_empty(), "Resolver errors: {:#?}", errors);
                 }
-            })
+            });
         });
     }
     group.finish();
@@ -153,7 +153,7 @@ fn resolver_bench(c: &mut Criterion) {
                     }
                     assert!(errors.is_empty(), "Resolver errors: {:#?}", errors);
                 }
-            })
+            });
         });
     }
     group.finish();

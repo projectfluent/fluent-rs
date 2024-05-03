@@ -115,7 +115,7 @@ where
 {
     pub async fn prefetch_async(&mut self) {
         let bundles = self.bundles();
-        bundles.prefetch_async().await
+        bundles.prefetch_async().await;
     }
 }
 
