@@ -1,8 +1,8 @@
 # Changelog
 
 ## Unreleased
-
-  - Bump `serde_yaml` to 0.9.
+  - Bump `self_cell` to 1.x
+  - Bump `serde_yaml` to 0.9
 
 ## fluent-bundle 0.15.3 (March 16, 2024)
   - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
@@ -18,7 +18,6 @@
   - Workspace: Add various missing documentation and fix typos and links
   - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
   - Workspace: Apply rustfmt and clippy lint fixes
-
 ## fluent-bundle 0.15.2 (October 25, 2021)
   - Bump `self_cell` to 0.10.
 
