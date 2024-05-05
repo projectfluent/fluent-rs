@@ -2,7 +2,22 @@
 
 ## Unreleased
 
-  - …
+  - Bump `serde_yaml` to 0.9.
+
+## fluent-bundle 0.15.3 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Implement `From<&String>` for `FluentValue`
+  - Add `FluentValue.into_string` to prevent String clone
+  - Fix `FluentValue::try_number` accepting numbers
+  - Allow optional arguments on `FluentValue`
+  - Fix behavior of `FluentArgs::set`
+  - Resolve function instead in `impl ResolveValue`
+  - Add type alias for concurrent `FluentBundle`
+  - Fix `FluentBundle::format_pattern` lifetimes
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
 
 ## fluent-bundle 0.15.2 (October 25, 2021)
   - Bump `self_cell` to 0.10.

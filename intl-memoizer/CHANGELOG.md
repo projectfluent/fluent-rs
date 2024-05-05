@@ -4,6 +4,13 @@
 
   - …
 
+## intl-memoizer 0.5.2 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
+
 ## intl-memoizer 0.5.1 (January 22, 2021)
   - Update `type-map` to 0.4.
 

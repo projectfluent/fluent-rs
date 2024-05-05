@@ -1,19 +1,17 @@
 [workspace]
 resolver = "2"
 members = [
-    "fluent-syntax",
-    "fluent-bundle",
-    "fluent-fallback",
-    "fluent-resmgr",
-    "fluent-pseudo",
-    "fluent-testing",
-    "fluent",
-    "intl-memoizer"
+  "fluent-syntax",
+  "fluent-bundle",
+  "fluent-fallback",
+  "fluent-resmgr",
+  "fluent-pseudo",
+  "fluent-testing",
+  "fluent",
+  "intl-memoizer",
 ]
 
-exclude = [
-    "fluent-cli",
-]
+exclude = ["fluent-cli"]
 
 [workspace.dependencies]
 criterion = "0.3"
@@ -28,7 +26,7 @@ thiserror = "1.0"
 tokio = "1.0"
 unic-langid = "0.9"
 
-fluent-bundle = { path = "fluent-bundle" }
-fluent-fallback = { path = "fluent-fallback" }
-fluent-pseudo = { path = "fluent-pseudo" }
-fluent-syntax = { path = "fluent-syntax" }
+fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
+fluent-fallback = { version = "0.7.1", path = "fluent-fallback" }
+fluent-pseudo = { version = "0.3.2", path = "fluent-pseudo" }
+fluent-syntax = { version = "0.11.1", path = "fluent-syntax" }
