@@ -4,7 +4,7 @@ description = """
 A memoizer specifically tailored for storing lazy-initialized
 intl formatters.
 """
-version = "0.5.1"
+version = "0.5.2"
 edition = "2021"
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
