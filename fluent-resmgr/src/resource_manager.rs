@@ -125,7 +125,7 @@ impl ResourceManager {
                         Ok(resource) => {
                             if let Err(errs) = bundle.add_resource(resource) {
                                 for error in errs {
-                                    errors.push(ResourceManagerError::Fluent(error))
+                                    errors.push(ResourceManagerError::Fluent(error));
                                 }
                             }
                         }

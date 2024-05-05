@@ -84,7 +84,7 @@ fn parse_bench(c: &mut Criterion) {
                     for source in ctx {
                         parse_runtime(source.as_str()).expect("Parsing of the FTL failed.");
                     }
-                })
+                });
             });
         }
 

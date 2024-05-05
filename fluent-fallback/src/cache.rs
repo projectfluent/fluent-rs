@@ -185,7 +185,7 @@ where
         let pin = unsafe { Pin::new_unchecked(&self.stream) };
         unsafe { PinMut::as_mut(&mut pin.borrow_mut()).get_unchecked_mut() }
             .prefetch_async()
-            .await
+            .await;
     }
 }
 

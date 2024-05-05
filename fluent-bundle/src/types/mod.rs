@@ -185,9 +185,9 @@ impl<'source> FluentValue<'source> {
         M: MemoizerKind,
     {
         match (self, other) {
-            (&FluentValue::String(ref a), &FluentValue::String(ref b)) => a == b,
-            (&FluentValue::Number(ref a), &FluentValue::Number(ref b)) => a == b,
-            (&FluentValue::String(ref a), &FluentValue::Number(ref b)) => {
+            (FluentValue::String(a), FluentValue::String(b)) => a == b,
+            (FluentValue::Number(a), FluentValue::Number(b)) => a == b,
+            (FluentValue::String(a), FluentValue::Number(b)) => {
                 let cat = match a.as_ref() {
                     "zero" => PluralCategory::ZERO,
                     "one" => PluralCategory::ONE,

@@ -58,13 +58,10 @@ fn get_args(name: &str) -> Option<FluentArgs> {
 }
 
 fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
-    match name {
-        "preferences" => {
-            bundle
-                .add_function("PLATFORM", |_args, _named_args| "linux".into())
-                .expect("Failed to add a function to the bundle.");
-        }
-        _ => {}
+    if name == "preferences" {
+        bundle
+            .add_function("PLATFORM", |_args, _named_args| "linux".into())
+            .expect("Failed to add a function to the bundle.");
     }
 }
 
@@ -106,7 +103,7 @@ fn resolver_bench(c: &mut Criterion) {
                     .add_resource(res.clone())
                     .expect("Couldn't add FluentResource to the FluentBundle");
                 add_functions(name, &mut bundle);
-            })
+            });
         });
     }
     group.finish();
@@ -133,7 +130,7 @@ fn resolver_bench(c: &mut Criterion) {
                     }
                     assert!(errors.is_empty(), "Resolver errors: {:#?}", errors);
                 }
-            })
+            });
         });
     }
     group.finish();
@@ -156,7 +153,7 @@ fn resolver_bench(c: &mut Criterion) {
                     }
                     assert!(errors.is_empty(), "Resolver errors: {:#?}", errors);
                 }
-            })
+            });
         });
     }
     group.finish();
