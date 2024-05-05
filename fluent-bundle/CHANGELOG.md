@@ -2,7 +2,7 @@
 
 ## Unreleased
 
-  - …
+  - Bump `serde_yaml` to 0.9.
 
 ## fluent-bundle 0.15.3 (March 16, 2024)
   - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
