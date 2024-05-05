@@ -89,7 +89,7 @@ pub trait Memoizable {
 ///     /// will be used as a prefix to the formatting operation.
 ///     type Args = (String,);
 ///
-///     /// If the construtor is fallible, than errors can be described here.
+///     /// If the constructor is fallible, than errors can be described here.
 ///     type Error = ();
 ///
 ///     /// This function wires together the `Args` and `Error` type to construct

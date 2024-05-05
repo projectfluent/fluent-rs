@@ -4,6 +4,15 @@
 
   - …
 
+## fluent 0.16.1 (March 16, 2024)
+  - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
+  - Make `fluent_args` macro work with trailing comma
+  - Fix `FluentValue::try_number` accepting numbers
+  - Workspace: Update to Rust 2021
+  - Workspace: Add various missing documentation and fix typos and links
+  - Workspace: Cleanup meta-data using workspaces, use SPDX licenses, etc.
+  - Workspace: Apply rustfmt and clippy lint fixes
+
 ## fluent 0.16.0 (July 29, 2021)
   - Update `fluent-pseudo` to 0.3.
 

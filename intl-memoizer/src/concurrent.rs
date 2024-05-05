@@ -20,7 +20,7 @@ impl IntlLangMemoizer {
     }
 
     /// Lazily initialize and run a formatter. See
-    /// [`intl_memoizer::IntlLangMemoizer::with_try_get`](../struct.IntlLangMemoizer.html#method.with_try_get)
+    /// [`intl_memoizer::IntlLangMemoizer::with_try_get`](crate::IntlLangMemoizer::with_try_get)
     /// for documentation.
     pub fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
     where
