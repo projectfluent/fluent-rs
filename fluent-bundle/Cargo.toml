@@ -7,8 +7,8 @@ natural language translations.
 version = "0.15.3"
 edition = "2021"
 authors = [
-    "Zibi Braniecki <zibi@unicode.org>",
-    "Staś Małolepszy <stas@mozilla.com>"
+  "Zibi Braniecki <zibi@unicode.org>",
+  "Staś Małolepszy <stas@mozilla.com>",
 ]
 homepage = "http://www.projectfluent.org"
 license = "Apache-2.0 OR MIT"
@@ -17,12 +17,12 @@ readme = "README.md"
 keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
 categories = ["localization", "internationalization"]
 include = [
-	"src/**/*",
-	"benches/*.rs",
-	"Cargo.toml",
-	"README.md",
-	"LICENSE-APACHE",
-	"LICENSE-MIT"
+  "src/**/*",
+  "benches/*.rs",
+  "Cargo.toml",
+  "README.md",
+  "LICENSE-APACHE",
+  "LICENSE-MIT",
 ]
 
 [dependencies]
@@ -31,14 +31,14 @@ fluent-syntax.workspace = true
 intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
-intl-memoizer = { path = "../intl-memoizer" }
+intl-memoizer = { version = "0.5.2", path = "../intl-memoizer" }
 self_cell = "0.10"
 smallvec = "1"
 
 [dev-dependencies]
 criterion.workspace = true
 iai.workspace = true
-serde = { workspace = true, features = ["derive"]}
+serde = { workspace = true, features = ["derive"] }
 unic-langid = { workspace = true, features = ["macros"] }
 rand = "0.8"
 serde_yaml = "0.8"
