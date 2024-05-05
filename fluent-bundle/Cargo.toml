@@ -4,7 +4,7 @@ description = """
 A localization system designed to unleash the entire expressive power of
 natural language translations.
 """
-version = "0.15.2"
+version = "0.15.3"
 edition = "2021"
 authors = [
     "Zibi Braniecki <zibi@unicode.org>",
