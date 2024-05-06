@@ -7,11 +7,6 @@ framework designed to unleash the entire expressive power of natural language tr
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
-Status
-------
-
-The crate currently provides just a parser, which is tracking Fluent Syntax on its way to 1.0.
-
 
 Learn the FTL syntax
 --------------------

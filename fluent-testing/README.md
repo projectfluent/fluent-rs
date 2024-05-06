@@ -12,14 +12,6 @@ natural languages like gender, plurals, conjugations, and others.
 [Project Fluent]: https://projectfluent.org
 [Documentation]: https://docs.rs/fluent/
 
-Status
-------
-
-The implementation is in its early stages and supports only some of the Project
-Fluent's spec.  Consult the [list of milestones][] for more information about
-release planning and scope.
-
-[list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
 
 Learn the FTL syntax
 --------------------

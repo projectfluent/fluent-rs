@@ -47,14 +47,6 @@ fn main() {
 }
 ```
 
-
-Status
-------
-
-The implementation is in pre-1.0 mode and supports Fluent Syntax 1.0, and
-Fluent API 0.14..  Consult the [list of milestones][] for more information about
-release planning and scope.
-
 `FluentBundle`, which is the main struct at the moment, is intended to remain
 a low level API.
 There is a number of higher level APIs like [fluent-resmgr][] and
@@ -63,7 +55,6 @@ for bindings and direct usage.
 Those higher level APIs are not mature yet enough to be included in this package,
 but will get added once they are.
 
-[list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
 [fluent-resmgr]: https://crates.io/crates/fluent-resmgr
 [fluent-fallback]: https://crates.io/crates/fluent-fallback
 
