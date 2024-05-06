@@ -47,19 +47,14 @@ fn fluent_custom_type() {
 
 #[test]
 fn fluent_date_time_builtin() {
-    #[derive(Debug, PartialEq, Clone)]
+    #[derive(Debug, Default, PartialEq, Clone)]
     enum DateTimeStyleValue {
         Full,
         Long,
         Medium,
         Short,
+        #[default]
         None,
-    }
-
-    impl std::default::Default for DateTimeStyleValue {
-        fn default() -> Self {
-            Self::None
-        }
     }
 
     impl<'l> From<&FluentValue<'l>> for DateTimeStyleValue {

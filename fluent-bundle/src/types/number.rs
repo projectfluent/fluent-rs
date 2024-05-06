@@ -8,17 +8,12 @@ use intl_pluralrules::operands::PluralOperands;
 use crate::args::FluentArgs;
 use crate::types::FluentValue;
 
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Default, Hash, PartialEq, Eq)]
 pub enum FluentNumberStyle {
+    #[default]
     Decimal,
     Currency,
     Percent,
-}
-
-impl std::default::Default for FluentNumberStyle {
-    fn default() -> Self {
-        Self::Decimal
-    }
 }
 
 impl From<&str> for FluentNumberStyle {
@@ -32,17 +27,12 @@ impl From<&str> for FluentNumberStyle {
     }
 }
 
-#[derive(Debug, Copy, Clone, Hash, PartialEq, Eq)]
+#[derive(Debug, Copy, Clone, Default, Hash, PartialEq, Eq)]
 pub enum FluentNumberCurrencyDisplayStyle {
+    #[default]
     Symbol,
     Code,
     Name,
-}
-
-impl std::default::Default for FluentNumberCurrencyDisplayStyle {
-    fn default() -> Self {
-        Self::Symbol
-    }
 }
 
 impl From<&str> for FluentNumberCurrencyDisplayStyle {
