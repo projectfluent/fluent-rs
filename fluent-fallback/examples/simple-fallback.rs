@@ -165,7 +165,7 @@ fn collatz(n: isize) -> isize {
     }
 }
 
-/// Bundle iterator used by BundleGeneratorSync implementation for Locales.
+/// Bundle iterator used by `BundleGeneratorSync` implementation for `Locales`.
 struct BundleIter {
     res_path_scheme: String,
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,

@@ -393,7 +393,7 @@ pub struct Pattern<S> {
     pub elements: Vec<PatternElement<S>>,
 }
 
-/// PatternElement is an element of a [`Pattern`].
+/// `PatternElement` is an element of a [`Pattern`].
 ///
 /// Each [`PatternElement`] node represents
 /// either a simple textual value, or a combination of text literals

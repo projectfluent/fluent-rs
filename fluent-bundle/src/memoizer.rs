@@ -2,14 +2,14 @@ use crate::types::FluentType;
 use intl_memoizer::Memoizable;
 use unic_langid::LanguageIdentifier;
 
-/// This trait contains thread-safe methods which extend [intl_memoizer::IntlLangMemoizer].
+/// This trait contains thread-safe methods which extend [`intl_memoizer::IntlLangMemoizer`].
 /// It is used as the generic bound in this crate when a memoizer is needed.
 pub trait MemoizerKind: 'static {
     fn new(lang: LanguageIdentifier) -> Self
     where
         Self: Sized;
 
-    /// A threadsafe variant of `with_try_get` from [intl_memoizer::IntlLangMemoizer].
+    /// A threadsafe variant of `with_try_get` from [`intl_memoizer::IntlLangMemoizer`].
     /// The generics enforce that `Self` and its arguments are actually threadsafe.
     ///
     /// `I` - The [Memoizable](intl_memoizer::Memoizable) internationalization formatter.

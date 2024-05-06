@@ -77,7 +77,7 @@
 
 pub use fluent_bundle::*;
 
-/// A helper macro to simplify creation of FluentArgs.
+/// A helper macro to simplify creation of `FluentArgs`.
 ///
 /// # Example
 ///

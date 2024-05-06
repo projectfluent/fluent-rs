@@ -34,13 +34,13 @@ pub trait FluentType: fmt::Debug + AnyEq + 'static {
     /// Create a clone of the underlying type.
     fn duplicate(&self) -> Box<dyn FluentType + Send>;
 
-    /// Convert the custom type into a string value, for instance a custom DateTime
+    /// Convert the custom type into a string value, for instance a custom `DateTime`
     /// type could return "Oct. 27, 2022".
     fn as_string(&self, intls: &intl_memoizer::IntlLangMemoizer) -> Cow<'static, str>;
 
-    /// Convert the custom type into a string value, for instance a custom DateTime
+    /// Convert the custom type into a string value, for instance a custom `DateTime`
     /// type could return "Oct. 27, 2022". This operation is provided the threadsafe
-    /// [IntlLangMemoizer](intl_memoizer::concurrent::IntlLangMemoizer).
+    /// [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer).
     fn as_string_threadsafe(
         &self,
         intls: &intl_memoizer::concurrent::IntlLangMemoizer,

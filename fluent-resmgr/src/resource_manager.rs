@@ -15,7 +15,7 @@ fn read_file(path: &str) -> Result<String, io::Error> {
     fs::read_to_string(path)
 }
 
-/// [ResourceManager] provides a standalone solution for managing localization resources which
+/// [`ResourceManager`] provides a standalone solution for managing localization resources which
 /// can be used by `fluent-fallback` or other higher level bindings.
 pub struct ResourceManager {
     resources: FrozenMap<String, Box<FluentResource>>,
