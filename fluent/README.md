@@ -67,18 +67,6 @@ but will get added once they are.
 [fluent-resmgr]: https://crates.io/crates/fluent-resmgr
 [fluent-fallback]: https://crates.io/crates/fluent-fallback
 
-Local Development
------------------
-
-    cargo build
-    cargo test
-    cargo bench
-    cargo run --example simple-app
-
-When submitting a PR please use  [`cargo fmt`][] (nightly).
-
-[`cargo fmt`]: https://github.com/rust-lang-nursery/rustfmt
-
 
 Learn the FTL syntax
 --------------------

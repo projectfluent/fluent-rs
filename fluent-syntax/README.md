@@ -12,17 +12,6 @@ Status
 
 The crate currently provides just a parser, which is tracking Fluent Syntax on its way to 1.0.
 
-Local Development
------------------
-
-    cargo build
-    cargo test
-    cargo bench
-
-When submitting a PR please use  [`cargo fmt`][] (nightly).
-
-[`cargo fmt`]: https://github.com/rust-lang-nursery/rustfmt
-
 
 Learn the FTL syntax
 --------------------

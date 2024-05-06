@@ -57,20 +57,6 @@ release planning and scope.
 
 [list of milestones]: https://github.com/projectfluent/fluent-rs/milestones
 
-
-Local Development
------------------
-
-    cargo build
-    cargo test
-    cargo bench
-    cargo run --example simple-app
-
-When submitting a PR please use  [`cargo fmt`][] (nightly).
-
-[`cargo fmt`]: https://github.com/rust-lang-nursery/rustfmt
-
-
 Learn the FTL syntax
 --------------------
 
