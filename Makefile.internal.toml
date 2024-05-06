@@ -19,11 +19,11 @@ workspace = false
 command = "cargo"
 args = ["test", "--all-features"]
 # toolchain = "nightly"
-env = {
-  RUSTFLAGS = "-Cinstrument-coverage",
-  RUSTDOCFLAGS = "-Cinstrument-coverage",
-  LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw"
-}
+
+[tasks.coverage-run-tests.env]
+RUSTFLAGS = "-Cinstrument-coverage"
+RUSTDOCFLAGS = "-Cinstrument-coverage"
+LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw"
 
 # After generating the .profraw, this step creates the html report.
 # Important! Keep in grcov flags in sync with Makefile.internal.toml.
@@ -47,7 +47,9 @@ args = [
   "--excl-line",     "\\#\\[derive\\(|// cov\\(skip\\)",
   "--excl-br-line",  "\\#\\[derive\\(|// cov\\(skip\\)",
 ]
-env = { LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw" }
+
+[tasks.coverage-run-grcov.env]
+LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw"
 
 # Cleans up all of the .profraw files left over after running -C instrument-coverage
 [tasks.coverage-clean-profraw]
