@@ -2,7 +2,7 @@
 //! expensive (in terms of performance and memory) to construct a formatter, but then
 //! relatively cheap to run the format operation.
 //!
-//! The [IntlMemoizer] is the main struct that creates a per-locale [IntlLangMemoizer].
+//! The [`IntlMemoizer`] is the main struct that creates a per-locale [`IntlLangMemoizer`].
 
 use std::cell::RefCell;
 use std::collections::hash_map::Entry;
@@ -31,7 +31,7 @@ pub trait Memoizable {
 
 /// The [`IntlLangMemoizer`] can memoize multiple constructed internationalization
 /// formatters, and their configuration for a single locale. For instance, given "en-US",
-/// a memorizer could retain 3 DateTimeFormat instances, and a PluralRules.
+/// a memorizer could retain 3 `DateTimeFormat` instances, and a `PluralRules`.
 ///
 /// For memoizing with multiple locales, see [`IntlMemoizer`].
 ///
@@ -190,8 +190,8 @@ impl IntlLangMemoizer {
     }
 
     /// `with_try_get` means `with` an internationalization formatter, `try` and `get` a result.
-    /// The (potentially expensive) constructor for the formatter (such as PluralRules or
-    /// DateTimeFormat) will be memoized and only constructed once for a given
+    /// The (potentially expensive) constructor for the formatter (such as `PluralRules` or
+    /// `DateTimeFormat`) will be memoized and only constructed once for a given
     /// `construct_args`. After that the format operation can be run multiple times
     /// inexpensively.
     ///
