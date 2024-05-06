@@ -20,4 +20,4 @@ jobs:
           components: rustfmt
 
       - name: Clippy
-        run: cargo clippy -- --all-features -Dwarnings
+        run: cargo clippy --all-features -- -Dwarnings
