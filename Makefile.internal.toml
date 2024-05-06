@@ -19,7 +19,11 @@ workspace = false
 command = "cargo"
 args = ["test", "--all-features"]
 # toolchain = "nightly"
-env = { RUSTFLAGS = "-Cinstrument-coverage", RUSTDOCFLAGS = "-Cinstrument-coverage", LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw" }
+env = {
+  RUSTFLAGS = "-Cinstrument-coverage",
+  RUSTDOCFLAGS = "-Cinstrument-coverage",
+  LLVM_PROFILE_FILE = "llvm_profile-%p-%m.profraw"
+}
 
 # After generating the .profraw, this step creates the html report.
 # Important! Keep in grcov flags in sync with Makefile.internal.toml.

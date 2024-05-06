@@ -11,7 +11,24 @@ members = [
   "intl-memoizer",
 ]
 
-exclude = ["fluent-cli"]
+exclude = [
+  "fluent-cli",
+]
+
+[workspace.package]
+homepage = "https://www.projectfluent.org"
+repository = "https://github.com/projectfluent/fluent-rs"
+license = "Apache-2.0 OR MIT"
+authors = [
+  "Caleb Maclennan <caleb@alerque.com>",
+  "Bruce Mitchener <bruce.mitchener@gmail.com",
+  "Zibi Braniecki <zibi@unicode.org>",
+  "Staś Małolepszy <stas@mozilla.com>",
+]
+categories = ["localization", "internationalization"]
+keywords = ["localization", "l10n", "i18n", "intl", "internationalization"]
+edition = "2021"
+rust-version = "1.67.0"
 
 [workspace.dependencies]
 criterion = "0.5"
