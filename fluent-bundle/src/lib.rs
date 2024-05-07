@@ -99,6 +99,7 @@
 //! the `fluent-bundle` crate directly, while the ecosystem
 //! matures and higher level APIs are being developed.
 mod args;
+pub mod builtins;
 pub mod bundle;
 pub mod concurrent;
 mod entry;

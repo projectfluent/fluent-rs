@@ -547,6 +547,61 @@ impl<R, M> FluentBundle<R, M> {
             }),
         }
     }
+
+    /// Adds the builtin functions described in the [FTL syntax guide] to the bundle, making them
+    /// available in messages.
+    ///
+    /// # Examples
+    ///
+    /// ```
+    /// use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
+    /// use unic_langid::langid;
+    ///
+    /// let ftl_string = String::from(r#"rank = { NUMBER($n, type: "ordinal") ->
+    ///     [1] first
+    ///     [2] second
+    ///     [3] third
+    ///     [one] {$n}st
+    ///     [two] {$n}nd
+    ///     [few] {$n}rd
+    ///     *[other] {$n}th
+    /// }"#);
+    /// let resource = FluentResource::try_new(ftl_string)
+    ///     .expect("Could not parse an FTL string.");
+    /// let langid_en = langid!("en-US");
+    /// let mut bundle = FluentBundle::new(vec![langid_en]);
+    /// bundle.add_resource(&resource)
+    ///     .expect("Failed to add FTL resources to the bundle.");
+    ///
+    /// // Register the builtin functions (including NUMBER())
+    /// bundle.add_builtins().expect("Failed to add builtins to the bundle.");
+    ///
+    /// let msg = bundle.get_message("rank").expect("Message doesn't exist.");
+    /// let mut errors = vec![];
+    /// let pattern = msg.value().expect("Message has no value.");
+    ///
+    /// let mut args = FluentArgs::new();
+    ///
+    /// args.set("n", 5);
+    /// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    /// assert_eq!(&value, "\u{2068}5\u{2069}th");
+    ///
+    /// args.set("n", 12);
+    /// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    /// assert_eq!(&value, "\u{2068}12\u{2069}th");
+    ///
+    /// args.set("n", 22);
+    /// let value = bundle.format_pattern(&pattern, Some(&args), &mut errors);
+    /// assert_eq!(&value, "\u{2068}22\u{2069}nd");
+    /// ```
+    ///
+    /// [FTL syntax guide]: https://projectfluent.org/fluent/guide/functions.html
+    pub fn add_builtins(&mut self) -> Result<(), FluentError> {
+        self.add_function("NUMBER", crate::builtins::NUMBER)?;
+        // TODO: DATETIME()
+
+        Ok(())
+    }
 }
 
 impl<R> Default for FluentBundle<R, IntlLangMemoizer> {

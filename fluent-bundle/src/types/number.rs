@@ -8,6 +8,23 @@ use intl_pluralrules::operands::PluralOperands;
 use crate::args::FluentArgs;
 use crate::types::FluentValue;
 
+#[derive(Debug, Default, Copy, Clone, Hash, PartialEq, Eq)]
+pub enum FluentNumberType {
+    #[default]
+    Cardinal,
+    Ordinal,
+}
+
+impl From<&str> for FluentNumberType {
+    fn from(input: &str) -> Self {
+        match input {
+            "cardinal" => Self::Cardinal,
+            "ordinal" => Self::Ordinal,
+            _ => Self::default(),
+        }
+    }
+}
+
 #[derive(Debug, Copy, Clone, Default, Hash, PartialEq, Eq)]
 pub enum FluentNumberStyle {
     #[default]
@@ -48,6 +65,7 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
 
 #[derive(Debug, Clone, Hash, PartialEq, Eq)]
 pub struct FluentNumberOptions {
+    pub r#type: FluentNumberType,
     pub style: FluentNumberStyle,
     pub currency: Option<String>,
     pub currency_display: FluentNumberCurrencyDisplayStyle,
@@ -62,6 +80,7 @@ pub struct FluentNumberOptions {
 impl Default for FluentNumberOptions {
     fn default() -> Self {
         Self {
+            r#type: Default::default(),
             style: Default::default(),
             currency: None,
             currency_display: Default::default(),
@@ -79,6 +98,9 @@ impl FluentNumberOptions {
     pub fn merge(&mut self, opts: &FluentArgs) {
         for (key, value) in opts.iter() {
             match (key, value) {
+                ("type", FluentValue::String(n)) => {
+                    self.r#type = n.as_ref().into();
+                }
                 ("style", FluentValue::String(n)) => {
                     self.style = n.as_ref().into();
                 }

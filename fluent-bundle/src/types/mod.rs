@@ -199,13 +199,16 @@ impl<'source> FluentValue<'source> {
                 };
                 // This string matches a plural rule keyword. Check if the number
                 // matches the plural rule category.
+                let r#type = match b.options.r#type {
+                    FluentNumberType::Cardinal => PluralRuleType::CARDINAL,
+                    FluentNumberType::Ordinal => PluralRuleType::ORDINAL,
+                };
                 scope
                     .bundle
                     .intls
-                    .with_try_get_threadsafe::<PluralRules, _, _>(
-                        (PluralRuleType::CARDINAL,),
-                        |pr| pr.0.select(b) == Ok(cat),
-                    )
+                    .with_try_get_threadsafe::<PluralRules, _, _>((r#type,), |pr| {
+                        pr.0.select(b) == Ok(cat)
+                    })
                     .unwrap()
             }
             _ => false,
