@@ -4,7 +4,7 @@ use fluent_cli::parse_file;
 
 fn main() {
     let matches = App::new("Fluent Parser")
-        .version("1.0")
+        .version("0.0.1")
         .about("Parses FTL file into an AST")
         .args_from_usage(
             "-s, --silent 'Disables error reporting'
