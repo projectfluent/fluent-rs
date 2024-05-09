@@ -178,6 +178,7 @@ fn fluent_number_to_operands() {
 fn fluent_number_grouping() {
     let langid_ars = langid!("ccp");
     let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    #[allow(deprecated)]
     bundle.set_icu_data_provider(Box::new(icu_testdata::any_no_fallback()));
 
     let mut number = FluentNumber::from(1234567890.1234567);

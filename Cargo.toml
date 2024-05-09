@@ -42,6 +42,10 @@ serde_json = "1.0"
 thiserror = "1.0"
 tokio = "1.0"
 unic-langid = "0.9"
+icu_locid = "1.4"
+icu_provider = "1.4"
+icu_decimal = "1.4"
+fixed_decimal = "0.5"
 
 fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
 fluent-fallback = { version = "0.7.1", path = "fluent-fallback" }

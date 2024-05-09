@@ -24,12 +24,12 @@ include = [
 ]
 
 [dependencies]
-fixed_decimal = { version = "0.5.1", features = ["ryu"] }
+fixed_decimal = { workspace = true, features = ["ryu"] }
 fluent-langneg.workspace = true
 fluent-syntax.workspace = true
-icu_decimal = "1"
-icu_locid = "1"
-icu_provider = { version = "1", features = ["sync"] }
+icu_decimal.workspace = true
+icu_locid.workspace = true
+icu_provider = { workspace = true, features = ["sync"] }
 intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
@@ -40,7 +40,7 @@ smallvec = "1.13"
 [dev-dependencies]
 criterion.workspace = true
 iai.workspace = true
-icu_testdata = "1"
+icu_testdata = "1.4"
 serde = { workspace = true, features = ["derive"] }
 unic-langid = { workspace = true, features = ["macros"] }
 rand = "0.8"
