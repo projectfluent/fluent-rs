@@ -45,6 +45,7 @@ unic-langid = "0.9"
 icu_locid = "1.4"
 icu_provider = "1.4"
 icu_decimal = "1.4"
+icu = { version = "1.4", default-features = false }
 fixed_decimal = "0.5"
 
 fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
