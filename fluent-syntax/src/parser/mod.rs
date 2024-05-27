@@ -3,7 +3,7 @@
 //! FTL resources can be parsed using one of two methods:
 //! * [`parse`] - parses an input into a complete Abstract Syntax Tree representation with all source information preserved.
 //! * [`parse_runtime`] - parses an input into a runtime optimized Abstract Syntax Tree
-//! representation with comments stripped.
+//!   representation with comments stripped.
 //!
 //! # Example
 //!
