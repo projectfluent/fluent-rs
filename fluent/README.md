@@ -90,7 +90,9 @@ FTL is designed to be simple to read, but at the same time allows to represent
 complex concepts from natural languages like gender, plurals, conjugations, and
 others.
 
-    hello-user = Hello, { $username }!
+```fluent
+hello-user = Hello, { $username }!
+```
 
 [Read the Fluent Syntax Guide][] in order to learn more about the syntax.  If
 you're a tool author you may be interested in the formal [EBNF grammar][].
