@@ -6,6 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 This crate exposes a low level implementation of a collection of localization messages for a single locale.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-bundle.svg)](https://crates.io/crates/fluent-bundle)
+[![docs.rs](https://img.shields.io/docsrs/fluent-bundle)](https://docs.rs/fluent-bundle)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 

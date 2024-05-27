@@ -6,6 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 This crate exposes a high-level implementation of a collection of locale bundles including fallback between locales.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-fallback.svg)](https://crates.io/crates/fluent-fallback)
+[![docs.rs](https://img.shields.io/docsrs/fluent-fallback)](https://docs.rs/fluent-fallback)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 

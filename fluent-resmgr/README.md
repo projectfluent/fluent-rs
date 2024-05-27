@@ -6,6 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 This crate provides a standalone solution for managing localization resource files and returning locale bundles.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-resmgr.svg)](https://crates.io/crates/fluent-resmgr)
+[![docs.rs](https://img.shields.io/docsrs/fluent-resmgr)](https://docs.rs/fluent-resmgr)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 

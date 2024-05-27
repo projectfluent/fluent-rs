@@ -6,6 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 This crate is a collection of mock scenarios for testing fluent-rs components.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-bundle.svg)](https://crates.io/crates/fluent-bundle)
+[![docs.rs](https://img.shields.io/docsrs/fluent-testing)](https://docs.rs/fluent-testing)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
