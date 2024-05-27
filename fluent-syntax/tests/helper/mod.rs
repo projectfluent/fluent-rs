@@ -94,6 +94,7 @@ pub fn adapt_ast(ast: &mut ast::Resource<String>, crlf: bool) {
 
 pub fn strip_comments(ast: &mut ast::Resource<String>) {
     ast.body.retain(|entry| match entry {
+        // an arm that returns false makes clippy's match_like_matches_macro a false positive
         ast::Entry::Comment(..)
         | ast::Entry::GroupComment(..)
         | ast::Entry::ResourceComment(..) => false,
