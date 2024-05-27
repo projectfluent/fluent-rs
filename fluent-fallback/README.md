@@ -1,12 +1,9 @@
-# Fluent
+# Fluent Fallback
 
-`fluent-fallback` is a Rust implementation of the [Project Fluent][] higher level API.
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
 
-The `Localization` struct encapsulates a persistent localization context providing
-language fallbacking. The instance remains available throughout the whole life cycle of
-the corresponding UI, reacting to events such as locale changes, resource updates etc.
-
-The API can be used directly, or can serve as an example of state manager for `fluent-bundle` and `fluent-resmgr`.
+This crate exposes a high-level implementation of a collection of locale bundles including fallback between locales.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-fallback.svg)](https://crates.io/crates/fluent-fallback)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
@@ -19,11 +16,17 @@ natural languages like gender, plurals, conjugations, and others.
 
 [Documentation][]
 
-[Project Fluent]: http://projectfluent.org
+[Project Fluent]: https://projectfluent.org
 [Documentation]: https://docs.rs/fluent/
 
 Usage
 -----
+
+The `Localization` struct encapsulates a persistent localization context providing language fallbacking.
+The instance remains available throughout the whole life cycle of the corresponding UI,
+reacting to events such as locale changes, resource updates etc.
+
+The API can be used directly, or can serve as an example of state manager for `fluent-bundle` and `fluent-resmgr`.
 
 ```rust
 use fluent_fallback::Localization;

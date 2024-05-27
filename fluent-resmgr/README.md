@@ -1,9 +1,9 @@
 # Fluent Resource Manager
 
-`fluent-resmgr` is an implementation of resource manager for [Project Fluent][].
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
 
-Resource Manager provides a standalone solution for managing localization resources which
-can be used by `fluent-fallback` or other higher level bindings.
+This crate provides a standalone solution for managing localization resource files and returning locale bundles.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-resmgr.svg)](https://crates.io/crates/fluent-resmgr)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
@@ -16,7 +16,7 @@ natural languages like gender, plurals, conjugations, and others.
 
 [Documentation][]
 
-[Project Fluent]: http://projectfluent.org
+[Project Fluent]: https://projectfluent.org
 [Documentation]: https://docs.rs/fluent/
 
 Usage

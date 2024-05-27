@@ -1,8 +1,10 @@
 [package]
 name = "fluent"
 description = """
-A localization system designed to unleash the entire expressive power of
-natural language translations.
+Project Fluent is a localization system designed to unleash the entire
+expressive power of natural language translations. This umbrella crate
+exposes the combined features of other fluent-rs crates with additional
+convenience macros.
 """
 version = "0.16.1"
 edition.workspace = true

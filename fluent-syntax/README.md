@@ -1,12 +1,15 @@
 # Fluent Syntax
 
-`fluent-syntax` is a parser/serializer API for the Fluent Syntax, part of the [Project Fluent](https://projectfluent.org/), a localization
-framework designed to unleash the entire expressive power of natural language translations.
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
+
+This crate exposes the low level parser, AST, and serializer APIs for the Fluent Syntax.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-syntax.svg)](https://crates.io/crates/fluent-syntax)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
+[Project Fluent]: https://projectfluent.org
 
 Learn the FTL syntax
 --------------------

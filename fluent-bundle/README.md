@@ -1,8 +1,9 @@
-# Fluent
+# Fluent Bundle
 
-`fluent-rs` is a Rust implementation of [Project Fluent][], a localization
-framework designed to unleash the entire expressive power of natural language
-translations.
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
+
+This crate exposes a low level implementation of a collection of localization messages for a single locale.
 
 [![crates.io](https://img.shields.io/crates/v/fluent-bundle.svg)](https://crates.io/crates/fluent-bundle)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
@@ -15,7 +16,7 @@ natural languages like gender, plurals, conjugations, and others.
 
 [Documentation][]
 
-[Project Fluent]: http://projectfluent.org
+[Project Fluent]: https://projectfluent.org
 [Documentation]: https://docs.rs/fluent/
 
 Usage

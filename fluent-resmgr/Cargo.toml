@@ -1,7 +1,10 @@
 [package]
 name = "fluent-resmgr"
 description = """
-Resource manager for Fluent localization resources.
+Project Fluent is a localization system designed to unleash the entire
+expressive power of natural language translations. This crate provides
+a standalone solution for managing localization resource files and returning
+locale bundles.
 """
 version = "0.0.7"
 edition.workspace = true

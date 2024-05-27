@@ -1,8 +1,9 @@
 [package]
 name = "intl-memoizer"
 description = """
-A memoizer specifically tailored for storing lazy-initialized
-intl formatters.
+Project Fluent is a localization system designed to unleash the entire
+expressive power of natural language translations. This crate provides
+a memoizer specifically tailored for storing lazy-initialized intl formatters.
 """
 version = "0.5.2"
 edition.workspace = true

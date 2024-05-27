@@ -1,8 +1,9 @@
 [package]
 name = "fluent-cli"
 description = """
-A collection of command line interface programs
-for Fluent Localization System.
+Project Fluent is a localization system designed to unleash the entire
+expressive power of natural language translations. This crate is
+collection of developer-oriented command line interface tools.
 """
 version = "0.0.1"
 edition.workspace = true
