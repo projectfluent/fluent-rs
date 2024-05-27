@@ -8,7 +8,7 @@ instance is read-only during its life time, with constructor being expensive, an
 `format`/`select` calls being cheap.
 
 In result it pays off to use a singleton to manage memoization of all instances of intl
-APIs such as `PluralRules`, DateTimeFormat` etc. between all `FluentBundle` instances.
+APIs such as `PluralRules`, `DateTimeFormat` etc. between all `FluentBundle` instances.
 
 Usage
 -----
