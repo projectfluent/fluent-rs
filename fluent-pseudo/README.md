@@ -1,14 +1,14 @@
 # Fluent Pseudo
 
-The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
-a localization system designed to unleash the entire expressive power of natural language translations.
-
-This crate provides a pseudolocalization and transformation API.
-
 [![crates.io](https://img.shields.io/crates/v/fluent-pseudo.svg)](https://crates.io/crates/fluent-pseudo)
 [![docs.rs](https://img.shields.io/docsrs/fluent-pseudo)](https://docs.rs/fluent-pseudo)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
+
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
+
+This crate provides a pseudolocalization and transformation API.
 
 [Project Fluent]: https://projectfluent.org
 

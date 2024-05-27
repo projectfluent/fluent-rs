@@ -1,24 +1,16 @@
 # Fluent Resource Manager
 
-The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
-a localization system designed to unleash the entire expressive power of natural language translations.
-
-This crate provides a standalone solution for managing localization resource files and returning locale bundles.
-
 [![crates.io](https://img.shields.io/crates/v/fluent-resmgr.svg)](https://crates.io/crates/fluent-resmgr)
 [![docs.rs](https://img.shields.io/docsrs/fluent-resmgr)](https://docs.rs/fluent-resmgr)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
 
-Project Fluent keeps simple things simple and makes complex things possible.
-The syntax used for describing translations is easy to read and understand.  At
-the same time it allows, when necessary, to represent complex concepts from
-natural languages like gender, plurals, conjugations, and others.
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
 
-[Documentation][]
+This crate provides a standalone solution for managing localization resource files and returning locale bundles.
 
 [Project Fluent]: https://projectfluent.org
-[Documentation]: https://docs.rs/fluent/
 
 Usage
 -----
@@ -36,26 +28,6 @@ fn main() {
     assert_eq!(&value, "Hello, world!");
 }
 ```
-
-
-Learn the FTL syntax
---------------------
-
-FTL is a localization file format used for describing translation resources.
-FTL stands for _Fluent Translation List_.
-
-FTL is designed to be simple to read, but at the same time allows to represent
-complex concepts from natural languages like gender, plurals, conjugations, and
-others.
-
-    hello-user = Hello, { $username }!
-
-[Read the Fluent Syntax Guide][] in order to learn more about the syntax.  If
-you're a tool author you may be interested in the formal [EBNF grammar][].
-
-[Read the Fluent Syntax Guide]: http://projectfluent.org/fluent/guide/
-[EBNF grammar]: https://github.com/projectfluent/fluent/tree/master/spec
-
 
 Get Involved
 ------------

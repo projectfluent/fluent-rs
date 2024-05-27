@@ -1,14 +1,14 @@
 # IntlMemoizer
 
-The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
-a localization system designed to unleash the entire expressive power of natural language translations.
-
-This crate provides a memoizer specifically tailored for storing lazy-initialized intl formatters.
-
 [![crates.io](https://img.shields.io/crates/v/intl-memoizer.svg)](https://crates.io/crates/intl-memoizer)
 [![docs.rs](https://img.shields.io/docsrs/intl-memoizer)](https://docs.rs/intl-memoizer)
 [![Build](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml/badge.svg)](https://github.com/projectfluent/fluent-rs/actions/workflows/test.yaml)
 [![Coverage Status](https://coveralls.io/repos/github/projectfluent/fluent-rs/badge.svg?branch=main)](https://coveralls.io/github/projectfluent/fluent-rs?branch=main)
+
+The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
+a localization system designed to unleash the entire expressive power of natural language translations.
+
+This crate provides a memoizer specifically tailored for storing lazy-initialized intl formatters.
 
 [Project Fluent]: https://projectfluent.org
 
