@@ -18,7 +18,7 @@ fn get_resources(tests: &[&'static str]) -> HashMap<&'static str, String> {
         let path = format!("./benches/{}", test);
         ftl_strings.insert(*test, read_file(&path).expect("Couldn't load file"));
     }
-    return ftl_strings;
+    ftl_strings
 }
 
 fn get_ctxs(tests: &[&'static str]) -> HashMap<&'static str, Vec<String>> {
