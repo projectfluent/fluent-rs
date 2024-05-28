@@ -8,7 +8,7 @@
 The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
 a localization system designed to unleash the entire expressive power of natural language translations.
 
-This crate exposes a low level implementation of a collection of localization messages for a single locale.
+This crate is a low-level implementation of a collection of localization messages for a single locale.
 
 [Project Fluent]: https://projectfluent.org
 

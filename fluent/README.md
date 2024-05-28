@@ -8,7 +8,7 @@
 The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
 a localization system designed to unleash the entire expressive power of natural language translations.
 
-This crate is an umbrella that exposes the combined features of other `fluent-rs` crates with additional convenience macros.
+This is an umbrella crate exposing the combined features of `fluent-rs` crates with additional convenience macros.
 
 [Project Fluent]: https://projectfluent.org
 

@@ -8,7 +8,7 @@
 The `fluent-rs` workspace is a collection of Rust crates implementing [Project Fluent][],
 a localization system designed to unleash the entire expressive power of natural language translations.
 
-This crate provides a memoizer specifically tailored for storing lazy-initialized intl formatters.
+This crate is a memoizer specifically tailored for storing lazy-initialized intl formatters.
 
 [Project Fluent]: https://projectfluent.org
 

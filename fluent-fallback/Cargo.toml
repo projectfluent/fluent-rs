@@ -1,10 +1,8 @@
 [package]
 name = "fluent-fallback"
 description = """
-Project Fluent is a localization system designed to unleash the entire
-expressive power of natural language translations. This crate exposes
-a high-level implementation of a collection of locale bundles including
-fallback between locales.
+A high-level implementation of a collection of locale bundles including fallback between locales for Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.7.1"
 edition.workspace = true

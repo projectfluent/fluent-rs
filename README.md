@@ -26,7 +26,7 @@ An umbrella crate exposing the combined features of fluent-rs crates with additi
 [![crates.io](https://img.shields.io/crates/v/fluent_bundle.svg)](https://crates.io/crates/fluent_bundle)
 [![docs.rs](https://img.shields.io/docsrs/fluent-bundle)](https://docs.rs/fluent-bundle)
 
-A low level implementation of a collection of localization messages for a single locale.
+A low-level implementation of a collection of localization messages for a single locale.
 
 ### fluent-fallback
 
@@ -40,14 +40,14 @@ A high-level abstraction model for managing locale bundles and runtime localizat
 [![crates.io](https://img.shields.io/crates/v/fluent_resmgr.svg)](https://crates.io/crates/fluent_resmgr)
 [![docs.rs](https://img.shields.io/docsrs/fluent-resmgr)](https://docs.rs/fluent-resmgr)
 
-A standalone solution for managing localization resource files and returning locale bundles.
+A standalone solution for managing resource files and returning locale bundles.
 
 ### fluent-syntax
 
 [![crates.io](https://img.shields.io/crates/v/fluent_syntax.svg)](https://crates.io/crates/fluent_syntax)
 [![docs.rs](https://img.shields.io/docsrs/fluent-syntax)](https://docs.rs/fluent-syntax)
 
-The low level parser, AST, and serializer APIs for the Fluent Syntax.
+A low-level parser, AST, and serializer API for the Fluent syntax.
 
 ### fluent-pseudo
 

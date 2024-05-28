@@ -1,9 +1,8 @@
 [package]
 name = "fluent-pseudo"
 description = """
-Project Fluent is a localization system designed to unleash the entire
-expressive power of natural language translations. This crate provides
-a pseudolocalization and transformation API.
+A pseudolocalization and transformation API for Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.3.2"
 edition.workspace = true
