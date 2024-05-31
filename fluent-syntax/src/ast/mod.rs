@@ -1444,6 +1444,7 @@ pub enum Expression<S> {
     ///     [key1] Value 1
     ///    *[other] Value 2
     /// }
+    /// Invariant: exactly 1 variant must have default: true.
     /// ```
     Select {
         selector: InlineExpression<S>,
