@@ -1,4 +1,4 @@
-use super::scope::Scope;
+use super::scope::{ArgumentResolver, Scope};
 use super::WriteValue;
 
 use std::borrow::Borrow;
@@ -12,15 +12,16 @@ use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
 impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
-    fn write<'ast, 'args, 'errors, W, R, M>(
+    fn write<'ast, 'args, 'errors, W, R, M, Args>(
         &'ast self,
         w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
+        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>,
     ) -> fmt::Result
     where
         W: fmt::Write,
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        Args: ArgumentResolver<'args>,
     {
         match self {
             Self::Inline(exp) => exp.write(w, scope),
