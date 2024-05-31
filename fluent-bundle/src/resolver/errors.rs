@@ -48,7 +48,7 @@ where
 }
 
 /// Errors generated during the process of resolving a fluent message into a string.
-/// This process takes place in the `write` method of the `WriteValue` trait.
+/// This process takes place in the `write_or_resolve` method of the `WriteOrResolve` trait.
 #[derive(Debug, PartialEq, Eq, Clone)]
 pub enum ResolverError {
     Reference(ReferenceKind),
