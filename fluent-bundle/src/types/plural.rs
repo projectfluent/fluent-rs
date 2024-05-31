@@ -8,7 +8,13 @@ pub struct PluralRules(pub IntlPluralRules);
 impl Memoizable for PluralRules {
     type Args = (PluralRuleType,);
     type Error = &'static str;
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+    type DataProvider = ();
+
+    fn construct(
+        lang: LanguageIdentifier,
+        args: Self::Args,
+        _: &Self::DataProvider,
+    ) -> Result<Self, Self::Error> {
         let default_lang: LanguageIdentifier = "en".parse().unwrap();
         let pr_lang = negotiate_languages(
             &[lang],

@@ -22,7 +22,12 @@ impl IntlLangMemoizer {
     /// Lazily initialize and run a formatter. See
     /// [`intl_memoizer::IntlLangMemoizer::with_try_get`](crate::IntlLangMemoizer::with_try_get)
     /// for documentation.
-    pub fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    pub fn with_try_get<I, R, U>(
+        &self,
+        args: I::Args,
+        data_provider: &I::DataProvider,
+        cb: U,
+    ) -> Result<R, I::Error>
     where
         Self: Sized,
         I: Memoizable + Sync + Send + 'static,
@@ -37,7 +42,7 @@ impl IntlLangMemoizer {
         let e = match cache.entry(args.clone()) {
             Entry::Occupied(entry) => entry.into_mut(),
             Entry::Vacant(entry) => {
-                let val = I::construct(self.lang.clone(), args)?;
+                let val = I::construct(self.lang.clone(), args, data_provider)?;
                 entry.insert(val)
             }
         };
