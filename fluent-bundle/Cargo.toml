@@ -1,8 +1,8 @@
 [package]
 name = "fluent-bundle"
 description = """
-A localization system designed to unleash the entire expressive power of
-natural language translations.
+A low-level implementation of a collection of localization messages for a single locale for Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.15.3"
 edition.workspace = true

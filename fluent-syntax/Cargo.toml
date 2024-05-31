@@ -1,7 +1,8 @@
 [package]
 name = "fluent-syntax"
 description = """
-Parser/Serializer tools for Fluent Syntax.
+A low-level parser, AST, and serializer API for the syntax used by Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.11.1"
 edition.workspace = true

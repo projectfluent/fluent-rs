@@ -1,8 +1,8 @@
 [package]
 name = "intl-memoizer"
 description = """
-A memoizer specifically tailored for storing lazy-initialized
-intl formatters.
+A memoizer specifically tailored for storing lazy-initialized intl formatters for Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.5.2"
 edition.workspace = true

@@ -1,7 +1,8 @@
 [package]
 name = "fluent-testing"
 description = """
-A collection of mock scenarios for testing fluent-rs components.
+A collection of mock scenarios for testing components of Project Fluent,
+a localization system designed to unleash the entire expressive power of natural language translations.
 """
 version = "0.0.4"
 edition.workspace = true
