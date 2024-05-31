@@ -1,6 +1,6 @@
 use crate::types::FluentType;
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::Memoizable;
-use unic_langid::LanguageIdentifier;
 
 /// This trait contains thread-safe methods which extend [`intl_memoizer::IntlLangMemoizer`].
 /// It is used as the generic bound in this crate when a memoizer is needed.
@@ -18,11 +18,20 @@ pub trait MemoizerKind: 'static {
     ///
     /// `U` - The callback that accepts the instance of the intl formatter, and generates
     ///       some kind of results `R`.
+    #[cfg(feature = "sync")]
     fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, callback: U) -> Result<R, I::Error>
     where
         Self: Sized,
         I: Memoizable + Send + Sync + 'static,
         I::Args: Send + Sync + 'static,
+        U: FnOnce(&I) -> R;
+
+    #[cfg(not(feature = "sync"))]
+    fn with_try_get<I, R, U>(&self, args: I::Args, callback: U) -> Result<R, I::Error>
+    where
+        Self: Sized,
+        I: Memoizable + 'static,
+        I::Args: 'static,
         U: FnOnce(&I) -> R;
 
     /// Wires up the `as_string` or `as_string_threadsafe` variants for [`FluentType`].

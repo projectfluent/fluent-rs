@@ -1,8 +1,8 @@
 use fluent_bundle::{FluentBundle, FluentError, FluentResource};
 use futures::Stream;
+use icu_locid::LanguageIdentifier;
 use rustc_hash::FxHashSet;
 use std::borrow::Borrow;
-use unic_langid::LanguageIdentifier;
 
 use crate::types::ResourceId;
 

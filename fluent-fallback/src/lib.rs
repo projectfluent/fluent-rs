@@ -26,7 +26,7 @@
 //! ```
 //! use fluent_fallback::{Localization, types::{ResourceType, ToResourceId}};
 //! use fluent_resmgr::ResourceManager;
-//! use unic_langid::langid;
+//! use icu_locid::langid;
 //!
 //! let res_mgr = ResourceManager::new("./tests/resources/{locale}/".to_string());
 //!
@@ -96,7 +96,7 @@
 //! As a long lived structure, the [`Localization`] is intended to handle runtime locale
 //! management.
 //!
-//! In the example above, [`Vec<LanguageIdentifier>`](unic_langid::LanguageIdentifier)
+//! In the example above, [`Vec<LagnuageIdentifier>`](icu_locid::LanguageIdentifier)
 //! provides a static list of locales that the [`Localization`] handles, but that's just the
 //! simplest implementation of the [`env::LocalesProvider`], and one can implement
 //! a much more sophisticated one that reacts to user or environment driven changes, and

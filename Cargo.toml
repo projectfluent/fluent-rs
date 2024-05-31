@@ -32,16 +32,17 @@ rust-version = "1.67.0"
 
 [workspace.dependencies]
 criterion = "0.5"
-fluent-langneg = "0.13"
+fluent-langneg = "0.14"
 futures = "0.3"
 iai = "0.1"
-intl_pluralrules = "7.0.1"
 rustc-hash = "1"
 serde = "1.0"
 serde_json = "1.0"
 thiserror = "1.0"
 tokio = "1.0"
-unic-langid = "0.9"
+icu_locid = "1.4"
+icu_plurals = { version = "1.4", features = ["experimental"] }
+icu_provider = "1.4"
 
 fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
 fluent-fallback = { version = "0.7.1", path = "fluent-fallback" }

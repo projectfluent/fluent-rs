@@ -12,8 +12,8 @@ use std::default::Default;
 use std::fmt;
 
 use fluent_syntax::ast;
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::IntlLangMemoizer;
-use unic_langid::LanguageIdentifier;
 
 use crate::args::FluentArgs;
 use crate::entry::Entry;
@@ -32,7 +32,7 @@ use crate::types::FluentValue;
 ///
 /// ```
 /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue, FluentArgs};
-/// use unic_langid::langid;
+/// use icu_locid::langid;
 ///
 /// // 1. Create a FluentResource
 ///
@@ -163,7 +163,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("
     /// hello = Hi!
@@ -253,7 +253,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("
     /// hello = Hi!
@@ -359,7 +359,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("hello = Hi!");
     /// let resource = FluentResource::try_new(ftl_string)
@@ -384,7 +384,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("hello-world = Hello World!");
     /// let resource = FluentResource::try_new(ftl_string)
@@ -412,7 +412,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("hello-world = Hello World!");
     /// let resource = FluentResource::try_new(ftl_string)
@@ -459,7 +459,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("hello-world = Hello World!");
     /// let resource = FluentResource::try_new(ftl_string)
@@ -508,7 +508,7 @@ impl<R, M> FluentBundle<R, M> {
     ///
     /// ```
     /// use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let ftl_string = String::from("length = { STRLEN(\"12345\") }");
     /// let resource = FluentResource::try_new(ftl_string)
@@ -622,7 +622,7 @@ impl<R> FluentBundle<R, IntlLangMemoizer> {
     /// ```
     /// use fluent_bundle::FluentBundle;
     /// use fluent_bundle::FluentResource;
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let langid_en = langid!("en-US");
     /// let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_en]);
@@ -653,11 +653,23 @@ impl crate::memoizer::MemoizerKind for IntlLangMemoizer {
         Self::new(lang)
     }
 
+    #[cfg(feature = "sync")]
     fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
     where
         Self: Sized,
         I: intl_memoizer::Memoizable + Send + Sync + 'static,
         I::Args: Send + Sync + 'static,
+        U: FnOnce(&I) -> R,
+    {
+        self.with_try_get(args, cb)
+    }
+
+    #[cfg(not(feature = "sync"))]
+    fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    where
+        Self: Sized,
+        I: intl_memoizer::Memoizable + 'static,
+        I::Args: 'static,
         U: FnOnce(&I) -> R,
     {
         self.with_try_get(args, cb)

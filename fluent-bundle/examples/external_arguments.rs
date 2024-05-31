@@ -1,5 +1,5 @@
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
-use unic_langid::langid;
+use icu_locid::langid;
 
 fn main() {
     let ftl_string = String::from(
