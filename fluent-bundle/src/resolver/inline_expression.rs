@@ -90,7 +90,11 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    let result = func.call(
+                        scope,
+                        resolved_positional_args.as_slice(),
+                        &resolved_named_args,
+                    );
                     if let FluentValue::Error = result {
                         self.write_error(w)
                     } else {
@@ -185,7 +189,11 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    let result = func.call(
+                        scope,
+                        resolved_positional_args.as_slice(),
+                        &resolved_named_args,
+                    );
                     return result;
                 } else {
                     return FluentValue::Error;

@@ -1,8 +1,7 @@
-use fluent_bundle::types::FluentNumber;
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 
 #[test]
-fn test_function_resolve() {
+fn test_term_argument_resolve() {
     // 1. Create bundle
     let ftl_string = String::from(
         "
