@@ -190,7 +190,7 @@ where
                     }
                     self.ptr += 1;
                     self.skip_blank();
-                    let val = self.get_inline_expression(true)?;
+                    let val = self.get_inline_expression(false)?;
 
                     argument_names.push(id.name.clone());
                     named.push(ast::NamedArgument {
