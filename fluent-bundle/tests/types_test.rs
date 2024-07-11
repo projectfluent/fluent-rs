@@ -1,6 +1,7 @@
 use fluent_bundle::resolver::Scope;
 use fluent_bundle::types::{
     FluentNumber, FluentNumberCurrencyDisplayStyle, FluentNumberOptions, FluentNumberStyle,
+    FluentNumberUseGrouping,
 };
 use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
@@ -120,21 +121,39 @@ fn fluent_number_style() {
     assert_eq!(fno.style, FluentNumberStyle::Currency);
     assert_eq!(fno.currency, Some("EUR".to_string()));
     assert_eq!(fno.currency_display, FluentNumberCurrencyDisplayStyle::Code);
-    assert!(!fno.use_grouping);
+    assert_eq!(fno.use_grouping, FluentNumberUseGrouping::False);
 
     let num = FluentNumber::new(0.2, FluentNumberOptions::default());
-    assert_eq!(num.as_string(), "0.2");
+    assert_eq!(num.as_string_basic(), "0.2");
 
-    let opts = FluentNumberOptions {
+    let mut opts = FluentNumberOptions {
         minimum_fraction_digits: Some(3),
         ..Default::default()
     };
 
     let num = FluentNumber::new(0.2, opts.clone());
-    assert_eq!(num.as_string(), "0.200");
+    assert_eq!(num.as_string_basic(), "0.200");
 
-    let num = FluentNumber::new(2.0, opts);
-    assert_eq!(num.as_string(), "2.000");
+    let num = FluentNumber::new(2.0, opts.clone());
+    assert_eq!(num.as_string_basic(), "2.000");
+
+    opts.minimum_integer_digits = Some(3);
+    opts.minimum_fraction_digits = None;
+
+    let num = FluentNumber::new(2.0, opts.clone());
+    assert_eq!(num.as_string_basic(), "002");
+
+    let num = FluentNumber::new(0.2, opts.clone());
+    assert_eq!(num.as_string_basic(), "000.2");
+
+    opts.minimum_integer_digits = None;
+    opts.maximum_significant_digits = Some(4);
+
+    let num = FluentNumber::new(12345.0, opts.clone());
+    assert_eq!(num.as_string_basic(), "12340");
+
+    let num = FluentNumber::new(1.2345, opts);
+    assert_eq!(num.as_string_basic(), "1.234");
 }
 
 #[test]
@@ -153,4 +172,25 @@ fn fluent_number_to_operands() {
             t: 81,
         }
     );
+}
+
+#[test]
+fn fluent_number_grouping() {
+    let langid_ars = langid!("ccp");
+    let mut bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    bundle.set_icu_data_provider(Box::new(fluent_bundle::FluentIcuDataProvider));
+
+    let mut number = FluentNumber::from(1234567890.1234567);
+
+    number.options.use_grouping = FluentNumberUseGrouping::False;
+    let no_grouping = number.as_string(&bundle);
+    assert_eq!(no_grouping, "𑄷𑄸𑄹𑄺𑄻𑄼𑄽𑄾𑄿𑄶.𑄷𑄸𑄹𑄺𑄻𑄼𑄽");
+
+    number.options.use_grouping = FluentNumberUseGrouping::Min2;
+    let long = number.as_string(&bundle);
+    assert_eq!(long, "𑄷,𑄸𑄹,𑄺𑄻,𑄼𑄽,𑄾𑄿𑄶.𑄷𑄸𑄹𑄺𑄻𑄼𑄽");
+
+    number.value = -1234.0;
+    let short = number.as_string(&bundle);
+    assert_eq!(short, "-𑄷𑄸𑄹𑄺");
 }
