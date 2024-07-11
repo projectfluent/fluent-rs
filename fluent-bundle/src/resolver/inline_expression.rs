@@ -1,30 +1,27 @@
 use super::scope::Scope;
-use super::{ResolveValue, ResolverError, WriteValue};
-
-use std::borrow::Borrow;
-use std::fmt;
-
-use fluent_syntax::ast;
-use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
+use super::{ResolverError, WriteOrResolve, WriteOrResolveContext};
 
 use crate::entry::GetEntry;
 use crate::memoizer::MemoizerKind;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+use fluent_syntax::ast;
+use std::borrow::{Borrow, Cow};
+use std::fmt;
 
-impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
-    fn write<'ast, 'args, 'errors, W, R, M>(
-        &'ast self,
-        w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-    ) -> fmt::Result
+impl<'bundle> WriteOrResolve<'bundle> for ast::InlineExpression<&'bundle str> {
+    fn write_or_resolve<'other, R, M, T>(
+        &'bundle self,
+        scope: &mut Scope<'bundle, 'other, R, M>,
+        context: &mut T,
+    ) -> T::Result
     where
-        W: fmt::Write,
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        T: WriteOrResolveContext<'bundle>,
     {
         match self {
-            Self::StringLiteral { value } => unescape_unicode(w, value),
+            Self::StringLiteral { value } => context.unescape(value),
             Self::MessageReference { id, attribute } => {
                 if let Some(msg) = scope.bundle.get_entry_message(id.name) {
                     if let Some(attr) = attribute {
@@ -32,28 +29,32 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                             .iter()
                             .find_map(|a| {
                                 if a.id.name == attr.name {
-                                    Some(scope.track(w, &a.value, self))
+                                    Some(scope.track(context, &a.value, self))
                                 } else {
                                     None
                                 }
                             })
-                            .unwrap_or_else(|| scope.write_ref_error(w, self))
+                            .unwrap_or_else(|| {
+                                scope.add_error(self.into());
+                                context.error(self, true)
+                            })
                     } else {
                         msg.value
                             .as_ref()
-                            .map(|value| scope.track(w, value, self))
+                            .map(|value| scope.track(context, value, self))
                             .unwrap_or_else(|| {
                                 scope.add_error(ResolverError::NoValue(id.name.to_string()));
-                                w.write_char('{')?;
-                                self.write_error(w)?;
-                                w.write_char('}')
+                                context.error(self, true)
                             })
                     }
                 } else {
-                    scope.write_ref_error(w, self)
+                    scope.add_error(self.into());
+                    context.error(self, true)
                 }
             }
-            Self::NumberLiteral { value } => FluentValue::try_number(value).write(w, scope),
+            Self::NumberLiteral { value } => {
+                context.value(scope, Cow::Owned(FluentValue::try_number(value)))
+            }
             Self::TermReference {
                 id,
                 attribute,
@@ -69,16 +70,19 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                         if let Some(attr) = attribute {
                             term.attributes.iter().find_map(|a| {
                                 if a.id.name == attr.name {
-                                    Some(scope.track(w, &a.value, self))
+                                    Some(scope.track(context, &a.value, self))
                                 } else {
                                     None
                                 }
                             })
                         } else {
-                            Some(scope.track(w, &term.value, self))
+                            Some(scope.track(context, &term.value, self))
                         }
                     })
-                    .unwrap_or_else(|| scope.write_ref_error(w, self));
+                    .unwrap_or_else(|| {
+                        scope.add_error(self.into());
+                        context.error(self, true)
+                    });
                 scope.local_args = None;
                 result
             }
@@ -90,30 +94,31 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
 
                 if let Some(func) = func {
                     let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
-                    if let FluentValue::Error = result {
-                        self.write_error(w)
+                    if matches!(result, FluentValue::Error) {
+                        context.error(self, false)
                     } else {
-                        w.write_str(&result.into_string(scope))
+                        context.value(scope, Cow::Owned(result))
                     }
                 } else {
-                    scope.write_ref_error(w, self)
+                    scope.add_error(self.into());
+                    context.error(self, true)
                 }
             }
             Self::VariableReference { id } => {
-                let args = scope.local_args.as_ref().or(scope.args);
-
-                if let Some(arg) = args.and_then(|args| args.get(id.name)) {
-                    arg.write(w, scope)
-                } else {
-                    if scope.local_args.is_none() {
-                        scope.add_error(self.into());
+                if let Some(local_args) = &scope.local_args {
+                    if let Some(arg) = local_args.get(id.name) {
+                        return context.value(scope, Cow::Borrowed(arg));
                     }
-                    w.write_char('{')?;
-                    self.write_error(w)?;
-                    w.write_char('}')
+                } else if let Some(arg) = scope.args.and_then(|args| args.get(id.name)) {
+                    return context.value(scope, Cow::Owned(arg.into_owned()));
                 }
+
+                if scope.local_args.is_none() {
+                    scope.add_error(self.into());
+                }
+                context.error(self, true)
             }
-            Self::Placeable { expression } => expression.write(w, scope),
+            Self::Placeable { expression } => expression.write_or_resolve(scope, context),
         }
     }
 
@@ -143,54 +148,6 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
             Self::FunctionReference { id, .. } => write!(w, "{}()", id.name),
             Self::VariableReference { id } => write!(w, "${}", id.name),
             _ => unreachable!(),
-        }
-    }
-}
-
-impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
-    fn resolve<'ast, 'args, 'errors, R, M>(
-        &'ast self,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-    ) -> FluentValue<'bundle>
-    where
-        R: Borrow<FluentResource>,
-        M: MemoizerKind,
-    {
-        match self {
-            Self::StringLiteral { value } => unescape_unicode_to_string(value).into(),
-            Self::NumberLiteral { value } => FluentValue::try_number(value),
-            Self::VariableReference { id } => {
-                if let Some(local_args) = &scope.local_args {
-                    if let Some(arg) = local_args.get(id.name) {
-                        return arg.clone();
-                    }
-                } else if let Some(arg) = scope.args.and_then(|args| args.get(id.name)) {
-                    return arg.into_owned();
-                }
-
-                if scope.local_args.is_none() {
-                    scope.add_error(self.into());
-                }
-                FluentValue::Error
-            }
-            Self::FunctionReference { id, arguments } => {
-                let (resolved_positional_args, resolved_named_args) =
-                    scope.get_arguments(Some(arguments));
-
-                let func = scope.bundle.get_entry_function(id.name);
-
-                if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
-                    result
-                } else {
-                    FluentValue::Error
-                }
-            }
-            _ => {
-                let mut result = String::new();
-                self.write(&mut result, scope).expect("Failed to write");
-                result.into()
-            }
         }
     }
 }
