@@ -20,12 +20,12 @@
 use fluent_bundle::{FluentArgs, FluentValue};
 use fluent_langneg::{negotiate_languages, NegotiationStrategy};
 use fluent_resmgr::resource_manager::ResourceManager;
+use icu_locid::LanguageIdentifier;
 use std::env;
 use std::fs;
 use std::io;
 use std::path::PathBuf;
 use std::str::FromStr;
-use unic_langid::LanguageIdentifier;
 
 /// This helper function allows us to read the list
 /// of available locales by reading the list of

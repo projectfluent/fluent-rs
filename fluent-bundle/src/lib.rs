@@ -18,7 +18,7 @@
 //! ```
 //! use fluent_bundle::{FluentBundle, FluentValue, FluentResource, FluentArgs};
 //! // Used to provide a locale for the bundle.
-//! use unic_langid::langid;
+//! use icu_locid::langid;
 //!
 //! // 1. Crate a FluentResource
 //!
@@ -101,6 +101,7 @@
 mod args;
 pub mod builtins;
 pub mod bundle;
+#[cfg(feature = "sync")]
 pub mod concurrent;
 mod entry;
 mod errors;
