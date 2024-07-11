@@ -24,6 +24,7 @@ use crate::message::FluentMessage;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+use crate::ArgumentResolver;
 
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
@@ -486,6 +487,21 @@ impl<R, M> FluentBundle<R, M> {
         &'bundle self,
         pattern: &'bundle ast::Pattern<&'bundle str>,
         args: Option<&FluentArgs>,
+        errors: &mut Vec<FluentError>,
+    ) -> Cow<'bundle, str>
+    where
+        R: Borrow<FluentResource>,
+        M: MemoizerKind,
+    {
+        self.format_pattern_with_argument_resolver(pattern, args, errors)
+    }
+
+    /// Formats a pattern which comes from a `FluentMessage`.
+    /// Works the same as [`FluentBundle::format_pattern`], but allows passing a custom argument resolver.
+    pub fn format_pattern_with_argument_resolver<'bundle, 'args>(
+        &'bundle self,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        args: impl ArgumentResolver<'args>,
         errors: &mut Vec<FluentError>,
     ) -> Cow<'bundle, str>
     where

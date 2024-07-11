@@ -21,7 +21,8 @@ fn fluent_value_matches() {
     // plural rules categories.
     let langid_ars = langid!("ars");
     let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
-    let scope = Scope::new(&bundle, None, None);
+    let arg_resolver: Option<&FluentArgs> = None;
+    let scope = Scope::new(&bundle, arg_resolver, None);
 
     let string_val = FluentValue::from("string1");
     let string_val_copy = FluentValue::from("string1");
