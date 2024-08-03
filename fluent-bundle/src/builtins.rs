@@ -8,7 +8,6 @@ pub fn NUMBER<'a>(positional: &[FluentValue<'a>], named: &FluentArgs) -> FluentV
 
     let mut n = n.clone();
     n.options.merge(named);
-    println!("{named:?} => {n:?}");
 
     FluentValue::Number(n)
 }
