@@ -1,6 +1,10 @@
-use intl_memoizer::{concurrent::IntlLangMemoizer, Memoizable};
+use icu_locid::LanguageIdentifier;
+#[cfg(feature = "sync")]
+use intl_memoizer::concurrent::IntlLangMemoizer;
+#[cfg(not(feature = "sync"))]
+use intl_memoizer::IntlLangMemoizer;
+use intl_memoizer::Memoizable;
 use rustc_hash::FxHashMap;
-use unic_langid::LanguageIdentifier;
 
 use crate::memoizer::MemoizerKind;
 use crate::types::FluentType;
@@ -23,7 +27,7 @@ impl<R> FluentBundle<R> {
     /// ```
     /// use fluent_bundle::concurrent::FluentBundle;
     /// use fluent_bundle::FluentResource;
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
     /// let langid_en = langid!("en-US");
     /// let mut bundle: FluentBundle<FluentResource> =
@@ -51,6 +55,7 @@ impl MemoizerKind for IntlLangMemoizer {
         Self::new(lang)
     }
 
+    #[cfg(feature = "sync")]
     fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
     where
         Self: Sized,
@@ -58,7 +63,18 @@ impl MemoizerKind for IntlLangMemoizer {
         I::Args: Send + Sync + 'static,
         U: FnOnce(&I) -> R,
     {
-        self.with_try_get(args, cb)
+        Self::with_try_get(self, args, cb)
+    }
+
+    #[cfg(not(feature = "sync"))]
+    fn with_try_get<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    where
+        Self: Sized,
+        I: Memoizable + 'static,
+        I::Args: 'static,
+        U: FnOnce(&I) -> R,
+    {
+        Self::with_try_get(self, args, cb)
     }
 
     fn stringify_value(&self, value: &dyn FluentType) -> std::borrow::Cow<'static, str> {

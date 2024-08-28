@@ -1,6 +1,6 @@
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 use fluent_syntax::ast;
-use unic_langid::{langid, LanguageIdentifier};
+use icu_locid::{langid, LanguageIdentifier};
 
 const LANG_EN: LanguageIdentifier = langid!("en");
 

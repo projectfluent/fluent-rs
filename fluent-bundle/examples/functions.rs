@@ -1,5 +1,5 @@
 use fluent_bundle::{FluentBundle, FluentResource, FluentValue};
-use unic_langid::langid;
+use icu_locid::langid;
 
 fn main() {
     // We define the resources here so that they outlive

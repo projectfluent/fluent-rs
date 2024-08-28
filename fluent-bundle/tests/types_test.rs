@@ -6,8 +6,8 @@ use fluent_bundle::FluentArgs;
 use fluent_bundle::FluentBundle;
 use fluent_bundle::FluentResource;
 use fluent_bundle::FluentValue;
-use intl_pluralrules::operands::PluralOperands;
-use unic_langid::langid;
+use icu_locid::langid;
+use icu_plurals::PluralOperands;
 
 #[test]
 fn fluent_value_try_number() {
@@ -17,10 +17,10 @@ fn fluent_value_try_number() {
 
 #[test]
 fn fluent_value_matches() {
-    // We'll use `ars` locale since it happens to have all
+    // We'll use `ar` locale since it happens to have all
     // plural rules categories.
-    let langid_ars = langid!("ars");
-    let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    let langid_ar = langid!("ar");
+    let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ar]);
     let scope = Scope::new(&bundle, None, None);
 
     let string_val = FluentValue::from("string1");
@@ -139,18 +139,60 @@ fn fluent_number_style() {
 
 #[test]
 fn fluent_number_to_operands() {
+    use icu_plurals::rules::RawPluralOperands;
+
     let num = FluentNumber::new(2.81, FluentNumberOptions::default());
     let operands: PluralOperands = (&num).into();
 
     assert_eq!(
         operands,
-        PluralOperands {
-            n: 2.81,
+        RawPluralOperands {
             i: 2,
             v: 2,
             w: 2,
             f: 81,
             t: 81,
+            c: 0,
         }
+        .into()
+    );
+}
+
+#[test]
+fn fluent_number_to_float_vs_int() {
+    // This test verifies that we coalesce f64 `1.0` to usize `1`.
+    // See `From<i&FluentNumber> for PluralOperands` for more details.
+    use icu_plurals::rules::RawPluralOperands;
+
+    let num: FluentNumber = 1.0.into();
+    let operands: PluralOperands = (&num).into();
+
+    assert_eq!(
+        operands,
+        RawPluralOperands {
+            i: 1,
+            v: 0,
+            w: 0,
+            f: 0,
+            t: 0,
+            c: 0,
+        }
+        .into()
+    );
+
+    let num: FluentNumber = 1.into();
+    let operands: PluralOperands = (&num).into();
+
+    assert_eq!(
+        operands,
+        RawPluralOperands {
+            i: 1,
+            v: 0,
+            w: 0,
+            f: 0,
+            t: 0,
+            c: 0,
+        }
+        .into()
     );
 }

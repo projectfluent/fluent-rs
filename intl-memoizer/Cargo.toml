@@ -24,9 +24,28 @@ include = [
 ]
 
 [dependencies]
-unic-langid.workspace = true
+icu_locid.workspace = true
+icu_plurals.workspace = true
+icu_provider.workspace = true
 type-map = "0.5"
+hashbrown = "0.14"
 
 [dev-dependencies]
-intl_pluralrules.workspace = true
 fluent-langneg.workspace = true
+criterion.workspace = true
+icu_datetime = {version = "1.4", features = ["serde"]}
+icu_calendar = "1.4"
+icu_decimal = "1.4"
+icu_provider_blob = "1.4"
+icu_collator = "1.4"
+fixed_decimal = "0.5"
+icu_list = { version = "1.4", features = ["serde"]}
+
+[features]
+default = []
+sync = ["icu_provider/sync"]
+
+[[bench]]
+name = "single"
+harness = false
+

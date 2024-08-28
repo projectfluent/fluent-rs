@@ -11,10 +11,10 @@ use fluent_fallback::{
     types::{L10nKey, ResourceId},
     Localization, LocalizationError,
 };
+use icu_locid::{langid, LanguageIdentifier};
 use rustc_hash::FxHashSet;
 use std::cell::RefCell;
 use std::rc::Rc;
-use unic_langid::{langid, LanguageIdentifier};
 
 struct InnerLocales {
     locales: RefCell<Vec<LanguageIdentifier>>,

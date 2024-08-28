@@ -9,8 +9,8 @@
 // Lastly, we'll also create a new formatter which will be memoizable.
 //
 // The type and its options are modelled after ECMA402 Intl.DateTimeFormat.
+use icu_locid::LanguageIdentifier;
 use intl_memoizer::Memoizable;
-use unic_langid::LanguageIdentifier;
 
 use fluent_bundle::types::FluentType;
 use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
@@ -107,6 +107,8 @@ impl FluentType for DateTime {
             })
             .expect("Failed to format a date.")
     }
+
+    #[cfg(feature = "sync")]
     fn as_string_threadsafe(
         &self,
         _: &intl_memoizer::concurrent::IntlLangMemoizer,

@@ -22,7 +22,7 @@ use std::borrow::{Borrow, Cow};
 use std::fmt;
 use std::str::FromStr;
 
-use intl_pluralrules::{PluralCategory, PluralRuleType};
+use icu_plurals::{PluralCategory, PluralRuleType};
 
 use crate::memoizer::MemoizerKind;
 use crate::resolver::Scope;
@@ -41,6 +41,7 @@ pub trait FluentType: fmt::Debug + AnyEq + 'static {
     /// Convert the custom type into a string value, for instance a custom `DateTime`
     /// type could return "Oct. 27, 2022". This operation is provided the threadsafe
     /// [`IntlLangMemoizer`](intl_memoizer::concurrent::IntlLangMemoizer).
+    #[cfg(feature = "sync")]
     fn as_string_threadsafe(
         &self,
         intls: &intl_memoizer::concurrent::IntlLangMemoizer,
@@ -157,10 +158,10 @@ impl<'source> FluentValue<'source> {
     /// ```
     /// use fluent_bundle::resolver::Scope;
     /// use fluent_bundle::{types::FluentValue, FluentBundle, FluentResource};
-    /// use unic_langid::langid;
+    /// use icu_locid::langid;
     ///
-    /// let langid_ars = langid!("en");
-    /// let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_ars]);
+    /// let langid_en = langid!("en");
+    /// let bundle: FluentBundle<FluentResource> = FluentBundle::new(vec![langid_en]);
     /// let scope = Scope::new(&bundle, None, None);
     ///
     /// // Matching examples:
@@ -189,12 +190,12 @@ impl<'source> FluentValue<'source> {
             (FluentValue::Number(a), FluentValue::Number(b)) => a == b,
             (FluentValue::String(a), FluentValue::Number(b)) => {
                 let cat = match a.as_ref() {
-                    "zero" => PluralCategory::ZERO,
-                    "one" => PluralCategory::ONE,
-                    "two" => PluralCategory::TWO,
-                    "few" => PluralCategory::FEW,
-                    "many" => PluralCategory::MANY,
-                    "other" => PluralCategory::OTHER,
+                    "zero" => PluralCategory::Zero,
+                    "one" => PluralCategory::One,
+                    "two" => PluralCategory::Two,
+                    "few" => PluralCategory::Few,
+                    "many" => PluralCategory::Many,
+                    "other" => PluralCategory::Other,
                     _ => return false,
                 };
                 // This string matches a plural rule keyword. Check if the number
@@ -203,13 +204,25 @@ impl<'source> FluentValue<'source> {
                     FluentNumberType::Cardinal => PluralRuleType::CARDINAL,
                     FluentNumberType::Ordinal => PluralRuleType::ORDINAL,
                 };
-                scope
+                #[cfg(feature = "sync")]
+                let result = scope
                     .bundle
                     .intls
-                    .with_try_get_threadsafe::<PluralRules, _, _>((r#type,), |pr| {
-                        pr.0.select(b) == Ok(cat)
+                    .with_try_get_threadsafe::<PluralRules, _, _>(
+                        (PluralRuleType::Cardinal,),
+                        |pr| pr.0.category_for(b) == cat,
+                    )
+                    .unwrap();
+
+                #[cfg(not(feature = "sync"))]
+                let result = scope
+                    .bundle
+                    .intls
+                    .with_try_get::<PluralRules, _, _>((PluralRuleType::Cardinal,), |pr| {
+                        pr.0.category_for(b) == cat
                     })
-                    .unwrap()
+                    .unwrap();
+                result
             }
             _ => false,
         }

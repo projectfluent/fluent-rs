@@ -13,7 +13,7 @@
 //! are available. The list should also be sorted according to the user
 //! preference, as the order is significant for how [`Localization`](crate::Localization) performs
 //! fallbacking.
-use unic_langid::LanguageIdentifier;
+use icu_locid::LanguageIdentifier;
 
 /// A trait used to provide a selection of locales to be used by the
 /// [`Localization`](crate::Localization) instance for runtime
@@ -23,7 +23,7 @@ use unic_langid::LanguageIdentifier;
 /// ```
 /// use fluent_fallback::{Localization, env::LocalesProvider};
 /// use fluent_resmgr::ResourceManager;
-/// use unic_langid::LanguageIdentifier;
+/// use icu_locid::LanguageIdentifier;
 /// use std::{
 ///     rc::Rc,
 ///     cell::RefCell

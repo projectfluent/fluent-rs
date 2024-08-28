@@ -26,9 +26,11 @@ include = [
 [dependencies]
 fluent-langneg.workspace = true
 fluent-syntax.workspace = true
-intl_pluralrules.workspace = true
 rustc-hash.workspace = true
-unic-langid.workspace = true
+icu_locid.workspace = true
+icu_plurals.workspace = true
+icu_provider.workspace = true
+fixed_decimal = { version = "0.5.5", features = ["ryu"] }
 intl-memoizer = { version = "0.5.2", path = "../intl-memoizer" }
 self_cell = "1.0"
 smallvec = "1.13"
@@ -37,12 +39,12 @@ smallvec = "1.13"
 criterion.workspace = true
 iai.workspace = true
 serde = { workspace = true, features = ["derive"] }
-unic-langid = { workspace = true, features = ["macros"] }
 rand = "0.8"
 serde_yaml = "0.9"
 
 [features]
 default = []
+sync = ["intl-memoizer/sync", "icu_provider/sync"]
 all-benchmarks = []
 
 [[bench]]

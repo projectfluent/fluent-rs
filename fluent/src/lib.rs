@@ -20,7 +20,7 @@
 //! use fluent::{FluentBundle, FluentValue, FluentResource, FluentArgs};
 //!
 //! // Used to provide a locale for the bundle.
-//! use unic_langid::LanguageIdentifier;
+//! use icu_locid::LanguageIdentifier;
 //!
 //! let ftl_string = String::from("
 //! hello-world = Hello, world!
