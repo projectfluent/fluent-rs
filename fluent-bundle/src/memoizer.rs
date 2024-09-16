@@ -18,7 +18,12 @@ pub trait MemoizerKind: 'static {
     ///
     /// `U` - The callback that accepts the instance of the intl formatter, and generates
     ///       some kind of results `R`.
-    fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, callback: U) -> Result<R, I::Error>
+    fn with_try_get_threadsafe<I, R, U>(
+        &self,
+        args: I::Args,
+        data_provider: &I::DataProvider,
+        callback: U,
+    ) -> Result<R, I::Error>
     where
         Self: Sized,
         I: Memoizable + Send + Sync + 'static,

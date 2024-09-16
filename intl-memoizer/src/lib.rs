@@ -22,9 +22,16 @@ pub trait Memoizable {
     /// Type of any errors that can occur during the construction process.
     type Error;
 
+    /// Type of shared data provider
+    type DataProvider;
+
     /// Construct a formatter. This maps the [`Self::Args`] type to the actual constructor
     /// for an intl formatter.
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error>
+    fn construct(
+        lang: LanguageIdentifier,
+        args: Self::Args,
+        data_provider: &Self::DataProvider,
+    ) -> Result<Self, Self::Error>
     where
         Self: std::marker::Sized;
 }
@@ -92,9 +99,12 @@ pub trait Memoizable {
 ///     /// If the constructor is fallible, than errors can be described here.
 ///     type Error = ();
 ///
+///     /// For accessing shared state to construct
+///     type DataProvider = ();
+///
 ///     /// This function wires together the `Args` and `Error` type to construct
 ///     /// the intl API. In our example, there is
-///     fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+///     fn construct(lang: LanguageIdentifier, args: Self::Args, data_provider: &Self::DataProvider) -> Result<Self, Self::Error> {
 ///         // Keep track for example purposes that this was constructed.
 ///         increment_constructs();
 ///
@@ -121,13 +131,13 @@ pub trait Memoizable {
 /// // more details.
 ///
 /// let result1 = memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message1)
 ///     });
 ///
 /// // The memoized instance of `ExampleFormatter` will be re-used.
 /// let result2 = memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message2)
 ///     });
 ///
@@ -149,13 +159,13 @@ pub trait Memoizable {
 ///
 /// // Since the constructor args changed, `ExampleFormatter` will be re-constructed.
 /// let result1 = memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message1)
 ///     });
 ///
 /// // The memoized instance of `ExampleFormatter` will be re-used.
 /// let result2 = memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message2)
 ///     });
 ///
@@ -205,7 +215,12 @@ impl IntlLangMemoizer {
     ///
     /// U - The callback function. Takes an instance of `I` as the first parameter and
     ///     returns the R value.
-    pub fn with_try_get<I, R, U>(&self, construct_args: I::Args, callback: U) -> Result<R, I::Error>
+    pub fn with_try_get<I, R, U>(
+        &self,
+        construct_args: I::Args,
+        data_provider: &I::DataProvider,
+        callback: U,
+    ) -> Result<R, I::Error>
     where
         Self: Sized,
         I: Memoizable + 'static,
@@ -222,7 +237,7 @@ impl IntlLangMemoizer {
         let e = match cache.entry(construct_args.clone()) {
             Entry::Occupied(entry) => entry.into_mut(),
             Entry::Vacant(entry) => {
-                let val = I::construct(self.lang.clone(), construct_args)?;
+                let val = I::construct(self.lang.clone(), construct_args, data_provider)?;
                 entry.insert(val)
             }
         };
@@ -269,7 +284,8 @@ impl IntlLangMemoizer {
 /// # impl Memoizable for ExampleFormatter {
 /// #     type Args = (String,);
 /// #     type Error = ();
-/// #     fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+/// #     type DataProvider = ();
+/// #     fn construct(lang: LanguageIdentifier, args: Self::Args, data_provider: &Self::DataProvider) -> Result<Self, Self::Error> {
 /// #         Ok(Self {
 /// #             lang,
 /// #             prefix: args.0,
@@ -295,7 +311,7 @@ impl IntlLangMemoizer {
 /// //
 /// // See `IntlLangMemoizer` for more details on this step.
 /// let en_us_result = en_us_memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message)
 ///     });
 ///
@@ -312,7 +328,7 @@ impl IntlLangMemoizer {
 /// let de_de_memoizer: Rc<IntlLangMemoizer> = memoizer.get_for_lang(de_de);
 ///
 /// let de_de_result = de_de_memoizer
-///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), |intl_example| {
+///     .with_try_get::<ExampleFormatter, _, _>(construct_args.clone(), &(), |intl_example| {
 ///         intl_example.format(message)
 ///     });
 ///
@@ -380,7 +396,12 @@ mod tests {
     impl Memoizable for PluralRules {
         type Args = (PluralRuleType,);
         type Error = &'static str;
-        fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+        type DataProvider = ();
+        fn construct(
+            lang: LanguageIdentifier,
+            args: Self::Args,
+            _: &Self::DataProvider,
+        ) -> Result<Self, Self::Error> {
             Self::new(lang, args.0)
         }
     }
@@ -394,7 +415,9 @@ mod tests {
             let en_memoizer = memoizer.get_for_lang(lang.clone());
 
             let result = en_memoizer
-                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), &(), |cb| {
+                    cb.0.select(5)
+                })
                 .unwrap();
             assert_eq!(result, Ok(PluralCategory::OTHER));
         }
@@ -403,7 +426,9 @@ mod tests {
             let en_memoizer = memoizer.get_for_lang(lang);
 
             let result = en_memoizer
-                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| cb.0.select(5))
+                .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), &(), |cb| {
+                    cb.0.select(5)
+                })
                 .unwrap();
             assert_eq!(result, Ok(PluralCategory::OTHER));
         }
@@ -420,7 +445,7 @@ mod tests {
             let memoizer = Arc::clone(&memoizer);
             threads.push(thread::spawn(move || {
                 memoizer
-                    .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), |cb| {
+                    .with_try_get::<PluralRules, _, _>((PluralRuleType::CARDINAL,), &(), |cb| {
                         cb.0.select(5)
                     })
                     .expect("Failed to get a PluralRules result.")

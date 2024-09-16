@@ -24,8 +24,13 @@ include = [
 ]
 
 [dependencies]
+fixed_decimal = { workspace = true, features = ["ryu"] }
 fluent-langneg.workspace = true
 fluent-syntax.workspace = true
+icu_decimal.workspace = true
+icu_locid.workspace = true
+icu_provider = { workspace = true, features = ["sync"] }
+icu.workspace = true
 intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
