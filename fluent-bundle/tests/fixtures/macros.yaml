@@ -313,6 +313,7 @@ suites:
                     *[traditional] neuter
                       [chicago] feminine
                   }
+                  .floats = true
               ref-attr = {-ship.gender ->
                 *[masculine] He
                   [feminine] She
@@ -332,6 +333,10 @@ suites:
                 *[masculine] He
                   [feminine] She
                   [neuter] It
+              }
+              more-than-one-attr = {-ship.floats ->
+                 *[false] is sinking
+                  [true] is floating around happily
               }
         tests:
           -
@@ -390,3 +395,9 @@ suites:
                 args:
                   style: chicago
                 value: It
+          -
+            name: For term with multiple attributes
+            asserts:
+              -
+                id: more-than-one-attr
+                value: is floating around happily
