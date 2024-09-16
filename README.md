@@ -65,7 +65,7 @@ A collection of mock scenarios for testing fluent-rs components.
 
 ### intl-memoizer
 
-[![crates.io](https://img.shields.io/crates/v/fluent_testing.svg)](https://crates.io/crates/fluent_testing)
+[![crates.io](https://img.shields.io/crates/v/intl_memoizer.svg)](https://crates.io/crates/intl_memoizer)
 [![docs.rs](https://img.shields.io/docsrs/intl-memoizer)](https://docs.rs/intl-memoizer)
 
 A memoizer specifically tailored for storing lazy-initialized intl formatters.
