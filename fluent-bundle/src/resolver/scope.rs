@@ -2,7 +2,7 @@ use crate::bundle::FluentBundle;
 use crate::memoizer::MemoizerKind;
 use crate::resolver::{ResolveValue, ResolverError, WriteValue};
 use crate::types::FluentValue;
-use crate::{FluentArgs, FluentError, FluentResource};
+use crate::{FluentArgs, FluentError, FluentFunctionScope, FluentMessage, FluentResource};
 use fluent_syntax::ast;
 use std::borrow::Borrow;
 use std::fmt;
@@ -136,5 +136,32 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         } else {
             (Vec::new(), FluentArgs::new())
         }
+    }
+}
+
+impl<'bundle, 'ast, 'args, 'errors, R, M> FluentFunctionScope<'bundle>
+    for Scope<'bundle, 'ast, 'args, 'errors, R, M>
+where
+    R: Borrow<FluentResource>,
+    M: MemoizerKind,
+{
+    fn get_message(&self, id: &str) -> Option<FluentMessage<'bundle>> {
+        self.bundle.get_message(id)
+    }
+
+    fn format_message(
+        &mut self,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        mut args: Option<FluentArgs<'bundle>>,
+    ) -> FluentValue<'bundle> {
+        // Setup scope
+        std::mem::swap(&mut self.local_args, &mut args);
+
+        let value = pattern.resolve(self);
+
+        // Restore scope
+        std::mem::swap(&mut self.local_args, &mut args);
+
+        value
     }
 }
