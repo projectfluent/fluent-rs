@@ -9,9 +9,6 @@ members = [
   "fluent-testing",
   "fluent",
   "intl-memoizer",
-]
-
-exclude = [
   "fluent-cli",
 ]
 
