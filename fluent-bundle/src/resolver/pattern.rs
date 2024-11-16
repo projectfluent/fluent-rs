@@ -32,14 +32,14 @@ impl<'bundle> WriteValue<'bundle> for ast::Pattern<&'bundle str> {
             }
 
             match elem {
-                ast::PatternElement::TextElement { value } => {
+                ast::PatternElement::TextElement { value, .. } => {
                     if let Some(ref transform) = scope.bundle.transform {
                         w.write_str(&transform(value))?;
                     } else {
                         w.write_str(value)?;
                     }
                 }
-                ast::PatternElement::Placeable { ref expression } => {
+                ast::PatternElement::Placeable { ref expression, .. } => {
                     scope.placeables += 1;
                     if scope.placeables > MAX_PLACEABLES {
                         scope.dirty = true;
@@ -51,13 +51,16 @@ impl<'bundle> WriteValue<'bundle> for ast::Pattern<&'bundle str> {
                         && len > 1
                         && !matches!(
                             expression,
-                            ast::Expression::Inline(ast::InlineExpression::MessageReference { .. },)
-                                | ast::Expression::Inline(
-                                    ast::InlineExpression::TermReference { .. },
-                                )
-                                | ast::Expression::Inline(
-                                    ast::InlineExpression::StringLiteral { .. },
-                                )
+                            ast::Expression::Inline(
+                                ast::InlineExpression::MessageReference { .. },
+                                ..
+                            ) | ast::Expression::Inline(
+                                ast::InlineExpression::TermReference { .. },
+                                ..
+                            ) | ast::Expression::Inline(
+                                ast::InlineExpression::StringLiteral { .. },
+                                ..
+                            )
                         );
                     if needs_isolation {
                         w.write_char('\u{2068}')?;
@@ -92,7 +95,7 @@ impl<'bundle> ResolveValue<'bundle> for ast::Pattern<&'bundle str> {
         let len = self.elements.len();
 
         if len == 1 {
-            if let ast::PatternElement::TextElement { value } = self.elements[0] {
+            if let ast::PatternElement::TextElement { value, .. } = self.elements[0] {
                 return scope
                     .bundle
                     .transform

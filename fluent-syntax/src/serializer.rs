@@ -87,7 +87,7 @@ impl Serializer {
                 Entry::Comment(comment) => self.serialize_free_comment(comment, "#"),
                 Entry::GroupComment(comment) => self.serialize_free_comment(comment, "##"),
                 Entry::ResourceComment(comment) => self.serialize_free_comment(comment, "###"),
-                Entry::Junk { content } => {
+                Entry::Junk { content, .. } => {
                     if self.options.with_junk {
                         self.serialize_junk(content.as_ref());
                     }
@@ -203,9 +203,9 @@ impl Serializer {
 
     fn serialize_element<'s, S: Slice<'s>>(&mut self, elem: &PatternElement<S>) {
         match elem {
-            PatternElement::TextElement { value } => self.writer.write_literal(value.as_ref()),
-            PatternElement::Placeable { expression } => match expression {
-                Expression::Inline(InlineExpression::Placeable { expression }) => {
+            PatternElement::TextElement { value, .. } => self.writer.write_literal(value.as_ref()),
+            PatternElement::Placeable { expression, .. } => match expression {
+                Expression::Inline(InlineExpression::Placeable { expression, .. }, ..) => {
                     // A placeable inside a placeable is a special case because we
                     // don't want the braces to look silly (e.g. "{ { Foo() } }").
                     self.writer.write_literal("{{ ");
@@ -219,7 +219,7 @@ impl Serializer {
                     self.serialize_expression(expression);
                     self.writer.write_literal("}");
                 }
-                Expression::Inline(_) => {
+                Expression::Inline( .. ) => {
                     self.writer.write_literal("{ ");
                     self.serialize_expression(expression);
                     self.writer.write_literal(" }");
@@ -230,8 +230,10 @@ impl Serializer {
 
     fn serialize_expression<'s, S: Slice<'s>>(&mut self, expr: &Expression<S>) {
         match expr {
-            Expression::Inline(inline) => self.serialize_inline_expression(inline),
-            Expression::Select { selector, variants } => {
+            Expression::Inline(inline, ..) => self.serialize_inline_expression(inline),
+            Expression::Select {
+                selector, variants, ..
+            } => {
                 self.serialize_select_expression(selector, variants);
             }
         }
@@ -239,23 +241,26 @@ impl Serializer {
 
     fn serialize_inline_expression<'s, S: Slice<'s>>(&mut self, expr: &InlineExpression<S>) {
         match expr {
-            InlineExpression::StringLiteral { value } => {
+            InlineExpression::StringLiteral { value, .. } => {
                 self.writer.write_literal("\"");
                 self.writer.write_literal(value.as_ref());
                 self.writer.write_literal("\"");
             }
-            InlineExpression::NumberLiteral { value } => self.writer.write_literal(value.as_ref()),
+            InlineExpression::NumberLiteral { value, .. } => {
+                self.writer.write_literal(value.as_ref())
+            }
             InlineExpression::VariableReference {
-                id: Identifier { name: value },
+                id: Identifier { name: value, .. },
+                ..
             } => {
                 self.writer.write_literal("$");
                 self.writer.write_literal(value.as_ref());
             }
-            InlineExpression::FunctionReference { id, arguments } => {
+            InlineExpression::FunctionReference { id, arguments, .. } => {
                 self.writer.write_literal(id.name.as_ref());
                 self.serialize_call_arguments(arguments);
             }
-            InlineExpression::MessageReference { id, attribute } => {
+            InlineExpression::MessageReference { id, attribute, .. } => {
                 self.writer.write_literal(id.name.as_ref());
 
                 if let Some(attr) = attribute.as_ref() {
@@ -267,6 +272,7 @@ impl Serializer {
                 id,
                 attribute,
                 arguments,
+                ..
             } => {
                 self.writer.write_literal("-");
                 self.writer.write_literal(id.name.as_ref());
@@ -279,7 +285,7 @@ impl Serializer {
                     self.serialize_call_arguments(args);
                 }
             }
-            InlineExpression::Placeable { expression } => {
+            InlineExpression::Placeable { expression, .. } => {
                 self.writer.write_literal("{");
                 self.serialize_expression(expression);
                 self.writer.write_literal("}");
@@ -361,13 +367,13 @@ impl<'s, S: Slice<'s>> Pattern<S> {
 
     fn is_multiline(&self) -> bool {
         self.elements.iter().any(|elem| match elem {
-            PatternElement::TextElement { value } => value.as_ref().contains('\n'),
-            PatternElement::Placeable { expression } => is_select_expr(expression),
+            PatternElement::TextElement { value, .. } => value.as_ref().contains('\n'),
+            PatternElement::Placeable { expression, .. } => is_select_expr(expression),
         })
     }
 
     fn has_leading_text_dot(&self) -> bool {
-        if let Some(PatternElement::TextElement { value }) = self.elements.first() {
+        if let Some(PatternElement::TextElement { value, .. }) = self.elements.first() {
             value.as_ref().starts_with('.')
         } else {
             false
@@ -378,10 +384,10 @@ impl<'s, S: Slice<'s>> Pattern<S> {
 fn is_select_expr<'s, S: Slice<'s>>(expr: &Expression<S>) -> bool {
     match expr {
         Expression::Select { .. } => true,
-        Expression::Inline(InlineExpression::Placeable { expression }) => {
+        Expression::Inline(InlineExpression::Placeable { expression, .. }, ..) => {
             is_select_expr(expression)
         }
-        Expression::Inline(_) => false,
+        Expression::Inline(..) => false,
     }
 }
 
@@ -478,12 +484,24 @@ mod test {
     macro_rules! text_message {
         ($name:expr, $value:expr) => {
             Entry::Message(Message {
-                id: Identifier { name: $name },
+                id: Identifier {
+                    name: $name,
+                    #[cfg(feature = "spans")]
+                    span: Span::new(0..0),
+                },
                 value: Some(Pattern {
-                    elements: vec![PatternElement::TextElement { value: $value }],
+                    elements: vec![PatternElement::TextElement {
+                        value: $value,
+                        #[cfg(feature = "spans")]
+                        span: Span::new(0..0),
+                    }],
+                    #[cfg(feature = "spans")]
+                    span: Span::new(0..0),
                 }),
                 attributes: vec![],
                 comment: None,
+                #[cfg(feature = "spans")]
+                span: Span::new(0..0),
             })
         };
     }
@@ -506,14 +524,14 @@ mod test {
     impl<'a> PatternElement<&'a str> {
         fn as_text(&mut self) -> &mut &'a str {
             match self {
-                Self::TextElement { value } => value,
+                Self::TextElement { value, .. } => value,
                 _ => panic!("Expected TextElement"),
             }
         }
 
         fn as_expression(&mut self) -> &mut Expression<&'a str> {
             match self {
-                Self::Placeable { expression } => expression,
+                Self::Placeable { expression, .. } => expression,
                 _ => panic!("Expected Placeable"),
             }
         }
@@ -528,7 +546,7 @@ mod test {
         }
         fn as_inline_variable_id(&mut self) -> &mut Identifier<&'a str> {
             match self {
-                Self::Inline(InlineExpression::VariableReference { id }) => id,
+                Self::Inline(InlineExpression::VariableReference { id, .. }, ..) => id,
                 _ => panic!("Expected Inline"),
             }
         }
@@ -563,14 +581,34 @@ mod test {
             value: Pattern {
                 elements: vec![
                     PatternElement::Placeable {
-                        expression: Expression::Inline(InlineExpression::VariableReference {
-                            id: Identifier { name: "num" },
-                        }),
+                        expression: Expression::Inline(
+                            InlineExpression::VariableReference {
+                                id: Identifier {
+                                    name: "num",
+                                    #[cfg(feature = "spans")]
+                                    span: Span::new(0..0),
+                                },
+                                #[cfg(feature = "spans")]
+                                span: Span::new(0..0),
+                            },
+                            #[cfg(feature = "spans")]
+                            Span::new(0..0),
+                        ),
+                        #[cfg(feature = "spans")]
+                        span: Span::new(0..0),
                     },
-                    PatternElement::TextElement { value: " bar" },
+                    PatternElement::TextElement {
+                        value: " bar",
+                        #[cfg(feature = "spans")]
+                        span: Span::new(0..0),
+                    },
                 ],
+                #[cfg(feature = "spans")]
+                span: Span::new(0..0),
             },
             default: false,
+            #[cfg(feature = "spans")]
+            span: Span::new(0..0),
         };
         ast.body[0].as_message().as_pattern().elements[0]
             .as_expression()
@@ -630,6 +668,8 @@ mod test {
         let mut ast = parse("foo = bar\n").expect("failed to parse ftl resource");
         ast.body[0].as_message().comment.replace(Comment {
             content: vec!["great message!"],
+            #[cfg(feature = "spans")]
+            span: Span::new(0..0),
         });
         assert_eq!("# great message!\nfoo = bar\n", serialize(&ast));
     }
