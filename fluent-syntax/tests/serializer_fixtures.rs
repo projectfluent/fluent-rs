@@ -30,6 +30,8 @@ fn clone_without_junk<'a>(original: &Resource<&'a str>) -> Resource<&'a str> {
             .filter(|entry| !matches!(entry, Entry::Junk { .. }))
             .cloned()
             .collect(),
+        #[cfg(feature = "spans")]
+        span: original.span,
     }
 }
 

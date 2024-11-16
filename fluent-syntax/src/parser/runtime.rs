@@ -34,16 +34,31 @@ where
                     err.slice = Some(entry_start..self.ptr);
                     errors.push(err);
                     let content = self.source.slice(entry_start..self.ptr);
-                    body.push(ast::Entry::Junk { content });
+                    body.push(ast::Entry::Junk {
+                        content,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span::new(entry_start..self.ptr),
+                    });
                 }
             }
             self.skip_blank_block();
         }
 
         if errors.is_empty() {
-            Ok(ast::Resource { body })
+            Ok(ast::Resource {
+                body,
+                #[cfg(feature = "spans")]
+                span: ast::Span::new(0..self.length),
+            })
         } else {
-            Err((ast::Resource { body }, errors))
+            Err((
+                ast::Resource {
+                    body,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span::new(0..self.length),
+                },
+                errors,
+            ))
         }
     }
 

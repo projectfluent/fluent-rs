@@ -3,7 +3,7 @@ use super::{
     errors::{ErrorKind, ParserError},
     slice::Slice,
 };
-use crate::ast;
+use crate::ast::{self, Span};
 
 pub type Result<T> = std::result::Result<T, ParserError>;
 
@@ -67,7 +67,11 @@ where
                     err.slice = Some(entry_start..self.ptr);
                     errors.push(err);
                     let content = self.source.slice(entry_start..self.ptr);
-                    body.push(ast::Entry::Junk { content });
+                    body.push(ast::Entry::Junk {
+                        content,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span::new(entry_start..self.ptr),
+                    });
                 }
             }
             last_blank_count = self.skip_blank_block();
@@ -77,9 +81,20 @@ where
             body.push(ast::Entry::Comment(last_comment));
         }
         if errors.is_empty() {
-            Ok(ast::Resource { body })
+            Ok(ast::Resource {
+                body,
+                #[cfg(feature = "spans")]
+                span: ast::Span::new(0..self.length),
+            })
         } else {
-            Err((ast::Resource { body }, errors))
+            Err((
+                ast::Resource {
+                    body,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span::new(0..self.length),
+                },
+                errors,
+            ))
         }
     }
 
@@ -123,6 +138,8 @@ where
             value: pattern,
             attributes,
             comment: None,
+            #[cfg(feature = "spans")]
+            span: ast::Span::new(entry_start..self.ptr),
         })
     }
 
@@ -145,6 +162,8 @@ where
                 value,
                 attributes,
                 comment: None,
+                #[cfg(feature = "spans")]
+                span: ast::Span::new(entry_start..self.ptr),
             })
         } else {
             error!(
@@ -184,12 +203,19 @@ where
         let pattern = self.get_pattern()?;
 
         match pattern {
-            Some(pattern) => Ok(ast::Attribute { id, value: pattern }),
+            Some(pattern) => Ok(ast::Attribute {
+                id,
+                value: pattern,
+                #[cfg(feature = "spans")]
+                span: ast::Span::new(self.ptr - 1..self.ptr),
+            }),
             None => error!(ErrorKind::MissingValue, self.ptr),
         }
     }
 
     pub(super) fn get_identifier_unchecked(&mut self) -> ast::Identifier<S> {
+        #[cfg(feature = "spans")]
+        let start = self.ptr - 1;
         let mut ptr = self.ptr;
 
         while matches!(get_byte!(self, ptr), Some(b) if b.is_ascii_alphanumeric() || *b == b'-' || *b == b'_')
@@ -200,7 +226,11 @@ where
         let name = self.source.slice(self.ptr - 1..ptr);
         self.ptr = ptr;
 
-        ast::Identifier { name }
+        ast::Identifier {
+            name,
+            #[cfg(feature = "spans")]
+            span: ast::Span::new(start..self.ptr),
+        }
     }
 
     pub(super) fn get_identifier(&mut self) -> Result<ast::Identifier<S>> {
@@ -229,12 +259,22 @@ where
         self.skip_blank();
 
         let key = if self.is_number_start() {
+            #[cfg(feature = "spans")]
+            let start = self.ptr;
+
             ast::VariantKey::NumberLiteral {
                 value: self.get_number_literal()?,
+                #[cfg(feature = "spans")]
+                span: Span(start..self.ptr),
             }
         } else {
+            #[cfg(feature = "spans")]
+            let start = self.ptr;
+
             ast::VariantKey::Identifier {
                 name: self.get_identifier()?.name,
+                #[cfg(feature = "spans")]
+                span: Span(start..self.ptr),
             }
         };
 
@@ -259,6 +299,9 @@ where
                 }
             }
 
+            #[cfg(feature = "spans")]
+            let start = self.ptr;
+
             if !self.take_byte_if(b'[') {
                 break;
             }
@@ -272,6 +315,8 @@ where
                     key,
                     value,
                     default,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span::new((if default { start - 1 } else { start })..self.ptr),
                 });
                 self.skip_blank();
             } else {
@@ -293,9 +338,10 @@ where
         self.expect_byte(b'}')?;
 
         let invalid_expression_found = match &exp {
-            ast::Expression::Inline(ast::InlineExpression::TermReference {
-                ref attribute, ..
-            }) => attribute.is_some(),
+            ast::Expression::Inline(
+                ast::InlineExpression::TermReference { ref attribute, .. },
+                ..,
+            ) => attribute.is_some(),
             _ => false,
         };
         if invalid_expression_found {
