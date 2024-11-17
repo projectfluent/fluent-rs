@@ -487,21 +487,21 @@ mod test {
                 id: Identifier {
                     name: $name,
                     #[cfg(feature = "spans")]
-                    span: Span::new(0..0),
+                    span: Span::default(),
                 },
                 value: Some(Pattern {
                     elements: vec![PatternElement::TextElement {
                         value: $value,
                         #[cfg(feature = "spans")]
-                        span: Span::new(0..0),
+                        span: Span::default(),
                     }],
                     #[cfg(feature = "spans")]
-                    span: Span::new(0..0),
+                    span: Span::default(),
                 }),
                 attributes: vec![],
                 comment: None,
                 #[cfg(feature = "spans")]
-                span: Span::new(0..0),
+                span: Span::default(),
             })
         };
     }
@@ -586,29 +586,29 @@ mod test {
                                 id: Identifier {
                                     name: "num",
                                     #[cfg(feature = "spans")]
-                                    span: Span::new(0..0),
+                                    span: Span::default(),
                                 },
                                 #[cfg(feature = "spans")]
-                                span: Span::new(0..0),
+                                span: Span::default(),
                             },
                             #[cfg(feature = "spans")]
-                            Span::new(0..0),
+                            Span::default(),
                         ),
                         #[cfg(feature = "spans")]
-                        span: Span::new(0..0),
+                        span: Span::default(),
                     },
                     PatternElement::TextElement {
                         value: " bar",
                         #[cfg(feature = "spans")]
-                        span: Span::new(0..0),
+                        span: Span::default(),
                     },
                 ],
                 #[cfg(feature = "spans")]
-                span: Span::new(0..0),
+                span: Span::default(),
             },
             default: false,
             #[cfg(feature = "spans")]
-            span: Span::new(0..0),
+            span: Span::default(),
         };
         ast.body[0].as_message().as_pattern().elements[0]
             .as_expression()
@@ -669,7 +669,7 @@ mod test {
         ast.body[0].as_message().comment.replace(Comment {
             content: vec!["great message!"],
             #[cfg(feature = "spans")]
-            span: Span::new(0..0),
+            span: Span::default(),
         });
         assert_eq!("# great message!\nfoo = bar\n", serialize(&ast));
     }
