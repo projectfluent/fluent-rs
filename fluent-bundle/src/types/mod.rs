@@ -84,7 +84,7 @@ pub enum FluentValue<'source> {
     Error,
 }
 
-impl<'s> PartialEq for FluentValue<'s> {
+impl PartialEq for FluentValue<'_> {
     fn eq(&self, other: &Self) -> bool {
         match (self, other) {
             (FluentValue::String(s), FluentValue::String(s2)) => s == s2,
@@ -95,7 +95,7 @@ impl<'s> PartialEq for FluentValue<'s> {
     }
 }
 
-impl<'s> Clone for FluentValue<'s> {
+impl Clone for FluentValue<'_> {
     fn clone(&self) -> Self {
         match self {
             FluentValue::String(s) => FluentValue::String(s.clone()),
@@ -291,7 +291,7 @@ impl<'source> FluentValue<'source> {
     }
 }
 
-impl<'source> From<String> for FluentValue<'source> {
+impl From<String> for FluentValue<'_> {
     fn from(s: String) -> Self {
         FluentValue::String(s.into())
     }

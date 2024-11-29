@@ -175,7 +175,7 @@ impl FromStr for FluentNumber {
     }
 }
 
-impl<'l> From<FluentNumber> for FluentValue<'l> {
+impl From<FluentNumber> for FluentValue<'_> {
     fn from(input: FluentNumber) -> Self {
         FluentValue::Number(input)
     }
