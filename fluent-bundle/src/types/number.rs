@@ -150,11 +150,7 @@ impl FluentNumber {
         if let Some(minfd) = self.options.minimum_fraction_digits {
             if let Some(pos) = val.find('.') {
                 let frac_num = val.len() - pos - 1;
-                let missing = if frac_num > minfd {
-                    0
-                } else {
-                    minfd - frac_num
-                };
+                let missing = minfd.saturating_sub(frac_num);
                 val = format!("{}{}", val, "0".repeat(missing));
             } else {
                 val = format!("{}.{}", val, "0".repeat(minfd));

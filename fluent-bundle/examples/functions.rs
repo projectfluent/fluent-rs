@@ -35,12 +35,12 @@ fn main() {
     // Test for a function that accepts named arguments
     bundle
         .add_function("BASE_OWNERSHIP", |_args, named_args| {
-            return match named_args.get("ownership") {
+            match named_args.get("ownership") {
                 Some(FluentValue::String(ref string)) => {
                     format!("All your base belong to {}", string).into()
                 }
                 _ => FluentValue::Error,
-            };
+            }
         })
         .expect("Failed to add a function to the bundle.");
 
