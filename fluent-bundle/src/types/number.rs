@@ -252,7 +252,8 @@ from_num!(f32 f64);
 
 #[cfg(test)]
 mod tests {
-    use crate::types::FluentValue;
+    use crate::types::{FluentNumber, FluentNumberOptions, FluentValue};
+    use rstest::*;
 
     #[test]
     fn value_from_copy_ref() {
@@ -260,5 +261,96 @@ mod tests {
         let y = &x;
         let z: FluentValue = y.into();
         assert_eq!(z, FluentValue::try_number("1"));
+    }
+
+    #[rstest]
+    #[case(10.12, 1, "10.12")]
+    #[case(10.0, 3, "10.000")]
+    #[case(10.12, 5, "10.12000")]
+    fn minimum_fraction_digits(#[case] input: f64, #[case] minfd: usize, #[case] expected: &str) {
+        let value = FluentNumber::new(
+            input,
+            FluentNumberOptions {
+                minimum_fraction_digits: Some(minfd),
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(value.as_string(), expected);
+    }
+
+    #[rstest]
+    #[case(10.12, 0, "10")]
+    #[case(10.0, 3, "10.0")]
+    #[case(10.123456, 3, "10.123")]
+    fn maximum_fraction_digits(#[case] input: f64, #[case] maxfd: usize, #[case] expected: &str) {
+        let value = FluentNumber::new(
+            input,
+            FluentNumberOptions {
+                maximum_fraction_digits: Some(maxfd),
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(value.as_string(), expected);
+    }
+
+    #[rstest]
+    #[case(10.12, 1, "10.12")]
+    #[case(10.0, 3, "010.0")]
+    #[case(10.12, 5, "00010.12")]
+    fn minimum_integer_digits(#[case] input: f64, #[case] minid: usize, #[case] expected: &str) {
+        let value = FluentNumber::new(
+            input,
+            FluentNumberOptions {
+                minimum_integer_digits: Some(minid),
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(value.as_string(), expected);
+    }
+
+    #[rstest]
+    #[case(10.1, 2, 5, "10.10")]
+    #[case(10.1, 2, 1, "10.1")]
+    #[case(10.12345, 2, 3, "10.123")]
+    fn multiple_options_minfd_maxfd(
+        #[case] input: f64,
+        #[case] minfd: usize,
+        #[case] maxfd: usize,
+        #[case] expected: &str,
+    ) {
+        let value = FluentNumber::new(
+            input,
+            FluentNumberOptions {
+                minimum_fraction_digits: Some(minfd),
+                maximum_fraction_digits: Some(maxfd),
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(value.as_string(), expected);
+    }
+
+    #[rstest]
+    #[case(10.1, 2, 1, "10.10")]
+    #[case(10.1, 2, 3, "010.10")]
+    fn multiple_options_minfd_minid(
+        #[case] input: f64,
+        #[case] minfd: usize,
+        #[case] minid: usize,
+        #[case] expected: &str,
+    ) {
+        let value = FluentNumber::new(
+            input,
+            FluentNumberOptions {
+                minimum_fraction_digits: Some(minfd),
+                maximum_fraction_digits: Some(minid),
+                ..Default::default()
+            },
+        );
+
+        assert_eq!(value.as_string(), expected);
     }
 }
