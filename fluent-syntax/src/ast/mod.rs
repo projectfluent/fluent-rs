@@ -113,20 +113,12 @@ use std::ops::Range;
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Resource<S> {
     pub body: Vec<Entry<S>>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Resource<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.body == other.body
-    }
 }
 
 /// A top-level node representing an entry of a [`Resource`].
@@ -205,8 +197,7 @@ impl<S: PartialEq> PartialEq for Resource<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum Entry<S> {
@@ -220,28 +211,6 @@ pub enum Entry<S> {
         #[cfg(feature = "spans")]
         span: Span,
     },
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Entry<S> {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (Self::Message(l0), Self::Message(r0)) => l0 == r0,
-            (Self::Term(l0), Self::Term(r0)) => l0 == r0,
-            (Self::Comment(l0), Self::Comment(r0)) => l0 == r0,
-            (Self::GroupComment(l0), Self::GroupComment(r0)) => l0 == r0,
-            (Self::ResourceComment(l0), Self::ResourceComment(r0)) => l0 == r0,
-            (
-                Self::Junk {
-                    content: l_content, ..
-                },
-                Self::Junk {
-                    content: r_content, ..
-                },
-            ) => l_content == r_content,
-            _ => false,
-        }
-    }
 }
 
 /// Message node represents the most common [`Entry`] in an FTL [`Resource`].
@@ -292,7 +261,7 @@ impl<S: PartialEq> PartialEq for Entry<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Message<S> {
     pub id: Identifier<S>,
@@ -301,15 +270,6 @@ pub struct Message<S> {
     pub comment: Option<Comment<S>>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-impl<S: PartialEq> PartialEq for Message<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-            && self.value == other.value
-            && self.attributes == other.attributes
-            && self.comment == other.comment
-    }
 }
 
 /// A Fluent [`Term`].
@@ -357,8 +317,7 @@ impl<S: PartialEq> PartialEq for Message<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Term<S> {
     pub id: Identifier<S>,
@@ -367,16 +326,6 @@ pub struct Term<S> {
     pub comment: Option<Comment<S>>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Term<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id
-            && self.value == other.value
-            && self.attributes == other.attributes
-            && self.comment == other.comment
-    }
 }
 
 /// Pattern contains a value of a [`Message`], [`Term`] or an [`Attribute`].
@@ -450,18 +399,12 @@ impl<S: PartialEq> PartialEq for Term<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Pattern<S> {
     pub elements: Vec<PatternElement<S>>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-impl<S: PartialEq> PartialEq for Pattern<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.elements == other.elements
-    }
 }
 
 /// `PatternElement` is an element of a [`Pattern`].
@@ -535,7 +478,7 @@ impl<S: PartialEq> PartialEq for Pattern<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum PatternElement<S> {
@@ -549,28 +492,6 @@ pub enum PatternElement<S> {
         #[cfg(feature = "spans")]
         span: Span,
     },
-}
-
-impl<S: PartialEq> PartialEq for PatternElement<S> {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (
-                Self::TextElement { value: l_value, .. },
-                Self::TextElement { value: r_value, .. },
-            ) => l_value == r_value,
-            (
-                Self::Placeable {
-                    expression: l_expression,
-                    ..
-                },
-                Self::Placeable {
-                    expression: r_expression,
-                    ..
-                },
-            ) => l_expression == r_expression,
-            _ => false,
-        }
-    }
 }
 
 /// Attribute represents a part of a [`Message`] or [`Term`].
@@ -636,21 +557,13 @@ impl<S: PartialEq> PartialEq for PatternElement<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Attribute<S> {
     pub id: Identifier<S>,
     pub value: Pattern<S>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Attribute<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.id == other.id && self.value == other.value
-    }
 }
 
 /// Identifier is part of nodes such as [`Message`], [`Term`] and [`Attribute`].
@@ -695,20 +608,12 @@ impl<S: PartialEq> PartialEq for Attribute<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Identifier<S> {
     pub name: S,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-impl<S: Eq> Eq for Identifier<S> {}
-
-impl<S: PartialEq> PartialEq for Identifier<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name
-    }
 }
 
 /// Variant is a single branch of a value in a [`Select`](Expression::Select) expression.
@@ -788,8 +693,7 @@ impl<S: PartialEq> PartialEq for Identifier<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub struct Variant<S> {
@@ -798,13 +702,6 @@ pub struct Variant<S> {
     pub default: bool,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Variant<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.key == other.key && self.value == other.value && self.default == other.default
-    }
 }
 
 /// A key of a [`Variant`].
@@ -883,7 +780,7 @@ impl<S: PartialEq> PartialEq for Variant<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, PartialEq, Eq, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum VariantKey<S> {
@@ -937,21 +834,13 @@ pub enum VariantKey<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(from = "helper::CommentDef<S>"))]
 pub struct Comment<S> {
     pub content: Vec<S>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-impl<S: Eq> Eq for Comment<S> {}
-
-impl<S: PartialEq> PartialEq for Comment<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.content == other.content
-    }
 }
 
 /// List of arguments for a [`FunctionReference`](InlineExpression::FunctionReference) or a
@@ -1028,7 +917,7 @@ impl<S: PartialEq> PartialEq for Comment<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone, Default)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub struct CallArguments<S> {
@@ -1036,12 +925,6 @@ pub struct CallArguments<S> {
     pub named: Vec<NamedArgument<S>>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-impl<S: PartialEq> PartialEq for CallArguments<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.positional == other.positional && self.named == other.named
-    }
 }
 
 /// A key-value pair used in [`CallArguments`].
@@ -1105,8 +988,7 @@ impl<S: PartialEq> PartialEq for CallArguments<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub struct NamedArgument<S> {
@@ -1114,13 +996,6 @@ pub struct NamedArgument<S> {
     pub value: InlineExpression<S>,
     #[cfg(feature = "spans")]
     pub span: Span,
-}
-
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for NamedArgument<S> {
-    fn eq(&self, other: &Self) -> bool {
-        self.name == other.name && self.value == other.value
-    }
 }
 
 /// A subset of expressions which can be used as [`Placeable`](PatternElement::Placeable),
@@ -1171,7 +1046,7 @@ impl<S: PartialEq> PartialEq for NamedArgument<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(tag = "type"))]
 pub enum InlineExpression<S> {
@@ -1549,74 +1424,6 @@ pub enum InlineExpression<S> {
     },
 }
 
-impl<S: PartialEq> PartialEq for InlineExpression<S> {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (
-                Self::StringLiteral { value: l_value, .. },
-                Self::StringLiteral { value: r_value, .. },
-            ) => l_value == r_value,
-            (
-                Self::NumberLiteral { value: l_value, .. },
-                Self::NumberLiteral { value: r_value, .. },
-            ) => l_value == r_value,
-            (
-                Self::FunctionReference {
-                    id: l_id,
-                    arguments: l_arguments,
-                    ..
-                },
-                Self::FunctionReference {
-                    id: r_id,
-                    arguments: r_arguments,
-                    ..
-                },
-            ) => l_id == r_id && l_arguments == r_arguments,
-            (
-                Self::MessageReference {
-                    id: l_id,
-                    attribute: l_attribute,
-                    ..
-                },
-                Self::MessageReference {
-                    id: r_id,
-                    attribute: r_attribute,
-                    ..
-                },
-            ) => l_id == r_id && l_attribute == r_attribute,
-            (
-                Self::TermReference {
-                    id: l_id,
-                    attribute: l_attribute,
-                    arguments: l_arguments,
-                    ..
-                },
-                Self::TermReference {
-                    id: r_id,
-                    attribute: r_attribute,
-                    arguments: r_arguments,
-                    ..
-                },
-            ) => l_id == r_id && l_attribute == r_attribute && l_arguments == r_arguments,
-            (
-                Self::VariableReference { id: l_id, .. },
-                Self::VariableReference { id: r_id, .. },
-            ) => l_id == r_id,
-            (
-                Self::Placeable {
-                    expression: l_expression,
-                    ..
-                },
-                Self::Placeable {
-                    expression: r_expression,
-                    ..
-                },
-            ) => l_expression == r_expression,
-            _ => false,
-        }
-    }
-}
-
 #[cfg(feature = "spans")]
 impl<S> InlineExpression<S> {
     pub fn get_span(&self) -> Span {
@@ -1706,8 +1513,7 @@ impl<S> InlineExpression<S> {
 ///     }
 /// );
 /// ```
-#[derive(Debug, Clone)]
-#[cfg_attr(not(feature = "spans"), derive(PartialEq))]
+#[derive(Clone, Debug, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 #[cfg_attr(feature = "serde", serde(untagged))]
 pub enum Expression<S> {
@@ -1733,28 +1539,6 @@ pub enum Expression<S> {
     Inline(InlineExpression<S>, #[cfg(feature = "spans")] Span),
 }
 
-#[cfg(feature = "spans")]
-impl<S: PartialEq> PartialEq for Expression<S> {
-    fn eq(&self, other: &Self) -> bool {
-        match (self, other) {
-            (
-                Self::Select {
-                    selector: l_selector,
-                    variants: l_variants,
-                    ..
-                },
-                Self::Select {
-                    selector: r_selector,
-                    variants: r_variants,
-                    ..
-                },
-            ) => l_selector == r_selector && l_variants == r_variants,
-            (Self::Inline(l0, ..), Self::Inline(r0, ..)) => l0 == r0,
-            _ => false,
-        }
-    }
-}
-
 /// A span of a node. Allows you to get the index of the start and end character of a node.
 ///
 /// # Example
@@ -1774,7 +1558,7 @@ impl<S: PartialEq> PartialEq for Expression<S> {
 /// assert_eq!(id.span, Span { start: 0, end: 11 }); // the span of hello-world identifier
 /// ```
 #[cfg(feature = "spans")]
-#[derive(Debug, Clone, Copy, Default, PartialEq)]
+#[derive(Clone, Debug, Default, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
 pub struct Span {
     pub start: usize,
