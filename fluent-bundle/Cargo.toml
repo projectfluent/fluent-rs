@@ -40,6 +40,7 @@ serde = { workspace = true, features = ["derive"] }
 unic-langid = { workspace = true, features = ["macros"] }
 rand = "0.8"
 serde_yaml = "0.9"
+rstest = "0.24.0"
 
 [features]
 default = []
