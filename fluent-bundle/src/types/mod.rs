@@ -60,9 +60,7 @@ pub trait AnyEq: Any + 'static {
 
 impl<T: Any + PartialEq> AnyEq for T {
     fn equals(&self, other: &dyn Any) -> bool {
-        other
-            .downcast_ref::<Self>()
-            .map_or(false, |that| self == that)
+        other.downcast_ref::<Self>() == Some(self)
     }
     fn as_any(&self) -> &dyn Any {
         self
