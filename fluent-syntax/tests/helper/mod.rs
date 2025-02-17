@@ -15,7 +15,7 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
         match element {
             ast::PatternElement::TextElement { value } => {
                 let mut start = 0;
-                let len = value.as_bytes().len();
+                let len = value.len();
                 for (i, b) in value.as_bytes().iter().enumerate() {
                     if b == &b'\n' {
                         if crlf {
