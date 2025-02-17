@@ -4,6 +4,7 @@
 //! internationalization formatters, functions, scopeironmental variables and are expected to be used
 //! together.
 
+use icu_provider::AnyProvider;
 use rustc_hash::FxHashMap;
 use std::borrow::Borrow;
 use std::borrow::Cow;
@@ -24,6 +25,8 @@ use crate::message::FluentMessage;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+
+pub type IcuDataProvider = Box<dyn AnyProvider>;
 
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
@@ -141,6 +144,7 @@ pub struct FluentBundle<R, M> {
     pub(crate) use_isolating: bool,
     pub(crate) transform: Option<fn(&str) -> Cow<str>>,
     pub(crate) formatter: Option<fn(&FluentValue, &M) -> Option<String>>,
+    pub(crate) icu_data_provider: Option<IcuDataProvider>,
 }
 
 impl<R, M> FluentBundle<R, M> {
@@ -548,6 +552,10 @@ impl<R, M> FluentBundle<R, M> {
         }
     }
 
+    pub fn set_icu_data_provider(&mut self, provider: IcuDataProvider) {
+        self.icu_data_provider = Some(provider);
+    }
+
     /// Adds the builtin functions described in the [FTL syntax guide] to the bundle, making them
     /// available in messages.
     ///
@@ -641,6 +649,7 @@ impl<R> FluentBundle<R, IntlLangMemoizer> {
             use_isolating: true,
             transform: None,
             formatter: None,
+            icu_data_provider: None,
         }
     }
 }
@@ -653,14 +662,19 @@ impl crate::memoizer::MemoizerKind for IntlLangMemoizer {
         Self::new(lang)
     }
 
-    fn with_try_get_threadsafe<I, R, U>(&self, args: I::Args, cb: U) -> Result<R, I::Error>
+    fn with_try_get_threadsafe<I, R, U>(
+        &self,
+        args: I::Args,
+        data_provider: &I::DataProvider,
+        cb: U,
+    ) -> Result<R, I::Error>
     where
         Self: Sized,
         I: intl_memoizer::Memoizable + Send + Sync + 'static,
         I::Args: Send + Sync + 'static,
         U: FnOnce(&I) -> R,
     {
-        self.with_try_get(args, cb)
+        self.with_try_get(args, data_provider, cb)
     }
 
     fn stringify_value(

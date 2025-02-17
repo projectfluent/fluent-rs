@@ -102,7 +102,7 @@ impl FluentType for DateTime {
     }
     fn as_string(&self, intls: &intl_memoizer::IntlLangMemoizer) -> std::borrow::Cow<'static, str> {
         intls
-            .with_try_get::<DateTimeFormatter, _, _>((self.options.clone(),), |dtf| {
+            .with_try_get::<DateTimeFormatter, _, _>((self.options.clone(),), &(), |dtf| {
                 dtf.format(self.epoch).into()
             })
             .expect("Failed to format a date.")
@@ -138,7 +138,13 @@ impl DateTimeFormatter {
 impl Memoizable for DateTimeFormatter {
     type Args = (DateTimeOptions,);
     type Error = ();
-    fn construct(lang: LanguageIdentifier, args: Self::Args) -> Result<Self, Self::Error> {
+    type DataProvider = ();
+
+    fn construct(
+        lang: LanguageIdentifier,
+        args: Self::Args,
+        _: &Self::DataProvider,
+    ) -> Result<Self, Self::Error> {
         Self::new(lang, args.0)
     }
 }
