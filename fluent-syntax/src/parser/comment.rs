@@ -16,6 +16,9 @@ where
     pub(super) fn get_comment(&mut self) -> Result<(ast::Comment<S>, Level)> {
         let mut level = Level::None;
         let mut content = vec![];
+        
+        #[cfg(feature = "spans")]
+        let start_pos = self.ptr;
 
         while self.ptr < self.length {
             let line_level = self.get_comment_level();
@@ -47,7 +50,14 @@ where
             self.skip_eol();
         }
 
-        Ok((ast::Comment { content }, level))
+        Ok((
+            ast::Comment {
+                content,
+                #[cfg(feature = "spans")]
+                span: ast::Span::new(start_pos..self.ptr),
+            },
+            level,
+        ))
     }
 
     pub(super) fn skip_comment(&mut self) {

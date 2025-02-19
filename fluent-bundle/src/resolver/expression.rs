@@ -23,8 +23,10 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
         M: MemoizerKind,
     {
         match self {
-            Self::Inline(exp) => exp.write(w, scope),
-            Self::Select { selector, variants } => {
+            Self::Inline(exp, ..) => exp.write(w, scope),
+            Self::Select {
+                selector, variants, ..
+            } => {
                 let selector = selector.resolve(scope);
                 match selector {
                     FluentValue::String(_) | FluentValue::Number(_) => {
@@ -59,7 +61,7 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
         W: fmt::Write,
     {
         match self {
-            Self::Inline(exp) => exp.write_error(w),
+            Self::Inline(exp, ..) => exp.write_error(w),
             Self::Select { selector, .. } => selector.write_error(w),
         }
     }

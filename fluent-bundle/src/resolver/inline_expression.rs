@@ -24,8 +24,8 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
         M: MemoizerKind,
     {
         match self {
-            Self::StringLiteral { value } => unescape_unicode(w, value),
-            Self::MessageReference { id, attribute } => {
+            Self::StringLiteral { value, .. } => unescape_unicode(w, value),
+            Self::MessageReference { id, attribute, .. } => {
                 if let Some(msg) = scope.bundle.get_entry_message(id.name) {
                     if let Some(attr) = attribute {
                         msg.attributes
@@ -53,11 +53,12 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     scope.write_ref_error(w, self)
                 }
             }
-            Self::NumberLiteral { value } => FluentValue::try_number(value).write(w, scope),
+            Self::NumberLiteral { value, .. } => FluentValue::try_number(value).write(w, scope),
             Self::TermReference {
                 id,
                 attribute,
                 arguments,
+                ..
             } => {
                 let (_, resolved_named_args) = scope.get_arguments(arguments.as_ref());
 
@@ -82,7 +83,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 scope.local_args = None;
                 result
             }
-            Self::FunctionReference { id, arguments } => {
+            Self::FunctionReference { id, arguments, .. } => {
                 let (resolved_positional_args, resolved_named_args) =
                     scope.get_arguments(Some(arguments));
 
@@ -99,7 +100,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     scope.write_ref_error(w, self)
                 }
             }
-            Self::VariableReference { id } => {
+            Self::VariableReference { id, .. } => {
                 let args = scope.local_args.as_ref().or(scope.args);
 
                 if let Some(arg) = args.and_then(|args| args.get(id.name)) {
@@ -113,7 +114,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     w.write_char('}')
                 }
             }
-            Self::Placeable { expression } => expression.write(w, scope),
+            Self::Placeable { expression, .. } => expression.write(w, scope),
         }
     }
 
@@ -125,10 +126,12 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
             Self::MessageReference {
                 id,
                 attribute: Some(attribute),
+                ..
             } => write!(w, "{}.{}", id.name, attribute.name),
             Self::MessageReference {
                 id,
                 attribute: None,
+                ..
             } => w.write_str(id.name),
             Self::TermReference {
                 id,
@@ -141,7 +144,7 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 ..
             } => write!(w, "-{}", id.name),
             Self::FunctionReference { id, .. } => write!(w, "{}()", id.name),
-            Self::VariableReference { id } => write!(w, "${}", id.name),
+            Self::VariableReference { id, .. } => write!(w, "${}", id.name),
             _ => unreachable!(),
         }
     }
@@ -157,9 +160,9 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
         M: MemoizerKind,
     {
         match self {
-            Self::StringLiteral { value } => unescape_unicode_to_string(value).into(),
-            Self::NumberLiteral { value } => FluentValue::try_number(value),
-            Self::VariableReference { id } => {
+            Self::StringLiteral { value, .. } => unescape_unicode_to_string(value).into(),
+            Self::NumberLiteral { value, .. } => FluentValue::try_number(value),
+            Self::VariableReference { id, .. } => {
                 if let Some(local_args) = &scope.local_args {
                     if let Some(arg) = local_args.get(id.name) {
                         return arg.clone();
@@ -173,7 +176,7 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 }
                 FluentValue::Error
             }
-            Self::FunctionReference { id, arguments } => {
+            Self::FunctionReference { id, arguments, .. } => {
                 let (resolved_positional_args, resolved_named_args) =
                     scope.get_arguments(Some(arguments));
 
