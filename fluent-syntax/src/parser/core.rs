@@ -70,7 +70,7 @@ where
                     body.push(ast::Entry::Junk {
                         content,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(entry_start..self.ptr),
+                        span: ast::Span(entry_start..self.ptr),
                     });
                 }
             }
@@ -84,14 +84,14 @@ where
             Ok(ast::Resource {
                 body,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(0..self.length),
+                span: ast::Span(0..self.length),
             })
         } else {
             Err((
                 ast::Resource {
                     body,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(0..self.length),
+                    span: ast::Span(0..self.length),
                 },
                 errors,
             ))
@@ -139,7 +139,7 @@ where
             attributes,
             comment: None,
             #[cfg(feature = "spans")]
-            span: ast::Span::new(entry_start..self.ptr),
+            span: ast::Span(entry_start..self.ptr),
         })
     }
 
@@ -163,7 +163,7 @@ where
                 attributes,
                 comment: None,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(entry_start..self.ptr),
+                span: ast::Span(entry_start..self.ptr),
             })
         } else {
             error!(
@@ -207,7 +207,7 @@ where
                 id,
                 value: pattern,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(self.ptr - 1..self.ptr),
+                span: ast::Span(self.ptr - 1..self.ptr),
             }),
             None => error!(ErrorKind::MissingValue, self.ptr),
         }
@@ -229,7 +229,7 @@ where
         ast::Identifier {
             name,
             #[cfg(feature = "spans")]
-            span: ast::Span::new(start..self.ptr),
+            span: ast::Span(start..self.ptr),
         }
     }
 
@@ -316,7 +316,7 @@ where
                     value,
                     default,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new((if default { start - 1 } else { start })..self.ptr),
+                    span: ast::Span((if default { start - 1 } else { start })..self.ptr),
                 });
                 self.skip_blank();
             } else {

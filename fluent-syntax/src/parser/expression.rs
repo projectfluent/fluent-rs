@@ -23,7 +23,7 @@ where
             return Ok(ast::Expression::Inline(
                 exp,
                 #[cfg(feature = "spans")]
-                ast::Span::new(start_span..self.ptr),
+                ast::Span(start_span..self.ptr),
             ));
         }
 
@@ -68,7 +68,7 @@ where
             selector: exp,
             variants,
             #[cfg(feature = "spans")]
-            span: ast::Span::new(start_span..self.ptr),
+            span: ast::Span(start_span..self.ptr),
         })
     }
 
@@ -112,7 +112,7 @@ where
                 Ok(ast::InlineExpression::StringLiteral {
                     value: slice,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(start..self.ptr),
+                    span: ast::Span(start..self.ptr),
                 })
             }
             Some(b) if b.is_ascii_digit() => {
@@ -120,7 +120,7 @@ where
                 Ok(ast::InlineExpression::NumberLiteral {
                     value: num,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(start..self.ptr),
+                    span: ast::Span(start..self.ptr),
                 })
             }
             Some(b'-') if !only_literal => {
@@ -135,7 +135,7 @@ where
                         attribute,
                         arguments,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(start..self.ptr),
+                        span: ast::Span(start..self.ptr),
                     })
                 } else {
                     self.ptr -= 1;
@@ -143,7 +143,7 @@ where
                     Ok(ast::InlineExpression::NumberLiteral {
                         value: num,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(start..self.ptr),
+                        span: ast::Span(start..self.ptr),
                     })
                 }
             }
@@ -153,7 +153,7 @@ where
                 Ok(ast::InlineExpression::VariableReference {
                     id,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(start..self.ptr),
+                    span: ast::Span(start..self.ptr),
                 })
             }
             Some(b) if b.is_ascii_alphabetic() => {
@@ -169,7 +169,7 @@ where
                         id,
                         arguments,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(start..self.ptr),
+                        span: ast::Span(start..self.ptr),
                     })
                 } else {
                     let attribute = self.get_attribute_accessor()?;
@@ -177,7 +177,7 @@ where
                         id,
                         attribute,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(start..self.ptr),
+                        span: ast::Span(start..self.ptr),
                     })
                 }
             }
@@ -187,7 +187,7 @@ where
                 Ok(ast::InlineExpression::Placeable {
                     expression: Box::new(exp),
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(start..self.ptr),
+                    span: ast::Span(start..self.ptr),
                 })
             }
             _ if only_literal => error!(ErrorKind::ExpectedLiteral, self.ptr),
@@ -239,11 +239,11 @@ where
                         name: ast::Identifier {
                             name: id.name.clone(),
                             #[cfg(feature = "spans")]
-                            span: id.span,
+                            span: id.span.clone(),
                         },
                         value: val,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(id.span.start..self.ptr),
+                        span: ast::Span(id.span.start..self.ptr),
                     });
                 } else {
                     if !argument_names.is_empty() {
@@ -269,7 +269,7 @@ where
             positional,
             named,
             #[cfg(feature = "spans")]
-            span: ast::Span::new(start..self.ptr),
+            span: ast::Span(start..self.ptr),
         }))
     }
 }

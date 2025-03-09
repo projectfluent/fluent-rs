@@ -37,7 +37,7 @@ where
                     body.push(ast::Entry::Junk {
                         content,
                         #[cfg(feature = "spans")]
-                        span: ast::Span::new(entry_start..self.ptr),
+                        span: ast::Span(entry_start..self.ptr),
                     });
                 }
             }
@@ -48,14 +48,14 @@ where
             Ok(ast::Resource {
                 body,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(0..self.length),
+                span: ast::Span(0..self.length),
             })
         } else {
             Err((
                 ast::Resource {
                     body,
                     #[cfg(feature = "spans")]
-                    span: ast::Span::new(0..self.length),
+                    span: ast::Span(0..self.length),
                 },
                 errors,
             ))

@@ -88,6 +88,7 @@ mod helper;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
+use std::ops::Deref;
 #[cfg(feature = "spans")]
 use std::ops::Range;
 
@@ -1426,7 +1427,7 @@ pub enum InlineExpression<S> {
 
 #[cfg(feature = "spans")]
 impl<S> InlineExpression<S> {
-    pub fn get_span(&self) -> Span {
+    pub fn get_span(&self) -> &Span {
         match self {
             InlineExpression::StringLiteral { span, .. }
             | InlineExpression::TermReference { span, .. }
@@ -1434,7 +1435,7 @@ impl<S> InlineExpression<S> {
             | InlineExpression::Placeable { span, .. }
             | InlineExpression::NumberLiteral { span, .. }
             | InlineExpression::FunctionReference { span, .. }
-            | InlineExpression::MessageReference { span, .. } => *span,
+            | InlineExpression::MessageReference { span, .. } => span,
         }
     }
 }
@@ -1560,17 +1561,13 @@ pub enum Expression<S> {
 #[cfg(feature = "spans")]
 #[derive(Clone, Debug, Default, Eq, PartialEq)]
 #[cfg_attr(feature = "serde", derive(Serialize, Deserialize))]
-pub struct Span {
-    pub start: usize,
-    pub end: usize,
-}
+pub struct Span(pub Range<usize>);
 
 #[cfg(feature = "spans")]
-impl Span {
-    pub fn new(range: Range<usize>) -> Self {
-        Self {
-            start: range.start,
-            end: range.end,
-        }
+impl Deref for Span {
+    type Target = Range<usize>;
+
+    fn deref(&self) -> &Self::Target {
+        &self.0
     }
 }

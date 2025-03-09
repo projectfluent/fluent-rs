@@ -54,7 +54,7 @@ where
             ast::Comment {
                 content,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(start_pos..self.ptr),
+                span: ast::Span(start_pos..self.ptr),
             },
             level,
         ))

@@ -147,7 +147,7 @@ where
                     PatternElementPlaceholders::Placeable(expression, range) => {
                         ast::PatternElement::Placeable {
                             expression,
-                            span: ast::Span::new(range),
+                            span: ast::Span(range),
                         }
                     }
                     #[cfg(not(feature = "spans"))]
@@ -170,7 +170,7 @@ where
                         ast::PatternElement::TextElement {
                             value,
                             #[cfg(feature = "spans")]
-                            span: ast::Span::new(start..end),
+                            span: ast::Span(start..end),
                         }
                     }
                 })
@@ -178,7 +178,7 @@ where
             return Ok(Some(ast::Pattern {
                 elements,
                 #[cfg(feature = "spans")]
-                span: ast::Span::new(start_pos..self.ptr),
+                span: ast::Span(start_pos..self.ptr),
             }));
         }
 
