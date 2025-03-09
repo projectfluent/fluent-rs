@@ -57,7 +57,7 @@ fn fluent_date_time_builtin() {
         None,
     }
 
-    impl<'l> From<&FluentValue<'l>> for DateTimeStyleValue {
+    impl From<&FluentValue<'_>> for DateTimeStyleValue {
         fn from(input: &FluentValue) -> Self {
             if let FluentValue::String(s) = input {
                 match s.as_ref() {
@@ -91,7 +91,7 @@ fn fluent_date_time_builtin() {
         }
     }
 
-    impl<'l> From<&FluentArgs<'l>> for DateTimeOptions {
+    impl From<&FluentArgs<'_>> for DateTimeOptions {
         fn from(input: &FluentArgs) -> Self {
             let mut opts = Self::default();
             opts.merge(input);

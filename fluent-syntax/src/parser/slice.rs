@@ -9,7 +9,7 @@ pub trait Slice<'s>: AsRef<str> + Clone + PartialEq {
     fn trim(&mut self);
 }
 
-impl<'s> Slice<'s> for String {
+impl Slice<'_> for String {
     fn slice(&self, range: Range<usize>) -> Self {
         self[range].to_string()
     }
