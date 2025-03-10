@@ -1,5 +1,5 @@
 use super::scope::Scope;
-use super::WriteValue;
+use super::{ResolveContext, WriteOrResolve, WriteOrResolveContext};
 
 use std::borrow::Borrow;
 use std::fmt;
@@ -7,25 +7,25 @@ use std::fmt;
 use fluent_syntax::ast;
 
 use crate::memoizer::MemoizerKind;
-use crate::resolver::{ResolveValue, ResolverError};
+use crate::resolver::ResolverError;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
 
-impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
-    fn write<'ast, 'args, 'errors, W, R, M>(
-        &'ast self,
-        w: &mut W,
-        scope: &mut Scope<'bundle, 'ast, 'args, 'errors, R, M>,
-    ) -> fmt::Result
+impl<'bundle> WriteOrResolve<'bundle> for ast::Expression<&'bundle str> {
+    fn write_or_resolve<'other, R, M, T>(
+        &'bundle self,
+        scope: &mut Scope<'bundle, 'other, R, M>,
+        context: &mut T,
+    ) -> T::Result
     where
-        W: fmt::Write,
         R: Borrow<FluentResource>,
         M: MemoizerKind,
+        T: WriteOrResolveContext<'bundle>,
     {
         match self {
-            Self::Inline(exp) => exp.write(w, scope),
+            Self::Inline(exp) => exp.write_or_resolve(scope, context),
             Self::Select { selector, variants } => {
-                let selector = selector.resolve(scope);
+                let selector = selector.write_or_resolve(scope, &mut ResolveContext);
                 match selector {
                     FluentValue::String(_) | FluentValue::Number(_) => {
                         for variant in variants {
@@ -36,7 +36,7 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
                                 }
                             };
                             if key.matches(&selector, scope) {
-                                return variant.value.write(w, scope);
+                                return context.resolve_pattern(scope, &variant.value);
                             }
                         }
                     }
@@ -45,11 +45,11 @@ impl<'bundle> WriteValue<'bundle> for ast::Expression<&'bundle str> {
 
                 for variant in variants {
                     if variant.default {
-                        return variant.value.write(w, scope);
+                        return context.resolve_pattern(scope, &variant.value);
                     }
                 }
                 scope.add_error(ResolverError::MissingDefault);
-                Ok(())
+                context.error(self, true)
             }
         }
     }
