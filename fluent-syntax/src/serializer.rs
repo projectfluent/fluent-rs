@@ -64,14 +64,14 @@ pub fn serialize_with_options<'s, S: Slice<'s>>(
 }
 
 #[derive(Debug)]
-struct Serializer {
+pub struct Serializer {
     writer: TextWriter,
     options: Options,
     state: State,
 }
 
 impl Serializer {
-    fn new(options: Options) -> Self {
+    pub fn new(options: Options) -> Self {
         Serializer {
             writer: TextWriter::default(),
             options,
@@ -79,7 +79,7 @@ impl Serializer {
         }
     }
 
-    fn serialize_resource<'s, S: Slice<'s>>(&mut self, res: &Resource<S>) {
+    pub fn serialize_resource<'s, S: Slice<'s>>(&mut self, res: &Resource<S>) {
         for entry in &res.body {
             match entry {
                 Entry::Message(msg) => self.serialize_message(msg),
@@ -98,15 +98,15 @@ impl Serializer {
         }
     }
 
-    fn into_serialized_text(self) -> String {
+    pub fn into_serialized_text(self) -> String {
         self.writer.buffer
     }
 
-    fn serialize_junk(&mut self, junk: &str) {
+    pub fn serialize_junk(&mut self, junk: &str) {
         self.writer.write_literal(junk);
     }
 
-    fn serialize_free_comment<'s, S: Slice<'s>>(&mut self, comment: &Comment<S>, prefix: &str) {
+    pub fn serialize_free_comment<'s, S: Slice<'s>>(&mut self, comment: &Comment<S>, prefix: &str) {
         if self.state.wrote_non_junk_entry {
             self.writer.newline();
         }
@@ -127,7 +127,7 @@ impl Serializer {
         }
     }
 
-    fn serialize_message<'s, S: Slice<'s>>(&mut self, msg: &Message<S>) {
+    pub fn serialize_message<'s, S: Slice<'s>>(&mut self, msg: &Message<S>) {
         if let Some(comment) = msg.comment.as_ref() {
             self.serialize_comment(comment, "#");
         }
@@ -144,7 +144,7 @@ impl Serializer {
         self.writer.newline();
     }
 
-    fn serialize_term<'s, S: Slice<'s>>(&mut self, term: &Term<S>) {
+    pub fn serialize_term<'s, S: Slice<'s>>(&mut self, term: &Term<S>) {
         if let Some(comment) = term.comment.as_ref() {
             self.serialize_comment(comment, "#");
         }
