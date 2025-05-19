@@ -30,7 +30,7 @@ intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
 intl-memoizer = { version = "0.5.2", path = "../intl-memoizer" }
-self_cell = "1.0"
+self_cell = "1.2"
 smallvec = "1.13"
 
 [dev-dependencies]
