@@ -40,7 +40,7 @@ rustc-hash = "2"
 serde = "1.0"
 serde_json = "1.0"
 thiserror = "2.0"
-tokio = "1.0"
+tokio = "1.38"
 unic-langid = "0.9"
 
 fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
