@@ -4,6 +4,7 @@ use fluent_syntax::ast::Pattern;
 #[test]
 fn test_builtin_number() {
     // 1. Create bundle
+    // typos: ignore start
     let ftl_string = String::from(
         r#"
 count = { NUMBER($num, type: "cardinal") ->
@@ -17,6 +18,7 @@ order = { NUMBER($num, type: "ordinal") ->
     [few] {$num}rd
 }
         "#,
+        // typos: ignore end
     );
 
     let mut bundle = FluentBundle::default();
