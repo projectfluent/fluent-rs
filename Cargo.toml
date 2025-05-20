@@ -42,11 +42,11 @@ thiserror = "2.0"
 tokio = "1.38"
 unic-langid = "0.9"
 
-fluent-bundle = { version = "0.15.3", path = "fluent-bundle" }
-fluent-fallback = { version = "0.7.1", path = "fluent-fallback" }
-fluent-pseudo = { version = "0.3.2", path = "fluent-pseudo" }
-fluent-syntax = { version = "0.11.1", path = "fluent-syntax" }
-intl-memoizer = { version = "0.5.2", path = "intl-memoizer" }
+fluent-bundle = { version = "0.16.0", path = "fluent-bundle" }
+fluent-fallback = { version = "0.7.2", path = "fluent-fallback" }
+fluent-pseudo = { version = "0.3.3", path = "fluent-pseudo" }
+fluent-syntax = { version = "0.12.0", path = "fluent-syntax" }
+intl-memoizer = { version = "0.5.3", path = "intl-memoizer" }
 
 [workspace.metadata.typos.default]
 locale = "en-us"

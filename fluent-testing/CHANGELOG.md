@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-testing 0.0.5 (May 20, 2025)
   - Cleanup docs
 
 ## fluent-testing 0.0.4 (March 16, 2024)

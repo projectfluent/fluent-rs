@@ -4,7 +4,7 @@ description = """
 A high-level implementation of a collection of locale bundles including fallback between locales for Project Fluent,
 a localization system designed to unleash the entire expressive power of natural language translations.
 """
-version = "0.7.1"
+version = "0.7.2"
 edition.workspace = true
 rust-version.workspace = true
 homepage.workspace = true

@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-fallback 0.7.2 (May 20, 2025)
   - Refactor to remove unnecessary named lifetimes
   - Cleanup docs
   - Satiate Clippy

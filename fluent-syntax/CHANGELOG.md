@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-syntax 0.12.0 (May 20, 2025)
   - Add module `serializer`
   - De-ambiguate dependencies vs. features
   - Cleanup docs

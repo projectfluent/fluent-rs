@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-pseudo 0.3.3 (May 20, 2025)
   - Eliminate unsafe block using `once_cell` instead of undefined behavior of mutable reference to mutable static
   - Cleanup docs
   - Satiate Clippy

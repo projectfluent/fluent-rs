@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## intl-memoizer 0.5.3 (May 20, 2025)
   - Cleanup docs
 
 ## intl-memoizer 0.5.2 (March 16, 2024)

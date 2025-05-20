@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-bundle 0.16.0 (May 20, 2025)
   - Implement NUMBER builtin
   - Improve examples
   - Refactor to remove unnecessary named lifetimes

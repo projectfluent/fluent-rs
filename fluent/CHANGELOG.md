@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent 0.16.2 (May 20, 2025)
   - Cleanup docs
 
 ## fluent 0.16.1 (March 16, 2024)
