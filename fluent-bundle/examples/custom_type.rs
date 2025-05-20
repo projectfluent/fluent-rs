@@ -8,7 +8,7 @@
 //
 // Lastly, we'll also create a new formatter which will be memoizable.
 //
-// The type and its options are modelled after ECMA402 Intl.DateTimeFormat.
+// The type and its options are modeled after ECMA402 Intl.DateTimeFormat.
 use intl_memoizer::Memoizable;
 use unic_langid::LanguageIdentifier;
 
