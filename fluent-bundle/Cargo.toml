@@ -4,7 +4,7 @@ description = """
 A low-level implementation of a collection of localization messages for a single locale for Project Fluent,
 a localization system designed to unleash the entire expressive power of natural language translations.
 """
-version = "0.15.3"
+version = "0.16.0"
 edition.workspace = true
 rust-version.workspace = true
 homepage.workspace = true

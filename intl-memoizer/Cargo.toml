@@ -4,7 +4,7 @@ description = """
 A memoizer specifically tailored for storing lazy-initialized intl formatters for Project Fluent,
 a localization system designed to unleash the entire expressive power of natural language translations.
 """
-version = "0.5.2"
+version = "0.5.3"
 edition.workspace = true
 rust-version.workspace = true
 homepage.workspace = true

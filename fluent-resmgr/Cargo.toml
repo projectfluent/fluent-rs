@@ -4,7 +4,7 @@ description = """
 A standalone solution for managing resource files and returning locale bundles for Project Fluent,
 a localization system designed to unleash the entire expressive power of natural language translations.
 """
-version = "0.0.7"
+version = "0.0.8"
 edition.workspace = true
 rust-version.workspace = true
 homepage.workspace = true

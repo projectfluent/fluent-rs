@@ -1,6 +1,8 @@
 # Changelog
 
 ## Unreleased
+
+## fluent-resmgr 0.0.8 (May 20, 2025)
   - Cleanup docs
   - Satiate Clippy
   - Bump `elsa` to 1.10
