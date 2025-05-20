@@ -88,7 +88,7 @@ pub fn get_defaults(path: &str) -> Result<TestDefaults, io::Error> {
     Ok(serde_yaml::from_str(&s).expect("Parsing YAML failed."))
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestBundle {
     pub name: Option<String>,
@@ -102,7 +102,7 @@ pub struct TestBundle {
     pub errors: Vec<TestError>,
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestResource {
     pub name: Option<String>,
@@ -111,7 +111,7 @@ pub struct TestResource {
     pub source: String,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestSetup {
     #[serde(skip_serializing_if = "Vec::is_empty", default)]
@@ -120,7 +120,7 @@ pub struct TestSetup {
     pub resources: Vec<TestResource>,
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestError {
     #[serde(rename = "type")]
@@ -128,7 +128,7 @@ pub struct TestError {
     pub desc: Option<String>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 #[serde(untagged)]
 pub enum TestArgumentValue {
@@ -136,7 +136,7 @@ pub enum TestArgumentValue {
     Number(f64),
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestAssert {
     pub bundle: Option<String>,
@@ -149,7 +149,7 @@ pub struct TestAssert {
     pub missing: Option<bool>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct Test {
     pub name: String,
@@ -163,7 +163,7 @@ pub struct Test {
     pub asserts: Vec<TestAssert>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestSuite {
     pub name: String,
@@ -180,13 +180,13 @@ pub struct TestSuite {
     pub suites: Vec<TestSuite>,
 }
 
-#[derive(Debug, PartialEq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestFixture {
     pub suites: Vec<TestSuite>,
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct BundleDefaults {
     #[serde(rename = "useIsolating")]
@@ -195,7 +195,7 @@ pub struct BundleDefaults {
     pub locales: Option<Vec<String>>,
 }
 
-#[derive(Debug, PartialEq, Eq, Serialize, Deserialize, Clone)]
+#[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestDefaults {
     pub bundle: BundleDefaults,

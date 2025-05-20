@@ -21,7 +21,7 @@ use fluent_bundle::{FluentArgs, FluentBundle, FluentResource, FluentValue};
 //  - timeStyle
 //
 // with an enum of allowed values.
-#[derive(Debug, Default, PartialEq, Eq, Clone, Hash)]
+#[derive(Clone, Debug, Default, Eq, Hash, PartialEq)]
 enum DateTimeStyleValue {
     Full,
     Long,
@@ -49,7 +49,7 @@ impl From<&FluentValue<'_>> for DateTimeStyleValue {
     }
 }
 
-#[derive(Debug, PartialEq, Eq, Default, Clone, Hash)]
+#[derive(Clone, Debug, Default, Eq, Hash, PartialEq)]
 struct DateTimeOptions {
     pub date_style: DateTimeStyleValue,
     pub time_style: DateTimeStyleValue,
@@ -84,7 +84,7 @@ impl From<&FluentArgs<'_>> for DateTimeOptions {
 // Our new custom type will store a value as an epoch number,
 // and the options.
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Clone, Debug, PartialEq)]
 struct DateTime {
     epoch: usize,
     options: DateTimeOptions,
