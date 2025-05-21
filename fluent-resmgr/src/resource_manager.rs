@@ -144,7 +144,7 @@ impl ResourceManager {
 }
 
 /// Errors generated during the process of retrieving the localization resources
-#[derive(Error, Debug)]
+#[derive(Debug, Error)]
 pub enum ResourceManagerError {
     /// Error while reading the resource file
     #[error("{0}")]

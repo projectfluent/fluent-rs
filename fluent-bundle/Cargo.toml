@@ -29,8 +29,8 @@ fluent-syntax.workspace = true
 intl_pluralrules.workspace = true
 rustc-hash.workspace = true
 unic-langid.workspace = true
-intl-memoizer = { version = "0.5.2", path = "../intl-memoizer" }
-self_cell = "1.0"
+intl-memoizer.workspace = true
+self_cell = "1.2"
 smallvec = "1.13"
 
 [dev-dependencies]
@@ -38,7 +38,7 @@ criterion.workspace = true
 iai.workspace = true
 serde = { workspace = true, features = ["derive"] }
 unic-langid = { workspace = true, features = ["macros"] }
-rand = "0.8"
+rand = "0.9"
 serde_yaml = "0.9"
 
 [features]

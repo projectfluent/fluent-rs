@@ -1,7 +1,7 @@
 use intl_memoizer::{IntlMemoizer, Memoizable};
 use unic_langid::LanguageIdentifier;
 
-#[derive(Clone, Hash, PartialEq, Eq)]
+#[derive(Clone, Eq, Hash, PartialEq)]
 struct NumberFormatOptions {
     minimum_fraction_digits: usize,
     maximum_fraction_digits: usize,

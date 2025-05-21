@@ -386,7 +386,7 @@ fn is_select_expr<'s, S: Slice<'s>>(expr: &Expression<S>) -> bool {
 }
 
 /// Options for serializing an abstract syntax tree.
-#[derive(Debug, Default, Copy, Clone, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, Eq, PartialEq)]
 pub struct Options {
     /// Whether invalid text fragments should be serialized, too.
     pub with_junk: bool,
@@ -397,7 +397,7 @@ struct State {
     wrote_non_junk_entry: bool,
 }
 
-#[derive(Debug, Clone, Default)]
+#[derive(Clone, Debug, Default)]
 struct TextWriter {
     buffer: String,
     indent_level: usize,
