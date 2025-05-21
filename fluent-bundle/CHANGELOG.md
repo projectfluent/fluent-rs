@@ -1,7 +1,14 @@
 # Changelog
 
 ## Unreleased
-  - Bump `self_cell` to 1.x
+  - Implement NUMBER builtin
+  - Improve examples
+  - Refactor to remove unnecessary named lifetimes
+  - Cleanup docs
+  - Satiate Clippy
+  - Bump `smallvec` to 1.13
+  - Bump `rand` to 0.9
+  - Bump `self_cell` to 1.2
   - Bump `serde_yaml` to 0.9
 
 ## fluent-bundle 0.15.3 (March 16, 2024)

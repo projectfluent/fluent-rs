@@ -1,8 +1,7 @@
 # Changelog
 
 ## Unreleased
-
-  - …
+  - Cleanup docs
 
 ## intl-memoizer 0.5.2 (March 16, 2024)
   - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers

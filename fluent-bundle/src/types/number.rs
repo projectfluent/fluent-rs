@@ -8,7 +8,7 @@ use intl_pluralrules::operands::PluralOperands;
 use crate::args::FluentArgs;
 use crate::types::FluentValue;
 
-#[derive(Debug, Default, Copy, Clone, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub enum FluentNumberType {
     #[default]
     Cardinal,
@@ -25,7 +25,7 @@ impl From<&str> for FluentNumberType {
     }
 }
 
-#[derive(Debug, Copy, Clone, Default, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub enum FluentNumberStyle {
     #[default]
     Decimal,
@@ -44,7 +44,7 @@ impl From<&str> for FluentNumberStyle {
     }
 }
 
-#[derive(Debug, Copy, Clone, Default, Hash, PartialEq, Eq)]
+#[derive(Clone, Copy, Debug, Default, Eq, Hash, PartialEq)]
 pub enum FluentNumberCurrencyDisplayStyle {
     #[default]
     Symbol,
@@ -63,7 +63,7 @@ impl From<&str> for FluentNumberCurrencyDisplayStyle {
     }
 }
 
-#[derive(Debug, Clone, Hash, PartialEq, Eq)]
+#[derive(Clone, Debug, Eq, Hash, PartialEq)]
 pub struct FluentNumberOptions {
     pub r#type: FluentNumberType,
     pub style: FluentNumberStyle,
@@ -134,7 +134,7 @@ impl FluentNumberOptions {
     }
 }
 
-#[derive(Debug, PartialEq, Clone)]
+#[derive(Clone, Debug, PartialEq)]
 pub struct FluentNumber {
     pub value: f64,
     pub options: FluentNumberOptions,

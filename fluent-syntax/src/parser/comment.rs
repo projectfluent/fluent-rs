@@ -1,7 +1,7 @@
 use super::{core::Parser, core::Result, Slice};
 use crate::ast;
 
-#[derive(Debug, PartialEq, Clone, Copy)]
+#[derive(Clone, Copy, Debug, PartialEq)]
 pub(super) enum Level {
     None = 0,
     Regular = 1,

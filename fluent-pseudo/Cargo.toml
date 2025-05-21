@@ -6,7 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 """
 version = "0.3.2"
 edition.workspace = true
-rust-version = "1.64.0"
+rust-version = "1.65.0"
 homepage.workspace = true
 repository.workspace = true
 license.workspace = true
@@ -24,4 +24,5 @@ include = [
 ]
 
 [dependencies]
-regex = "1"
+once_cell.workspace = true
+regex = "1.11"
