@@ -6,7 +6,7 @@ a localization system designed to unleash the entire expressive power of natural
 """
 version = "0.0.1"
 edition.workspace = true
-rust-version.workspace = true
+rust-version = "1.74.0"
 homepage.workspace = true
 repository.workspace = true
 license.workspace = true
@@ -29,4 +29,4 @@ fluent-syntax.workspace = true
 serde = { workspace = true, features = ["derive"]}
 serde_json.workspace = true
 annotate-snippets = { version = "0.6", features = ["color"] }
-clap = "2.33"
+clap = "4.5"
