@@ -1,8 +1,9 @@
 # Changelog
 
 ## Unreleased
-
-  - …
+  - Cleanup docs
+  - Satiate Clippy
+  - Bump `elsa` to 1.10
 
 ## fluent-resmgr 0.0.7 (March 16, 2024)
   - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers

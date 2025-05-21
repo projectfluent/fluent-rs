@@ -1,8 +1,7 @@
 # Changelog
 
 ## Unreleased
-
-  - …
+  - Cleanup docs
 
 ## fluent-testing 0.0.4 (March 16, 2024)
   - This is a 'safe harbor' release prior to bringing on non-Mozilla community maintainers
