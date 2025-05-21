@@ -64,3 +64,6 @@ required-features = ["json"]
 name = "parser_fixtures"
 path = "tests/parser_fixtures.rs"
 required-features = ["json"]
+
+[lib]
+doctest = false

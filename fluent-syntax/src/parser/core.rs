@@ -3,7 +3,9 @@ use super::{
     errors::{ErrorKind, ParserError},
     slice::Slice,
 };
-use crate::ast::{self, Span};
+use crate::ast;
+#[cfg(feature = "spans")]
+use crate::ast::Span;
 
 pub type Result<T> = std::result::Result<T, ParserError>;
 

@@ -88,9 +88,8 @@ mod helper;
 
 #[cfg(feature = "serde")]
 use serde::{Deserialize, Serialize};
-use std::ops::Deref;
 #[cfg(feature = "spans")]
-use std::ops::Range;
+use std::ops::{Deref, Range};
 
 /// Root node of a Fluent Translation List.
 ///

@@ -580,6 +580,7 @@ mod test {
         let one_variant = Variant {
             key: VariantKey::Identifier {
                 name: "one",
+                #[cfg(feature = "spans")]
                 span: Span::default(),
             },
             value: Pattern {
