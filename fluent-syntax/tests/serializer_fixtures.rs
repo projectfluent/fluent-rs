@@ -46,9 +46,9 @@ fn roundtrip_normalized_fixtures() {
     }
 }
 
-/// Compares a parsed AST with a parsed, serialized and reparsed AST, as these fixtures
-/// contain unnormalized syntax that is not supposed to be preserved on a roundtrip.
-/// Tests both parsing with and without junk.
+/// Compares a parsed AST with a parsed, serialized, and re-parsed AST, as these fixtures
+/// contain unnormalized syntax that is not supposed to be preserved on a round-trip.
+/// Tests parsing both with and without junk.
 #[test]
 fn roundtrip_unnormalized_fixtures() {
     for entry in glob("./tests/fixtures/*.ftl").expect("Failed to read glob pattern") {
