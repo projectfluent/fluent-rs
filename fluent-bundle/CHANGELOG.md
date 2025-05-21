@@ -2,6 +2,7 @@
 
 ## Unreleased
   - Implement NUMBER builtin
+  - Adapt for new optional source positions span feature in syntax parser
   - Improve examples
   - Refactor to remove unnecessary named lifetimes
   - Cleanup docs

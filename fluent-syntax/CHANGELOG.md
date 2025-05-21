@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+  - Add `spans` feature to track source positions in the AST
   - Add module `serializer`
   - De-ambiguate dependencies vs. features
   - Cleanup docs
