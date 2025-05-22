@@ -55,8 +55,7 @@ extend-ignore-re = [
 ]
 
 [workspace.metadata.typos.default.extend-words]
-travelled = "travelled" # sadly part of a public API and fixing would be a breaking change
-nd = "nd"               # appears frequently in inline test messages
+nd = "nd" # appears frequently in inline test messages
 
 [workspace.metadata.typos.files]
 ignore-hidden = false
