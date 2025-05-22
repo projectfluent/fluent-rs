@@ -20,13 +20,18 @@ include = [
   "Cargo.toml",
   "README.md",
   "LICENSE-APACHE",
-  "LICENSE-MIT"
+  "LICENSE-MIT",
 ]
 
 [dependencies]
 fluent-bundle.workspace = true
 fluent-fallback.workspace = true
-tokio = { workspace = true, optional = true, features = ["fs", "rt-multi-thread", "macros", "io-util"] }
+tokio = { workspace = true, optional = true, features = [
+  "fs",
+  "rt-multi-thread",
+  "macros",
+  "io-util",
+] }
 
 [features]
 default = ["sync"]
