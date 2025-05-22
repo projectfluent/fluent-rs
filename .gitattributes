@@ -1,6 +1,4 @@
 *.ftl eol=lf
 
-fluent-syntax/tests/fixtures/cr.ftl eol=cr
 fluent-syntax/tests/fixtures/crlf.ftl eol=crlf
-fluent-syntax/tests/fixtures/formatted/cr.ftl eol=cr
-fluent-syntax/tests/fixtures/formatted/junked/cr.ftl eol=cr
+fluent-syntax/tests/fixtures/cr.ftl eol=cr
