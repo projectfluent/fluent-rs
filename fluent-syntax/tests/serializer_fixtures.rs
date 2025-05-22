@@ -31,7 +31,7 @@ fn clone_without_junk<'a>(original: &Resource<&'a str>) -> Resource<&'a str> {
             .cloned()
             .collect(),
         #[cfg(feature = "spans")]
-        span: original.span,
+        span: original.span.clone(),
     }
 }
 
