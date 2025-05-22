@@ -19,7 +19,7 @@ pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
     /// Laughs and Quadratic Blowup attacks.
     pub(super) placeables: u8,
     /// Tracks hashes to prevent infinite recursion.
-    travelled: smallvec::SmallVec<[&'ast ast::Pattern<&'bundle str>; 2]>,
+    traveled: smallvec::SmallVec<[&'ast ast::Pattern<&'bundle str>; 2]>,
     /// Track errors accumulated during resolving.
     pub errors: Option<&'errors mut Vec<FluentError>>,
     /// Makes the resolver bail.
@@ -37,7 +37,7 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
             args,
             local_args: None,
             placeables: 0,
-            travelled: Default::default(),
+            traveled: Default::default(),
             errors,
             dirty: false,
         }
@@ -65,8 +65,8 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         W: fmt::Write,
         M: MemoizerKind,
     {
-        if self.travelled.is_empty() {
-            self.travelled.push(pattern);
+        if self.traveled.is_empty() {
+            self.traveled.push(pattern);
         }
         exp.write(w, self)?;
         if self.dirty {
@@ -89,15 +89,15 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         W: fmt::Write,
         M: MemoizerKind,
     {
-        if self.travelled.contains(&pattern) {
+        if self.traveled.contains(&pattern) {
             self.add_error(ResolverError::Cyclic);
             w.write_char('{')?;
             exp.write_error(w)?;
             w.write_char('}')
         } else {
-            self.travelled.push(pattern);
+            self.traveled.push(pattern);
             let result = pattern.write(w, self);
-            self.travelled.pop();
+            self.traveled.pop();
             result
         }
     }
