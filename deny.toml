@@ -1,0 +1,7 @@
+[graph]
+all-features = true
+exclude-dev = true
+
+# Not exhaustive, just whitelist the current dependency tree
+[licenses]
+allow = ["Apache-2.0", "MIT", "Unicode-3.0"]
