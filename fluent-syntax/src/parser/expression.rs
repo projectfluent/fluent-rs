@@ -9,6 +9,9 @@ where
     pub(super) fn get_expression(&mut self) -> Result<ast::Expression<S>> {
         let exp = self.get_inline_expression(false)?;
 
+        #[cfg(feature = "spans")]
+        let start_span = exp.get_span().start;
+
         self.skip_blank();
 
         if !self.is_current_byte(b'-') || !self.is_byte_at(b'>', self.ptr + 1) {
@@ -17,7 +20,11 @@ where
                     return error!(ErrorKind::TermAttributeAsPlaceable, self.ptr);
                 }
             }
-            return Ok(ast::Expression::Inline(exp));
+            return Ok(ast::Expression::Inline(
+                exp,
+                #[cfg(feature = "spans")]
+                ast::Span(start_span..self.ptr),
+            ));
         }
 
         match exp {
@@ -60,6 +67,8 @@ where
         Ok(ast::Expression::Select {
             selector: exp,
             variants,
+            #[cfg(feature = "spans")]
+            span: ast::Span(start_span..self.ptr),
         })
     }
 
@@ -67,10 +76,10 @@ where
         &mut self,
         only_literal: bool,
     ) -> Result<ast::InlineExpression<S>> {
+        let start = self.ptr;
         match get_current_byte!(self) {
             Some(b'"') => {
                 self.ptr += 1; // "
-                let start = self.ptr;
                 while let Some(b) = get_current_byte!(self) {
                     match b {
                         b'\\' => match get_byte!(self, self.ptr + 1) {
@@ -99,12 +108,20 @@ where
                 }
 
                 self.expect_byte(b'"')?;
-                let slice = self.source.slice(start..self.ptr - 1);
-                Ok(ast::InlineExpression::StringLiteral { value: slice })
+                let slice = self.source.slice(start + 1..self.ptr - 1);
+                Ok(ast::InlineExpression::StringLiteral {
+                    value: slice,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span(start..self.ptr),
+                })
             }
             Some(b) if b.is_ascii_digit() => {
                 let num = self.get_number_literal()?;
-                Ok(ast::InlineExpression::NumberLiteral { value: num })
+                Ok(ast::InlineExpression::NumberLiteral {
+                    value: num,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span(start..self.ptr),
+                })
             }
             Some(b'-') if !only_literal => {
                 self.ptr += 1; // -
@@ -117,17 +134,27 @@ where
                         id,
                         attribute,
                         arguments,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(start..self.ptr),
                     })
                 } else {
                     self.ptr -= 1;
                     let num = self.get_number_literal()?;
-                    Ok(ast::InlineExpression::NumberLiteral { value: num })
+                    Ok(ast::InlineExpression::NumberLiteral {
+                        value: num,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(start..self.ptr),
+                    })
                 }
             }
             Some(b'$') if !only_literal => {
                 self.ptr += 1; // $
                 let id = self.get_identifier()?;
-                Ok(ast::InlineExpression::VariableReference { id })
+                Ok(ast::InlineExpression::VariableReference {
+                    id,
+                    #[cfg(feature = "spans")]
+                    span: ast::Span(start..self.ptr),
+                })
             }
             Some(b) if b.is_ascii_alphabetic() => {
                 self.ptr += 1;
@@ -138,10 +165,20 @@ where
                         return error!(ErrorKind::ForbiddenCallee, self.ptr);
                     }
 
-                    Ok(ast::InlineExpression::FunctionReference { id, arguments })
+                    Ok(ast::InlineExpression::FunctionReference {
+                        id,
+                        arguments,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(start..self.ptr),
+                    })
                 } else {
                     let attribute = self.get_attribute_accessor()?;
-                    Ok(ast::InlineExpression::MessageReference { id, attribute })
+                    Ok(ast::InlineExpression::MessageReference {
+                        id,
+                        attribute,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(start..self.ptr),
+                    })
                 }
             }
             Some(b'{') if !only_literal => {
@@ -149,6 +186,8 @@ where
                 let exp = self.get_placeable()?;
                 Ok(ast::InlineExpression::Placeable {
                     expression: Box::new(exp),
+                    #[cfg(feature = "spans")]
+                    span: ast::Span(start..self.ptr),
                 })
             }
             _ if only_literal => error!(ErrorKind::ExpectedLiteral, self.ptr),
@@ -161,6 +200,8 @@ where
         if !self.take_byte_if(b'(') {
             return Ok(None);
         }
+        #[cfg(feature = "spans")]
+        let start = self.ptr - 1;
 
         let mut positional = vec![];
         let mut named = vec![];
@@ -178,6 +219,7 @@ where
             if let ast::InlineExpression::MessageReference {
                 ref id,
                 attribute: None,
+                ..
             } = expr
             {
                 self.skip_blank();
@@ -196,8 +238,12 @@ where
                     named.push(ast::NamedArgument {
                         name: ast::Identifier {
                             name: id.name.clone(),
+                            #[cfg(feature = "spans")]
+                            span: id.span.clone(),
                         },
                         value: val,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(id.span.start..self.ptr),
                     });
                 } else {
                     if !argument_names.is_empty() {
@@ -219,6 +265,11 @@ where
 
         self.expect_byte(b')')?;
 
-        Ok(Some(ast::CallArguments { positional, named }))
+        Ok(Some(ast::CallArguments {
+            positional,
+            named,
+            #[cfg(feature = "spans")]
+            span: ast::Span(start..self.ptr),
+        }))
     }
 }

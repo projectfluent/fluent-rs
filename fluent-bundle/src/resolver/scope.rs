@@ -124,7 +124,10 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         R: Borrow<FluentResource>,
         M: MemoizerKind,
     {
-        if let Some(ast::CallArguments { positional, named }) = arguments {
+        if let Some(ast::CallArguments {
+            positional, named, ..
+        }) = arguments
+        {
             let positional = positional.iter().map(|expr| expr.resolve(self)).collect();
 
             let named = named

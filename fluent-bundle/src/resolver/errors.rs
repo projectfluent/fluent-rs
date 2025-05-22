@@ -31,7 +31,7 @@ where
             InlineExpression::FunctionReference { id, .. } => Self::Function {
                 id: id.name.to_string(),
             },
-            InlineExpression::MessageReference { id, attribute } => Self::Message {
+            InlineExpression::MessageReference { id, attribute, .. } => Self::Message {
                 id: id.name.to_string(),
                 attribute: attribute.as_ref().map(|i| i.name.to_string()),
             },

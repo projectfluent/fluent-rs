@@ -1,6 +1,8 @@
 use super::errors::{ErrorKind, ParserError};
 use super::{core::Parser, core::Result, slice::Slice};
 use crate::ast;
+#[cfg(feature = "spans")]
+use std::ops::Range;
 
 #[derive(Debug, PartialEq)]
 enum TextElementTermination {
@@ -24,7 +26,7 @@ enum TextElementPosition {
 // cheaper since they'll happen on the pointers, rather than extracted slices.
 #[derive(Debug)]
 enum PatternElementPlaceholders<S> {
-    Placeable(ast::Expression<S>),
+    Placeable(ast::Expression<S>, #[cfg(feature = "spans")] Range<usize>),
     // (start, end, indent, position)
     TextElement(usize, usize, usize, TextElementPosition),
 }
@@ -49,6 +51,9 @@ where
 
         self.skip_blank_inline();
 
+        #[cfg(feature = "spans")]
+        let start_pos = self.ptr;
+
         let mut text_element_role = if self.skip_eol() {
             self.skip_blank_block();
             TextElementPosition::LineStart
@@ -58,12 +63,23 @@ where
 
         while self.ptr < self.length {
             if self.take_byte_if(b'{') {
+                #[cfg(feature = "spans")]
+                let slice_start = self.ptr - 1;
                 if text_element_role == TextElementPosition::LineStart {
                     common_indent = Some(0);
                 }
                 let exp = self.get_placeable()?;
                 last_non_blank = Some(elements.len());
+
+                #[cfg(feature = "spans")]
+                elements.push(PatternElementPlaceholders::Placeable(
+                    exp,
+                    slice_start..self.ptr - 1,
+                ));
+
+                #[cfg(not(feature = "spans"))]
                 elements.push(PatternElementPlaceholders::Placeable(exp));
+
                 text_element_role = TextElementPosition::Continuation;
             } else {
                 let slice_start = self.ptr;
@@ -127,6 +143,14 @@ where
                 .take(last_non_blank + 1)
                 .enumerate()
                 .map(|(i, elem)| match elem {
+                    #[cfg(feature = "spans")]
+                    PatternElementPlaceholders::Placeable(expression, range) => {
+                        ast::PatternElement::Placeable {
+                            expression,
+                            span: ast::Span(range),
+                        }
+                    }
+                    #[cfg(not(feature = "spans"))]
                     PatternElementPlaceholders::Placeable(expression) => {
                         ast::PatternElement::Placeable { expression }
                     }
@@ -143,11 +167,19 @@ where
                         if last_non_blank == i {
                             value.trim();
                         }
-                        ast::PatternElement::TextElement { value }
+                        ast::PatternElement::TextElement {
+                            value,
+                            #[cfg(feature = "spans")]
+                            span: ast::Span(start..end),
+                        }
                     }
                 })
                 .collect();
-            return Ok(Some(ast::Pattern { elements }));
+            return Ok(Some(ast::Pattern {
+                elements,
+                #[cfg(feature = "spans")]
+                span: ast::Span(start_pos..self.ptr),
+            }));
         }
 
         Ok(None)

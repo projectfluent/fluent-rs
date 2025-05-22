@@ -13,7 +13,7 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
     let mut elements = vec![];
     for element in &pattern.elements {
         match element {
-            ast::PatternElement::TextElement { value } => {
+            ast::PatternElement::TextElement { value, .. } => {
                 let mut start = 0;
                 let len = value.len();
                 for (i, b) in value.as_bytes().iter().enumerate() {
@@ -22,29 +22,53 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
                             if i > start {
                                 let chunk = &value.as_bytes()[start..=i - 1];
                                 let value = String::from_utf8_lossy(chunk).to_string();
-                                elements.push(ast::PatternElement::TextElement { value });
+                                elements.push(ast::PatternElement::TextElement {
+                                    value,
+                                    #[cfg(feature = "spans")]
+                                    span: ast::Span(start..i),
+                                });
                             }
+
                             elements.push(ast::PatternElement::TextElement {
                                 value: "\n".to_string(),
+                                #[cfg(feature = "spans")]
+                                span: ast::Span(i..i + 1),
                             });
                         } else {
                             let chunk = &value.as_bytes()[start..=i];
                             let value = String::from_utf8_lossy(chunk).to_string();
-                            elements.push(ast::PatternElement::TextElement { value });
+                            elements.push(ast::PatternElement::TextElement {
+                                value,
+                                #[cfg(feature = "spans")]
+                                span: ast::Span(start..i + 1),
+                            });
                         }
                         start = i + 1;
                     }
                 }
+
                 if start < len {
                     let chunk = &value.as_bytes()[start..len];
                     let value = String::from_utf8_lossy(chunk).to_string();
-                    elements.push(ast::PatternElement::TextElement { value });
+                    elements.push(ast::PatternElement::TextElement {
+                        value,
+                        #[cfg(feature = "spans")]
+                        span: ast::Span(start..len),
+                    });
                 }
             }
-            ast::PatternElement::Placeable { expression } => {
+            ast::PatternElement::Placeable {
+                expression,
+                #[cfg(feature = "spans")]
+                span,
+            } => {
                 let mut expression = expression.clone();
                 adapt_expression(&mut expression, crlf);
-                elements.push(ast::PatternElement::Placeable { expression });
+                elements.push(ast::PatternElement::Placeable {
+                    expression,
+                    #[cfg(feature = "spans")]
+                    span: span.clone(),
+                });
             }
         }
     }
@@ -58,7 +82,7 @@ fn adapt_expression(expression: &mut ast::Expression<String>, crlf: bool) {
                 adapt_pattern(&mut variant.value, crlf);
             }
         }
-        ast::Expression::Inline(_) => {}
+        ast::Expression::Inline(..) => {}
     }
 }
 
