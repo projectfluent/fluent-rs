@@ -1,0 +1,639 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-window",
+        "span": {
+          "start": 200,
+          "end": 216
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 224,
+              "end": 229
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Block Lists",
+                "span": {
+                  "start": 232,
+                  "end": 244
+                }
+              }
+            ],
+            "span": {
+              "start": 232,
+              "end": 244
+            }
+          },
+          "span": {
+            "start": 243,
+            "end": 244
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 249,
+              "end": 254
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 55em",
+                "span": {
+                  "start": 257,
+                  "end": 269
+                }
+              }
+            ],
+            "span": {
+              "start": 257,
+              "end": 270
+            }
+          },
+          "span": {
+            "start": 269,
+            "end": 270
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 270
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-description",
+        "span": {
+          "start": 270,
+          "end": 291
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose the list ",
+            "span": {
+              "start": 294,
+              "end": 310
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 313,
+                    "end": 329
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 312,
+                  "end": 330
+                }
+              },
+              {
+                "start": 312,
+                "end": 330
+              }
+            ],
+            "span": {
+              "start": 310,
+              "end": 330
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " uses to block online trackers. Lists provided by <a data-l10n-name=\"disconnect-link\" title=\"Disconnect\">Disconnect</a>.",
+            "span": {
+              "start": 331,
+              "end": 452
+            }
+          }
+        ],
+        "span": {
+          "start": 294,
+          "end": 452
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 270,
+        "end": 452
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-close-key",
+        "span": {
+          "start": 452,
+          "end": 471
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 479,
+              "end": 482
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 485,
+                  "end": 487
+                }
+              }
+            ],
+            "span": {
+              "start": 485,
+              "end": 488
+            }
+          },
+          "span": {
+            "start": 487,
+            "end": 488
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 452,
+        "end": 488
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-treehead-list",
+        "span": {
+          "start": 488,
+          "end": 511
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 519,
+              "end": 524
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "List",
+                "span": {
+                  "start": 527,
+                  "end": 532
+                }
+              }
+            ],
+            "span": {
+              "start": 527,
+              "end": 533
+            }
+          },
+          "span": {
+            "start": 532,
+            "end": 533
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 488,
+        "end": 533
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-button-cancel",
+        "span": {
+          "start": 533,
+          "end": 556
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 564,
+              "end": 569
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cancel",
+                "span": {
+                  "start": 572,
+                  "end": 579
+                }
+              }
+            ],
+            "span": {
+              "start": 572,
+              "end": 579
+            }
+          },
+          "span": {
+            "start": 578,
+            "end": 579
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 584,
+              "end": 593
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 596,
+                  "end": 598
+                }
+              }
+            ],
+            "span": {
+              "start": 596,
+              "end": 599
+            }
+          },
+          "span": {
+            "start": 598,
+            "end": 599
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 533,
+        "end": 599
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-button-ok",
+        "span": {
+          "start": 599,
+          "end": 618
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 626,
+              "end": 631
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Changes",
+                "span": {
+                  "start": 634,
+                  "end": 647
+                }
+              }
+            ],
+            "span": {
+              "start": 634,
+              "end": 647
+            }
+          },
+          "span": {
+            "start": 646,
+            "end": 647
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 652,
+              "end": 661
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 664,
+                  "end": 666
+                }
+              }
+            ],
+            "span": {
+              "start": 664,
+              "end": 667
+            }
+          },
+          "span": {
+            "start": 666,
+            "end": 667
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 599,
+        "end": 667
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-list-template",
+        "span": {
+          "start": 1028,
+          "end": 1056
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "listName",
+                  "span": {
+                    "start": 1062,
+                    "end": 1070
+                  }
+                },
+                "span": {
+                  "start": 1061,
+                  "end": 1070
+                }
+              },
+              {
+                "start": 1061,
+                "end": 1071
+              }
+            ],
+            "span": {
+              "start": 1059,
+              "end": 1071
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " ",
+            "span": {
+              "start": 1072,
+              "end": 1073
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "description",
+                  "span": {
+                    "start": 1076,
+                    "end": 1087
+                  }
+                },
+                "span": {
+                  "start": 1075,
+                  "end": 1087
+                }
+              },
+              {
+                "start": 1075,
+                "end": 1088
+              }
+            ],
+            "span": {
+              "start": 1073,
+              "end": 1088
+            }
+          }
+        ],
+        "span": {
+          "start": 1059,
+          "end": 1091
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This template constructs the name of the block list in the block lists dialog.",
+          "It combines the list name and description.",
+          "e.g. \"Standard (Recommended). This list does a pretty good job.\"",
+          "",
+          "Variables:",
+          "  $listName {string, \"Standard (Recommended).\"} - List name.",
+          "  $description {string, \"This list does a pretty good job.\"} - Description of the list."
+        ],
+        "span": {
+          "start": 667,
+          "end": 1027
+        }
+      },
+      "span": {
+        "start": 1028,
+        "end": 1091
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-std-listName",
+        "span": {
+          "start": 1091,
+          "end": 1122
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Level 1 block list (Recommended).",
+            "span": {
+              "start": 1125,
+              "end": 1159
+            }
+          }
+        ],
+        "span": {
+          "start": 1125,
+          "end": 1159
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1091,
+        "end": 1159
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-std-description",
+        "span": {
+          "start": 1159,
+          "end": 1193
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Allows some trackers so fewer websites break.",
+            "span": {
+              "start": 1196,
+              "end": 1242
+            }
+          }
+        ],
+        "span": {
+          "start": 1196,
+          "end": 1242
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1159,
+        "end": 1242
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-full-listName",
+        "span": {
+          "start": 1242,
+          "end": 1274
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Level 2 block list.",
+            "span": {
+              "start": 1277,
+              "end": 1297
+            }
+          }
+        ],
+        "span": {
+          "start": 1277,
+          "end": 1297
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1242,
+        "end": 1297
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "blocklist-item-moz-full-description",
+        "span": {
+          "start": 1297,
+          "end": 1332
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Blocks all detected trackers. Some websites or content may not load properly.",
+            "span": {
+              "start": 1335,
+              "end": 1413
+            }
+          }
+        ],
+        "span": {
+          "start": 1335,
+          "end": 1413
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1297,
+        "end": 1413
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1413
+  }
+}

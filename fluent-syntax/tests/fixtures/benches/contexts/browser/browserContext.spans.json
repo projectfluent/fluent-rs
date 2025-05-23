@@ -1,0 +1,7109 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "navbar-tooltip-instruction",
+        "span": {
+          "start": 200,
+          "end": 226
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 234,
+              "end": 239
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "selector": {
+                    "type": "FunctionReference",
+                    "id": {
+                      "name": "PLATFORM",
+                      "span": {
+                        "start": 244,
+                        "end": 252
+                      }
+                    },
+                    "arguments": {
+                      "type": "CallArguments",
+                      "positional": [],
+                      "named": [],
+                      "span": {
+                        "start": 252,
+                        "end": 254
+                      }
+                    },
+                    "span": {
+                      "start": 244,
+                      "end": 254
+                    }
+                  },
+                  "variants": [
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "macos",
+                        "span": {
+                          "start": 267,
+                          "end": 272
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "Pull down to show history",
+                            "span": {
+                              "start": 274,
+                              "end": 300
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 274,
+                          "end": 300
+                        }
+                      },
+                      "default": false,
+                      "span": {
+                        "start": 266,
+                        "end": 300
+                      }
+                    },
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "other",
+                        "span": {
+                          "start": 309,
+                          "end": 314
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "Right-click or pull down to show history",
+                            "span": {
+                              "start": 316,
+                              "end": 357
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 316,
+                          "end": 357
+                        }
+                      },
+                      "default": true,
+                      "span": {
+                        "start": 307,
+                        "end": 357
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 244,
+                    "end": 361
+                  }
+                },
+                "span": {
+                  "start": 242,
+                  "end": 361
+                }
+              }
+            ],
+            "span": {
+              "start": 242,
+              "end": 364
+            }
+          },
+          "span": {
+            "start": 363,
+            "end": 364
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 364
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Back"
+      ],
+      "span": {
+        "start": 364,
+        "end": 371
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-back",
+        "span": {
+          "start": 373,
+          "end": 395
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 403,
+              "end": 414
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Go back one page",
+                "span": {
+                  "start": 417,
+                  "end": 434
+                }
+              }
+            ],
+            "span": {
+              "start": 417,
+              "end": 434
+            }
+          },
+          "span": {
+            "start": 433,
+            "end": 434
+          }
+        },
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 439,
+              "end": 449
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Back",
+                "span": {
+                  "start": 452,
+                  "end": 457
+                }
+              }
+            ],
+            "span": {
+              "start": 452,
+              "end": 457
+            }
+          },
+          "span": {
+            "start": 456,
+            "end": 457
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 462,
+              "end": 471
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B",
+                "span": {
+                  "start": 474,
+                  "end": 476
+                }
+              }
+            ],
+            "span": {
+              "start": 474,
+              "end": 477
+            }
+          },
+          "span": {
+            "start": 476,
+            "end": 477
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 373,
+        "end": 477
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "navbar-tooltip-back",
+        "span": {
+          "start": 477,
+          "end": 496
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 505,
+              "end": 510
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-back",
+                      "span": {
+                        "start": 515,
+                        "end": 537
+                      }
+                    },
+                    "attribute": {
+                      "name": "tooltiptext",
+                      "span": {
+                        "start": 538,
+                        "end": 549
+                      }
+                    },
+                    "span": {
+                      "start": 515,
+                      "end": 549
+                    }
+                  },
+                  {
+                    "start": 515,
+                    "end": 550
+                  }
+                ],
+                "span": {
+                  "start": 513,
+                  "end": 550
+                }
+              }
+            ],
+            "span": {
+              "start": 513,
+              "end": 553
+            }
+          },
+          "span": {
+            "start": 552,
+            "end": 553
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 477,
+        "end": 553
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-back",
+        "span": {
+          "start": 553,
+          "end": 572
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 580,
+              "end": 585
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-back",
+                      "span": {
+                        "start": 590,
+                        "end": 612
+                      }
+                    },
+                    "attribute": {
+                      "name": "aria-label",
+                      "span": {
+                        "start": 613,
+                        "end": 623
+                      }
+                    },
+                    "span": {
+                      "start": 590,
+                      "end": 623
+                    }
+                  },
+                  {
+                    "start": 590,
+                    "end": 624
+                  }
+                ],
+                "span": {
+                  "start": 588,
+                  "end": 624
+                }
+              }
+            ],
+            "span": {
+              "start": 588,
+              "end": 627
+            }
+          },
+          "span": {
+            "start": 626,
+            "end": 627
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 553,
+        "end": 627
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Forward"
+      ],
+      "span": {
+        "start": 627,
+        "end": 637
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-forward",
+        "span": {
+          "start": 639,
+          "end": 664
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 672,
+              "end": 683
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Go forward one page",
+                "span": {
+                  "start": 686,
+                  "end": 706
+                }
+              }
+            ],
+            "span": {
+              "start": 686,
+              "end": 706
+            }
+          },
+          "span": {
+            "start": 705,
+            "end": 706
+          }
+        },
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 711,
+              "end": 721
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Forward",
+                "span": {
+                  "start": 724,
+                  "end": 732
+                }
+              }
+            ],
+            "span": {
+              "start": 724,
+              "end": 732
+            }
+          },
+          "span": {
+            "start": 731,
+            "end": 732
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 737,
+              "end": 746
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 749,
+                  "end": 751
+                }
+              }
+            ],
+            "span": {
+              "start": 749,
+              "end": 752
+            }
+          },
+          "span": {
+            "start": 751,
+            "end": 752
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 639,
+        "end": 752
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "navbar-tooltip-forward",
+        "span": {
+          "start": 752,
+          "end": 774
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 782,
+              "end": 787
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-forward",
+                      "span": {
+                        "start": 792,
+                        "end": 817
+                      }
+                    },
+                    "attribute": {
+                      "name": "tooltiptext",
+                      "span": {
+                        "start": 818,
+                        "end": 829
+                      }
+                    },
+                    "span": {
+                      "start": 792,
+                      "end": 829
+                    }
+                  },
+                  {
+                    "start": 792,
+                    "end": 830
+                  }
+                ],
+                "span": {
+                  "start": 790,
+                  "end": 830
+                }
+              }
+            ],
+            "span": {
+              "start": 790,
+              "end": 834
+            }
+          },
+          "span": {
+            "start": 833,
+            "end": 834
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 752,
+        "end": 834
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-forward",
+        "span": {
+          "start": 834,
+          "end": 856
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 864,
+              "end": 869
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-forward",
+                      "span": {
+                        "start": 874,
+                        "end": 899
+                      }
+                    },
+                    "attribute": {
+                      "name": "aria-label",
+                      "span": {
+                        "start": 900,
+                        "end": 910
+                      }
+                    },
+                    "span": {
+                      "start": 874,
+                      "end": 910
+                    }
+                  },
+                  {
+                    "start": 874,
+                    "end": 911
+                  }
+                ],
+                "span": {
+                  "start": 872,
+                  "end": 911
+                }
+              }
+            ],
+            "span": {
+              "start": 872,
+              "end": 914
+            }
+          },
+          "span": {
+            "start": 913,
+            "end": 914
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 834,
+        "end": 914
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Reload"
+      ],
+      "span": {
+        "start": 914,
+        "end": 923
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-reload",
+        "span": {
+          "start": 925,
+          "end": 949
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 957,
+              "end": 967
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Reload",
+                "span": {
+                  "start": 970,
+                  "end": 977
+                }
+              }
+            ],
+            "span": {
+              "start": 970,
+              "end": 977
+            }
+          },
+          "span": {
+            "start": 976,
+            "end": 977
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 982,
+              "end": 991
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 994,
+                  "end": 996
+                }
+              }
+            ],
+            "span": {
+              "start": 994,
+              "end": 997
+            }
+          },
+          "span": {
+            "start": 996,
+            "end": 997
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 925,
+        "end": 997
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-reload",
+        "span": {
+          "start": 997,
+          "end": 1018
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1026,
+              "end": 1031
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-reload",
+                      "span": {
+                        "start": 1036,
+                        "end": 1060
+                      }
+                    },
+                    "attribute": {
+                      "name": "aria-label",
+                      "span": {
+                        "start": 1061,
+                        "end": 1071
+                      }
+                    },
+                    "span": {
+                      "start": 1036,
+                      "end": 1071
+                    }
+                  },
+                  {
+                    "start": 1036,
+                    "end": 1072
+                  }
+                ],
+                "span": {
+                  "start": 1034,
+                  "end": 1072
+                }
+              }
+            ],
+            "span": {
+              "start": 1034,
+              "end": 1075
+            }
+          },
+          "span": {
+            "start": 1074,
+            "end": 1075
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 997,
+        "end": 1075
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Stop"
+      ],
+      "span": {
+        "start": 1075,
+        "end": 1082
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-stop",
+        "span": {
+          "start": 1084,
+          "end": 1106
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 1114,
+              "end": 1124
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Stop",
+                "span": {
+                  "start": 1127,
+                  "end": 1132
+                }
+              }
+            ],
+            "span": {
+              "start": 1127,
+              "end": 1132
+            }
+          },
+          "span": {
+            "start": 1131,
+            "end": 1132
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1137,
+              "end": 1146
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 1149,
+                  "end": 1151
+                }
+              }
+            ],
+            "span": {
+              "start": 1149,
+              "end": 1152
+            }
+          },
+          "span": {
+            "start": 1151,
+            "end": 1152
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1084,
+        "end": 1152
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-stop",
+        "span": {
+          "start": 1152,
+          "end": 1171
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1179,
+              "end": 1184
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-stop",
+                      "span": {
+                        "start": 1189,
+                        "end": 1211
+                      }
+                    },
+                    "attribute": {
+                      "name": "aria-label",
+                      "span": {
+                        "start": 1212,
+                        "end": 1222
+                      }
+                    },
+                    "span": {
+                      "start": 1189,
+                      "end": 1222
+                    }
+                  },
+                  {
+                    "start": 1189,
+                    "end": 1223
+                  }
+                ],
+                "span": {
+                  "start": 1187,
+                  "end": 1223
+                }
+              }
+            ],
+            "span": {
+              "start": 1187,
+              "end": 1226
+            }
+          },
+          "span": {
+            "start": 1225,
+            "end": 1226
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1152,
+        "end": 1226
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Stop-Reload Button"
+      ],
+      "span": {
+        "start": 1226,
+        "end": 1247
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-stop-reload",
+        "span": {
+          "start": 1249,
+          "end": 1275
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1283,
+              "end": 1288
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-reload",
+                      "span": {
+                        "start": 1293,
+                        "end": 1317
+                      }
+                    },
+                    "attribute": {
+                      "name": "aria-label",
+                      "span": {
+                        "start": 1318,
+                        "end": 1328
+                      }
+                    },
+                    "span": {
+                      "start": 1293,
+                      "end": 1328
+                    }
+                  },
+                  {
+                    "start": 1293,
+                    "end": 1329
+                  }
+                ],
+                "span": {
+                  "start": 1291,
+                  "end": 1329
+                }
+              }
+            ],
+            "span": {
+              "start": 1291,
+              "end": 1332
+            }
+          },
+          "span": {
+            "start": 1331,
+            "end": 1332
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1249,
+        "end": 1332
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Save Page"
+      ],
+      "span": {
+        "start": 1332,
+        "end": 1344
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-page-save",
+        "span": {
+          "start": 1346,
+          "end": 1373
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1381,
+              "end": 1386
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Page As…",
+                "span": {
+                  "start": 1389,
+                  "end": 1405
+                }
+              }
+            ],
+            "span": {
+              "start": 1389,
+              "end": 1405
+            }
+          },
+          "span": {
+            "start": 1404,
+            "end": 1405
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1410,
+              "end": 1419
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 1422,
+                  "end": 1424
+                }
+              }
+            ],
+            "span": {
+              "start": 1422,
+              "end": 1425
+            }
+          },
+          "span": {
+            "start": 1424,
+            "end": 1425
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1346,
+        "end": 1425
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "toolbar-button-page-save",
+        "span": {
+          "start": 1425,
+          "end": 1449
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1457,
+              "end": 1462
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "main-context-menu-page-save",
+                      "span": {
+                        "start": 1467,
+                        "end": 1494
+                      }
+                    },
+                    "attribute": {
+                      "name": "label",
+                      "span": {
+                        "start": 1495,
+                        "end": 1500
+                      }
+                    },
+                    "span": {
+                      "start": 1467,
+                      "end": 1500
+                    }
+                  },
+                  {
+                    "start": 1467,
+                    "end": 1501
+                  }
+                ],
+                "span": {
+                  "start": 1465,
+                  "end": 1501
+                }
+              }
+            ],
+            "span": {
+              "start": 1465,
+              "end": 1504
+            }
+          },
+          "span": {
+            "start": 1503,
+            "end": 1504
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1425,
+        "end": 1504
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Simple menu items"
+      ],
+      "span": {
+        "start": 1504,
+        "end": 1524
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bookmark-add",
+        "span": {
+          "start": 1526,
+          "end": 1556
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 1564,
+              "end": 1574
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark This Page",
+                "span": {
+                  "start": 1577,
+                  "end": 1596
+                }
+              }
+            ],
+            "span": {
+              "start": 1577,
+              "end": 1596
+            }
+          },
+          "span": {
+            "start": 1595,
+            "end": 1596
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1601,
+              "end": 1610
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 1613,
+                  "end": 1615
+                }
+              }
+            ],
+            "span": {
+              "start": 1613,
+              "end": 1615
+            }
+          },
+          "span": {
+            "start": 1614,
+            "end": 1615
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 1620,
+              "end": 1631
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark this page",
+                "span": {
+                  "start": 1634,
+                  "end": 1653
+                }
+              }
+            ],
+            "span": {
+              "start": 1634,
+              "end": 1654
+            }
+          },
+          "span": {
+            "start": 1653,
+            "end": 1654
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1526,
+        "end": 1654
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bookmark-add-with-shortcut",
+        "span": {
+          "start": 1741,
+          "end": 1785
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 1793,
+              "end": 1803
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark This Page",
+                "span": {
+                  "start": 1806,
+                  "end": 1825
+                }
+              }
+            ],
+            "span": {
+              "start": 1806,
+              "end": 1825
+            }
+          },
+          "span": {
+            "start": 1824,
+            "end": 1825
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1830,
+              "end": 1839
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 1842,
+                  "end": 1844
+                }
+              }
+            ],
+            "span": {
+              "start": 1842,
+              "end": 1844
+            }
+          },
+          "span": {
+            "start": 1843,
+            "end": 1844
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 1849,
+              "end": 1860
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark this page (",
+                "span": {
+                  "start": 1863,
+                  "end": 1883
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "shortcut",
+                      "span": {
+                        "start": 1886,
+                        "end": 1894
+                      }
+                    },
+                    "span": {
+                      "start": 1885,
+                      "end": 1894
+                    }
+                  },
+                  {
+                    "start": 1885,
+                    "end": 1895
+                  }
+                ],
+                "span": {
+                  "start": 1883,
+                  "end": 1895
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")",
+                "span": {
+                  "start": 1896,
+                  "end": 1898
+                }
+              }
+            ],
+            "span": {
+              "start": 1863,
+              "end": 1899
+            }
+          },
+          "span": {
+            "start": 1898,
+            "end": 1899
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables",
+          "  $shortcut (String) - A keyboard shortcut for the add bookmark command."
+        ],
+        "span": {
+          "start": 1654,
+          "end": 1740
+        }
+      },
+      "span": {
+        "start": 1741,
+        "end": 1899
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bookmark-change",
+        "span": {
+          "start": 1899,
+          "end": 1932
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 1940,
+              "end": 1950
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit This Bookmark",
+                "span": {
+                  "start": 1953,
+                  "end": 1972
+                }
+              }
+            ],
+            "span": {
+              "start": 1953,
+              "end": 1972
+            }
+          },
+          "span": {
+            "start": 1971,
+            "end": 1972
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1977,
+              "end": 1986
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 1989,
+                  "end": 1991
+                }
+              }
+            ],
+            "span": {
+              "start": 1989,
+              "end": 1991
+            }
+          },
+          "span": {
+            "start": 1990,
+            "end": 1991
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 1996,
+              "end": 2007
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit this bookmark",
+                "span": {
+                  "start": 2010,
+                  "end": 2029
+                }
+              }
+            ],
+            "span": {
+              "start": 2010,
+              "end": 2030
+            }
+          },
+          "span": {
+            "start": 2029,
+            "end": 2030
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1899,
+        "end": 2030
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bookmark-change-with-shortcut",
+        "span": {
+          "start": 2118,
+          "end": 2165
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "aria-label",
+            "span": {
+              "start": 2173,
+              "end": 2183
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit This Bookmark",
+                "span": {
+                  "start": 2186,
+                  "end": 2205
+                }
+              }
+            ],
+            "span": {
+              "start": 2186,
+              "end": 2205
+            }
+          },
+          "span": {
+            "start": 2204,
+            "end": 2205
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2210,
+              "end": 2219
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 2222,
+                  "end": 2224
+                }
+              }
+            ],
+            "span": {
+              "start": 2222,
+              "end": 2224
+            }
+          },
+          "span": {
+            "start": 2223,
+            "end": 2224
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 2229,
+              "end": 2240
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit this bookmark (",
+                "span": {
+                  "start": 2243,
+                  "end": 2263
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "shortcut",
+                      "span": {
+                        "start": 2266,
+                        "end": 2274
+                      }
+                    },
+                    "span": {
+                      "start": 2265,
+                      "end": 2274
+                    }
+                  },
+                  {
+                    "start": 2265,
+                    "end": 2275
+                  }
+                ],
+                "span": {
+                  "start": 2263,
+                  "end": 2275
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")",
+                "span": {
+                  "start": 2276,
+                  "end": 2278
+                }
+              }
+            ],
+            "span": {
+              "start": 2243,
+              "end": 2279
+            }
+          },
+          "span": {
+            "start": 2278,
+            "end": 2279
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables",
+          "  $shortcut (String) - A keyboard shortcut for the edit bookmark command."
+        ],
+        "span": {
+          "start": 2030,
+          "end": 2117
+        }
+      },
+      "span": {
+        "start": 2118,
+        "end": 2279
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-open-link",
+        "span": {
+          "start": 2279,
+          "end": 2306
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2314,
+              "end": 2319
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Link",
+                "span": {
+                  "start": 2322,
+                  "end": 2332
+                }
+              }
+            ],
+            "span": {
+              "start": 2322,
+              "end": 2332
+            }
+          },
+          "span": {
+            "start": 2331,
+            "end": 2332
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2337,
+              "end": 2346
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "O",
+                "span": {
+                  "start": 2349,
+                  "end": 2351
+                }
+              }
+            ],
+            "span": {
+              "start": 2349,
+              "end": 2352
+            }
+          },
+          "span": {
+            "start": 2351,
+            "end": 2352
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2279,
+        "end": 2352
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-open-link-new-tab",
+        "span": {
+          "start": 2352,
+          "end": 2387
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2395,
+              "end": 2400
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Link in New Tab",
+                "span": {
+                  "start": 2403,
+                  "end": 2424
+                }
+              }
+            ],
+            "span": {
+              "start": 2403,
+              "end": 2424
+            }
+          },
+          "span": {
+            "start": 2423,
+            "end": 2424
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2429,
+              "end": 2438
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T",
+                "span": {
+                  "start": 2441,
+                  "end": 2443
+                }
+              }
+            ],
+            "span": {
+              "start": 2441,
+              "end": 2444
+            }
+          },
+          "span": {
+            "start": 2443,
+            "end": 2444
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2352,
+        "end": 2444
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-open-link-container-tab",
+        "span": {
+          "start": 2444,
+          "end": 2485
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2493,
+              "end": 2498
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Link in New Container Tab",
+                "span": {
+                  "start": 2501,
+                  "end": 2532
+                }
+              }
+            ],
+            "span": {
+              "start": 2501,
+              "end": 2532
+            }
+          },
+          "span": {
+            "start": 2531,
+            "end": 2532
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2537,
+              "end": 2546
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "b",
+                "span": {
+                  "start": 2549,
+                  "end": 2551
+                }
+              }
+            ],
+            "span": {
+              "start": 2549,
+              "end": 2552
+            }
+          },
+          "span": {
+            "start": 2551,
+            "end": 2552
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2444,
+        "end": 2552
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-open-link-new-window",
+        "span": {
+          "start": 2552,
+          "end": 2590
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2598,
+              "end": 2603
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Link in New Window",
+                "span": {
+                  "start": 2606,
+                  "end": 2630
+                }
+              }
+            ],
+            "span": {
+              "start": 2606,
+              "end": 2630
+            }
+          },
+          "span": {
+            "start": 2629,
+            "end": 2630
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2635,
+              "end": 2644
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "W",
+                "span": {
+                  "start": 2647,
+                  "end": 2649
+                }
+              }
+            ],
+            "span": {
+              "start": 2647,
+              "end": 2650
+            }
+          },
+          "span": {
+            "start": 2649,
+            "end": 2650
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2552,
+        "end": 2650
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-open-link-new-private-window",
+        "span": {
+          "start": 2650,
+          "end": 2696
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2704,
+              "end": 2709
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Link in New Private Window",
+                "span": {
+                  "start": 2712,
+                  "end": 2744
+                }
+              }
+            ],
+            "span": {
+              "start": 2712,
+              "end": 2744
+            }
+          },
+          "span": {
+            "start": 2743,
+            "end": 2744
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2749,
+              "end": 2758
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 2761,
+                  "end": 2763
+                }
+              }
+            ],
+            "span": {
+              "start": 2761,
+              "end": 2764
+            }
+          },
+          "span": {
+            "start": 2763,
+            "end": 2764
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2650,
+        "end": 2764
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bookmark-this-link",
+        "span": {
+          "start": 2764,
+          "end": 2800
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2808,
+              "end": 2813
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark This Link",
+                "span": {
+                  "start": 2816,
+                  "end": 2835
+                }
+              }
+            ],
+            "span": {
+              "start": 2816,
+              "end": 2835
+            }
+          },
+          "span": {
+            "start": 2834,
+            "end": 2835
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2840,
+              "end": 2849
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 2852,
+                  "end": 2854
+                }
+              }
+            ],
+            "span": {
+              "start": 2852,
+              "end": 2855
+            }
+          },
+          "span": {
+            "start": 2854,
+            "end": 2855
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2764,
+        "end": 2855
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-save-link",
+        "span": {
+          "start": 2855,
+          "end": 2882
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2890,
+              "end": 2895
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Link As…",
+                "span": {
+                  "start": 2898,
+                  "end": 2914
+                }
+              }
+            ],
+            "span": {
+              "start": 2898,
+              "end": 2914
+            }
+          },
+          "span": {
+            "start": 2913,
+            "end": 2914
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2919,
+              "end": 2928
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "k",
+                "span": {
+                  "start": 2931,
+                  "end": 2933
+                }
+              }
+            ],
+            "span": {
+              "start": 2931,
+              "end": 2934
+            }
+          },
+          "span": {
+            "start": 2933,
+            "end": 2934
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2855,
+        "end": 2934
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-save-link-to-pocket",
+        "span": {
+          "start": 2934,
+          "end": 2971
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2979,
+              "end": 2984
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Link to ",
+                "span": {
+                  "start": 2987,
+                  "end": 3000
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "TermReference",
+                    "id": {
+                      "name": "pocket-brand-name",
+                      "span": {
+                        "start": 3003,
+                        "end": 3020
+                      }
+                    },
+                    "attribute": null,
+                    "arguments": null,
+                    "span": {
+                      "start": 3002,
+                      "end": 3021
+                    }
+                  },
+                  {
+                    "start": 3002,
+                    "end": 3021
+                  }
+                ],
+                "span": {
+                  "start": 3000,
+                  "end": 3021
+                }
+              }
+            ],
+            "span": {
+              "start": 2987,
+              "end": 3023
+            }
+          },
+          "span": {
+            "start": 3022,
+            "end": 3023
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3028,
+              "end": 3037
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 3040,
+                  "end": 3042
+                }
+              }
+            ],
+            "span": {
+              "start": 3040,
+              "end": 3043
+            }
+          },
+          "span": {
+            "start": 3042,
+            "end": 3043
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2934,
+        "end": 3043
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "The access keys for \"Copy Link Location\" and \"Copy Email Address\"",
+        "should be the same if possible; the two context menu items",
+        "are mutually exclusive."
+      ],
+      "span": {
+        "start": 3043,
+        "end": 3200
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-copy-email",
+        "span": {
+          "start": 3202,
+          "end": 3230
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3238,
+              "end": 3243
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Email Address",
+                "span": {
+                  "start": 3246,
+                  "end": 3265
+                }
+              }
+            ],
+            "span": {
+              "start": 3246,
+              "end": 3265
+            }
+          },
+          "span": {
+            "start": 3264,
+            "end": 3265
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3270,
+              "end": 3279
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 3282,
+                  "end": 3284
+                }
+              }
+            ],
+            "span": {
+              "start": 3282,
+              "end": 3285
+            }
+          },
+          "span": {
+            "start": 3284,
+            "end": 3285
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3202,
+        "end": 3285
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-copy-link",
+        "span": {
+          "start": 3285,
+          "end": 3312
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3320,
+              "end": 3325
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Link Location",
+                "span": {
+                  "start": 3328,
+                  "end": 3347
+                }
+              }
+            ],
+            "span": {
+              "start": 3328,
+              "end": 3347
+            }
+          },
+          "span": {
+            "start": 3346,
+            "end": 3347
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3352,
+              "end": 3361
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 3364,
+                  "end": 3366
+                }
+              }
+            ],
+            "span": {
+              "start": 3364,
+              "end": 3367
+            }
+          },
+          "span": {
+            "start": 3366,
+            "end": 3367
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3285,
+        "end": 3367
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Media (video/audio) controls",
+        "",
+        "The accesskey for \"Play\" and \"Pause\" are the",
+        "same because the two context-menu items are",
+        "mutually exclusive."
+      ],
+      "span": {
+        "start": 3367,
+        "end": 3519
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play",
+        "span": {
+          "start": 3521,
+          "end": 3549
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3557,
+              "end": 3562
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Play",
+                "span": {
+                  "start": 3565,
+                  "end": 3570
+                }
+              }
+            ],
+            "span": {
+              "start": 3565,
+              "end": 3570
+            }
+          },
+          "span": {
+            "start": 3569,
+            "end": 3570
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3575,
+              "end": 3584
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 3587,
+                  "end": 3589
+                }
+              }
+            ],
+            "span": {
+              "start": 3587,
+              "end": 3590
+            }
+          },
+          "span": {
+            "start": 3589,
+            "end": 3590
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3521,
+        "end": 3590
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-pause",
+        "span": {
+          "start": 3590,
+          "end": 3619
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3627,
+              "end": 3632
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Pause",
+                "span": {
+                  "start": 3635,
+                  "end": 3641
+                }
+              }
+            ],
+            "span": {
+              "start": 3635,
+              "end": 3641
+            }
+          },
+          "span": {
+            "start": 3640,
+            "end": 3641
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3646,
+              "end": 3655
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 3658,
+                  "end": 3660
+                }
+              }
+            ],
+            "span": {
+              "start": 3658,
+              "end": 3661
+            }
+          },
+          "span": {
+            "start": 3660,
+            "end": 3661
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3590,
+        "end": 3661
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        ""
+      ],
+      "span": {
+        "start": 3661,
+        "end": 3663
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-mute",
+        "span": {
+          "start": 3665,
+          "end": 3693
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3701,
+              "end": 3706
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Mute",
+                "span": {
+                  "start": 3709,
+                  "end": 3714
+                }
+              }
+            ],
+            "span": {
+              "start": 3709,
+              "end": 3714
+            }
+          },
+          "span": {
+            "start": 3713,
+            "end": 3714
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3719,
+              "end": 3728
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "M",
+                "span": {
+                  "start": 3731,
+                  "end": 3733
+                }
+              }
+            ],
+            "span": {
+              "start": 3731,
+              "end": 3734
+            }
+          },
+          "span": {
+            "start": 3733,
+            "end": 3734
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3665,
+        "end": 3734
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-unmute",
+        "span": {
+          "start": 3734,
+          "end": 3764
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3772,
+              "end": 3777
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Unmute",
+                "span": {
+                  "start": 3780,
+                  "end": 3787
+                }
+              }
+            ],
+            "span": {
+              "start": 3780,
+              "end": 3787
+            }
+          },
+          "span": {
+            "start": 3786,
+            "end": 3787
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3792,
+              "end": 3801
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 3804,
+                  "end": 3806
+                }
+              }
+            ],
+            "span": {
+              "start": 3804,
+              "end": 3807
+            }
+          },
+          "span": {
+            "start": 3806,
+            "end": 3807
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3734,
+        "end": 3807
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed",
+        "span": {
+          "start": 3807,
+          "end": 3841
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3849,
+              "end": 3854
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Play Speed",
+                "span": {
+                  "start": 3857,
+                  "end": 3868
+                }
+              }
+            ],
+            "span": {
+              "start": 3857,
+              "end": 3868
+            }
+          },
+          "span": {
+            "start": 3867,
+            "end": 3868
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3873,
+              "end": 3882
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "d",
+                "span": {
+                  "start": 3885,
+                  "end": 3887
+                }
+              }
+            ],
+            "span": {
+              "start": 3885,
+              "end": 3888
+            }
+          },
+          "span": {
+            "start": 3887,
+            "end": 3888
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3807,
+        "end": 3888
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed-slow",
+        "span": {
+          "start": 3888,
+          "end": 3927
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3935,
+              "end": 3940
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Slow (0.5×)",
+                "span": {
+                  "start": 3943,
+                  "end": 3956
+                }
+              }
+            ],
+            "span": {
+              "start": 3943,
+              "end": 3956
+            }
+          },
+          "span": {
+            "start": 3955,
+            "end": 3956
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3961,
+              "end": 3970
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 3973,
+                  "end": 3975
+                }
+              }
+            ],
+            "span": {
+              "start": 3973,
+              "end": 3976
+            }
+          },
+          "span": {
+            "start": 3975,
+            "end": 3976
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3888,
+        "end": 3976
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed-normal",
+        "span": {
+          "start": 3976,
+          "end": 4017
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4025,
+              "end": 4030
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Normal",
+                "span": {
+                  "start": 4033,
+                  "end": 4040
+                }
+              }
+            ],
+            "span": {
+              "start": 4033,
+              "end": 4040
+            }
+          },
+          "span": {
+            "start": 4039,
+            "end": 4040
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4045,
+              "end": 4054
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "N",
+                "span": {
+                  "start": 4057,
+                  "end": 4059
+                }
+              }
+            ],
+            "span": {
+              "start": 4057,
+              "end": 4060
+            }
+          },
+          "span": {
+            "start": 4059,
+            "end": 4060
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3976,
+        "end": 4060
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed-fast",
+        "span": {
+          "start": 4060,
+          "end": 4099
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4107,
+              "end": 4112
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Fast (1.25×)",
+                "span": {
+                  "start": 4115,
+                  "end": 4129
+                }
+              }
+            ],
+            "span": {
+              "start": 4115,
+              "end": 4129
+            }
+          },
+          "span": {
+            "start": 4128,
+            "end": 4129
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4134,
+              "end": 4143
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 4146,
+                  "end": 4148
+                }
+              }
+            ],
+            "span": {
+              "start": 4146,
+              "end": 4149
+            }
+          },
+          "span": {
+            "start": 4148,
+            "end": 4149
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4060,
+        "end": 4149
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed-faster",
+        "span": {
+          "start": 4149,
+          "end": 4190
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4198,
+              "end": 4203
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Faster (1.5×)",
+                "span": {
+                  "start": 4206,
+                  "end": 4221
+                }
+              }
+            ],
+            "span": {
+              "start": 4206,
+              "end": 4221
+            }
+          },
+          "span": {
+            "start": 4220,
+            "end": 4221
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4226,
+              "end": 4235
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 4238,
+                  "end": 4240
+                }
+              }
+            ],
+            "span": {
+              "start": 4238,
+              "end": 4241
+            }
+          },
+          "span": {
+            "start": 4240,
+            "end": 4241
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4149,
+        "end": 4241
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-play-speed-fastest",
+        "span": {
+          "start": 4349,
+          "end": 4391
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4399,
+              "end": 4404
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Ludicrous (2×)",
+                "span": {
+                  "start": 4407,
+                  "end": 4423
+                }
+              }
+            ],
+            "span": {
+              "start": 4407,
+              "end": 4423
+            }
+          },
+          "span": {
+            "start": 4422,
+            "end": 4423
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4428,
+              "end": 4437
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 4440,
+                  "end": 4442
+                }
+              }
+            ],
+            "span": {
+              "start": 4440,
+              "end": 4443
+            }
+          },
+          "span": {
+            "start": 4442,
+            "end": 4443
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "\"Ludicrous\" is a reference to the movie \"Space Balls\" and is meant",
+          "to say that this speed is very fast."
+        ],
+        "span": {
+          "start": 4241,
+          "end": 4348
+        }
+      },
+      "span": {
+        "start": 4349,
+        "end": 4443
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-loop",
+        "span": {
+          "start": 4443,
+          "end": 4471
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4479,
+              "end": 4484
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Loop",
+                "span": {
+                  "start": 4487,
+                  "end": 4492
+                }
+              }
+            ],
+            "span": {
+              "start": 4487,
+              "end": 4492
+            }
+          },
+          "span": {
+            "start": 4491,
+            "end": 4492
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4497,
+              "end": 4506
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 4509,
+                  "end": 4511
+                }
+              }
+            ],
+            "span": {
+              "start": 4509,
+              "end": 4512
+            }
+          },
+          "span": {
+            "start": 4511,
+            "end": 4512
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4443,
+        "end": 4512
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "The access keys for \"Show Controls\" and \"Hide Controls\" are the same",
+        "because the two context-menu items are mutually exclusive."
+      ],
+      "span": {
+        "start": 4512,
+        "end": 4645
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-show-controls",
+        "span": {
+          "start": 4647,
+          "end": 4684
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4692,
+              "end": 4697
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Show Controls",
+                "span": {
+                  "start": 4700,
+                  "end": 4714
+                }
+              }
+            ],
+            "span": {
+              "start": 4700,
+              "end": 4714
+            }
+          },
+          "span": {
+            "start": 4713,
+            "end": 4714
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4719,
+              "end": 4728
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 4731,
+                  "end": 4733
+                }
+              }
+            ],
+            "span": {
+              "start": 4731,
+              "end": 4734
+            }
+          },
+          "span": {
+            "start": 4733,
+            "end": 4734
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4647,
+        "end": 4734
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-hide-controls",
+        "span": {
+          "start": 4734,
+          "end": 4771
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4779,
+              "end": 4784
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Hide Controls",
+                "span": {
+                  "start": 4787,
+                  "end": 4801
+                }
+              }
+            ],
+            "span": {
+              "start": 4787,
+              "end": 4801
+            }
+          },
+          "span": {
+            "start": 4800,
+            "end": 4801
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4806,
+              "end": 4815
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 4818,
+                  "end": 4820
+                }
+              }
+            ],
+            "span": {
+              "start": 4818,
+              "end": 4821
+            }
+          },
+          "span": {
+            "start": 4820,
+            "end": 4821
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4734,
+        "end": 4821
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        ""
+      ],
+      "span": {
+        "start": 4821,
+        "end": 4823
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-video-fullscreen",
+        "span": {
+          "start": 4825,
+          "end": 4865
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4873,
+              "end": 4878
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Full Screen",
+                "span": {
+                  "start": 4881,
+                  "end": 4893
+                }
+              }
+            ],
+            "span": {
+              "start": 4881,
+              "end": 4893
+            }
+          },
+          "span": {
+            "start": 4892,
+            "end": 4893
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4898,
+              "end": 4907
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 4910,
+                  "end": 4912
+                }
+              }
+            ],
+            "span": {
+              "start": 4910,
+              "end": 4913
+            }
+          },
+          "span": {
+            "start": 4912,
+            "end": 4913
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4825,
+        "end": 4913
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-video-leave-fullscreen",
+        "span": {
+          "start": 4913,
+          "end": 4959
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4967,
+              "end": 4972
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Exit Full Screen",
+                "span": {
+                  "start": 4975,
+                  "end": 4992
+                }
+              }
+            ],
+            "span": {
+              "start": 4975,
+              "end": 4992
+            }
+          },
+          "span": {
+            "start": 4991,
+            "end": 4992
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 4997,
+              "end": 5006
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "u",
+                "span": {
+                  "start": 5009,
+                  "end": 5011
+                }
+              }
+            ],
+            "span": {
+              "start": 5009,
+              "end": 5012
+            }
+          },
+          "span": {
+            "start": 5011,
+            "end": 5012
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4913,
+        "end": 5012
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-media-pip",
+        "span": {
+          "start": 5128,
+          "end": 5155
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5163,
+              "end": 5168
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Picture-in-Picture",
+                "span": {
+                  "start": 5171,
+                  "end": 5190
+                }
+              }
+            ],
+            "span": {
+              "start": 5171,
+              "end": 5190
+            }
+          },
+          "span": {
+            "start": 5189,
+            "end": 5190
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5195,
+              "end": 5204
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "u",
+                "span": {
+                  "start": 5207,
+                  "end": 5209
+                }
+              }
+            ],
+            "span": {
+              "start": 5207,
+              "end": 5210
+            }
+          },
+          "span": {
+            "start": 5209,
+            "end": 5210
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "This is used when right-clicking on a video in the",
+          "content area when the Picture-in-Picture feature is enabled."
+        ],
+        "span": {
+          "start": 5012,
+          "end": 5127
+        }
+      },
+      "span": {
+        "start": 5128,
+        "end": 5210
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-reload",
+        "span": {
+          "start": 5210,
+          "end": 5240
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5248,
+              "end": 5253
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Reload Image",
+                "span": {
+                  "start": 5256,
+                  "end": 5269
+                }
+              }
+            ],
+            "span": {
+              "start": 5256,
+              "end": 5269
+            }
+          },
+          "span": {
+            "start": 5268,
+            "end": 5269
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5274,
+              "end": 5283
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 5286,
+                  "end": 5288
+                }
+              }
+            ],
+            "span": {
+              "start": 5286,
+              "end": 5289
+            }
+          },
+          "span": {
+            "start": 5288,
+            "end": 5289
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5210,
+        "end": 5289
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-view",
+        "span": {
+          "start": 5289,
+          "end": 5317
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5325,
+              "end": 5330
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Image",
+                "span": {
+                  "start": 5333,
+                  "end": 5344
+                }
+              }
+            ],
+            "span": {
+              "start": 5333,
+              "end": 5344
+            }
+          },
+          "span": {
+            "start": 5343,
+            "end": 5344
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5349,
+              "end": 5358
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "I",
+                "span": {
+                  "start": 5361,
+                  "end": 5363
+                }
+              }
+            ],
+            "span": {
+              "start": 5361,
+              "end": 5364
+            }
+          },
+          "span": {
+            "start": 5363,
+            "end": 5364
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5289,
+        "end": 5364
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-video-view",
+        "span": {
+          "start": 5364,
+          "end": 5392
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5400,
+              "end": 5405
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Video",
+                "span": {
+                  "start": 5408,
+                  "end": 5419
+                }
+              }
+            ],
+            "span": {
+              "start": 5408,
+              "end": 5419
+            }
+          },
+          "span": {
+            "start": 5418,
+            "end": 5419
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5424,
+              "end": 5433
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "i",
+                "span": {
+                  "start": 5436,
+                  "end": 5438
+                }
+              }
+            ],
+            "span": {
+              "start": 5436,
+              "end": 5439
+            }
+          },
+          "span": {
+            "start": 5438,
+            "end": 5439
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5364,
+        "end": 5439
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-copy",
+        "span": {
+          "start": 5439,
+          "end": 5467
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5475,
+              "end": 5480
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Image",
+                "span": {
+                  "start": 5483,
+                  "end": 5494
+                }
+              }
+            ],
+            "span": {
+              "start": 5483,
+              "end": 5494
+            }
+          },
+          "span": {
+            "start": 5493,
+            "end": 5494
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5499,
+              "end": 5508
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "y",
+                "span": {
+                  "start": 5511,
+                  "end": 5513
+                }
+              }
+            ],
+            "span": {
+              "start": 5511,
+              "end": 5514
+            }
+          },
+          "span": {
+            "start": 5513,
+            "end": 5514
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5439,
+        "end": 5514
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-copy-location",
+        "span": {
+          "start": 5514,
+          "end": 5551
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5559,
+              "end": 5564
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Image Location",
+                "span": {
+                  "start": 5567,
+                  "end": 5587
+                }
+              }
+            ],
+            "span": {
+              "start": 5567,
+              "end": 5587
+            }
+          },
+          "span": {
+            "start": 5586,
+            "end": 5587
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5592,
+              "end": 5601
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 5604,
+                  "end": 5606
+                }
+              }
+            ],
+            "span": {
+              "start": 5604,
+              "end": 5607
+            }
+          },
+          "span": {
+            "start": 5606,
+            "end": 5607
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5514,
+        "end": 5607
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-video-copy-location",
+        "span": {
+          "start": 5607,
+          "end": 5644
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5652,
+              "end": 5657
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Video Location",
+                "span": {
+                  "start": 5660,
+                  "end": 5680
+                }
+              }
+            ],
+            "span": {
+              "start": 5660,
+              "end": 5680
+            }
+          },
+          "span": {
+            "start": 5679,
+            "end": 5680
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5685,
+              "end": 5694
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 5697,
+                  "end": 5699
+                }
+              }
+            ],
+            "span": {
+              "start": 5697,
+              "end": 5700
+            }
+          },
+          "span": {
+            "start": 5699,
+            "end": 5700
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5607,
+        "end": 5700
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-audio-copy-location",
+        "span": {
+          "start": 5700,
+          "end": 5737
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5745,
+              "end": 5750
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy Audio Location",
+                "span": {
+                  "start": 5753,
+                  "end": 5773
+                }
+              }
+            ],
+            "span": {
+              "start": 5753,
+              "end": 5773
+            }
+          },
+          "span": {
+            "start": 5772,
+            "end": 5773
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5778,
+              "end": 5787
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 5790,
+                  "end": 5792
+                }
+              }
+            ],
+            "span": {
+              "start": 5790,
+              "end": 5793
+            }
+          },
+          "span": {
+            "start": 5792,
+            "end": 5793
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5700,
+        "end": 5793
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-save-as",
+        "span": {
+          "start": 5793,
+          "end": 5824
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5832,
+              "end": 5837
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Image As…",
+                "span": {
+                  "start": 5840,
+                  "end": 5857
+                }
+              }
+            ],
+            "span": {
+              "start": 5840,
+              "end": 5857
+            }
+          },
+          "span": {
+            "start": 5856,
+            "end": 5857
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5862,
+              "end": 5871
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "v",
+                "span": {
+                  "start": 5874,
+                  "end": 5876
+                }
+              }
+            ],
+            "span": {
+              "start": 5874,
+              "end": 5877
+            }
+          },
+          "span": {
+            "start": 5876,
+            "end": 5877
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5793,
+        "end": 5877
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-email",
+        "span": {
+          "start": 5877,
+          "end": 5906
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 5914,
+              "end": 5919
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Image…",
+                "span": {
+                  "start": 5922,
+                  "end": 5937
+                }
+              }
+            ],
+            "span": {
+              "start": 5922,
+              "end": 5937
+            }
+          },
+          "span": {
+            "start": 5936,
+            "end": 5937
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 5942,
+              "end": 5951
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "g",
+                "span": {
+                  "start": 5954,
+                  "end": 5956
+                }
+              }
+            ],
+            "span": {
+              "start": 5954,
+              "end": 5957
+            }
+          },
+          "span": {
+            "start": 5956,
+            "end": 5957
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5877,
+        "end": 5957
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-set-as-background",
+        "span": {
+          "start": 5957,
+          "end": 5998
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6006,
+              "end": 6011
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Set As Desktop Background…",
+                "span": {
+                  "start": 6014,
+                  "end": 6043
+                }
+              }
+            ],
+            "span": {
+              "start": 6014,
+              "end": 6043
+            }
+          },
+          "span": {
+            "start": 6042,
+            "end": 6043
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6048,
+              "end": 6057
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 6060,
+                  "end": 6062
+                }
+              }
+            ],
+            "span": {
+              "start": 6060,
+              "end": 6063
+            }
+          },
+          "span": {
+            "start": 6062,
+            "end": 6063
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5957,
+        "end": 6063
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-info",
+        "span": {
+          "start": 6063,
+          "end": 6091
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6099,
+              "end": 6104
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Image Info",
+                "span": {
+                  "start": 6107,
+                  "end": 6123
+                }
+              }
+            ],
+            "span": {
+              "start": 6107,
+              "end": 6123
+            }
+          },
+          "span": {
+            "start": 6122,
+            "end": 6123
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6128,
+              "end": 6137
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "f",
+                "span": {
+                  "start": 6140,
+                  "end": 6142
+                }
+              }
+            ],
+            "span": {
+              "start": 6140,
+              "end": 6143
+            }
+          },
+          "span": {
+            "start": 6142,
+            "end": 6143
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6063,
+        "end": 6143
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-image-desc",
+        "span": {
+          "start": 6143,
+          "end": 6171
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6179,
+              "end": 6184
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Description",
+                "span": {
+                  "start": 6187,
+                  "end": 6204
+                }
+              }
+            ],
+            "span": {
+              "start": 6187,
+              "end": 6204
+            }
+          },
+          "span": {
+            "start": 6203,
+            "end": 6204
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6209,
+              "end": 6218
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 6221,
+                  "end": 6223
+                }
+              }
+            ],
+            "span": {
+              "start": 6221,
+              "end": 6224
+            }
+          },
+          "span": {
+            "start": 6223,
+            "end": 6224
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6143,
+        "end": 6224
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-video-save-as",
+        "span": {
+          "start": 6224,
+          "end": 6255
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6263,
+              "end": 6268
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Video As…",
+                "span": {
+                  "start": 6271,
+                  "end": 6288
+                }
+              }
+            ],
+            "span": {
+              "start": 6271,
+              "end": 6288
+            }
+          },
+          "span": {
+            "start": 6287,
+            "end": 6288
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6293,
+              "end": 6302
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "v",
+                "span": {
+                  "start": 6305,
+                  "end": 6307
+                }
+              }
+            ],
+            "span": {
+              "start": 6305,
+              "end": 6308
+            }
+          },
+          "span": {
+            "start": 6307,
+            "end": 6308
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6224,
+        "end": 6308
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-audio-save-as",
+        "span": {
+          "start": 6308,
+          "end": 6339
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6347,
+              "end": 6352
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Audio As…",
+                "span": {
+                  "start": 6355,
+                  "end": 6372
+                }
+              }
+            ],
+            "span": {
+              "start": 6355,
+              "end": 6372
+            }
+          },
+          "span": {
+            "start": 6371,
+            "end": 6372
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6377,
+              "end": 6386
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "v",
+                "span": {
+                  "start": 6389,
+                  "end": 6391
+                }
+              }
+            ],
+            "span": {
+              "start": 6389,
+              "end": 6392
+            }
+          },
+          "span": {
+            "start": 6391,
+            "end": 6392
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6308,
+        "end": 6392
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-video-image-save-as",
+        "span": {
+          "start": 6392,
+          "end": 6429
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6437,
+              "end": 6442
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Snapshot As…",
+                "span": {
+                  "start": 6445,
+                  "end": 6465
+                }
+              }
+            ],
+            "span": {
+              "start": 6445,
+              "end": 6465
+            }
+          },
+          "span": {
+            "start": 6464,
+            "end": 6465
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6470,
+              "end": 6479
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 6482,
+                  "end": 6484
+                }
+              }
+            ],
+            "span": {
+              "start": 6482,
+              "end": 6485
+            }
+          },
+          "span": {
+            "start": 6484,
+            "end": 6485
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6392,
+        "end": 6485
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-video-email",
+        "span": {
+          "start": 6485,
+          "end": 6514
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6522,
+              "end": 6527
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Video…",
+                "span": {
+                  "start": 6530,
+                  "end": 6545
+                }
+              }
+            ],
+            "span": {
+              "start": 6530,
+              "end": 6545
+            }
+          },
+          "span": {
+            "start": 6544,
+            "end": 6545
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6550,
+              "end": 6559
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 6562,
+                  "end": 6564
+                }
+              }
+            ],
+            "span": {
+              "start": 6562,
+              "end": 6565
+            }
+          },
+          "span": {
+            "start": 6564,
+            "end": 6565
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6485,
+        "end": 6565
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-audio-email",
+        "span": {
+          "start": 6565,
+          "end": 6594
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6602,
+              "end": 6607
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Audio…",
+                "span": {
+                  "start": 6610,
+                  "end": 6625
+                }
+              }
+            ],
+            "span": {
+              "start": 6610,
+              "end": 6625
+            }
+          },
+          "span": {
+            "start": 6624,
+            "end": 6625
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6630,
+              "end": 6639
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 6642,
+                  "end": 6644
+                }
+              }
+            ],
+            "span": {
+              "start": 6642,
+              "end": 6645
+            }
+          },
+          "span": {
+            "start": 6644,
+            "end": 6645
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6565,
+        "end": 6645
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-plugin-play",
+        "span": {
+          "start": 6645,
+          "end": 6674
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6682,
+              "end": 6687
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Activate this plugin",
+                "span": {
+                  "start": 6690,
+                  "end": 6711
+                }
+              }
+            ],
+            "span": {
+              "start": 6690,
+              "end": 6711
+            }
+          },
+          "span": {
+            "start": 6710,
+            "end": 6711
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6716,
+              "end": 6725
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "c",
+                "span": {
+                  "start": 6728,
+                  "end": 6730
+                }
+              }
+            ],
+            "span": {
+              "start": 6728,
+              "end": 6731
+            }
+          },
+          "span": {
+            "start": 6730,
+            "end": 6731
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6645,
+        "end": 6731
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-plugin-hide",
+        "span": {
+          "start": 6731,
+          "end": 6760
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6768,
+              "end": 6773
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Hide this plugin",
+                "span": {
+                  "start": 6776,
+                  "end": 6793
+                }
+              }
+            ],
+            "span": {
+              "start": 6776,
+              "end": 6793
+            }
+          },
+          "span": {
+            "start": 6792,
+            "end": 6793
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6798,
+              "end": 6807
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "H",
+                "span": {
+                  "start": 6810,
+                  "end": 6812
+                }
+              }
+            ],
+            "span": {
+              "start": 6810,
+              "end": 6813
+            }
+          },
+          "span": {
+            "start": 6812,
+            "end": 6813
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6731,
+        "end": 6813
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-save-to-pocket",
+        "span": {
+          "start": 6813,
+          "end": 6845
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6853,
+              "end": 6858
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Page to ",
+                "span": {
+                  "start": 6861,
+                  "end": 6874
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "TermReference",
+                    "id": {
+                      "name": "pocket-brand-name",
+                      "span": {
+                        "start": 6877,
+                        "end": 6894
+                      }
+                    },
+                    "attribute": null,
+                    "arguments": null,
+                    "span": {
+                      "start": 6876,
+                      "end": 6895
+                    }
+                  },
+                  {
+                    "start": 6876,
+                    "end": 6895
+                  }
+                ],
+                "span": {
+                  "start": 6874,
+                  "end": 6895
+                }
+              }
+            ],
+            "span": {
+              "start": 6861,
+              "end": 6897
+            }
+          },
+          "span": {
+            "start": 6896,
+            "end": 6897
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6902,
+              "end": 6911
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "k",
+                "span": {
+                  "start": 6914,
+                  "end": 6916
+                }
+              }
+            ],
+            "span": {
+              "start": 6914,
+              "end": 6917
+            }
+          },
+          "span": {
+            "start": 6916,
+            "end": 6917
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6813,
+        "end": 6917
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-send-to-device",
+        "span": {
+          "start": 6917,
+          "end": 6949
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 6957,
+              "end": 6962
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Send Page to Device",
+                "span": {
+                  "start": 6965,
+                  "end": 6985
+                }
+              }
+            ],
+            "span": {
+              "start": 6965,
+              "end": 6985
+            }
+          },
+          "span": {
+            "start": 6984,
+            "end": 6985
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 6990,
+              "end": 6999
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "n",
+                "span": {
+                  "start": 7002,
+                  "end": 7004
+                }
+              }
+            ],
+            "span": {
+              "start": 7002,
+              "end": 7005
+            }
+          },
+          "span": {
+            "start": 7004,
+            "end": 7005
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6917,
+        "end": 7005
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-view-background-image",
+        "span": {
+          "start": 7005,
+          "end": 7044
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7052,
+              "end": 7057
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Background Image",
+                "span": {
+                  "start": 7060,
+                  "end": 7082
+                }
+              }
+            ],
+            "span": {
+              "start": 7060,
+              "end": 7082
+            }
+          },
+          "span": {
+            "start": 7081,
+            "end": 7082
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7087,
+              "end": 7096
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 7099,
+                  "end": 7101
+                }
+              }
+            ],
+            "span": {
+              "start": 7099,
+              "end": 7102
+            }
+          },
+          "span": {
+            "start": 7101,
+            "end": 7102
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7005,
+        "end": 7102
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-generate-new-password",
+        "span": {
+          "start": 7102,
+          "end": 7141
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7149,
+              "end": 7154
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Use Generated Password…",
+                "span": {
+                  "start": 7157,
+                  "end": 7183
+                }
+              }
+            ],
+            "span": {
+              "start": 7157,
+              "end": 7183
+            }
+          },
+          "span": {
+            "start": 7182,
+            "end": 7183
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7188,
+              "end": 7197
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "G",
+                "span": {
+                  "start": 7200,
+                  "end": 7202
+                }
+              }
+            ],
+            "span": {
+              "start": 7200,
+              "end": 7203
+            }
+          },
+          "span": {
+            "start": 7202,
+            "end": 7203
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7102,
+        "end": 7203
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-keyword",
+        "span": {
+          "start": 7203,
+          "end": 7228
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7236,
+              "end": 7241
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add a Keyword for this Search…",
+                "span": {
+                  "start": 7244,
+                  "end": 7277
+                }
+              }
+            ],
+            "span": {
+              "start": 7244,
+              "end": 7277
+            }
+          },
+          "span": {
+            "start": 7276,
+            "end": 7277
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7282,
+              "end": 7291
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "K",
+                "span": {
+                  "start": 7294,
+                  "end": 7296
+                }
+              }
+            ],
+            "span": {
+              "start": 7294,
+              "end": 7297
+            }
+          },
+          "span": {
+            "start": 7296,
+            "end": 7297
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7203,
+        "end": 7297
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-link-send-to-device",
+        "span": {
+          "start": 7297,
+          "end": 7334
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7342,
+              "end": 7347
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Send Link to Device",
+                "span": {
+                  "start": 7350,
+                  "end": 7370
+                }
+              }
+            ],
+            "span": {
+              "start": 7350,
+              "end": 7370
+            }
+          },
+          "span": {
+            "start": 7369,
+            "end": 7370
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7375,
+              "end": 7384
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "n",
+                "span": {
+                  "start": 7387,
+                  "end": 7389
+                }
+              }
+            ],
+            "span": {
+              "start": 7387,
+              "end": 7390
+            }
+          },
+          "span": {
+            "start": 7389,
+            "end": 7390
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7297,
+        "end": 7390
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame",
+        "span": {
+          "start": 7390,
+          "end": 7413
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7421,
+              "end": 7426
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This Frame",
+                "span": {
+                  "start": 7429,
+                  "end": 7440
+                }
+              }
+            ],
+            "span": {
+              "start": 7429,
+              "end": 7440
+            }
+          },
+          "span": {
+            "start": 7439,
+            "end": 7440
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7445,
+              "end": 7454
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "h",
+                "span": {
+                  "start": 7457,
+                  "end": 7459
+                }
+              }
+            ],
+            "span": {
+              "start": 7457,
+              "end": 7460
+            }
+          },
+          "span": {
+            "start": 7459,
+            "end": 7460
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7390,
+        "end": 7460
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-show-this",
+        "span": {
+          "start": 7460,
+          "end": 7493
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7501,
+              "end": 7506
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Show Only This Frame",
+                "span": {
+                  "start": 7509,
+                  "end": 7530
+                }
+              }
+            ],
+            "span": {
+              "start": 7509,
+              "end": 7530
+            }
+          },
+          "span": {
+            "start": 7529,
+            "end": 7530
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7535,
+              "end": 7544
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 7547,
+                  "end": 7549
+                }
+              }
+            ],
+            "span": {
+              "start": 7547,
+              "end": 7550
+            }
+          },
+          "span": {
+            "start": 7549,
+            "end": 7550
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7460,
+        "end": 7550
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-open-tab",
+        "span": {
+          "start": 7550,
+          "end": 7582
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7590,
+              "end": 7595
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Frame in New Tab",
+                "span": {
+                  "start": 7598,
+                  "end": 7620
+                }
+              }
+            ],
+            "span": {
+              "start": 7598,
+              "end": 7620
+            }
+          },
+          "span": {
+            "start": 7619,
+            "end": 7620
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7625,
+              "end": 7634
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T",
+                "span": {
+                  "start": 7637,
+                  "end": 7639
+                }
+              }
+            ],
+            "span": {
+              "start": 7637,
+              "end": 7640
+            }
+          },
+          "span": {
+            "start": 7639,
+            "end": 7640
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7550,
+        "end": 7640
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-open-window",
+        "span": {
+          "start": 7640,
+          "end": 7675
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7683,
+              "end": 7688
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Open Frame in New Window",
+                "span": {
+                  "start": 7691,
+                  "end": 7716
+                }
+              }
+            ],
+            "span": {
+              "start": 7691,
+              "end": 7716
+            }
+          },
+          "span": {
+            "start": 7715,
+            "end": 7716
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7721,
+              "end": 7730
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "W",
+                "span": {
+                  "start": 7733,
+                  "end": 7735
+                }
+              }
+            ],
+            "span": {
+              "start": 7733,
+              "end": 7736
+            }
+          },
+          "span": {
+            "start": 7735,
+            "end": 7736
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7640,
+        "end": 7736
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-reload",
+        "span": {
+          "start": 7736,
+          "end": 7766
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7774,
+              "end": 7779
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Reload Frame",
+                "span": {
+                  "start": 7782,
+                  "end": 7795
+                }
+              }
+            ],
+            "span": {
+              "start": 7782,
+              "end": 7795
+            }
+          },
+          "span": {
+            "start": 7794,
+            "end": 7795
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7800,
+              "end": 7809
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 7812,
+                  "end": 7814
+                }
+              }
+            ],
+            "span": {
+              "start": 7812,
+              "end": 7815
+            }
+          },
+          "span": {
+            "start": 7814,
+            "end": 7815
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7736,
+        "end": 7815
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-bookmark",
+        "span": {
+          "start": 7815,
+          "end": 7847
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7855,
+              "end": 7860
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bookmark This Frame",
+                "span": {
+                  "start": 7863,
+                  "end": 7883
+                }
+              }
+            ],
+            "span": {
+              "start": 7863,
+              "end": 7883
+            }
+          },
+          "span": {
+            "start": 7882,
+            "end": 7883
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7888,
+              "end": 7897
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 7900,
+                  "end": 7902
+                }
+              }
+            ],
+            "span": {
+              "start": 7900,
+              "end": 7903
+            }
+          },
+          "span": {
+            "start": 7902,
+            "end": 7903
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7815,
+        "end": 7903
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-save-as",
+        "span": {
+          "start": 7903,
+          "end": 7934
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 7942,
+              "end": 7947
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Frame As…",
+                "span": {
+                  "start": 7950,
+                  "end": 7967
+                }
+              }
+            ],
+            "span": {
+              "start": 7950,
+              "end": 7967
+            }
+          },
+          "span": {
+            "start": 7966,
+            "end": 7967
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 7972,
+              "end": 7981
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 7984,
+                  "end": 7986
+                }
+              }
+            ],
+            "span": {
+              "start": 7984,
+              "end": 7987
+            }
+          },
+          "span": {
+            "start": 7986,
+            "end": 7987
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7903,
+        "end": 7987
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-print",
+        "span": {
+          "start": 7987,
+          "end": 8016
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8024,
+              "end": 8029
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Print Frame…",
+                "span": {
+                  "start": 8032,
+                  "end": 8047
+                }
+              }
+            ],
+            "span": {
+              "start": 8032,
+              "end": 8047
+            }
+          },
+          "span": {
+            "start": 8046,
+            "end": 8047
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8052,
+              "end": 8061
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 8064,
+                  "end": 8066
+                }
+              }
+            ],
+            "span": {
+              "start": 8064,
+              "end": 8067
+            }
+          },
+          "span": {
+            "start": 8066,
+            "end": 8067
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7987,
+        "end": 8067
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-view-source",
+        "span": {
+          "start": 8067,
+          "end": 8102
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8110,
+              "end": 8115
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Frame Source",
+                "span": {
+                  "start": 8118,
+                  "end": 8136
+                }
+              }
+            ],
+            "span": {
+              "start": 8118,
+              "end": 8136
+            }
+          },
+          "span": {
+            "start": 8135,
+            "end": 8136
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8141,
+              "end": 8150
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 8153,
+                  "end": 8155
+                }
+              }
+            ],
+            "span": {
+              "start": 8153,
+              "end": 8156
+            }
+          },
+          "span": {
+            "start": 8155,
+            "end": 8156
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8067,
+        "end": 8156
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-frame-view-info",
+        "span": {
+          "start": 8156,
+          "end": 8189
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8197,
+              "end": 8202
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Frame Info",
+                "span": {
+                  "start": 8205,
+                  "end": 8221
+                }
+              }
+            ],
+            "span": {
+              "start": 8205,
+              "end": 8221
+            }
+          },
+          "span": {
+            "start": 8220,
+            "end": 8221
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8226,
+              "end": 8235
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "I",
+                "span": {
+                  "start": 8238,
+                  "end": 8240
+                }
+              }
+            ],
+            "span": {
+              "start": 8238,
+              "end": 8241
+            }
+          },
+          "span": {
+            "start": 8240,
+            "end": 8241
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8156,
+        "end": 8241
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-view-selection-source",
+        "span": {
+          "start": 8241,
+          "end": 8280
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8288,
+              "end": 8293
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Selection Source",
+                "span": {
+                  "start": 8296,
+                  "end": 8318
+                }
+              }
+            ],
+            "span": {
+              "start": 8296,
+              "end": 8318
+            }
+          },
+          "span": {
+            "start": 8317,
+            "end": 8318
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8323,
+              "end": 8332
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e",
+                "span": {
+                  "start": 8335,
+                  "end": 8337
+                }
+              }
+            ],
+            "span": {
+              "start": 8335,
+              "end": 8338
+            }
+          },
+          "span": {
+            "start": 8337,
+            "end": 8338
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8241,
+        "end": 8338
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-view-page-source",
+        "span": {
+          "start": 8338,
+          "end": 8372
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8380,
+              "end": 8385
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Page Source",
+                "span": {
+                  "start": 8388,
+                  "end": 8405
+                }
+              }
+            ],
+            "span": {
+              "start": 8388,
+              "end": 8405
+            }
+          },
+          "span": {
+            "start": 8404,
+            "end": 8405
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8410,
+              "end": 8419
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 8422,
+                  "end": 8424
+                }
+              }
+            ],
+            "span": {
+              "start": 8422,
+              "end": 8425
+            }
+          },
+          "span": {
+            "start": 8424,
+            "end": 8425
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8338,
+        "end": 8425
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-view-page-info",
+        "span": {
+          "start": 8425,
+          "end": 8457
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8465,
+              "end": 8470
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View Page Info",
+                "span": {
+                  "start": 8473,
+                  "end": 8488
+                }
+              }
+            ],
+            "span": {
+              "start": 8473,
+              "end": 8488
+            }
+          },
+          "span": {
+            "start": 8487,
+            "end": 8488
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8493,
+              "end": 8502
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "I",
+                "span": {
+                  "start": 8505,
+                  "end": 8507
+                }
+              }
+            ],
+            "span": {
+              "start": 8505,
+              "end": 8508
+            }
+          },
+          "span": {
+            "start": 8507,
+            "end": 8508
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8425,
+        "end": 8508
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bidi-switch-text",
+        "span": {
+          "start": 8508,
+          "end": 8542
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8550,
+              "end": 8555
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Switch Text Direction",
+                "span": {
+                  "start": 8558,
+                  "end": 8580
+                }
+              }
+            ],
+            "span": {
+              "start": 8558,
+              "end": 8580
+            }
+          },
+          "span": {
+            "start": 8579,
+            "end": 8580
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8585,
+              "end": 8594
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 8597,
+                  "end": 8599
+                }
+              }
+            ],
+            "span": {
+              "start": 8597,
+              "end": 8600
+            }
+          },
+          "span": {
+            "start": 8599,
+            "end": 8600
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8508,
+        "end": 8600
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-bidi-switch-page",
+        "span": {
+          "start": 8600,
+          "end": 8634
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8642,
+              "end": 8647
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Switch Page Direction",
+                "span": {
+                  "start": 8650,
+                  "end": 8672
+                }
+              }
+            ],
+            "span": {
+              "start": 8650,
+              "end": 8672
+            }
+          },
+          "span": {
+            "start": 8671,
+            "end": 8672
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8677,
+              "end": 8686
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 8689,
+                  "end": 8691
+                }
+              }
+            ],
+            "span": {
+              "start": 8689,
+              "end": 8692
+            }
+          },
+          "span": {
+            "start": 8691,
+            "end": 8692
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8600,
+        "end": 8692
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-inspect-element",
+        "span": {
+          "start": 8692,
+          "end": 8725
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8733,
+              "end": 8738
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Inspect Element",
+                "span": {
+                  "start": 8741,
+                  "end": 8757
+                }
+              }
+            ],
+            "span": {
+              "start": 8741,
+              "end": 8757
+            }
+          },
+          "span": {
+            "start": 8756,
+            "end": 8757
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8762,
+              "end": 8771
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Q",
+                "span": {
+                  "start": 8774,
+                  "end": 8776
+                }
+              }
+            ],
+            "span": {
+              "start": 8774,
+              "end": 8777
+            }
+          },
+          "span": {
+            "start": 8776,
+            "end": 8777
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8692,
+        "end": 8777
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-inspect-a11y-properties",
+        "span": {
+          "start": 8777,
+          "end": 8818
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8826,
+              "end": 8831
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Inspect Accessibility Properties",
+                "span": {
+                  "start": 8834,
+                  "end": 8867
+                }
+              }
+            ],
+            "span": {
+              "start": 8834,
+              "end": 8868
+            }
+          },
+          "span": {
+            "start": 8867,
+            "end": 8868
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8777,
+        "end": 8868
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "main-context-menu-eme-learn-more",
+        "span": {
+          "start": 8868,
+          "end": 8900
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 8908,
+              "end": 8913
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Learn more about DRM…",
+                "span": {
+                  "start": 8916,
+                  "end": 8940
+                }
+              }
+            ],
+            "span": {
+              "start": 8916,
+              "end": 8940
+            }
+          },
+          "span": {
+            "start": 8939,
+            "end": 8940
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 8945,
+              "end": 8954
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 8957,
+                  "end": 8959
+                }
+              }
+            ],
+            "span": {
+              "start": 8957,
+              "end": 8959
+            }
+          },
+          "span": {
+            "start": 8958,
+            "end": 8959
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 8868,
+        "end": 8959
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 8959
+  }
+}

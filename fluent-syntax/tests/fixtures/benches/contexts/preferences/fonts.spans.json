@@ -1,0 +1,3247 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-window",
+        "span": {
+          "start": 200,
+          "end": 212
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 220,
+              "end": 225
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Fonts",
+                "span": {
+                  "start": 228,
+                  "end": 234
+                }
+              }
+            ],
+            "span": {
+              "start": 228,
+              "end": 235
+            }
+          },
+          "span": {
+            "start": 234,
+            "end": 235
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 235
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-window-close",
+        "span": {
+          "start": 235,
+          "end": 253
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 261,
+              "end": 264
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 267,
+                  "end": 269
+                }
+              }
+            ],
+            "span": {
+              "start": 267,
+              "end": 270
+            }
+          },
+          "span": {
+            "start": 269,
+            "end": 270
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 235,
+        "end": 270
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Font groups by language"
+      ],
+      "span": {
+        "start": 270,
+        "end": 296
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-header",
+        "span": {
+          "start": 298,
+          "end": 320
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Fonts for",
+            "span": {
+              "start": 323,
+              "end": 333
+            }
+          }
+        ],
+        "span": {
+          "start": 323,
+          "end": 333
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 338,
+              "end": 347
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 350,
+                  "end": 352
+                }
+              }
+            ],
+            "span": {
+              "start": 350,
+              "end": 353
+            }
+          },
+          "span": {
+            "start": 352,
+            "end": 353
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 298,
+        "end": 353
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-arabic",
+        "span": {
+          "start": 353,
+          "end": 375
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 383,
+              "end": 388
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Arabic",
+                "span": {
+                  "start": 391,
+                  "end": 398
+                }
+              }
+            ],
+            "span": {
+              "start": 391,
+              "end": 398
+            }
+          },
+          "span": {
+            "start": 397,
+            "end": 398
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 353,
+        "end": 398
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-armenian",
+        "span": {
+          "start": 398,
+          "end": 422
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 430,
+              "end": 435
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Armenian",
+                "span": {
+                  "start": 438,
+                  "end": 447
+                }
+              }
+            ],
+            "span": {
+              "start": 438,
+              "end": 447
+            }
+          },
+          "span": {
+            "start": 446,
+            "end": 447
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 398,
+        "end": 447
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-bengali",
+        "span": {
+          "start": 447,
+          "end": 470
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 478,
+              "end": 483
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Bengali",
+                "span": {
+                  "start": 486,
+                  "end": 494
+                }
+              }
+            ],
+            "span": {
+              "start": 486,
+              "end": 494
+            }
+          },
+          "span": {
+            "start": 493,
+            "end": 494
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 447,
+        "end": 494
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-simpl-chinese",
+        "span": {
+          "start": 494,
+          "end": 523
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 531,
+              "end": 536
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Simplified Chinese",
+                "span": {
+                  "start": 539,
+                  "end": 558
+                }
+              }
+            ],
+            "span": {
+              "start": 539,
+              "end": 558
+            }
+          },
+          "span": {
+            "start": 557,
+            "end": 558
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 494,
+        "end": 558
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-trad-chinese-hk",
+        "span": {
+          "start": 558,
+          "end": 589
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 597,
+              "end": 602
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Traditional Chinese (Hong Kong)",
+                "span": {
+                  "start": 605,
+                  "end": 637
+                }
+              }
+            ],
+            "span": {
+              "start": 605,
+              "end": 637
+            }
+          },
+          "span": {
+            "start": 636,
+            "end": 637
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 558,
+        "end": 637
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-trad-chinese",
+        "span": {
+          "start": 637,
+          "end": 665
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 673,
+              "end": 678
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Traditional Chinese (Taiwan)",
+                "span": {
+                  "start": 681,
+                  "end": 710
+                }
+              }
+            ],
+            "span": {
+              "start": 681,
+              "end": 710
+            }
+          },
+          "span": {
+            "start": 709,
+            "end": 710
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 637,
+        "end": 710
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-cyrillic",
+        "span": {
+          "start": 710,
+          "end": 734
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 742,
+              "end": 747
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cyrillic",
+                "span": {
+                  "start": 750,
+                  "end": 759
+                }
+              }
+            ],
+            "span": {
+              "start": 750,
+              "end": 759
+            }
+          },
+          "span": {
+            "start": 758,
+            "end": 759
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 710,
+        "end": 759
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-devanagari",
+        "span": {
+          "start": 759,
+          "end": 785
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 793,
+              "end": 798
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Devanagari",
+                "span": {
+                  "start": 801,
+                  "end": 812
+                }
+              }
+            ],
+            "span": {
+              "start": 801,
+              "end": 812
+            }
+          },
+          "span": {
+            "start": 811,
+            "end": 812
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 759,
+        "end": 812
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-ethiopic",
+        "span": {
+          "start": 812,
+          "end": 836
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 844,
+              "end": 849
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Ethiopic",
+                "span": {
+                  "start": 852,
+                  "end": 861
+                }
+              }
+            ],
+            "span": {
+              "start": 852,
+              "end": 861
+            }
+          },
+          "span": {
+            "start": 860,
+            "end": 861
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 812,
+        "end": 861
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-georgian",
+        "span": {
+          "start": 861,
+          "end": 885
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 893,
+              "end": 898
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Georgian",
+                "span": {
+                  "start": 901,
+                  "end": 910
+                }
+              }
+            ],
+            "span": {
+              "start": 901,
+              "end": 910
+            }
+          },
+          "span": {
+            "start": 909,
+            "end": 910
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 861,
+        "end": 910
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-el",
+        "span": {
+          "start": 910,
+          "end": 928
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 936,
+              "end": 941
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Greek",
+                "span": {
+                  "start": 944,
+                  "end": 950
+                }
+              }
+            ],
+            "span": {
+              "start": 944,
+              "end": 950
+            }
+          },
+          "span": {
+            "start": 949,
+            "end": 950
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 910,
+        "end": 950
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-gujarati",
+        "span": {
+          "start": 950,
+          "end": 974
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 982,
+              "end": 987
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Gujarati",
+                "span": {
+                  "start": 990,
+                  "end": 999
+                }
+              }
+            ],
+            "span": {
+              "start": 990,
+              "end": 999
+            }
+          },
+          "span": {
+            "start": 998,
+            "end": 999
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 950,
+        "end": 999
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-gurmukhi",
+        "span": {
+          "start": 999,
+          "end": 1023
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1031,
+              "end": 1036
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Gurmukhi",
+                "span": {
+                  "start": 1039,
+                  "end": 1048
+                }
+              }
+            ],
+            "span": {
+              "start": 1039,
+              "end": 1048
+            }
+          },
+          "span": {
+            "start": 1047,
+            "end": 1048
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 999,
+        "end": 1048
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-japanese",
+        "span": {
+          "start": 1048,
+          "end": 1072
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1080,
+              "end": 1085
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Japanese",
+                "span": {
+                  "start": 1088,
+                  "end": 1097
+                }
+              }
+            ],
+            "span": {
+              "start": 1088,
+              "end": 1097
+            }
+          },
+          "span": {
+            "start": 1096,
+            "end": 1097
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1048,
+        "end": 1097
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-hebrew",
+        "span": {
+          "start": 1097,
+          "end": 1119
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1127,
+              "end": 1132
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Hebrew",
+                "span": {
+                  "start": 1135,
+                  "end": 1142
+                }
+              }
+            ],
+            "span": {
+              "start": 1135,
+              "end": 1142
+            }
+          },
+          "span": {
+            "start": 1141,
+            "end": 1142
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1097,
+        "end": 1142
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-kannada",
+        "span": {
+          "start": 1142,
+          "end": 1165
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1173,
+              "end": 1178
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Kannada",
+                "span": {
+                  "start": 1181,
+                  "end": 1189
+                }
+              }
+            ],
+            "span": {
+              "start": 1181,
+              "end": 1189
+            }
+          },
+          "span": {
+            "start": 1188,
+            "end": 1189
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1142,
+        "end": 1189
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-khmer",
+        "span": {
+          "start": 1189,
+          "end": 1210
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1218,
+              "end": 1223
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Khmer",
+                "span": {
+                  "start": 1226,
+                  "end": 1232
+                }
+              }
+            ],
+            "span": {
+              "start": 1226,
+              "end": 1232
+            }
+          },
+          "span": {
+            "start": 1231,
+            "end": 1232
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1189,
+        "end": 1232
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-korean",
+        "span": {
+          "start": 1232,
+          "end": 1254
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1262,
+              "end": 1267
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Korean",
+                "span": {
+                  "start": 1270,
+                  "end": 1277
+                }
+              }
+            ],
+            "span": {
+              "start": 1270,
+              "end": 1277
+            }
+          },
+          "span": {
+            "start": 1276,
+            "end": 1277
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1232,
+        "end": 1277
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-latin",
+        "span": {
+          "start": 1373,
+          "end": 1394
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1402,
+              "end": 1407
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Latin",
+                "span": {
+                  "start": 1410,
+                  "end": 1416
+                }
+              }
+            ],
+            "span": {
+              "start": 1410,
+              "end": 1416
+            }
+          },
+          "span": {
+            "start": 1415,
+            "end": 1416
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Translate \"Latin\" as the name of Latin (Roman) script, not as the name of the Latin language."
+        ],
+        "span": {
+          "start": 1277,
+          "end": 1372
+        }
+      },
+      "span": {
+        "start": 1373,
+        "end": 1416
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-malayalam",
+        "span": {
+          "start": 1416,
+          "end": 1441
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1449,
+              "end": 1454
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Malayalam",
+                "span": {
+                  "start": 1457,
+                  "end": 1467
+                }
+              }
+            ],
+            "span": {
+              "start": 1457,
+              "end": 1467
+            }
+          },
+          "span": {
+            "start": 1466,
+            "end": 1467
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1416,
+        "end": 1467
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-math",
+        "span": {
+          "start": 1467,
+          "end": 1487
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1495,
+              "end": 1500
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Mathematics",
+                "span": {
+                  "start": 1503,
+                  "end": 1515
+                }
+              }
+            ],
+            "span": {
+              "start": 1503,
+              "end": 1515
+            }
+          },
+          "span": {
+            "start": 1514,
+            "end": 1515
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1467,
+        "end": 1515
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-odia",
+        "span": {
+          "start": 1515,
+          "end": 1535
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1543,
+              "end": 1548
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Odia",
+                "span": {
+                  "start": 1551,
+                  "end": 1556
+                }
+              }
+            ],
+            "span": {
+              "start": 1551,
+              "end": 1556
+            }
+          },
+          "span": {
+            "start": 1555,
+            "end": 1556
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1515,
+        "end": 1556
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-sinhala",
+        "span": {
+          "start": 1556,
+          "end": 1579
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1587,
+              "end": 1592
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Sinhala",
+                "span": {
+                  "start": 1595,
+                  "end": 1603
+                }
+              }
+            ],
+            "span": {
+              "start": 1595,
+              "end": 1603
+            }
+          },
+          "span": {
+            "start": 1602,
+            "end": 1603
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1556,
+        "end": 1603
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-tamil",
+        "span": {
+          "start": 1603,
+          "end": 1624
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1632,
+              "end": 1637
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Tamil",
+                "span": {
+                  "start": 1640,
+                  "end": 1646
+                }
+              }
+            ],
+            "span": {
+              "start": 1640,
+              "end": 1646
+            }
+          },
+          "span": {
+            "start": 1645,
+            "end": 1646
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1603,
+        "end": 1646
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-telugu",
+        "span": {
+          "start": 1646,
+          "end": 1668
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1676,
+              "end": 1681
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Telugu",
+                "span": {
+                  "start": 1684,
+                  "end": 1691
+                }
+              }
+            ],
+            "span": {
+              "start": 1684,
+              "end": 1691
+            }
+          },
+          "span": {
+            "start": 1690,
+            "end": 1691
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1646,
+        "end": 1691
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-thai",
+        "span": {
+          "start": 1691,
+          "end": 1711
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1719,
+              "end": 1724
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Thai",
+                "span": {
+                  "start": 1727,
+                  "end": 1732
+                }
+              }
+            ],
+            "span": {
+              "start": 1727,
+              "end": 1732
+            }
+          },
+          "span": {
+            "start": 1731,
+            "end": 1732
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1691,
+        "end": 1732
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-tibetan",
+        "span": {
+          "start": 1732,
+          "end": 1755
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1763,
+              "end": 1768
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Tibetan",
+                "span": {
+                  "start": 1771,
+                  "end": 1779
+                }
+              }
+            ],
+            "span": {
+              "start": 1771,
+              "end": 1779
+            }
+          },
+          "span": {
+            "start": 1778,
+            "end": 1779
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1732,
+        "end": 1779
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-canadian",
+        "span": {
+          "start": 1779,
+          "end": 1803
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1811,
+              "end": 1816
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Unified Canadian Syllabary",
+                "span": {
+                  "start": 1819,
+                  "end": 1846
+                }
+              }
+            ],
+            "span": {
+              "start": 1819,
+              "end": 1846
+            }
+          },
+          "span": {
+            "start": 1845,
+            "end": 1846
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1779,
+        "end": 1846
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-langgroup-other",
+        "span": {
+          "start": 1846,
+          "end": 1867
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1875,
+              "end": 1880
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Other Writing Systems",
+                "span": {
+                  "start": 1883,
+                  "end": 1905
+                }
+              }
+            ],
+            "span": {
+              "start": 1883,
+              "end": 1906
+            }
+          },
+          "span": {
+            "start": 1905,
+            "end": 1906
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1846,
+        "end": 1906
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Default fonts and their sizes"
+      ],
+      "span": {
+        "start": 1906,
+        "end": 1938
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-proportional-header",
+        "span": {
+          "start": 1940,
+          "end": 1965
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Proportional",
+            "span": {
+              "start": 1968,
+              "end": 1981
+            }
+          }
+        ],
+        "span": {
+          "start": 1968,
+          "end": 1981
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1986,
+              "end": 1995
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 1998,
+                  "end": 2000
+                }
+              }
+            ],
+            "span": {
+              "start": 1998,
+              "end": 2001
+            }
+          },
+          "span": {
+            "start": 2000,
+            "end": 2001
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1940,
+        "end": 2001
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-default-serif",
+        "span": {
+          "start": 2001,
+          "end": 2020
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2028,
+              "end": 2033
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Serif",
+                "span": {
+                  "start": 2036,
+                  "end": 2042
+                }
+              }
+            ],
+            "span": {
+              "start": 2036,
+              "end": 2042
+            }
+          },
+          "span": {
+            "start": 2041,
+            "end": 2042
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2001,
+        "end": 2042
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-default-sans-serif",
+        "span": {
+          "start": 2042,
+          "end": 2066
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2074,
+              "end": 2079
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Sans Serif",
+                "span": {
+                  "start": 2082,
+                  "end": 2093
+                }
+              }
+            ],
+            "span": {
+              "start": 2082,
+              "end": 2094
+            }
+          },
+          "span": {
+            "start": 2093,
+            "end": 2094
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2042,
+        "end": 2094
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-proportional-size",
+        "span": {
+          "start": 2094,
+          "end": 2117
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Size",
+            "span": {
+              "start": 2120,
+              "end": 2125
+            }
+          }
+        ],
+        "span": {
+          "start": 2120,
+          "end": 2125
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2130,
+              "end": 2139
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "z",
+                "span": {
+                  "start": 2142,
+                  "end": 2144
+                }
+              }
+            ],
+            "span": {
+              "start": 2142,
+              "end": 2145
+            }
+          },
+          "span": {
+            "start": 2144,
+            "end": 2145
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2094,
+        "end": 2145
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-serif",
+        "span": {
+          "start": 2145,
+          "end": 2156
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Serif",
+            "span": {
+              "start": 2159,
+              "end": 2165
+            }
+          }
+        ],
+        "span": {
+          "start": 2159,
+          "end": 2165
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2170,
+              "end": 2179
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 2182,
+                  "end": 2184
+                }
+              }
+            ],
+            "span": {
+              "start": 2182,
+              "end": 2185
+            }
+          },
+          "span": {
+            "start": 2184,
+            "end": 2185
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2145,
+        "end": 2185
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-sans-serif",
+        "span": {
+          "start": 2185,
+          "end": 2201
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Sans-serif",
+            "span": {
+              "start": 2204,
+              "end": 2215
+            }
+          }
+        ],
+        "span": {
+          "start": 2204,
+          "end": 2215
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2220,
+              "end": 2229
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "n",
+                "span": {
+                  "start": 2232,
+                  "end": 2234
+                }
+              }
+            ],
+            "span": {
+              "start": 2232,
+              "end": 2235
+            }
+          },
+          "span": {
+            "start": 2234,
+            "end": 2235
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2185,
+        "end": 2235
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-monospace",
+        "span": {
+          "start": 2235,
+          "end": 2250
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Monospace",
+            "span": {
+              "start": 2253,
+              "end": 2263
+            }
+          }
+        ],
+        "span": {
+          "start": 2253,
+          "end": 2263
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2268,
+              "end": 2277
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "M",
+                "span": {
+                  "start": 2280,
+                  "end": 2282
+                }
+              }
+            ],
+            "span": {
+              "start": 2280,
+              "end": 2283
+            }
+          },
+          "span": {
+            "start": 2282,
+            "end": 2283
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2235,
+        "end": 2283
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-monospace-size",
+        "span": {
+          "start": 2283,
+          "end": 2303
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Size",
+            "span": {
+              "start": 2306,
+              "end": 2311
+            }
+          }
+        ],
+        "span": {
+          "start": 2306,
+          "end": 2311
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2316,
+              "end": 2325
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e",
+                "span": {
+                  "start": 2328,
+                  "end": 2330
+                }
+              }
+            ],
+            "span": {
+              "start": 2328,
+              "end": 2331
+            }
+          },
+          "span": {
+            "start": 2330,
+            "end": 2331
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2283,
+        "end": 2331
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-minsize",
+        "span": {
+          "start": 2331,
+          "end": 2344
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Minimum font size",
+            "span": {
+              "start": 2347,
+              "end": 2365
+            }
+          }
+        ],
+        "span": {
+          "start": 2347,
+          "end": 2365
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2370,
+              "end": 2379
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 2382,
+                  "end": 2384
+                }
+              }
+            ],
+            "span": {
+              "start": 2382,
+              "end": 2385
+            }
+          },
+          "span": {
+            "start": 2384,
+            "end": 2385
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2331,
+        "end": 2385
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-minsize-none",
+        "span": {
+          "start": 2385,
+          "end": 2403
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2411,
+              "end": 2416
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "None",
+                "span": {
+                  "start": 2419,
+                  "end": 2424
+                }
+              }
+            ],
+            "span": {
+              "start": 2419,
+              "end": 2425
+            }
+          },
+          "span": {
+            "start": 2424,
+            "end": 2425
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2385,
+        "end": 2425
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-allow-own",
+        "span": {
+          "start": 2425,
+          "end": 2440
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2448,
+              "end": 2453
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Allow pages to choose their own fonts, instead of your selections above",
+                "span": {
+                  "start": 2456,
+                  "end": 2528
+                }
+              }
+            ],
+            "span": {
+              "start": 2456,
+              "end": 2528
+            }
+          },
+          "span": {
+            "start": 2527,
+            "end": 2528
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2533,
+              "end": 2542
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 2545,
+                  "end": 2547
+                }
+              }
+            ],
+            "span": {
+              "start": 2545,
+              "end": 2548
+            }
+          },
+          "span": {
+            "start": 2547,
+            "end": 2548
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2425,
+        "end": 2548
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Text Encodings",
+        "",
+        "Translate the encoding names as adjectives for an encoding, not as the name",
+        "of the language."
+      ],
+      "span": {
+        "start": 2548,
+        "end": 2667
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-header",
+        "span": {
+          "start": 2669,
+          "end": 2700
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Text Encoding for Legacy Content",
+            "span": {
+              "start": 2703,
+              "end": 2736
+            }
+          }
+        ],
+        "span": {
+          "start": 2703,
+          "end": 2736
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2669,
+        "end": 2736
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-desc",
+        "span": {
+          "start": 2736,
+          "end": 2765
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This text encoding is used for legacy content that fails to declare its encoding.",
+            "span": {
+              "start": 2768,
+              "end": 2850
+            }
+          }
+        ],
+        "span": {
+          "start": 2768,
+          "end": 2851
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2736,
+        "end": 2851
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-label",
+        "span": {
+          "start": 2851,
+          "end": 2881
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Fallback Text Encoding",
+            "span": {
+              "start": 2884,
+              "end": 2907
+            }
+          }
+        ],
+        "span": {
+          "start": 2884,
+          "end": 2907
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2912,
+              "end": 2921
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T",
+                "span": {
+                  "start": 2924,
+                  "end": 2926
+                }
+              }
+            ],
+            "span": {
+              "start": 2924,
+              "end": 2927
+            }
+          },
+          "span": {
+            "start": 2926,
+            "end": 2927
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2851,
+        "end": 2927
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-auto",
+        "span": {
+          "start": 2927,
+          "end": 2961
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2969,
+              "end": 2974
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Default for Current Locale",
+                "span": {
+                  "start": 2977,
+                  "end": 3004
+                }
+              }
+            ],
+            "span": {
+              "start": 2977,
+              "end": 3004
+            }
+          },
+          "span": {
+            "start": 3003,
+            "end": 3004
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2927,
+        "end": 3004
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-arabic",
+        "span": {
+          "start": 3004,
+          "end": 3040
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3048,
+              "end": 3053
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Arabic",
+                "span": {
+                  "start": 3056,
+                  "end": 3063
+                }
+              }
+            ],
+            "span": {
+              "start": 3056,
+              "end": 3063
+            }
+          },
+          "span": {
+            "start": 3062,
+            "end": 3063
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3004,
+        "end": 3063
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-baltic",
+        "span": {
+          "start": 3063,
+          "end": 3099
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3107,
+              "end": 3112
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Baltic",
+                "span": {
+                  "start": 3115,
+                  "end": 3122
+                }
+              }
+            ],
+            "span": {
+              "start": 3115,
+              "end": 3122
+            }
+          },
+          "span": {
+            "start": 3121,
+            "end": 3122
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3063,
+        "end": 3122
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-ceiso",
+        "span": {
+          "start": 3122,
+          "end": 3157
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3165,
+              "end": 3170
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Central European, ISO",
+                "span": {
+                  "start": 3173,
+                  "end": 3195
+                }
+              }
+            ],
+            "span": {
+              "start": 3173,
+              "end": 3195
+            }
+          },
+          "span": {
+            "start": 3194,
+            "end": 3195
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3122,
+        "end": 3195
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-cewindows",
+        "span": {
+          "start": 3195,
+          "end": 3234
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3242,
+              "end": 3247
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Central European, Microsoft",
+                "span": {
+                  "start": 3250,
+                  "end": 3278
+                }
+              }
+            ],
+            "span": {
+              "start": 3250,
+              "end": 3278
+            }
+          },
+          "span": {
+            "start": 3277,
+            "end": 3278
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3195,
+        "end": 3278
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-simplified",
+        "span": {
+          "start": 3278,
+          "end": 3318
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3326,
+              "end": 3331
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Chinese, Simplified",
+                "span": {
+                  "start": 3334,
+                  "end": 3354
+                }
+              }
+            ],
+            "span": {
+              "start": 3334,
+              "end": 3354
+            }
+          },
+          "span": {
+            "start": 3353,
+            "end": 3354
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3278,
+        "end": 3354
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-traditional",
+        "span": {
+          "start": 3354,
+          "end": 3395
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3403,
+              "end": 3408
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Chinese, Traditional",
+                "span": {
+                  "start": 3411,
+                  "end": 3432
+                }
+              }
+            ],
+            "span": {
+              "start": 3411,
+              "end": 3432
+            }
+          },
+          "span": {
+            "start": 3431,
+            "end": 3432
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3354,
+        "end": 3432
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-cyrillic",
+        "span": {
+          "start": 3432,
+          "end": 3470
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3478,
+              "end": 3483
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cyrillic",
+                "span": {
+                  "start": 3486,
+                  "end": 3495
+                }
+              }
+            ],
+            "span": {
+              "start": 3486,
+              "end": 3495
+            }
+          },
+          "span": {
+            "start": 3494,
+            "end": 3495
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3432,
+        "end": 3495
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-greek",
+        "span": {
+          "start": 3495,
+          "end": 3530
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3538,
+              "end": 3543
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Greek",
+                "span": {
+                  "start": 3546,
+                  "end": 3552
+                }
+              }
+            ],
+            "span": {
+              "start": 3546,
+              "end": 3552
+            }
+          },
+          "span": {
+            "start": 3551,
+            "end": 3552
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3495,
+        "end": 3552
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-hebrew",
+        "span": {
+          "start": 3552,
+          "end": 3588
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3596,
+              "end": 3601
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Hebrew",
+                "span": {
+                  "start": 3604,
+                  "end": 3611
+                }
+              }
+            ],
+            "span": {
+              "start": 3604,
+              "end": 3611
+            }
+          },
+          "span": {
+            "start": 3610,
+            "end": 3611
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3552,
+        "end": 3611
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-japanese",
+        "span": {
+          "start": 3611,
+          "end": 3649
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3657,
+              "end": 3662
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Japanese",
+                "span": {
+                  "start": 3665,
+                  "end": 3674
+                }
+              }
+            ],
+            "span": {
+              "start": 3665,
+              "end": 3674
+            }
+          },
+          "span": {
+            "start": 3673,
+            "end": 3674
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3611,
+        "end": 3674
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-korean",
+        "span": {
+          "start": 3674,
+          "end": 3710
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3718,
+              "end": 3723
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Korean",
+                "span": {
+                  "start": 3726,
+                  "end": 3733
+                }
+              }
+            ],
+            "span": {
+              "start": 3726,
+              "end": 3733
+            }
+          },
+          "span": {
+            "start": 3732,
+            "end": 3733
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3674,
+        "end": 3733
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-thai",
+        "span": {
+          "start": 3733,
+          "end": 3767
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3775,
+              "end": 3780
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Thai",
+                "span": {
+                  "start": 3783,
+                  "end": 3788
+                }
+              }
+            ],
+            "span": {
+              "start": 3783,
+              "end": 3788
+            }
+          },
+          "span": {
+            "start": 3787,
+            "end": 3788
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3733,
+        "end": 3788
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-turkish",
+        "span": {
+          "start": 3788,
+          "end": 3825
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3833,
+              "end": 3838
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Turkish",
+                "span": {
+                  "start": 3841,
+                  "end": 3849
+                }
+              }
+            ],
+            "span": {
+              "start": 3841,
+              "end": 3849
+            }
+          },
+          "span": {
+            "start": 3848,
+            "end": 3849
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3788,
+        "end": 3849
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-vietnamese",
+        "span": {
+          "start": 3849,
+          "end": 3889
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3897,
+              "end": 3902
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Vietnamese",
+                "span": {
+                  "start": 3905,
+                  "end": 3916
+                }
+              }
+            ],
+            "span": {
+              "start": 3905,
+              "end": 3916
+            }
+          },
+          "span": {
+            "start": 3915,
+            "end": 3916
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3849,
+        "end": 3916
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-languages-fallback-name-other",
+        "span": {
+          "start": 3916,
+          "end": 3951
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3959,
+              "end": 3964
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Other (incl. Western European)",
+                "span": {
+                  "start": 3967,
+                  "end": 3998
+                }
+              }
+            ],
+            "span": {
+              "start": 3967,
+              "end": 3999
+            }
+          },
+          "span": {
+            "start": 3998,
+            "end": 3999
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3916,
+        "end": 3999
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-label-default",
+        "span": {
+          "start": 4067,
+          "end": 4086
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4094,
+              "end": 4099
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Default (",
+                "span": {
+                  "start": 4102,
+                  "end": 4111
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "name",
+                      "span": {
+                        "start": 4114,
+                        "end": 4118
+                      }
+                    },
+                    "span": {
+                      "start": 4113,
+                      "end": 4118
+                    }
+                  },
+                  {
+                    "start": 4113,
+                    "end": 4119
+                  }
+                ],
+                "span": {
+                  "start": 4111,
+                  "end": 4119
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")",
+                "span": {
+                  "start": 4120,
+                  "end": 4122
+                }
+              }
+            ],
+            "span": {
+              "start": 4102,
+              "end": 4122
+            }
+          },
+          "span": {
+            "start": 4121,
+            "end": 4122
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables:",
+          "  $name {string, \"Arial\"} - Name of the default font"
+        ],
+        "span": {
+          "start": 3999,
+          "end": 4066
+        }
+      },
+      "span": {
+        "start": 4067,
+        "end": 4122
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fonts-label-default-unnamed",
+        "span": {
+          "start": 4122,
+          "end": 4149
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 4157,
+              "end": 4162
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Default",
+                "span": {
+                  "start": 4165,
+                  "end": 4173
+                }
+              }
+            ],
+            "span": {
+              "start": 4165,
+              "end": 4173
+            }
+          },
+          "span": {
+            "start": 4172,
+            "end": 4173
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 4122,
+        "end": 4173
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 4173
+  }
+}

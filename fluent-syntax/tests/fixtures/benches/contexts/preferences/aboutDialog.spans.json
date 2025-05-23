@@ -1,0 +1,1353 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-title",
+        "span": {
+          "start": 200,
+          "end": 217
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 225,
+              "end": 230
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "About ",
+                "span": {
+                  "start": 233,
+                  "end": 239
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "TermReference",
+                    "id": {
+                      "name": "brand-full-name",
+                      "span": {
+                        "start": 242,
+                        "end": 257
+                      }
+                    },
+                    "attribute": null,
+                    "arguments": null,
+                    "span": {
+                      "start": 241,
+                      "end": 258
+                    }
+                  },
+                  {
+                    "start": 241,
+                    "end": 258
+                  }
+                ],
+                "span": {
+                  "start": 239,
+                  "end": 258
+                }
+              }
+            ],
+            "span": {
+              "start": 233,
+              "end": 261
+            }
+          },
+          "span": {
+            "start": 260,
+            "end": 261
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 261
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "releaseNotes-link",
+        "span": {
+          "start": 261,
+          "end": 278
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "What’s new",
+            "span": {
+              "start": 281,
+              "end": 294
+            }
+          }
+        ],
+        "span": {
+          "start": 281,
+          "end": 295
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 261,
+        "end": 295
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-checkForUpdatesButton",
+        "span": {
+          "start": 295,
+          "end": 323
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 331,
+              "end": 336
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Check for updates",
+                "span": {
+                  "start": 339,
+                  "end": 357
+                }
+              }
+            ],
+            "span": {
+              "start": 339,
+              "end": 357
+            }
+          },
+          "span": {
+            "start": 356,
+            "end": 357
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 362,
+              "end": 371
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 374,
+                  "end": 376
+                }
+              }
+            ],
+            "span": {
+              "start": 374,
+              "end": 377
+            }
+          },
+          "span": {
+            "start": 376,
+            "end": 377
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 295,
+        "end": 377
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-updateButton",
+        "span": {
+          "start": 377,
+          "end": 396
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 404,
+              "end": 409
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Restart to update ",
+                "span": {
+                  "start": 412,
+                  "end": 430
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "TermReference",
+                    "id": {
+                      "name": "brand-shorter-name",
+                      "span": {
+                        "start": 433,
+                        "end": 451
+                      }
+                    },
+                    "attribute": null,
+                    "arguments": null,
+                    "span": {
+                      "start": 432,
+                      "end": 452
+                    }
+                  },
+                  {
+                    "start": 432,
+                    "end": 452
+                  }
+                ],
+                "span": {
+                  "start": 430,
+                  "end": 452
+                }
+              }
+            ],
+            "span": {
+              "start": 412,
+              "end": 454
+            }
+          },
+          "span": {
+            "start": 453,
+            "end": 454
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 459,
+              "end": 468
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 471,
+                  "end": 473
+                }
+              }
+            ],
+            "span": {
+              "start": 471,
+              "end": 474
+            }
+          },
+          "span": {
+            "start": 473,
+            "end": 474
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 377,
+        "end": 474
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-checkingForUpdates",
+        "span": {
+          "start": 474,
+          "end": 499
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Checking for updates…",
+            "span": {
+              "start": 502,
+              "end": 526
+            }
+          }
+        ],
+        "span": {
+          "start": 502,
+          "end": 526
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 474,
+        "end": 526
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-downloading",
+        "span": {
+          "start": 526,
+          "end": 544
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "<img data-l10n-name=\"icon\"/>Downloading update — <label data-l10n-name=\"download-status\"/>",
+            "span": {
+              "start": 547,
+              "end": 640
+            }
+          }
+        ],
+        "span": {
+          "start": 547,
+          "end": 640
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 526,
+        "end": 640
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-applying",
+        "span": {
+          "start": 640,
+          "end": 655
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Applying update…",
+            "span": {
+              "start": 658,
+              "end": 677
+            }
+          }
+        ],
+        "span": {
+          "start": 658,
+          "end": 678
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 640,
+        "end": 678
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-failed",
+        "span": {
+          "start": 678,
+          "end": 691
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update failed. <label data-l10n-name=\"failed-link\">Download the latest version</label>",
+            "span": {
+              "start": 694,
+              "end": 781
+            }
+          }
+        ],
+        "span": {
+          "start": 694,
+          "end": 781
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 678,
+        "end": 781
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-failed-main",
+        "span": {
+          "start": 781,
+          "end": 799
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update failed. <a data-l10n-name=\"failed-link-main\">Download the latest version</a>",
+            "span": {
+              "start": 806,
+              "end": 890
+            }
+          }
+        ],
+        "span": {
+          "start": 801,
+          "end": 891
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 781,
+        "end": 891
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-adminDisabled",
+        "span": {
+          "start": 891,
+          "end": 911
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Updates disabled by your system administrator",
+            "span": {
+              "start": 914,
+              "end": 960
+            }
+          }
+        ],
+        "span": {
+          "start": 914,
+          "end": 960
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 891,
+        "end": 960
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-noUpdatesFound",
+        "span": {
+          "start": 960,
+          "end": 981
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 987,
+                    "end": 1003
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 986,
+                  "end": 1004
+                }
+              },
+              {
+                "start": 986,
+                "end": 1004
+              }
+            ],
+            "span": {
+              "start": 984,
+              "end": 1004
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is up to date",
+            "span": {
+              "start": 1005,
+              "end": 1020
+            }
+          }
+        ],
+        "span": {
+          "start": 984,
+          "end": 1020
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 960,
+        "end": 1020
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-otherInstanceHandlingUpdates",
+        "span": {
+          "start": 1020,
+          "end": 1055
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 1061,
+                    "end": 1077
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1060,
+                  "end": 1078
+                }
+              },
+              {
+                "start": 1060,
+                "end": 1078
+              }
+            ],
+            "span": {
+              "start": 1058,
+              "end": 1078
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is being updated by another instance",
+            "span": {
+              "start": 1079,
+              "end": 1117
+            }
+          }
+        ],
+        "span": {
+          "start": 1058,
+          "end": 1118
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1020,
+        "end": 1118
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-manual",
+        "span": {
+          "start": 1118,
+          "end": 1131
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Updates available at <label data-l10n-name=\"manual-link\"/>",
+            "span": {
+              "start": 1134,
+              "end": 1193
+            }
+          }
+        ],
+        "span": {
+          "start": 1134,
+          "end": 1194
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1118,
+        "end": 1194
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-unsupported",
+        "span": {
+          "start": 1194,
+          "end": 1212
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You can not perform further updates on this system. <label data-l10n-name=\"unsupported-link\">Learn more</label>",
+            "span": {
+              "start": 1215,
+              "end": 1327
+            }
+          }
+        ],
+        "span": {
+          "start": 1215,
+          "end": 1328
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1194,
+        "end": 1328
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-restarting",
+        "span": {
+          "start": 1328,
+          "end": 1345
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Restarting…",
+            "span": {
+              "start": 1348,
+              "end": 1362
+            }
+          }
+        ],
+        "span": {
+          "start": 1348,
+          "end": 1363
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1328,
+        "end": 1363
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "channel-description",
+        "span": {
+          "start": 1363,
+          "end": 1382
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are currently on the <label data-l10n-name=\"current-channel\"></label> update channel.",
+            "span": {
+              "start": 1385,
+              "end": 1475
+            }
+          }
+        ],
+        "span": {
+          "start": 1385,
+          "end": 1476
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1363,
+        "end": 1476
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "warningDesc-version",
+        "span": {
+          "start": 1476,
+          "end": 1495
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 1501,
+                    "end": 1517
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1500,
+                  "end": 1518
+                }
+              },
+              {
+                "start": 1500,
+                "end": 1518
+              }
+            ],
+            "span": {
+              "start": 1498,
+              "end": 1518
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is experimental and may be unstable.",
+            "span": {
+              "start": 1519,
+              "end": 1557
+            }
+          }
+        ],
+        "span": {
+          "start": 1498,
+          "end": 1558
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1476,
+        "end": 1558
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "community-exp",
+        "span": {
+          "start": 1558,
+          "end": 1571
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "<label data-l10n-name=\"community-exp-mozillaLink\">",
+            "span": {
+              "start": 1574,
+              "end": 1624
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "vendor-short-name",
+                  "span": {
+                    "start": 1627,
+                    "end": 1644
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1626,
+                  "end": 1645
+                }
+              },
+              {
+                "start": 1626,
+                "end": 1645
+              }
+            ],
+            "span": {
+              "start": 1624,
+              "end": 1645
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "</label> is a <label data-l10n-name=\"community-exp-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all.",
+            "span": {
+              "start": 1646,
+              "end": 1804
+            }
+          }
+        ],
+        "span": {
+          "start": 1574,
+          "end": 1805
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1558,
+        "end": 1805
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "community-2",
+        "span": {
+          "start": 1805,
+          "end": 1816
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 1822,
+                    "end": 1838
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1821,
+                  "end": 1839
+                }
+              },
+              {
+                "start": 1821,
+                "end": 1839
+              }
+            ],
+            "span": {
+              "start": 1819,
+              "end": 1839
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " is designed by <label data-l10n-name=\"community-mozillaLink\">",
+            "span": {
+              "start": 1840,
+              "end": 1902
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "vendor-short-name",
+                  "span": {
+                    "start": 1905,
+                    "end": 1922
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1904,
+                  "end": 1923
+                }
+              },
+              {
+                "start": 1904,
+                "end": 1923
+              }
+            ],
+            "span": {
+              "start": 1902,
+              "end": 1923
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "</label>, a <label data-l10n-name=\"community-creditsLink\">global community</label> working together to keep the Web open, public and accessible to all.",
+            "span": {
+              "start": 1924,
+              "end": 2076
+            }
+          }
+        ],
+        "span": {
+          "start": 1819,
+          "end": 2077
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1805,
+        "end": 2077
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "helpus",
+        "span": {
+          "start": 2077,
+          "end": 2083
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Want to help? <label data-l10n-name=\"helpus-donateLink\">Make a donation</label> or <label data-l10n-name=\"helpus-getInvolvedLink\">get involved!</label>",
+            "span": {
+              "start": 2086,
+              "end": 2238
+            }
+          }
+        ],
+        "span": {
+          "start": 2086,
+          "end": 2239
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2077,
+        "end": 2239
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-license",
+        "span": {
+          "start": 2239,
+          "end": 2258
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Licensing Information",
+            "span": {
+              "start": 2261,
+              "end": 2283
+            }
+          }
+        ],
+        "span": {
+          "start": 2261,
+          "end": 2283
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2239,
+        "end": 2283
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-rights",
+        "span": {
+          "start": 2283,
+          "end": 2301
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "End-User Rights",
+            "span": {
+              "start": 2304,
+              "end": 2320
+            }
+          }
+        ],
+        "span": {
+          "start": 2304,
+          "end": 2320
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2283,
+        "end": 2320
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bottomLinks-privacy",
+        "span": {
+          "start": 2320,
+          "end": 2339
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Privacy Policy",
+            "span": {
+              "start": 2342,
+              "end": 2357
+            }
+          }
+        ],
+        "span": {
+          "start": 2342,
+          "end": 2358
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2320,
+        "end": 2358
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-version",
+        "span": {
+          "start": 2529,
+          "end": 2548
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "version",
+                  "span": {
+                    "start": 2554,
+                    "end": 2561
+                  }
+                },
+                "span": {
+                  "start": 2553,
+                  "end": 2561
+                }
+              },
+              {
+                "start": 2553,
+                "end": 2562
+              }
+            ],
+            "span": {
+              "start": 2551,
+              "end": 2562
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " (",
+            "span": {
+              "start": 2563,
+              "end": 2565
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "bits",
+                  "span": {
+                    "start": 2568,
+                    "end": 2572
+                  }
+                },
+                "span": {
+                  "start": 2567,
+                  "end": 2572
+                }
+              },
+              {
+                "start": 2567,
+                "end": 2573
+              }
+            ],
+            "span": {
+              "start": 2565,
+              "end": 2573
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "-bit)",
+            "span": {
+              "start": 2574,
+              "end": 2580
+            }
+          }
+        ],
+        "span": {
+          "start": 2551,
+          "end": 2581
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Example of resulting string: 66.0.1 (64-bit)",
+          "Variables:",
+          "  $version (String): version of Firefox, e.g. 66.0.1",
+          "  $bits (Number): bits of the architecture (32 or 64)"
+        ],
+        "span": {
+          "start": 2358,
+          "end": 2528
+        }
+      },
+      "span": {
+        "start": 2529,
+        "end": 2581
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "aboutDialog-version-nightly",
+        "span": {
+          "start": 2843,
+          "end": 2870
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "version",
+                  "span": {
+                    "start": 2876,
+                    "end": 2883
+                  }
+                },
+                "span": {
+                  "start": 2875,
+                  "end": 2883
+                }
+              },
+              {
+                "start": 2875,
+                "end": 2884
+              }
+            ],
+            "span": {
+              "start": 2873,
+              "end": 2884
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " (",
+            "span": {
+              "start": 2885,
+              "end": 2887
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "isodate",
+                  "span": {
+                    "start": 2890,
+                    "end": 2897
+                  }
+                },
+                "span": {
+                  "start": 2889,
+                  "end": 2897
+                }
+              },
+              {
+                "start": 2889,
+                "end": 2898
+              }
+            ],
+            "span": {
+              "start": 2887,
+              "end": 2898
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": ") (",
+            "span": {
+              "start": 2899,
+              "end": 2902
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "bits",
+                  "span": {
+                    "start": 2905,
+                    "end": 2909
+                  }
+                },
+                "span": {
+                  "start": 2904,
+                  "end": 2909
+                }
+              },
+              {
+                "start": 2904,
+                "end": 2910
+              }
+            ],
+            "span": {
+              "start": 2902,
+              "end": 2910
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "-bit)",
+            "span": {
+              "start": 2911,
+              "end": 2917
+            }
+          }
+        ],
+        "span": {
+          "start": 2873,
+          "end": 2917
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Example of resulting string: 66.0a1 (2019-01-16) (64-bit)",
+          "Variables:",
+          "  $version (String): version of Firefox for Nightly builds, e.g. 66.0a1",
+          "  $isodate (String): date in ISO format, e.g. 2019-01-16",
+          "  $bits (Number): bits of the architecture (32 or 64)"
+        ],
+        "span": {
+          "start": 2581,
+          "end": 2842
+        }
+      },
+      "span": {
+        "start": 2843,
+        "end": 2917
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2917
+  }
+}

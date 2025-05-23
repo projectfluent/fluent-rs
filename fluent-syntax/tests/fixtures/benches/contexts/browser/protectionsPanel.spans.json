@@ -1,0 +1,92 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "protections-panel-sendreportview-error",
+        "span": {
+          "start": 200,
+          "end": 238
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "There was an error sending the report. Please try again later.",
+            "span": {
+              "start": 241,
+              "end": 304
+            }
+          }
+        ],
+        "span": {
+          "start": 241,
+          "end": 305
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 305
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "protections-panel-sitefixedsendreport-label",
+        "span": {
+          "start": 401,
+          "end": 444
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Site fixed? Send report",
+            "span": {
+              "start": 447,
+              "end": 471
+            }
+          }
+        ],
+        "span": {
+          "start": 447,
+          "end": 471
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "A link shown when ETP is disabled for a site. Opens the breakage report subview when clicked."
+        ],
+        "span": {
+          "start": 305,
+          "end": 400
+        }
+      },
+      "span": {
+        "start": 401,
+        "end": 471
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 471
+  }
+}

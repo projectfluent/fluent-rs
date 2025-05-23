@@ -1,0 +1,128 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-bookmark-window",
+        "span": {
+          "start": 200,
+          "end": 222
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 230,
+              "end": 235
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Set Home Page",
+                "span": {
+                  "start": 238,
+                  "end": 252
+                }
+              }
+            ],
+            "span": {
+              "start": 238,
+              "end": 252
+            }
+          },
+          "span": {
+            "start": 251,
+            "end": 252
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 257,
+              "end": 262
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 32em;",
+                "span": {
+                  "start": 265,
+                  "end": 278
+                }
+              }
+            ],
+            "span": {
+              "start": 265,
+              "end": 279
+            }
+          },
+          "span": {
+            "start": 278,
+            "end": 279
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 279
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-bookmark-desc",
+        "span": {
+          "start": 279,
+          "end": 299
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose a Bookmark to be your Home Page. If you choose a folder, the Bookmarks in that folder will be opened in Tabs.",
+            "span": {
+              "start": 302,
+              "end": 419
+            }
+          }
+        ],
+        "span": {
+          "start": 302,
+          "end": 419
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 279,
+        "end": 419
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 419
+  }
+}

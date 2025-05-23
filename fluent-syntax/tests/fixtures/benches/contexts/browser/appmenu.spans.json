@@ -1,0 +1,270 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "App Menu"
+      ],
+      "span": {
+        "start": 200,
+        "end": 211
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-protection-report-title",
+        "span": {
+          "start": 213,
+          "end": 248
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Privacy Protections",
+            "span": {
+              "start": 251,
+              "end": 271
+            }
+          }
+        ],
+        "span": {
+          "start": 251,
+          "end": 271
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 213,
+        "end": 271
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-protection-report-tooltip",
+        "span": {
+          "start": 271,
+          "end": 308
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 316,
+              "end": 327
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Go to your privacy report",
+                "span": {
+                  "start": 330,
+                  "end": 356
+                }
+              }
+            ],
+            "span": {
+              "start": 330,
+              "end": 357
+            }
+          },
+          "span": {
+            "start": 356,
+            "end": 357
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 271,
+        "end": 357
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Zoom Controls"
+      ],
+      "span": {
+        "start": 357,
+        "end": 373
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-zoom-enlarge",
+        "span": {
+          "start": 375,
+          "end": 399
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 405,
+              "end": 410
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Zoom in",
+                "span": {
+                  "start": 413,
+                  "end": 421
+                }
+              }
+            ],
+            "span": {
+              "start": 413,
+              "end": 421
+            }
+          },
+          "span": {
+            "start": 420,
+            "end": 421
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 375,
+        "end": 421
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "appmenuitem-zoom-reduce",
+        "span": {
+          "start": 421,
+          "end": 444
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 450,
+              "end": 455
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Zoom out",
+                "span": {
+                  "start": 458,
+                  "end": 467
+                }
+              }
+            ],
+            "span": {
+              "start": 458,
+              "end": 468
+            }
+          },
+          "span": {
+            "start": 467,
+            "end": 468
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 421,
+        "end": 468
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Firefox Account toolbar button and Sync panel in App menu."
+      ],
+      "span": {
+        "start": 468,
+        "end": 529
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fxa-toolbar-sync-now",
+        "span": {
+          "start": 531,
+          "end": 551
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 559,
+              "end": 564
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Sync Now",
+                "span": {
+                  "start": 567,
+                  "end": 576
+                }
+              }
+            ],
+            "span": {
+              "start": 567,
+              "end": 576
+            }
+          },
+          "span": {
+            "start": 575,
+            "end": 576
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 531,
+        "end": 576
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 576
+  }
+}

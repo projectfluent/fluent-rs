@@ -1,0 +1,576 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "history-title",
+        "span": {
+          "start": 200,
+          "end": 213
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update History",
+            "span": {
+              "start": 216,
+              "end": 231
+            }
+          }
+        ],
+        "span": {
+          "start": 216,
+          "end": 231
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 231
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "history-intro",
+        "span": {
+          "start": 231,
+          "end": 244
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following updates have been installed",
+            "span": {
+              "start": 247,
+              "end": 289
+            }
+          }
+        ],
+        "span": {
+          "start": 247,
+          "end": 290
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 231,
+        "end": 290
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "close-button-label",
+        "span": {
+          "start": 290,
+          "end": 308
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "buttonlabelcancel",
+            "span": {
+              "start": 316,
+              "end": 333
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Close",
+                "span": {
+                  "start": 336,
+                  "end": 342
+                }
+              }
+            ],
+            "span": {
+              "start": 336,
+              "end": 342
+            }
+          },
+          "span": {
+            "start": 341,
+            "end": 342
+          }
+        },
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 347,
+              "end": 352
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Update History",
+                "span": {
+                  "start": 355,
+                  "end": 370
+                }
+              }
+            ],
+            "span": {
+              "start": 355,
+              "end": 371
+            }
+          },
+          "span": {
+            "start": 370,
+            "end": 371
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 290,
+        "end": 371
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "no-updates-label",
+        "span": {
+          "start": 371,
+          "end": 387
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "No updates installed yet",
+            "span": {
+              "start": 390,
+              "end": 415
+            }
+          }
+        ],
+        "span": {
+          "start": 390,
+          "end": 415
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 371,
+        "end": 415
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "name-header",
+        "span": {
+          "start": 415,
+          "end": 426
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Update Name",
+            "span": {
+              "start": 429,
+              "end": 441
+            }
+          }
+        ],
+        "span": {
+          "start": 429,
+          "end": 441
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 415,
+        "end": 441
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "date-header",
+        "span": {
+          "start": 441,
+          "end": 452
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Install Date",
+            "span": {
+              "start": 455,
+              "end": 468
+            }
+          }
+        ],
+        "span": {
+          "start": 455,
+          "end": 468
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 441,
+        "end": 468
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "type-header",
+        "span": {
+          "start": 468,
+          "end": 479
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Type",
+            "span": {
+              "start": 482,
+              "end": 487
+            }
+          }
+        ],
+        "span": {
+          "start": 482,
+          "end": 487
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 468,
+        "end": 487
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "state-header",
+        "span": {
+          "start": 487,
+          "end": 499
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "State",
+            "span": {
+              "start": 502,
+              "end": 508
+            }
+          }
+        ],
+        "span": {
+          "start": 502,
+          "end": 509
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 487,
+        "end": 509
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-full-build-name",
+        "span": {
+          "start": 663,
+          "end": 685
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "name",
+                  "span": {
+                    "start": 691,
+                    "end": 695
+                  }
+                },
+                "span": {
+                  "start": 690,
+                  "end": 695
+                }
+              },
+              {
+                "start": 690,
+                "end": 696
+              }
+            ],
+            "span": {
+              "start": 688,
+              "end": 696
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " (",
+            "span": {
+              "start": 697,
+              "end": 699
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "buildID",
+                  "span": {
+                    "start": 702,
+                    "end": 709
+                  }
+                },
+                "span": {
+                  "start": 701,
+                  "end": 709
+                }
+              },
+              {
+                "start": 701,
+                "end": 710
+              }
+            ],
+            "span": {
+              "start": 699,
+              "end": 710
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": ")",
+            "span": {
+              "start": 711,
+              "end": 713
+            }
+          }
+        ],
+        "span": {
+          "start": 688,
+          "end": 714
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Used to display update history",
+          "",
+          "Variables:",
+          "  $name (String): name of the update",
+          "  $buildID (String): build identifier from the local updates.xml"
+        ],
+        "span": {
+          "start": 509,
+          "end": 662
+        }
+      },
+      "span": {
+        "start": 663,
+        "end": 714
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-details",
+        "span": {
+          "start": 714,
+          "end": 728
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Details",
+            "span": {
+              "start": 731,
+              "end": 739
+            }
+          }
+        ],
+        "span": {
+          "start": 731,
+          "end": 739
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 714,
+        "end": 739
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-installed-on",
+        "span": {
+          "start": 739,
+          "end": 758
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Installed on: ",
+            "span": {
+              "start": 761,
+              "end": 775
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "date",
+                  "span": {
+                    "start": 778,
+                    "end": 782
+                  }
+                },
+                "span": {
+                  "start": 777,
+                  "end": 782
+                }
+              },
+              {
+                "start": 777,
+                "end": 783
+              }
+            ],
+            "span": {
+              "start": 775,
+              "end": 783
+            }
+          }
+        ],
+        "span": {
+          "start": 761,
+          "end": 785
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 739,
+        "end": 785
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "update-status",
+        "span": {
+          "start": 785,
+          "end": 798
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Status: ",
+            "span": {
+              "start": 801,
+              "end": 809
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "status",
+                  "span": {
+                    "start": 812,
+                    "end": 818
+                  }
+                },
+                "span": {
+                  "start": 811,
+                  "end": 818
+                }
+              },
+              {
+                "start": 811,
+                "end": 819
+              }
+            ],
+            "span": {
+              "start": 809,
+              "end": 819
+            }
+          }
+        ],
+        "span": {
+          "start": 801,
+          "end": 821
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 785,
+        "end": 821
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 821
+  }
+}

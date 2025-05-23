@@ -1,0 +1,834 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-undo",
+        "span": {
+          "start": 200,
+          "end": 216
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 224,
+              "end": 229
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Undo",
+                "span": {
+                  "start": 232,
+                  "end": 237
+                }
+              }
+            ],
+            "span": {
+              "start": 232,
+              "end": 237
+            }
+          },
+          "span": {
+            "start": 236,
+            "end": 237
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 242,
+              "end": 251
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U",
+                "span": {
+                  "start": 254,
+                  "end": 256
+                }
+              }
+            ],
+            "span": {
+              "start": 254,
+              "end": 257
+            }
+          },
+          "span": {
+            "start": 256,
+            "end": 257
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 257
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-undo-shortcut",
+        "span": {
+          "start": 257,
+          "end": 282
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 290,
+              "end": 293
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Z",
+                "span": {
+                  "start": 296,
+                  "end": 298
+                }
+              }
+            ],
+            "span": {
+              "start": 296,
+              "end": 299
+            }
+          },
+          "span": {
+            "start": 298,
+            "end": 299
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 257,
+        "end": 299
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-redo",
+        "span": {
+          "start": 299,
+          "end": 315
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 323,
+              "end": 328
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Redo",
+                "span": {
+                  "start": 331,
+                  "end": 336
+                }
+              }
+            ],
+            "span": {
+              "start": 331,
+              "end": 336
+            }
+          },
+          "span": {
+            "start": 335,
+            "end": 336
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 341,
+              "end": 350
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 353,
+                  "end": 355
+                }
+              }
+            ],
+            "span": {
+              "start": 353,
+              "end": 356
+            }
+          },
+          "span": {
+            "start": 355,
+            "end": 356
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 299,
+        "end": 356
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-redo-shortcut",
+        "span": {
+          "start": 356,
+          "end": 381
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 389,
+              "end": 392
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Y",
+                "span": {
+                  "start": 395,
+                  "end": 397
+                }
+              }
+            ],
+            "span": {
+              "start": 395,
+              "end": 398
+            }
+          },
+          "span": {
+            "start": 397,
+            "end": 398
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 356,
+        "end": 398
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-cut",
+        "span": {
+          "start": 398,
+          "end": 413
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 421,
+              "end": 426
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cut",
+                "span": {
+                  "start": 429,
+                  "end": 433
+                }
+              }
+            ],
+            "span": {
+              "start": 429,
+              "end": 433
+            }
+          },
+          "span": {
+            "start": 432,
+            "end": 433
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 438,
+              "end": 447
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "t",
+                "span": {
+                  "start": 450,
+                  "end": 452
+                }
+              }
+            ],
+            "span": {
+              "start": 450,
+              "end": 453
+            }
+          },
+          "span": {
+            "start": 452,
+            "end": 453
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 398,
+        "end": 453
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-cut-shortcut",
+        "span": {
+          "start": 453,
+          "end": 477
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 485,
+              "end": 488
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "X",
+                "span": {
+                  "start": 491,
+                  "end": 493
+                }
+              }
+            ],
+            "span": {
+              "start": 491,
+              "end": 494
+            }
+          },
+          "span": {
+            "start": 493,
+            "end": 494
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 453,
+        "end": 494
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-copy",
+        "span": {
+          "start": 494,
+          "end": 510
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 518,
+              "end": 523
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Copy",
+                "span": {
+                  "start": 526,
+                  "end": 531
+                }
+              }
+            ],
+            "span": {
+              "start": 526,
+              "end": 531
+            }
+          },
+          "span": {
+            "start": 530,
+            "end": 531
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 536,
+              "end": 545
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 548,
+                  "end": 550
+                }
+              }
+            ],
+            "span": {
+              "start": 548,
+              "end": 551
+            }
+          },
+          "span": {
+            "start": 550,
+            "end": 551
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 494,
+        "end": 551
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-copy-shortcut",
+        "span": {
+          "start": 551,
+          "end": 576
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 584,
+              "end": 587
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 590,
+                  "end": 592
+                }
+              }
+            ],
+            "span": {
+              "start": 590,
+              "end": 593
+            }
+          },
+          "span": {
+            "start": 592,
+            "end": 593
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 551,
+        "end": 593
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-paste",
+        "span": {
+          "start": 593,
+          "end": 610
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 618,
+              "end": 623
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Paste",
+                "span": {
+                  "start": 626,
+                  "end": 632
+                }
+              }
+            ],
+            "span": {
+              "start": 626,
+              "end": 632
+            }
+          },
+          "span": {
+            "start": 631,
+            "end": 632
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 637,
+              "end": 646
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 649,
+                  "end": 651
+                }
+              }
+            ],
+            "span": {
+              "start": 649,
+              "end": 652
+            }
+          },
+          "span": {
+            "start": 651,
+            "end": 652
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 593,
+        "end": 652
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-paste-shortcut",
+        "span": {
+          "start": 652,
+          "end": 678
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 686,
+              "end": 689
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 692,
+                  "end": 694
+                }
+              }
+            ],
+            "span": {
+              "start": 692,
+              "end": 695
+            }
+          },
+          "span": {
+            "start": 694,
+            "end": 695
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 652,
+        "end": 695
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-delete",
+        "span": {
+          "start": 695,
+          "end": 713
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 721,
+              "end": 726
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete",
+                "span": {
+                  "start": 729,
+                  "end": 736
+                }
+              }
+            ],
+            "span": {
+              "start": 729,
+              "end": 736
+            }
+          },
+          "span": {
+            "start": 735,
+            "end": 736
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 741,
+              "end": 750
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 753,
+                  "end": 755
+                }
+              }
+            ],
+            "span": {
+              "start": 753,
+              "end": 756
+            }
+          },
+          "span": {
+            "start": 755,
+            "end": 756
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 695,
+        "end": 756
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-select-all",
+        "span": {
+          "start": 756,
+          "end": 778
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 786,
+              "end": 791
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Select All",
+                "span": {
+                  "start": 794,
+                  "end": 805
+                }
+              }
+            ],
+            "span": {
+              "start": 794,
+              "end": 805
+            }
+          },
+          "span": {
+            "start": 804,
+            "end": 805
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 810,
+              "end": 819
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 822,
+                  "end": 824
+                }
+              }
+            ],
+            "span": {
+              "start": 822,
+              "end": 825
+            }
+          },
+          "span": {
+            "start": 824,
+            "end": 825
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 756,
+        "end": 825
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-action-select-all-shortcut",
+        "span": {
+          "start": 825,
+          "end": 856
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 864,
+              "end": 867
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 870,
+                  "end": 872
+                }
+              }
+            ],
+            "span": {
+              "start": 870,
+              "end": 872
+            }
+          },
+          "span": {
+            "start": 871,
+            "end": 872
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 825,
+        "end": 872
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 872
+  }
+}

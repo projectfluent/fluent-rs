@@ -1,0 +1,904 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-window",
+        "span": {
+          "start": 200,
+          "end": 213
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 221,
+              "end": 226
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Colors",
+                "span": {
+                  "start": 229,
+                  "end": 236
+                }
+              }
+            ],
+            "span": {
+              "start": 229,
+              "end": 236
+            }
+          },
+          "span": {
+            "start": 235,
+            "end": 236
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 241,
+              "end": 246
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "selector": {
+                    "type": "FunctionReference",
+                    "id": {
+                      "name": "PLATFORM",
+                      "span": {
+                        "start": 259,
+                        "end": 267
+                      }
+                    },
+                    "arguments": {
+                      "type": "CallArguments",
+                      "positional": [],
+                      "named": [],
+                      "span": {
+                        "start": 267,
+                        "end": 269
+                      }
+                    },
+                    "span": {
+                      "start": 259,
+                      "end": 269
+                    }
+                  },
+                  "variants": [
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "macos",
+                        "span": {
+                          "start": 286,
+                          "end": 291
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "width: 41em",
+                            "span": {
+                              "start": 293,
+                              "end": 305
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 293,
+                          "end": 305
+                        }
+                      },
+                      "default": false,
+                      "span": {
+                        "start": 285,
+                        "end": 305
+                      }
+                    },
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "other",
+                        "span": {
+                          "start": 318,
+                          "end": 323
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "width: 38em",
+                            "span": {
+                              "start": 325,
+                              "end": 337
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 325,
+                          "end": 337
+                        }
+                      },
+                      "default": true,
+                      "span": {
+                        "start": 316,
+                        "end": 337
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 259,
+                    "end": 345
+                  }
+                },
+                "span": {
+                  "start": 257,
+                  "end": 345
+                }
+              }
+            ],
+            "span": {
+              "start": 248,
+              "end": 348
+            }
+          },
+          "span": {
+            "start": 347,
+            "end": 348
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 348
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-close-key",
+        "span": {
+          "start": 348,
+          "end": 364
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 372,
+              "end": 375
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 378,
+                  "end": 380
+                }
+              }
+            ],
+            "span": {
+              "start": 378,
+              "end": 381
+            }
+          },
+          "span": {
+            "start": 380,
+            "end": 381
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 348,
+        "end": 381
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-page-override",
+        "span": {
+          "start": 381,
+          "end": 401
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Override the colors specified by the page with your selections above",
+            "span": {
+              "start": 404,
+              "end": 473
+            }
+          }
+        ],
+        "span": {
+          "start": 404,
+          "end": 473
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 478,
+              "end": 487
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "O",
+                "span": {
+                  "start": 490,
+                  "end": 492
+                }
+              }
+            ],
+            "span": {
+              "start": 490,
+              "end": 493
+            }
+          },
+          "span": {
+            "start": 492,
+            "end": 493
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 381,
+        "end": 493
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-page-override-option-always",
+        "span": {
+          "start": 493,
+          "end": 527
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 535,
+              "end": 540
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Always",
+                "span": {
+                  "start": 543,
+                  "end": 550
+                }
+              }
+            ],
+            "span": {
+              "start": 543,
+              "end": 550
+            }
+          },
+          "span": {
+            "start": 549,
+            "end": 550
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 493,
+        "end": 550
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-page-override-option-auto",
+        "span": {
+          "start": 550,
+          "end": 582
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 590,
+              "end": 595
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Only with High Contrast themes",
+                "span": {
+                  "start": 598,
+                  "end": 629
+                }
+              }
+            ],
+            "span": {
+              "start": 598,
+              "end": 629
+            }
+          },
+          "span": {
+            "start": 628,
+            "end": 629
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 550,
+        "end": 629
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-page-override-option-never",
+        "span": {
+          "start": 629,
+          "end": 662
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 670,
+              "end": 675
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Never",
+                "span": {
+                  "start": 678,
+                  "end": 684
+                }
+              }
+            ],
+            "span": {
+              "start": 678,
+              "end": 685
+            }
+          },
+          "span": {
+            "start": 684,
+            "end": 685
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 629,
+        "end": 685
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-text-and-background",
+        "span": {
+          "start": 685,
+          "end": 711
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Text and Background",
+            "span": {
+              "start": 714,
+              "end": 734
+            }
+          }
+        ],
+        "span": {
+          "start": 714,
+          "end": 735
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 685,
+        "end": 735
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-text-header",
+        "span": {
+          "start": 735,
+          "end": 753
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Text",
+            "span": {
+              "start": 756,
+              "end": 761
+            }
+          }
+        ],
+        "span": {
+          "start": 756,
+          "end": 761
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 766,
+              "end": 775
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T",
+                "span": {
+                  "start": 778,
+                  "end": 780
+                }
+              }
+            ],
+            "span": {
+              "start": 778,
+              "end": 781
+            }
+          },
+          "span": {
+            "start": 780,
+            "end": 781
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 735,
+        "end": 781
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-background",
+        "span": {
+          "start": 781,
+          "end": 798
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Background",
+            "span": {
+              "start": 801,
+              "end": 812
+            }
+          }
+        ],
+        "span": {
+          "start": 801,
+          "end": 812
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 817,
+              "end": 826
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B",
+                "span": {
+                  "start": 829,
+                  "end": 831
+                }
+              }
+            ],
+            "span": {
+              "start": 829,
+              "end": 832
+            }
+          },
+          "span": {
+            "start": 831,
+            "end": 832
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 781,
+        "end": 832
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-use-system",
+        "span": {
+          "start": 832,
+          "end": 849
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 857,
+              "end": 862
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Use system colors",
+                "span": {
+                  "start": 865,
+                  "end": 883
+                }
+              }
+            ],
+            "span": {
+              "start": 865,
+              "end": 883
+            }
+          },
+          "span": {
+            "start": 882,
+            "end": 883
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 888,
+              "end": 897
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "s",
+                "span": {
+                  "start": 900,
+                  "end": 902
+                }
+              }
+            ],
+            "span": {
+              "start": 900,
+              "end": 903
+            }
+          },
+          "span": {
+            "start": 902,
+            "end": 903
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 832,
+        "end": 903
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-underline-links",
+        "span": {
+          "start": 903,
+          "end": 925
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 933,
+              "end": 938
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Underline links",
+                "span": {
+                  "start": 941,
+                  "end": 957
+                }
+              }
+            ],
+            "span": {
+              "start": 941,
+              "end": 957
+            }
+          },
+          "span": {
+            "start": 956,
+            "end": 957
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 962,
+              "end": 971
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U",
+                "span": {
+                  "start": 974,
+                  "end": 976
+                }
+              }
+            ],
+            "span": {
+              "start": 974,
+              "end": 977
+            }
+          },
+          "span": {
+            "start": 976,
+            "end": 977
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 903,
+        "end": 977
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-links-header",
+        "span": {
+          "start": 977,
+          "end": 996
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Link Colors",
+            "span": {
+              "start": 999,
+              "end": 1011
+            }
+          }
+        ],
+        "span": {
+          "start": 999,
+          "end": 1012
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 977,
+        "end": 1012
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-unvisited-links",
+        "span": {
+          "start": 1012,
+          "end": 1034
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unvisited Links",
+            "span": {
+              "start": 1037,
+              "end": 1053
+            }
+          }
+        ],
+        "span": {
+          "start": 1037,
+          "end": 1053
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1058,
+              "end": 1067
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 1070,
+                  "end": 1072
+                }
+              }
+            ],
+            "span": {
+              "start": 1070,
+              "end": 1073
+            }
+          },
+          "span": {
+            "start": 1072,
+            "end": 1073
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1012,
+        "end": 1073
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "colors-visited-links",
+        "span": {
+          "start": 1073,
+          "end": 1093
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Visited Links",
+            "span": {
+              "start": 1096,
+              "end": 1110
+            }
+          }
+        ],
+        "span": {
+          "start": 1096,
+          "end": 1110
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1115,
+              "end": 1124
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 1127,
+                  "end": 1129
+                }
+              }
+            ],
+            "span": {
+              "start": 1127,
+              "end": 1129
+            }
+          },
+          "span": {
+            "start": 1128,
+            "end": 1129
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1073,
+        "end": 1129
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1129
+  }
+}

@@ -1,0 +1,1265 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "webpage-languages-window",
+        "span": {
+          "start": 200,
+          "end": 224
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 232,
+              "end": 237
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Webpage Language Settings",
+                "span": {
+                  "start": 240,
+                  "end": 266
+                }
+              }
+            ],
+            "span": {
+              "start": 240,
+              "end": 266
+            }
+          },
+          "span": {
+            "start": 265,
+            "end": 266
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 271,
+              "end": 276
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 40em",
+                "span": {
+                  "start": 279,
+                  "end": 291
+                }
+              }
+            ],
+            "span": {
+              "start": 279,
+              "end": 292
+            }
+          },
+          "span": {
+            "start": 291,
+            "end": 292
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 292
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-close-key",
+        "span": {
+          "start": 292,
+          "end": 311
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 319,
+              "end": 322
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 325,
+                  "end": 327
+                }
+              }
+            ],
+            "span": {
+              "start": 325,
+              "end": 328
+            }
+          },
+          "span": {
+            "start": 327,
+            "end": 328
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 292,
+        "end": 328
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-description",
+        "span": {
+          "start": 328,
+          "end": 349
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Web pages are sometimes offered in more than one language. Choose languages for displaying these web pages, in order of preference",
+            "span": {
+              "start": 352,
+              "end": 483
+            }
+          }
+        ],
+        "span": {
+          "start": 352,
+          "end": 484
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 328,
+        "end": 484
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-spoof-english",
+        "span": {
+          "start": 484,
+          "end": 517
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 525,
+              "end": 530
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Request English versions of web pages for enhanced privacy",
+                "span": {
+                  "start": 533,
+                  "end": 592
+                }
+              }
+            ],
+            "span": {
+              "start": 533,
+              "end": 593
+            }
+          },
+          "span": {
+            "start": 592,
+            "end": 593
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 484,
+        "end": 593
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-moveup",
+        "span": {
+          "start": 593,
+          "end": 619
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 627,
+              "end": 632
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Move Up",
+                "span": {
+                  "start": 635,
+                  "end": 643
+                }
+              }
+            ],
+            "span": {
+              "start": 635,
+              "end": 643
+            }
+          },
+          "span": {
+            "start": 642,
+            "end": 643
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 648,
+              "end": 657
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U",
+                "span": {
+                  "start": 660,
+                  "end": 662
+                }
+              }
+            ],
+            "span": {
+              "start": 660,
+              "end": 663
+            }
+          },
+          "span": {
+            "start": 662,
+            "end": 663
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 593,
+        "end": 663
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-movedown",
+        "span": {
+          "start": 663,
+          "end": 691
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 699,
+              "end": 704
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Move Down",
+                "span": {
+                  "start": 707,
+                  "end": 717
+                }
+              }
+            ],
+            "span": {
+              "start": 707,
+              "end": 717
+            }
+          },
+          "span": {
+            "start": 716,
+            "end": 717
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 722,
+              "end": 731
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 734,
+                  "end": 736
+                }
+              }
+            ],
+            "span": {
+              "start": 734,
+              "end": 737
+            }
+          },
+          "span": {
+            "start": 736,
+            "end": 737
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 663,
+        "end": 737
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-remove",
+        "span": {
+          "start": 737,
+          "end": 763
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 771,
+              "end": 776
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove",
+                "span": {
+                  "start": 779,
+                  "end": 786
+                }
+              }
+            ],
+            "span": {
+              "start": 779,
+              "end": 786
+            }
+          },
+          "span": {
+            "start": 785,
+            "end": 786
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 791,
+              "end": 800
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 803,
+                  "end": 805
+                }
+              }
+            ],
+            "span": {
+              "start": 803,
+              "end": 806
+            }
+          },
+          "span": {
+            "start": 805,
+            "end": 806
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 737,
+        "end": 806
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-select-language",
+        "span": {
+          "start": 806,
+          "end": 841
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "placeholder",
+            "span": {
+              "start": 849,
+              "end": 860
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Select a language to add…",
+                "span": {
+                  "start": 863,
+                  "end": 891
+                }
+              }
+            ],
+            "span": {
+              "start": 863,
+              "end": 892
+            }
+          },
+          "span": {
+            "start": 891,
+            "end": 892
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 806,
+        "end": 892
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-customize-add",
+        "span": {
+          "start": 892,
+          "end": 915
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 923,
+              "end": 928
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add",
+                "span": {
+                  "start": 931,
+                  "end": 935
+                }
+              }
+            ],
+            "span": {
+              "start": 931,
+              "end": 935
+            }
+          },
+          "span": {
+            "start": 934,
+            "end": 935
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 940,
+              "end": 949
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 952,
+                  "end": 954
+                }
+              }
+            ],
+            "span": {
+              "start": 952,
+              "end": 955
+            }
+          },
+          "span": {
+            "start": 954,
+            "end": 955
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 892,
+        "end": 955
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-code-format",
+        "span": {
+          "start": 1289,
+          "end": 1310
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1318,
+              "end": 1323
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "locale",
+                      "span": {
+                        "start": 1329,
+                        "end": 1335
+                      }
+                    },
+                    "span": {
+                      "start": 1328,
+                      "end": 1335
+                    }
+                  },
+                  {
+                    "start": 1328,
+                    "end": 1336
+                  }
+                ],
+                "span": {
+                  "start": 1326,
+                  "end": 1336
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " [",
+                "span": {
+                  "start": 1337,
+                  "end": 1339
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "code",
+                      "span": {
+                        "start": 1342,
+                        "end": 1346
+                      }
+                    },
+                    "span": {
+                      "start": 1341,
+                      "end": 1346
+                    }
+                  },
+                  {
+                    "start": 1341,
+                    "end": 1347
+                  }
+                ],
+                "span": {
+                  "start": 1339,
+                  "end": 1347
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "]",
+                "span": {
+                  "start": 1348,
+                  "end": 1350
+                }
+              }
+            ],
+            "span": {
+              "start": 1326,
+              "end": 1351
+            }
+          },
+          "span": {
+            "start": 1350,
+            "end": 1351
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "The pattern used to generate strings presented to the user in the",
+          "locale selection list.",
+          "",
+          "Example:",
+          "  Icelandic [is]",
+          "  Spanish (Chile) [es-CL]",
+          "",
+          "Variables:",
+          "  $locale (String) - A name of the locale (for example: \"Icelandic\", \"Spanish (Chile)\")",
+          "  $code (String) - Locale code of the locale (for example: \"is\", \"es-CL\")"
+        ],
+        "span": {
+          "start": 955,
+          "end": 1288
+        }
+      },
+      "span": {
+        "start": 1289,
+        "end": 1351
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "languages-active-code-format",
+        "span": {
+          "start": 1351,
+          "end": 1379
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1387,
+              "end": 1392
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "languages-code-format",
+                      "span": {
+                        "start": 1397,
+                        "end": 1418
+                      }
+                    },
+                    "attribute": {
+                      "name": "label",
+                      "span": {
+                        "start": 1419,
+                        "end": 1424
+                      }
+                    },
+                    "span": {
+                      "start": 1397,
+                      "end": 1424
+                    }
+                  },
+                  {
+                    "start": 1397,
+                    "end": 1425
+                  }
+                ],
+                "span": {
+                  "start": 1395,
+                  "end": 1425
+                }
+              }
+            ],
+            "span": {
+              "start": 1395,
+              "end": 1428
+            }
+          },
+          "span": {
+            "start": 1427,
+            "end": 1428
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1351,
+        "end": 1428
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-window",
+        "span": {
+          "start": 1428,
+          "end": 1452
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1460,
+              "end": 1465
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "TermReference",
+                    "id": {
+                      "name": "brand-short-name",
+                      "span": {
+                        "start": 1471,
+                        "end": 1487
+                      }
+                    },
+                    "attribute": null,
+                    "arguments": null,
+                    "span": {
+                      "start": 1470,
+                      "end": 1488
+                    }
+                  },
+                  {
+                    "start": 1470,
+                    "end": 1488
+                  }
+                ],
+                "span": {
+                  "start": 1468,
+                  "end": 1488
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " Language Settings",
+                "span": {
+                  "start": 1489,
+                  "end": 1508
+                }
+              }
+            ],
+            "span": {
+              "start": 1468,
+              "end": 1508
+            }
+          },
+          "span": {
+            "start": 1507,
+            "end": 1508
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 1513,
+              "end": 1518
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 40em",
+                "span": {
+                  "start": 1521,
+                  "end": 1533
+                }
+              }
+            ],
+            "span": {
+              "start": 1521,
+              "end": 1534
+            }
+          },
+          "span": {
+            "start": 1533,
+            "end": 1534
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1428,
+        "end": 1534
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-description",
+        "span": {
+          "start": 1534,
+          "end": 1563
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 1569,
+                    "end": 1585
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 1568,
+                  "end": 1586
+                }
+              },
+              {
+                "start": 1568,
+                "end": 1586
+              }
+            ],
+            "span": {
+              "start": 1566,
+              "end": 1586
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " will display the first language as your default and will display alternate languages if necessary in the order they appear.",
+            "span": {
+              "start": 1587,
+              "end": 1712
+            }
+          }
+        ],
+        "span": {
+          "start": 1566,
+          "end": 1713
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1534,
+        "end": 1713
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-search",
+        "span": {
+          "start": 1713,
+          "end": 1737
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Search for more languages…",
+            "span": {
+              "start": 1740,
+              "end": 1769
+            }
+          }
+        ],
+        "span": {
+          "start": 1740,
+          "end": 1770
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1713,
+        "end": 1770
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-searching",
+        "span": {
+          "start": 1770,
+          "end": 1797
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1805,
+              "end": 1810
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Searching for languages…",
+                "span": {
+                  "start": 1813,
+                  "end": 1840
+                }
+              }
+            ],
+            "span": {
+              "start": 1813,
+              "end": 1841
+            }
+          },
+          "span": {
+            "start": 1840,
+            "end": 1841
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1770,
+        "end": 1841
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-downloading",
+        "span": {
+          "start": 1841,
+          "end": 1870
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1878,
+              "end": 1883
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Downloading…",
+                "span": {
+                  "start": 1886,
+                  "end": 1901
+                }
+              }
+            ],
+            "span": {
+              "start": 1886,
+              "end": 1902
+            }
+          },
+          "span": {
+            "start": 1901,
+            "end": 1902
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1841,
+        "end": 1902
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-select-language",
+        "span": {
+          "start": 1902,
+          "end": 1935
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1943,
+              "end": 1948
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Select a language to add…",
+                "span": {
+                  "start": 1951,
+                  "end": 1979
+                }
+              }
+            ],
+            "span": {
+              "start": 1951,
+              "end": 1979
+            }
+          },
+          "span": {
+            "start": 1978,
+            "end": 1979
+          }
+        },
+        {
+          "id": {
+            "name": "placeholder",
+            "span": {
+              "start": 1984,
+              "end": 1995
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Select a language to add…",
+                "span": {
+                  "start": 1998,
+                  "end": 2026
+                }
+              }
+            ],
+            "span": {
+              "start": 1998,
+              "end": 2027
+            }
+          },
+          "span": {
+            "start": 2026,
+            "end": 2027
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1902,
+        "end": 2027
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-installed-label",
+        "span": {
+          "start": 2027,
+          "end": 2060
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Installed languages",
+            "span": {
+              "start": 2063,
+              "end": 2083
+            }
+          }
+        ],
+        "span": {
+          "start": 2063,
+          "end": 2083
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2027,
+        "end": 2083
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-available-label",
+        "span": {
+          "start": 2083,
+          "end": 2116
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Available languages",
+            "span": {
+              "start": 2119,
+              "end": 2139
+            }
+          }
+        ],
+        "span": {
+          "start": 2119,
+          "end": 2140
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2083,
+        "end": 2140
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "browser-languages-error",
+        "span": {
+          "start": 2140,
+          "end": 2163
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 2169,
+                    "end": 2185
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 2168,
+                  "end": 2186
+                }
+              },
+              {
+                "start": 2168,
+                "end": 2186
+              }
+            ],
+            "span": {
+              "start": 2166,
+              "end": 2186
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " can’t update your languages right now. Check that you are connected to the internet or try again.",
+            "span": {
+              "start": 2187,
+              "end": 2288
+            }
+          }
+        ],
+        "span": {
+          "start": 2166,
+          "end": 2288
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2140,
+        "end": 2288
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2288
+  }
+}

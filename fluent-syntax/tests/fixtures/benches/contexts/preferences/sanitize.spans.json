@@ -1,0 +1,1654 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-prefs",
+        "span": {
+          "start": 200,
+          "end": 214
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 222,
+              "end": 227
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Settings for Clearing History",
+                "span": {
+                  "start": 230,
+                  "end": 260
+                }
+              }
+            ],
+            "span": {
+              "start": 230,
+              "end": 260
+            }
+          },
+          "span": {
+            "start": 259,
+            "end": 260
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 265,
+              "end": 270
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 34em",
+                "span": {
+                  "start": 273,
+                  "end": 285
+                }
+              }
+            ],
+            "span": {
+              "start": 273,
+              "end": 286
+            }
+          },
+          "span": {
+            "start": 285,
+            "end": 286
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 286
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-prefs-style",
+        "span": {
+          "start": 286,
+          "end": 306
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 314,
+              "end": 319
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 17em",
+                "span": {
+                  "start": 322,
+                  "end": 334
+                }
+              }
+            ],
+            "span": {
+              "start": 322,
+              "end": 335
+            }
+          },
+          "span": {
+            "start": 334,
+            "end": 335
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 286,
+        "end": 335
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "dialog-title",
+        "span": {
+          "start": 335,
+          "end": 347
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 355,
+              "end": 360
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear Recent History",
+                "span": {
+                  "start": 363,
+                  "end": 384
+                }
+              }
+            ],
+            "span": {
+              "start": 363,
+              "end": 384
+            }
+          },
+          "span": {
+            "start": 383,
+            "end": 384
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 389,
+              "end": 394
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 34em",
+                "span": {
+                  "start": 397,
+                  "end": 409
+                }
+              }
+            ],
+            "span": {
+              "start": 397,
+              "end": 410
+            }
+          },
+          "span": {
+            "start": 409,
+            "end": 410
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 335,
+        "end": 410
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "dialog-title-everything",
+        "span": {
+          "start": 525,
+          "end": 548
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 556,
+              "end": 561
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear All History",
+                "span": {
+                  "start": 564,
+                  "end": 582
+                }
+              }
+            ],
+            "span": {
+              "start": 564,
+              "end": 582
+            }
+          },
+          "span": {
+            "start": 581,
+            "end": 582
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 587,
+              "end": 592
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 34em",
+                "span": {
+                  "start": 595,
+                  "end": 607
+                }
+              }
+            ],
+            "span": {
+              "start": 595,
+              "end": 608
+            }
+          },
+          "span": {
+            "start": 607,
+            "end": 608
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "When \"Time range to clear\" is set to \"Everything\", this message is used for the",
+          "title instead of dialog-title."
+        ],
+        "span": {
+          "start": 410,
+          "end": 524
+        }
+      },
+      "span": {
+        "start": 525,
+        "end": 608
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-data-settings-label",
+        "span": {
+          "start": 608,
+          "end": 633
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "When closed, ",
+            "span": {
+              "start": 636,
+              "end": 649
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 652,
+                    "end": 668
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 651,
+                  "end": 669
+                }
+              },
+              {
+                "start": 651,
+                "end": 669
+              }
+            ],
+            "span": {
+              "start": 649,
+              "end": 669
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " should automatically clear all",
+            "span": {
+              "start": 670,
+              "end": 702
+            }
+          }
+        ],
+        "span": {
+          "start": 636,
+          "end": 703
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 608,
+        "end": 703
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "clear-time-duration-prefix is followed by a dropdown list, with",
+        "values localized using clear-time-duration-value-* messages.",
+        "clear-time-duration-suffix is left empty in English, but can be",
+        "used in other languages to change the structure of the message.",
+        "",
+        "This results in English:",
+        "Time range to clear: (Last Hour, Today, etc.)"
+      ],
+      "span": {
+        "start": 703,
+        "end": 1047
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-prefix",
+        "span": {
+          "start": 1049,
+          "end": 1075
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1083,
+              "end": 1088
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Time range to clear:",
+                "span": {
+                  "start": 1091,
+                  "end": 1111
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "StringLiteral",
+                    "value": " ",
+                    "span": {
+                      "start": 1113,
+                      "end": 1116
+                    }
+                  },
+                  {
+                    "start": 1113,
+                    "end": 1117
+                  }
+                ],
+                "span": {
+                  "start": 1111,
+                  "end": 1117
+                }
+              }
+            ],
+            "span": {
+              "start": 1091,
+              "end": 1119
+            }
+          },
+          "span": {
+            "start": 1118,
+            "end": 1119
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1124,
+              "end": 1133
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "T",
+                "span": {
+                  "start": 1136,
+                  "end": 1138
+                }
+              }
+            ],
+            "span": {
+              "start": 1136,
+              "end": 1139
+            }
+          },
+          "span": {
+            "start": 1138,
+            "end": 1139
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1049,
+        "end": 1139
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-value-last-hour",
+        "span": {
+          "start": 1139,
+          "end": 1174
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1182,
+              "end": 1187
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Last Hour",
+                "span": {
+                  "start": 1190,
+                  "end": 1200
+                }
+              }
+            ],
+            "span": {
+              "start": 1190,
+              "end": 1201
+            }
+          },
+          "span": {
+            "start": 1200,
+            "end": 1201
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1139,
+        "end": 1201
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-value-last-2-hours",
+        "span": {
+          "start": 1201,
+          "end": 1239
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1247,
+              "end": 1252
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Last Two Hours",
+                "span": {
+                  "start": 1255,
+                  "end": 1270
+                }
+              }
+            ],
+            "span": {
+              "start": 1255,
+              "end": 1271
+            }
+          },
+          "span": {
+            "start": 1270,
+            "end": 1271
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1201,
+        "end": 1271
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-value-last-4-hours",
+        "span": {
+          "start": 1271,
+          "end": 1309
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1317,
+              "end": 1322
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Last Four Hours",
+                "span": {
+                  "start": 1325,
+                  "end": 1341
+                }
+              }
+            ],
+            "span": {
+              "start": 1325,
+              "end": 1342
+            }
+          },
+          "span": {
+            "start": 1341,
+            "end": 1342
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1271,
+        "end": 1342
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-value-today",
+        "span": {
+          "start": 1342,
+          "end": 1373
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1381,
+              "end": 1386
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Today",
+                "span": {
+                  "start": 1389,
+                  "end": 1395
+                }
+              }
+            ],
+            "span": {
+              "start": 1389,
+              "end": 1396
+            }
+          },
+          "span": {
+            "start": 1395,
+            "end": 1396
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1342,
+        "end": 1396
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-value-everything",
+        "span": {
+          "start": 1396,
+          "end": 1432
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1440,
+              "end": 1445
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Everything",
+                "span": {
+                  "start": 1448,
+                  "end": 1459
+                }
+              }
+            ],
+            "span": {
+              "start": 1448,
+              "end": 1460
+            }
+          },
+          "span": {
+            "start": 1459,
+            "end": 1460
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1396,
+        "end": 1460
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-time-duration-suffix",
+        "span": {
+          "start": 1460,
+          "end": 1486
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1494,
+              "end": 1499
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "StringLiteral",
+                    "value": "",
+                    "span": {
+                      "start": 1504,
+                      "end": 1506
+                    }
+                  },
+                  {
+                    "start": 1504,
+                    "end": 1507
+                  }
+                ],
+                "span": {
+                  "start": 1502,
+                  "end": 1507
+                }
+              }
+            ],
+            "span": {
+              "start": 1502,
+              "end": 1510
+            }
+          },
+          "span": {
+            "start": 1509,
+            "end": 1510
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1460,
+        "end": 1510
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "These strings are used as section comments and checkboxes",
+        "to select the items to remove"
+      ],
+      "span": {
+        "start": 1510,
+        "end": 1603
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "history-section-label",
+        "span": {
+          "start": 1605,
+          "end": 1626
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "History",
+            "span": {
+              "start": 1629,
+              "end": 1637
+            }
+          }
+        ],
+        "span": {
+          "start": 1629,
+          "end": 1638
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1605,
+        "end": 1638
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-history-and-downloads",
+        "span": {
+          "start": 1638,
+          "end": 1664
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1672,
+              "end": 1677
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Browsing & Download History",
+                "span": {
+                  "start": 1680,
+                  "end": 1708
+                }
+              }
+            ],
+            "span": {
+              "start": 1680,
+              "end": 1708
+            }
+          },
+          "span": {
+            "start": 1707,
+            "end": 1708
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1713,
+              "end": 1722
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B",
+                "span": {
+                  "start": 1725,
+                  "end": 1727
+                }
+              }
+            ],
+            "span": {
+              "start": 1725,
+              "end": 1728
+            }
+          },
+          "span": {
+            "start": 1727,
+            "end": 1728
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1638,
+        "end": 1728
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-cookies",
+        "span": {
+          "start": 1728,
+          "end": 1740
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1748,
+              "end": 1753
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cookies",
+                "span": {
+                  "start": 1756,
+                  "end": 1764
+                }
+              }
+            ],
+            "span": {
+              "start": 1756,
+              "end": 1764
+            }
+          },
+          "span": {
+            "start": 1763,
+            "end": 1764
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1769,
+              "end": 1778
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 1781,
+                  "end": 1783
+                }
+              }
+            ],
+            "span": {
+              "start": 1781,
+              "end": 1784
+            }
+          },
+          "span": {
+            "start": 1783,
+            "end": 1784
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1728,
+        "end": 1784
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-active-logins",
+        "span": {
+          "start": 1784,
+          "end": 1802
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1810,
+              "end": 1815
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Active Logins",
+                "span": {
+                  "start": 1818,
+                  "end": 1832
+                }
+              }
+            ],
+            "span": {
+              "start": 1818,
+              "end": 1832
+            }
+          },
+          "span": {
+            "start": 1831,
+            "end": 1832
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1837,
+              "end": 1846
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 1849,
+                  "end": 1851
+                }
+              }
+            ],
+            "span": {
+              "start": 1849,
+              "end": 1852
+            }
+          },
+          "span": {
+            "start": 1851,
+            "end": 1852
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1784,
+        "end": 1852
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-cache",
+        "span": {
+          "start": 1852,
+          "end": 1862
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1870,
+              "end": 1875
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cache",
+                "span": {
+                  "start": 1878,
+                  "end": 1884
+                }
+              }
+            ],
+            "span": {
+              "start": 1878,
+              "end": 1884
+            }
+          },
+          "span": {
+            "start": 1883,
+            "end": 1884
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1889,
+              "end": 1898
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 1901,
+                  "end": 1903
+                }
+              }
+            ],
+            "span": {
+              "start": 1901,
+              "end": 1904
+            }
+          },
+          "span": {
+            "start": 1903,
+            "end": 1904
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1852,
+        "end": 1904
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-form-search-history",
+        "span": {
+          "start": 1904,
+          "end": 1928
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1936,
+              "end": 1941
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Form & Search History",
+                "span": {
+                  "start": 1944,
+                  "end": 1966
+                }
+              }
+            ],
+            "span": {
+              "start": 1944,
+              "end": 1966
+            }
+          },
+          "span": {
+            "start": 1965,
+            "end": 1966
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1971,
+              "end": 1980
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 1983,
+                  "end": 1985
+                }
+              }
+            ],
+            "span": {
+              "start": 1983,
+              "end": 1986
+            }
+          },
+          "span": {
+            "start": 1985,
+            "end": 1986
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1904,
+        "end": 1986
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "data-section-label",
+        "span": {
+          "start": 1986,
+          "end": 2004
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Data",
+            "span": {
+              "start": 2007,
+              "end": 2012
+            }
+          }
+        ],
+        "span": {
+          "start": 2007,
+          "end": 2013
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1986,
+        "end": 2013
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-site-preferences",
+        "span": {
+          "start": 2013,
+          "end": 2034
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2042,
+              "end": 2047
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Site Preferences",
+                "span": {
+                  "start": 2050,
+                  "end": 2067
+                }
+              }
+            ],
+            "span": {
+              "start": 2050,
+              "end": 2067
+            }
+          },
+          "span": {
+            "start": 2066,
+            "end": 2067
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2072,
+              "end": 2081
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 2084,
+                  "end": 2086
+                }
+              }
+            ],
+            "span": {
+              "start": 2084,
+              "end": 2087
+            }
+          },
+          "span": {
+            "start": 2086,
+            "end": 2087
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2013,
+        "end": 2087
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "item-offline-apps",
+        "span": {
+          "start": 2087,
+          "end": 2104
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2112,
+              "end": 2117
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Offline Website Data",
+                "span": {
+                  "start": 2120,
+                  "end": 2141
+                }
+              }
+            ],
+            "span": {
+              "start": 2120,
+              "end": 2141
+            }
+          },
+          "span": {
+            "start": 2140,
+            "end": 2141
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2146,
+              "end": 2155
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "O",
+                "span": {
+                  "start": 2158,
+                  "end": 2160
+                }
+              }
+            ],
+            "span": {
+              "start": 2158,
+              "end": 2161
+            }
+          },
+          "span": {
+            "start": 2160,
+            "end": 2161
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2087,
+        "end": 2161
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-everything-undo-warning",
+        "span": {
+          "start": 2161,
+          "end": 2193
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This action cannot be undone.",
+            "span": {
+              "start": 2196,
+              "end": 2226
+            }
+          }
+        ],
+        "span": {
+          "start": 2196,
+          "end": 2227
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2161,
+        "end": 2227
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "window-close",
+        "span": {
+          "start": 2227,
+          "end": 2239
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 2247,
+              "end": 2250
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 2253,
+                  "end": 2255
+                }
+              }
+            ],
+            "span": {
+              "start": 2253,
+              "end": 2256
+            }
+          },
+          "span": {
+            "start": 2255,
+            "end": 2256
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2227,
+        "end": 2256
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-button-ok",
+        "span": {
+          "start": 2256,
+          "end": 2274
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2282,
+              "end": 2287
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear Now",
+                "span": {
+                  "start": 2290,
+                  "end": 2300
+                }
+              }
+            ],
+            "span": {
+              "start": 2290,
+              "end": 2301
+            }
+          },
+          "span": {
+            "start": 2300,
+            "end": 2301
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2256,
+        "end": 2301
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-button-clearing",
+        "span": {
+          "start": 2431,
+          "end": 2455
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2463,
+              "end": 2468
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clearing",
+                "span": {
+                  "start": 2471,
+                  "end": 2480
+                }
+              }
+            ],
+            "span": {
+              "start": 2471,
+              "end": 2481
+            }
+          },
+          "span": {
+            "start": 2480,
+            "end": 2481
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "The label for the default button between the user clicking it and the window",
+          "closing.  Indicates the items are being cleared."
+        ],
+        "span": {
+          "start": 2301,
+          "end": 2430
+        }
+      },
+      "span": {
+        "start": 2431,
+        "end": 2481
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-everything-warning",
+        "span": {
+          "start": 2673,
+          "end": 2700
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "All history will be cleared.",
+            "span": {
+              "start": 2703,
+              "end": 2732
+            }
+          }
+        ],
+        "span": {
+          "start": 2703,
+          "end": 2733
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Warning that appears when \"Time range to clear\" is set to \"Everything\" in Clear",
+          "Recent History dialog, provided that the user has not modified the default set",
+          "of history items to clear."
+        ],
+        "span": {
+          "start": 2481,
+          "end": 2672
+        }
+      },
+      "span": {
+        "start": 2673,
+        "end": 2733
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sanitize-selected-warning",
+        "span": {
+          "start": 2921,
+          "end": 2946
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "All selected items will be cleared.",
+            "span": {
+              "start": 2949,
+              "end": 2985
+            }
+          }
+        ],
+        "span": {
+          "start": 2949,
+          "end": 2985
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Warning that appears when \"Time range to clear\" is set to \"Everything\" in Clear",
+          "Recent History dialog, provided that the user has modified the default set of",
+          "history items to clear."
+        ],
+        "span": {
+          "start": 2733,
+          "end": 2920
+        }
+      },
+      "span": {
+        "start": 2921,
+        "end": 2985
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2985
+  }
+}

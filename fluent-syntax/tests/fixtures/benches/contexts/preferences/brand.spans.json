@@ -1,0 +1,239 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Firefox Brand",
+        "",
+        "Firefox must be treated as a brand, and kept in English.",
+        "It cannot be:",
+        "- Declined to adapt to grammatical case.",
+        "- Transliterated.",
+        "- Translated.",
+        "",
+        "Reference: https://www.mozilla.org/styleguide/communications/translation/"
+      ],
+      "span": {
+        "start": 200,
+        "end": 458
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "brand-shorter-name",
+        "span": {
+          "start": 461,
+          "end": 479
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox",
+            "span": {
+              "start": 482,
+              "end": 490
+            }
+          }
+        ],
+        "span": {
+          "start": 482,
+          "end": 490
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 460,
+        "end": 490
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "brand-short-name",
+        "span": {
+          "start": 491,
+          "end": 507
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox",
+            "span": {
+              "start": 510,
+              "end": 518
+            }
+          }
+        ],
+        "span": {
+          "start": 510,
+          "end": 518
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 490,
+        "end": 518
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "brand-full-name",
+        "span": {
+          "start": 519,
+          "end": 534
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Mozilla Firefox",
+            "span": {
+              "start": 537,
+              "end": 553
+            }
+          }
+        ],
+        "span": {
+          "start": 537,
+          "end": 553
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 518,
+        "end": 553
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "brand-product-name",
+        "span": {
+          "start": 696,
+          "end": 714
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox",
+            "span": {
+              "start": 717,
+              "end": 725
+            }
+          }
+        ],
+        "span": {
+          "start": 717,
+          "end": 725
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This brand name can be used in messages where the product name needs to",
+          "remain unchanged across different versions (Nightly, Beta, etc.)."
+        ],
+        "span": {
+          "start": 553,
+          "end": 694
+        }
+      },
+      "span": {
+        "start": 695,
+        "end": 725
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "vendor-short-name",
+        "span": {
+          "start": 726,
+          "end": 743
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Mozilla",
+            "span": {
+              "start": 746,
+              "end": 754
+            }
+          }
+        ],
+        "span": {
+          "start": 746,
+          "end": 754
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 725,
+        "end": 754
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "trademarkInfo",
+        "span": {
+          "start": 754,
+          "end": 767
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox and the Firefox logos are trademarks of the Mozilla Foundation.",
+            "span": {
+              "start": 770,
+              "end": 842
+            }
+          }
+        ],
+        "span": {
+          "start": 770,
+          "end": 842
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 754,
+        "end": 842
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 842
+  }
+}

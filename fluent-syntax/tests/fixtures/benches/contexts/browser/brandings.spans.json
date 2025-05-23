@@ -1,0 +1,290 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "The following feature names must be treated as a brand, and kept in English.",
+        "They cannot be:",
+        "- Declined to adapt to grammatical case.",
+        "- Transliterated.",
+        "- Translated."
+      ],
+      "span": {
+        "start": 200,
+        "end": 380
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "facebook-container-brand-name",
+        "span": {
+          "start": 383,
+          "end": 412
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Facebook Container",
+            "span": {
+              "start": 415,
+              "end": 434
+            }
+          }
+        ],
+        "span": {
+          "start": 415,
+          "end": 434
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 382,
+        "end": 434
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "lockwise-brand-name",
+        "span": {
+          "start": 435,
+          "end": 454
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Lockwise",
+            "span": {
+              "start": 457,
+              "end": 474
+            }
+          }
+        ],
+        "span": {
+          "start": 457,
+          "end": 474
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 434,
+        "end": 474
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "lockwise-brand-short-name",
+        "span": {
+          "start": 475,
+          "end": 500
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Lockwise",
+            "span": {
+              "start": 503,
+              "end": 512
+            }
+          }
+        ],
+        "span": {
+          "start": 503,
+          "end": 512
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 474,
+        "end": 512
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "monitor-brand-name",
+        "span": {
+          "start": 513,
+          "end": 531
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Monitor",
+            "span": {
+              "start": 534,
+              "end": 550
+            }
+          }
+        ],
+        "span": {
+          "start": 534,
+          "end": 550
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 512,
+        "end": 550
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "monitor-brand-short-name",
+        "span": {
+          "start": 551,
+          "end": 575
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Monitor",
+            "span": {
+              "start": 578,
+              "end": 586
+            }
+          }
+        ],
+        "span": {
+          "start": 578,
+          "end": 586
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 550,
+        "end": 586
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "pocket-brand-name",
+        "span": {
+          "start": 587,
+          "end": 604
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Pocket",
+            "span": {
+              "start": 607,
+              "end": 614
+            }
+          }
+        ],
+        "span": {
+          "start": 607,
+          "end": 614
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 586,
+        "end": 614
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "send-brand-name",
+        "span": {
+          "start": 615,
+          "end": 630
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Send",
+            "span": {
+              "start": 633,
+              "end": 646
+            }
+          }
+        ],
+        "span": {
+          "start": 633,
+          "end": 646
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 614,
+        "end": 646
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "screenshots-brand-name",
+        "span": {
+          "start": 647,
+          "end": 669
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Firefox Screenshots",
+            "span": {
+              "start": 672,
+              "end": 692
+            }
+          }
+        ],
+        "span": {
+          "start": 672,
+          "end": 692
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 646,
+        "end": 692
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 692
+  }
+}

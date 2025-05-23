@@ -1,0 +1,5554 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-title",
+        "span": {
+          "start": 200,
+          "end": 213
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 221,
+              "end": 226
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Manager",
+                "span": {
+                  "start": 229,
+                  "end": 249
+                }
+              }
+            ],
+            "span": {
+              "start": 229,
+              "end": 250
+            }
+          },
+          "span": {
+            "start": 249,
+            "end": 250
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 250
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-mine",
+        "span": {
+          "start": 250,
+          "end": 266
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 274,
+              "end": 279
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Your Certificates",
+                "span": {
+                  "start": 282,
+                  "end": 300
+                }
+              }
+            ],
+            "span": {
+              "start": 282,
+              "end": 301
+            }
+          },
+          "span": {
+            "start": 300,
+            "end": 301
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 250,
+        "end": 301
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-people",
+        "span": {
+          "start": 301,
+          "end": 319
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 327,
+              "end": 332
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "People",
+                "span": {
+                  "start": 335,
+                  "end": 342
+                }
+              }
+            ],
+            "span": {
+              "start": 335,
+              "end": 343
+            }
+          },
+          "span": {
+            "start": 342,
+            "end": 343
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 301,
+        "end": 343
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-servers",
+        "span": {
+          "start": 343,
+          "end": 362
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 370,
+              "end": 375
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Servers",
+                "span": {
+                  "start": 378,
+                  "end": 386
+                }
+              }
+            ],
+            "span": {
+              "start": 378,
+              "end": 387
+            }
+          },
+          "span": {
+            "start": 386,
+            "end": 387
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 343,
+        "end": 387
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-tab-ca",
+        "span": {
+          "start": 387,
+          "end": 401
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 409,
+              "end": 414
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Authorities",
+                "span": {
+                  "start": 417,
+                  "end": 429
+                }
+              }
+            ],
+            "span": {
+              "start": 417,
+              "end": 430
+            }
+          },
+          "span": {
+            "start": 429,
+            "end": 430
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 387,
+        "end": 430
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-mine",
+        "span": {
+          "start": 430,
+          "end": 442
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates from these organizations that identify you",
+            "span": {
+              "start": 445,
+              "end": 510
+            }
+          }
+        ],
+        "span": {
+          "start": 445,
+          "end": 510
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 430,
+        "end": 510
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-people",
+        "span": {
+          "start": 510,
+          "end": 524
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these people",
+            "span": {
+              "start": 527,
+              "end": 584
+            }
+          }
+        ],
+        "span": {
+          "start": 527,
+          "end": 584
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 510,
+        "end": 584
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-servers",
+        "span": {
+          "start": 584,
+          "end": 599
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these servers",
+            "span": {
+              "start": 602,
+              "end": 660
+            }
+          }
+        ],
+        "span": {
+          "start": 602,
+          "end": 660
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 584,
+        "end": 660
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-ca",
+        "span": {
+          "start": 660,
+          "end": 670
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have certificates on file that identify these certificate authorities",
+            "span": {
+              "start": 673,
+              "end": 747
+            }
+          }
+        ],
+        "span": {
+          "start": 673,
+          "end": 748
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 660,
+        "end": 748
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-detail-general-tab-title",
+        "span": {
+          "start": 748,
+          "end": 780
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 788,
+              "end": 793
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "General",
+                "span": {
+                  "start": 796,
+                  "end": 804
+                }
+              }
+            ],
+            "span": {
+              "start": 796,
+              "end": 804
+            }
+          },
+          "span": {
+            "start": 803,
+            "end": 804
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 809,
+              "end": 818
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "G",
+                "span": {
+                  "start": 821,
+                  "end": 823
+                }
+              }
+            ],
+            "span": {
+              "start": 821,
+              "end": 824
+            }
+          },
+          "span": {
+            "start": 823,
+            "end": 824
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 748,
+        "end": 824
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-detail-pretty-print-tab-title",
+        "span": {
+          "start": 824,
+          "end": 861
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 869,
+              "end": 874
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Details",
+                "span": {
+                  "start": 877,
+                  "end": 885
+                }
+              }
+            ],
+            "span": {
+              "start": 877,
+              "end": 885
+            }
+          },
+          "span": {
+            "start": 884,
+            "end": 885
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 890,
+              "end": 899
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 902,
+                  "end": 904
+                }
+              }
+            ],
+            "span": {
+              "start": 902,
+              "end": 905
+            }
+          },
+          "span": {
+            "start": 904,
+            "end": 905
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 824,
+        "end": 905
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-pending-label",
+        "span": {
+          "start": 905,
+          "end": 926
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 934,
+              "end": 939
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Currently verifying certificate…",
+                "span": {
+                  "start": 942,
+                  "end": 977
+                }
+              }
+            ],
+            "span": {
+              "start": 942,
+              "end": 978
+            }
+          },
+          "span": {
+            "start": 977,
+            "end": 978
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 905,
+        "end": 978
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-subject-label",
+        "span": {
+          "start": 978,
+          "end": 999
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Issued To",
+            "span": {
+              "start": 1002,
+              "end": 1012
+            }
+          }
+        ],
+        "span": {
+          "start": 1002,
+          "end": 1013
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 978,
+        "end": 1013
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-issuer-label",
+        "span": {
+          "start": 1013,
+          "end": 1033
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Issued By",
+            "span": {
+              "start": 1036,
+              "end": 1046
+            }
+          }
+        ],
+        "span": {
+          "start": 1036,
+          "end": 1047
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1013,
+        "end": 1047
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-period-of-validity",
+        "span": {
+          "start": 1047,
+          "end": 1073
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Period of Validity",
+            "span": {
+              "start": 1076,
+              "end": 1095
+            }
+          }
+        ],
+        "span": {
+          "start": 1076,
+          "end": 1096
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1047,
+        "end": 1096
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-fingerprints",
+        "span": {
+          "start": 1096,
+          "end": 1116
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Fingerprints",
+            "span": {
+              "start": 1119,
+              "end": 1132
+            }
+          }
+        ],
+        "span": {
+          "start": 1119,
+          "end": 1133
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1096,
+        "end": 1133
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail",
+        "span": {
+          "start": 1133,
+          "end": 1152
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1160,
+              "end": 1165
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Detail",
+                "span": {
+                  "start": 1168,
+                  "end": 1187
+                }
+              }
+            ],
+            "span": {
+              "start": 1168,
+              "end": 1187
+            }
+          },
+          "span": {
+            "start": 1186,
+            "end": 1187
+          }
+        },
+        {
+          "id": {
+            "name": "buttonlabelaccept",
+            "span": {
+              "start": 1192,
+              "end": 1209
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Close",
+                "span": {
+                  "start": 1212,
+                  "end": 1218
+                }
+              }
+            ],
+            "span": {
+              "start": 1212,
+              "end": 1218
+            }
+          },
+          "span": {
+            "start": 1217,
+            "end": 1218
+          }
+        },
+        {
+          "id": {
+            "name": "buttonaccesskeyaccept",
+            "span": {
+              "start": 1223,
+              "end": 1244
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 1247,
+                  "end": 1249
+                }
+              }
+            ],
+            "span": {
+              "start": 1247,
+              "end": 1250
+            }
+          },
+          "span": {
+            "start": 1249,
+            "end": 1250
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1133,
+        "end": 1250
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-commonname",
+        "span": {
+          "start": 1250,
+          "end": 1280
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Common Name (CN)",
+            "span": {
+              "start": 1283,
+              "end": 1300
+            }
+          }
+        ],
+        "span": {
+          "start": 1283,
+          "end": 1301
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1250,
+        "end": 1301
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-org",
+        "span": {
+          "start": 1301,
+          "end": 1324
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Organization (O)",
+            "span": {
+              "start": 1327,
+              "end": 1344
+            }
+          }
+        ],
+        "span": {
+          "start": 1327,
+          "end": 1345
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1301,
+        "end": 1345
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-orgunit",
+        "span": {
+          "start": 1345,
+          "end": 1372
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Organizational Unit (OU)",
+            "span": {
+              "start": 1375,
+              "end": 1400
+            }
+          }
+        ],
+        "span": {
+          "start": 1375,
+          "end": 1401
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1345,
+        "end": 1401
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-serial-number",
+        "span": {
+          "start": 1401,
+          "end": 1434
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Serial Number",
+            "span": {
+              "start": 1437,
+              "end": 1451
+            }
+          }
+        ],
+        "span": {
+          "start": 1437,
+          "end": 1452
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1401,
+        "end": 1452
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-sha-256-fingerprint",
+        "span": {
+          "start": 1452,
+          "end": 1491
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "SHA-256 Fingerprint",
+            "span": {
+              "start": 1494,
+              "end": 1514
+            }
+          }
+        ],
+        "span": {
+          "start": 1494,
+          "end": 1515
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1452,
+        "end": 1515
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-detail-sha-1-fingerprint",
+        "span": {
+          "start": 1515,
+          "end": 1552
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "SHA1 Fingerprint",
+            "span": {
+              "start": 1555,
+              "end": 1572
+            }
+          }
+        ],
+        "span": {
+          "start": 1555,
+          "end": 1573
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1515,
+        "end": 1573
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-ca-cert",
+        "span": {
+          "start": 1573,
+          "end": 1593
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1601,
+              "end": 1606
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit CA certificate trust settings",
+                "span": {
+                  "start": 1609,
+                  "end": 1644
+                }
+              }
+            ],
+            "span": {
+              "start": 1609,
+              "end": 1644
+            }
+          },
+          "span": {
+            "start": 1643,
+            "end": 1644
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 1649,
+              "end": 1654
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 48em;",
+                "span": {
+                  "start": 1657,
+                  "end": 1670
+                }
+              }
+            ],
+            "span": {
+              "start": 1657,
+              "end": 1671
+            }
+          },
+          "span": {
+            "start": 1670,
+            "end": 1671
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1573,
+        "end": 1671
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-edit-trust",
+        "span": {
+          "start": 1671,
+          "end": 1699
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Edit trust settings:",
+            "span": {
+              "start": 1702,
+              "end": 1723
+            }
+          }
+        ],
+        "span": {
+          "start": 1702,
+          "end": 1724
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1671,
+        "end": 1724
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-trust-ssl",
+        "span": {
+          "start": 1724,
+          "end": 1751
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1759,
+              "end": 1764
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This certificate can identify websites.",
+                "span": {
+                  "start": 1767,
+                  "end": 1807
+                }
+              }
+            ],
+            "span": {
+              "start": 1767,
+              "end": 1808
+            }
+          },
+          "span": {
+            "start": 1807,
+            "end": 1808
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1724,
+        "end": 1808
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit-cert-trust-email",
+        "span": {
+          "start": 1808,
+          "end": 1837
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1845,
+              "end": 1850
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This certificate can identify mail users.",
+                "span": {
+                  "start": 1853,
+                  "end": 1895
+                }
+              }
+            ],
+            "span": {
+              "start": 1853,
+              "end": 1896
+            }
+          },
+          "span": {
+            "start": 1895,
+            "end": 1896
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1808,
+        "end": 1896
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete-cert",
+        "span": {
+          "start": 1896,
+          "end": 1915
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1923,
+              "end": 1928
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete Certificate",
+                "span": {
+                  "start": 1931,
+                  "end": 1950
+                }
+              }
+            ],
+            "span": {
+              "start": 1931,
+              "end": 1950
+            }
+          },
+          "span": {
+            "start": 1949,
+            "end": 1950
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 1955,
+              "end": 1960
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 48em; height: 24em;",
+                "span": {
+                  "start": 1963,
+                  "end": 1990
+                }
+              }
+            ],
+            "span": {
+              "start": 1963,
+              "end": 1991
+            }
+          },
+          "span": {
+            "start": 1990,
+            "end": 1991
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1896,
+        "end": 1991
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-name",
+        "span": {
+          "start": 1991,
+          "end": 2008
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2016,
+              "end": 2021
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Name",
+                "span": {
+                  "start": 2024,
+                  "end": 2041
+                }
+              }
+            ],
+            "span": {
+              "start": 2024,
+              "end": 2042
+            }
+          },
+          "span": {
+            "start": 2041,
+            "end": 2042
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1991,
+        "end": 2042
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-cert-server",
+        "span": {
+          "start": 2042,
+          "end": 2061
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2069,
+              "end": 2074
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Server",
+                "span": {
+                  "start": 2077,
+                  "end": 2084
+                }
+              }
+            ],
+            "span": {
+              "start": 2077,
+              "end": 2085
+            }
+          },
+          "span": {
+            "start": 2084,
+            "end": 2085
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2042,
+        "end": 2085
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-override-lifetime",
+        "span": {
+          "start": 2085,
+          "end": 2110
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2118,
+              "end": 2123
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Lifetime",
+                "span": {
+                  "start": 2126,
+                  "end": 2135
+                }
+              }
+            ],
+            "span": {
+              "start": 2126,
+              "end": 2136
+            }
+          },
+          "span": {
+            "start": 2135,
+            "end": 2136
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2085,
+        "end": 2136
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-token-name",
+        "span": {
+          "start": 2136,
+          "end": 2154
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2162,
+              "end": 2167
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Security Device",
+                "span": {
+                  "start": 2170,
+                  "end": 2186
+                }
+              }
+            ],
+            "span": {
+              "start": 2170,
+              "end": 2187
+            }
+          },
+          "span": {
+            "start": 2186,
+            "end": 2187
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2136,
+        "end": 2187
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-begins-on",
+        "span": {
+          "start": 2187,
+          "end": 2204
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Begins On",
+            "span": {
+              "start": 2207,
+              "end": 2217
+            }
+          }
+        ],
+        "span": {
+          "start": 2207,
+          "end": 2218
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2187,
+        "end": 2218
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-begins-label",
+        "span": {
+          "start": 2218,
+          "end": 2238
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2246,
+              "end": 2251
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Begins On",
+                "span": {
+                  "start": 2254,
+                  "end": 2264
+                }
+              }
+            ],
+            "span": {
+              "start": 2254,
+              "end": 2265
+            }
+          },
+          "span": {
+            "start": 2264,
+            "end": 2265
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2218,
+        "end": 2265
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-expires-on",
+        "span": {
+          "start": 2265,
+          "end": 2283
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Expires On",
+            "span": {
+              "start": 2286,
+              "end": 2297
+            }
+          }
+        ],
+        "span": {
+          "start": 2286,
+          "end": 2298
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2265,
+        "end": 2298
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-expires-label",
+        "span": {
+          "start": 2298,
+          "end": 2319
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2327,
+              "end": 2332
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Expires On",
+                "span": {
+                  "start": 2335,
+                  "end": 2346
+                }
+              }
+            ],
+            "span": {
+              "start": 2335,
+              "end": 2347
+            }
+          },
+          "span": {
+            "start": 2346,
+            "end": 2347
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2298,
+        "end": 2347
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-email",
+        "span": {
+          "start": 2347,
+          "end": 2360
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2368,
+              "end": 2373
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "E-Mail Address",
+                "span": {
+                  "start": 2376,
+                  "end": 2391
+                }
+              }
+            ],
+            "span": {
+              "start": 2376,
+              "end": 2392
+            }
+          },
+          "span": {
+            "start": 2391,
+            "end": 2392
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2347,
+        "end": 2392
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-serial",
+        "span": {
+          "start": 2392,
+          "end": 2406
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2414,
+              "end": 2419
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Serial Number",
+                "span": {
+                  "start": 2422,
+                  "end": 2436
+                }
+              }
+            ],
+            "span": {
+              "start": 2422,
+              "end": 2437
+            }
+          },
+          "span": {
+            "start": 2436,
+            "end": 2437
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2392,
+        "end": 2437
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-view",
+        "span": {
+          "start": 2437,
+          "end": 2449
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2457,
+              "end": 2462
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View…",
+                "span": {
+                  "start": 2465,
+                  "end": 2473
+                }
+              }
+            ],
+            "span": {
+              "start": 2465,
+              "end": 2473
+            }
+          },
+          "span": {
+            "start": 2472,
+            "end": 2473
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2478,
+              "end": 2487
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 2490,
+                  "end": 2492
+                }
+              }
+            ],
+            "span": {
+              "start": 2490,
+              "end": 2493
+            }
+          },
+          "span": {
+            "start": 2492,
+            "end": 2493
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2437,
+        "end": 2493
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-edit",
+        "span": {
+          "start": 2493,
+          "end": 2505
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2513,
+              "end": 2518
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Edit Trust…",
+                "span": {
+                  "start": 2521,
+                  "end": 2535
+                }
+              }
+            ],
+            "span": {
+              "start": 2521,
+              "end": 2535
+            }
+          },
+          "span": {
+            "start": 2534,
+            "end": 2535
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2540,
+              "end": 2549
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "E",
+                "span": {
+                  "start": 2552,
+                  "end": 2554
+                }
+              }
+            ],
+            "span": {
+              "start": 2552,
+              "end": 2555
+            }
+          },
+          "span": {
+            "start": 2554,
+            "end": 2555
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2493,
+        "end": 2555
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-export",
+        "span": {
+          "start": 2555,
+          "end": 2569
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2577,
+              "end": 2582
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Export…",
+                "span": {
+                  "start": 2585,
+                  "end": 2595
+                }
+              }
+            ],
+            "span": {
+              "start": 2585,
+              "end": 2595
+            }
+          },
+          "span": {
+            "start": 2594,
+            "end": 2595
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2600,
+              "end": 2609
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "x",
+                "span": {
+                  "start": 2612,
+                  "end": 2614
+                }
+              }
+            ],
+            "span": {
+              "start": 2612,
+              "end": 2615
+            }
+          },
+          "span": {
+            "start": 2614,
+            "end": 2615
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2555,
+        "end": 2615
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete",
+        "span": {
+          "start": 2615,
+          "end": 2629
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2637,
+              "end": 2642
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete…",
+                "span": {
+                  "start": 2645,
+                  "end": 2655
+                }
+              }
+            ],
+            "span": {
+              "start": 2645,
+              "end": 2655
+            }
+          },
+          "span": {
+            "start": 2654,
+            "end": 2655
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2660,
+              "end": 2669
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 2672,
+                  "end": 2674
+                }
+              }
+            ],
+            "span": {
+              "start": 2672,
+              "end": 2675
+            }
+          },
+          "span": {
+            "start": 2674,
+            "end": 2675
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2615,
+        "end": 2675
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-delete-builtin",
+        "span": {
+          "start": 2675,
+          "end": 2697
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2705,
+              "end": 2710
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete or Distrust…",
+                "span": {
+                  "start": 2713,
+                  "end": 2735
+                }
+              }
+            ],
+            "span": {
+              "start": 2713,
+              "end": 2735
+            }
+          },
+          "span": {
+            "start": 2734,
+            "end": 2735
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2740,
+              "end": 2749
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 2752,
+                  "end": 2754
+                }
+              }
+            ],
+            "span": {
+              "start": 2752,
+              "end": 2755
+            }
+          },
+          "span": {
+            "start": 2754,
+            "end": 2755
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2675,
+        "end": 2755
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-backup",
+        "span": {
+          "start": 2755,
+          "end": 2769
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2777,
+              "end": 2782
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Backup…",
+                "span": {
+                  "start": 2785,
+                  "end": 2795
+                }
+              }
+            ],
+            "span": {
+              "start": 2785,
+              "end": 2795
+            }
+          },
+          "span": {
+            "start": 2794,
+            "end": 2795
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2800,
+              "end": 2809
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B",
+                "span": {
+                  "start": 2812,
+                  "end": 2814
+                }
+              }
+            ],
+            "span": {
+              "start": 2812,
+              "end": 2815
+            }
+          },
+          "span": {
+            "start": 2814,
+            "end": 2815
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2755,
+        "end": 2815
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-backup-all",
+        "span": {
+          "start": 2815,
+          "end": 2833
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2841,
+              "end": 2846
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Backup All…",
+                "span": {
+                  "start": 2849,
+                  "end": 2863
+                }
+              }
+            ],
+            "span": {
+              "start": 2849,
+              "end": 2863
+            }
+          },
+          "span": {
+            "start": 2862,
+            "end": 2863
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2868,
+              "end": 2877
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "k",
+                "span": {
+                  "start": 2880,
+                  "end": 2882
+                }
+              }
+            ],
+            "span": {
+              "start": 2880,
+              "end": 2883
+            }
+          },
+          "span": {
+            "start": 2882,
+            "end": 2883
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2815,
+        "end": 2883
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-restore",
+        "span": {
+          "start": 2883,
+          "end": 2898
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2906,
+              "end": 2911
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Import…",
+                "span": {
+                  "start": 2914,
+                  "end": 2924
+                }
+              }
+            ],
+            "span": {
+              "start": 2914,
+              "end": 2924
+            }
+          },
+          "span": {
+            "start": 2923,
+            "end": 2924
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2929,
+              "end": 2938
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "m",
+                "span": {
+                  "start": 2941,
+                  "end": 2943
+                }
+              }
+            ],
+            "span": {
+              "start": 2941,
+              "end": 2944
+            }
+          },
+          "span": {
+            "start": 2943,
+            "end": 2944
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2883,
+        "end": 2944
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-details",
+        "span": {
+          "start": 2944,
+          "end": 2959
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 2967,
+              "end": 2972
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Fields",
+                "span": {
+                  "start": 2975,
+                  "end": 2994
+                }
+              }
+            ],
+            "span": {
+              "start": 2975,
+              "end": 2994
+            }
+          },
+          "span": {
+            "start": 2993,
+            "end": 2994
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2999,
+              "end": 3008
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 3011,
+                  "end": 3013
+                }
+              }
+            ],
+            "span": {
+              "start": 3011,
+              "end": 3014
+            }
+          },
+          "span": {
+            "start": 3013,
+            "end": 3014
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2944,
+        "end": 3014
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-fields",
+        "span": {
+          "start": 3014,
+          "end": 3028
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 3036,
+              "end": 3041
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Field Value",
+                "span": {
+                  "start": 3044,
+                  "end": 3056
+                }
+              }
+            ],
+            "span": {
+              "start": 3044,
+              "end": 3056
+            }
+          },
+          "span": {
+            "start": 3055,
+            "end": 3056
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3061,
+              "end": 3070
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 3073,
+                  "end": 3075
+                }
+              }
+            ],
+            "span": {
+              "start": 3073,
+              "end": 3076
+            }
+          },
+          "span": {
+            "start": 3075,
+            "end": 3076
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3014,
+        "end": 3076
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-hierarchy",
+        "span": {
+          "start": 3076,
+          "end": 3093
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 3101,
+              "end": 3106
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Hierarchy",
+                "span": {
+                  "start": 3109,
+                  "end": 3131
+                }
+              }
+            ],
+            "span": {
+              "start": 3109,
+              "end": 3131
+            }
+          },
+          "span": {
+            "start": 3130,
+            "end": 3131
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3136,
+              "end": 3145
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "H",
+                "span": {
+                  "start": 3148,
+                  "end": 3150
+                }
+              }
+            ],
+            "span": {
+              "start": 3148,
+              "end": 3151
+            }
+          },
+          "span": {
+            "start": 3150,
+            "end": 3151
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3076,
+        "end": 3151
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "certmgr-add-exception",
+        "span": {
+          "start": 3151,
+          "end": 3172
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3180,
+              "end": 3185
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add Exception…",
+                "span": {
+                  "start": 3188,
+                  "end": 3205
+                }
+              }
+            ],
+            "span": {
+              "start": 3188,
+              "end": 3205
+            }
+          },
+          "span": {
+            "start": 3204,
+            "end": 3205
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3210,
+              "end": 3219
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "x",
+                "span": {
+                  "start": 3222,
+                  "end": 3224
+                }
+              }
+            ],
+            "span": {
+              "start": 3222,
+              "end": 3225
+            }
+          },
+          "span": {
+            "start": 3224,
+            "end": 3225
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3151,
+        "end": 3225
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr",
+        "span": {
+          "start": 3225,
+          "end": 3238
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 3246,
+              "end": 3251
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Add Security Exception",
+                "span": {
+                  "start": 3254,
+                  "end": 3277
+                }
+              }
+            ],
+            "span": {
+              "start": 3254,
+              "end": 3278
+            }
+          },
+          "span": {
+            "start": 3277,
+            "end": 3278
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3225,
+        "end": 3278
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-extra-button",
+        "span": {
+          "start": 3278,
+          "end": 3304
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3312,
+              "end": 3317
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Confirm Security Exception",
+                "span": {
+                  "start": 3320,
+                  "end": 3347
+                }
+              }
+            ],
+            "span": {
+              "start": 3320,
+              "end": 3347
+            }
+          },
+          "span": {
+            "start": 3346,
+            "end": 3347
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3352,
+              "end": 3361
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 3364,
+                  "end": 3366
+                }
+              }
+            ],
+            "span": {
+              "start": 3364,
+              "end": 3367
+            }
+          },
+          "span": {
+            "start": 3366,
+            "end": 3367
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3278,
+        "end": 3367
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-supplemental-warning",
+        "span": {
+          "start": 3367,
+          "end": 3401
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Legitimate banks, stores, and other public sites will not ask you to do this.",
+            "span": {
+              "start": 3404,
+              "end": 3482
+            }
+          }
+        ],
+        "span": {
+          "start": 3404,
+          "end": 3483
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 3367,
+        "end": 3483
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-location-url",
+        "span": {
+          "start": 3483,
+          "end": 3514
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 3522,
+              "end": 3527
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Location:",
+                "span": {
+                  "start": 3530,
+                  "end": 3540
+                }
+              }
+            ],
+            "span": {
+              "start": 3530,
+              "end": 3541
+            }
+          },
+          "span": {
+            "start": 3540,
+            "end": 3541
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3483,
+        "end": 3541
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-location-download",
+        "span": {
+          "start": 3541,
+          "end": 3577
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3585,
+              "end": 3590
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Get Certificate",
+                "span": {
+                  "start": 3593,
+                  "end": 3609
+                }
+              }
+            ],
+            "span": {
+              "start": 3593,
+              "end": 3609
+            }
+          },
+          "span": {
+            "start": 3608,
+            "end": 3609
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3614,
+              "end": 3623
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "G",
+                "span": {
+                  "start": 3626,
+                  "end": 3628
+                }
+              }
+            ],
+            "span": {
+              "start": 3626,
+              "end": 3629
+            }
+          },
+          "span": {
+            "start": 3628,
+            "end": 3629
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3541,
+        "end": 3629
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-cert-status-view-cert",
+        "span": {
+          "start": 3629,
+          "end": 3664
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3672,
+              "end": 3677
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "View…",
+                "span": {
+                  "start": 3680,
+                  "end": 3688
+                }
+              }
+            ],
+            "span": {
+              "start": 3680,
+              "end": 3688
+            }
+          },
+          "span": {
+            "start": 3687,
+            "end": 3688
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3693,
+              "end": 3702
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "V",
+                "span": {
+                  "start": 3705,
+                  "end": 3707
+                }
+              }
+            ],
+            "span": {
+              "start": 3705,
+              "end": 3708
+            }
+          },
+          "span": {
+            "start": 3707,
+            "end": 3708
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3629,
+        "end": 3708
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "exception-mgr-permanent",
+        "span": {
+          "start": 3708,
+          "end": 3731
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 3739,
+              "end": 3744
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Permanently store this exception",
+                "span": {
+                  "start": 3747,
+                  "end": 3780
+                }
+              }
+            ],
+            "span": {
+              "start": 3747,
+              "end": 3780
+            }
+          },
+          "span": {
+            "start": 3779,
+            "end": 3780
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 3785,
+              "end": 3794
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 3797,
+                  "end": 3799
+                }
+              }
+            ],
+            "span": {
+              "start": 3797,
+              "end": 3800
+            }
+          },
+          "span": {
+            "start": 3799,
+            "end": 3800
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 3708,
+        "end": 3800
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pk11-bad-password",
+        "span": {
+          "start": 3800,
+          "end": 3817
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The password entered was incorrect.",
+            "span": {
+              "start": 3820,
+              "end": 3856
+            }
+          }
+        ],
+        "span": {
+          "start": 3820,
+          "end": 3856
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 3800,
+        "end": 3856
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-decode-err",
+        "span": {
+          "start": 3856,
+          "end": 3873
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to decode the file. Either it is not in PKCS #12 format, has been corrupted, or the password you entered was incorrect.",
+            "span": {
+              "start": 3876,
+              "end": 4003
+            }
+          }
+        ],
+        "span": {
+          "start": 3876,
+          "end": 4003
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 3856,
+        "end": 4003
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err-restore",
+        "span": {
+          "start": 4003,
+          "end": 4029
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to restore the PKCS #12 file for unknown reasons.",
+            "span": {
+              "start": 4032,
+              "end": 4089
+            }
+          }
+        ],
+        "span": {
+          "start": 4032,
+          "end": 4089
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4003,
+        "end": 4089
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err-backup",
+        "span": {
+          "start": 4089,
+          "end": 4114
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to create the PKCS #12 backup file for unknown reasons.",
+            "span": {
+              "start": 4117,
+              "end": 4180
+            }
+          }
+        ],
+        "span": {
+          "start": 4117,
+          "end": 4180
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4089,
+        "end": 4180
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-unknown-err",
+        "span": {
+          "start": 4180,
+          "end": 4198
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The PKCS #12 operation failed for unknown reasons.",
+            "span": {
+              "start": 4201,
+              "end": 4252
+            }
+          }
+        ],
+        "span": {
+          "start": 4201,
+          "end": 4252
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4180,
+        "end": 4252
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-info-no-smartcard-backup",
+        "span": {
+          "start": 4252,
+          "end": 4283
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "It is not possible to back up certificates from a hardware security device such as a smart card.",
+            "span": {
+              "start": 4286,
+              "end": 4383
+            }
+          }
+        ],
+        "span": {
+          "start": 4286,
+          "end": 4383
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4252,
+        "end": 4383
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "pkcs12-dup-data",
+        "span": {
+          "start": 4383,
+          "end": 4398
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate and private key already exist on the security device.",
+            "span": {
+              "start": 4401,
+              "end": 4471
+            }
+          }
+        ],
+        "span": {
+          "start": 4401,
+          "end": 4472
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4383,
+        "end": 4472
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "PKCS#12 file dialogs"
+      ],
+      "span": {
+        "start": 4472,
+        "end": 4495
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "choose-p12-backup-file-dialog",
+        "span": {
+          "start": 4496,
+          "end": 4525
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "File Name to Backup",
+            "span": {
+              "start": 4528,
+              "end": 4548
+            }
+          }
+        ],
+        "span": {
+          "start": 4528,
+          "end": 4548
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4496,
+        "end": 4548
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "file-browse-pkcs12-spec",
+        "span": {
+          "start": 4548,
+          "end": 4571
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "PKCS12 Files",
+            "span": {
+              "start": 4574,
+              "end": 4587
+            }
+          }
+        ],
+        "span": {
+          "start": 4574,
+          "end": 4587
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4548,
+        "end": 4587
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "choose-p12-restore-file-dialog",
+        "span": {
+          "start": 4587,
+          "end": 4617
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Certificate File to Import",
+            "span": {
+              "start": 4620,
+              "end": 4647
+            }
+          }
+        ],
+        "span": {
+          "start": 4620,
+          "end": 4648
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4587,
+        "end": 4648
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Import certificate(s) file dialog"
+      ],
+      "span": {
+        "start": 4648,
+        "end": 4684
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "file-browse-certificate-spec",
+        "span": {
+          "start": 4685,
+          "end": 4713
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Certificate Files",
+            "span": {
+              "start": 4716,
+              "end": 4734
+            }
+          }
+        ],
+        "span": {
+          "start": 4716,
+          "end": 4734
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4685,
+        "end": 4734
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "import-ca-certs-prompt",
+        "span": {
+          "start": 4734,
+          "end": 4756
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Select File containing CA certificate(s) to import",
+            "span": {
+              "start": 4759,
+              "end": 4810
+            }
+          }
+        ],
+        "span": {
+          "start": 4759,
+          "end": 4810
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4734,
+        "end": 4810
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "import-email-cert-prompt",
+        "span": {
+          "start": 4810,
+          "end": 4834
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Select File containing somebody’s Email certificate to import",
+            "span": {
+              "start": 4837,
+              "end": 4901
+            }
+          }
+        ],
+        "span": {
+          "start": 4837,
+          "end": 4902
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 4810,
+        "end": 4902
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "For editing certificates trust"
+      ],
+      "span": {
+        "start": 4902,
+        "end": 4935
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "edit-trust-ca",
+        "span": {
+          "start": 4989,
+          "end": 5002
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate “",
+            "span": {
+              "start": 5005,
+              "end": 5024
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "certName",
+                  "span": {
+                    "start": 5027,
+                    "end": 5035
+                  }
+                },
+                "span": {
+                  "start": 5026,
+                  "end": 5035
+                }
+              },
+              {
+                "start": 5026,
+                "end": 5036
+              }
+            ],
+            "span": {
+              "start": 5024,
+              "end": 5036
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "” represents a Certificate Authority.",
+            "span": {
+              "start": 5037,
+              "end": 5077
+            }
+          }
+        ],
+        "span": {
+          "start": 5005,
+          "end": 5078
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Variables:",
+          "  $certName: the name of certificate"
+        ],
+        "span": {
+          "start": 4937,
+          "end": 4988
+        }
+      },
+      "span": {
+        "start": 4989,
+        "end": 5078
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "For Deleting Certificates"
+      ],
+      "span": {
+        "start": 5078,
+        "end": 5106
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-title",
+        "span": {
+          "start": 5108,
+          "end": 5130
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 5138,
+              "end": 5143
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete your Certificates",
+                "span": {
+                  "start": 5146,
+                  "end": 5171
+                }
+              }
+            ],
+            "span": {
+              "start": 5146,
+              "end": 5171
+            }
+          },
+          "span": {
+            "start": 5170,
+            "end": 5171
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5108,
+        "end": 5171
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-confirm",
+        "span": {
+          "start": 5171,
+          "end": 5195
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these certificates?",
+            "span": {
+              "start": 5198,
+              "end": 5250
+            }
+          }
+        ],
+        "span": {
+          "start": 5198,
+          "end": 5250
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5171,
+        "end": 5250
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-user-cert-impact",
+        "span": {
+          "start": 5250,
+          "end": 5273
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete one of your own certificates, you can no longer use it to identify yourself.",
+            "span": {
+              "start": 5276,
+              "end": 5367
+            }
+          }
+        ],
+        "span": {
+          "start": 5276,
+          "end": 5369
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5250,
+        "end": 5369
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-title",
+        "span": {
+          "start": 5369,
+          "end": 5390
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 5398,
+              "end": 5403
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete Server Certificate Exceptions",
+                "span": {
+                  "start": 5406,
+                  "end": 5443
+                }
+              }
+            ],
+            "span": {
+              "start": 5406,
+              "end": 5443
+            }
+          },
+          "span": {
+            "start": 5442,
+            "end": 5443
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5369,
+        "end": 5443
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-confirm",
+        "span": {
+          "start": 5443,
+          "end": 5466
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these server exceptions?",
+            "span": {
+              "start": 5469,
+              "end": 5526
+            }
+          }
+        ],
+        "span": {
+          "start": 5469,
+          "end": 5526
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5443,
+        "end": 5526
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ssl-cert-impact",
+        "span": {
+          "start": 5526,
+          "end": 5548
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete a server exception, you restore the usual security checks for that server and require it uses a valid certificate.",
+            "span": {
+              "start": 5551,
+              "end": 5680
+            }
+          }
+        ],
+        "span": {
+          "start": 5551,
+          "end": 5681
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5526,
+        "end": 5681
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-title",
+        "span": {
+          "start": 5681,
+          "end": 5701
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 5709,
+              "end": 5714
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete or Distrust CA Certificates",
+                "span": {
+                  "start": 5717,
+                  "end": 5752
+                }
+              }
+            ],
+            "span": {
+              "start": 5717,
+              "end": 5752
+            }
+          },
+          "span": {
+            "start": 5751,
+            "end": 5752
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 5681,
+        "end": 5752
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-confirm",
+        "span": {
+          "start": 5752,
+          "end": 5774
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You have requested to delete these CA certificates. For built-in certificates all trust will be removed, which has the same effect. Are you sure you want to delete or distrust?",
+            "span": {
+              "start": 5777,
+              "end": 5954
+            }
+          }
+        ],
+        "span": {
+          "start": 5777,
+          "end": 5954
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5752,
+        "end": 5954
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-ca-cert-impact",
+        "span": {
+          "start": 5954,
+          "end": 5975
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete or distrust a certificate authority (CA) certificate, this application will no longer trust any certificates issued by that CA.",
+            "span": {
+              "start": 5978,
+              "end": 6120
+            }
+          }
+        ],
+        "span": {
+          "start": 5978,
+          "end": 6122
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 5954,
+        "end": 6122
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-title",
+        "span": {
+          "start": 6122,
+          "end": 6145
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 6153,
+              "end": 6158
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Delete E-Mail Certificates",
+                "span": {
+                  "start": 6161,
+                  "end": 6188
+                }
+              }
+            ],
+            "span": {
+              "start": 6161,
+              "end": 6188
+            }
+          },
+          "span": {
+            "start": 6187,
+            "end": 6188
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6122,
+        "end": 6188
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-confirm",
+        "span": {
+          "start": 6188,
+          "end": 6213
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete these people’s e-mail certificates?",
+            "span": {
+              "start": 6216,
+              "end": 6286
+            }
+          }
+        ],
+        "span": {
+          "start": 6216,
+          "end": 6286
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 6188,
+        "end": 6286
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete-email-cert-impact",
+        "span": {
+          "start": 6286,
+          "end": 6310
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "If you delete a person’s e-mail certificate, you will no longer be able to send encrypted e-mail to that person.",
+            "span": {
+              "start": 6313,
+              "end": 6428
+            }
+          }
+        ],
+        "span": {
+          "start": 6313,
+          "end": 6429
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 6286,
+        "end": 6429
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-with-serial",
+        "span": {
+          "start": 6564,
+          "end": 6580
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 6588,
+              "end": 6593
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate with serial number: ",
+                "span": {
+                  "start": 6596,
+                  "end": 6628
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "serialNumber",
+                      "span": {
+                        "start": 6631,
+                        "end": 6643
+                      }
+                    },
+                    "span": {
+                      "start": 6630,
+                      "end": 6643
+                    }
+                  },
+                  {
+                    "start": 6630,
+                    "end": 6644
+                  }
+                ],
+                "span": {
+                  "start": 6628,
+                  "end": 6644
+                }
+              }
+            ],
+            "span": {
+              "start": 6596,
+              "end": 6647
+            }
+          },
+          "span": {
+            "start": 6646,
+            "end": 6647
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Used for semi-uniquely representing a cert.",
+          "",
+          "Variables:",
+          "  $serialNumber : the serial number of the cert in AA:BB:CC hex format."
+        ],
+        "span": {
+          "start": 6429,
+          "end": 6563
+        }
+      },
+      "span": {
+        "start": 6564,
+        "end": 6647
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Cert Viewer"
+      ],
+      "span": {
+        "start": 6647,
+        "end": 6661
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-viewer-title",
+        "span": {
+          "start": 6795,
+          "end": 6812
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 6820,
+              "end": 6825
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Certificate Viewer: “",
+                "span": {
+                  "start": 6828,
+                  "end": 6851
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "certName",
+                      "span": {
+                        "start": 6854,
+                        "end": 6862
+                      }
+                    },
+                    "span": {
+                      "start": 6853,
+                      "end": 6862
+                    }
+                  },
+                  {
+                    "start": 6853,
+                    "end": 6863
+                  }
+                ],
+                "span": {
+                  "start": 6851,
+                  "end": 6863
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "”",
+                "span": {
+                  "start": 6864,
+                  "end": 6868
+                }
+              }
+            ],
+            "span": {
+              "start": 6828,
+              "end": 6869
+            }
+          },
+          "span": {
+            "start": 6868,
+            "end": 6869
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Title used for the Certificate Viewer.",
+          "",
+          "Variables:",
+          "  $certificate : a string representative of the certificate being viewed."
+        ],
+        "span": {
+          "start": 6663,
+          "end": 6794
+        }
+      },
+      "span": {
+        "start": 6795,
+        "end": 6869
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "not-present",
+        "span": {
+          "start": 6869,
+          "end": 6880
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 6888,
+              "end": 6893
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "<Not Part Of Certificate>",
+                "span": {
+                  "start": 6896,
+                  "end": 6922
+                }
+              }
+            ],
+            "span": {
+              "start": 6896,
+              "end": 6923
+            }
+          },
+          "span": {
+            "start": 6922,
+            "end": 6923
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 6869,
+        "end": 6923
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-verified",
+        "span": {
+          "start": 6943,
+          "end": 6956
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This certificate has been verified for the following uses:",
+            "span": {
+              "start": 6959,
+              "end": 7018
+            }
+          }
+        ],
+        "span": {
+          "start": 6959,
+          "end": 7019
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Cert verification"
+        ],
+        "span": {
+          "start": 6923,
+          "end": 6942
+        }
+      },
+      "span": {
+        "start": 6943,
+        "end": 7019
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-client",
+        "span": {
+          "start": 7031,
+          "end": 7048
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 7056,
+              "end": 7061
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Client Certificate",
+                "span": {
+                  "start": 7064,
+                  "end": 7087
+                }
+              }
+            ],
+            "span": {
+              "start": 7064,
+              "end": 7088
+            }
+          },
+          "span": {
+            "start": 7087,
+            "end": 7088
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Add usage"
+        ],
+        "span": {
+          "start": 7019,
+          "end": 7030
+        }
+      },
+      "span": {
+        "start": 7031,
+        "end": 7088
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-server",
+        "span": {
+          "start": 7088,
+          "end": 7105
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 7113,
+              "end": 7118
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Server Certificate",
+                "span": {
+                  "start": 7121,
+                  "end": 7144
+                }
+              }
+            ],
+            "span": {
+              "start": 7121,
+              "end": 7145
+            }
+          },
+          "span": {
+            "start": 7144,
+            "end": 7145
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7088,
+        "end": 7145
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-ssl-ca",
+        "span": {
+          "start": 7145,
+          "end": 7158
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 7166,
+              "end": 7171
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SSL Certificate Authority",
+                "span": {
+                  "start": 7174,
+                  "end": 7200
+                }
+              }
+            ],
+            "span": {
+              "start": 7174,
+              "end": 7201
+            }
+          },
+          "span": {
+            "start": 7200,
+            "end": 7201
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7145,
+        "end": 7201
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-email-signer",
+        "span": {
+          "start": 7201,
+          "end": 7220
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 7228,
+              "end": 7233
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Signer Certificate",
+                "span": {
+                  "start": 7236,
+                  "end": 7261
+                }
+              }
+            ],
+            "span": {
+              "start": 7236,
+              "end": 7262
+            }
+          },
+          "span": {
+            "start": 7261,
+            "end": 7262
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7201,
+        "end": 7262
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "verify-email-recip",
+        "span": {
+          "start": 7262,
+          "end": 7280
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 7288,
+              "end": 7293
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Email Recipient Certificate",
+                "span": {
+                  "start": 7296,
+                  "end": 7324
+                }
+              }
+            ],
+            "span": {
+              "start": 7296,
+              "end": 7325
+            }
+          },
+          "span": {
+            "start": 7324,
+            "end": 7325
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 7262,
+        "end": 7325
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-revoked",
+        "span": {
+          "start": 7345,
+          "end": 7375
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it has been revoked.",
+            "span": {
+              "start": 7378,
+              "end": 7441
+            }
+          }
+        ],
+        "span": {
+          "start": 7378,
+          "end": 7441
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Cert verification"
+        ],
+        "span": {
+          "start": 7325,
+          "end": 7344
+        }
+      },
+      "span": {
+        "start": 7345,
+        "end": 7441
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-expired",
+        "span": {
+          "start": 7441,
+          "end": 7471
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it has expired.",
+            "span": {
+              "start": 7474,
+              "end": 7532
+            }
+          }
+        ],
+        "span": {
+          "start": 7474,
+          "end": 7532
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7441,
+        "end": 7532
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-cert-not-trusted",
+        "span": {
+          "start": 7532,
+          "end": 7566
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it is not trusted.",
+            "span": {
+              "start": 7569,
+              "end": 7630
+            }
+          }
+        ],
+        "span": {
+          "start": 7569,
+          "end": 7630
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7532,
+        "end": 7630
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-issuer-not-trusted",
+        "span": {
+          "start": 7630,
+          "end": 7666
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the issuer is not trusted.",
+            "span": {
+              "start": 7669,
+              "end": 7738
+            }
+          }
+        ],
+        "span": {
+          "start": 7669,
+          "end": 7738
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7630,
+        "end": 7738
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-issuer-unknown",
+        "span": {
+          "start": 7738,
+          "end": 7770
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the issuer is unknown.",
+            "span": {
+              "start": 7773,
+              "end": 7838
+            }
+          }
+        ],
+        "span": {
+          "start": 7773,
+          "end": 7838
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7738,
+        "end": 7838
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-ca-invalid",
+        "span": {
+          "start": 7838,
+          "end": 7866
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because the CA certificate is invalid.",
+            "span": {
+              "start": 7869,
+              "end": 7942
+            }
+          }
+        ],
+        "span": {
+          "start": 7869,
+          "end": 7942
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7838,
+        "end": 7942
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified_algorithm-disabled",
+        "span": {
+          "start": 7942,
+          "end": 7978
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate because it was signed using a signature algorithm that was disabled because that algorithm is not secure.",
+            "span": {
+              "start": 7981,
+              "end": 8121
+            }
+          }
+        ],
+        "span": {
+          "start": 7981,
+          "end": 8121
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7942,
+        "end": 8121
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-not-verified-unknown",
+        "span": {
+          "start": 8121,
+          "end": 8146
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Could not verify this certificate for unknown reasons.",
+            "span": {
+              "start": 8149,
+              "end": 8204
+            }
+          }
+        ],
+        "span": {
+          "start": 8149,
+          "end": 8205
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8121,
+        "end": 8205
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Add Security Exception dialog"
+      ],
+      "span": {
+        "start": 8205,
+        "end": 8237
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-branded-warning",
+        "span": {
+          "start": 8238,
+          "end": 8267
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You are about to override how ",
+            "span": {
+              "start": 8270,
+              "end": 8300
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 8303,
+                    "end": 8319
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 8302,
+                  "end": 8320
+                }
+              },
+              {
+                "start": 8302,
+                "end": 8320
+              }
+            ],
+            "span": {
+              "start": 8300,
+              "end": 8320
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " identifies this site.",
+            "span": {
+              "start": 8321,
+              "end": 8344
+            }
+          }
+        ],
+        "span": {
+          "start": 8270,
+          "end": 8344
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8238,
+        "end": 8344
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-invalid-header",
+        "span": {
+          "start": 8344,
+          "end": 8372
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This site attempts to identify itself with invalid information.",
+            "span": {
+              "start": 8375,
+              "end": 8439
+            }
+          }
+        ],
+        "span": {
+          "start": 8375,
+          "end": 8439
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8344,
+        "end": 8439
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-domain-mismatch-short",
+        "span": {
+          "start": 8439,
+          "end": 8474
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Wrong Site",
+            "span": {
+              "start": 8477,
+              "end": 8488
+            }
+          }
+        ],
+        "span": {
+          "start": 8477,
+          "end": 8488
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8439,
+        "end": 8488
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-domain-mismatch-long",
+        "span": {
+          "start": 8488,
+          "end": 8522
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate belongs to a different site, which could mean that someone is trying to impersonate this site.",
+            "span": {
+              "start": 8525,
+              "end": 8636
+            }
+          }
+        ],
+        "span": {
+          "start": 8525,
+          "end": 8636
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8488,
+        "end": 8636
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-expired-short",
+        "span": {
+          "start": 8636,
+          "end": 8663
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Outdated Information",
+            "span": {
+              "start": 8666,
+              "end": 8687
+            }
+          }
+        ],
+        "span": {
+          "start": 8666,
+          "end": 8687
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8636,
+        "end": 8687
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-expired-long",
+        "span": {
+          "start": 8687,
+          "end": 8713
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate is not currently valid. It may have been stolen or lost, and could be used by someone to impersonate this site.",
+            "span": {
+              "start": 8716,
+              "end": 8844
+            }
+          }
+        ],
+        "span": {
+          "start": 8716,
+          "end": 8844
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8687,
+        "end": 8844
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-unverified-or-bad-signature-short",
+        "span": {
+          "start": 8844,
+          "end": 8891
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unknown Identity",
+            "span": {
+              "start": 8894,
+              "end": 8911
+            }
+          }
+        ],
+        "span": {
+          "start": 8894,
+          "end": 8911
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8844,
+        "end": 8911
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-unverified-or-bad-signature-long",
+        "span": {
+          "start": 8911,
+          "end": 8957
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The certificate is not trusted because it hasn’t been verified as issued by a trusted authority using a secure signature.",
+            "span": {
+              "start": 8960,
+              "end": 9084
+            }
+          }
+        ],
+        "span": {
+          "start": 8960,
+          "end": 9084
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 8911,
+        "end": 9084
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-valid-short",
+        "span": {
+          "start": 9084,
+          "end": 9109
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Valid Certificate",
+            "span": {
+              "start": 9112,
+              "end": 9130
+            }
+          }
+        ],
+        "span": {
+          "start": 9112,
+          "end": 9130
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9084,
+        "end": 9130
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-valid-long",
+        "span": {
+          "start": 9130,
+          "end": 9154
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This site provides valid, verified identification.  There is no need to add an exception.",
+            "span": {
+              "start": 9157,
+              "end": 9247
+            }
+          }
+        ],
+        "span": {
+          "start": 9157,
+          "end": 9247
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9130,
+        "end": 9247
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-checking-short",
+        "span": {
+          "start": 9247,
+          "end": 9275
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Checking Information",
+            "span": {
+              "start": 9278,
+              "end": 9299
+            }
+          }
+        ],
+        "span": {
+          "start": 9278,
+          "end": 9299
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9247,
+        "end": 9299
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-checking-long",
+        "span": {
+          "start": 9299,
+          "end": 9326
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Attempting to identify this site…",
+            "span": {
+              "start": 9329,
+              "end": 9365
+            }
+          }
+        ],
+        "span": {
+          "start": 9329,
+          "end": 9365
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9299,
+        "end": 9365
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-no-cert-short",
+        "span": {
+          "start": 9365,
+          "end": 9392
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "No Information Available",
+            "span": {
+              "start": 9395,
+              "end": 9420
+            }
+          }
+        ],
+        "span": {
+          "start": 9395,
+          "end": 9420
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9365,
+        "end": 9420
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-exception-no-cert-long",
+        "span": {
+          "start": 9420,
+          "end": 9446
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to obtain identification status for this site.",
+            "span": {
+              "start": 9449,
+              "end": 9503
+            }
+          }
+        ],
+        "span": {
+          "start": 9449,
+          "end": 9504
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9420,
+        "end": 9504
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Certificate export \"Save as\" and error dialogs"
+      ],
+      "span": {
+        "start": 9504,
+        "end": 9553
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "save-cert-as",
+        "span": {
+          "start": 9554,
+          "end": 9566
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Save Certificate To File",
+            "span": {
+              "start": 9569,
+              "end": 9594
+            }
+          }
+        ],
+        "span": {
+          "start": 9569,
+          "end": 9594
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9554,
+        "end": 9594
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-base64",
+        "span": {
+          "start": 9594,
+          "end": 9612
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (PEM)",
+            "span": {
+              "start": 9615,
+              "end": 9639
+            }
+          }
+        ],
+        "span": {
+          "start": 9615,
+          "end": 9639
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9594,
+        "end": 9639
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-base64-chain",
+        "span": {
+          "start": 9639,
+          "end": 9663
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate with chain (PEM)",
+            "span": {
+              "start": 9666,
+              "end": 9701
+            }
+          }
+        ],
+        "span": {
+          "start": 9666,
+          "end": 9701
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9639,
+        "end": 9701
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-der",
+        "span": {
+          "start": 9701,
+          "end": 9716
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (DER)",
+            "span": {
+              "start": 9719,
+              "end": 9743
+            }
+          }
+        ],
+        "span": {
+          "start": 9719,
+          "end": 9743
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9701,
+        "end": 9743
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-pkcs7",
+        "span": {
+          "start": 9743,
+          "end": 9760
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate (PKCS#7)",
+            "span": {
+              "start": 9763,
+              "end": 9790
+            }
+          }
+        ],
+        "span": {
+          "start": 9763,
+          "end": 9790
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9743,
+        "end": 9790
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "cert-format-pkcs7-chain",
+        "span": {
+          "start": 9790,
+          "end": 9813
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "X.509 Certificate with chain (PKCS#7)",
+            "span": {
+              "start": 9816,
+              "end": 9854
+            }
+          }
+        ],
+        "span": {
+          "start": 9816,
+          "end": 9854
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9790,
+        "end": 9854
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "write-file-failure",
+        "span": {
+          "start": 9854,
+          "end": 9872
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "File Error",
+            "span": {
+              "start": 9875,
+              "end": 9886
+            }
+          }
+        ],
+        "span": {
+          "start": 9875,
+          "end": 9886
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 9854,
+        "end": 9886
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 9886
+  }
+}

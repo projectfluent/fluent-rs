@@ -1,0 +1,2198 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-window",
+        "span": {
+          "start": 200,
+          "end": 217
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 225,
+              "end": 230
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Connection Settings",
+                "span": {
+                  "start": 233,
+                  "end": 253
+                }
+              }
+            ],
+            "span": {
+              "start": 233,
+              "end": 253
+            }
+          },
+          "span": {
+            "start": 252,
+            "end": 253
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 258,
+              "end": 263
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": {
+                  "selector": {
+                    "type": "FunctionReference",
+                    "id": {
+                      "name": "PLATFORM",
+                      "span": {
+                        "start": 276,
+                        "end": 284
+                      }
+                    },
+                    "arguments": {
+                      "type": "CallArguments",
+                      "positional": [],
+                      "named": [],
+                      "span": {
+                        "start": 284,
+                        "end": 286
+                      }
+                    },
+                    "span": {
+                      "start": 276,
+                      "end": 286
+                    }
+                  },
+                  "variants": [
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "macos",
+                        "span": {
+                          "start": 303,
+                          "end": 308
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "width: 44em",
+                            "span": {
+                              "start": 310,
+                              "end": 322
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 310,
+                          "end": 322
+                        }
+                      },
+                      "default": false,
+                      "span": {
+                        "start": 302,
+                        "end": 322
+                      }
+                    },
+                    {
+                      "type": "Variant",
+                      "key": {
+                        "type": "Identifier",
+                        "name": "other",
+                        "span": {
+                          "start": 335,
+                          "end": 340
+                        }
+                      },
+                      "value": {
+                        "elements": [
+                          {
+                            "type": "TextElement",
+                            "value": "width: 49em",
+                            "span": {
+                              "start": 342,
+                              "end": 354
+                            }
+                          }
+                        ],
+                        "span": {
+                          "start": 342,
+                          "end": 354
+                        }
+                      },
+                      "default": true,
+                      "span": {
+                        "start": 333,
+                        "end": 354
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 276,
+                    "end": 362
+                  }
+                },
+                "span": {
+                  "start": 274,
+                  "end": 362
+                }
+              }
+            ],
+            "span": {
+              "start": 265,
+              "end": 365
+            }
+          },
+          "span": {
+            "start": 364,
+            "end": 365
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 365
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-close-key",
+        "span": {
+          "start": 365,
+          "end": 385
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 393,
+              "end": 396
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 399,
+                  "end": 401
+                }
+              }
+            ],
+            "span": {
+              "start": 399,
+              "end": 402
+            }
+          },
+          "span": {
+            "start": 401,
+            "end": 402
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 365,
+        "end": 402
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-disable-extension",
+        "span": {
+          "start": 402,
+          "end": 430
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 438,
+              "end": 443
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disable Extension",
+                "span": {
+                  "start": 446,
+                  "end": 464
+                }
+              }
+            ],
+            "span": {
+              "start": 446,
+              "end": 465
+            }
+          },
+          "span": {
+            "start": 464,
+            "end": 465
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 402,
+        "end": 465
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-configure",
+        "span": {
+          "start": 465,
+          "end": 491
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Configure Proxy Access to the Internet",
+            "span": {
+              "start": 494,
+              "end": 533
+            }
+          }
+        ],
+        "span": {
+          "start": 494,
+          "end": 534
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 465,
+        "end": 534
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-option-no",
+        "span": {
+          "start": 534,
+          "end": 560
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 568,
+              "end": 573
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "No proxy",
+                "span": {
+                  "start": 576,
+                  "end": 585
+                }
+              }
+            ],
+            "span": {
+              "start": 576,
+              "end": 585
+            }
+          },
+          "span": {
+            "start": 584,
+            "end": 585
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 590,
+              "end": 599
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "y",
+                "span": {
+                  "start": 602,
+                  "end": 604
+                }
+              }
+            ],
+            "span": {
+              "start": 602,
+              "end": 604
+            }
+          },
+          "span": {
+            "start": 603,
+            "end": 604
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 534,
+        "end": 604
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-option-system",
+        "span": {
+          "start": 604,
+          "end": 634
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 642,
+              "end": 647
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Use system proxy settings",
+                "span": {
+                  "start": 650,
+                  "end": 676
+                }
+              }
+            ],
+            "span": {
+              "start": 650,
+              "end": 676
+            }
+          },
+          "span": {
+            "start": 675,
+            "end": 676
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 681,
+              "end": 690
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U",
+                "span": {
+                  "start": 693,
+                  "end": 695
+                }
+              }
+            ],
+            "span": {
+              "start": 693,
+              "end": 695
+            }
+          },
+          "span": {
+            "start": 694,
+            "end": 695
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 604,
+        "end": 695
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-option-auto",
+        "span": {
+          "start": 695,
+          "end": 723
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 731,
+              "end": 736
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Auto-detect proxy settings for this network",
+                "span": {
+                  "start": 739,
+                  "end": 783
+                }
+              }
+            ],
+            "span": {
+              "start": 739,
+              "end": 783
+            }
+          },
+          "span": {
+            "start": 782,
+            "end": 783
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 788,
+              "end": 797
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 800,
+                  "end": 802
+                }
+              }
+            ],
+            "span": {
+              "start": 800,
+              "end": 802
+            }
+          },
+          "span": {
+            "start": 801,
+            "end": 802
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 695,
+        "end": 802
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-option-manual",
+        "span": {
+          "start": 802,
+          "end": 832
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 840,
+              "end": 845
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manual proxy configuration",
+                "span": {
+                  "start": 848,
+                  "end": 875
+                }
+              }
+            ],
+            "span": {
+              "start": 848,
+              "end": 875
+            }
+          },
+          "span": {
+            "start": 874,
+            "end": 875
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 880,
+              "end": 889
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "M",
+                "span": {
+                  "start": 892,
+                  "end": 894
+                }
+              }
+            ],
+            "span": {
+              "start": 892,
+              "end": 895
+            }
+          },
+          "span": {
+            "start": 894,
+            "end": 895
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 802,
+        "end": 895
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-http",
+        "span": {
+          "start": 895,
+          "end": 916
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "HTTP Proxy",
+            "span": {
+              "start": 919,
+              "end": 930
+            }
+          }
+        ],
+        "span": {
+          "start": 919,
+          "end": 930
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 935,
+              "end": 944
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "x",
+                "span": {
+                  "start": 947,
+                  "end": 949
+                }
+              }
+            ],
+            "span": {
+              "start": 947,
+              "end": 949
+            }
+          },
+          "span": {
+            "start": 948,
+            "end": 949
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 895,
+        "end": 949
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-http-port",
+        "span": {
+          "start": 949,
+          "end": 975
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Port",
+            "span": {
+              "start": 978,
+              "end": 983
+            }
+          }
+        ],
+        "span": {
+          "start": 978,
+          "end": 983
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 988,
+              "end": 997
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 1000,
+                  "end": 1002
+                }
+              }
+            ],
+            "span": {
+              "start": 1000,
+              "end": 1002
+            }
+          },
+          "span": {
+            "start": 1001,
+            "end": 1002
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 949,
+        "end": 1002
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-http-sharing",
+        "span": {
+          "start": 1002,
+          "end": 1031
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1039,
+              "end": 1044
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Also use this proxy for FTP and HTTPS",
+                "span": {
+                  "start": 1047,
+                  "end": 1085
+                }
+              }
+            ],
+            "span": {
+              "start": 1047,
+              "end": 1085
+            }
+          },
+          "span": {
+            "start": 1084,
+            "end": 1085
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1090,
+              "end": 1099
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "s",
+                "span": {
+                  "start": 1102,
+                  "end": 1104
+                }
+              }
+            ],
+            "span": {
+              "start": 1102,
+              "end": 1105
+            }
+          },
+          "span": {
+            "start": 1104,
+            "end": 1105
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1002,
+        "end": 1105
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-https",
+        "span": {
+          "start": 1105,
+          "end": 1127
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "HTTPS Proxy",
+            "span": {
+              "start": 1130,
+              "end": 1142
+            }
+          }
+        ],
+        "span": {
+          "start": 1130,
+          "end": 1142
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1147,
+              "end": 1156
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "H",
+                "span": {
+                  "start": 1159,
+                  "end": 1161
+                }
+              }
+            ],
+            "span": {
+              "start": 1159,
+              "end": 1161
+            }
+          },
+          "span": {
+            "start": 1160,
+            "end": 1161
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1105,
+        "end": 1161
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-ssl-port",
+        "span": {
+          "start": 1161,
+          "end": 1186
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Port",
+            "span": {
+              "start": 1189,
+              "end": 1194
+            }
+          }
+        ],
+        "span": {
+          "start": 1189,
+          "end": 1194
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1199,
+              "end": 1208
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "o",
+                "span": {
+                  "start": 1211,
+                  "end": 1213
+                }
+              }
+            ],
+            "span": {
+              "start": 1211,
+              "end": 1214
+            }
+          },
+          "span": {
+            "start": 1213,
+            "end": 1214
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1161,
+        "end": 1214
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-ftp",
+        "span": {
+          "start": 1214,
+          "end": 1234
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "FTP Proxy",
+            "span": {
+              "start": 1237,
+              "end": 1247
+            }
+          }
+        ],
+        "span": {
+          "start": 1237,
+          "end": 1247
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1252,
+              "end": 1261
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 1264,
+                  "end": 1266
+                }
+              }
+            ],
+            "span": {
+              "start": 1264,
+              "end": 1266
+            }
+          },
+          "span": {
+            "start": 1265,
+            "end": 1266
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1214,
+        "end": 1266
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-ftp-port",
+        "span": {
+          "start": 1266,
+          "end": 1291
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Port",
+            "span": {
+              "start": 1294,
+              "end": 1299
+            }
+          }
+        ],
+        "span": {
+          "start": 1294,
+          "end": 1299
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1304,
+              "end": 1313
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "r",
+                "span": {
+                  "start": 1316,
+                  "end": 1318
+                }
+              }
+            ],
+            "span": {
+              "start": 1316,
+              "end": 1319
+            }
+          },
+          "span": {
+            "start": 1318,
+            "end": 1319
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1266,
+        "end": 1319
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-socks",
+        "span": {
+          "start": 1319,
+          "end": 1341
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "SOCKS Host",
+            "span": {
+              "start": 1344,
+              "end": 1355
+            }
+          }
+        ],
+        "span": {
+          "start": 1344,
+          "end": 1355
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1360,
+              "end": 1369
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 1372,
+                  "end": 1374
+                }
+              }
+            ],
+            "span": {
+              "start": 1372,
+              "end": 1374
+            }
+          },
+          "span": {
+            "start": 1373,
+            "end": 1374
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1319,
+        "end": 1374
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-socks-port",
+        "span": {
+          "start": 1374,
+          "end": 1401
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Port",
+            "span": {
+              "start": 1404,
+              "end": 1409
+            }
+          }
+        ],
+        "span": {
+          "start": 1404,
+          "end": 1409
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1414,
+              "end": 1423
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "t",
+                "span": {
+                  "start": 1426,
+                  "end": 1428
+                }
+              }
+            ],
+            "span": {
+              "start": 1426,
+              "end": 1429
+            }
+          },
+          "span": {
+            "start": 1428,
+            "end": 1429
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1374,
+        "end": 1429
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-socks4",
+        "span": {
+          "start": 1429,
+          "end": 1452
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1460,
+              "end": 1465
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SOCKS v4",
+                "span": {
+                  "start": 1468,
+                  "end": 1477
+                }
+              }
+            ],
+            "span": {
+              "start": 1468,
+              "end": 1477
+            }
+          },
+          "span": {
+            "start": 1476,
+            "end": 1477
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1482,
+              "end": 1491
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "K",
+                "span": {
+                  "start": 1494,
+                  "end": 1496
+                }
+              }
+            ],
+            "span": {
+              "start": 1494,
+              "end": 1496
+            }
+          },
+          "span": {
+            "start": 1495,
+            "end": 1496
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1429,
+        "end": 1496
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-socks5",
+        "span": {
+          "start": 1496,
+          "end": 1519
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1527,
+              "end": 1532
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "SOCKS v5",
+                "span": {
+                  "start": 1535,
+                  "end": 1544
+                }
+              }
+            ],
+            "span": {
+              "start": 1535,
+              "end": 1544
+            }
+          },
+          "span": {
+            "start": 1543,
+            "end": 1544
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1549,
+              "end": 1558
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "v",
+                "span": {
+                  "start": 1561,
+                  "end": 1563
+                }
+              }
+            ],
+            "span": {
+              "start": 1561,
+              "end": 1563
+            }
+          },
+          "span": {
+            "start": 1562,
+            "end": 1563
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1496,
+        "end": 1563
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-noproxy",
+        "span": {
+          "start": 1563,
+          "end": 1587
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "No proxy for",
+            "span": {
+              "start": 1590,
+              "end": 1603
+            }
+          }
+        ],
+        "span": {
+          "start": 1590,
+          "end": 1603
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1608,
+              "end": 1617
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "N",
+                "span": {
+                  "start": 1620,
+                  "end": 1622
+                }
+              }
+            ],
+            "span": {
+              "start": 1620,
+              "end": 1623
+            }
+          },
+          "span": {
+            "start": 1622,
+            "end": 1623
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1563,
+        "end": 1623
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-noproxy-desc",
+        "span": {
+          "start": 1623,
+          "end": 1652
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Example: .mozilla.org, .net.nz, 192.168.1.0/24",
+            "span": {
+              "start": 1655,
+              "end": 1702
+            }
+          }
+        ],
+        "span": {
+          "start": 1655,
+          "end": 1703
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1623,
+        "end": 1703
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-noproxy-localhost-desc",
+        "span": {
+          "start": 1752,
+          "end": 1791
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Connections to localhost, 127.0.0.1, and ::1 are never proxied.",
+            "span": {
+              "start": 1794,
+              "end": 1858
+            }
+          }
+        ],
+        "span": {
+          "start": 1794,
+          "end": 1859
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Do not translate localhost, 127.0.0.1 and ::1."
+        ],
+        "span": {
+          "start": 1703,
+          "end": 1751
+        }
+      },
+      "span": {
+        "start": 1752,
+        "end": 1859
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-autotype",
+        "span": {
+          "start": 1859,
+          "end": 1884
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1892,
+              "end": 1897
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Automatic proxy configuration URL",
+                "span": {
+                  "start": 1900,
+                  "end": 1934
+                }
+              }
+            ],
+            "span": {
+              "start": 1900,
+              "end": 1934
+            }
+          },
+          "span": {
+            "start": 1933,
+            "end": 1934
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1939,
+              "end": 1948
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A",
+                "span": {
+                  "start": 1951,
+                  "end": 1953
+                }
+              }
+            ],
+            "span": {
+              "start": 1951,
+              "end": 1954
+            }
+          },
+          "span": {
+            "start": 1953,
+            "end": 1954
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1859,
+        "end": 1954
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-reload",
+        "span": {
+          "start": 1954,
+          "end": 1977
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1985,
+              "end": 1990
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Reload",
+                "span": {
+                  "start": 1993,
+                  "end": 2000
+                }
+              }
+            ],
+            "span": {
+              "start": 1993,
+              "end": 2000
+            }
+          },
+          "span": {
+            "start": 1999,
+            "end": 2000
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2005,
+              "end": 2014
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e",
+                "span": {
+                  "start": 2017,
+                  "end": 2019
+                }
+              }
+            ],
+            "span": {
+              "start": 2017,
+              "end": 2020
+            }
+          },
+          "span": {
+            "start": 2019,
+            "end": 2020
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1954,
+        "end": 2020
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-autologin",
+        "span": {
+          "start": 2020,
+          "end": 2046
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2054,
+              "end": 2059
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Do not prompt for authentication if password is saved",
+                "span": {
+                  "start": 2062,
+                  "end": 2116
+                }
+              }
+            ],
+            "span": {
+              "start": 2062,
+              "end": 2116
+            }
+          },
+          "span": {
+            "start": 2115,
+            "end": 2116
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2121,
+              "end": 2130
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "i",
+                "span": {
+                  "start": 2133,
+                  "end": 2135
+                }
+              }
+            ],
+            "span": {
+              "start": 2133,
+              "end": 2135
+            }
+          },
+          "span": {
+            "start": 2134,
+            "end": 2135
+          }
+        },
+        {
+          "id": {
+            "name": "tooltip",
+            "span": {
+              "start": 2140,
+              "end": 2147
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "This option silently authenticates you to proxies when you have saved credentials for them. You will be prompted if authentication fails.",
+                "span": {
+                  "start": 2150,
+                  "end": 2288
+                }
+              }
+            ],
+            "span": {
+              "start": 2150,
+              "end": 2289
+            }
+          },
+          "span": {
+            "start": 2288,
+            "end": 2289
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2020,
+        "end": 2289
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-proxy-socks-remote-dns",
+        "span": {
+          "start": 2289,
+          "end": 2322
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2330,
+              "end": 2335
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Proxy DNS when using SOCKS v5",
+                "span": {
+                  "start": 2338,
+                  "end": 2368
+                }
+              }
+            ],
+            "span": {
+              "start": 2338,
+              "end": 2368
+            }
+          },
+          "span": {
+            "start": 2367,
+            "end": 2368
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2373,
+              "end": 2382
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "D",
+                "span": {
+                  "start": 2385,
+                  "end": 2387
+                }
+              }
+            ],
+            "span": {
+              "start": 2385,
+              "end": 2388
+            }
+          },
+          "span": {
+            "start": 2387,
+            "end": 2388
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2289,
+        "end": 2388
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-dns-over-https",
+        "span": {
+          "start": 2388,
+          "end": 2413
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2421,
+              "end": 2426
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Enable DNS over HTTPS",
+                "span": {
+                  "start": 2429,
+                  "end": 2451
+                }
+              }
+            ],
+            "span": {
+              "start": 2429,
+              "end": 2451
+            }
+          },
+          "span": {
+            "start": 2450,
+            "end": 2451
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2456,
+              "end": 2465
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "b",
+                "span": {
+                  "start": 2468,
+                  "end": 2470
+                }
+              }
+            ],
+            "span": {
+              "start": 2468,
+              "end": 2471
+            }
+          },
+          "span": {
+            "start": 2470,
+            "end": 2471
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2388,
+        "end": 2471
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-dns-over-https-url-resolver",
+        "span": {
+          "start": 2471,
+          "end": 2509
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Use Provider",
+            "span": {
+              "start": 2512,
+              "end": 2525
+            }
+          }
+        ],
+        "span": {
+          "start": 2512,
+          "end": 2525
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2530,
+              "end": 2539
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 2542,
+                  "end": 2544
+                }
+              }
+            ],
+            "span": {
+              "start": 2542,
+              "end": 2545
+            }
+          },
+          "span": {
+            "start": 2544,
+            "end": 2545
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2471,
+        "end": 2545
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-dns-over-https-url-item-default",
+        "span": {
+          "start": 2631,
+          "end": 2673
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2681,
+              "end": 2686
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "name",
+                      "span": {
+                        "start": 2692,
+                        "end": 2696
+                      }
+                    },
+                    "span": {
+                      "start": 2691,
+                      "end": 2696
+                    }
+                  },
+                  {
+                    "start": 2691,
+                    "end": 2697
+                  }
+                ],
+                "span": {
+                  "start": 2689,
+                  "end": 2697
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " (Default)",
+                "span": {
+                  "start": 2698,
+                  "end": 2709
+                }
+              }
+            ],
+            "span": {
+              "start": 2689,
+              "end": 2709
+            }
+          },
+          "span": {
+            "start": 2708,
+            "end": 2709
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 2714,
+              "end": 2725
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Use the default URL for resolving DNS over HTTPS",
+                "span": {
+                  "start": 2728,
+                  "end": 2777
+                }
+              }
+            ],
+            "span": {
+              "start": 2728,
+              "end": 2778
+            }
+          },
+          "span": {
+            "start": 2777,
+            "end": 2778
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables:",
+          "  $name (String) - Display name or URL for the DNS over HTTPS provider"
+        ],
+        "span": {
+          "start": 2545,
+          "end": 2630
+        }
+      },
+      "span": {
+        "start": 2631,
+        "end": 2778
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-dns-over-https-url-custom",
+        "span": {
+          "start": 2778,
+          "end": 2814
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2822,
+              "end": 2827
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Custom",
+                "span": {
+                  "start": 2830,
+                  "end": 2837
+                }
+              }
+            ],
+            "span": {
+              "start": 2830,
+              "end": 2837
+            }
+          },
+          "span": {
+            "start": 2836,
+            "end": 2837
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2842,
+              "end": 2851
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 2854,
+                  "end": 2856
+                }
+              }
+            ],
+            "span": {
+              "start": 2854,
+              "end": 2856
+            }
+          },
+          "span": {
+            "start": 2855,
+            "end": 2856
+          }
+        },
+        {
+          "id": {
+            "name": "tooltiptext",
+            "span": {
+              "start": 2861,
+              "end": 2872
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Enter your preferred URL for resolving DNS over HTTPS",
+                "span": {
+                  "start": 2875,
+                  "end": 2929
+                }
+              }
+            ],
+            "span": {
+              "start": 2875,
+              "end": 2930
+            }
+          },
+          "span": {
+            "start": 2929,
+            "end": 2930
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2778,
+        "end": 2930
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "connection-dns-over-https-custom-label",
+        "span": {
+          "start": 2930,
+          "end": 2968
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Custom",
+            "span": {
+              "start": 2971,
+              "end": 2978
+            }
+          }
+        ],
+        "span": {
+          "start": 2971,
+          "end": 2978
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2930,
+        "end": 2978
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2978
+  }
+}

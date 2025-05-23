@@ -1,0 +1,1224 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Settings"
+      ],
+      "span": {
+        "start": 201,
+        "end": 212
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-settings-window",
+        "span": {
+          "start": 214,
+          "end": 239
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 247,
+              "end": 252
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manage Cookies and Site Data",
+                "span": {
+                  "start": 255,
+                  "end": 284
+                }
+              }
+            ],
+            "span": {
+              "start": 255,
+              "end": 285
+            }
+          },
+          "span": {
+            "start": 284,
+            "end": 285
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 214,
+        "end": 285
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-settings-description",
+        "span": {
+          "start": 285,
+          "end": 315
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "The following websites store cookies and site data on your computer. ",
+            "span": {
+              "start": 318,
+              "end": 387
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 390,
+                    "end": 406
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 389,
+                  "end": 407
+                }
+              },
+              {
+                "start": 389,
+                "end": 407
+              }
+            ],
+            "span": {
+              "start": 387,
+              "end": 407
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " keeps data from websites with persistent storage until you delete it, and deletes data from websites with non-persistent storage as space is needed.",
+            "span": {
+              "start": 408,
+              "end": 558
+            }
+          }
+        ],
+        "span": {
+          "start": 318,
+          "end": 559
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 285,
+        "end": 559
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-search-textbox",
+        "span": {
+          "start": 559,
+          "end": 583
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "placeholder",
+            "span": {
+              "start": 591,
+              "end": 602
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Search websites",
+                "span": {
+                  "start": 605,
+                  "end": 621
+                }
+              }
+            ],
+            "span": {
+              "start": 605,
+              "end": 621
+            }
+          },
+          "span": {
+            "start": 620,
+            "end": 621
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 626,
+              "end": 635
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 638,
+                  "end": 640
+                }
+              }
+            ],
+            "span": {
+              "start": 638,
+              "end": 641
+            }
+          },
+          "span": {
+            "start": 640,
+            "end": 641
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 559,
+        "end": 641
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-column-host",
+        "span": {
+          "start": 641,
+          "end": 662
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 670,
+              "end": 675
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Site",
+                "span": {
+                  "start": 678,
+                  "end": 683
+                }
+              }
+            ],
+            "span": {
+              "start": 678,
+              "end": 683
+            }
+          },
+          "span": {
+            "start": 682,
+            "end": 683
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 641,
+        "end": 683
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-column-cookies",
+        "span": {
+          "start": 683,
+          "end": 707
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 715,
+              "end": 720
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cookies",
+                "span": {
+                  "start": 723,
+                  "end": 731
+                }
+              }
+            ],
+            "span": {
+              "start": 723,
+              "end": 731
+            }
+          },
+          "span": {
+            "start": 730,
+            "end": 731
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 683,
+        "end": 731
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-column-storage",
+        "span": {
+          "start": 731,
+          "end": 755
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 763,
+              "end": 768
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Storage",
+                "span": {
+                  "start": 771,
+                  "end": 779
+                }
+              }
+            ],
+            "span": {
+              "start": 771,
+              "end": 779
+            }
+          },
+          "span": {
+            "start": 778,
+            "end": 779
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 731,
+        "end": 779
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-column-last-used",
+        "span": {
+          "start": 779,
+          "end": 805
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 813,
+              "end": 818
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Last Used",
+                "span": {
+                  "start": 821,
+                  "end": 831
+                }
+              }
+            ],
+            "span": {
+              "start": 821,
+              "end": 832
+            }
+          },
+          "span": {
+            "start": 831,
+            "end": 832
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 779,
+        "end": 832
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-local-file-host",
+        "span": {
+          "start": 911,
+          "end": 936
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "(local file)",
+            "span": {
+              "start": 939,
+              "end": 952
+            }
+          }
+        ],
+        "span": {
+          "start": 939,
+          "end": 953
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "This label is used in the \"Host\" column for local files, which have no host."
+        ],
+        "span": {
+          "start": 832,
+          "end": 910
+        }
+      },
+      "span": {
+        "start": 911,
+        "end": 953
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-remove-selected",
+        "span": {
+          "start": 953,
+          "end": 978
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 986,
+              "end": 991
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove Selected",
+                "span": {
+                  "start": 994,
+                  "end": 1010
+                }
+              }
+            ],
+            "span": {
+              "start": 994,
+              "end": 1010
+            }
+          },
+          "span": {
+            "start": 1009,
+            "end": 1010
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1015,
+              "end": 1024
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "R",
+                "span": {
+                  "start": 1027,
+                  "end": 1029
+                }
+              }
+            ],
+            "span": {
+              "start": 1027,
+              "end": 1030
+            }
+          },
+          "span": {
+            "start": 1029,
+            "end": 1030
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 953,
+        "end": 1030
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-button-cancel",
+        "span": {
+          "start": 1030,
+          "end": 1053
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1061,
+              "end": 1066
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cancel",
+                "span": {
+                  "start": 1069,
+                  "end": 1076
+                }
+              }
+            ],
+            "span": {
+              "start": 1069,
+              "end": 1076
+            }
+          },
+          "span": {
+            "start": 1075,
+            "end": 1076
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1081,
+              "end": 1090
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 1093,
+                  "end": 1095
+                }
+              }
+            ],
+            "span": {
+              "start": 1093,
+              "end": 1096
+            }
+          },
+          "span": {
+            "start": 1095,
+            "end": 1096
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1030,
+        "end": 1096
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-button-save",
+        "span": {
+          "start": 1096,
+          "end": 1117
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1125,
+              "end": 1130
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Save Changes",
+                "span": {
+                  "start": 1133,
+                  "end": 1146
+                }
+              }
+            ],
+            "span": {
+              "start": 1133,
+              "end": 1146
+            }
+          },
+          "span": {
+            "start": 1145,
+            "end": 1146
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1151,
+              "end": 1160
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "a",
+                "span": {
+                  "start": 1163,
+                  "end": 1165
+                }
+              }
+            ],
+            "span": {
+              "start": 1163,
+              "end": 1166
+            }
+          },
+          "span": {
+            "start": 1165,
+            "end": 1166
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1096,
+        "end": 1166
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-storage-usage",
+        "span": {
+          "start": 1310,
+          "end": 1328
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1336,
+              "end": 1341
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "value",
+                      "span": {
+                        "start": 1347,
+                        "end": 1352
+                      }
+                    },
+                    "span": {
+                      "start": 1346,
+                      "end": 1352
+                    }
+                  },
+                  {
+                    "start": 1346,
+                    "end": 1353
+                  }
+                ],
+                "span": {
+                  "start": 1344,
+                  "end": 1353
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " ",
+                "span": {
+                  "start": 1354,
+                  "end": 1355
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "unit",
+                      "span": {
+                        "start": 1358,
+                        "end": 1362
+                      }
+                    },
+                    "span": {
+                      "start": 1357,
+                      "end": 1362
+                    }
+                  },
+                  {
+                    "start": 1357,
+                    "end": 1363
+                  }
+                ],
+                "span": {
+                  "start": 1355,
+                  "end": 1363
+                }
+              }
+            ],
+            "span": {
+              "start": 1344,
+              "end": 1365
+            }
+          },
+          "span": {
+            "start": 1364,
+            "end": 1365
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Variables:",
+          "  $value (Number) - Value of the unit (for example: 4.6, 500)",
+          "  $unit (String) - Name of the unit (for example: \"bytes\", \"KB\")"
+        ],
+        "span": {
+          "start": 1166,
+          "end": 1309
+        }
+      },
+      "span": {
+        "start": 1310,
+        "end": 1365
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-storage-persistent",
+        "span": {
+          "start": 1365,
+          "end": 1388
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1396,
+              "end": 1401
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "site-storage-usage",
+                      "span": {
+                        "start": 1406,
+                        "end": 1424
+                      }
+                    },
+                    "attribute": {
+                      "name": "value",
+                      "span": {
+                        "start": 1425,
+                        "end": 1430
+                      }
+                    },
+                    "span": {
+                      "start": 1406,
+                      "end": 1430
+                    }
+                  },
+                  {
+                    "start": 1406,
+                    "end": 1431
+                  }
+                ],
+                "span": {
+                  "start": 1404,
+                  "end": 1431
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " (Persistent)",
+                "span": {
+                  "start": 1432,
+                  "end": 1446
+                }
+              }
+            ],
+            "span": {
+              "start": 1404,
+              "end": 1447
+            }
+          },
+          "span": {
+            "start": 1446,
+            "end": 1447
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1365,
+        "end": 1447
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-remove-all",
+        "span": {
+          "start": 1447,
+          "end": 1467
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1475,
+              "end": 1480
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove All",
+                "span": {
+                  "start": 1483,
+                  "end": 1494
+                }
+              }
+            ],
+            "span": {
+              "start": 1483,
+              "end": 1494
+            }
+          },
+          "span": {
+            "start": 1493,
+            "end": 1494
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1499,
+              "end": 1508
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e",
+                "span": {
+                  "start": 1511,
+                  "end": 1513
+                }
+              }
+            ],
+            "span": {
+              "start": 1511,
+              "end": 1514
+            }
+          },
+          "span": {
+            "start": 1513,
+            "end": 1514
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1447,
+        "end": 1514
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-remove-shown",
+        "span": {
+          "start": 1514,
+          "end": 1536
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1544,
+              "end": 1549
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove All Shown",
+                "span": {
+                  "start": 1552,
+                  "end": 1569
+                }
+              }
+            ],
+            "span": {
+              "start": 1552,
+              "end": 1569
+            }
+          },
+          "span": {
+            "start": 1568,
+            "end": 1569
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1574,
+              "end": 1583
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "e",
+                "span": {
+                  "start": 1586,
+                  "end": 1588
+                }
+              }
+            ],
+            "span": {
+              "start": 1586,
+              "end": 1589
+            }
+          },
+          "span": {
+            "start": 1588,
+            "end": 1589
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1514,
+        "end": 1589
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Removing"
+      ],
+      "span": {
+        "start": 1589,
+        "end": 1600
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-removing-dialog",
+        "span": {
+          "start": 1602,
+          "end": 1627
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 1635,
+              "end": 1640
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "MessageReference",
+                    "id": {
+                      "name": "site-data-removing-header",
+                      "span": {
+                        "start": 1645,
+                        "end": 1670
+                      }
+                    },
+                    "attribute": null,
+                    "span": {
+                      "start": 1645,
+                      "end": 1671
+                    }
+                  },
+                  {
+                    "start": 1645,
+                    "end": 1671
+                  }
+                ],
+                "span": {
+                  "start": 1643,
+                  "end": 1671
+                }
+              }
+            ],
+            "span": {
+              "start": 1643,
+              "end": 1673
+            }
+          },
+          "span": {
+            "start": 1672,
+            "end": 1673
+          }
+        },
+        {
+          "id": {
+            "name": "buttonlabelaccept",
+            "span": {
+              "start": 1678,
+              "end": 1695
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Remove",
+                "span": {
+                  "start": 1698,
+                  "end": 1705
+                }
+              }
+            ],
+            "span": {
+              "start": 1698,
+              "end": 1706
+            }
+          },
+          "span": {
+            "start": 1705,
+            "end": 1706
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1602,
+        "end": 1706
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-removing-header",
+        "span": {
+          "start": 1706,
+          "end": 1731
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Removing Cookies and Site Data",
+            "span": {
+              "start": 1734,
+              "end": 1765
+            }
+          }
+        ],
+        "span": {
+          "start": 1734,
+          "end": 1766
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1706,
+        "end": 1766
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-removing-desc",
+        "span": {
+          "start": 1766,
+          "end": 1789
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Removing cookies and site data may log you out of websites. Are you sure you want to make the changes?",
+            "span": {
+              "start": 1792,
+              "end": 1895
+            }
+          }
+        ],
+        "span": {
+          "start": 1792,
+          "end": 1896
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1766,
+        "end": 1896
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "site-data-removing-table",
+        "span": {
+          "start": 1896,
+          "end": 1920
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Cookies and site data for the following websites will be removed",
+            "span": {
+              "start": 1923,
+              "end": 1988
+            }
+          }
+        ],
+        "span": {
+          "start": 1923,
+          "end": 1988
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1896,
+        "end": 1988
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1988
+  }
+}

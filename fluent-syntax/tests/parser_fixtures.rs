@@ -110,10 +110,17 @@ fn parse_bench_fixtures() {
             let path = p.to_str().expect("Can't print path");
             let file_name = p.file_name().unwrap().to_str().unwrap();
 
+            #[cfg(not(feature = "spans"))]
             let reference_path = format!(
                 "./tests/fixtures/benches/contexts/{}/{}",
                 context,
                 file_name.replace(".ftl", ".json")
+            );
+            #[cfg(feature = "spans")]
+            let reference_path = format!(
+                "./tests/fixtures/benches/contexts/{}/{}",
+                context,
+                file_name.replace(".ftl", ".spans.json")
             );
             let reference_file = read_file(&reference_path, true).unwrap();
             let ftl_file = read_file(path, false).unwrap();

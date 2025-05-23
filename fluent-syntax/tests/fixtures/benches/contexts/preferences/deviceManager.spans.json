@@ -1,0 +1,2192 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Strings used for device manager"
+      ],
+      "span": {
+        "start": 200,
+        "end": 234
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr",
+        "span": {
+          "start": 235,
+          "end": 241
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 249,
+              "end": 254
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Device Manager",
+                "span": {
+                  "start": 257,
+                  "end": 272
+                }
+              }
+            ],
+            "span": {
+              "start": 257,
+              "end": 272
+            }
+          },
+          "span": {
+            "start": 271,
+            "end": 272
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 277,
+              "end": 282
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 67em; height: 32em;",
+                "span": {
+                  "start": 285,
+                  "end": 312
+                }
+              }
+            ],
+            "span": {
+              "start": 285,
+              "end": 313
+            }
+          },
+          "span": {
+            "start": 312,
+            "end": 313
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 235,
+        "end": 313
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-devlist",
+        "span": {
+          "start": 313,
+          "end": 327
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 335,
+              "end": 340
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Security Modules and Devices",
+                "span": {
+                  "start": 343,
+                  "end": 372
+                }
+              }
+            ],
+            "span": {
+              "start": 343,
+              "end": 373
+            }
+          },
+          "span": {
+            "start": 372,
+            "end": 373
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 313,
+        "end": 373
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-header-details",
+        "span": {
+          "start": 373,
+          "end": 394
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 402,
+              "end": 407
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Details",
+                "span": {
+                  "start": 410,
+                  "end": 418
+                }
+              }
+            ],
+            "span": {
+              "start": 410,
+              "end": 419
+            }
+          },
+          "span": {
+            "start": 418,
+            "end": 419
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 373,
+        "end": 419
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-header-value",
+        "span": {
+          "start": 419,
+          "end": 438
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 446,
+              "end": 451
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Value",
+                "span": {
+                  "start": 454,
+                  "end": 460
+                }
+              }
+            ],
+            "span": {
+              "start": 454,
+              "end": 461
+            }
+          },
+          "span": {
+            "start": 460,
+            "end": 461
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 419,
+        "end": 461
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-login",
+        "span": {
+          "start": 461,
+          "end": 480
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 488,
+              "end": 493
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Log In",
+                "span": {
+                  "start": 496,
+                  "end": 503
+                }
+              }
+            ],
+            "span": {
+              "start": 496,
+              "end": 503
+            }
+          },
+          "span": {
+            "start": 502,
+            "end": 503
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 508,
+              "end": 517
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "n",
+                "span": {
+                  "start": 520,
+                  "end": 522
+                }
+              }
+            ],
+            "span": {
+              "start": 520,
+              "end": 523
+            }
+          },
+          "span": {
+            "start": 522,
+            "end": 523
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 461,
+        "end": 523
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-logout",
+        "span": {
+          "start": 523,
+          "end": 543
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 551,
+              "end": 556
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Log Out",
+                "span": {
+                  "start": 559,
+                  "end": 567
+                }
+              }
+            ],
+            "span": {
+              "start": 559,
+              "end": 567
+            }
+          },
+          "span": {
+            "start": 566,
+            "end": 567
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 572,
+              "end": 581
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "O",
+                "span": {
+                  "start": 584,
+                  "end": 586
+                }
+              }
+            ],
+            "span": {
+              "start": 584,
+              "end": 587
+            }
+          },
+          "span": {
+            "start": 586,
+            "end": 587
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 523,
+        "end": 587
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-changepw",
+        "span": {
+          "start": 587,
+          "end": 609
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 617,
+              "end": 622
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Change Password",
+                "span": {
+                  "start": 625,
+                  "end": 641
+                }
+              }
+            ],
+            "span": {
+              "start": 625,
+              "end": 641
+            }
+          },
+          "span": {
+            "start": 640,
+            "end": 641
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 646,
+              "end": 655
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "P",
+                "span": {
+                  "start": 658,
+                  "end": 660
+                }
+              }
+            ],
+            "span": {
+              "start": 658,
+              "end": 661
+            }
+          },
+          "span": {
+            "start": 660,
+            "end": 661
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 587,
+        "end": 661
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-load",
+        "span": {
+          "start": 661,
+          "end": 679
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 687,
+              "end": 692
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Load",
+                "span": {
+                  "start": 695,
+                  "end": 700
+                }
+              }
+            ],
+            "span": {
+              "start": 695,
+              "end": 700
+            }
+          },
+          "span": {
+            "start": 699,
+            "end": 700
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 705,
+              "end": 714
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "L",
+                "span": {
+                  "start": 717,
+                  "end": 719
+                }
+              }
+            ],
+            "span": {
+              "start": 717,
+              "end": 720
+            }
+          },
+          "span": {
+            "start": 719,
+            "end": 720
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 661,
+        "end": 720
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-unload",
+        "span": {
+          "start": 720,
+          "end": 740
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 748,
+              "end": 753
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Unload",
+                "span": {
+                  "start": 756,
+                  "end": 763
+                }
+              }
+            ],
+            "span": {
+              "start": 756,
+              "end": 763
+            }
+          },
+          "span": {
+            "start": 762,
+            "end": 763
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 768,
+              "end": 777
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "U",
+                "span": {
+                  "start": 780,
+                  "end": 782
+                }
+              }
+            ],
+            "span": {
+              "start": 780,
+              "end": 783
+            }
+          },
+          "span": {
+            "start": 782,
+            "end": 783
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 720,
+        "end": 783
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-enable-fips",
+        "span": {
+          "start": 783,
+          "end": 808
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 816,
+              "end": 821
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Enable FIPS",
+                "span": {
+                  "start": 824,
+                  "end": 836
+                }
+              }
+            ],
+            "span": {
+              "start": 824,
+              "end": 836
+            }
+          },
+          "span": {
+            "start": 835,
+            "end": 836
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 841,
+              "end": 850
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 853,
+                  "end": 855
+                }
+              }
+            ],
+            "span": {
+              "start": 853,
+              "end": 856
+            }
+          },
+          "span": {
+            "start": 855,
+            "end": 856
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 783,
+        "end": 856
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devmgr-button-disable-fips",
+        "span": {
+          "start": 856,
+          "end": 882
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 890,
+              "end": 895
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disable FIPS",
+                "span": {
+                  "start": 898,
+                  "end": 911
+                }
+              }
+            ],
+            "span": {
+              "start": 898,
+              "end": 911
+            }
+          },
+          "span": {
+            "start": 910,
+            "end": 911
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 916,
+              "end": 925
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "F",
+                "span": {
+                  "start": 928,
+                  "end": 930
+                }
+              }
+            ],
+            "span": {
+              "start": 928,
+              "end": 931
+            }
+          },
+          "span": {
+            "start": 930,
+            "end": 931
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 856,
+        "end": 931
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Strings used for load device"
+      ],
+      "span": {
+        "start": 931,
+        "end": 962
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device",
+        "span": {
+          "start": 963,
+          "end": 974
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 982,
+              "end": 987
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Load PKCS#11 Device Driver",
+                "span": {
+                  "start": 990,
+                  "end": 1017
+                }
+              }
+            ],
+            "span": {
+              "start": 990,
+              "end": 1018
+            }
+          },
+          "span": {
+            "start": 1017,
+            "end": 1018
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 963,
+        "end": 1018
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-info",
+        "span": {
+          "start": 1018,
+          "end": 1034
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Enter the information for the module you want to add.",
+            "span": {
+              "start": 1037,
+              "end": 1091
+            }
+          }
+        ],
+        "span": {
+          "start": 1037,
+          "end": 1092
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1018,
+        "end": 1092
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-modname",
+        "span": {
+          "start": 1092,
+          "end": 1111
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1119,
+              "end": 1124
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module Name",
+                "span": {
+                  "start": 1127,
+                  "end": 1139
+                }
+              }
+            ],
+            "span": {
+              "start": 1127,
+              "end": 1139
+            }
+          },
+          "span": {
+            "start": 1138,
+            "end": 1139
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1144,
+              "end": 1153
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "M",
+                "span": {
+                  "start": 1156,
+                  "end": 1158
+                }
+              }
+            ],
+            "span": {
+              "start": 1156,
+              "end": 1159
+            }
+          },
+          "span": {
+            "start": 1158,
+            "end": 1159
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1092,
+        "end": 1159
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-modname-default",
+        "span": {
+          "start": 1159,
+          "end": 1186
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1194,
+              "end": 1199
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "New PKCS#11 Module",
+                "span": {
+                  "start": 1202,
+                  "end": 1221
+                }
+              }
+            ],
+            "span": {
+              "start": 1202,
+              "end": 1222
+            }
+          },
+          "span": {
+            "start": 1221,
+            "end": 1222
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1159,
+        "end": 1222
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-filename",
+        "span": {
+          "start": 1222,
+          "end": 1242
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 1250,
+              "end": 1255
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module filename",
+                "span": {
+                  "start": 1258,
+                  "end": 1274
+                }
+              }
+            ],
+            "span": {
+              "start": 1258,
+              "end": 1274
+            }
+          },
+          "span": {
+            "start": 1273,
+            "end": 1274
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1279,
+              "end": 1288
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "f",
+                "span": {
+                  "start": 1291,
+                  "end": 1293
+                }
+              }
+            ],
+            "span": {
+              "start": 1291,
+              "end": 1294
+            }
+          },
+          "span": {
+            "start": 1293,
+            "end": 1294
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1222,
+        "end": 1294
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-device-browse",
+        "span": {
+          "start": 1294,
+          "end": 1312
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1320,
+              "end": 1325
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Browse…",
+                "span": {
+                  "start": 1328,
+                  "end": 1338
+                }
+              }
+            ],
+            "span": {
+              "start": 1328,
+              "end": 1338
+            }
+          },
+          "span": {
+            "start": 1337,
+            "end": 1338
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1343,
+              "end": 1352
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "B",
+                "span": {
+                  "start": 1355,
+                  "end": 1357
+                }
+              }
+            ],
+            "span": {
+              "start": 1355,
+              "end": 1358
+            }
+          },
+          "span": {
+            "start": 1357,
+            "end": 1358
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1294,
+        "end": 1358
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Token Manager"
+      ],
+      "span": {
+        "start": 1358,
+        "end": 1374
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status",
+        "span": {
+          "start": 1376,
+          "end": 1390
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1398,
+              "end": 1403
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Status",
+                "span": {
+                  "start": 1406,
+                  "end": 1413
+                }
+              }
+            ],
+            "span": {
+              "start": 1406,
+              "end": 1414
+            }
+          },
+          "span": {
+            "start": 1413,
+            "end": 1414
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1376,
+        "end": 1414
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-disabled",
+        "span": {
+          "start": 1414,
+          "end": 1437
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1445,
+              "end": 1450
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Disabled",
+                "span": {
+                  "start": 1453,
+                  "end": 1462
+                }
+              }
+            ],
+            "span": {
+              "start": 1453,
+              "end": 1463
+            }
+          },
+          "span": {
+            "start": 1462,
+            "end": 1463
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1414,
+        "end": 1463
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-not-present",
+        "span": {
+          "start": 1463,
+          "end": 1489
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1497,
+              "end": 1502
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Not Present",
+                "span": {
+                  "start": 1505,
+                  "end": 1517
+                }
+              }
+            ],
+            "span": {
+              "start": 1505,
+              "end": 1518
+            }
+          },
+          "span": {
+            "start": 1517,
+            "end": 1518
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1463,
+        "end": 1518
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-uninitialized",
+        "span": {
+          "start": 1518,
+          "end": 1546
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1554,
+              "end": 1559
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Uninitialized",
+                "span": {
+                  "start": 1562,
+                  "end": 1576
+                }
+              }
+            ],
+            "span": {
+              "start": 1562,
+              "end": 1577
+            }
+          },
+          "span": {
+            "start": 1576,
+            "end": 1577
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1518,
+        "end": 1577
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-not-logged-in",
+        "span": {
+          "start": 1577,
+          "end": 1605
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1613,
+              "end": 1618
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Not Logged In",
+                "span": {
+                  "start": 1621,
+                  "end": 1635
+                }
+              }
+            ],
+            "span": {
+              "start": 1621,
+              "end": 1636
+            }
+          },
+          "span": {
+            "start": 1635,
+            "end": 1636
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1577,
+        "end": 1636
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-logged-in",
+        "span": {
+          "start": 1636,
+          "end": 1660
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1668,
+              "end": 1673
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Logged In",
+                "span": {
+                  "start": 1676,
+                  "end": 1686
+                }
+              }
+            ],
+            "span": {
+              "start": 1676,
+              "end": 1687
+            }
+          },
+          "span": {
+            "start": 1686,
+            "end": 1687
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1636,
+        "end": 1687
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-status-ready",
+        "span": {
+          "start": 1687,
+          "end": 1707
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1715,
+              "end": 1720
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Ready",
+                "span": {
+                  "start": 1723,
+                  "end": 1729
+                }
+              }
+            ],
+            "span": {
+              "start": 1723,
+              "end": 1730
+            }
+          },
+          "span": {
+            "start": 1729,
+            "end": 1730
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1687,
+        "end": 1730
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-desc",
+        "span": {
+          "start": 1730,
+          "end": 1742
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1750,
+              "end": 1755
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Description",
+                "span": {
+                  "start": 1758,
+                  "end": 1770
+                }
+              }
+            ],
+            "span": {
+              "start": 1758,
+              "end": 1771
+            }
+          },
+          "span": {
+            "start": 1770,
+            "end": 1771
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1730,
+        "end": 1771
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-man-id",
+        "span": {
+          "start": 1771,
+          "end": 1785
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1793,
+              "end": 1798
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Manufacturer",
+                "span": {
+                  "start": 1801,
+                  "end": 1814
+                }
+              }
+            ],
+            "span": {
+              "start": 1801,
+              "end": 1815
+            }
+          },
+          "span": {
+            "start": 1814,
+            "end": 1815
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1771,
+        "end": 1815
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-hwversion",
+        "span": {
+          "start": 1815,
+          "end": 1832
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1840,
+              "end": 1845
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "HW Version",
+                "span": {
+                  "start": 1848,
+                  "end": 1859
+                }
+              }
+            ],
+            "span": {
+              "start": 1848,
+              "end": 1859
+            }
+          },
+          "span": {
+            "start": 1858,
+            "end": 1859
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1815,
+        "end": 1859
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-fwversion",
+        "span": {
+          "start": 1859,
+          "end": 1876
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1884,
+              "end": 1889
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "FW Version",
+                "span": {
+                  "start": 1892,
+                  "end": 1903
+                }
+              }
+            ],
+            "span": {
+              "start": 1892,
+              "end": 1904
+            }
+          },
+          "span": {
+            "start": 1903,
+            "end": 1904
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1859,
+        "end": 1904
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-modname",
+        "span": {
+          "start": 1904,
+          "end": 1919
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1927,
+              "end": 1932
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Module",
+                "span": {
+                  "start": 1935,
+                  "end": 1942
+                }
+              }
+            ],
+            "span": {
+              "start": 1935,
+              "end": 1943
+            }
+          },
+          "span": {
+            "start": 1942,
+            "end": 1943
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1904,
+        "end": 1943
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-modpath",
+        "span": {
+          "start": 1943,
+          "end": 1958
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1966,
+              "end": 1971
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Path",
+                "span": {
+                  "start": 1974,
+                  "end": 1979
+                }
+              }
+            ],
+            "span": {
+              "start": 1974,
+              "end": 1980
+            }
+          },
+          "span": {
+            "start": 1979,
+            "end": 1980
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 1943,
+        "end": 1980
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "login-failed",
+        "span": {
+          "start": 1980,
+          "end": 1992
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Failed to Login",
+            "span": {
+              "start": 1995,
+              "end": 2011
+            }
+          }
+        ],
+        "span": {
+          "start": 1995,
+          "end": 2012
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1980,
+        "end": 2012
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-label",
+        "span": {
+          "start": 2012,
+          "end": 2025
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2033,
+              "end": 2038
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Label",
+                "span": {
+                  "start": 2041,
+                  "end": 2047
+                }
+              }
+            ],
+            "span": {
+              "start": 2041,
+              "end": 2048
+            }
+          },
+          "span": {
+            "start": 2047,
+            "end": 2048
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2012,
+        "end": 2048
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "devinfo-serialnum",
+        "span": {
+          "start": 2048,
+          "end": 2065
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2073,
+              "end": 2078
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Serial Number",
+                "span": {
+                  "start": 2081,
+                  "end": 2095
+                }
+              }
+            ],
+            "span": {
+              "start": 2081,
+              "end": 2096
+            }
+          },
+          "span": {
+            "start": 2095,
+            "end": 2096
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2048,
+        "end": 2096
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "fips-nonempty-password-required",
+        "span": {
+          "start": 2096,
+          "end": 2127
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "FIPS mode requires that you have a Master Password set for each security device. Please set the password before trying to enable FIPS mode.",
+            "span": {
+              "start": 2130,
+              "end": 2270
+            }
+          }
+        ],
+        "span": {
+          "start": 2130,
+          "end": 2270
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2096,
+        "end": 2270
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unable-to-toggle-fips",
+        "span": {
+          "start": 2270,
+          "end": 2291
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to change the FIPS mode for the security device. It is recommended that you exit and restart this application.",
+            "span": {
+              "start": 2294,
+              "end": 2412
+            }
+          }
+        ],
+        "span": {
+          "start": 2294,
+          "end": 2412
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2270,
+        "end": 2412
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-pk11-module-file-picker-title",
+        "span": {
+          "start": 2412,
+          "end": 2446
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Choose a PKCS#11 device driver to load",
+            "span": {
+              "start": 2449,
+              "end": 2488
+            }
+          }
+        ],
+        "span": {
+          "start": 2449,
+          "end": 2489
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2412,
+        "end": 2489
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-module-help-empty-module-name",
+        "span": {
+          "start": 2510,
+          "end": 2544
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 2552,
+              "end": 2557
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "The module name cannot be empty.",
+                "span": {
+                  "start": 2560,
+                  "end": 2593
+                }
+              }
+            ],
+            "span": {
+              "start": 2560,
+              "end": 2594
+            }
+          },
+          "span": {
+            "start": 2593,
+            "end": 2594
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Load Module Dialog"
+        ],
+        "span": {
+          "start": 2489,
+          "end": 2509
+        }
+      },
+      "span": {
+        "start": 2510,
+        "end": 2594
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "load-module-help-root-certs-module-name",
+        "span": {
+          "start": 2626,
+          "end": 2665
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "value",
+            "span": {
+              "start": 2673,
+              "end": 2678
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "‘Root Certs‘ is reserved and cannot be used as the module name.",
+                "span": {
+                  "start": 2681,
+                  "end": 2749
+                }
+              }
+            ],
+            "span": {
+              "start": 2681,
+              "end": 2750
+            }
+          },
+          "span": {
+            "start": 2749,
+            "end": 2750
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "Do not translate 'Root Certs'"
+        ],
+        "span": {
+          "start": 2594,
+          "end": 2625
+        }
+      },
+      "span": {
+        "start": 2626,
+        "end": 2750
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "add-module-failure",
+        "span": {
+          "start": 2750,
+          "end": 2768
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to add module",
+            "span": {
+              "start": 2771,
+              "end": 2792
+            }
+          }
+        ],
+        "span": {
+          "start": 2771,
+          "end": 2792
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2750,
+        "end": 2792
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "del-module-warning",
+        "span": {
+          "start": 2792,
+          "end": 2810
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Are you sure you want to delete this security module?",
+            "span": {
+              "start": 2813,
+              "end": 2867
+            }
+          }
+        ],
+        "span": {
+          "start": 2813,
+          "end": 2867
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2792,
+        "end": 2867
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "del-module-error",
+        "span": {
+          "start": 2867,
+          "end": 2883
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Unable to delete module",
+            "span": {
+              "start": 2886,
+              "end": 2910
+            }
+          }
+        ],
+        "span": {
+          "start": 2886,
+          "end": 2910
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2867,
+        "end": 2910
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2910
+  }
+}

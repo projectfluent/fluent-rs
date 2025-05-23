@@ -1,0 +1,920 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "This Source Code Form is subject to the terms of the Mozilla Public",
+        "License, v. 2.0. If a copy of the MPL was not distributed with this",
+        "file, You can obtain one at http://mozilla.org/MPL/2.0/."
+      ],
+      "span": {
+        "start": 0,
+        "end": 198
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-window",
+        "span": {
+          "start": 200,
+          "end": 222
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 230,
+              "end": 235
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear Data",
+                "span": {
+                  "start": 238,
+                  "end": 249
+                }
+              }
+            ],
+            "span": {
+              "start": 238,
+              "end": 249
+            }
+          },
+          "span": {
+            "start": 248,
+            "end": 249
+          }
+        },
+        {
+          "id": {
+            "name": "style",
+            "span": {
+              "start": 254,
+              "end": 259
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "width: 35em",
+                "span": {
+                  "start": 262,
+                  "end": 274
+                }
+              }
+            ],
+            "span": {
+              "start": 262,
+              "end": 275
+            }
+          },
+          "span": {
+            "start": 274,
+            "end": 275
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 200,
+        "end": 275
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-description",
+        "span": {
+          "start": 275,
+          "end": 302
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Clearing all cookies and site data stored by ",
+            "span": {
+              "start": 305,
+              "end": 350
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "brand-short-name",
+                  "span": {
+                    "start": 353,
+                    "end": 369
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 352,
+                  "end": 370
+                }
+              },
+              {
+                "start": 352,
+                "end": 370
+              }
+            ],
+            "span": {
+              "start": 350,
+              "end": 370
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " may sign you out of websites and remove offline web content. Clearing cache data will not affect your logins.",
+            "span": {
+              "start": 371,
+              "end": 482
+            }
+          }
+        ],
+        "span": {
+          "start": 305,
+          "end": 483
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 275,
+        "end": 483
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-close-key",
+        "span": {
+          "start": 483,
+          "end": 508
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "key",
+            "span": {
+              "start": 516,
+              "end": 519
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "w",
+                "span": {
+                  "start": 522,
+                  "end": 524
+                }
+              }
+            ],
+            "span": {
+              "start": 522,
+              "end": 525
+            }
+          },
+          "span": {
+            "start": 524,
+            "end": 525
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 483,
+        "end": 525
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cookies-with-data",
+        "span": {
+          "start": 819,
+          "end": 852
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 860,
+              "end": 865
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cookies and Site Data (",
+                "span": {
+                  "start": 868,
+                  "end": 891
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "amount",
+                      "span": {
+                        "start": 894,
+                        "end": 900
+                      }
+                    },
+                    "span": {
+                      "start": 893,
+                      "end": 900
+                    }
+                  },
+                  {
+                    "start": 893,
+                    "end": 901
+                  }
+                ],
+                "span": {
+                  "start": 891,
+                  "end": 901
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " ",
+                "span": {
+                  "start": 902,
+                  "end": 903
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "unit",
+                      "span": {
+                        "start": 906,
+                        "end": 910
+                      }
+                    },
+                    "span": {
+                      "start": 905,
+                      "end": 910
+                    }
+                  },
+                  {
+                    "start": 905,
+                    "end": 911
+                  }
+                ],
+                "span": {
+                  "start": 903,
+                  "end": 911
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")",
+                "span": {
+                  "start": 912,
+                  "end": 914
+                }
+              }
+            ],
+            "span": {
+              "start": 868,
+              "end": 914
+            }
+          },
+          "span": {
+            "start": 913,
+            "end": 914
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 919,
+              "end": 928
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 931,
+                  "end": 933
+                }
+              }
+            ],
+            "span": {
+              "start": 931,
+              "end": 934
+            }
+          },
+          "span": {
+            "start": 933,
+            "end": 934
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "The parameters in parentheses in this string describe disk usage",
+          "in the format ($amount $unit), e.g. \"Cookies and Site Data (24 KB)\"",
+          "Variables:",
+          "  $amount (Number) - Amount of site data currently stored on disk",
+          "  $unit (String) - Abbreviation of the unit that $amount is in, e.g. \"MB\""
+        ],
+        "span": {
+          "start": 525,
+          "end": 818
+        }
+      },
+      "span": {
+        "start": 819,
+        "end": 934
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cookies-empty",
+        "span": {
+          "start": 1249,
+          "end": 1278
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1286,
+              "end": 1291
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cookies and Site Data",
+                "span": {
+                  "start": 1294,
+                  "end": 1316
+                }
+              }
+            ],
+            "span": {
+              "start": 1294,
+              "end": 1316
+            }
+          },
+          "span": {
+            "start": 1315,
+            "end": 1316
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1321,
+              "end": 1330
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "S",
+                "span": {
+                  "start": 1333,
+                  "end": 1335
+                }
+              }
+            ],
+            "span": {
+              "start": 1333,
+              "end": 1336
+            }
+          },
+          "span": {
+            "start": 1335,
+            "end": 1336
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "This string is a placeholder for while the data used to fill",
+          "clear-site-data-cookies-with-data is loading. This placeholder is usually",
+          "only shown for a very short time (< 1s), so it should be very similar",
+          "or the same as clear-site-data-cookies-with-data (except the amount and unit),",
+          "to avoid flickering."
+        ],
+        "span": {
+          "start": 934,
+          "end": 1248
+        }
+      },
+      "span": {
+        "start": 1249,
+        "end": 1336
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cookies-info",
+        "span": {
+          "start": 1336,
+          "end": 1364
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "You may get signed out of websites if cleared",
+            "span": {
+              "start": 1367,
+              "end": 1413
+            }
+          }
+        ],
+        "span": {
+          "start": 1367,
+          "end": 1414
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1336,
+        "end": 1414
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cache-with-data",
+        "span": {
+          "start": 1701,
+          "end": 1732
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 1740,
+              "end": 1745
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cached Web Content (",
+                "span": {
+                  "start": 1748,
+                  "end": 1768
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "amount",
+                      "span": {
+                        "start": 1771,
+                        "end": 1777
+                      }
+                    },
+                    "span": {
+                      "start": 1770,
+                      "end": 1777
+                    }
+                  },
+                  {
+                    "start": 1770,
+                    "end": 1778
+                  }
+                ],
+                "span": {
+                  "start": 1768,
+                  "end": 1778
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": " ",
+                "span": {
+                  "start": 1779,
+                  "end": 1780
+                }
+              },
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "VariableReference",
+                    "id": {
+                      "name": "unit",
+                      "span": {
+                        "start": 1783,
+                        "end": 1787
+                      }
+                    },
+                    "span": {
+                      "start": 1782,
+                      "end": 1787
+                    }
+                  },
+                  {
+                    "start": 1782,
+                    "end": 1788
+                  }
+                ],
+                "span": {
+                  "start": 1780,
+                  "end": 1788
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": ")",
+                "span": {
+                  "start": 1789,
+                  "end": 1791
+                }
+              }
+            ],
+            "span": {
+              "start": 1748,
+              "end": 1791
+            }
+          },
+          "span": {
+            "start": 1790,
+            "end": 1791
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 1796,
+              "end": 1805
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "W",
+                "span": {
+                  "start": 1808,
+                  "end": 1810
+                }
+              }
+            ],
+            "span": {
+              "start": 1808,
+              "end": 1811
+            }
+          },
+          "span": {
+            "start": 1810,
+            "end": 1811
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "The parameters in parentheses in this string describe disk usage",
+          "in the format ($amount $unit), e.g. \"Cached Web Content (24 KB)\"",
+          "Variables:",
+          "  $amount (Number) - Amount of cache currently stored on disk",
+          "  $unit (String) - Abbreviation of the unit that $amount is in, e.g. \"MB\""
+        ],
+        "span": {
+          "start": 1414,
+          "end": 1700
+        }
+      },
+      "span": {
+        "start": 1701,
+        "end": 1811
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cache-empty",
+        "span": {
+          "start": 2122,
+          "end": 2149
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2157,
+              "end": 2162
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cached Web Content",
+                "span": {
+                  "start": 2165,
+                  "end": 2184
+                }
+              }
+            ],
+            "span": {
+              "start": 2165,
+              "end": 2184
+            }
+          },
+          "span": {
+            "start": 2183,
+            "end": 2184
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2189,
+              "end": 2198
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "W",
+                "span": {
+                  "start": 2201,
+                  "end": 2203
+                }
+              }
+            ],
+            "span": {
+              "start": 2201,
+              "end": 2204
+            }
+          },
+          "span": {
+            "start": 2203,
+            "end": 2204
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "This string is a placeholder for while the data used to fill",
+          "clear-site-data-cache-with-data is loading. This placeholder is usually",
+          "only shown for a very short time (< 1s), so it should be very similar",
+          "or the same as clear-site-data-cache-with-data (except the amount and unit),",
+          "to avoid flickering."
+        ],
+        "span": {
+          "start": 1811,
+          "end": 2121
+        }
+      },
+      "span": {
+        "start": 2122,
+        "end": 2204
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cache-info",
+        "span": {
+          "start": 2204,
+          "end": 2230
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Will require websites to reload images and data",
+            "span": {
+              "start": 2233,
+              "end": 2281
+            }
+          }
+        ],
+        "span": {
+          "start": 2233,
+          "end": 2282
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 2204,
+        "end": 2282
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-cancel",
+        "span": {
+          "start": 2282,
+          "end": 2304
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2312,
+              "end": 2317
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Cancel",
+                "span": {
+                  "start": 2320,
+                  "end": 2327
+                }
+              }
+            ],
+            "span": {
+              "start": 2320,
+              "end": 2327
+            }
+          },
+          "span": {
+            "start": 2326,
+            "end": 2327
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2332,
+              "end": 2341
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "C",
+                "span": {
+                  "start": 2344,
+                  "end": 2346
+                }
+              }
+            ],
+            "span": {
+              "start": 2344,
+              "end": 2347
+            }
+          },
+          "span": {
+            "start": 2346,
+            "end": 2347
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2282,
+        "end": 2347
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "clear-site-data-clear",
+        "span": {
+          "start": 2347,
+          "end": 2368
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "label",
+            "span": {
+              "start": 2376,
+              "end": 2381
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Clear",
+                "span": {
+                  "start": 2384,
+                  "end": 2390
+                }
+              }
+            ],
+            "span": {
+              "start": 2384,
+              "end": 2390
+            }
+          },
+          "span": {
+            "start": 2389,
+            "end": 2390
+          }
+        },
+        {
+          "id": {
+            "name": "accesskey",
+            "span": {
+              "start": 2395,
+              "end": 2404
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "l",
+                "span": {
+                  "start": 2407,
+                  "end": 2409
+                }
+              }
+            ],
+            "span": {
+              "start": 2407,
+              "end": 2409
+            }
+          },
+          "span": {
+            "start": 2408,
+            "end": 2409
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 2347,
+        "end": 2409
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2409
+  }
+}
