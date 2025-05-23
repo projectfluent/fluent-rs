@@ -24,6 +24,7 @@ use crate::message::FluentMessage;
 use crate::resolver::{ResolveValue, Scope, WriteValue};
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
+use crate::FluentFunctionObject;
 
 /// A collection of localization messages for a single locale, which are meant
 /// to be used together in a single view, widget or any other UI abstraction.
@@ -535,6 +536,13 @@ impl<R, M> FluentBundle<R, M> {
     pub fn add_function<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
     where
         F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send + 'static,
+    {
+        self.add_function_with_scope(id, func)
+    }
+
+    pub fn add_function_with_scope<F>(&mut self, id: &str, func: F) -> Result<(), FluentError>
+    where
+        F: FluentFunctionObject + Sync + Send + 'static,
     {
         match self.entries.entry(id.to_owned()) {
             HashEntry::Vacant(entry) => {

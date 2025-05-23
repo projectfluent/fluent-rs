@@ -3,6 +3,7 @@ use super::{ResolveValue, ResolverError, WriteValue};
 
 use std::borrow::Borrow;
 use std::fmt;
+use std::ops::Deref;
 
 use fluent_syntax::ast;
 use fluent_syntax::unicode::{unescape_unicode, unescape_unicode_to_string};
@@ -89,7 +90,11 @@ impl<'bundle> WriteValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
+                    let result = func.call(
+                        scope,
+                        resolved_positional_args.as_slice(),
+                        &resolved_named_args,
+                    );
                     if let FluentValue::Error = result {
                         self.write_error(w)
                     } else {
@@ -157,8 +162,12 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
         M: MemoizerKind,
     {
         match self {
-            Self::StringLiteral { value } => unescape_unicode_to_string(value).into(),
-            Self::NumberLiteral { value } => FluentValue::try_number(value),
+            Self::StringLiteral { value } => {
+                return unescape_unicode_to_string(value).into();
+            }
+            Self::NumberLiteral { value } => {
+                return FluentValue::try_number(value);
+            }
             Self::VariableReference { id } => {
                 if let Some(local_args) = &scope.local_args {
                     if let Some(arg) = local_args.get(id.name) {
@@ -171,7 +180,7 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 if scope.local_args.is_none() {
                     scope.add_error(self.into());
                 }
-                FluentValue::Error
+                return FluentValue::Error;
             }
             Self::FunctionReference { id, arguments } => {
                 let (resolved_positional_args, resolved_named_args) =
@@ -180,17 +189,27 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                 let func = scope.bundle.get_entry_function(id.name);
 
                 if let Some(func) = func {
-                    let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
-                    result
+                    let result = func.call(
+                        scope,
+                        resolved_positional_args.as_slice(),
+                        &resolved_named_args,
+                    );
+                    return result;
                 } else {
-                    FluentValue::Error
+                    return FluentValue::Error;
                 }
             }
-            _ => {
-                let mut result = String::new();
-                self.write(&mut result, scope).expect("Failed to write");
-                result.into()
+            Self::Placeable { expression } => {
+                if let ast::Expression::Inline(expression) = expression.deref() {
+                    return expression.resolve(scope);
+                }
             }
-        }
+            _ => {}
+        };
+
+        // Fallback to text serialization
+        let mut result = String::new();
+        self.write(&mut result, scope).expect("Failed to write");
+        result.into()
     }
 }
