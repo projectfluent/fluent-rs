@@ -183,14 +183,72 @@ impl<'bundle> ResolveValue<'bundle> for ast::InlineExpression<&'bundle str> {
                     let result = func(resolved_positional_args.as_slice(), &resolved_named_args);
                     result
                 } else {
+                    scope.add_error(self.into());
                     FluentValue::Error
                 }
             }
-            _ => {
-                let mut result = String::new();
-                self.write(&mut result, scope).expect("Failed to write");
-                result.into()
+            ast::InlineExpression::MessageReference { id, attribute } => {
+                if let Some(msg) = scope.bundle.get_entry_message(id.name) {
+                    if let Some(attr) = attribute {
+                        msg.attributes
+                            .iter()
+                            .find_map(|a| {
+                                if a.id.name == attr.name {
+                                    Some(scope.track_resolve(&a.value))
+                                } else {
+                                    None
+                                }
+                            })
+                            .unwrap_or_else(|| {
+                                scope.add_error(self.into());
+                                FluentValue::Error
+                            })
+                    } else {
+                        msg.value
+                            .as_ref()
+                            .map(|value| scope.track_resolve(value))
+                            .unwrap_or_else(|| {
+                                scope.add_error(ResolverError::NoValue(id.name.to_string()));
+                                FluentValue::Error
+                            })
+                    }
+                } else {
+                    scope.add_error(self.into());
+                    FluentValue::Error
+                }
             }
+            ast::InlineExpression::TermReference {
+                id,
+                attribute,
+                arguments,
+            } => {
+                let (_, resolved_named_args) = scope.get_arguments(arguments.as_ref());
+
+                scope.local_args = Some(resolved_named_args);
+                let result = scope
+                    .bundle
+                    .get_entry_term(id.name)
+                    .and_then(|term| {
+                        if let Some(attr) = attribute {
+                            term.attributes.iter().find_map(|a| {
+                                if a.id.name == attr.name {
+                                    Some(scope.track_resolve(&a.value))
+                                } else {
+                                    None
+                                }
+                            })
+                        } else {
+                            Some(scope.track_resolve(&term.value))
+                        }
+                    })
+                    .unwrap_or_else(|| {
+                        scope.add_error(self.into());
+                        FluentValue::Error
+                    });
+                scope.local_args = None;
+                result
+            }
+            ast::InlineExpression::Placeable { expression } => expression.resolve(scope),
         }
     }
 }
