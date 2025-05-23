@@ -2,7 +2,10 @@
 
 ## Unreleased
 
-## fluent 0.16.2 (May 20, 2025)
+## fluent 0.17.0 (May 23, 2025)
+  - Bump version to reflect breaking changes in re-exported FluentBundle
+
+## fluent 0.16.2 (May 20, 2025) [yanked]
   - Cleanup docs
 
 ## fluent 0.16.1 (March 16, 2024)
