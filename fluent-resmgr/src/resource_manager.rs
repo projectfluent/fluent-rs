@@ -160,6 +160,7 @@ pub enum ResourceManagerError {
 pub struct BundleIter {
     locales: <Vec<LanguageIdentifier> as IntoIterator>::IntoIter,
     res_ids: FxHashSet<ResourceId>,
+    path_scheme: String,
 }
 
 impl Iterator for BundleIter {
@@ -171,7 +172,10 @@ impl Iterator for BundleIter {
         let mut bundle = FluentBundle::new(vec![locale.clone()]);
 
         for res_id in self.res_ids.iter() {
-            let full_path = format!("./tests/resources/{}/{}", locale, res_id);
+            let full_path = self
+                .path_scheme
+                .replace("{locale}", &locale.to_string())
+                .replace("{res_id}", &res_id.to_string());
             let source = fs::read_to_string(full_path).unwrap();
             let res = FluentResource::try_new(source).unwrap();
             bundle.add_resource(res).unwrap();
@@ -206,7 +210,11 @@ impl BundleGenerator for ResourceManager {
         locales: Self::LocalesIter,
         res_ids: FxHashSet<ResourceId>,
     ) -> Self::Iter {
-        BundleIter { locales, res_ids }
+        BundleIter {
+            locales,
+            res_ids,
+            path_scheme: self.path_scheme.clone(),
+        }
     }
 
     fn bundles_stream(
