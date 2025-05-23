@@ -4,15 +4,17 @@ use crate::resolver::{ResolveValue, ResolverError, WriteValue};
 use crate::types::FluentValue;
 use crate::{FluentArgs, FluentError, FluentResource};
 use fluent_syntax::ast;
-use std::borrow::Borrow;
+use std::borrow::{Borrow, Cow};
 use std::fmt;
+use std::marker::PhantomData;
 
 /// State for a single `ResolveValue::to_value` call.
-pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
+pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M, Args> {
+    lt: PhantomData<&'args ()>,
     /// The current `FluentBundle` instance.
     pub bundle: &'bundle FluentBundle<R, M>,
     /// The current arguments passed by the developer.
-    pub(super) args: Option<&'args FluentArgs<'args>>,
+    pub(super) args: Args,
     /// Local args
     pub(super) local_args: Option<FluentArgs<'bundle>>,
     /// The running count of resolved placeables. Used to detect the Billion
@@ -26,15 +28,16 @@ pub struct Scope<'bundle, 'ast, 'args, 'errors, R, M> {
     pub dirty: bool,
 }
 
-impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R, M> {
+impl<'bundle, 'ast, 'args, 'errors, R, M, Args> Scope<'bundle, 'ast, 'args, 'errors, R, M, Args> {
     pub fn new(
         bundle: &'bundle FluentBundle<R, M>,
-        args: Option<&'args FluentArgs>,
+        arg_resolver: Args,
         errors: Option<&'errors mut Vec<FluentError>>,
     ) -> Self {
         Scope {
+            lt: PhantomData,
             bundle,
-            args,
+            args: arg_resolver,
             local_args: None,
             placeables: 0,
             traveled: Default::default(),
@@ -48,7 +51,11 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
             errors.push(error.into());
         }
     }
+}
 
+impl<'bundle, 'ast, 'args, 'errors, R, M, Args: ArgumentResolver<'args>>
+    Scope<'bundle, 'ast, 'args, 'errors, R, M, Args>
+{
     /// This method allows us to lazily add Pattern on the stack, only if the
     /// `Pattern::resolve` has been called on an empty stack.
     ///
@@ -136,5 +143,21 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         } else {
             (Vec::new(), FluentArgs::new())
         }
+    }
+}
+
+/// Determines how to retrieve argument values when resolving fluent messages.
+/// This trait can be used to implement an alternative to [`FluentArgs`].
+///
+/// One example usage is for argument type safety that [`FluentArgs`] can't provide due to its
+/// flexible nature. See `fluent-bundle/examples/typesafe_messages.rs` for an example of this.
+pub trait ArgumentResolver<'a>: Copy {
+    fn resolve(self, name: &str) -> Option<Cow<FluentValue<'a>>>;
+}
+
+impl<'args> ArgumentResolver<'args> for Option<&'args FluentArgs<'args>> {
+    fn resolve(self, name: &str) -> Option<Cow<FluentValue<'args>>> {
+        let arg = self?.get(name)?;
+        Some(Cow::Borrowed(arg))
     }
 }
