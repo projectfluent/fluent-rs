@@ -1,0 +1,782 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 0,
+          "end": 5
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A multiline value\n",
+            "span": {
+              "start": 8,
+              "end": 26
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "continued on the next line\n",
+            "span": {
+              "start": 30,
+              "end": 57
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 57,
+              "end": 58
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "and also down here.",
+            "span": {
+              "start": 62,
+              "end": 82
+            }
+          }
+        ],
+        "span": {
+          "start": 8,
+          "end": 83
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 83
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 83,
+          "end": 88
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A multiline value starting\n",
+            "span": {
+              "start": 95,
+              "end": 122
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "on a new line.",
+            "span": {
+              "start": 126,
+              "end": 141
+            }
+          }
+        ],
+        "span": {
+          "start": 90,
+          "end": 142
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 83,
+        "end": 142
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key03",
+        "span": {
+          "start": 142,
+          "end": 147
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 155,
+              "end": 159
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A multiline attribute value\n",
+                "span": {
+                  "start": 162,
+                  "end": 190
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "continued on the next line\n",
+                "span": {
+                  "start": 198,
+                  "end": 225
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "\n",
+                "span": {
+                  "start": 225,
+                  "end": 226
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "and also down here.",
+                "span": {
+                  "start": 234,
+                  "end": 254
+                }
+              }
+            ],
+            "span": {
+              "start": 162,
+              "end": 255
+            }
+          },
+          "span": {
+            "start": 254,
+            "end": 255
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 142,
+        "end": 255
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 255,
+          "end": 260
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 268,
+              "end": 272
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "A multiline attribute value\n",
+                "span": {
+                  "start": 283,
+                  "end": 311
+                }
+              },
+              {
+                "type": "TextElement",
+                "value": "staring on a new line",
+                "span": {
+                  "start": 319,
+                  "end": 341
+                }
+              }
+            ],
+            "span": {
+              "start": 274,
+              "end": 342
+            }
+          },
+          "span": {
+            "start": 341,
+            "end": 342
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 255,
+        "end": 342
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key05",
+        "span": {
+          "start": 342,
+          "end": 347
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A multiline value with non-standard\n",
+            "span": {
+              "start": 352,
+              "end": 388
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 388,
+              "end": 389
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "    indentation.",
+            "span": {
+              "start": 390,
+              "end": 407
+            }
+          }
+        ],
+        "span": {
+          "start": 349,
+          "end": 408
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 342,
+        "end": 408
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key06",
+        "span": {
+          "start": 408,
+          "end": 413
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A multiline value with ",
+            "span": {
+              "start": 420,
+              "end": 443
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "placeables",
+                "span": {
+                  "start": 444,
+                  "end": 456
+                }
+              },
+              {
+                "start": 444,
+                "end": 456
+              }
+            ],
+            "span": {
+              "start": 443,
+              "end": 456
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 457,
+              "end": 458
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "at",
+                "span": {
+                  "start": 463,
+                  "end": 467
+                }
+              },
+              {
+                "start": 463,
+                "end": 467
+              }
+            ],
+            "span": {
+              "start": 462,
+              "end": 467
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " the beginning and the end\n",
+            "span": {
+              "start": 468,
+              "end": 495
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "of lines",
+                "span": {
+                  "start": 500,
+                  "end": 510
+                }
+              },
+              {
+                "start": 500,
+                "end": 510
+              }
+            ],
+            "span": {
+              "start": 499,
+              "end": 510
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": ".",
+                "span": {
+                  "start": 512,
+                  "end": 515
+                }
+              },
+              {
+                "start": 512,
+                "end": 515
+              }
+            ],
+            "span": {
+              "start": 511,
+              "end": 515
+            }
+          }
+        ],
+        "span": {
+          "start": 415,
+          "end": 518
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 408,
+        "end": 518
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key07",
+        "span": {
+          "start": 518,
+          "end": 523
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "A multiline value",
+                "span": {
+                  "start": 531,
+                  "end": 550
+                }
+              },
+              {
+                "start": 531,
+                "end": 550
+              }
+            ],
+            "span": {
+              "start": 530,
+              "end": 550
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " starting and ending ",
+            "span": {
+              "start": 551,
+              "end": 572
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "with a placeable",
+                "span": {
+                  "start": 573,
+                  "end": 591
+                }
+              },
+              {
+                "start": 573,
+                "end": 591
+              }
+            ],
+            "span": {
+              "start": 572,
+              "end": 591
+            }
+          }
+        ],
+        "span": {
+          "start": 525,
+          "end": 594
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 518,
+        "end": 594
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key08",
+        "span": {
+          "start": 594,
+          "end": 599
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Leading and trailing whitespace.",
+            "span": {
+              "start": 606,
+              "end": 644
+            }
+          }
+        ],
+        "span": {
+          "start": 606,
+          "end": 645
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 594,
+        "end": 645
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key09",
+        "span": {
+          "start": 645,
+          "end": 650
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "zero\n",
+            "span": {
+              "start": 653,
+              "end": 658
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "   three\n",
+            "span": {
+              "start": 660,
+              "end": 669
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "  two\n",
+            "span": {
+              "start": 671,
+              "end": 677
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " one\n",
+            "span": {
+              "start": 679,
+              "end": 684
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "zero",
+            "span": {
+              "start": 686,
+              "end": 691
+            }
+          }
+        ],
+        "span": {
+          "start": 653,
+          "end": 692
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 645,
+        "end": 692
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key10",
+        "span": {
+          "start": 692,
+          "end": 697
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "  two\n",
+            "span": {
+              "start": 704,
+              "end": 710
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "zero\n",
+            "span": {
+              "start": 714,
+              "end": 719
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "    four",
+            "span": {
+              "start": 723,
+              "end": 732
+            }
+          }
+        ],
+        "span": {
+          "start": 699,
+          "end": 733
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 692,
+        "end": 733
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key11",
+        "span": {
+          "start": 733,
+          "end": 738
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "  two\n",
+            "span": {
+              "start": 747,
+              "end": 753
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "zero",
+            "span": {
+              "start": 757,
+              "end": 762
+            }
+          }
+        ],
+        "span": {
+          "start": 740,
+          "end": 763
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 733,
+        "end": 763
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key12",
+        "span": {
+          "start": 763,
+          "end": 768
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": ".",
+                "span": {
+                  "start": 772,
+                  "end": 775
+                }
+              },
+              {
+                "start": 772,
+                "end": 775
+              }
+            ],
+            "span": {
+              "start": 771,
+              "end": 775
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 776,
+              "end": 777
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "    four",
+            "span": {
+              "start": 777,
+              "end": 786
+            }
+          }
+        ],
+        "span": {
+          "start": 770,
+          "end": 787
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 763,
+        "end": 787
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key13",
+        "span": {
+          "start": 787,
+          "end": 792
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "    four\n",
+            "span": {
+              "start": 795,
+              "end": 804
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": ".",
+                "span": {
+                  "start": 805,
+                  "end": 808
+                }
+              },
+              {
+                "start": 805,
+                "end": 808
+              }
+            ],
+            "span": {
+              "start": 804,
+              "end": 808
+            }
+          }
+        ],
+        "span": {
+          "start": 794,
+          "end": 810
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 787,
+        "end": 810
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 810
+  }
+}

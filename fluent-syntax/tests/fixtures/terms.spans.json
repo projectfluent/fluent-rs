@@ -1,0 +1,331 @@
+{
+  "body": [
+    {
+      "type": "Term",
+      "id": {
+        "name": "term01",
+        "span": {
+          "start": 1,
+          "end": 7
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 10,
+              "end": 16
+            }
+          }
+        ],
+        "span": {
+          "start": 10,
+          "end": 16
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 21,
+              "end": 25
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 28,
+                  "end": 38
+                }
+              }
+            ],
+            "span": {
+              "start": 28,
+              "end": 39
+            }
+          },
+          "span": {
+            "start": 38,
+            "end": 39
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 39
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "term02",
+        "span": {
+          "start": 40,
+          "end": 46
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "",
+                "span": {
+                  "start": 50,
+                  "end": 52
+                }
+              },
+              {
+                "start": 50,
+                "end": 52
+              }
+            ],
+            "span": {
+              "start": 49,
+              "end": 52
+            }
+          }
+        ],
+        "span": {
+          "start": 49,
+          "end": 55
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 39,
+        "end": 55
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing value"
+      ],
+      "span": {
+        "start": 55,
+        "end": 75
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term03 =\n    .attr = Attribute\n\n",
+      "span": {
+        "start": 76,
+        "end": 109
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing value",
+        "       <  whitespace  >"
+      ],
+      "span": {
+        "start": 109,
+        "end": 155
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term04 =                \n    .attr1 = Attribute 1\n\n",
+      "span": {
+        "start": 156,
+        "end": 208
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing value"
+      ],
+      "span": {
+        "start": 208,
+        "end": 228
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term05 =\n\n",
+      "span": {
+        "start": 229,
+        "end": 240
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing value",
+        "       <  whitespace  >"
+      ],
+      "span": {
+        "start": 240,
+        "end": 286
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term06 =                \n\n",
+      "span": {
+        "start": 287,
+        "end": 314
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing ="
+      ],
+      "span": {
+        "start": 314,
+        "end": 330
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term07\n\n",
+      "span": {
+        "start": 331,
+        "end": 340
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "term08",
+        "span": {
+          "start": 341,
+          "end": 347
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 348,
+              "end": 354
+            }
+          }
+        ],
+        "span": {
+          "start": 348,
+          "end": 354
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 359,
+              "end": 363
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 364,
+                  "end": 374
+                }
+              }
+            ],
+            "span": {
+              "start": 364,
+              "end": 375
+            }
+          },
+          "span": {
+            "start": 374,
+            "end": 375
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 340,
+        "end": 375
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "term09",
+        "span": {
+          "start": 376,
+          "end": 382
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 388,
+              "end": 394
+            }
+          }
+        ],
+        "span": {
+          "start": 388,
+          "end": 394
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 399,
+              "end": 403
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 409,
+                  "end": 419
+                }
+              }
+            ],
+            "span": {
+              "start": 409,
+              "end": 419
+            }
+          },
+          "span": {
+            "start": 418,
+            "end": 419
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 375,
+        "end": 419
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 419
+  }
+}

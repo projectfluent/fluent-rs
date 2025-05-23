@@ -13,7 +13,7 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
     let mut elements = vec![];
     for element in &pattern.elements {
         match element {
-            ast::PatternElement::TextElement { value, .. } => {
+            ast::PatternElement::TextElement { value, #[cfg(feature = "spans")] span } => {
                 let mut start = 0;
                 let len = value.len();
                 for (i, b) in value.as_bytes().iter().enumerate() {
@@ -25,14 +25,14 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
                                 elements.push(ast::PatternElement::TextElement {
                                     value,
                                     #[cfg(feature = "spans")]
-                                    span: ast::Span(start..i),
+                                    span: span.clone(),
                                 });
                             }
 
                             elements.push(ast::PatternElement::TextElement {
                                 value: "\n".to_string(),
                                 #[cfg(feature = "spans")]
-                                span: ast::Span(i..i + 1),
+                                span: span.clone(),
                             });
                         } else {
                             let chunk = &value.as_bytes()[start..=i];
@@ -40,7 +40,7 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
                             elements.push(ast::PatternElement::TextElement {
                                 value,
                                 #[cfg(feature = "spans")]
-                                span: ast::Span(start..i + 1),
+                                span: span.clone(),
                             });
                         }
                         start = i + 1;
@@ -53,7 +53,7 @@ fn adapt_pattern(pattern: &mut ast::Pattern<String>, crlf: bool) {
                     elements.push(ast::PatternElement::TextElement {
                         value,
                         #[cfg(feature = "spans")]
-                        span: ast::Span(start..len),
+                        span: span.clone(),
                     });
                 }
             }

@@ -1,0 +1,1323 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-1tbs-inline",
+        "span": {
+          "start": 0,
+          "end": 18
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 24,
+                    "end": 32
+                  }
+                },
+                "span": {
+                  "start": 23,
+                  "end": 32
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 41,
+                      "end": 44
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 46,
+                          "end": 52
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 46,
+                      "end": 52
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 39,
+                    "end": 52
+                  }
+                }
+              ],
+              "span": {
+                "start": 23,
+                "end": 52
+              }
+            },
+            "span": {
+              "start": 21,
+              "end": 52
+            }
+          }
+        ],
+        "span": {
+          "start": 21,
+          "end": 55
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 55
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-1tbs-newline",
+        "span": {
+          "start": 55,
+          "end": 74
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 80,
+                    "end": 88
+                  }
+                },
+                "span": {
+                  "start": 79,
+                  "end": 88
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 97,
+                      "end": 100
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 102,
+                          "end": 108
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 102,
+                      "end": 108
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 95,
+                    "end": 108
+                  }
+                }
+              ],
+              "span": {
+                "start": 79,
+                "end": 108
+              }
+            },
+            "span": {
+              "start": 77,
+              "end": 108
+            }
+          }
+        ],
+        "span": {
+          "start": 77,
+          "end": 111
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 55,
+        "end": 111
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-1tbs-indent",
+        "span": {
+          "start": 111,
+          "end": 129
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 139,
+                    "end": 147
+                  }
+                },
+                "span": {
+                  "start": 138,
+                  "end": 147
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 156,
+                      "end": 159
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 161,
+                          "end": 167
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 161,
+                      "end": 167
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 154,
+                    "end": 167
+                  }
+                }
+              ],
+              "span": {
+                "start": 138,
+                "end": 167
+              }
+            },
+            "span": {
+              "start": 132,
+              "end": 167
+            }
+          }
+        ],
+        "span": {
+          "start": 132,
+          "end": 170
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 111,
+        "end": 170
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-allman-inline",
+        "span": {
+          "start": 170,
+          "end": 190
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 196,
+                    "end": 204
+                  }
+                },
+                "span": {
+                  "start": 195,
+                  "end": 204
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 213,
+                      "end": 216
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 218,
+                          "end": 224
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 218,
+                      "end": 224
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 211,
+                    "end": 224
+                  }
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other",
+                    "span": {
+                      "start": 229,
+                      "end": 234
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Other",
+                        "span": {
+                          "start": 236,
+                          "end": 242
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 236,
+                      "end": 242
+                    }
+                  },
+                  "default": false,
+                  "span": {
+                    "start": 228,
+                    "end": 242
+                  }
+                }
+              ],
+              "span": {
+                "start": 195,
+                "end": 242
+              }
+            },
+            "span": {
+              "start": 193,
+              "end": 242
+            }
+          }
+        ],
+        "span": {
+          "start": 192,
+          "end": 245
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 170,
+        "end": 245
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-allman-newline",
+        "span": {
+          "start": 245,
+          "end": 266
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 272,
+                    "end": 280
+                  }
+                },
+                "span": {
+                  "start": 271,
+                  "end": 280
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 289,
+                      "end": 292
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 294,
+                          "end": 300
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 294,
+                      "end": 300
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 287,
+                    "end": 300
+                  }
+                }
+              ],
+              "span": {
+                "start": 271,
+                "end": 300
+              }
+            },
+            "span": {
+              "start": 269,
+              "end": 300
+            }
+          }
+        ],
+        "span": {
+          "start": 268,
+          "end": 303
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 245,
+        "end": 303
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-allman-indent",
+        "span": {
+          "start": 303,
+          "end": 323
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 333,
+                    "end": 341
+                  }
+                },
+                "span": {
+                  "start": 332,
+                  "end": 341
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 350,
+                      "end": 353
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 355,
+                          "end": 361
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 355,
+                      "end": 361
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 348,
+                    "end": 361
+                  }
+                }
+              ],
+              "span": {
+                "start": 332,
+                "end": 361
+              }
+            },
+            "span": {
+              "start": 326,
+              "end": 361
+            }
+          }
+        ],
+        "span": {
+          "start": 325,
+          "end": 364
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 303,
+        "end": 364
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-gnu-inline",
+        "span": {
+          "start": 364,
+          "end": 381
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 390,
+                    "end": 398
+                  }
+                },
+                "span": {
+                  "start": 389,
+                  "end": 398
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 410,
+                      "end": 413
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 415,
+                          "end": 421
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 415,
+                      "end": 421
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 408,
+                    "end": 421
+                  }
+                }
+              ],
+              "span": {
+                "start": 389,
+                "end": 424
+              }
+            },
+            "span": {
+              "start": 387,
+              "end": 424
+            }
+          }
+        ],
+        "span": {
+          "start": 383,
+          "end": 427
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 364,
+        "end": 427
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-gnu-newline",
+        "span": {
+          "start": 427,
+          "end": 445
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 454,
+                    "end": 462
+                  }
+                },
+                "span": {
+                  "start": 453,
+                  "end": 462
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 474,
+                      "end": 477
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 479,
+                          "end": 485
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 479,
+                      "end": 485
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 472,
+                    "end": 485
+                  }
+                }
+              ],
+              "span": {
+                "start": 453,
+                "end": 488
+              }
+            },
+            "span": {
+              "start": 451,
+              "end": 488
+            }
+          }
+        ],
+        "span": {
+          "start": 447,
+          "end": 491
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 427,
+        "end": 491
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-gnu-indent",
+        "span": {
+          "start": 491,
+          "end": 508
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 524,
+                    "end": 532
+                  }
+                },
+                "span": {
+                  "start": 523,
+                  "end": 532
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 544,
+                      "end": 547
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 549,
+                          "end": 555
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 549,
+                      "end": 555
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 542,
+                    "end": 555
+                  }
+                }
+              ],
+              "span": {
+                "start": 523,
+                "end": 558
+              }
+            },
+            "span": {
+              "start": 514,
+              "end": 558
+            }
+          }
+        ],
+        "span": {
+          "start": 510,
+          "end": 561
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 491,
+        "end": 561
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-no-indent",
+        "span": {
+          "start": 561,
+          "end": 577
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 583,
+                    "end": 591
+                  }
+                },
+                "span": {
+                  "start": 582,
+                  "end": 591
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 597,
+                      "end": 600
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 602,
+                          "end": 608
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 602,
+                      "end": 608
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 595,
+                    "end": 608
+                  }
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other",
+                    "span": {
+                      "start": 609,
+                      "end": 614
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Other",
+                        "span": {
+                          "start": 616,
+                          "end": 622
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 616,
+                      "end": 622
+                    }
+                  },
+                  "default": false,
+                  "span": {
+                    "start": 608,
+                    "end": 622
+                  }
+                }
+              ],
+              "span": {
+                "start": 582,
+                "end": 622
+              }
+            },
+            "span": {
+              "start": 580,
+              "end": 622
+            }
+          }
+        ],
+        "span": {
+          "start": 579,
+          "end": 625
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 561,
+        "end": 625
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-no-indent-multiline",
+        "span": {
+          "start": 625,
+          "end": 651
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 657,
+                    "end": 665
+                  }
+                },
+                "span": {
+                  "start": 656,
+                  "end": 665
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 671,
+                      "end": 674
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value\n",
+                        "span": {
+                          "start": 676,
+                          "end": 682
+                        }
+                      },
+                      {
+                        "type": "TextElement",
+                        "value": "Continued",
+                        "span": {
+                          "start": 689,
+                          "end": 699
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 676,
+                      "end": 699
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 669,
+                    "end": 699
+                  }
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other",
+                    "span": {
+                      "start": 700,
+                      "end": 705
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Other\n",
+                        "span": {
+                          "start": 711,
+                          "end": 717
+                        }
+                      },
+                      {
+                        "type": "TextElement",
+                        "value": "Multiline",
+                        "span": {
+                          "start": 721,
+                          "end": 731
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 706,
+                      "end": 731
+                    }
+                  },
+                  "default": false,
+                  "span": {
+                    "start": 699,
+                    "end": 731
+                  }
+                }
+              ],
+              "span": {
+                "start": 656,
+                "end": 731
+              }
+            },
+            "span": {
+              "start": 654,
+              "end": 731
+            }
+          }
+        ],
+        "span": {
+          "start": 653,
+          "end": 734
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 625,
+        "end": 734
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR (Multiline text must be indented)"
+      ],
+      "span": {
+        "start": 734,
+        "end": 775
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "select-no-indent-multiline = { $selector ->\n   *[key] Value\n",
+      "span": {
+        "start": 776,
+        "end": 836
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "Continued without indent.\n}\n\n",
+      "span": {
+        "start": 836,
+        "end": 865
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-flat",
+        "span": {
+          "start": 865,
+          "end": 876
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 882,
+                    "end": 890
+                  }
+                },
+                "span": {
+                  "start": 881,
+                  "end": 890
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 897,
+                      "end": 900
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 903,
+                          "end": 909
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 903,
+                      "end": 909
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 894,
+                    "end": 909
+                  }
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other",
+                    "span": {
+                      "start": 911,
+                      "end": 916
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Other",
+                        "span": {
+                          "start": 919,
+                          "end": 925
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 919,
+                      "end": 925
+                    }
+                  },
+                  "default": false,
+                  "span": {
+                    "start": 909,
+                    "end": 925
+                  }
+                }
+              ],
+              "span": {
+                "start": 881,
+                "end": 925
+              }
+            },
+            "span": {
+              "start": 879,
+              "end": 925
+            }
+          }
+        ],
+        "span": {
+          "start": 878,
+          "end": 928
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 865,
+        "end": 928
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "select-flat-with-trailing-spaces",
+        "span": {
+          "start": 960,
+          "end": 992
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "selector",
+                  "span": {
+                    "start": 1003,
+                    "end": 1011
+                  }
+                },
+                "span": {
+                  "start": 1002,
+                  "end": 1011
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 1033,
+                      "end": 1036
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 1044,
+                          "end": 1055
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 1044,
+                      "end": 1055
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 1025,
+                    "end": 1055
+                  }
+                },
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "other",
+                    "span": {
+                      "start": 1062,
+                      "end": 1067
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Other",
+                        "span": {
+                          "start": 1075,
+                          "end": 1086
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 1075,
+                      "end": 1086
+                    }
+                  },
+                  "default": false,
+                  "span": {
+                    "start": 1055,
+                    "end": 1086
+                  }
+                }
+              ],
+              "span": {
+                "start": 1002,
+                "end": 1086
+              }
+            },
+            "span": {
+              "start": 995,
+              "end": 1086
+            }
+          }
+        ],
+        "span": {
+          "start": 994,
+          "end": 1093
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Each line ends with 5 spaces."
+        ],
+        "span": {
+          "start": 928,
+          "end": 959
+        }
+      },
+      "span": {
+        "start": 960,
+        "end": 1093
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1093
+  }
+}

@@ -1,0 +1,227 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 40,
+          "end": 45
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "\tValue 01",
+            "span": {
+              "start": 47,
+              "end": 57
+            }
+          }
+        ],
+        "span": {
+          "start": 47,
+          "end": 58
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK (tab after = is part of the value)"
+        ],
+        "span": {
+          "start": 0,
+          "end": 39
+        }
+      },
+      "span": {
+        "start": 40,
+        "end": 58
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "Error (tab before =)"
+      ],
+      "span": {
+        "start": 58,
+        "end": 80
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "key02\t= Value 02\n\n",
+      "span": {
+        "start": 81,
+        "end": 99
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "Error (tab is not a valid indent)"
+      ],
+      "span": {
+        "start": 99,
+        "end": 134
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "key03 =\n\tThis line isn't properly indented.\n\n",
+      "span": {
+        "start": 135,
+        "end": 180
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 224,
+          "end": 229
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "This line is indented by 4 spaces,",
+            "span": {
+              "start": 236,
+              "end": 271
+            }
+          }
+        ],
+        "span": {
+          "start": 231,
+          "end": 271
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Partial Error (tab is not a valid indent)"
+        ],
+        "span": {
+          "start": 180,
+          "end": 223
+        }
+      },
+      "span": {
+        "start": 224,
+        "end": 271
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "\twhereas this line by 1 tab.\n\n",
+      "span": {
+        "start": 271,
+        "end": 301
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key05",
+        "span": {
+          "start": 330,
+          "end": 335
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "\t",
+            "span": {
+              "start": 338,
+              "end": 340
+            }
+          }
+        ],
+        "span": {
+          "start": 338,
+          "end": 341
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK (value is a single tab)"
+        ],
+        "span": {
+          "start": 301,
+          "end": 329
+        }
+      },
+      "span": {
+        "start": 330,
+        "end": 341
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key06",
+        "span": {
+          "start": 376,
+          "end": 381
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 387,
+              "end": 391
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "\t\t",
+                "span": {
+                  "start": 394,
+                  "end": 397
+                }
+              }
+            ],
+            "span": {
+              "start": 394,
+              "end": 397
+            }
+          },
+          "span": {
+            "start": 396,
+            "end": 397
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "OK (attribute value is two tabs)"
+        ],
+        "span": {
+          "start": 341,
+          "end": 375
+        }
+      },
+      "span": {
+        "start": 376,
+        "end": 397
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 397
+  }
+}

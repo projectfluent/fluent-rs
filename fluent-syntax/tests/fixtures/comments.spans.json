@@ -1,0 +1,166 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "Standalone Comment"
+      ],
+      "span": {
+        "start": 0,
+        "end": 20
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "foo",
+        "span": {
+          "start": 40,
+          "end": 43
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Foo",
+            "span": {
+              "start": 46,
+              "end": 50
+            }
+          }
+        ],
+        "span": {
+          "start": 46,
+          "end": 51
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Message Comment"
+        ],
+        "span": {
+          "start": 22,
+          "end": 39
+        }
+      },
+      "span": {
+        "start": 40,
+        "end": 51
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "term",
+        "span": {
+          "start": 95,
+          "end": 99
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Term",
+            "span": {
+              "start": 102,
+              "end": 107
+            }
+          }
+        ],
+        "span": {
+          "start": 102,
+          "end": 108
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Term Comment",
+          "with a blank last line.",
+          ""
+        ],
+        "span": {
+          "start": 51,
+          "end": 93
+        }
+      },
+      "span": {
+        "start": 94,
+        "end": 108
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "Another standalone",
+        "",
+        "     with indent"
+      ],
+      "span": {
+        "start": 108,
+        "end": 151
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Group Comment"
+      ],
+      "span": {
+        "start": 151,
+        "end": 168
+      }
+    },
+    {
+      "type": "ResourceComment",
+      "content": [
+        "Resource Comment"
+      ],
+      "span": {
+        "start": 168,
+        "end": 188
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "Errors"
+      ],
+      "span": {
+        "start": 190,
+        "end": 199
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "#error\n",
+      "span": {
+        "start": 199,
+        "end": 206
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "##error\n",
+      "span": {
+        "start": 206,
+        "end": 214
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "###error\n",
+      "span": {
+        "start": 214,
+        "end": 223
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 223
+  }
+}

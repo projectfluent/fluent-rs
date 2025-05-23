@@ -1,0 +1,104 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key",
+        "span": {
+          "start": 56,
+          "end": 59
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "first line\n",
+            "span": {
+              "start": 64,
+              "end": 75
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 75,
+              "end": 76
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 76,
+              "end": 77
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 79,
+              "end": 80
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 82,
+              "end": 83
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 83,
+              "end": 84
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 84,
+              "end": 85
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "last line",
+            "span": {
+              "start": 87,
+              "end": 97
+            }
+          }
+        ],
+        "span": {
+          "start": 61,
+          "end": 97
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Caution, lines 6 and 7 contain white-space-only lines"
+        ],
+        "span": {
+          "start": 0,
+          "end": 55
+        }
+      },
+      "span": {
+        "start": 56,
+        "end": 97
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 97
+  }
+}

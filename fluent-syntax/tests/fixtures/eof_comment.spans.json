@@ -1,0 +1,28 @@
+{
+  "body": [
+    {
+      "type": "ResourceComment",
+      "content": [
+        "NOTE: Disable final newline insertion when editing this file."
+      ],
+      "span": {
+        "start": 0,
+        "end": 65
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "No EOL"
+      ],
+      "span": {
+        "start": 67,
+        "end": 75
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 75
+  }
+}

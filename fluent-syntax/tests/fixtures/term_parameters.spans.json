@@ -1,0 +1,406 @@
+{
+  "body": [
+    {
+      "type": "Term",
+      "id": {
+        "name": "term",
+        "span": {
+          "start": 1,
+          "end": 5
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "arg",
+                  "span": {
+                    "start": 11,
+                    "end": 14
+                  }
+                },
+                "span": {
+                  "start": 10,
+                  "end": 14
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 23,
+                      "end": 26
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 28,
+                          "end": 34
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 28,
+                      "end": 34
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 21,
+                    "end": 34
+                  }
+                }
+              ],
+              "span": {
+                "start": 10,
+                "end": 34
+              }
+            },
+            "span": {
+              "start": 8,
+              "end": 34
+            }
+          }
+        ],
+        "span": {
+          "start": 8,
+          "end": 37
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 37
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 37,
+          "end": 42
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 48,
+                    "end": 52
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 47,
+                  "end": 53
+                }
+              },
+              {
+                "start": 47,
+                "end": 53
+              }
+            ],
+            "span": {
+              "start": 45,
+              "end": 53
+            }
+          }
+        ],
+        "span": {
+          "start": 45,
+          "end": 55
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 37,
+        "end": 55
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 55,
+          "end": 60
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 66,
+                    "end": 70
+                  }
+                },
+                "attribute": null,
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 71,
+                    "end": 73
+                  }
+                },
+                "span": {
+                  "start": 65,
+                  "end": 73
+                }
+              },
+              {
+                "start": 65,
+                "end": 74
+              }
+            ],
+            "span": {
+              "start": 63,
+              "end": 74
+            }
+          }
+        ],
+        "span": {
+          "start": 63,
+          "end": 76
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 55,
+        "end": 76
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key03",
+        "span": {
+          "start": 76,
+          "end": 81
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 87,
+                    "end": 91
+                  }
+                },
+                "attribute": null,
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "arg",
+                        "span": {
+                          "start": 92,
+                          "end": 95
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 97,
+                          "end": 98
+                        }
+                      },
+                      "span": {
+                        "start": 92,
+                        "end": 98
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 91,
+                    "end": 99
+                  }
+                },
+                "span": {
+                  "start": 86,
+                  "end": 99
+                }
+              },
+              {
+                "start": 86,
+                "end": 100
+              }
+            ],
+            "span": {
+              "start": 84,
+              "end": 100
+            }
+          }
+        ],
+        "span": {
+          "start": 84,
+          "end": 102
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 76,
+        "end": 102
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 102,
+          "end": 107
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 113,
+                    "end": 117
+                  }
+                },
+                "attribute": null,
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "StringLiteral",
+                      "value": "positional",
+                      "span": {
+                        "start": 118,
+                        "end": 130
+                      }
+                    }
+                  ],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "narg1",
+                        "span": {
+                          "start": 132,
+                          "end": 137
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 139,
+                          "end": 140
+                        }
+                      },
+                      "span": {
+                        "start": 132,
+                        "end": 140
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "narg2",
+                        "span": {
+                          "start": 142,
+                          "end": 147
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "2",
+                        "span": {
+                          "start": 149,
+                          "end": 150
+                        }
+                      },
+                      "span": {
+                        "start": 142,
+                        "end": 150
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 117,
+                    "end": 151
+                  }
+                },
+                "span": {
+                  "start": 112,
+                  "end": 151
+                }
+              },
+              {
+                "start": 112,
+                "end": 152
+              }
+            ],
+            "span": {
+              "start": 110,
+              "end": 152
+            }
+          }
+        ],
+        "span": {
+          "start": 110,
+          "end": 154
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 102,
+        "end": 154
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 154
+  }
+}

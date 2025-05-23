@@ -1,0 +1,231 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Member expressions in placeables."
+      ],
+      "span": {
+        "start": 0,
+        "end": 36
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "message-attribute-expression-placeable",
+        "span": {
+          "start": 93,
+          "end": 131
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "MessageReference",
+                "id": {
+                  "name": "msg",
+                  "span": {
+                    "start": 135,
+                    "end": 138
+                  }
+                },
+                "attribute": {
+                  "name": "attr",
+                  "span": {
+                    "start": 139,
+                    "end": 143
+                  }
+                },
+                "span": {
+                  "start": 135,
+                  "end": 143
+                }
+              },
+              {
+                "start": 135,
+                "end": 143
+              }
+            ],
+            "span": {
+              "start": 134,
+              "end": 143
+            }
+          }
+        ],
+        "span": {
+          "start": 134,
+          "end": 146
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK Message attributes may be interpolated in values."
+        ],
+        "span": {
+          "start": 38,
+          "end": 92
+        }
+      },
+      "span": {
+        "start": 93,
+        "end": 146
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Term attributes may not be used for interpolation."
+      ],
+      "span": {
+        "start": 146,
+        "end": 204
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-attribute-expression-placeable = {-term.attr}\n\n\n",
+      "span": {
+        "start": 205,
+        "end": 258
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Member expressions in selectors."
+      ],
+      "span": {
+        "start": 258,
+        "end": 293
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "term-attribute-expression-selector",
+        "span": {
+          "start": 342,
+          "end": 376
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 381,
+                    "end": 385
+                  }
+                },
+                "attribute": {
+                  "name": "attr",
+                  "span": {
+                    "start": 386,
+                    "end": 390
+                  }
+                },
+                "arguments": null,
+                "span": {
+                  "start": 380,
+                  "end": 391
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 399,
+                      "end": 402
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 404,
+                          "end": 410
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 404,
+                      "end": 410
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 397,
+                    "end": 410
+                  }
+                }
+              ],
+              "span": {
+                "start": 380,
+                "end": 410
+              }
+            },
+            "span": {
+              "start": 379,
+              "end": 410
+            }
+          }
+        ],
+        "span": {
+          "start": 379,
+          "end": 412
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK Term attributes may be used as selectors."
+        ],
+        "span": {
+          "start": 295,
+          "end": 341
+        }
+      },
+      "span": {
+        "start": 342,
+        "end": 412
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Message attributes may not be used as selectors."
+      ],
+      "span": {
+        "start": 412,
+        "end": 468
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-attribute-expression-selector = {msg.attr ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 469,
+        "end": 540
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 540
+  }
+}

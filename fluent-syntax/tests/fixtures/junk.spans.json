@@ -1,0 +1,135 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Two adjacent Junks."
+      ],
+      "span": {
+        "start": 0,
+        "end": 22
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err01 = {1x}\n",
+      "span": {
+        "start": 23,
+        "end": 36
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err02 = {2x}\n\n",
+      "span": {
+        "start": 36,
+        "end": 50
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "A single Junk."
+      ],
+      "span": {
+        "start": 50,
+        "end": 66
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err03 = {1x\n2\n\n",
+      "span": {
+        "start": 67,
+        "end": 82
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "A single Junk."
+      ],
+      "span": {
+        "start": 82,
+        "end": 98
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "ą=Invalid identifier\nć=Another one\n\n",
+      "span": {
+        "start": 99,
+        "end": 137
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "The COMMENT ends this junk."
+      ],
+      "span": {
+        "start": 137,
+        "end": 166
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err04 = {\n",
+      "span": {
+        "start": 167,
+        "end": 177
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "COMMENT"
+      ],
+      "span": {
+        "start": 177,
+        "end": 186
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "The COMMENT ends this junk.",
+        "The closing brace is a separate Junk."
+      ],
+      "span": {
+        "start": 188,
+        "end": 257
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err04 = {\n",
+      "span": {
+        "start": 258,
+        "end": 268
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "COMMENT"
+      ],
+      "span": {
+        "start": 268,
+        "end": 277
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "}\n",
+      "span": {
+        "start": 278,
+        "end": 280
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 280
+  }
+}

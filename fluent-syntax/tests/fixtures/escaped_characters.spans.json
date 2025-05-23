@@ -1,0 +1,824 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Literal text"
+      ],
+      "span": {
+        "start": 0,
+        "end": 15
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-backslash-one",
+        "span": {
+          "start": 16,
+          "end": 34
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value with \\ a backslash",
+            "span": {
+              "start": 37,
+              "end": 62
+            }
+          }
+        ],
+        "span": {
+          "start": 37,
+          "end": 62
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 16,
+        "end": 62
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-backslash-two",
+        "span": {
+          "start": 62,
+          "end": 80
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value with \\\\ two backslashes",
+            "span": {
+              "start": 83,
+              "end": 113
+            }
+          }
+        ],
+        "span": {
+          "start": 83,
+          "end": 113
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 62,
+        "end": 113
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-backslash-brace",
+        "span": {
+          "start": 113,
+          "end": 133
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value with \\",
+            "span": {
+              "start": 136,
+              "end": 148
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "MessageReference",
+                "id": {
+                  "name": "placeable",
+                  "span": {
+                    "start": 149,
+                    "end": 158
+                  }
+                },
+                "attribute": null,
+                "span": {
+                  "start": 149,
+                  "end": 158
+                }
+              },
+              {
+                "start": 149,
+                "end": 158
+              }
+            ],
+            "span": {
+              "start": 148,
+              "end": 158
+            }
+          }
+        ],
+        "span": {
+          "start": 136,
+          "end": 160
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 113,
+        "end": 160
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-backslash-u",
+        "span": {
+          "start": 160,
+          "end": 176
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "\\u0041",
+            "span": {
+              "start": 179,
+              "end": 186
+            }
+          }
+        ],
+        "span": {
+          "start": 179,
+          "end": 186
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 160,
+        "end": 186
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "text-backslash-backslash-u",
+        "span": {
+          "start": 186,
+          "end": 212
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "\\\\u0041",
+            "span": {
+              "start": 215,
+              "end": 223
+            }
+          }
+        ],
+        "span": {
+          "start": 215,
+          "end": 224
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 186,
+        "end": 224
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "String literals"
+      ],
+      "span": {
+        "start": 224,
+        "end": 242
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "quote-in-string",
+        "span": {
+          "start": 243,
+          "end": 258
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\\"",
+                "span": {
+                  "start": 262,
+                  "end": 266
+                }
+              },
+              {
+                "start": 262,
+                "end": 266
+              }
+            ],
+            "span": {
+              "start": 261,
+              "end": 266
+            }
+          }
+        ],
+        "span": {
+          "start": 261,
+          "end": 268
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 243,
+        "end": 268
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "backslash-in-string",
+        "span": {
+          "start": 268,
+          "end": 287
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\\\",
+                "span": {
+                  "start": 291,
+                  "end": 295
+                }
+              },
+              {
+                "start": 291,
+                "end": 295
+              }
+            ],
+            "span": {
+              "start": 290,
+              "end": 295
+            }
+          }
+        ],
+        "span": {
+          "start": 290,
+          "end": 297
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 268,
+        "end": 297
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Mismatched quote"
+      ],
+      "span": {
+        "start": 297,
+        "end": 321
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "mismatched-quote = {\"\\\\\"\"}\n",
+      "span": {
+        "start": 322,
+        "end": 349
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unknown escape"
+      ],
+      "span": {
+        "start": 349,
+        "end": 371
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "unknown-escape = {\"\\x\"}\n",
+      "span": {
+        "start": 372,
+        "end": 396
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Multiline literal"
+      ],
+      "span": {
+        "start": 396,
+        "end": 421
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-multiline-literal = {\"\n \"}\n\n",
+      "span": {
+        "start": 422,
+        "end": 458
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Unicode escapes"
+      ],
+      "span": {
+        "start": 458,
+        "end": 476
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "string-unicode-4digits",
+        "span": {
+          "start": 477,
+          "end": 499
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\u0041",
+                "span": {
+                  "start": 503,
+                  "end": 511
+                }
+              },
+              {
+                "start": 503,
+                "end": 511
+              }
+            ],
+            "span": {
+              "start": 502,
+              "end": 511
+            }
+          }
+        ],
+        "span": {
+          "start": 502,
+          "end": 513
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 477,
+        "end": 513
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "escape-unicode-4digits",
+        "span": {
+          "start": 513,
+          "end": 535
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\\\u0041",
+                "span": {
+                  "start": 539,
+                  "end": 548
+                }
+              },
+              {
+                "start": 539,
+                "end": 548
+              }
+            ],
+            "span": {
+              "start": 538,
+              "end": 548
+            }
+          }
+        ],
+        "span": {
+          "start": 538,
+          "end": 550
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 513,
+        "end": 550
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "string-unicode-6digits",
+        "span": {
+          "start": 550,
+          "end": 572
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\U01F602",
+                "span": {
+                  "start": 576,
+                  "end": 586
+                }
+              },
+              {
+                "start": 576,
+                "end": 586
+              }
+            ],
+            "span": {
+              "start": 575,
+              "end": 586
+            }
+          }
+        ],
+        "span": {
+          "start": 575,
+          "end": 588
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 550,
+        "end": 588
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "escape-unicode-6digits",
+        "span": {
+          "start": 588,
+          "end": 610
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\\\U01F602",
+                "span": {
+                  "start": 614,
+                  "end": 625
+                }
+              },
+              {
+                "start": 614,
+                "end": 625
+              }
+            ],
+            "span": {
+              "start": 613,
+              "end": 625
+            }
+          }
+        ],
+        "span": {
+          "start": 613,
+          "end": 628
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 588,
+        "end": 628
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "string-too-many-4digits",
+        "span": {
+          "start": 681,
+          "end": 704
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\u004100",
+                "span": {
+                  "start": 708,
+                  "end": 718
+                }
+              },
+              {
+                "start": 708,
+                "end": 718
+              }
+            ],
+            "span": {
+              "start": 707,
+              "end": 718
+            }
+          }
+        ],
+        "span": {
+          "start": 707,
+          "end": 720
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK The trailing \"00\" is part of the literal value."
+        ],
+        "span": {
+          "start": 628,
+          "end": 680
+        }
+      },
+      "span": {
+        "start": 681,
+        "end": 720
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "string-too-many-6digits",
+        "span": {
+          "start": 773,
+          "end": 796
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\U01F60200",
+                "span": {
+                  "start": 800,
+                  "end": 812
+                }
+              },
+              {
+                "start": 800,
+                "end": 812
+              }
+            ],
+            "span": {
+              "start": 799,
+              "end": 812
+            }
+          }
+        ],
+        "span": {
+          "start": 799,
+          "end": 815
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "OK The trailing \"00\" is part of the literal value."
+        ],
+        "span": {
+          "start": 720,
+          "end": 772
+        }
+      },
+      "span": {
+        "start": 773,
+        "end": 815
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Too few hex digits after \\u."
+      ],
+      "span": {
+        "start": 815,
+        "end": 851
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "string-too-few-4digits = {\"\\u41\"}\n",
+      "span": {
+        "start": 852,
+        "end": 886
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Too few hex digits after \\U."
+      ],
+      "span": {
+        "start": 886,
+        "end": 922
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "string-too-few-6digits = {\"\\U1F602\"}\n\n",
+      "span": {
+        "start": 923,
+        "end": 961
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Literal braces"
+      ],
+      "span": {
+        "start": 961,
+        "end": 978
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "brace-open",
+        "span": {
+          "start": 979,
+          "end": 989
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "An opening ",
+            "span": {
+              "start": 992,
+              "end": 1003
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "{",
+                "span": {
+                  "start": 1004,
+                  "end": 1007
+                }
+              },
+              {
+                "start": 1004,
+                "end": 1007
+              }
+            ],
+            "span": {
+              "start": 1003,
+              "end": 1007
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " brace.",
+            "span": {
+              "start": 1008,
+              "end": 1016
+            }
+          }
+        ],
+        "span": {
+          "start": 992,
+          "end": 1016
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 979,
+        "end": 1016
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "brace-close",
+        "span": {
+          "start": 1016,
+          "end": 1027
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A closing ",
+            "span": {
+              "start": 1030,
+              "end": 1040
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "}",
+                "span": {
+                  "start": 1041,
+                  "end": 1044
+                }
+              },
+              {
+                "start": 1041,
+                "end": 1044
+              }
+            ],
+            "span": {
+              "start": 1040,
+              "end": 1044
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": " brace.",
+            "span": {
+              "start": 1045,
+              "end": 1053
+            }
+          }
+        ],
+        "span": {
+          "start": 1030,
+          "end": 1053
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1016,
+        "end": 1053
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1053
+  }
+}

@@ -1,0 +1,128 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "control0",
+        "span": {
+          "start": 30,
+          "end": 38
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "abc\u0007def",
+            "span": {
+              "start": 41,
+              "end": 49
+            }
+          }
+        ],
+        "span": {
+          "start": 41,
+          "end": 50
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "            ↓ BEL, U+0007"
+        ],
+        "span": {
+          "start": 0,
+          "end": 29
+        }
+      },
+      "span": {
+        "start": 30,
+        "end": 50
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "delete",
+        "span": {
+          "start": 78,
+          "end": 84
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "abcdef",
+            "span": {
+              "start": 87,
+              "end": 95
+            }
+          }
+        ],
+        "span": {
+          "start": 87,
+          "end": 96
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "          ↓ DEL, U+007F"
+        ],
+        "span": {
+          "start": 50,
+          "end": 77
+        }
+      },
+      "span": {
+        "start": 78,
+        "end": 96
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "control1",
+        "span": {
+          "start": 126,
+          "end": 134
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "abcdef",
+            "span": {
+              "start": 137,
+              "end": 146
+            }
+          }
+        ],
+        "span": {
+          "start": 137,
+          "end": 146
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "            ↓ BPM, U+0082"
+        ],
+        "span": {
+          "start": 96,
+          "end": 125
+        }
+      },
+      "span": {
+        "start": 126,
+        "end": 146
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 146
+  }
+}

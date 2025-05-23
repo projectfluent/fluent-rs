@@ -1,0 +1,88 @@
+{
+  "body": [
+    {
+      "type": "ResourceComment",
+      "content": [
+        "The syntax in this file has been discontinued. It is no longer part of the",
+        "Fluent specification and should not be implemented nor used. We're keeping",
+        "these fixtures around to protect against accidental syntax reuse."
+      ],
+      "span": {
+        "start": 0,
+        "end": 227
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Variant lists."
+      ],
+      "span": {
+        "start": 230,
+        "end": 247
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-variant-list =\n    {\n       *[key] Value\n    }\n\n",
+      "span": {
+        "start": 249,
+        "end": 305
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "-term-variant-list =\n    {\n       *[key] Value\n    }\n\n\n",
+      "span": {
+        "start": 305,
+        "end": 360
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Variant expressions."
+      ],
+      "span": {
+        "start": 360,
+        "end": 383
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-variant-expression-placeable = {msg[case]}\n",
+      "span": {
+        "start": 385,
+        "end": 436
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-variant-expression-selector = {msg[case] ->\n   *[key] Value\n}\n\n",
+      "span": {
+        "start": 436,
+        "end": 507
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-variant-expression-placeable = {-term[case]}\n",
+      "span": {
+        "start": 507,
+        "end": 557
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-variant-expression-selector = {-term[case] ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 557,
+        "end": 626
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 626
+  }
+}

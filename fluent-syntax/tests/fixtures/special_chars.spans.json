@@ -1,0 +1,148 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "OK"
+      ],
+      "span": {
+        "start": 0,
+        "end": 5
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "bracket-inline",
+        "span": {
+          "start": 7,
+          "end": 21
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "[Value]",
+            "span": {
+              "start": 24,
+              "end": 32
+            }
+          }
+        ],
+        "span": {
+          "start": 24,
+          "end": 32
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 7,
+        "end": 32
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "dot-inline",
+        "span": {
+          "start": 32,
+          "end": 42
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": ".Value",
+            "span": {
+              "start": 45,
+              "end": 52
+            }
+          }
+        ],
+        "span": {
+          "start": 45,
+          "end": 52
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 32,
+        "end": 52
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "star-inline",
+        "span": {
+          "start": 52,
+          "end": 63
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "*Value",
+            "span": {
+              "start": 66,
+              "end": 73
+            }
+          }
+        ],
+        "span": {
+          "start": 66,
+          "end": 74
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 52,
+        "end": 74
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "ERRORS"
+      ],
+      "span": {
+        "start": 74,
+        "end": 83
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "bracket-newline =\n    [Value]\n",
+      "span": {
+        "start": 85,
+        "end": 115
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "dot-newline =\n    .Value\n",
+      "span": {
+        "start": 115,
+        "end": 140
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "star-newline =\n    *Value\n",
+      "span": {
+        "start": 140,
+        "end": 166
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 166
+  }
+}

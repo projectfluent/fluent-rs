@@ -1,0 +1,385 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Reference expressions in placeables."
+      ],
+      "span": {
+        "start": 0,
+        "end": 39
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "message-reference-placeable",
+        "span": {
+          "start": 41,
+          "end": 68
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "MessageReference",
+                "id": {
+                  "name": "msg",
+                  "span": {
+                    "start": 72,
+                    "end": 75
+                  }
+                },
+                "attribute": null,
+                "span": {
+                  "start": 72,
+                  "end": 75
+                }
+              },
+              {
+                "start": 72,
+                "end": 75
+              }
+            ],
+            "span": {
+              "start": 71,
+              "end": 75
+            }
+          }
+        ],
+        "span": {
+          "start": 71,
+          "end": 77
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 41,
+        "end": 77
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "term-reference-placeable",
+        "span": {
+          "start": 77,
+          "end": 101
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 106,
+                    "end": 110
+                  }
+                },
+                "attribute": null,
+                "arguments": null,
+                "span": {
+                  "start": 105,
+                  "end": 110
+                }
+              },
+              {
+                "start": 105,
+                "end": 110
+              }
+            ],
+            "span": {
+              "start": 104,
+              "end": 110
+            }
+          }
+        ],
+        "span": {
+          "start": 104,
+          "end": 112
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 77,
+        "end": 112
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "variable-reference-placeable",
+        "span": {
+          "start": 112,
+          "end": 140
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 145,
+                    "end": 148
+                  }
+                },
+                "span": {
+                  "start": 144,
+                  "end": 148
+                }
+              },
+              {
+                "start": 144,
+                "end": 148
+              }
+            ],
+            "span": {
+              "start": 143,
+              "end": 148
+            }
+          }
+        ],
+        "span": {
+          "start": 143,
+          "end": 151
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 112,
+        "end": 151
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "function-reference-placeable",
+        "span": {
+          "start": 257,
+          "end": 285
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "MessageReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 289,
+                    "end": 292
+                  }
+                },
+                "attribute": null,
+                "span": {
+                  "start": 289,
+                  "end": 292
+                }
+              },
+              {
+                "start": 289,
+                "end": 292
+              }
+            ],
+            "span": {
+              "start": 288,
+              "end": 292
+            }
+          }
+        ],
+        "span": {
+          "start": 288,
+          "end": 296
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Function references are invalid outside of call expressions.",
+          "This parses as a valid MessageReference."
+        ],
+        "span": {
+          "start": 151,
+          "end": 256
+        }
+      },
+      "span": {
+        "start": 257,
+        "end": 296
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Reference expressions in selectors."
+      ],
+      "span": {
+        "start": 296,
+        "end": 334
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "variable-reference-selector",
+        "span": {
+          "start": 336,
+          "end": 363
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 368,
+                    "end": 371
+                  }
+                },
+                "span": {
+                  "start": 367,
+                  "end": 371
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 380,
+                      "end": 383
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 385,
+                          "end": 391
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 385,
+                      "end": 391
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 378,
+                    "end": 391
+                  }
+                }
+              ],
+              "span": {
+                "start": 367,
+                "end": 391
+              }
+            },
+            "span": {
+              "start": 366,
+              "end": 391
+            }
+          }
+        ],
+        "span": {
+          "start": 366,
+          "end": 394
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 336,
+        "end": 394
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Message values may not be used as selectors."
+      ],
+      "span": {
+        "start": 394,
+        "end": 446
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-reference-selector = {msg ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 447,
+        "end": 502
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Term values may not be used as selectors."
+      ],
+      "span": {
+        "start": 502,
+        "end": 551
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-reference-selector = {-term ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 552,
+        "end": 606
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Function references are invalid outside of call expressions, and this",
+        "parses as a MessageReference which isn't a valid selector."
+      ],
+      "span": {
+        "start": 606,
+        "end": 744
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "function-expression-selector = {FUN ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 745,
+        "end": 802
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 802
+  }
+}

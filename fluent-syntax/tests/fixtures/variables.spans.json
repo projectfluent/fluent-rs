@@ -1,0 +1,276 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 0,
+          "end": 5
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 10,
+                    "end": 13
+                  }
+                },
+                "span": {
+                  "start": 9,
+                  "end": 13
+                }
+              },
+              {
+                "start": 9,
+                "end": 13
+              }
+            ],
+            "span": {
+              "start": 8,
+              "end": 13
+            }
+          }
+        ],
+        "span": {
+          "start": 8,
+          "end": 15
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 15
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 15,
+          "end": 20
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 28,
+                    "end": 31
+                  }
+                },
+                "span": {
+                  "start": 27,
+                  "end": 31
+                }
+              },
+              {
+                "start": 27,
+                "end": 34
+              }
+            ],
+            "span": {
+              "start": 23,
+              "end": 34
+            }
+          }
+        ],
+        "span": {
+          "start": 23,
+          "end": 36
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 15,
+        "end": 36
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key03",
+        "span": {
+          "start": 36,
+          "end": 41
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 51,
+                    "end": 54
+                  }
+                },
+                "span": {
+                  "start": 50,
+                  "end": 54
+                }
+              },
+              {
+                "start": 50,
+                "end": 55
+              }
+            ],
+            "span": {
+              "start": 44,
+              "end": 55
+            }
+          }
+        ],
+        "span": {
+          "start": 44,
+          "end": 57
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 36,
+        "end": 57
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 57,
+          "end": 62
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "VariableReference",
+                "id": {
+                  "name": "var",
+                  "span": {
+                    "start": 68,
+                    "end": 71
+                  }
+                },
+                "span": {
+                  "start": 67,
+                  "end": 71
+                }
+              },
+              {
+                "start": 67,
+                "end": 71
+              }
+            ],
+            "span": {
+              "start": 65,
+              "end": 71
+            }
+          }
+        ],
+        "span": {
+          "start": 65,
+          "end": 75
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 57,
+        "end": 75
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Errors"
+      ],
+      "span": {
+        "start": 75,
+        "end": 84
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Missing variable identifier"
+      ],
+      "span": {
+        "start": 86,
+        "end": 121
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err01 = {$}\n",
+      "span": {
+        "start": 122,
+        "end": 134
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Double $$"
+      ],
+      "span": {
+        "start": 134,
+        "end": 151
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err02 = {$$var}\n",
+      "span": {
+        "start": 152,
+        "end": 168
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Invalid first char of the identifier"
+      ],
+      "span": {
+        "start": 168,
+        "end": 212
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err03 = {$-var}\n",
+      "span": {
+        "start": 213,
+        "end": 229
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 229
+  }
+}

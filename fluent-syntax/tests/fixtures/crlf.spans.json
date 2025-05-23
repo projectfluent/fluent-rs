@@ -1,0 +1,164 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 48,
+          "end": 53
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 01",
+            "span": {
+              "start": 56,
+              "end": 64
+            }
+          }
+        ],
+        "span": {
+          "start": 56,
+          "end": 66
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Term Comment",
+          "with a blank last line.",
+          ""
+        ],
+        "span": {
+          "start": 2,
+          "end": 47
+        }
+      },
+      "span": {
+        "start": 48,
+        "end": 66
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 66,
+          "end": 71
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 02",
+            "span": {
+              "start": 81,
+              "end": 89
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "\n",
+            "span": {
+              "start": 90,
+              "end": 91
+            }
+          },
+          {
+            "type": "TextElement",
+            "value": "Continued",
+            "span": {
+              "start": 95,
+              "end": 104
+            }
+          }
+        ],
+        "span": {
+          "start": 73,
+          "end": 108
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "title",
+            "span": {
+              "start": 113,
+              "end": 118
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Title",
+                "span": {
+                  "start": 121,
+                  "end": 126
+                }
+              }
+            ],
+            "span": {
+              "start": 121,
+              "end": 130
+            }
+          },
+          "span": {
+            "start": 129,
+            "end": 130
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 66,
+        "end": 130
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unclosed StringLiteral"
+      ],
+      "span": {
+        "start": 130,
+        "end": 161
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err03 = { \"str\r\n\r\n",
+      "span": {
+        "start": 162,
+        "end": 180
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Missing newline after ->."
+      ],
+      "span": {
+        "start": 180,
+        "end": 214
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err04 = { $sel -> }\r\n",
+      "span": {
+        "start": 215,
+        "end": 236
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 236
+  }
+}

@@ -1,0 +1,402 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "simple-identifier",
+        "span": {
+          "start": 0,
+          "end": 17
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "sel",
+                  "span": {
+                    "start": 27,
+                    "end": 30
+                  }
+                },
+                "span": {
+                  "start": 26,
+                  "end": 30
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 43,
+                      "end": 46
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "value",
+                        "span": {
+                          "start": 48,
+                          "end": 54
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 48,
+                      "end": 54
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 41,
+                    "end": 54
+                  }
+                }
+              ],
+              "span": {
+                "start": 26,
+                "end": 58
+              }
+            },
+            "span": {
+              "start": 24,
+              "end": 58
+            }
+          }
+        ],
+        "span": {
+          "start": 19,
+          "end": 61
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 61
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "identifier-surrounded-by-whitespace",
+        "span": {
+          "start": 61,
+          "end": 96
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "sel",
+                  "span": {
+                    "start": 106,
+                    "end": 109
+                  }
+                },
+                "span": {
+                  "start": 105,
+                  "end": 109
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 127,
+                      "end": 130
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "value",
+                        "span": {
+                          "start": 137,
+                          "end": 143
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 137,
+                      "end": 143
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 120,
+                    "end": 143
+                  }
+                }
+              ],
+              "span": {
+                "start": 105,
+                "end": 147
+              }
+            },
+            "span": {
+              "start": 103,
+              "end": 147
+            }
+          }
+        ],
+        "span": {
+          "start": 98,
+          "end": 150
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 61,
+        "end": 150
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "int-number",
+        "span": {
+          "start": 150,
+          "end": 160
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "sel",
+                  "span": {
+                    "start": 170,
+                    "end": 173
+                  }
+                },
+                "span": {
+                  "start": 169,
+                  "end": 173
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "NumberLiteral",
+                    "value": "1",
+                    "span": {
+                      "start": 186,
+                      "end": 187
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "value",
+                        "span": {
+                          "start": 189,
+                          "end": 195
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 189,
+                      "end": 195
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 184,
+                    "end": 195
+                  }
+                }
+              ],
+              "span": {
+                "start": 169,
+                "end": 199
+              }
+            },
+            "span": {
+              "start": 167,
+              "end": 199
+            }
+          }
+        ],
+        "span": {
+          "start": 162,
+          "end": 202
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 150,
+        "end": 202
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "float-number",
+        "span": {
+          "start": 202,
+          "end": 214
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "VariableReference",
+                "id": {
+                  "name": "sel",
+                  "span": {
+                    "start": 224,
+                    "end": 227
+                  }
+                },
+                "span": {
+                  "start": 223,
+                  "end": 227
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "NumberLiteral",
+                    "value": "3.14",
+                    "span": {
+                      "start": 240,
+                      "end": 244
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "value",
+                        "span": {
+                          "start": 246,
+                          "end": 252
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 246,
+                      "end": 252
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 238,
+                    "end": 252
+                  }
+                }
+              ],
+              "span": {
+                "start": 223,
+                "end": 256
+              }
+            },
+            "span": {
+              "start": 221,
+              "end": 256
+            }
+          }
+        ],
+        "span": {
+          "start": 216,
+          "end": 259
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 202,
+        "end": 259
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR"
+      ],
+      "span": {
+        "start": 259,
+        "end": 266
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-identifier =\n    { $sel ->\n       *[two words] value\n    }\n\n",
+      "span": {
+        "start": 267,
+        "end": 335
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR"
+      ],
+      "span": {
+        "start": 335,
+        "end": 342
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-int =\n    { $sel ->\n       *[1 apple] value\n    }\n\n",
+      "span": {
+        "start": 343,
+        "end": 402
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR"
+      ],
+      "span": {
+        "start": 402,
+        "end": 409
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-int =\n    { $sel ->\n       *[3.14 apples] value\n    }\n",
+      "span": {
+        "start": 410,
+        "end": 472
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 472
+  }
+}

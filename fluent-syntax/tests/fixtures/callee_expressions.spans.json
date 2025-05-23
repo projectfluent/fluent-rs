@@ -1,0 +1,524 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Callees in placeables."
+      ],
+      "span": {
+        "start": 0,
+        "end": 25
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "function-callee-placeable",
+        "span": {
+          "start": 27,
+          "end": 52
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUNCTION",
+                  "span": {
+                    "start": 56,
+                    "end": 64
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 64,
+                    "end": 66
+                  }
+                },
+                "span": {
+                  "start": 56,
+                  "end": 66
+                }
+              },
+              {
+                "start": 56,
+                "end": 66
+              }
+            ],
+            "span": {
+              "start": 55,
+              "end": 66
+            }
+          }
+        ],
+        "span": {
+          "start": 55,
+          "end": 68
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 27,
+        "end": 68
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "term-callee-placeable",
+        "span": {
+          "start": 68,
+          "end": 89
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 94,
+                    "end": 98
+                  }
+                },
+                "attribute": null,
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 98,
+                    "end": 100
+                  }
+                },
+                "span": {
+                  "start": 93,
+                  "end": 100
+                }
+              },
+              {
+                "start": 93,
+                "end": 100
+              }
+            ],
+            "span": {
+              "start": 92,
+              "end": 100
+            }
+          }
+        ],
+        "span": {
+          "start": 92,
+          "end": 103
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 68,
+        "end": 103
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Messages cannot be parameterized."
+      ],
+      "span": {
+        "start": 103,
+        "end": 144
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-callee-placeable = {message()}\n",
+      "span": {
+        "start": 145,
+        "end": 184
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Equivalent to a MessageReference callee."
+      ],
+      "span": {
+        "start": 184,
+        "end": 232
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "mixed-case-callee-placeable = {Function()}\n",
+      "span": {
+        "start": 233,
+        "end": 276
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Message attributes cannot be parameterized."
+      ],
+      "span": {
+        "start": 276,
+        "end": 327
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-attr-callee-placeable = {message.attr()}\n",
+      "span": {
+        "start": 328,
+        "end": 377
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Term attributes may not be used in Placeables."
+      ],
+      "span": {
+        "start": 377,
+        "end": 431
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-attr-callee-placeable = {-term.attr()}\n",
+      "span": {
+        "start": 432,
+        "end": 476
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Variables cannot be parameterized."
+      ],
+      "span": {
+        "start": 476,
+        "end": 518
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "variable-callee-placeable = {$variable()}\n\n\n",
+      "span": {
+        "start": 519,
+        "end": 563
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Callees in selectors."
+      ],
+      "span": {
+        "start": 563,
+        "end": 587
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "function-callee-selector",
+        "span": {
+          "start": 589,
+          "end": 613
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUNCTION",
+                  "span": {
+                    "start": 617,
+                    "end": 625
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 625,
+                    "end": 627
+                  }
+                },
+                "span": {
+                  "start": 617,
+                  "end": 627
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 636,
+                      "end": 639
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 641,
+                          "end": 647
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 641,
+                      "end": 647
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 634,
+                    "end": 647
+                  }
+                }
+              ],
+              "span": {
+                "start": 617,
+                "end": 647
+              }
+            },
+            "span": {
+              "start": 616,
+              "end": 647
+            }
+          }
+        ],
+        "span": {
+          "start": 616,
+          "end": 649
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 589,
+        "end": 649
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "term-attr-callee-selector",
+        "span": {
+          "start": 649,
+          "end": 674
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": {
+              "selector": {
+                "type": "TermReference",
+                "id": {
+                  "name": "term",
+                  "span": {
+                    "start": 679,
+                    "end": 683
+                  }
+                },
+                "attribute": {
+                  "name": "attr",
+                  "span": {
+                    "start": 684,
+                    "end": 688
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 688,
+                    "end": 690
+                  }
+                },
+                "span": {
+                  "start": 678,
+                  "end": 690
+                }
+              },
+              "variants": [
+                {
+                  "type": "Variant",
+                  "key": {
+                    "type": "Identifier",
+                    "name": "key",
+                    "span": {
+                      "start": 699,
+                      "end": 702
+                    }
+                  },
+                  "value": {
+                    "elements": [
+                      {
+                        "type": "TextElement",
+                        "value": "Value",
+                        "span": {
+                          "start": 704,
+                          "end": 710
+                        }
+                      }
+                    ],
+                    "span": {
+                      "start": 704,
+                      "end": 710
+                    }
+                  },
+                  "default": true,
+                  "span": {
+                    "start": 697,
+                    "end": 710
+                  }
+                }
+              ],
+              "span": {
+                "start": 678,
+                "end": 710
+              }
+            },
+            "span": {
+              "start": 677,
+              "end": 710
+            }
+          }
+        ],
+        "span": {
+          "start": 677,
+          "end": 713
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 649,
+        "end": 713
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Messages cannot be parameterized."
+      ],
+      "span": {
+        "start": 713,
+        "end": 754
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-callee-selector = {message() ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 755,
+        "end": 813
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Equivalent to a MessageReference callee."
+      ],
+      "span": {
+        "start": 813,
+        "end": 861
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "mixed-case-callee-selector = {Function() ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 862,
+        "end": 924
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Message attributes cannot be parameterized."
+      ],
+      "span": {
+        "start": 924,
+        "end": 975
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "message-attr-callee-selector = {message.attr() ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 976,
+        "end": 1044
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Term values may not be used as selectors."
+      ],
+      "span": {
+        "start": 1044,
+        "end": 1093
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "term-callee-selector = {-term() ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 1094,
+        "end": 1147
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Variables cannot be parameterized."
+      ],
+      "span": {
+        "start": 1147,
+        "end": 1189
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "variable-callee-selector = {$variable() ->\n   *[key] Value\n}\n",
+      "span": {
+        "start": 1190,
+        "end": 1251
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 1251
+  }
+}

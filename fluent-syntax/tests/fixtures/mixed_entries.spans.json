@@ -1,0 +1,255 @@
+{
+  "body": [
+    {
+      "type": "Comment",
+      "content": [
+        "License Comment"
+      ],
+      "span": {
+        "start": 0,
+        "end": 17
+      }
+    },
+    {
+      "type": "ResourceComment",
+      "content": [
+        "Resource Comment"
+      ],
+      "span": {
+        "start": 19,
+        "end": 39
+      }
+    },
+    {
+      "type": "Term",
+      "id": {
+        "name": "brand-name",
+        "span": {
+          "start": 42,
+          "end": 52
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Aurora",
+            "span": {
+              "start": 55,
+              "end": 62
+            }
+          }
+        ],
+        "span": {
+          "start": 55,
+          "end": 63
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 41,
+        "end": 63
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Group Comment"
+      ],
+      "span": {
+        "start": 63,
+        "end": 79
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 81,
+          "end": 86
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 94,
+              "end": 98
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 101,
+                  "end": 111
+                }
+              }
+            ],
+            "span": {
+              "start": 101,
+              "end": 112
+            }
+          },
+          "span": {
+            "start": 111,
+            "end": 112
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 81,
+        "end": 112
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "ą=Invalid identifier\nć=Another one\n\n",
+      "span": {
+        "start": 112,
+        "end": 150
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 168,
+          "end": 173
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 176,
+              "end": 182
+            }
+          }
+        ],
+        "span": {
+          "start": 176,
+          "end": 183
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "Message Comment"
+        ],
+        "span": {
+          "start": 150,
+          "end": 167
+        }
+      },
+      "span": {
+        "start": 168,
+        "end": 183
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "Standalone Comment"
+      ],
+      "span": {
+        "start": 183,
+        "end": 203
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "    .attr = Dangling attribute\n\n",
+      "span": {
+        "start": 204,
+        "end": 236
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key03",
+        "span": {
+          "start": 294,
+          "end": 299
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 03",
+            "span": {
+              "start": 302,
+              "end": 311
+            }
+          }
+        ],
+        "span": {
+          "start": 302,
+          "end": 317
+        }
+      },
+      "attributes": [],
+      "comment": {
+        "content": [
+          "There are 5 spaces on the line between key03 and key04."
+        ],
+        "span": {
+          "start": 236,
+          "end": 293
+        }
+      },
+      "span": {
+        "start": 294,
+        "end": 317
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 317,
+          "end": 322
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 04",
+            "span": {
+              "start": 325,
+              "end": 334
+            }
+          }
+        ],
+        "span": {
+          "start": 325,
+          "end": 334
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 317,
+        "end": 334
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 334
+  }
+}

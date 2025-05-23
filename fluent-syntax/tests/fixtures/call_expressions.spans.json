@@ -1,0 +1,2555 @@
+{
+  "body": [
+    {
+      "type": "GroupComment",
+      "content": [
+        "Function names"
+      ],
+      "span": {
+        "start": 0,
+        "end": 17
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "valid-func-name-01",
+        "span": {
+          "start": 19,
+          "end": 37
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN1",
+                  "span": {
+                    "start": 41,
+                    "end": 45
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 45,
+                    "end": 47
+                  }
+                },
+                "span": {
+                  "start": 41,
+                  "end": 47
+                }
+              },
+              {
+                "start": 41,
+                "end": 47
+              }
+            ],
+            "span": {
+              "start": 40,
+              "end": 47
+            }
+          }
+        ],
+        "span": {
+          "start": 40,
+          "end": 49
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 19,
+        "end": 49
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "valid-func-name-02",
+        "span": {
+          "start": 49,
+          "end": 67
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN_FUN",
+                  "span": {
+                    "start": 71,
+                    "end": 78
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 78,
+                    "end": 80
+                  }
+                },
+                "span": {
+                  "start": 71,
+                  "end": 80
+                }
+              },
+              {
+                "start": 71,
+                "end": 80
+              }
+            ],
+            "span": {
+              "start": 70,
+              "end": 80
+            }
+          }
+        ],
+        "span": {
+          "start": 70,
+          "end": 82
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 49,
+        "end": 82
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "valid-func-name-03",
+        "span": {
+          "start": 82,
+          "end": 100
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN-FUN",
+                  "span": {
+                    "start": 104,
+                    "end": 111
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 111,
+                    "end": 113
+                  }
+                },
+                "span": {
+                  "start": 104,
+                  "end": 113
+                }
+              },
+              {
+                "start": 104,
+                "end": 113
+              }
+            ],
+            "span": {
+              "start": 103,
+              "end": 113
+            }
+          }
+        ],
+        "span": {
+          "start": 103,
+          "end": 116
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 82,
+        "end": 116
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK 0 is not a valid Identifier start"
+      ],
+      "span": {
+        "start": 116,
+        "end": 156
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-func-name-01 = {0FUN()}\n",
+      "span": {
+        "start": 157,
+        "end": 189
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Function names may not be lowercase"
+      ],
+      "span": {
+        "start": 189,
+        "end": 231
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-func-name-02 = {fun()}\n",
+      "span": {
+        "start": 232,
+        "end": 263
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Function names may not contain lowercase character"
+      ],
+      "span": {
+        "start": 263,
+        "end": 320
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-func-name-03 = {Fun()}\n",
+      "span": {
+        "start": 321,
+        "end": 352
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK ? is not a valid Identifier character"
+      ],
+      "span": {
+        "start": 352,
+        "end": 396
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "invalid-func-name-04 = {FUN?()}\n\n",
+      "span": {
+        "start": 397,
+        "end": 430
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Arguments"
+      ],
+      "span": {
+        "start": 430,
+        "end": 442
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "positional-args",
+        "span": {
+          "start": 444,
+          "end": 459
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 463,
+                    "end": 466
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 467,
+                        "end": 468
+                      }
+                    },
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 470,
+                        "end": 473
+                      }
+                    },
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 475,
+                          "end": 478
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 475,
+                        "end": 478
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 466,
+                    "end": 479
+                  }
+                },
+                "span": {
+                  "start": 463,
+                  "end": 479
+                }
+              },
+              {
+                "start": 463,
+                "end": 479
+              }
+            ],
+            "span": {
+              "start": 462,
+              "end": 479
+            }
+          }
+        ],
+        "span": {
+          "start": 462,
+          "end": 481
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 444,
+        "end": 481
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "named-args",
+        "span": {
+          "start": 481,
+          "end": 491
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 495,
+                    "end": 498
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 499,
+                          "end": 500
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 502,
+                          "end": 503
+                        }
+                      },
+                      "span": {
+                        "start": 499,
+                        "end": 503
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 505,
+                          "end": 506
+                        }
+                      },
+                      "value": {
+                        "type": "StringLiteral",
+                        "value": "Y",
+                        "span": {
+                          "start": 508,
+                          "end": 511
+                        }
+                      },
+                      "span": {
+                        "start": 505,
+                        "end": 511
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 498,
+                    "end": 512
+                  }
+                },
+                "span": {
+                  "start": 495,
+                  "end": 512
+                }
+              },
+              {
+                "start": 495,
+                "end": 512
+              }
+            ],
+            "span": {
+              "start": 494,
+              "end": 512
+            }
+          }
+        ],
+        "span": {
+          "start": 494,
+          "end": 514
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 481,
+        "end": 514
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "dense-named-args",
+        "span": {
+          "start": 514,
+          "end": 530
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 534,
+                    "end": 537
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 538,
+                          "end": 539
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 540,
+                          "end": 541
+                        }
+                      },
+                      "span": {
+                        "start": 538,
+                        "end": 541
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 543,
+                          "end": 544
+                        }
+                      },
+                      "value": {
+                        "type": "StringLiteral",
+                        "value": "Y",
+                        "span": {
+                          "start": 545,
+                          "end": 548
+                        }
+                      },
+                      "span": {
+                        "start": 543,
+                        "end": 548
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 537,
+                    "end": 549
+                  }
+                },
+                "span": {
+                  "start": 534,
+                  "end": 549
+                }
+              },
+              {
+                "start": 534,
+                "end": 549
+              }
+            ],
+            "span": {
+              "start": 533,
+              "end": 549
+            }
+          }
+        ],
+        "span": {
+          "start": 533,
+          "end": 551
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 514,
+        "end": 551
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "mixed-args",
+        "span": {
+          "start": 551,
+          "end": 561
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 565,
+                    "end": 568
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 569,
+                        "end": 570
+                      }
+                    },
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 572,
+                        "end": 575
+                      }
+                    },
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 577,
+                          "end": 580
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 577,
+                        "end": 580
+                      }
+                    }
+                  ],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 582,
+                          "end": 583
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 585,
+                          "end": 586
+                        }
+                      },
+                      "span": {
+                        "start": 582,
+                        "end": 586
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 588,
+                          "end": 589
+                        }
+                      },
+                      "value": {
+                        "type": "StringLiteral",
+                        "value": "Y",
+                        "span": {
+                          "start": 591,
+                          "end": 594
+                        }
+                      },
+                      "span": {
+                        "start": 588,
+                        "end": 594
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 568,
+                    "end": 595
+                  }
+                },
+                "span": {
+                  "start": 565,
+                  "end": 595
+                }
+              },
+              {
+                "start": 565,
+                "end": 595
+              }
+            ],
+            "span": {
+              "start": 564,
+              "end": 595
+            }
+          }
+        ],
+        "span": {
+          "start": 564,
+          "end": 598
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 551,
+        "end": 598
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Positional arg must not follow keyword args"
+      ],
+      "span": {
+        "start": 598,
+        "end": 649
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "shuffled-args = {FUN(1, x: 1, \"a\", y: \"Y\", msg)}\n\n",
+      "span": {
+        "start": 650,
+        "end": 700
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Named arguments must be unique"
+      ],
+      "span": {
+        "start": 700,
+        "end": 738
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "duplicate-named-args = {FUN(x: 1, x: \"X\")}\n\n\n",
+      "span": {
+        "start": 739,
+        "end": 784
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Whitespace around arguments"
+      ],
+      "span": {
+        "start": 784,
+        "end": 814
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sparse-inline-call",
+        "span": {
+          "start": 816,
+          "end": 834
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 838,
+                    "end": 841
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 849,
+                        "end": 852
+                      }
+                    },
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 856,
+                          "end": 859
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 856,
+                        "end": 859
+                      }
+                    }
+                  ],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 863,
+                          "end": 864
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 866,
+                          "end": 867
+                        }
+                      },
+                      "span": {
+                        "start": 863,
+                        "end": 867
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 846,
+                    "end": 871
+                  }
+                },
+                "span": {
+                  "start": 838,
+                  "end": 871
+                }
+              },
+              {
+                "start": 838,
+                "end": 871
+              }
+            ],
+            "span": {
+              "start": 837,
+              "end": 871
+            }
+          }
+        ],
+        "span": {
+          "start": 837,
+          "end": 873
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 816,
+        "end": 873
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "empty-inline-call",
+        "span": {
+          "start": 873,
+          "end": 890
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 894,
+                    "end": 897
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 897,
+                    "end": 901
+                  }
+                },
+                "span": {
+                  "start": 894,
+                  "end": 901
+                }
+              },
+              {
+                "start": 894,
+                "end": 901
+              }
+            ],
+            "span": {
+              "start": 893,
+              "end": 901
+            }
+          }
+        ],
+        "span": {
+          "start": 893,
+          "end": 903
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 873,
+        "end": 903
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "multiline-call",
+        "span": {
+          "start": 903,
+          "end": 917
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 921,
+                    "end": 924
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 934,
+                        "end": 937
+                      }
+                    },
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 947,
+                          "end": 950
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 947,
+                        "end": 950
+                      }
+                    }
+                  ],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 960,
+                          "end": 961
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 963,
+                          "end": 964
+                        }
+                      },
+                      "span": {
+                        "start": 960,
+                        "end": 964
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 924,
+                    "end": 970
+                  }
+                },
+                "span": {
+                  "start": 921,
+                  "end": 970
+                }
+              },
+              {
+                "start": 921,
+                "end": 970
+              }
+            ],
+            "span": {
+              "start": 920,
+              "end": 970
+            }
+          }
+        ],
+        "span": {
+          "start": 920,
+          "end": 972
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 903,
+        "end": 972
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sparse-multiline-call",
+        "span": {
+          "start": 972,
+          "end": 993
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 997,
+                    "end": 1000
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 1016,
+                        "end": 1019
+                      }
+                    },
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 1033,
+                          "end": 1036
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 1033,
+                        "end": 1045
+                      }
+                    }
+                  ],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1047,
+                          "end": 1048
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 1050,
+                          "end": 1051
+                        }
+                      },
+                      "span": {
+                        "start": 1047,
+                        "end": 1051
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 1005,
+                    "end": 1057
+                  }
+                },
+                "span": {
+                  "start": 997,
+                  "end": 1057
+                }
+              },
+              {
+                "start": 997,
+                "end": 1057
+              }
+            ],
+            "span": {
+              "start": 996,
+              "end": 1057
+            }
+          }
+        ],
+        "span": {
+          "start": 996,
+          "end": 1059
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 972,
+        "end": 1059
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "empty-multiline-call",
+        "span": {
+          "start": 1059,
+          "end": 1079
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1083,
+                    "end": 1086
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [],
+                  "span": {
+                    "start": 1086,
+                    "end": 1094
+                  }
+                },
+                "span": {
+                  "start": 1083,
+                  "end": 1094
+                }
+              },
+              {
+                "start": 1083,
+                "end": 1094
+              }
+            ],
+            "span": {
+              "start": 1082,
+              "end": 1094
+            }
+          }
+        ],
+        "span": {
+          "start": 1082,
+          "end": 1098
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1059,
+        "end": 1098
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-number",
+        "span": {
+          "start": 1098,
+          "end": 1119
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1123,
+                    "end": 1126
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1128,
+                        "end": 1129
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1126,
+                    "end": 1130
+                  }
+                },
+                "span": {
+                  "start": 1123,
+                  "end": 1130
+                }
+              },
+              {
+                "start": 1123,
+                "end": 1130
+              }
+            ],
+            "span": {
+              "start": 1122,
+              "end": 1130
+            }
+          }
+        ],
+        "span": {
+          "start": 1122,
+          "end": 1133
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1098,
+        "end": 1133
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-string",
+        "span": {
+          "start": 1133,
+          "end": 1154
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1158,
+                    "end": 1161
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "StringLiteral",
+                      "value": "a",
+                      "span": {
+                        "start": 1163,
+                        "end": 1166
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1161,
+                    "end": 1167
+                  }
+                },
+                "span": {
+                  "start": 1158,
+                  "end": 1167
+                }
+              },
+              {
+                "start": 1158,
+                "end": 1167
+              }
+            ],
+            "span": {
+              "start": 1157,
+              "end": 1167
+            }
+          }
+        ],
+        "span": {
+          "start": 1157,
+          "end": 1170
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1133,
+        "end": 1170
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-msg-ref",
+        "span": {
+          "start": 1170,
+          "end": 1192
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1196,
+                    "end": 1199
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 1201,
+                          "end": 1204
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 1201,
+                        "end": 1204
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1199,
+                    "end": 1205
+                  }
+                },
+                "span": {
+                  "start": 1196,
+                  "end": 1205
+                }
+              },
+              {
+                "start": 1196,
+                "end": 1205
+              }
+            ],
+            "span": {
+              "start": 1195,
+              "end": 1205
+            }
+          }
+        ],
+        "span": {
+          "start": 1195,
+          "end": 1208
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1170,
+        "end": 1208
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-term-ref",
+        "span": {
+          "start": 1208,
+          "end": 1231
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1235,
+                    "end": 1238
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "TermReference",
+                      "id": {
+                        "name": "msg",
+                        "span": {
+                          "start": 1241,
+                          "end": 1244
+                        }
+                      },
+                      "attribute": null,
+                      "arguments": null,
+                      "span": {
+                        "start": 1240,
+                        "end": 1244
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1238,
+                    "end": 1245
+                  }
+                },
+                "span": {
+                  "start": 1235,
+                  "end": 1245
+                }
+              },
+              {
+                "start": 1235,
+                "end": 1245
+              }
+            ],
+            "span": {
+              "start": 1234,
+              "end": 1245
+            }
+          }
+        ],
+        "span": {
+          "start": 1234,
+          "end": 1248
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1208,
+        "end": 1248
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-var-ref",
+        "span": {
+          "start": 1248,
+          "end": 1270
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1274,
+                    "end": 1277
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "VariableReference",
+                      "id": {
+                        "name": "var",
+                        "span": {
+                          "start": 1280,
+                          "end": 1283
+                        }
+                      },
+                      "span": {
+                        "start": 1279,
+                        "end": 1283
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1277,
+                    "end": 1284
+                  }
+                },
+                "span": {
+                  "start": 1274,
+                  "end": 1284
+                }
+              },
+              {
+                "start": 1274,
+                "end": 1284
+              }
+            ],
+            "span": {
+              "start": 1273,
+              "end": 1284
+            }
+          }
+        ],
+        "span": {
+          "start": 1273,
+          "end": 1287
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1248,
+        "end": 1287
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-arg-call",
+        "span": {
+          "start": 1287,
+          "end": 1306
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1310,
+                    "end": 1313
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "FunctionReference",
+                      "id": {
+                        "name": "OTHER",
+                        "span": {
+                          "start": 1315,
+                          "end": 1320
+                        }
+                      },
+                      "arguments": {
+                        "type": "CallArguments",
+                        "positional": [],
+                        "named": [],
+                        "span": {
+                          "start": 1320,
+                          "end": 1322
+                        }
+                      },
+                      "span": {
+                        "start": 1315,
+                        "end": 1322
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1313,
+                    "end": 1323
+                  }
+                },
+                "span": {
+                  "start": 1310,
+                  "end": 1323
+                }
+              },
+              {
+                "start": 1310,
+                "end": 1323
+              }
+            ],
+            "span": {
+              "start": 1309,
+              "end": 1323
+            }
+          }
+        ],
+        "span": {
+          "start": 1309,
+          "end": 1326
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1287,
+        "end": 1326
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-named-arg",
+        "span": {
+          "start": 1326,
+          "end": 1346
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1350,
+                    "end": 1353
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1355,
+                          "end": 1356
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 1357,
+                          "end": 1358
+                        }
+                      },
+                      "span": {
+                        "start": 1355,
+                        "end": 1358
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 1353,
+                    "end": 1359
+                  }
+                },
+                "span": {
+                  "start": 1350,
+                  "end": 1359
+                }
+              },
+              {
+                "start": 1350,
+                "end": 1359
+              }
+            ],
+            "span": {
+              "start": 1349,
+              "end": 1359
+            }
+          }
+        ],
+        "span": {
+          "start": 1349,
+          "end": 1362
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1326,
+        "end": 1362
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-closing-paren",
+        "span": {
+          "start": 1362,
+          "end": 1386
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1390,
+                    "end": 1393
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "MessageReference",
+                      "id": {
+                        "name": "x",
+                        "span": {
+                          "start": 1399,
+                          "end": 1400
+                        }
+                      },
+                      "attribute": null,
+                      "span": {
+                        "start": 1399,
+                        "end": 1401
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1393,
+                    "end": 1402
+                  }
+                },
+                "span": {
+                  "start": 1390,
+                  "end": 1402
+                }
+              },
+              {
+                "start": 1390,
+                "end": 1402
+              }
+            ],
+            "span": {
+              "start": 1389,
+              "end": 1402
+            }
+          }
+        ],
+        "span": {
+          "start": 1389,
+          "end": 1407
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1362,
+        "end": 1407
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Optional trailing comma"
+      ],
+      "span": {
+        "start": 1407,
+        "end": 1433
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "one-argument",
+        "span": {
+          "start": 1435,
+          "end": 1447
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1451,
+                    "end": 1454
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1455,
+                        "end": 1456
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1454,
+                    "end": 1458
+                  }
+                },
+                "span": {
+                  "start": 1451,
+                  "end": 1458
+                }
+              },
+              {
+                "start": 1451,
+                "end": 1458
+              }
+            ],
+            "span": {
+              "start": 1450,
+              "end": 1458
+            }
+          }
+        ],
+        "span": {
+          "start": 1450,
+          "end": 1460
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1435,
+        "end": 1460
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "many-arguments",
+        "span": {
+          "start": 1460,
+          "end": 1474
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1478,
+                    "end": 1481
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1482,
+                        "end": 1483
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "2",
+                      "span": {
+                        "start": 1485,
+                        "end": 1486
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "3",
+                      "span": {
+                        "start": 1488,
+                        "end": 1489
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1481,
+                    "end": 1491
+                  }
+                },
+                "span": {
+                  "start": 1478,
+                  "end": 1491
+                }
+              },
+              {
+                "start": 1478,
+                "end": 1491
+              }
+            ],
+            "span": {
+              "start": 1477,
+              "end": 1491
+            }
+          }
+        ],
+        "span": {
+          "start": 1477,
+          "end": 1493
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1460,
+        "end": 1493
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "inline-sparse-args",
+        "span": {
+          "start": 1493,
+          "end": 1511
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1515,
+                    "end": 1518
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1521,
+                        "end": 1522
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "2",
+                      "span": {
+                        "start": 1525,
+                        "end": 1526
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "3",
+                      "span": {
+                        "start": 1529,
+                        "end": 1530
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1518,
+                    "end": 1534
+                  }
+                },
+                "span": {
+                  "start": 1515,
+                  "end": 1534
+                }
+              },
+              {
+                "start": 1515,
+                "end": 1534
+              }
+            ],
+            "span": {
+              "start": 1514,
+              "end": 1534
+            }
+          }
+        ],
+        "span": {
+          "start": 1514,
+          "end": 1536
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1493,
+        "end": 1536
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "mulitline-args",
+        "span": {
+          "start": 1536,
+          "end": 1550
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1554,
+                    "end": 1557
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1567,
+                        "end": 1568
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "2",
+                      "span": {
+                        "start": 1578,
+                        "end": 1579
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1557,
+                    "end": 1586
+                  }
+                },
+                "span": {
+                  "start": 1554,
+                  "end": 1586
+                }
+              },
+              {
+                "start": 1554,
+                "end": 1586
+              }
+            ],
+            "span": {
+              "start": 1553,
+              "end": 1586
+            }
+          }
+        ],
+        "span": {
+          "start": 1553,
+          "end": 1588
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1536,
+        "end": 1588
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "mulitline-sparse-args",
+        "span": {
+          "start": 1588,
+          "end": 1609
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1613,
+                    "end": 1616
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [
+                    {
+                      "type": "NumberLiteral",
+                      "value": "1",
+                      "span": {
+                        "start": 1627,
+                        "end": 1628
+                      }
+                    },
+                    {
+                      "type": "NumberLiteral",
+                      "value": "2",
+                      "span": {
+                        "start": 1647,
+                        "end": 1648
+                      }
+                    }
+                  ],
+                  "named": [],
+                  "span": {
+                    "start": 1616,
+                    "end": 1667
+                  }
+                },
+                "span": {
+                  "start": 1613,
+                  "end": 1667
+                }
+              },
+              {
+                "start": 1613,
+                "end": 1667
+              }
+            ],
+            "span": {
+              "start": 1612,
+              "end": 1667
+            }
+          }
+        ],
+        "span": {
+          "start": 1612,
+          "end": 1671
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1588,
+        "end": 1671
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Syntax errors for trailing comma"
+      ],
+      "span": {
+        "start": 1671,
+        "end": 1706
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "one-argument = {FUN(1,,)}\n",
+      "span": {
+        "start": 1708,
+        "end": 1734
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "missing-arg = {FUN(,)}\n",
+      "span": {
+        "start": 1734,
+        "end": 1757
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "missing-sparse-arg = {FUN(   ,   )}\n\n\n",
+      "span": {
+        "start": 1757,
+        "end": 1795
+      }
+    },
+    {
+      "type": "GroupComment",
+      "content": [
+        "Whitespace in named arguments"
+      ],
+      "span": {
+        "start": 1795,
+        "end": 1827
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sparse-named-arg",
+        "span": {
+          "start": 1829,
+          "end": 1845
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1849,
+                    "end": 1852
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1862,
+                          "end": 1863
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 1870,
+                          "end": 1871
+                        }
+                      },
+                      "span": {
+                        "start": 1862,
+                        "end": 1871
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "y",
+                        "span": {
+                          "start": 1881,
+                          "end": 1882
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "2",
+                        "span": {
+                          "start": 1889,
+                          "end": 1890
+                        }
+                      },
+                      "span": {
+                        "start": 1881,
+                        "end": 1890
+                      }
+                    },
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "z",
+                        "span": {
+                          "start": 1900,
+                          "end": 1901
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "3",
+                        "span": {
+                          "start": 1920,
+                          "end": 1921
+                        }
+                      },
+                      "span": {
+                        "start": 1900,
+                        "end": 1921
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 1852,
+                    "end": 1927
+                  }
+                },
+                "span": {
+                  "start": 1849,
+                  "end": 1927
+                }
+              },
+              {
+                "start": 1849,
+                "end": 1927
+              }
+            ],
+            "span": {
+              "start": 1848,
+              "end": 1927
+            }
+          }
+        ],
+        "span": {
+          "start": 1848,
+          "end": 1931
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1829,
+        "end": 1931
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-colon",
+        "span": {
+          "start": 1931,
+          "end": 1947
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1951,
+                    "end": 1954
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 1964,
+                          "end": 1965
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 1967,
+                          "end": 1968
+                        }
+                      },
+                      "span": {
+                        "start": 1964,
+                        "end": 1968
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 1954,
+                    "end": 1969
+                  }
+                },
+                "span": {
+                  "start": 1951,
+                  "end": 1969
+                }
+              },
+              {
+                "start": 1951,
+                "end": 1969
+              }
+            ],
+            "span": {
+              "start": 1950,
+              "end": 1969
+            }
+          }
+        ],
+        "span": {
+          "start": 1950,
+          "end": 1972
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1931,
+        "end": 1972
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "unindented-value",
+        "span": {
+          "start": 1972,
+          "end": 1988
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "FunctionReference",
+                "id": {
+                  "name": "FUN",
+                  "span": {
+                    "start": 1992,
+                    "end": 1995
+                  }
+                },
+                "arguments": {
+                  "type": "CallArguments",
+                  "positional": [],
+                  "named": [
+                    {
+                      "type": "NamedArgument",
+                      "name": {
+                        "name": "x",
+                        "span": {
+                          "start": 2005,
+                          "end": 2006
+                        }
+                      },
+                      "value": {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 2008,
+                          "end": 2009
+                        }
+                      },
+                      "span": {
+                        "start": 2005,
+                        "end": 2009
+                      }
+                    }
+                  ],
+                  "span": {
+                    "start": 1995,
+                    "end": 2010
+                  }
+                },
+                "span": {
+                  "start": 1992,
+                  "end": 2010
+                }
+              },
+              {
+                "start": 1992,
+                "end": 2010
+              }
+            ],
+            "span": {
+              "start": 1991,
+              "end": 2010
+            }
+          }
+        ],
+        "span": {
+          "start": 1991,
+          "end": 2012
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 1972,
+        "end": 2012
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 2012
+  }
+}

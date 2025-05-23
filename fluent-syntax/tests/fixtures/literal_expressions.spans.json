@@ -1,0 +1,143 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "string-expression",
+        "span": {
+          "start": 0,
+          "end": 17
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "abc",
+                "span": {
+                  "start": 21,
+                  "end": 26
+                }
+              },
+              {
+                "start": 21,
+                "end": 26
+              }
+            ],
+            "span": {
+              "start": 20,
+              "end": 26
+            }
+          }
+        ],
+        "span": {
+          "start": 20,
+          "end": 28
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 28
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "number-expression",
+        "span": {
+          "start": 28,
+          "end": 45
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "NumberLiteral",
+                "value": "123",
+                "span": {
+                  "start": 49,
+                  "end": 52
+                }
+              },
+              {
+                "start": 49,
+                "end": 52
+              }
+            ],
+            "span": {
+              "start": 48,
+              "end": 52
+            }
+          }
+        ],
+        "span": {
+          "start": 48,
+          "end": 54
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 28,
+        "end": 54
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "number-expression",
+        "span": {
+          "start": 54,
+          "end": 71
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "NumberLiteral",
+                "value": "-3.14",
+                "span": {
+                  "start": 75,
+                  "end": 80
+                }
+              },
+              {
+                "start": 75,
+                "end": 80
+              }
+            ],
+            "span": {
+              "start": 74,
+              "end": 80
+            }
+          }
+        ],
+        "span": {
+          "start": 74,
+          "end": 82
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 54,
+        "end": 82
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 82
+  }
+}

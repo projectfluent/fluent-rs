@@ -1,0 +1,790 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "key01",
+        "span": {
+          "start": 0,
+          "end": 5
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 8,
+              "end": 14
+            }
+          }
+        ],
+        "span": {
+          "start": 8,
+          "end": 15
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 15
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 15,
+          "end": 20
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 23,
+              "end": 29
+            }
+          }
+        ],
+        "span": {
+          "start": 23,
+          "end": 29
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 34,
+              "end": 38
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 41,
+                  "end": 51
+                }
+              }
+            ],
+            "span": {
+              "start": 41,
+              "end": 52
+            }
+          },
+          "span": {
+            "start": 51,
+            "end": 52
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 15,
+        "end": 52
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key02",
+        "span": {
+          "start": 52,
+          "end": 57
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 60,
+              "end": 66
+            }
+          }
+        ],
+        "span": {
+          "start": 60,
+          "end": 66
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr1",
+            "span": {
+              "start": 71,
+              "end": 76
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 1",
+                "span": {
+                  "start": 79,
+                  "end": 91
+                }
+              }
+            ],
+            "span": {
+              "start": 79,
+              "end": 91
+            }
+          },
+          "span": {
+            "start": 90,
+            "end": 91
+          }
+        },
+        {
+          "id": {
+            "name": "attr2",
+            "span": {
+              "start": 96,
+              "end": 101
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 2",
+                "span": {
+                  "start": 104,
+                  "end": 116
+                }
+              }
+            ],
+            "span": {
+              "start": 104,
+              "end": 117
+            }
+          },
+          "span": {
+            "start": 116,
+            "end": 117
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 52,
+        "end": 117
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key03",
+        "span": {
+          "start": 117,
+          "end": 122
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr",
+            "span": {
+              "start": 130,
+              "end": 134
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute",
+                "span": {
+                  "start": 137,
+                  "end": 147
+                }
+              }
+            ],
+            "span": {
+              "start": 137,
+              "end": 148
+            }
+          },
+          "span": {
+            "start": 147,
+            "end": 148
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 117,
+        "end": 148
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key04",
+        "span": {
+          "start": 148,
+          "end": 153
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr1",
+            "span": {
+              "start": 161,
+              "end": 166
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 1",
+                "span": {
+                  "start": 169,
+                  "end": 181
+                }
+              }
+            ],
+            "span": {
+              "start": 169,
+              "end": 181
+            }
+          },
+          "span": {
+            "start": 180,
+            "end": 181
+          }
+        },
+        {
+          "id": {
+            "name": "attr2",
+            "span": {
+              "start": 186,
+              "end": 191
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 2",
+                "span": {
+                  "start": 194,
+                  "end": 206
+                }
+              }
+            ],
+            "span": {
+              "start": 194,
+              "end": 207
+            }
+          },
+          "span": {
+            "start": 206,
+            "end": 207
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 148,
+        "end": 207
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key05",
+        "span": {
+          "start": 231,
+          "end": 236
+        }
+      },
+      "value": null,
+      "attributes": [
+        {
+          "id": {
+            "name": "attr1",
+            "span": {
+              "start": 260,
+              "end": 265
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 1",
+                "span": {
+                  "start": 268,
+                  "end": 280
+                }
+              }
+            ],
+            "span": {
+              "start": 268,
+              "end": 281
+            }
+          },
+          "span": {
+            "start": 280,
+            "end": 281
+          }
+        }
+      ],
+      "comment": {
+        "content": [
+          "     <  whitespace  >"
+        ],
+        "span": {
+          "start": 207,
+          "end": 230
+        }
+      },
+      "span": {
+        "start": 231,
+        "end": 281
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "no-whitespace",
+        "span": {
+          "start": 281,
+          "end": 294
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 295,
+              "end": 301
+            }
+          }
+        ],
+        "span": {
+          "start": 295,
+          "end": 301
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr1",
+            "span": {
+              "start": 306,
+              "end": 311
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 1",
+                "span": {
+                  "start": 312,
+                  "end": 324
+                }
+              }
+            ],
+            "span": {
+              "start": 312,
+              "end": 325
+            }
+          },
+          "span": {
+            "start": 324,
+            "end": 325
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 281,
+        "end": 325
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "extra-whitespace",
+        "span": {
+          "start": 325,
+          "end": 341
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value",
+            "span": {
+              "start": 348,
+              "end": 354
+            }
+          }
+        ],
+        "span": {
+          "start": 348,
+          "end": 354
+        }
+      },
+      "attributes": [
+        {
+          "id": {
+            "name": "attr1",
+            "span": {
+              "start": 359,
+              "end": 364
+            }
+          },
+          "value": {
+            "elements": [
+              {
+                "type": "TextElement",
+                "value": "Attribute 1",
+                "span": {
+                  "start": 374,
+                  "end": 386
+                }
+              }
+            ],
+            "span": {
+              "start": 374,
+              "end": 387
+            }
+          },
+          "span": {
+            "start": 386,
+            "end": 387
+          }
+        }
+      ],
+      "comment": null,
+      "span": {
+        "start": 325,
+        "end": 387
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key06",
+        "span": {
+          "start": 387,
+          "end": 392
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "",
+                "span": {
+                  "start": 396,
+                  "end": 398
+                }
+              },
+              {
+                "start": 396,
+                "end": 398
+              }
+            ],
+            "span": {
+              "start": 395,
+              "end": 398
+            }
+          }
+        ],
+        "span": {
+          "start": 395,
+          "end": 401
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 387,
+        "end": 401
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing value"
+      ],
+      "span": {
+        "start": 401,
+        "end": 421
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "key07 =\n\n",
+      "span": {
+        "start": 422,
+        "end": 431
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Missing ="
+      ],
+      "span": {
+        "start": 431,
+        "end": 447
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "key08\n\n",
+      "span": {
+        "start": 448,
+        "end": 455
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "KEY09",
+        "span": {
+          "start": 455,
+          "end": 460
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 09",
+            "span": {
+              "start": 463,
+              "end": 472
+            }
+          }
+        ],
+        "span": {
+          "start": 463,
+          "end": 473
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 455,
+        "end": 473
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key-10",
+        "span": {
+          "start": 473,
+          "end": 479
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 10",
+            "span": {
+              "start": 482,
+              "end": 491
+            }
+          }
+        ],
+        "span": {
+          "start": 482,
+          "end": 491
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 473,
+        "end": 491
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key_11",
+        "span": {
+          "start": 491,
+          "end": 497
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 11",
+            "span": {
+              "start": 500,
+              "end": 509
+            }
+          }
+        ],
+        "span": {
+          "start": 500,
+          "end": 509
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 491,
+        "end": 509
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key-12-",
+        "span": {
+          "start": 509,
+          "end": 516
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 12",
+            "span": {
+              "start": 519,
+              "end": 528
+            }
+          }
+        ],
+        "span": {
+          "start": 519,
+          "end": 528
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 509,
+        "end": 528
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "key_13_",
+        "span": {
+          "start": 528,
+          "end": 535
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "Value 13",
+            "span": {
+              "start": 538,
+              "end": 547
+            }
+          }
+        ],
+        "span": {
+          "start": 538,
+          "end": 548
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 528,
+        "end": 548
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Invalid id"
+      ],
+      "span": {
+        "start": 548,
+        "end": 565
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "0err-14 = Value 14\n\n",
+      "span": {
+        "start": 566,
+        "end": 586
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Invalid id"
+      ],
+      "span": {
+        "start": 586,
+        "end": 603
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err-15? = Value 15\n\n",
+      "span": {
+        "start": 604,
+        "end": 624
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "JUNK Invalid id"
+      ],
+      "span": {
+        "start": 624,
+        "end": 641
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err-ąę-16 = Value 16\n",
+      "span": {
+        "start": 642,
+        "end": 665
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 665
+  }
+}

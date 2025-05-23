@@ -25,7 +25,11 @@ fn parse_fixtures_compare() {
         let path = p.to_str().expect("Can't print path");
         let is_crlf = path.contains("crlf");
 
+        #[cfg(feature = "spans")]
+        let reference_path = path.replace(".ftl", ".spans.json");
+        #[cfg(not(feature = "spans"))]
         let reference_path = path.replace(".ftl", ".json");
+
         let reference_file = read_file(&reference_path, true).unwrap();
         let ftl_file = read_file(path, false).unwrap();
 
@@ -67,6 +71,12 @@ fn parse_bench_fixtures() {
         let path = p.to_str().expect("Can't print path");
         let file_name = p.file_name().unwrap().to_str().unwrap();
 
+        #[cfg(feature = "spans")]
+        let reference_path = format!(
+            "./tests/fixtures/benches/{}",
+            file_name.replace(".ftl", ".spans.json")
+        );
+        #[cfg(not(feature = "spans"))]
         let reference_path = format!(
             "./tests/fixtures/benches/{}",
             file_name.replace(".ftl", ".json")

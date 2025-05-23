@@ -1,0 +1,254 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "nested-placeable",
+        "span": {
+          "start": 0,
+          "end": 16
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "Placeable",
+                    "expression": [
+                      {
+                        "type": "NumberLiteral",
+                        "value": "1",
+                        "span": {
+                          "start": 22,
+                          "end": 23
+                        }
+                      },
+                      {
+                        "start": 22,
+                        "end": 23
+                      }
+                    ],
+                    "span": {
+                      "start": 21,
+                      "end": 24
+                    }
+                  },
+                  {
+                    "start": 21,
+                    "end": 24
+                  }
+                ],
+                "span": {
+                  "start": 20,
+                  "end": 25
+                }
+              },
+              {
+                "start": 20,
+                "end": 25
+              }
+            ],
+            "span": {
+              "start": 19,
+              "end": 25
+            }
+          }
+        ],
+        "span": {
+          "start": 19,
+          "end": 27
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 27
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "padded-placeable",
+        "span": {
+          "start": 27,
+          "end": 43
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "NumberLiteral",
+                "value": "1",
+                "span": {
+                  "start": 49,
+                  "end": 50
+                }
+              },
+              {
+                "start": 49,
+                "end": 52
+              }
+            ],
+            "span": {
+              "start": 46,
+              "end": 52
+            }
+          }
+        ],
+        "span": {
+          "start": 46,
+          "end": 54
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 27,
+        "end": 54
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "sparse-placeable",
+        "span": {
+          "start": 54,
+          "end": 70
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "Placeable",
+                "expression": [
+                  {
+                    "type": "NumberLiteral",
+                    "value": "1",
+                    "span": {
+                      "start": 77,
+                      "end": 78
+                    }
+                  },
+                  {
+                    "start": 77,
+                    "end": 79
+                  }
+                ],
+                "span": {
+                  "start": 75,
+                  "end": 80
+                }
+              },
+              {
+                "start": 75,
+                "end": 81
+              }
+            ],
+            "span": {
+              "start": 73,
+              "end": 81
+            }
+          }
+        ],
+        "span": {
+          "start": 73,
+          "end": 84
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 54,
+        "end": 84
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unmatched opening brace"
+      ],
+      "span": {
+        "start": 84,
+        "end": 115
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "unmatched-open1 = { 1\n\n",
+      "span": {
+        "start": 116,
+        "end": 139
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unmatched opening brace"
+      ],
+      "span": {
+        "start": 139,
+        "end": 170
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "unmatched-open2 = {{ 1 }\n\n",
+      "span": {
+        "start": 171,
+        "end": 197
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unmatched closing brace"
+      ],
+      "span": {
+        "start": 197,
+        "end": 228
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "unmatched-close1 = 1 }\n\n",
+      "span": {
+        "start": 229,
+        "end": 253
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Unmatched closing brace"
+      ],
+      "span": {
+        "start": 253,
+        "end": 284
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "unmatched-close2 = { 1 }}\n",
+      "span": {
+        "start": 285,
+        "end": 311
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 311
+  }
+}

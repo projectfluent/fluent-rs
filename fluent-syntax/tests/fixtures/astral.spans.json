@@ -1,0 +1,346 @@
+{
+  "body": [
+    {
+      "type": "Message",
+      "id": {
+        "name": "face-with-tears-of-joy",
+        "span": {
+          "start": 0,
+          "end": 22
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "😂",
+            "span": {
+              "start": 25,
+              "end": 30
+            }
+          }
+        ],
+        "span": {
+          "start": 25,
+          "end": 30
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 0,
+        "end": 30
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "tetragram-for-centre",
+        "span": {
+          "start": 30,
+          "end": 50
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "𝌆",
+            "span": {
+              "start": 53,
+              "end": 58
+            }
+          }
+        ],
+        "span": {
+          "start": 53,
+          "end": 59
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 30,
+        "end": 59
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "surrogates-in-text",
+        "span": {
+          "start": 59,
+          "end": 77
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "\\uD83D\\uDE02",
+            "span": {
+              "start": 80,
+              "end": 93
+            }
+          }
+        ],
+        "span": {
+          "start": 80,
+          "end": 93
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 59,
+        "end": 93
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "surrogates-in-string",
+        "span": {
+          "start": 93,
+          "end": 113
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\uD83D\\uDE02",
+                "span": {
+                  "start": 117,
+                  "end": 131
+                }
+              },
+              {
+                "start": 117,
+                "end": 131
+              }
+            ],
+            "span": {
+              "start": 116,
+              "end": 131
+            }
+          }
+        ],
+        "span": {
+          "start": 116,
+          "end": 133
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 93,
+        "end": 133
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "surrogates-in-adjacent-strings",
+        "span": {
+          "start": 133,
+          "end": 163
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\uD83D",
+                "span": {
+                  "start": 167,
+                  "end": 175
+                }
+              },
+              {
+                "start": 167,
+                "end": 175
+              }
+            ],
+            "span": {
+              "start": 166,
+              "end": 175
+            }
+          },
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "\\uDE02",
+                "span": {
+                  "start": 177,
+                  "end": 185
+                }
+              },
+              {
+                "start": 177,
+                "end": 185
+              }
+            ],
+            "span": {
+              "start": 176,
+              "end": 185
+            }
+          }
+        ],
+        "span": {
+          "start": 166,
+          "end": 188
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 133,
+        "end": 188
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "emoji-in-text",
+        "span": {
+          "start": 188,
+          "end": 201
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "TextElement",
+            "value": "A face 😂 with tears of joy.",
+            "span": {
+              "start": 204,
+              "end": 235
+            }
+          }
+        ],
+        "span": {
+          "start": 204,
+          "end": 235
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 188,
+        "end": 235
+      }
+    },
+    {
+      "type": "Message",
+      "id": {
+        "name": "emoji-in-string",
+        "span": {
+          "start": 235,
+          "end": 250
+        }
+      },
+      "value": {
+        "elements": [
+          {
+            "type": "Placeable",
+            "expression": [
+              {
+                "type": "StringLiteral",
+                "value": "A face 😂 with tears of joy.",
+                "span": {
+                  "start": 254,
+                  "end": 286
+                }
+              },
+              {
+                "start": 254,
+                "end": 286
+              }
+            ],
+            "span": {
+              "start": 253,
+              "end": 286
+            }
+          }
+        ],
+        "span": {
+          "start": 253,
+          "end": 289
+        }
+      },
+      "attributes": [],
+      "comment": null,
+      "span": {
+        "start": 235,
+        "end": 289
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Invalid identifier"
+      ],
+      "span": {
+        "start": 289,
+        "end": 315
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err-😂 = Value\n\n",
+      "span": {
+        "start": 316,
+        "end": 334
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Invalid expression"
+      ],
+      "span": {
+        "start": 334,
+        "end": 360
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err-invalid-expression = { 😂 }\n\n",
+      "span": {
+        "start": 361,
+        "end": 396
+      }
+    },
+    {
+      "type": "Comment",
+      "content": [
+        "ERROR Invalid variant key"
+      ],
+      "span": {
+        "start": 396,
+        "end": 423
+      }
+    },
+    {
+      "type": "Junk",
+      "content": "err-invalid-variant-key = { $sel ->\n    *[😂] Value\n}\n",
+      "span": {
+        "start": 424,
+        "end": 480
+      }
+    }
+  ],
+  "span": {
+    "start": 0,
+    "end": 480
+  }
+}
