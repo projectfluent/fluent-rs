@@ -16,7 +16,7 @@ use unic_langid::LanguageIdentifier;
 
 use helpers::*;
 
-fn transform_example(s: &str) -> Cow<str> {
+fn transform_example(s: &str) -> Cow<'_, str> {
     s.replace('a', "A").into()
 }
 

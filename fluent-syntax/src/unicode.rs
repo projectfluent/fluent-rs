@@ -133,7 +133,7 @@ where
 ///     "Foo 😊 Bar"
 /// );
 /// ```
-pub fn unescape_unicode_to_string(input: &str) -> Cow<str> {
+pub fn unescape_unicode_to_string(input: &str) -> Cow<'_, str> {
     let mut result = String::new();
     let owned = unescape(&mut result, input).expect("String write methods don't Err");
     if owned {

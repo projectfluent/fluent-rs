@@ -37,7 +37,7 @@ fn get_ids(res: &FluentResource) -> Vec<String> {
         .collect()
 }
 
-fn get_args(name: &str) -> Option<FluentArgs> {
+fn get_args(name: &str) -> Option<FluentArgs<'_>> {
     match name {
         "preferences" => {
             let mut prefs_args = FluentArgs::new();

@@ -93,7 +93,7 @@ impl<'args> FluentArgs<'args> {
     }
 
     /// Iterate over a tuple of the key an [`FluentValue`].
-    pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue)> {
+    pub fn iter(&self) -> impl Iterator<Item = (&str, &FluentValue<'_>)> {
         self.0.iter().map(|(k, v)| (k.as_ref(), v))
     }
 }

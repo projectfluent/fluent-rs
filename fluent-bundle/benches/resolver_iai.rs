@@ -12,7 +12,7 @@ fn add_functions<R>(name: &'static str, bundle: &mut FluentBundle<R>) {
     }
 }
 
-fn get_args(name: &str) -> Option<FluentArgs> {
+fn get_args(name: &str) -> Option<FluentArgs<'_>> {
     match name {
         "preferences" => {
             let mut prefs_args = FluentArgs::new();

@@ -24,7 +24,7 @@ static FLIPPED_CAPS_MAP: &[char] = &[
 static RE_EXCLUDED: Lazy<Regex> = Lazy::new(|| Regex::new(r"&[#\w]+;|<\s*.+?\s*>").unwrap());
 static RE_AZ: Lazy<Regex> = Lazy::new(|| Regex::new(r"[a-zA-Z]").unwrap());
 
-pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool) -> Cow<str> {
+pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool) -> Cow<'_, str> {
     // Exclude access-keys and other single-char messages
     if s.len() == 1 {
         return s.into();
@@ -62,7 +62,7 @@ pub fn transform_dom(s: &str, flipped: bool, elongate: bool, with_markers: bool)
     result
 }
 
-pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<str> {
+pub fn transform(s: &str, flipped: bool, elongate: bool) -> Cow<'_, str> {
     let (small_map, caps_map) = if flipped {
         (FLIPPED_SMALL_MAP, FLIPPED_CAPS_MAP)
     } else {
