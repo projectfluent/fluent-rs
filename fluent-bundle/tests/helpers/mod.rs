@@ -111,15 +111,6 @@ pub struct TestResource {
     pub source: String,
 }
 
-#[derive(Clone, Debug, Deserialize, PartialEq, Serialize)]
-#[serde(deny_unknown_fields)]
-pub struct TestSetup {
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
-    pub bundles: Vec<TestBundle>,
-    #[serde(skip_serializing_if = "Vec::is_empty", default)]
-    pub resources: Vec<TestResource>,
-}
-
 #[derive(Clone, Debug, Deserialize, Eq, PartialEq, Serialize)]
 #[serde(deny_unknown_fields)]
 pub struct TestError {
