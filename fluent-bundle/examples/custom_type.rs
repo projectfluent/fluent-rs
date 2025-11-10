@@ -115,8 +115,6 @@ impl FluentType for DateTime {
     }
 }
 
-/// Formatter
-
 struct DateTimeFormatter {
     lang: LanguageIdentifier,
     options: DateTimeOptions,
