@@ -334,7 +334,6 @@ fn test_errors(errors: &[FluentError], reference: Option<&[TestError]>) {
                 ResolverError::TooManyPlaceables => {
                     assert_eq!(reference.error_type, "TooManyPlaceables");
                 }
-                _ => unimplemented!(),
             },
             FluentError::ParserError(_) => {
                 assert_eq!(reference.error_type, "Parser");

@@ -78,6 +78,10 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
         }
     }
 
+    /// Cyclic pattern reference detection used in expression resolvers.
+    ///
+    /// Writes an error as soon as an identical pattern is encountered more than once,
+    /// which would lead to an infinite loop.
     pub fn track<W>(
         &mut self,
         w: &mut W,
@@ -98,6 +102,49 @@ impl<'bundle, 'ast, 'args, 'errors, R, M> Scope<'bundle, 'ast, 'args, 'errors, R
             self.traveled.push(pattern);
             let result = pattern.write(w, self);
             self.traveled.pop();
+            result
+        }
+    }
+
+    /// Similar to [`Scope::maybe_track`], but resolves to a value
+    /// instead of writing to a Writer instance.
+    pub fn maybe_track_resolve(
+        &mut self,
+        pattern: &'ast ast::Pattern<&'bundle str>,
+        exp: &'ast ast::Expression<&'bundle str>,
+    ) -> FluentValue<'bundle>
+    where
+        R: Borrow<FluentResource>,
+        M: MemoizerKind,
+    {
+        if self.travelled.is_empty() {
+            self.travelled.push(pattern);
+        }
+        let res = exp.resolve(self);
+        if self.dirty {
+            FluentValue::Error
+        } else {
+            res
+        }
+    }
+
+    /// Similar to [`Scope::track`], but resolves to a value
+    /// instead of writing to a Writer instance.
+    pub fn track_resolve(
+        &mut self,
+        pattern: &'ast ast::Pattern<&'bundle str>,
+    ) -> FluentValue<'bundle>
+    where
+        R: Borrow<FluentResource>,
+        M: MemoizerKind,
+    {
+        if self.travelled.contains(&pattern) {
+            self.add_error(ResolverError::Cyclic);
+            FluentValue::Error
+        } else {
+            self.travelled.push(pattern);
+            let result = pattern.resolve(self);
+            self.travelled.pop();
             result
         }
     }
