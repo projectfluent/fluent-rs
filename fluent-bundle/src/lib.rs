@@ -20,7 +20,7 @@
 //! // Used to provide a locale for the bundle.
 //! use unic_langid::langid;
 //!
-//! // 1. Crate a FluentResource
+//! // 1. Create a FluentResource
 //!
 //! let ftl_string = r#"
 //!
@@ -33,7 +33,7 @@
 //!     .expect("Failed to parse an FTL string.");
 //!
 //!
-//! // 2. Crate a FluentBundle
+//! // 2. Create a FluentBundle
 //!
 //! let langid_en = langid!("en-US");
 //! let mut bundle = FluentBundle::new(vec![langid_en]);
