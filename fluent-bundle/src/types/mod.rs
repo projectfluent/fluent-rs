@@ -184,7 +184,7 @@ impl<'source> FluentValue<'source> {
     {
         match (self, other) {
             (FluentValue::String(a), FluentValue::String(b)) => a == b,
-            (FluentValue::Number(a), FluentValue::Number(b)) => a == b,
+            (FluentValue::Number(a), FluentValue::Number(b)) => a.value == b.value,
             (FluentValue::String(a), FluentValue::Number(b)) => {
                 let cat = match a.as_ref() {
                     "zero" => PluralCategory::ZERO,
