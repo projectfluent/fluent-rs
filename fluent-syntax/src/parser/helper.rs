@@ -17,7 +17,7 @@ where
         while let Some(b) = get_current_byte!(self) {
             let new_line = self.ptr == 0 || get_byte!(self, self.ptr - 1) == Some(&b'\n');
 
-            if new_line && (b.is_ascii_alphabetic() || [b'-', b'#'].contains(b)) {
+            if new_line && (b.is_ascii_alphabetic() || b"-#".contains(b)) {
                 break;
             }
 
