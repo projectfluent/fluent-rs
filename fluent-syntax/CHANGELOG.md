@@ -1,6 +1,7 @@
 # Changelog
 
 ## Unreleased
+  - Fix parser dropping extra indentation of lines following an indented placeable
 
 ## fluent-syntax 0.12.0 (May 20, 2025)
   - Add module `serializer`

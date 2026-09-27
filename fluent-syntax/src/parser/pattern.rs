@@ -84,9 +84,11 @@ where
                     }
                 }
                 let (start, end, text_element_type, termination_reason) = self.get_text_slice()?;
-                if start != end {
+                let indented_placeable = text_element_role == TextElementPosition::LineStart
+                    && termination_reason == TextElementTermination::PlaceableStart;
+                if start != end || indented_placeable {
                     if text_element_role == TextElementPosition::LineStart
-                        && text_element_type == TextElementType::NonBlank
+                        && (text_element_type == TextElementType::NonBlank || indented_placeable)
                     {
                         if let Some(common) = common_indent {
                             if indent < common {
@@ -99,6 +101,7 @@ where
                     if text_element_role != TextElementPosition::LineStart
                         || text_element_type == TextElementType::NonBlank
                         || termination_reason == TextElementTermination::LineFeed
+                        || indented_placeable
                     {
                         if text_element_type == TextElementType::NonBlank {
                             last_non_blank = Some(elements.len());
@@ -126,9 +129,9 @@ where
                 .into_iter()
                 .take(last_non_blank + 1)
                 .enumerate()
-                .map(|(i, elem)| match elem {
+                .filter_map(|(i, elem)| match elem {
                     PatternElementPlaceholders::Placeable(expression) => {
-                        ast::PatternElement::Placeable { expression }
+                        Some(ast::PatternElement::Placeable { expression })
                     }
                     PatternElementPlaceholders::TextElement(start, end, indent, role) => {
                         let start = if role == TextElementPosition::LineStart {
@@ -139,11 +142,14 @@ where
                         } else {
                             start
                         };
+                        if start == end {
+                            return None;
+                        }
                         let mut value = self.source.slice(start..end);
                         if last_non_blank == i {
                             value.trim();
                         }
-                        ast::PatternElement::TextElement { value }
+                        Some(ast::PatternElement::TextElement { value })
                     }
                 })
                 .collect();
