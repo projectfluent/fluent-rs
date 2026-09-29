@@ -78,6 +78,7 @@ mod runtime;
 mod slice;
 
 use crate::ast;
+pub use core::Parser;
 pub use errors::{ErrorKind, ParserError};
 pub(crate) use slice::matches_fluent_ws;
 pub use slice::Slice;
