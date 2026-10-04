@@ -91,13 +91,33 @@ impl<'bundle> ResolveValue<'bundle> for ast::Pattern<&'bundle str> {
     {
         let len = self.elements.len();
 
+        // If there is only 1 element, then it is more efficient to attempt to resolve as a message
+        // reference that can be passed back as a Cow::Borrowed rather than writing a new String.
         if len == 1 {
-            if let ast::PatternElement::TextElement { value } = self.elements[0] {
-                return scope
-                    .bundle
-                    .transform
-                    .map_or_else(|| value.into(), |transform| transform(value).into());
-            }
+            match &self.elements[0] {
+                &ast::PatternElement::TextElement { value } => {
+                    return scope
+                        .bundle
+                        .transform
+                        .map_or_else(|| value.into(), |transform| transform(value).into());
+                }
+                ast::PatternElement::Placeable { expression } => {
+                    let before = scope.placeables;
+                    scope.placeables += 1;
+
+                    let res = scope.maybe_track_resolve(self, expression);
+                    if !matches!(res, FluentValue::Error) {
+                        return res;
+                    }
+
+                    // when hitting an error, reset scope state and format using writer below to write error information
+                    scope.placeables = before;
+                    scope.dirty = false;
+                    if let Some(err) = &mut scope.errors {
+                        err.pop();
+                    }
+                }
+            };
         }
 
         let mut result = String::new();
