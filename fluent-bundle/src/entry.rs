@@ -9,9 +9,7 @@ use crate::args::FluentArgs;
 use crate::bundle::FluentBundle;
 use crate::resource::FluentResource;
 use crate::types::FluentValue;
-
-pub type FluentFunction =
-    Box<dyn for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Send + Sync>;
+use crate::FluentMessage;
 
 type ResourceIdx = usize;
 type EntryIdx = usize;
@@ -69,5 +67,42 @@ impl<R: Borrow<FluentResource>, M> GetEntry for FluentBundle<R, M> {
             Entry::Function(function) => Some(function),
             _ => None,
         })
+    }
+}
+
+pub type FluentFunction = Box<dyn FluentFunctionObject + Send + Sync>;
+
+pub trait FluentFunctionScope<'bundle> {
+    fn get_message(&self, id: &str) -> Option<FluentMessage<'bundle>>;
+
+    fn format_message(
+        &mut self,
+        pattern: &'bundle ast::Pattern<&'bundle str>,
+        args: Option<FluentArgs<'bundle>>,
+    ) -> FluentValue<'bundle>;
+}
+
+/// Implement custom function that retrieves execution scope information
+pub trait FluentFunctionObject {
+    fn call<'bundle>(
+        &self,
+        scope: &mut dyn FluentFunctionScope<'bundle>,
+        positional: &[FluentValue<'bundle>],
+        named: &FluentArgs<'bundle>,
+    ) -> FluentValue<'bundle>;
+}
+
+impl<F> FluentFunctionObject for F
+where
+    F: for<'a> Fn(&[FluentValue<'a>], &FluentArgs) -> FluentValue<'a> + Sync + Send + 'static,
+{
+    fn call<'bundle>(
+        &self,
+        scope: &mut dyn FluentFunctionScope,
+        positional: &[FluentValue<'bundle>],
+        named: &FluentArgs,
+    ) -> FluentValue<'bundle> {
+        let _ = scope;
+        self(positional, named)
     }
 }

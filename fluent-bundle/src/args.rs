@@ -52,7 +52,7 @@ use crate::types::FluentValue;
 ///     "Hello, John. You have 5 messages."
 /// );
 /// ```
-#[derive(Debug, Default)]
+#[derive(Debug, Default, Clone)]
 pub struct FluentArgs<'args>(Vec<(Cow<'args, str>, FluentValue<'args>)>);
 
 impl<'args> FluentArgs<'args> {
