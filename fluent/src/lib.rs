@@ -77,6 +77,28 @@
 
 pub use fluent_bundle::*;
 
+/// The memoizer type used by the [concurrent `FluentBundle`](crate::concurrent::FluentBundle).
+///
+/// This is a re-export of
+/// [`intl_memoizer::concurrent::IntlLangMemoizer`](https://docs.rs/intl-memoizer/latest/intl_memoizer/concurrent/type.IntlLangMemoizer.html),
+/// so that the full type of a concurrent bundle can be spelled out without
+/// adding `intl-memoizer` as a direct dependency:
+///
+/// # Example
+///
+/// ```
+/// use fluent::{concurrent, FluentResource, IntlLangMemoizer};
+///
+/// let langid_en: unic_langid::LanguageIdentifier = "en-US".parse().expect("Parsing failed");
+/// let bundle: concurrent::FluentBundle<FluentResource> =
+///     concurrent::FluentBundle::new_concurrent(vec![langid_en]);
+///
+/// fn takes_bundle(_: fluent::bundle::FluentBundle<FluentResource, IntlLangMemoizer>) {}
+/// takes_bundle(bundle);
+/// ```
+#[doc(inline)]
+pub use intl_memoizer::concurrent::IntlLangMemoizer;
+
 /// A helper macro to simplify creation of `FluentArgs`.
 ///
 /// # Example

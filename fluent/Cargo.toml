@@ -26,4 +26,5 @@ include = [
 [dependencies]
 fluent-bundle.workspace = true
 fluent-pseudo = { workspace = true, optional = true }
+intl-memoizer.workspace = true
 unic-langid.workspace = true
