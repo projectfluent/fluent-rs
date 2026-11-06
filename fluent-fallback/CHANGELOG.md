@@ -1,6 +1,10 @@
 # Changelog
 
 ## Unreleased
+  - `fluent-fallback`: Store cached bundles in per-element boxes instead of
+    `chunky-vec`'s fixed 32-element chunks. A `Localization` that caches the
+    usual one or two bundles no longer reserves an ~8 KiB block it barely
+    uses (#407).
 
 ## fluent-fallback 0.7.2 (May 20, 2025)
   - Refactor to remove unnecessary named lifetimes

@@ -8,16 +8,26 @@ use std::{
 };
 
 use crate::generator::{BundleIterator, BundleStream};
-use chunky_vec::ChunkyVec;
 use futures::{ready, Stream};
 use pin_cell::{PinCell, PinMut};
+
+/// Backing store for the cached bundles.
+///
+/// Each element lives behind its own `Box`, so references handed out by
+/// [`Cache::get`] and [`Cache::push_get`] stay valid no matter how the
+/// `Vec` of boxes grows. This keeps the pin-safety guarantee of the
+/// `chunky-vec` crate previously used here, without its fixed 32-element
+/// chunks: a `Localization` usually caches one or two bundles, and the
+/// first chunk alone used to reserve several kilobytes that were never
+/// used (see issue #407).
+type ChunkedItems<T> = Vec<Box<T>>;
 
 pub struct Cache<I, R>
 where
     I: Iterator,
 {
     iter: RefCell<I>,
-    items: UnsafeCell<ChunkyVec<I::Item>>,
+    items: UnsafeCell<ChunkedItems<I::Item>>,
     res: std::marker::PhantomData<R>,
 }
 
@@ -43,7 +53,7 @@ where
     pub fn get(&self, index: usize) -> Option<&I::Item> {
         unsafe {
             let items = self.items.get();
-            (*items).get(index)
+            (&*items).get(index).map(|item| &**item)
         }
     }
 
@@ -51,7 +61,9 @@ where
     pub fn push_get(&self, new_value: I::Item) -> &I::Item {
         unsafe {
             let items = self.items.get();
-            (*items).push_get(new_value)
+            let items = &mut *items;
+            items.push(Box::new(new_value));
+            items.last().expect("an item was just pushed")
         }
     }
 }
@@ -127,7 +139,7 @@ where
     S: Stream,
 {
     stream: PinCell<S>,
-    items: UnsafeCell<ChunkyVec<S::Item>>,
+    items: UnsafeCell<ChunkedItems<S::Item>>,
     // TODO: Should probably be an SmallVec<[Waker; 1]> or something? I guess
     // multiple pending wakes are not really all that common.
     pending_wakes: RefCell<Vec<Waker>>,
@@ -157,7 +169,7 @@ where
     pub fn get(&self, index: usize) -> Poll<Option<&S::Item>> {
         unsafe {
             let items = self.items.get();
-            (*items).get(index).into()
+            (&*items).get(index).map(|item| &**item).into()
         }
     }
 
@@ -165,7 +177,9 @@ where
     pub fn push_get(&self, new_value: S::Item) -> &S::Item {
         unsafe {
             let items = self.items.get();
-            (*items).push_get(new_value)
+            let items = &mut *items;
+            items.push(Box::new(new_value));
+            items.last().expect("an item was just pushed")
         }
     }
 
@@ -249,5 +263,95 @@ where
                 None.into()
             }
         }
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn cache_yields_all_items() {
+        let cache: Cache<std::ops::Range<usize>, ()> = Cache::new(0..3);
+        let items: Vec<usize> = cache.into_iter().copied().collect();
+        assert_eq!(items, vec![0, 1, 2]);
+        assert_eq!(cache.len(), 3);
+    }
+
+    /// The cache hands out `&T` which callers may hold while the cache
+    /// keeps growing. Boxing every item keeps those references valid,
+    /// mirroring the pin-safety guarantee of `ChunkyVec`.
+    #[test]
+    fn references_stay_stable_across_growth() {
+        let cache: Cache<std::ops::Range<usize>, ()> = Cache::new(0..5);
+        let mut iter = cache.into_iter();
+
+        let first: *const usize = iter.next().unwrap();
+        let second: *const usize = iter.next().unwrap();
+
+        // Grow the backing storage well past its previous capacity.
+        for _ in 0..3 {
+            iter.next().unwrap();
+        }
+
+        assert_eq!(unsafe { *first }, 0);
+        assert_eq!(unsafe { *second }, 1);
+        assert_eq!(cache.get(1), Some(&1));
+        assert_eq!(cache.len(), 5);
+    }
+
+    /// A bundle-sized element (~200 bytes, see issue #407) must not
+    /// trigger a large up-front allocation: `ChunkyVec` reserved
+    /// 32 elements (32 x 200 = 6400 bytes) on the first push, while a
+    /// `Localization` usually caches only one or two bundles.
+    ///
+    /// The assertion counts allocations in a narrow band around the old
+    /// chunk size so unrelated test-harness allocations cannot flake it.
+    #[test]
+    fn caching_few_bundles_avoids_chunk_sized_allocations() {
+        use std::alloc::{GlobalAlloc, Layout, System};
+        use std::sync::atomic::{AtomicUsize, Ordering};
+
+        #[repr(C)]
+        struct BundleSized([u8; 200]);
+
+        const CHUNK_BYTES_MIN: usize = 6000;
+        const CHUNK_BYTES_MAX: usize = 7000;
+
+        struct Counting;
+        static IN_BAND: AtomicUsize = AtomicUsize::new(0);
+
+        unsafe impl GlobalAlloc for Counting {
+            unsafe fn alloc(&self, layout: Layout) -> *mut u8 {
+                let ptr = System.alloc(layout);
+                if !ptr.is_null()
+                    && layout.size() >= CHUNK_BYTES_MIN
+                    && layout.size() < CHUNK_BYTES_MAX
+                {
+                    IN_BAND.fetch_add(1, Ordering::Relaxed);
+                }
+                ptr
+            }
+
+            unsafe fn dealloc(&self, ptr: *mut u8, layout: Layout) {
+                System.dealloc(ptr, layout)
+            }
+        }
+
+        #[global_allocator]
+        static ALLOCATOR: Counting = Counting;
+
+        IN_BAND.store(0, Ordering::Relaxed);
+
+        let bundles = (0..2).map(|i| BundleSized([i as u8; 200]));
+        let cache: Cache<_, ()> = Cache::new(bundles);
+        let count = cache.into_iter().count();
+        assert_eq!(count, 2);
+
+        assert_eq!(
+            IN_BAND.load(Ordering::Relaxed),
+            0,
+            "caching two ~200 byte bundles requested a chunk-sized allocation"
+        );
     }
 }
