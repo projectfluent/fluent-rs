@@ -48,11 +48,12 @@ where
             }
         }
         if self.ptr - start != length {
-            let end = if self.ptr >= self.length {
-                self.ptr
-            } else {
-                self.ptr + 1
-            };
+            // Include the offending character, which may be multi-byte.
+            let end = self.ptr
+                + self.source.as_ref()[self.ptr..]
+                    .chars()
+                    .next()
+                    .map_or(0, char::len_utf8);
             let seq = self.source.slice(start..end).as_ref().to_owned();
             return error!(ErrorKind::InvalidUnicodeEscapeSequence(seq), self.ptr);
         }
