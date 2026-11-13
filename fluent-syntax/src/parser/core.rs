@@ -11,7 +11,15 @@ pub struct Parser<S> {
     pub(super) source: S,
     pub(super) ptr: usize,
     pub(super) length: usize,
+    pub(super) depth: usize,
 }
+
+/// Maximum nesting depth for inline expressions (placeables, select
+/// expressions and call arguments). Each nesting level of those constructs
+/// recurses through the parser, so an unbounded input can overflow the
+/// stack and abort the process. Real FTL rarely nests more than a few
+/// levels deep.
+pub(super) const MAX_NESTING_DEPTH: usize = 64;
 
 impl<'s, S> Parser<S>
 where
@@ -23,6 +31,7 @@ where
             source,
             ptr: 0,
             length,
+            depth: 0,
         }
     }
 
@@ -287,6 +296,17 @@ where
     }
 
     pub(super) fn get_placeable(&mut self) -> Result<ast::Expression<S>> {
+        self.depth += 1;
+        if self.depth > MAX_NESTING_DEPTH {
+            self.depth -= 1;
+            return error!(ErrorKind::TooDeepNesting, self.ptr);
+        }
+        let result = self.get_placeable_inner();
+        self.depth -= 1;
+        result
+    }
+
+    fn get_placeable_inner(&mut self) -> Result<ast::Expression<S>> {
         self.skip_blank();
         let exp = self.get_expression()?;
         self.skip_blank_inline();

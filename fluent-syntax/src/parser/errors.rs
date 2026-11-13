@@ -166,4 +166,6 @@ pub enum ErrorKind {
     ExpectedSimpleExpressionAsSelector,
     #[error("Expected a string or number literal")]
     ExpectedLiteral,
+    #[error("Nesting of placeables, select expressions and call arguments exceeds the parser's depth limit")]
+    TooDeepNesting,
 }
