@@ -1,5 +1,5 @@
 use super::errors::{ErrorKind, ParserError};
-use super::{core::Parser, core::Result, slice::Slice};
+use super::{core::MAX_NESTING_DEPTH, core::Parser, core::Result, slice::Slice};
 use crate::ast;
 
 impl<'s, S> Parser<S>
@@ -161,6 +161,18 @@ where
         if !self.take_byte_if(b'(') {
             return Ok(None);
         }
+
+        self.depth += 1;
+        if self.depth > MAX_NESTING_DEPTH {
+            self.depth -= 1;
+            return error!(ErrorKind::TooDeepNesting, self.ptr);
+        }
+        let result = self.get_call_arguments_inner();
+        self.depth -= 1;
+        result
+    }
+
+    fn get_call_arguments_inner(&mut self) -> Result<Option<ast::CallArguments<S>>> {
 
         let mut positional = vec![];
         let mut named = vec![];

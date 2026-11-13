@@ -1,6 +1,9 @@
 # Changelog
 
 ## Unreleased
+  - Limit the nesting depth of placeables, select expressions and call arguments
+    in the parser to 64, reporting `ErrorKind::TooDeepNesting` instead of
+    overflowing the stack on deeply nested input.
 
 ## fluent-syntax 0.12.0 (May 20, 2025)
   - Add module `serializer`
